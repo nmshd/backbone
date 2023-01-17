@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Version>2.0.0</Version>
+		<Authors>j&amp;s soft GmbH</Authors>
+		<Company>j&amp;s soft GmbH</Company>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<RepositoryUrl>https://github.com/nmshd/bkb-libraries</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<PackageId>Enmeshed.UnitTestTools</PackageId>
+		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
+		<PackageTags>Enmeshed</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoFixture" Version="4.17.0" />
+		<PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
+		<PackageReference Include="FluentAssertions" Version="6.8.0" />
+		<PackageReference Include="FluentValidation" Version="11.2.2" />
+		<PackageReference Include="Enmeshed.Tooling" Version="2.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+		<PackageReference Include="Moq" Version="4.18.2" />
+		<PackageReference Include="xunit" Version="2.4.2" />
+	</ItemGroup>
+
+</Project>

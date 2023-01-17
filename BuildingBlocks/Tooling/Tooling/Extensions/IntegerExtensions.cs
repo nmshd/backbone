@@ -1,0 +1,18 @@
+﻿namespace Enmeshed.Tooling.Extensions
+{
+    public static class IntegerExtensions
+    {
+        public static int Kibibytes(this int bytes)
+        {
+            return bytes * 1024;
+        }
+        public static int Mebibytes(this int bytes)
+        {
+            return bytes * 1024 * 1024;
+        }
+        public static int Gibibytes(this int bytes)
+        {
+            return bytes * 1024 * 1024 * 1024;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Version>2.0.0</Version>
+		<Authors>j&amp;s soft GmbH</Authors>
+		<Company>j&amp;s soft GmbH</Company>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<RepositoryUrl>https://github.com/nmshd/bkb-libraries</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Enmeshed.Crypto</PackageId>
+		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
+		<PackageTags>Enmeshed</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BouncyCastle.NetCore" Version="1.9.0" />
+		<PackageReference Include="NSec.Cryptography" Version="22.4.0" />
+	</ItemGroup>
+
+</Project>
