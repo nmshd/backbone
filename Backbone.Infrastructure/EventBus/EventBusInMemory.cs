@@ -13,7 +13,7 @@ public class EventBusInMemory : IEventBus
 
     private record Subscription(Type Event, Type EventHandler);
 
-    private List<Subscription> _subscriptions = new();
+    private readonly List<Subscription> _subscriptions = new();
     private readonly ILifetimeScope _autofac;
 
     public EventBusInMemory(ILifetimeScope autofac)

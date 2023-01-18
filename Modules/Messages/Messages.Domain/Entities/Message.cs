@@ -4,7 +4,7 @@ using Messages.Domain.Ids;
 
 namespace Messages.Domain.Entities;
 
-public class Message : Identifiable<MessageId>
+public class Message : IIdentifiable<MessageId>
 {
 #pragma warning disable CS8618
     private Message() { }
