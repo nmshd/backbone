@@ -1,8 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
-using Relationships.Common;
-using Relationships.Common.FluentValidation;
 
 namespace Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 

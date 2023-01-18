@@ -1,6 +1,4 @@
 ﻿using Challenges.Domain.Entities;
-using Challenges.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

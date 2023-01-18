@@ -70,11 +70,11 @@ public class RelationshipsController : ApiControllerBase
         [FromQuery] OptionalDateRange createdAt,
         [FromQuery] OptionalDateRange completedAt,
         [FromQuery] OptionalDateRange modifiedAt,
-        [FromQuery] bool onlyPeerChanges,
+        [FromQuery] bool? onlyPeerChanges,
         [FromQuery] IdentityAddress createdBy,
         [FromQuery] IdentityAddress completedBy,
-        [FromQuery] string status,
-        [FromQuery] string type)
+        [FromQuery] string? status,
+        [FromQuery] string? type)
     {
         var request = new ListChangesQuery(
             paginationFilter,
@@ -86,7 +86,7 @@ public class RelationshipsController : ApiControllerBase
             type == null ? null : Enum.Parse<RelationshipChangeType>(type),
             createdBy,
             completedBy,
-            onlyPeerChanges);
+            onlyPeerChanges ?? false);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -120,10 +120,11 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> CreateRelationshipChange([FromRoute] RelationshipId relationshipId,
         CreateRelationshipChangeRequest request)
     {
-        RelationshipChangeMetadataDTO change = request.Type switch
+        var change = request.Type switch
         {
-            RelationshipChangeType.Termination => await _mediator.Send(new CreateRelationshipTerminationRequestCommand
-                { Id = relationshipId }),
+            RelationshipChangeType.Termination => await _mediator.Send(
+                new CreateRelationshipTerminationRequestCommand { Id = relationshipId }
+            ),
             RelationshipChangeType.TerminationCancellation => throw new NotImplementedException(),
             RelationshipChangeType.Creation => throw new NotSupportedException(),
             _ => throw new NotSupportedException()
@@ -185,5 +186,5 @@ public class CreateRelationshipChangeRequest
 
 public class CompleteRelationshipChangeRequest
 {
-    public byte[] Content { get; set; }
+    public byte[] Content { get; set; } = Array.Empty<byte>();
 }

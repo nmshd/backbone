@@ -11,10 +11,7 @@ public static class ChallengesServiceCollectionExtensions
     {
         services.AddApplication();
 
-        services.AddDatabase(dbOptions =>
-        {
-            dbOptions.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
-        });
+        services.AddDatabase(dbOptions => dbOptions.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString);
 
         return services;
     }

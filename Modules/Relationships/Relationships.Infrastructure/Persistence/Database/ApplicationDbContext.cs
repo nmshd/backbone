@@ -1,6 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Relationships.Domain.Entities;
 using Relationships.Domain.Ids;
 using Relationships.Infrastructure.Persistence.Database.ValueConverters;

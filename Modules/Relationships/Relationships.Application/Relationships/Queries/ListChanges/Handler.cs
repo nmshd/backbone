@@ -39,7 +39,7 @@ public class Handler : RequestHandlerBase<ListChangesQuery, ListChangesResponse>
 
         if (request.OnlyPeerChanges)
             query = query.OnlyPeerChanges(_activeIdentity);
-        
+
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
 
         await _contentStore.FillContentOfChanges(dbPaginationResult.ItemsOnPage);

@@ -1,40 +1,39 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus
+namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+
+public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnection
 {
-    public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnection
+    private readonly string _serviceBusConnectionString;
+
+    private bool _disposed;
+    private ServiceBusClient _topicClient;
+
+    public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
     {
-        private readonly string _serviceBusConnectionString;
+        _serviceBusConnectionString = serviceBusConnectionString;
+        AdministrationClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);
+        _topicClient = new ServiceBusClient(_serviceBusConnectionString);
+    }
 
-        private bool _disposed;
-        private ServiceBusClient _topicClient;
-
-        public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
+    public ServiceBusClient TopicClient
+    {
+        get
         {
-            _serviceBusConnectionString = serviceBusConnectionString;
-            AdministrationClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);
-            _topicClient = new ServiceBusClient(_serviceBusConnectionString);
+            if (_topicClient.IsClosed) _topicClient = new ServiceBusClient(_serviceBusConnectionString);
+
+            return _topicClient;
         }
+    }
 
-        public ServiceBusClient TopicClient
-        {
-            get
-            {
-                if (_topicClient.IsClosed) _topicClient = new ServiceBusClient(_serviceBusConnectionString);
+    public ServiceBusAdministrationClient AdministrationClient { get; }
 
-                return _topicClient;
-            }
-        }
+    public void Dispose()
+    {
+        if (_disposed) return;
 
-        public ServiceBusAdministrationClient AdministrationClient { get; }
-
-        public void Dispose()
-        {
-            if (_disposed) return;
-
-            _disposed = true;
-            _topicClient.DisposeAsync().GetAwaiter().GetResult();
-        }
+        _disposed = true;
+        _topicClient.DisposeAsync().GetAwaiter().GetResult();
     }
 }

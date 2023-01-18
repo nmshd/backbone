@@ -12,5 +12,6 @@ public class MessageIdEntityFrameworkValueConverter : ValueConverter<MessageId, 
             id => id == null ? null : id.StringValue,
             value => MessageId.Parse(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

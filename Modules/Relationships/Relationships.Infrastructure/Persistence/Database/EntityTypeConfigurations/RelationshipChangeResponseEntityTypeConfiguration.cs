@@ -1,8 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Relationships.Domain.Entities;
 
 namespace Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;

@@ -2,7 +2,6 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Relationships.Application.Extensions;
 using Relationships.Application.Infrastructure;
 using Relationships.Application.Relationships;

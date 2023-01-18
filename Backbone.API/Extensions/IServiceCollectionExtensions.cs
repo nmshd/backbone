@@ -1,13 +1,11 @@
 ﻿using System.Text.Json.Serialization;
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.Certificates;
 using Backbone.API.Mvc.ExceptionFilters;
-using Backbone.API.Mvc.JsonConverters;
 using Backbone.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.Tooling.JsonConverters;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;

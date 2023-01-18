@@ -1,7 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Messages.Common;
 using Messages.Domain.Entities;
 using Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore;

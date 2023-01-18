@@ -12,5 +12,6 @@ public class SyncErrorIdEntityFrameworkValueConverter : ValueConverter<SyncError
             id => id == null ? null : id.StringValue,
             value => SyncErrorId.Parse(value),
             mappingHints?.With(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
-        ) { }
+        )
+    { }
 }

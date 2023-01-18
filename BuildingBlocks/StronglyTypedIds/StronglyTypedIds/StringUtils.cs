@@ -1,11 +1,10 @@
-﻿namespace Enmeshed.StronglyTypedIds
+﻿namespace Enmeshed.StronglyTypedIds;
+
+public static class StringUtils
 {
-    public static class StringUtils
+    public static string Generate(char[] chars, int resultLength)
     {
-        public static string Generate(char[] chars, int resultLength)
-        {
-            Random random = new();
-            return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());
-        }
+        Random random = new();
+        return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }

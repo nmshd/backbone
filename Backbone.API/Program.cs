@@ -5,12 +5,9 @@ using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Challenges.Infrastructure.Persistence.Database;
-using Files.Application;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
-using Newtonsoft.Json.Linq;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

@@ -1,5 +1,4 @@
-﻿using Enmeshed.DevelopmentKit.Identity.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Relationships.Domain.Ids;
 
@@ -15,7 +14,7 @@ public class RelationshipTemplateAllocation
         AllocatedByDevice = allocatedByDevice;
     }
 
-    public RelationshipTemplateId RelationshipTemplateId{ get; set; }
+    public RelationshipTemplateId RelationshipTemplateId { get; set; }
     public IdentityAddress AllocatedBy { get; set; }
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }

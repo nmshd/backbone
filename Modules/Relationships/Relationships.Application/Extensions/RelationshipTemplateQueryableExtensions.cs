@@ -2,7 +2,6 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Microsoft.EntityFrameworkCore;
-using Relationships.Common;
 using Relationships.Domain.Entities;
 using Relationships.Domain.Ids;
 

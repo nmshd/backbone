@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
 using Relationships.Domain.Ids;
 
 namespace Relationships.Application.Relationships.Commands.CreateRelationship;

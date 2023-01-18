@@ -11,7 +11,7 @@ public class AutoMapperProfile : AutoMapperProfileBase
     public static IMapper CreateMapper()
     {
         var profile = new AutoMapperProfile();
-        var config = new MapperConfiguration(cfg => { cfg.AddProfile(profile); });
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(profile));
         var mapper = config.CreateMapper();
         return mapper;
     }

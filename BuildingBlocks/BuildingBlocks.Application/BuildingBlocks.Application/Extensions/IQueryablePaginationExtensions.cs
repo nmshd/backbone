@@ -4,48 +4,47 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions
+namespace Enmeshed.BuildingBlocks.Application.Extensions;
+
+public static class IQueryablePaginationExtensions
 {
-    public static class IQueryablePaginationExtensions
+    public static async Task<DbPaginationResult<T>> OrderAndPaginate<T, TOrderProperty>(this IQueryable<T> query,
+        Expression<Func<T, TOrderProperty>> orderBy, PaginationFilter paginationFilter)
     {
-        public static async Task<DbPaginationResult<T>> OrderAndPaginate<T, TOrderProperty>(this IQueryable<T> query,
-            Expression<Func<T, TOrderProperty>> orderBy, PaginationFilter paginationFilter)
-        {
-            var items = await query.OrderBy(orderBy).Paged(paginationFilter).ToListAsync();
-            var totalNumberOfItems = await CalculateTotalNumberOfItems(paginationFilter, items, query);
+        var items = await query.OrderBy(orderBy).Paged(paginationFilter).ToListAsync();
+        var totalNumberOfItems = await CalculateTotalNumberOfItems(paginationFilter, items, query);
 
-            return new DbPaginationResult<T>(items, totalNumberOfItems);
+        return new DbPaginationResult<T>(items, totalNumberOfItems);
+    }
+
+    private static async Task<int> CalculateTotalNumberOfItems<T>(PaginationFilter paginationFilter,
+        ICollection items, IQueryable<T> query)
+    {
+        int totalNumberOfItems;
+        if (paginationFilter.PageSize == null)
+        {
+            totalNumberOfItems = items.Count;
         }
-
-        private static async Task<int> CalculateTotalNumberOfItems<T>(PaginationFilter paginationFilter,
-            ICollection items, IQueryable<T> query)
+        else
         {
-            int totalNumberOfItems;
-            if (paginationFilter.PageSize == null)
-            {
-                totalNumberOfItems = items.Count;
-            }
+            if (items.Count < paginationFilter.PageSize)
+                totalNumberOfItems = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize.Value + items.Count;
             else
-            {
-                if (items.Count < paginationFilter.PageSize)
-                    totalNumberOfItems = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize.Value + items.Count;
-                else
-                    totalNumberOfItems = await query.CountAsync();
-            }
-
-            return totalNumberOfItems;
+                totalNumberOfItems = await query.CountAsync();
         }
 
-        public static IQueryable<T> Paged<T>(this IQueryable<T> query, PaginationFilter paginationFilter)
-        {
-            if (paginationFilter == null) throw new Exception("A pagination filter has to be provided.");
+        return totalNumberOfItems;
+    }
 
-            if (paginationFilter.PageSize != null)
-                query = query
-                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize.Value)
-                    .Take(paginationFilter.PageSize.Value);
+    public static IQueryable<T> Paged<T>(this IQueryable<T> query, PaginationFilter paginationFilter)
+    {
+        if (paginationFilter == null) throw new Exception("A pagination filter has to be provided.");
 
-            return query;
-        }
+        if (paginationFilter.PageSize != null)
+            query = query
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize.Value)
+                .Take(paginationFilter.PageSize.Value);
+
+        return query;
     }
 }

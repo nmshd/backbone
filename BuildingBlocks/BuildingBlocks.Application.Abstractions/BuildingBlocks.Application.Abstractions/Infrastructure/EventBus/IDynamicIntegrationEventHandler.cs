@@ -1,7 +1,6 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus
+﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+
+public interface IDynamicIntegrationEventHandler
 {
-    public interface IDynamicIntegrationEventHandler
-    {
-        Task Handle(dynamic eventData);
-    }
+    Task Handle(dynamic eventData);
 }

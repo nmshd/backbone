@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.ExpiresAt,
             request.Content);
 
-        if(template.Content != null)
+        if (template.Content != null)
             _blobStorage.Add(template.Id, template.Content);
         await _blobStorage.SaveAsync();
 

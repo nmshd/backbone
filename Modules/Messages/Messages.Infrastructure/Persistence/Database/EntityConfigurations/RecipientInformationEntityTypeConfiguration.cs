@@ -1,6 +1,4 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
+﻿using Messages.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +9,7 @@ public class RecipientInformationEntityTypeConfiguration : IEntityTypeConfigurat
     public void Configure(EntityTypeBuilder<RecipientInformation> builder)
     {
         builder
-            .HasKey(r => new {r.Address, r.MessageId});
+            .HasKey(r => new { r.Address, r.MessageId });
 
         builder.HasIndex(m => m.ReceivedAt);
         builder.HasIndex(m => m.RelationshipId);

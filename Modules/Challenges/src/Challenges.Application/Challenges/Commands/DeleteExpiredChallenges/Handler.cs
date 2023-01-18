@@ -35,7 +35,7 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
         _dbContext
             .Set<Challenge>()
-            .RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge {Id = id}));
+            .RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge { Id = id }));
 
         if (cancellationToken.IsCancellationRequested)
         {

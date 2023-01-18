@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
-using Relationships.Infrastructure.Persistence.Database.ValueConverters;
 
 namespace Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
@@ -29,7 +26,7 @@ public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguratio
         builder.Property(x => x.RelationshipId);
 
         builder.HasOne(x => x.Relationship).WithMany(x => x.Changes);
-        
+
         builder
             .HasOne(x => x.Request).WithOne()
             .HasForeignKey<RelationshipChangeRequest>(b => b.Id);

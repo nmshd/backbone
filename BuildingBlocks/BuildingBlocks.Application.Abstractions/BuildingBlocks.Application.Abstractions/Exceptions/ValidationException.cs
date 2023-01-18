@@ -1,13 +1,12 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions
-{
-    public class ValidationException : ApplicationException
-    {
-        public ValidationException(ApplicationError error) : base(error)
-        {
-        }
+﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 
-        public ValidationException(ApplicationError error, Exception innerException) : base(error, innerException)
-        {
-        }
+public class ValidationException : ApplicationException
+{
+    public ValidationException(ApplicationError error) : base(error)
+    {
+    }
+
+    public ValidationException(ApplicationError error, Exception innerException) : base(error, innerException)
+    {
     }
 }

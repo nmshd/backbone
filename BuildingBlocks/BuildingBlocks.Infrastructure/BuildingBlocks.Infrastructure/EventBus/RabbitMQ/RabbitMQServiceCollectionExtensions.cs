@@ -6,57 +6,56 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class RabbitMQServiceCollectionExtensions
 {
-    public static class RabbitMQServiceCollectionExtensions
+    public static void AddRabbitMQ(this IServiceCollection services, Action<RabbitMQOptions> setupOptions)
     {
-        public static void AddRabbitMQ(this IServiceCollection services, Action<RabbitMQOptions> setupOptions)
+        var options = new RabbitMQOptions();
+        setupOptions.Invoke(options);
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+        services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
         {
-            var options = new RabbitMQOptions();
-            setupOptions.Invoke(options);
+            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            var factory = new ConnectionFactory
             {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                HostName = options.HostName
+            };
 
+            if (!string.IsNullOrEmpty(options.Username)) factory.UserName = options.Username;
 
-                var factory = new ConnectionFactory
-                {
-                    HostName = options.HostName
-                };
+            if (!string.IsNullOrEmpty(options.Password)) factory.Password = options.Password;
 
-                if (!string.IsNullOrEmpty(options.Username)) factory.UserName = options.Username;
+            return new DefaultRabbitMQPersistentConnection(factory, logger, options.RetryCount);
+        });
 
-                if (!string.IsNullOrEmpty(options.Password)) factory.Password = options.Password;
+        services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+        {
+            var subscriptionClientName = options.SubscriptionClientName;
 
-                return new DefaultRabbitMQPersistentConnection(factory, logger, options.RetryCount);
-            });
+            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+            var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-            {
-                var subscriptionClientName = options.SubscriptionClientName;
-
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope,
-                    eventBusSubcriptionsManager, subscriptionClientName, options.RetryCount);
-            });
-        }
+            return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope,
+                eventBusSubcriptionsManager, subscriptionClientName, options.RetryCount);
+        });
     }
+}
 
-    public class RabbitMQOptions
-    {
+public class RabbitMQOptions
+{
 #pragma warning disable CS8618
-        public string HostName { get; set; }
-        public string SubscriptionClientName { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public int RetryCount { get; set; } = 5;
+    public string HostName { get; set; }
+    public string SubscriptionClientName { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public int RetryCount { get; set; } = 5;
 #pragma warning restore CS8618
-    }
 }

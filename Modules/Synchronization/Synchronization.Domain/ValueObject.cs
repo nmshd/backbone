@@ -16,7 +16,7 @@ public abstract class ValueObject : IComparable, IComparable<ValueObject>
         if (thisType != otherType)
             return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);
 
-        var other = (ValueObject) obj;
+        var other = (ValueObject)obj;
 
         var components = GetEqualityComponents().ToArray();
         var otherComponents = other.GetEqualityComponents().ToArray();
@@ -39,7 +39,7 @@ public abstract class ValueObject : IComparable, IComparable<ValueObject>
         if (GetUnproxiedType(this) != GetUnproxiedType(obj))
             return false;
 
-        var valueObject = (ValueObject) obj;
+        var valueObject = (ValueObject)obj;
 
         return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
     }

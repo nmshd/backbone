@@ -12,5 +12,6 @@ public class DatawalletVersionEntityFrameworkValueConverter : ValueConverter<Dat
             id => id.Value,
             value => new Datawallet.DatawalletVersion(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

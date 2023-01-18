@@ -12,5 +12,6 @@ public class RelationshipTemplateIdEntityFrameworkValueConverter : ValueConverte
             id => id == null ? null : id.StringValue,
             value => RelationshipTemplateId.Parse(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

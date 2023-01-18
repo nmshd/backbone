@@ -1,6 +1,4 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
+﻿using Messages.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,39 +1,38 @@
 ﻿using System.Reflection;
 using AutoMapper;
 
-namespace Enmeshed.BuildingBlocks.Application.AutoMapper
+namespace Enmeshed.BuildingBlocks.Application.AutoMapper;
+
+public abstract class AutoMapperProfileBase : Profile
 {
-    public abstract class AutoMapperProfileBase : Profile
+    private readonly Assembly _assemblyWithTypes;
+
+    protected AutoMapperProfileBase(Assembly assemblyWithTypes)
     {
-        private readonly Assembly _assemblyWithTypes;
+        _assemblyWithTypes = assemblyWithTypes;
 
-        protected AutoMapperProfileBase(Assembly assemblyWithTypes)
-        {
-            _assemblyWithTypes = assemblyWithTypes;
+        LoadStandardMappings();
+        LoadCustomMappings();
+        LoadConverters();
 
-            LoadStandardMappings();
-            LoadCustomMappings();
-            LoadConverters();
+        AllowNullCollections = true;
+    }
 
-            AllowNullCollections = true;
-        }
+    private void LoadConverters()
+    {
+    }
 
-        private void LoadConverters()
-        {
-        }
+    private void LoadStandardMappings()
+    {
+        var mapsFrom = MapperProfileHelper.LoadStandardMappings(_assemblyWithTypes);
 
-        private void LoadStandardMappings()
-        {
-            var mapsFrom = MapperProfileHelper.LoadStandardMappings(_assemblyWithTypes);
+        foreach (var map in mapsFrom) CreateMap(map.Source, map.Destination).ReverseMap();
+    }
 
-            foreach (var map in mapsFrom) CreateMap(map.Source, map.Destination).ReverseMap();
-        }
+    private void LoadCustomMappings()
+    {
+        var mapsFrom = MapperProfileHelper.LoadCustomMappings(_assemblyWithTypes);
 
-        private void LoadCustomMappings()
-        {
-            var mapsFrom = MapperProfileHelper.LoadCustomMappings(_assemblyWithTypes);
-
-            foreach (var map in mapsFrom) map.CreateMappings(this);
-        }
+        foreach (var map in mapsFrom) map.CreateMappings(this);
     }
 }

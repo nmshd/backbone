@@ -1,20 +1,19 @@
-﻿namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus
+﻿namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+
+public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
 {
-    public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
+    public class SubscriptionInfo
     {
-        public class SubscriptionInfo
+        private SubscriptionInfo(Type handlerType)
         {
-            private SubscriptionInfo(Type handlerType)
-            {
-                HandlerType = handlerType;
-            }
+            HandlerType = handlerType;
+        }
 
-            public Type HandlerType { get; }
+        public Type HandlerType { get; }
 
-            public static SubscriptionInfo Typed(Type handlerType)
-            {
-                return new SubscriptionInfo(handlerType);
-            }
+        public static SubscriptionInfo Typed(Type handlerType)
+        {
+            return new SubscriptionInfo(handlerType);
         }
     }
 }

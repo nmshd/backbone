@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, Re
 
         await SaveSyncRun(syncRun, cancellationToken);
 
-        return new RefreshExpirationTimeOfSyncRunResponse {ExpiresAt = syncRun.ExpiresAt};
+        return new RefreshExpirationTimeOfSyncRunResponse { ExpiresAt = syncRun.ExpiresAt };
     }
 
     private void CheckPrerequisites(SyncRun syncRun)

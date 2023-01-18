@@ -8,7 +8,7 @@ public class SyncErrorEntityTypeConfiguration : IEntityTypeConfiguration<SyncErr
 {
     public void Configure(EntityTypeBuilder<SyncError> builder)
     {
-        builder.HasIndex(x => new {x.SyncRunId, x.ExternalEventId}).IsUnique();
+        builder.HasIndex(x => new { x.SyncRunId, x.ExternalEventId }).IsUnique();
 
         builder.HasKey(x => x.Id);
 

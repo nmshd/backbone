@@ -1,8 +1,6 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
 
 namespace Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 

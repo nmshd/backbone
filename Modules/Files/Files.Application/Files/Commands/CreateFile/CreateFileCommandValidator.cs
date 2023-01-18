@@ -24,7 +24,7 @@ public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
 
         RuleFor(m => m.Owner)
             .NotEmpty()
-            .When(m => m.OwnerSignature is {Length: > 0})
+            .When(m => m.OwnerSignature is { Length: > 0 })
             .WithMessage(m => $"{nameof(m.Owner)} and {nameof(m.OwnerSignature)} have to be provided either both or none.");
 
         RuleFor(m => m.OwnerSignature)

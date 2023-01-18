@@ -3,7 +3,6 @@ using Messages.Domain.Entities;
 using Messages.Domain.Ids;
 using Messages.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Messages.Infrastructure.Persistence.Database;
 

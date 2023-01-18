@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Files.Application.Files.DTOs;
 using Files.Domain.Entities;
 
 namespace Files.Application.Files.Commands.CreateFile;

@@ -25,7 +25,7 @@ public class RelationshipChangeCompletedIntegrationEventHandler : IIntegrationEv
 
     private async Task CreateExternalEvent(RelationshipChangeCompletedIntegrationEvent integrationEvent)
     {
-        var payload = new {integrationEvent.RelationshipId, integrationEvent.ChangeId};
+        var payload = new { integrationEvent.RelationshipId, integrationEvent.ChangeId };
         try
         {
             var owner = integrationEvent.ChangeResult switch

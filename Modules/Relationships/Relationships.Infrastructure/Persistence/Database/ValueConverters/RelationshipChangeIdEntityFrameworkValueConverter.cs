@@ -12,5 +12,6 @@ public class RelationshipChangeIdEntityFrameworkValueConverter : ValueConverter<
             id => id == null ? null : id.StringValue,
             value => RelationshipChangeId.Parse(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

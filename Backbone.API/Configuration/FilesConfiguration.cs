@@ -1,29 +1,28 @@
 ﻿using Files.Application;
 
-namespace Backbone.API.Configuration
+namespace Backbone.API.Configuration;
+
+public class FilesConfiguration
 {
-    public class FilesConfiguration
+    public ApplicationOptions Application { get; set; } = new();
+    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+
+    public class InfrastructureConfiguration
     {
-        public ApplicationOptions Application { get; set; } = new();
-        public InfrastructureConfiguration Infrastructure { get; set; } = new();
+        public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
-        public class InfrastructureConfiguration
+        public BlobStorageConfiguration BlobStorage { get; set; } = new();
+
+        public class BlobStorageConfiguration
         {
-            public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
+            public string ConnectionInfo { get; set; } = string.Empty;
+            public string CloudProvider { get; set; } = string.Empty;
+            public string ContainerName { get; set; } = string.Empty;
+        }
 
-            public BlobStorageConfiguration BlobStorage { get; set; } = new();
-
-            public class BlobStorageConfiguration
-            {
-                public string ConnectionInfo { get; set; } = string.Empty;
-                public string CloudProvider { get; set; } = string.Empty;
-                public string ContainerName { get; set; } = string.Empty;
-            }
-
-            public class SqlDatabaseConfiguration
-            {
-                public string ConnectionString { get; set; } = string.Empty;
-            }
+        public class SqlDatabaseConfiguration
+        {
+            public string ConnectionString { get; set; } = string.Empty;
         }
     }
 }

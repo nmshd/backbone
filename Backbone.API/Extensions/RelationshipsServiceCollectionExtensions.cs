@@ -1,9 +1,7 @@
 ﻿using Backbone.API.Configuration;
 using Challenges.Application.Extensions;
-using Challenges.Infrastructure.Persistence;
-using Microsoft.Extensions.Configuration;
-using Relationships.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
+using Relationships.Infrastructure.Persistence;
 
 
 namespace Backbone.API.Extensions;

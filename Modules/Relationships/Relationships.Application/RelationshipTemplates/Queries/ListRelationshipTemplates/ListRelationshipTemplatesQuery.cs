@@ -1,6 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
-using Relationships.Common;
 using Relationships.Domain.Ids;
 
 namespace Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;

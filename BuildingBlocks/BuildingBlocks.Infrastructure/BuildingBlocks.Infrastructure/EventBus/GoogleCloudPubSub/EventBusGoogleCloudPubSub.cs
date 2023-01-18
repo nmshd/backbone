@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Autofac;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
@@ -8,7 +7,6 @@ using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 

@@ -1,5 +1,4 @@
 ﻿using Messages.Domain.Entities;
-using Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,6 +11,6 @@ public class AttachmentEntityTypeConfiguration : IEntityTypeConfiguration<Attach
         builder.ToTable($"{nameof(Attachment)}s");
 
         builder
-            .HasKey(m => new {m.Id, m.MessageId});
+            .HasKey(m => new { m.Id, m.MessageId });
     }
 }

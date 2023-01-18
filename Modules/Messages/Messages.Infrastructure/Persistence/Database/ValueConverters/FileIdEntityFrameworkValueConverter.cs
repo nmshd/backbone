@@ -12,5 +12,6 @@ public class FileIdEntityFrameworkValueConverter : ValueConverter<FileId, string
             id => id == null ? null : id.StringValue,
             value => FileId.Parse(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

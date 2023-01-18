@@ -12,5 +12,6 @@ public class ChallengeIdEntityFrameworkValueConverter : ValueConverter<Challenge
             id => id == null ? null : id.StringValue,
             value => ChallengeId.Parse(value),
             mappingHints
-        ) { }
+        )
+    { }
 }

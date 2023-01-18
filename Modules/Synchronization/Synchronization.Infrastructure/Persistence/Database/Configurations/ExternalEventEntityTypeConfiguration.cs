@@ -1,5 +1,4 @@
 ﻿using System.Dynamic;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
@@ -11,8 +10,8 @@ public class ExternalEventEntityTypeConfiguration : IEntityTypeConfiguration<Ext
 {
     public void Configure(EntityTypeBuilder<ExternalEvent> builder)
     {
-        builder.HasIndex(x => new {x.Owner, x.Index}).IsUnique();
-        builder.HasIndex(x => new {x.Owner, x.SyncRunId});
+        builder.HasIndex(x => new { x.Owner, x.Index }).IsUnique();
+        builder.HasIndex(x => new { x.Owner, x.SyncRunId });
 
         builder.HasKey(x => x.Id);
 
