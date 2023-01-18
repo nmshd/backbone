@@ -1,16 +1,23 @@
 using System.Reflection;
-using Backbone.API;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Challenges.Infrastructure.Persistence.Database;
+using Files.Application;
+using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
+using Newtonsoft.Json.Linq;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
+var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
     .UseKestrel(options =>
     {
@@ -18,28 +25,14 @@ builder.WebHost
         options.Limits.MaxRequestBodySize = 0;
     });
 
+LoadConfiguration(builder, args);
 
-builder.Configuration.Sources.Clear();
-var env = builder.Environment;
-
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true); // TODO: make optional
-
-if (env.IsDevelopment())
-{
-    var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-    builder.Configuration.AddUserSecrets(appAssembly, optional: true);
-}
-
-builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddCommandLine(args);
-builder.Configuration.AddAzureAppConfiguration();
-
-builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+builder.Host
+    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
 var app = builder.Build();
 Configure(app);
 
@@ -49,6 +42,17 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.Configure<Challenges.Application.ApplicationOptions>(
+        configuration.GetSection("Modules.Challenges.Application"));
+    services.Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules.Files.Application"));
+    services.Configure<Messages.Application.ApplicationOptions>(
+        configuration.GetSection("Modules.Relationships.Application"));
+    services.Configure<Relationships.Application.ApplicationOptions>(
+        configuration.GetSection("Modules.Files.Application"));
+    services.Configure<Synchronization.Application.ApplicationOptions>(
+        configuration.GetSection("Modules.Synchronization.Application"));
+    services.Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules.Files.Application"));
+
     var parsedConfiguration = new BackboneConfiguration();
     configuration.Bind(parsedConfiguration);
 
@@ -57,7 +61,21 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomApplicationInsights()
         .AddCustomFluentValidation();
 
-    services.AddChallenges(parsedConfiguration.Services.Challenges);
+    // TODO: M switch to manual validation
+    services.AddFluentValidationAutoValidation(config =>
+    {
+        config.DisableDataAnnotationsValidation = true;
+        config.ImplicitlyValidateChildProperties = true;
+        config.ImplicitlyValidateRootCollectionElements = true;
+    });
+
+    services
+        .AddChallenges(parsedConfiguration.Modules.Challenges)
+        .AddFiles(parsedConfiguration.Modules.Files)
+        .AddMessages(parsedConfiguration.Modules.Messages)
+        .AddRelationships(parsedConfiguration.Modules.Relationships)
+        .AddSynchronization(parsedConfiguration.Modules.Synchronization)
+        .AddTokens(parsedConfiguration.Modules.Tokens);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
@@ -82,7 +100,7 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
@@ -94,4 +112,25 @@ static void Configure(WebApplication app)
     app.MapHealthChecks("/health");
 
     app.UseCors();
+}
+
+static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
+{
+    webApplicationBuilder.Configuration.Sources.Clear();
+    var env = webApplicationBuilder.Environment;
+
+    webApplicationBuilder.Configuration
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true); // TODO: make optional
+
+    if (env.IsDevelopment())
+    {
+        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
+    }
+
+    webApplicationBuilder.Configuration.AddEnvironmentVariables();
+    webApplicationBuilder.Configuration.AddCommandLine(strings);
+    webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }

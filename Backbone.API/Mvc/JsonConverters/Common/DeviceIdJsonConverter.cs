@@ -3,23 +3,22 @@ using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.StronglyTypedIds;
 
-namespace Backbone.API.Mvc.JsonConverters;
+namespace Backbone.API.Mvc.JsonConverters.Common;
 
-public class IdentityAddressJsonConverter : JsonConverter<IdentityAddress?>
+public class DeviceIdJsonConverter : JsonConverter<DeviceId?>
 {
     public override bool CanConvert(Type objectType)
     {
-        return objectType == typeof(IdentityAddress);
+        return objectType == typeof(DeviceId);
     }
 
-    public override IdentityAddress? Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
+    public override DeviceId? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
         try
         {
-            return id == null ? null : IdentityAddress.Parse(id);
+            return id == null ? null : DeviceId.Parse(id);
         }
         catch (InvalidIdException ex)
         {
@@ -27,7 +26,7 @@ public class IdentityAddressJsonConverter : JsonConverter<IdentityAddress?>
         }
     }
 
-    public override void Write(Utf8JsonWriter writer, IdentityAddress? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, DeviceId? value, JsonSerializerOptions options)
     {
         if (value == null)
             writer.WriteNullValue();

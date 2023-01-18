@@ -1,13 +1,11 @@
-﻿namespace Backbone.API.Configuration;
+﻿using Challenges.Application;
+
+namespace Backbone.API.Configuration;
 
 public class ChallengesConfiguration
 {
-    public Application Application { get; set; } = new();
+    public ApplicationOptions Application { get; set; } = new();
     public ChallengesInfrastructure Infrastructure { get; set; } = new();
-}
-
-public class Application
-{
 }
 
 public class ChallengesInfrastructure

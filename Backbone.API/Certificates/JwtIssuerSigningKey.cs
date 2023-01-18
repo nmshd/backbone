@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Backbone.API.Configuration;
+using Backbone.API.Extensions;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.IdentityModel.Tokens;
 

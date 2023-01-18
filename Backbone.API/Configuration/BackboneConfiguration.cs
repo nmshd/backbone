@@ -7,7 +7,7 @@ public class BackboneConfiguration
     public AuthenticationConfiguration Authentication { get; set; } = new();
     public HttpConfiguration Http { get; set; } = new();
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
-    public ServicesConfiguration Services { get; set; } = new();
+    public ModulesConfiguration Modules { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
@@ -31,8 +31,13 @@ public class BackboneConfiguration
         public EventBusConfiguration EventBus { get; set; } = new();
     }
 
-    public class ServicesConfiguration
+    public class ModulesConfiguration
     {
         public ChallengesConfiguration Challenges { get; set; } = new();
+        public FilesConfiguration Files { get; set; } = new();
+        public MessagesConfiguration Messages { get; set; } = new();
+        public RelationshipsConfiguration Relationships { get; set; } = new();
+        public SynchronizationConfiguration Synchronization { get; set; } = new();
+        public TokensConfiguration Tokens { get; set; } = new();
     }
 }

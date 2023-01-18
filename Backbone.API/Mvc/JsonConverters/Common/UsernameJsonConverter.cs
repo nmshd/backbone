@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.StronglyTypedIds;
 
-namespace Backbone.API.Mvc.JsonConverters;
+namespace Backbone.API.Mvc.JsonConverters.Common;
 
 public class UsernameJsonConverter : JsonConverter<Username?>
 {

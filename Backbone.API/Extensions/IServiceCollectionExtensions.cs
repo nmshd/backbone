@@ -1,4 +1,5 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Text.Json.Serialization;
+using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.Certificates;
@@ -51,15 +52,18 @@ public static class IServiceCollectionExtensions
             })
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Add(new NullableUtcDateTimeConverter());
-                options.JsonSerializerOptions.Converters.Add(new UtcDateTimeConverter());
-                options.JsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
-                options.JsonSerializerOptions.Converters.Add(new DeviceIdJsonConverter());
-                options.JsonSerializerOptions.Converters.Add(new IdentityAddressJsonConverter());
+                var jsonConverters =
+                    AppDomain.CurrentDomain
+                        .GetAssemblies()
+                        .SelectMany(x => x.ExportedTypes)
+                        .Where(x => !x.IsAbstract)
+                        .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
 
-                options.JsonSerializerOptions.Converters.Add(new ChallengeIdJsonConverter());
-
-                // TODO: M add converters
+                foreach (var jsonConverter in jsonConverters)
+                {
+                    var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
+                    options.JsonSerializerOptions.Converters.Add(instance);
+                }
             });
 
         services.AddAuthentication("Bearer")
@@ -95,7 +99,7 @@ public static class IServiceCollectionExtensions
 
         services
             .AddHealthChecks()
-            .AddSqlServer(configuration.Services.Challenges.Infrastructure.SqlDatabase
+            .AddSqlServer(configuration.Modules.Challenges.Infrastructure.SqlDatabase
                 .ConnectionString); // TODO: use separate Connection String
 
         services.AddHttpContextAccessor();
@@ -151,7 +155,7 @@ public static class IServiceCollectionExtensions
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 
-        services.AddValidatorsFromAssemblies(new[] { typeof(Program).Assembly });
+        services.AddValidatorsFromAssemblyContaining<Program>();
 
         return services;
     }
