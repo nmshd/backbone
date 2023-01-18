@@ -10,23 +10,20 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
+      
+      - Modules__Devices__Infrastructure__AzureNotificationHubs__ConnectionString=${ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (Endpoint=sb://<namespace-name>.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=<shared-access-key>)
+      - Modules__Devices__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (Endpoint=sb://<namespace-name>.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=<shared-access-key>)
+      
+      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
+      
+      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
+      
+      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
+      
+      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
+      
+      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
 
-      #- ApplicationInsights__Enabled=false
-
-      #- Authentication__JwtSigningCertificate=MIIDazCCAlOgAwIBAgIUEIiSlffGvbWX64L2TevPqp2Me7swDQYJKoZIhvcNAQELBQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yMTA1MjAxMTAyNDhaFw0zMTA1MTgxMTAyNDhaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDXgWRymp7sxTNlmCh7XL4Y5FqsqvGMw/LnTMR9ki6Ht87essqI1wUUKFT8+snQ6W2YjvVw0b1b++RrrOJADE3mipPck2Efikvnjszw+Nkyhb6Hh3+2koFE8Jfxoxq7beD/VbAYVl1fKwGRhSUHJvCybnIM7s3svTw+BOj1WFvDfUM3qkYKyarxrywU8bmT4rdE2Xbtyhag7Z8Ngy2jJoNAQhOBH4haV3m97X2fwnh3fFINCWf/j4TzGRj/U3EHe5pDnSZzWv427b+N7JYuSQWoKYPBPiNB5zzzqT1Ifk2+DM7q0wOWoUexJHRxyGPr/Zo1owpI3NnUBHgO0wHS7dkPAgMBAAGjUzBRMB0GA1UdDgQWBBQyyL+oBj25CTXI3v61o+64tbEIKzAfBgNVHSMEGDAWgBQyyL+oBj25CTXI3v61o+64tbEIKzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQCfhwUrgC8fwH7msMBwdZM9Fy95uBk/Ao6+WYSQrTP5EX4TfdWs087T7fEdl0MTOuMYgGJlXa5s9pEIwYoaRu5LEPUZ9YDfvpt3J62SgSdEADGImejQzOHSF0DDYNet5HwtnNRVnW2rV6haIay0A+P58mud1TxQXafMww+VkKBnQPY8ArNf59DJXGQduxRTrUE/Unu5UHcucgzUP8962OpUjIA5mQw5D1clZMllTZVc0R3eTcneH2g9rKzwGhpi6yx+1tvcULVEbKx3duZd2rpW9sH6mO7HoeJzGMUmWt4vSoi814ThPwrBIuvpiYabFDaVyUsVaSBCs7iTzzOjNaW8
-      #- Authentication__ValidIssuer=http://backbone
-
-      #- CORS__AllowedOrigins=${CORS__ALLOWED_ORIGINS}
-      #- CORS__ExposedHeaders=${CORS__EXPOSED_HEADERS}
-
-      #- EventBus__Vendor=RabbitMQ
-      #- EventBus__ConnectionInfo=rabbitmq
-      #- EventBus__RabbitMQUsername=guest
-      #- EventBus__RabbitMQPassword=guest
-      #- EventBus__ProjectId = ${GOOGLE_CLOUD_PUBSUB_PROJECT_ID}
-      #- EventBus__TopicName=${GOOGLE_CLOUD_PUBSUB_TOPIC_NAME}
-
-      #- SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True
     ports:
       - "127.0.0.10:80:80"
       - "5000:80"
