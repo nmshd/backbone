@@ -1,0 +1,16 @@
+﻿// ReSharper disable once CheckNamespace
+
+namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions
+{
+    public class ApplicationError
+    {
+        public ApplicationError(string code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
+
+        public string Code { get; }
+        public string Message { get; }
+    }
+}

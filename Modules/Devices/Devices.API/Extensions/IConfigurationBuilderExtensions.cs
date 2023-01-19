@@ -1,0 +1,26 @@
+﻿using Azure.Identity;
+
+namespace Devices.API.Extensions
+{
+    public static class IConfigurationBuilderExtensions
+    {
+        public static void AddAzureAppConfiguration(this IConfigurationBuilder builder, WebHostBuilderContext hostingContext)
+        {
+            var configuration = builder.Build();
+
+            var azureAppConfigurationConfiguration = configuration.GetAzureAppConfigurationConfiguration();
+
+            if (azureAppConfigurationConfiguration.Enabled)
+                builder.AddAzureAppConfiguration(appConfigurationOptions =>
+                {
+                    var credentials = new ManagedIdentityCredential();
+
+                    appConfigurationOptions
+                        .Connect(new Uri(azureAppConfigurationConfiguration.Endpoint), credentials)
+                        .ConfigureKeyVault(vaultOptions => { vaultOptions.SetCredential(credentials); })
+                        .Select("*", "")
+                        .Select("*", "Devices");
+                });
+        }
+    }
+}
