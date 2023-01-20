@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.Certificates;
+using Backbone.API.Configuration;
 using Backbone.API.Mvc.ExceptionFilters;
 using Backbone.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -12,14 +13,16 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 
 namespace Backbone.API.Extensions;
 
 public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        Configuration.BackboneConfiguration configuration,
+        BackboneConfiguration configuration,
         IHostEnvironment env)
     {
         services
@@ -88,8 +91,8 @@ public static class IServiceCollectionExtensions
             options.AddDefaultPolicy(builder =>
             {
                 builder
-                    .WithOrigins(configuration.Http.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Http.Cors.ExposedHeaders.Split(";"))
+                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
@@ -98,7 +101,7 @@ public static class IServiceCollectionExtensions
         services
             .AddHealthChecks()
             .AddSqlServer(configuration.Modules.Challenges.Infrastructure.SqlDatabase
-                .ConnectionString); // TODO: use separate Connection String
+                .ConnectionString); // TODO: M use separate Connection String
 
         services.AddHttpContextAccessor();
 
@@ -154,6 +157,38 @@ public static class IServiceCollectionExtensions
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 
         services.AddValidatorsFromAssemblyContaining<Program>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomSwaggerUI(this IServiceCollection services, BackboneConfiguration.SwaggerUiConfiguration configuration)
+    {
+        services
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen(c =>
+            {
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows { Password = new OpenApiOAuthFlow { TokenUrl = new Uri(configuration.TokenUrl) } },
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    UnresolvedReference = false,
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {securityScheme, new string[] { }}
+                });
+            });
 
         return services;
     }

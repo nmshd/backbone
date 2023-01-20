@@ -5,7 +5,8 @@ namespace Backbone.API.Configuration;
 public class BackboneConfiguration
 {
     public AuthenticationConfiguration Authentication { get; set; } = new();
-    public HttpConfiguration Http { get; set; } = new();
+    public CorsConfiguration Cors { get; set; } = new();
+    public SwaggerUiConfiguration SwaggerUi { get; set; }
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
     public ModulesConfiguration Modules { get; set; } = new();
 
@@ -15,15 +16,15 @@ public class BackboneConfiguration
         public string JwtSigningCertificate { get; set; }
     }
 
-    public class HttpConfiguration
+    public class CorsConfiguration
     {
-        public CorsConfiguration Cors { get; set; } = new();
+        public string AllowedOrigins { get; set; } = "";
+        public string ExposedHeaders { get; set; } = "";
+    }
 
-        public class CorsConfiguration
-        {
-            public string AllowedOrigins { get; set; } = "";
-            public string ExposedHeaders { get; set; } = "";
-        }
+    public class SwaggerUiConfiguration
+    {
+        public string TokenUrl { get; set; }
     }
 
     public class BackboneInfrastructureConfiguration

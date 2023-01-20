@@ -7,9 +7,7 @@ using Backbone.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.OpenApi.Models;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -64,7 +62,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
         .AddCustomApplicationInsights()
-        .AddCustomFluentValidation();
+        .AddCustomFluentValidation()
+        .AddCustomSwaggerUI(parsedConfiguration.SwaggerUi);
 
     // TODO: M switch to manual validation
     services.AddFluentValidationAutoValidation(config =>
@@ -83,10 +82,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddTokens(parsedConfiguration.Modules.Tokens);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-    services
-        .AddEndpointsApiExplorer()
-        .AddSwaggerGen();
 }
 
 static void Configure(WebApplication app)
