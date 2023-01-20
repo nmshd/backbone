@@ -4,10 +4,12 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
-using Challenges.Infrastructure.Persistence.Database;
+using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -19,7 +21,7 @@ builder.WebHost
     .UseKestrel(options =>
     {
         options.AddServerHeader = false;
-        options.Limits.MaxRequestBodySize = 0;
+        options.Limits.MaxRequestBodySize = 20.Mebibytes();
     });
 
 LoadConfiguration(builder, args);
@@ -33,22 +35,28 @@ ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 var app = builder.Build();
 Configure(app);
 
-app.MigrateDbContext<ApplicationDbContext>();
+app
+    .MigrateDbContext<Challenges.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Files.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Relationships.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Synchronization.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Tokens.Infrastructure.Persistence.Database.ApplicationDbContext>();
 
 app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services.Configure<Challenges.Application.ApplicationOptions>(
-        configuration.GetSection("Modules.Challenges.Application"));
-    services.Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules.Files.Application"));
+        configuration.GetSection("Modules:Challenges:Application"));
+    services.Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules:Files:Application"));
     services.Configure<Messages.Application.ApplicationOptions>(
-        configuration.GetSection("Modules.Relationships.Application"));
+        configuration.GetSection("Modules:Relationships:Application"));
     services.Configure<Relationships.Application.ApplicationOptions>(
-        configuration.GetSection("Modules.Files.Application"));
+        configuration.GetSection("Modules:Files:Application"));
     services.Configure<Synchronization.Application.ApplicationOptions>(
-        configuration.GetSection("Modules.Synchronization.Application"));
-    services.Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules.Files.Application"));
+        configuration.GetSection("Modules:Synchronization:Application"));
+    services.Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules:Tokens:Application"));
 
     var parsedConfiguration = new BackboneConfiguration();
     configuration.Bind(parsedConfiguration);

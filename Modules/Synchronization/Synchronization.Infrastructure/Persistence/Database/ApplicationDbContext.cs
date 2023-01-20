@@ -8,7 +8,6 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application;
 using Synchronization.Application.Extensions;
 using Synchronization.Application.Infrastructure;
 using Synchronization.Domain.Entities;

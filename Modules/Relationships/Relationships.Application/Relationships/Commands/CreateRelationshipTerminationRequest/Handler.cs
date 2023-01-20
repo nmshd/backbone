@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Relationships.Application.Extensions;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Application.IntegrationEvents;
 using Relationships.Application.Relationships.DTOs;
 using Relationships.Domain.Entities;
@@ -12,12 +12,12 @@ namespace Relationships.Application.Relationships.Commands.CreateRelationshipTer
 
 public class Handler : IRequestHandler<CreateRelationshipTerminationRequestCommand, RelationshipChangeMetadataDTO>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IRelationshipsDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _userContext = userContext;

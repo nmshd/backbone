@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Synchronization.Application;
+using Synchronization.Application.Infrastructure;
 
 namespace Synchronization.Infrastructure.Persistence.Database;
 

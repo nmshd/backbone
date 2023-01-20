@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using Challenges.Application.Infrastructure.Persistence;
 using Challenges.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +20,7 @@ public static class IServiceCollectionExtensions
                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
             }));
 
-        services.AddScoped<IDbContext, ApplicationDbContext>();
+        services.AddScoped<IChallengesDbContext, ApplicationDbContext>();
     }
 
     public class DbOptions

@@ -2,6 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Domain.Entities.Sync;
 
 namespace Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;

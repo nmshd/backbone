@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Relationships.Application.Infrastructure.Persistence;
 
 namespace Relationships.Infrastructure.Persistence.Database;
 
@@ -25,7 +25,7 @@ public static class IServiceCollectionExtensions
                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
             }));
 
-        services.AddScoped<IDbContext, ApplicationDbContext>();
+        services.AddScoped<IRelationshipsDbContext, ApplicationDbContext>();
     }
 
     public class DbOptions

@@ -6,6 +6,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Synchronization.Application.Datawallets.DTOs;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Application.IntegrationEvents.Outgoing;
 using Synchronization.Domain.Entities;
 using Synchronization.Domain.Entities.Sync;

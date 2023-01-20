@@ -62,7 +62,7 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new DeviceIdJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new IdentityAddressJsonConverter());
-                options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter()); 
+                options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
 
                 foreach (var converter in aspNetCoreOptions.Json.Converters)
                 {

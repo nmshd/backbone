@@ -1,8 +1,8 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Messages.Application.Extensions;
+using Messages.Application.Infrastructure.Persistence;
 using Messages.Application.IntegrationEvents.Outgoing;
 using Messages.Application.Messages.DTOs;
 using Messages.Domain.Entities;
@@ -13,12 +13,12 @@ namespace Messages.Application.Messages;
 public class MessageService
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IDbContext _dbContext;
+    private readonly IMessagesDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageService> _logger;
     private readonly IUserContext _userContext;
 
-    public MessageService(IDbContext dbContext, IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, ILogger<MessageService> logger)
+    public MessageService(IMessagesDbContext dbContext, IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, ILogger<MessageService> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;

@@ -1,4 +1,5 @@
-﻿using Challenges.Domain.Entities;
+﻿using Challenges.Application.Infrastructure.Persistence;
+using Challenges.Domain.Entities;
 using Challenges.Domain.Ids;
 using Challenges.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Challenges.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase
+public class ApplicationDbContext : AbstractDbContextBase, IChallengesDbContext
 {
     public ApplicationDbContext() { }
 

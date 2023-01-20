@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Relationships.Application.Extensions;
 using Relationships.Application.Infrastructure;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Application.Relationships;
 using Relationships.Application.Relationships.DTOs;
 using Relationships.Domain.Entities;
@@ -14,7 +14,7 @@ public class Handler : RequestHandlerBase<ListRelationshipTemplatesQuery, ListRe
 {
     private readonly IContentStore _contentStore;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore) : base(dbContext, userContext, mapper)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore) : base(dbContext, userContext, mapper)
     {
         _contentStore = contentStore;
     }

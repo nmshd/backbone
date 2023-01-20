@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using Relationships.Application.Infrastructure.Persistence;
 
 namespace Relationships.Application.Relationships;
 
@@ -10,10 +10,10 @@ public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<
 {
     protected readonly IdentityAddress _activeIdentity;
     protected readonly DeviceId _activeDevice;
-    protected readonly IDbContext _dbContext;
+    protected readonly IRelationshipsDbContext _dbContext;
     protected readonly IMapper _mapper;
 
-    protected RequestHandlerBase(IDbContext dbContext, IUserContext userContext, IMapper mapper)
+    protected RequestHandlerBase(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _mapper = mapper;

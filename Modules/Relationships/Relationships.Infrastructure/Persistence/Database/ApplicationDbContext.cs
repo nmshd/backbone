@@ -1,12 +1,13 @@
 ﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Domain.Entities;
 using Relationships.Domain.Ids;
 using Relationships.Infrastructure.Persistence.Database.ValueConverters;
 
 namespace Relationships.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase
+public class ApplicationDbContext : AbstractDbContextBase, IRelationshipsDbContext
 {
     public ApplicationDbContext() { }
 

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.Tooling;
 using MediatR;
 using Relationships.Application.Extensions;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Application.Relationships;
 using Relationships.Domain.Entities;
 
@@ -12,7 +12,7 @@ namespace Relationships.Application.RelationshipTemplates.Command.DeleteRelation
 
 public class Handler : RequestHandlerBase<DeleteRelationshipTemplateCommand, Unit>
 {
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
 
     public override async Task<Unit> Handle(DeleteRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {

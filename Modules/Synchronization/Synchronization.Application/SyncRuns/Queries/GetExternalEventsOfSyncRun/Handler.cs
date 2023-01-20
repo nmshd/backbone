@@ -3,6 +3,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Application.SyncRuns.DTOs;
 
 namespace Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;

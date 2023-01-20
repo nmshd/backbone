@@ -4,6 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Synchronization.Application.Datawallets.DTOs;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Domain.Entities;
 
 namespace Synchronization.Application.Datawallets.Queries.GetDatawallet;

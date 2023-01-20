@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Files.Application.Infrastructure.Persistence;
 
 namespace Files.Application.Files.Queries.GetFileContent;
 
@@ -9,7 +9,7 @@ public class Handler : RequestHandlerBase<GetFileContentQuery, GetFileContentRes
 {
     private readonly IBlobStorage _blobStorage;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage) : base(dbContext, userContext, mapper)
+    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage) : base(dbContext, userContext, mapper)
     {
         _blobStorage = blobStorage;
     }

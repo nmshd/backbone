@@ -1,4 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+using Messages.Application.Infrastructure.Persistence;
 using Messages.Domain.Entities;
 using Messages.Domain.Ids;
 using Messages.Infrastructure.Persistence.Database.ValueConverters;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Messages.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase
+public class ApplicationDbContext : AbstractDbContextBase, IMessagesDbContext
 {
     public ApplicationDbContext() { }
 

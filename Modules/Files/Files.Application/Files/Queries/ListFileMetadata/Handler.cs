@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Files.Application.Extensions;
 using Files.Application.Files.DTOs;
+using Files.Application.Infrastructure.Persistence;
 using Files.Domain.Entities;
 
 namespace Files.Application.Files.Queries.ListFileMetadata;
 
 public class Handler : RequestHandlerBase<ListFileMetadataQuery, ListFileMetadataResponse>
 {
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
+    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
 
     public override async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
     {

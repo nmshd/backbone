@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Challenges.Application.Challenges.DTOs;
+using Challenges.Application.Infrastructure.Persistence;
 using Challenges.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
@@ -9,11 +9,11 @@ namespace Challenges.Application.Challenges.Commands.CreateChallenge;
 
 public class Handler : IRequestHandler<CreateChallengeCommand, ChallengeDTO>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IChallengesDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(IChallengesDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _userContext = userContext;

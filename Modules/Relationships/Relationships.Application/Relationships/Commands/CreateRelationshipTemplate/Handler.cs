@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Domain.Entities;
 
 namespace Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
@@ -10,11 +10,11 @@ namespace Relationships.Application.Relationships.Commands.CreateRelationshipTem
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IDbContext _dbContext;
+    private readonly IRelationshipsDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage)
     {
         _dbContext = dbContext;
         _userContext = userContext;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Files.Application.Infrastructure.Persistence;
 using Files.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,13 +11,13 @@ namespace Files.Application.Files.Commands.CreateFile;
 public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IDbContext _dbContext;
+    private readonly IFilesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
     private CreateFileCommand _request;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, ILogger<Handler> logger)
+    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, ILogger<Handler> logger)
     {
         _dbContext = dbContext;
         _userContext = userContext;

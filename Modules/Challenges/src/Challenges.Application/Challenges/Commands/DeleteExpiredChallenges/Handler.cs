@@ -1,5 +1,5 @@
-﻿using Challenges.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using Challenges.Application.Infrastructure.Persistence;
+using Challenges.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -8,10 +8,10 @@ namespace Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExpiredChallengesResponse>
 {
-    private readonly IDbContext _dbContext;
+    private readonly IChallengesDbContext _dbContext;
     private readonly ILogger<DeleteExpiredChallengesCommand> _logger;
 
-    public Handler(ILogger<DeleteExpiredChallengesCommand> logger, IDbContext dbContext)
+    public Handler(ILogger<DeleteExpiredChallengesCommand> logger, IChallengesDbContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;

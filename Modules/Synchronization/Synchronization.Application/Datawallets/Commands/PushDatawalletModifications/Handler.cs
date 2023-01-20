@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Synchronization.Application.Datawallets.DTOs;
 using Synchronization.Application.Extensions;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Application.IntegrationEvents.Outgoing;
 using Synchronization.Domain.Entities;
 using static Synchronization.Domain.Entities.Datawallet;

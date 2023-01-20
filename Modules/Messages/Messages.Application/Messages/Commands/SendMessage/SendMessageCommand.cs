@@ -1,6 +1,5 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Messages.Domain.Ids;
 
 namespace Messages.Application.Messages.Commands.SendMessage;
 
@@ -20,5 +19,5 @@ public class SendMessageCommandRecipientInformation
 
 public class SendMessageCommandAttachment
 {
-    public FileId Id { get; set; }
+    public string Id { get; set; }
 }

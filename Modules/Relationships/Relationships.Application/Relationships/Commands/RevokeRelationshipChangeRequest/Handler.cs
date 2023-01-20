@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Relationships.Application.Extensions;
 using Relationships.Application.Infrastructure;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Application.IntegrationEvents;
 using Relationships.Domain;
 using Relationships.Domain.Entities;
@@ -16,12 +16,12 @@ namespace Relationships.Application.Relationships.Commands.RevokeRelationshipCha
 public class Handler : IRequestHandler<RevokeRelationshipChangeRequestCommand, RevokeRelationshipChangeRequestResponse>
 {
     private readonly IContentStore _contentStore;
-    private readonly IDbContext _dbContext;
+    private readonly IRelationshipsDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore)
     {
         _dbContext = dbContext;
         _userContext = userContext;

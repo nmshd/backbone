@@ -1,6 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
+using Synchronization.Application.Infrastructure;
 using Synchronization.Application.IntegrationEvents.Outgoing;
 using Synchronization.Domain.Entities.Sync;
 

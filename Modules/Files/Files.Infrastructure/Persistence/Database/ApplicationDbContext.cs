@@ -1,11 +1,12 @@
 ﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+using Files.Application.Infrastructure.Persistence;
 using Files.Domain.Entities;
 using Files.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Files.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase
+public class ApplicationDbContext : AbstractDbContextBase, IFilesDbContext
 {
     public ApplicationDbContext() { }
 

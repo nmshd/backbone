@@ -2,12 +2,13 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Messages.Application.Extensions;
+using Messages.Application.Infrastructure.Persistence;
 using Messages.Application.IntegrationEvents.Outgoing;
 using Messages.Domain.Entities;
+using Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,14 +18,14 @@ namespace Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IDbContext _dbContext;
+    private readonly IMessagesDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
 
-    public Handler(IDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsMonitor<ApplicationOptions> options, ILogger<Handler> logger)
+    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsMonitor<ApplicationOptions> options, ILogger<Handler> logger)
     {
         _dbContext = dbContext;
         _blobStorage = blobStorage;
@@ -44,7 +45,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             _userContext.GetDeviceId(),
             request.DoNotSendBefore,
             request.Body,
-            request.Attachments.Select(a => new Attachment(a.Id)),
+            request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
             recipients);
 
         await SaveMessage(message, cancellationToken);

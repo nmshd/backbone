@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Relationships.Application.Extensions;
 using Relationships.Application.Infrastructure;
+using Relationships.Application.Infrastructure.Persistence;
 using Relationships.Application.IntegrationEvents;
 using Relationships.Domain.Entities;
 using Relationships.Domain.Ids;
@@ -16,7 +16,7 @@ namespace Relationships.Application.Relationships.Commands.CreateRelationship;
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {
     private readonly IContentStore _contentStore;
-    private readonly IDbContext _dbContext;
+    private readonly IRelationshipsDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private CreateRelationshipCommand _request;
     private RelationshipTemplate _template;
 
-    public Handler(IDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore)
     {
         _dbContext = dbContext;
         _userContext = userContext;

@@ -2,6 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
+using Messages.Domain.Ids;
 
 namespace Messages.Application.Messages.Commands.SendMessage;
 
@@ -48,6 +49,8 @@ public class SendMessageCommandAttachmentValidator : AbstractValidator<SendMessa
 {
     public SendMessageCommandAttachmentValidator()
     {
-        RuleFor(a => a.Id).DetailedNotNull();
+        RuleFor(a => a.Id)
+            .DetailedNotNull()
+            .Must(FileId.IsValid).WithMessage("{PropertyName} has an invalid format.");
     }
 }
