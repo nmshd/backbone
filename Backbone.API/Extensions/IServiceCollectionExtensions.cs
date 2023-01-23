@@ -83,7 +83,7 @@ public static class IServiceCollectionExtensions
                     JwtIssuerSigningKey.Get(configuration.Authentication, env);
 
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = true; // TODO: M rather false?
+                options.SaveToken = false;
             });
 
         services.AddCors(options =>

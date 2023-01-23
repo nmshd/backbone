@@ -45,16 +45,13 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
-    services.Configure<Challenges.Application.ApplicationOptions>(
-        configuration.GetSection("Modules:Challenges:Application"));
-    services.Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules:Files:Application"));
-    services.Configure<Messages.Application.ApplicationOptions>(
-        configuration.GetSection("Modules:Relationships:Application"));
-    services.Configure<Relationships.Application.ApplicationOptions>(
-        configuration.GetSection("Modules:Files:Application"));
-    services.Configure<Synchronization.Application.ApplicationOptions>(
-        configuration.GetSection("Modules:Synchronization:Application"));
-    services.Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules:Tokens:Application"));
+    services
+        .Configure<Challenges.Application.ApplicationOptions>(configuration.GetSection("Modules:Challenges:Application"))
+        .Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules:Files:Application"))
+        .Configure<Messages.Application.ApplicationOptions>(configuration.GetSection("Modules:Messages:Application"))
+        .Configure<Relationships.Application.ApplicationOptions>(configuration.GetSection("Modules:Relationships:Application"))
+        .Configure<Synchronization.Application.ApplicationOptions>(configuration.GetSection("Modules:Synchronization:Application"))
+        .Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules:Tokens:Application"));
 
     var parsedConfiguration = new BackboneConfiguration();
     configuration.Bind(parsedConfiguration);
@@ -122,7 +119,7 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true); // TODO: make optional
+        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
     if (env.IsDevelopment())
     {

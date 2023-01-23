@@ -41,10 +41,10 @@ public static class RabbitMQServiceCollectionExtensions
             var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
             var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-            var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope,
-                eventBusSubcriptionsManager, subscriptionClientName, options.RetryCount);
+                eventBusSubscriptionsManager, subscriptionClientName, options.RetryCount);
         });
     }
 }
