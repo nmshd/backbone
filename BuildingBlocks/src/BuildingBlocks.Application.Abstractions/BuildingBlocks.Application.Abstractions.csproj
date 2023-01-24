@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Version>3.1.0</Version>
+		<Authors>j&amp;s soft GmbH</Authors>
+		<Company>j&amp;s soft GmbH</Company>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<RepositoryUrl>https://github.com/nmshd/bkb-libraries</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Enmeshed.BuildingBlocks.Application.Abstractions</PackageId>
+		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
+		<PackageTags>Enmeshed</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+		<ProjectReference Include="..\Tooling\Tooling.csproj" />
+	</ItemGroup>
+
+</Project>

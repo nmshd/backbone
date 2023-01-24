@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Authors>j&amp;s soft GmbH</Authors>
+		<Company>j&amp;s soft GmbH</Company>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<RepositoryUrl>https://github.com/nmshd/bkb-libraries</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ByteSize" Version="2.1.1" />
+		<PackageReference Include="FluentValidation" Version="11.2.2" />
+		<PackageReference Include="MediatR" Version="11.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+		<ProjectReference Include="..\Tooling\Tooling.csproj" />
+	</ItemGroup>
+
+</Project>

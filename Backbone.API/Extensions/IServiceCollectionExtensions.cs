@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
@@ -65,6 +66,8 @@ public static class IServiceCollectionExtensions
                     var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
                     options.JsonSerializerOptions.Converters.Add(instance);
                 }
+
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
         services.AddAuthentication("Bearer")

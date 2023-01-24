@@ -4,11 +4,13 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Synchronization.Application.Extensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -109,6 +111,10 @@ static void Configure(WebApplication app)
     app.MapHealthChecks("/health");
 
     app.UseCors();
+
+    var eventBus = app.Services.GetRequiredService<IEventBus>();
+    eventBus.AddSynchronizationIntegrationEventSubscriptions();
+
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

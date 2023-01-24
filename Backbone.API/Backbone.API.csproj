@@ -47,20 +47,20 @@
 		<ProjectReference Include="..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
-		<ProjectReference Include="..\Modules\Files\Files.Application\Files.Application.csproj" />
-		<ProjectReference Include="..\Modules\Files\Files.Domain\Files.Domain.csproj" />
-		<ProjectReference Include="..\Modules\Files\Files.Infrastructure\Files.Infrastructure.csproj" />
-		<ProjectReference Include="..\Modules\Messages\Messages.Application\Messages.Application.csproj" />
-		<ProjectReference Include="..\Modules\Messages\Messages.Infrastructure\Messages.Infrastructure.csproj" />
-		<ProjectReference Include="..\Modules\Relationships\Relationships.Application\Relationships.Application.csproj" />
-		<ProjectReference Include="..\Modules\Relationships\Relationships.Domain\Relationships.Domain.csproj" />
-		<ProjectReference Include="..\Modules\Relationships\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
-		<ProjectReference Include="..\Modules\Synchronization\Synchronization.Application\Synchronization.Application.csproj" />
-		<ProjectReference Include="..\Modules\Synchronization\Synchronization.Domain\Synchronization.Domain.csproj" />
-		<ProjectReference Include="..\Modules\Synchronization\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
-		<ProjectReference Include="..\Modules\Tokens\Tokens.Application\Tokens.Application.csproj" />
-		<ProjectReference Include="..\Modules\Tokens\Tokens.Domain\Tokens.Domain.csproj" />
-		<ProjectReference Include="..\Modules\Tokens\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Files\src\Files.Application\Files.Application.csproj" />
+		<ProjectReference Include="..\Modules\Files\src\Files.Domain\Files.Domain.csproj" />
+		<ProjectReference Include="..\Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Messages\src\Messages.Application\Messages.Application.csproj" />
+		<ProjectReference Include="..\Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Relationships\src\Relationships.Application\Relationships.Application.csproj" />
+		<ProjectReference Include="..\Modules\Relationships\src\Relationships.Domain\Relationships.Domain.csproj" />
+		<ProjectReference Include="..\Modules\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
+		<ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Domain\Synchronization.Domain.csproj" />
+		<ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
+		<ProjectReference Include="..\Modules\Tokens\src\Tokens.Domain\Tokens.Domain.csproj" />
+		<ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

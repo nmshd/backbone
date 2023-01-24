@@ -3,4 +3,4 @@ EXPOSE 80
 
 WORKDIR /app
 
-ENTRYPOINT ["dotnet", "run"]
+ENTRYPOINT ["dotnet", "run", "--project", "Backbone.API/Backbone.API.csproj"]

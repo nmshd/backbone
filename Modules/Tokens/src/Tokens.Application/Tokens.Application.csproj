@@ -5,19 +5,22 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile></DocumentationFile>
-	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="IntegrationEvents\**" />
+		<EmbeddedResource Remove="IntegrationEvents\**" />
+		<None Remove="IntegrationEvents\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-		<PackageReference Include="FluentValidation" Version="11.2.2" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
-		<ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj" />
+		<ProjectReference Include="..\Tokens.Domain\Tokens.Domain.csproj"/>
 	</ItemGroup>
+
 </Project>

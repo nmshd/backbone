@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{06D714AE-EDF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{76F6B614-D605-427C-ADFE-0A6D63A3858B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application", "BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application\BuildingBlocks.Application.csproj", "{B9616684-0252-428D-8D64-CAFC8708F7D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application", "BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj", "{B9616684-0252-428D-8D64-CAFC8708F7D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling", "BuildingBlocks\Tooling\Tooling\Tooling.csproj", "{2D4AF534-2435-4FD0-88EC-690227F26172}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling", "BuildingBlocks\src\Tooling\Tooling.csproj", "{2D4AF534-2435-4FD0-88EC-690227F26172}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application.Abstractions", "BuildingBlocks\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj", "{9D0E3DF3-BCB4-4C7A-BE3F-FF6BC5E17903}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application.Abstractions", "BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj", "{9D0E3DF3-BCB4-4C7A-BE3F-FF6BC5E17903}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Infrastructure", "Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj", "{15150029-9E3F-4211-9BF4-DEC868BB0F0E}"
 EndProject
@@ -27,11 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Domain", "Modules\Challenges\src\Challenges.Domain\Challenges.Domain.csproj", "{8A21954E-99F6-484A-B7C4-32AC71108285}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevelopmentKit.Identity", "BuildingBlocks\DevelopmentKit.Identity\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj", "{6275041A-FF15-44C4-8386-4D42A234C890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevelopmentKit.Identity", "BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj", "{6275041A-FF15-44C4-8386-4D42A234C890}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds", "BuildingBlocks\StronglyTypedIds\StronglyTypedIds\StronglyTypedIds.csproj", "{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds", "BuildingBlocks\src\StronglyTypedIds\StronglyTypedIds.csproj", "{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure", "BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{F157A154-8E45-443C-8021-29BE9D32325F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure", "BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{F157A154-8E45-443C-8021-29BE9D32325F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4B0D1F2-8AD5-481D-96EE-AC2EE7B85A51}"
 	ProjectSection(SolutionItems) = preProject
@@ -42,17 +42,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backbone.Infrastructure", "Backbone.Infrastructure\Backbone.Infrastructure.csproj", "{197F5C0C-A042-42F9-AE83-057640AA4036}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{24644042-C274-4A5F-8F40-463ADC3E7B34}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{24644042-C274-4A5F-8F40-463ADC3E7B34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{0EAF57B8-E97C-469E-A74B-596D78C978B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{557BD815-AC5A-4880-9455-F0CE4F493EAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Application", "Modules\Files\Files.Application\Files.Application.csproj", "{1C0A846B-DD6A-426F-99C0-9479FA9B1AD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Application", "Modules\Files\src\Files.Application\Files.Application.csproj", "{1C0A846B-DD6A-426F-99C0-9479FA9B1AD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Domain", "Modules\Files\Files.Domain\Files.Domain.csproj", "{F08D7B60-A643-4277-AD67-DBD50F9D4B87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Domain", "Modules\Files\src\Files.Domain\Files.Domain.csproj", "{F08D7B60-A643-4277-AD67-DBD50F9D4B87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure", "Modules\Files\Files.Infrastructure\Files.Infrastructure.csproj", "{70F69EC1-1374-49D2-88AB-111B62664B27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure", "Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj", "{70F69EC1-1374-49D2-88AB-111B62664B27}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Messages", "Messages", "{10FD6076-863A-4197-B7D5-EC91061F8DD2}"
 EndProject
@@ -62,43 +62,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tokens", "Tokens", "{6A9D01
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Synchronization", "Synchronization", "{AB0FB8CB-C232-459F-A6C8-01B574E96D70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Application", "Modules\Messages\Messages.Application\Messages.Application.csproj", "{D7FF923F-5D3F-4B58-A92B-BF0A73A42F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Application", "Modules\Messages\src\Messages.Application\Messages.Application.csproj", "{D7FF923F-5D3F-4B58-A92B-BF0A73A42F48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Common", "Modules\Messages\Messages.Common\Messages.Common.csproj", "{7052A7FA-DA11-43DA-B2BF-5C7898A5CA9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Common", "Modules\Messages\src\Messages.Common\Messages.Common.csproj", "{7052A7FA-DA11-43DA-B2BF-5C7898A5CA9C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain", "Modules\Messages\Messages.Domain\Messages.Domain.csproj", "{CF623BC9-660E-49D1-B215-B2B285F67DA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain", "Modules\Messages\src\Messages.Domain\Messages.Domain.csproj", "{CF623BC9-660E-49D1-B215-B2B285F67DA3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Infrastructure", "Modules\Messages\Messages.Infrastructure\Messages.Infrastructure.csproj", "{C880254A-1775-40F7-9E70-D6B627C58D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Infrastructure", "Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj", "{C880254A-1775-40F7-9E70-D6B627C58D04}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Application", "Modules\Relationships\Relationships.Application\Relationships.Application.csproj", "{1524655C-99D8-41DF-B80B-B7666CBE6B6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Application", "Modules\Relationships\src\Relationships.Application\Relationships.Application.csproj", "{1524655C-99D8-41DF-B80B-B7666CBE6B6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Common", "Modules\Relationships\Relationships.Common\Relationships.Common.csproj", "{3C60925D-A9CE-4957-9C27-C2043A7A42F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Common", "Modules\Relationships\src\Relationships.Common\Relationships.Common.csproj", "{3C60925D-A9CE-4957-9C27-C2043A7A42F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Domain", "Modules\Relationships\Relationships.Domain\Relationships.Domain.csproj", "{A7A02EE7-B2FC-4BE6-AB7E-EAE5FE5EB01D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Domain", "Modules\Relationships\src\Relationships.Domain\Relationships.Domain.csproj", "{A7A02EE7-B2FC-4BE6-AB7E-EAE5FE5EB01D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Infrastructure", "Modules\Relationships\Relationships.Infrastructure\Relationships.Infrastructure.csproj", "{2B504170-1CA6-463B-955A-028EABF70B89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Infrastructure", "Modules\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj", "{2B504170-1CA6-463B-955A-028EABF70B89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Application", "Modules\Synchronization\Synchronization.Application\Synchronization.Application.csproj", "{93105D4E-D13D-4878-8207-8F6C0CD75D60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Application", "Modules\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj", "{93105D4E-D13D-4878-8207-8F6C0CD75D60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Domain", "Modules\Synchronization\Synchronization.Domain\Synchronization.Domain.csproj", "{C17C02BA-9DA8-496E-BB15-C2E3D66BBF9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Domain", "Modules\Synchronization\src\Synchronization.Domain\Synchronization.Domain.csproj", "{C17C02BA-9DA8-496E-BB15-C2E3D66BBF9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Infrastructure", "Modules\Synchronization\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj", "{C78F3C29-514E-411B-AB80-B484186EF88E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Infrastructure", "Modules\Synchronization\src\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj", "{C78F3C29-514E-411B-AB80-B484186EF88E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Application", "Modules\Tokens\Tokens.Application\Tokens.Application.csproj", "{006E287E-E685-43C2-A379-1DB78C06DCD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Application", "Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj", "{006E287E-E685-43C2-A379-1DB78C06DCD8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain", "Modules\Tokens\Tokens.Domain\Tokens.Domain.csproj", "{B643D89D-A4ED-4C36-9D18-060096C1F37D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain", "Modules\Tokens\src\Tokens.Domain\Tokens.Domain.csproj", "{B643D89D-A4ED-4C36-9D18-060096C1F37D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Infrastructure", "Modules\Tokens\Tokens.Infrastructure\Tokens.Infrastructure.csproj", "{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Infrastructure", "Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj", "{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{8D25581A-C9DD-4DED-A1DB-A26CD9239666}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.API", "Modules\Devices\Devices.API\Devices.API.csproj", "{213414C2-CFBF-48C8-A7E3-CB452DCD32BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.API", "Modules\Devices\src\Devices.API\Devices.API.csproj", "{213414C2-CFBF-48C8-A7E3-CB452DCD32BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Application", "Modules\Devices\Devices.Application\Devices.Application.csproj", "{C8E0A960-24C1-4F0B-91BF-3DFCF02A1931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Application", "Modules\Devices\src\Devices.Application\Devices.Application.csproj", "{C8E0A960-24C1-4F0B-91BF-3DFCF02A1931}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Domain", "Modules\Devices\Devices.Domain\Devices.Domain.csproj", "{0EED4A4D-3A2F-4C13-AD88-E7DC6C92CCEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Domain", "Modules\Devices\src\Devices.Domain\Devices.Domain.csproj", "{0EED4A4D-3A2F-4C13-AD88-E7DC6C92CCEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure", "Modules\Devices\Devices.Infrastructure\Devices.Infrastructure.csproj", "{B666F88B-781D-4D2C-8F04-D259017B8173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure", "Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj", "{B666F88B-781D-4D2C-8F04-D259017B8173}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

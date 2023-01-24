@@ -8,14 +8,12 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
-		<PackageReference Include="System.Interactive.Async" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
-		<ProjectReference Include="..\Challenges.Application\Challenges.Application.csproj"/>
-		<ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj"/>
+		<ProjectReference Include="..\Messages.Application\Messages.Application.csproj"/>
+		<ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj"/>
 	</ItemGroup>
-
 </Project>
