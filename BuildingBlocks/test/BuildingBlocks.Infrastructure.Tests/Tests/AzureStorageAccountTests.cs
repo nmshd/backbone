@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Diagnostics;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
-using System.Text;
 using Xunit;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
@@ -13,7 +13,7 @@ public class AzureStorageAccountTests
     private static void StartAzuriteContainer()
     {
         var processInfo = new ProcessStartInfo("docker",
-            $"run --rm --name azurite-test-container -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0")
+            "run --rm --name azurite-test-container -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0")
         {
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -62,16 +62,11 @@ public class AzureStorageAccountTests
         var services = new ServiceCollection()
             .AddLogging();
 
-        var connectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;";
-        var containerName = "azureblobstoragecontainer";
-
-        Action<AzureStorageAccountOptions> options = x =>
+        services.AddAzureStorageAccount(x =>
         {
-            x.ContainerName = containerName;
-            x.ConnectionString = connectionString;
-        };
-
-        services.AddAzureStorageAccount(options);
+            x.ContainerName = "azureblobstoragecontainer";
+            x.ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;";
+        });
 
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider.GetService<IBlobStorage>();
@@ -83,7 +78,7 @@ public class AzureStorageAccountTests
         var azureBlobStorage = ProvisionAzureStorageTests();
 
         var addBlobName = "AzureSaveAsyncAndFindAsync";
-        var addBlobContent = Encoding.ASCII.GetBytes("AzureSaveAsyncAndFindAsync");
+        var addBlobContent = "AzureSaveAsyncAndFindAsync"u8.ToArray();
 
         azureBlobStorage.Add(addBlobName, addBlobContent);
         await azureBlobStorage.SaveAsync();
@@ -99,11 +94,11 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var addBlobName = "AzureDeleteBlobThatExists";
-        var addBlobContent = Encoding.ASCII.GetBytes("AzureDeleteBlobThatExists");
+        const string ADD_BLOB_NAME = "AzureDeleteBlobThatExists";
+        var addBlobContent = "AzureDeleteBlobThatExists"u8.ToArray();
 
-        azureBlobStorage.Add(addBlobName, addBlobContent);
-        azureBlobStorage.Remove(addBlobName);
+        azureBlobStorage.Add(ADD_BLOB_NAME, addBlobContent);
+        azureBlobStorage.Remove(ADD_BLOB_NAME);
         await azureBlobStorage.SaveAsync();
 
         CloseAzuriteContainer();
@@ -114,10 +109,9 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var blobName = "AzureDeleteBlobThatDoesNotExist";
-        azureBlobStorage.Remove(blobName);
+        azureBlobStorage.Remove("AzureDeleteBlobThatDoesNotExist");
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await azureBlobStorage.SaveAsync());
+        await Assert.ThrowsAsync<NotFoundException>(azureBlobStorage.SaveAsync);
 
         CloseAzuriteContainer();
     }
@@ -127,14 +121,12 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var addBlobName = "AzureAddBlobWithSameName";
-        var addBlobContent = Encoding.ASCII.GetBytes("AddBlobWithSameName Before.");
-        azureBlobStorage.Add(addBlobName, addBlobContent);
+        const string ADD_BLOB_NAME = "AzureAddBlobWithSameName";
 
-        addBlobContent = Encoding.ASCII.GetBytes("AddBlobWithSameName After.");
-        azureBlobStorage.Add(addBlobName, addBlobContent);
+        azureBlobStorage.Add(ADD_BLOB_NAME, "AddBlobWithSameName Before"u8.ToArray());
+        azureBlobStorage.Add(ADD_BLOB_NAME, "AddBlobWithSameName After"u8.ToArray());
 
-        await Assert.ThrowsAsync<BlobAlreadyExistsException>(async () => await azureBlobStorage.SaveAsync());
+        await Assert.ThrowsAsync<BlobAlreadyExistsException>(azureBlobStorage.SaveAsync);
 
         CloseAzuriteContainer();
     }
@@ -144,20 +136,20 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var addBlobName1 = "AzureAddMultipleBlobsAndFindAllBlobs1";
-        var addBlobName2 = "AzureAddMultipleBlobsAndFindAllBlobs2";
+        const string ADD_BLOB_NAME1 = "AzureAddMultipleBlobsAndFindAllBlobs1";
+        const string ADD_BLOB_NAME2 = "AzureAddMultipleBlobsAndFindAllBlobs2";
 
-        var addBlobContent1 = Encoding.ASCII.GetBytes("AzureAddMultipleBlobsAndFindAllBlobs1");
-        var addBlobContent2 = Encoding.ASCII.GetBytes("AzureAddMultipleBlobsAndFindAllBlobs2");
+        var addBlobContent1 = "AzureAddMultipleBlobsAndFindAllBlobs1"u8.ToArray();
+        var addBlobContent2 = "AzureAddMultipleBlobsAndFindAllBlobs2"u8.ToArray();
 
-        azureBlobStorage.Add(addBlobName1, addBlobContent1);
-        azureBlobStorage.Add(addBlobName2, addBlobContent2);
+        azureBlobStorage.Add(ADD_BLOB_NAME1, addBlobContent1);
+        azureBlobStorage.Add(ADD_BLOB_NAME2, addBlobContent2);
         await azureBlobStorage.SaveAsync();
 
-        var retrievedBlobContent = await azureBlobStorage.FindAllAsync();
+        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync()).ToListAsync();
 
-        Assert.Contains<string>(addBlobName1, retrievedBlobContent);
-        Assert.Contains<string>(addBlobName2, retrievedBlobContent);
+        retrievedBlobContent.Should().Contain(ADD_BLOB_NAME1);
+        retrievedBlobContent.Should().Contain(ADD_BLOB_NAME2);
 
         CloseAzuriteContainer();
     }

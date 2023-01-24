@@ -1,10 +1,9 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Storage.V1;
-using System.Text;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using FluentAssertions;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,9 +17,9 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
 
         public GoogleCloudStorageTests(ITestOutputHelper output)
         {
-            const string authJson = "";
+            const string AUTH_JSON = "";
 
-            _storageClient = StorageClient.Create(GoogleCredential.FromJson(authJson));
+            _storageClient = StorageClient.Create(GoogleCredential.FromJson(AUTH_JSON));
 
             var logger = output.BuildLoggerFor<GoogleCloudStorage>();
             _blobStorageUnderTest = new GoogleCloudStorage(BUCKET_NAME, _storageClient, logger);
@@ -44,13 +43,13 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
         [Fact(Skip = "No valid emulator for GCP")]
         public async Task SaveAndFindSingleBlob()
         {
-            const string blobName = "BlobName";
+            const string BLOB_NAME = "BlobName";
             var blobContent = "BlobContent".GetBytes();
 
-            _blobStorageUnderTest.Add(blobName, blobContent);
+            _blobStorageUnderTest.Add(BLOB_NAME, blobContent);
             await _blobStorageUnderTest.SaveAsync();
 
-            var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(blobName);
+            var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BLOB_NAME);
             retrievedBlobContent.Should().Equal(blobContent);
         }
 
@@ -77,10 +76,10 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
         {
             const string blobName = "AddBlobWithSameName";
 
-            var blobContent = Encoding.ASCII.GetBytes("BlobContent1");
+            var blobContent = "BlobContent1"u8.ToArray();
             _blobStorageUnderTest.Add(blobName, blobContent);
 
-            blobContent = Encoding.ASCII.GetBytes("BlobContent2");
+            blobContent = "BlobContent2"u8.ToArray();
             _blobStorageUnderTest.Add(blobName, blobContent);
 
             var acting = () => _blobStorageUnderTest.SaveAsync();
@@ -120,10 +119,10 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
 
             await _blobStorageUnderTest.SaveAsync();
 
-            var retrievedBlobContent = await _blobStorageUnderTest.FindAllAsync();
+            var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
 
-            Assert.Contains<string>("BlobName1", retrievedBlobContent);
-            Assert.Contains<string>("BlobName2", retrievedBlobContent);
+            retrievedBlobContent.Should().Contain("BlobName1");
+            retrievedBlobContent.Should().Contain("BlobName2");
         }
     }
 }

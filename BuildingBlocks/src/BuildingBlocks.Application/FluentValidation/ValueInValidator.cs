@@ -13,19 +13,14 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
     {
         if (validValues == null) throw new ArgumentNullException(nameof(validValues));
 
-        var validValuesList = new List<object>();
-
-        foreach (var validValue in validValues) validValuesList.Add(validValue);
-
-        ValidValues = validValuesList;
+        ValidValues = validValues.Cast<object?>().ToList();
 
         var numberOfValidValues = ValidValues.Count();
 
         if (numberOfValidValues == 0)
             throw new ArgumentException("At least one valid option is expected", nameof(validValues));
 
-        _commaSeparatedListOfValidValues =
-            $"[{string.Join(", ", ValidValues.Select(v => v == null ? "null" : v.ToString()).ToArray())}]";
+        _commaSeparatedListOfValidValues = $"[{string.Join(", ", ValidValues.Select(v => v == null ? "null" : v.ToString()))}]";
     }
 
     public IEnumerable<object?> ValidValues { get; }
@@ -36,10 +31,11 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
     {
         var propertyValueType = typeof(TProperty);
 
-        foreach (var validValue in ValidValues)
-            if (validValue == null || validValue.GetType() != propertyValueType)
-                throw new ArgumentException(
-                    $"All objects in 'validValues' have to be of type '{propertyValueType}'");
+        if (ValidValues.Any(validValue => validValue == null || validValue.GetType() != propertyValueType))
+        {
+            throw new ArgumentException(
+                $"All objects in 'validValues' have to be of type '{propertyValueType}'");
+        }
     }
 
     public override bool IsValid(ValidationContext<T> context, TProperty value)
@@ -48,18 +44,16 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
 
         ValidateValidValuesType();
 
-        if (!ValidValues.Contains(value))
-        {
-            context.MessageFormatter.AppendArgument("ValidValues", _commaSeparatedListOfValidValues);
-            return false;
-        }
+        if (ValidValues.Contains(value)) return true;
 
-        return true;
+        context.MessageFormatter.AppendArgument("ValidValues", _commaSeparatedListOfValidValues);
+
+        return false;
     }
 
     protected override string GetDefaultMessageTemplate(string errorCode)
     {
-        return $"'{{PropertyName}}' must have one of the following values: {ValidValues}";
+        return "'{PropertyName}' must have one of the following values: {ValidValues}";
     }
 }
 
