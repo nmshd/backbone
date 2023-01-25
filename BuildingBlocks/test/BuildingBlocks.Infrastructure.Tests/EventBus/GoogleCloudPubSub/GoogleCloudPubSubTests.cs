@@ -35,7 +35,7 @@ public class GoogleCloudPubSubTests : IDisposable
         TestEvent2IntegrationEventHandler.Instances.Clear();
     }
 
-    [Fact]
+    [Fact(Skip = "No valid emulator for GCP")]
     public void One_subscriber_for_one_event()
     {
         Task.Delay(30.Seconds()).GetAwaiter().GetResult();
@@ -50,7 +50,7 @@ public class GoogleCloudPubSubTests : IDisposable
         TestEvent1IntegrationEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
-    [Fact]
+    [Fact(Skip = "No valid emulator for GCP")]
     public void Subscribe_to_the_same_event_twice_with_the_same_subscriber()
     {
         Task.Delay(30.Seconds()).GetAwaiter().GetResult();
@@ -67,7 +67,7 @@ public class GoogleCloudPubSubTests : IDisposable
         TestEvent1IntegrationEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
-    [Fact]
+    [Fact(Skip = "No valid emulator for GCP")]
     public void Two_subscribers_for_the_same_event_both_receive_the_event()
     {
         Task.Delay(30.Seconds()).GetAwaiter().GetResult();
@@ -85,7 +85,7 @@ public class GoogleCloudPubSubTests : IDisposable
         TestEvent1IntegrationEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
-    [Fact]
+    [Fact(Skip = "No valid emulator for GCP")]
     public async Task Only_one_instance_of_a_subscriber_receives_the_event()
     {
         await Task.Delay(30.Seconds());
@@ -112,7 +112,7 @@ public class GoogleCloudPubSubTests : IDisposable
         totalNumberOfTriggeredInstances.Should().Be(1);
     }
 
-    [Fact]
+    [Fact(Skip = "No valid emulator for GCP")]
     public void The_correct_event_handler_is_called_when_multiple_subscriptions_exist()
     {
         Task.Delay(30.Seconds()).GetAwaiter().GetResult();
