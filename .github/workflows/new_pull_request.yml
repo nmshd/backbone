@@ -1,0 +1,13 @@
+name: Notify about new pull request
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nmshd/github-notify-action@v1
+        with:
+          webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK_CONTRIBUTION }}
