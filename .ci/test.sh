@@ -3,6 +3,6 @@ set -e
 set -u
 set -x
  
-dotnet restore Backbone.sln
-dotnet build --no-restore  Backbone.sln
-dotnet test --no-restore --no-build Backbone.sln
+dotnet restore "Backbone.API/Backbone.API.csproj"
+dotnet build --no-restore  "Backbone.API/Backbone.API.csproj"
+dotnet test --no-restore --no-build "Backbone.API/Backbone.API.csproj"

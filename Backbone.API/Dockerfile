@@ -4,7 +4,6 @@ WORKDIR /src
 COPY . .
 RUN dotnet restore "Backbone.API/Backbone.API.csproj"
 
-WORKDIR "/src/Backbone.API"
 RUN dotnet publish --configuration Release --output /app --no-restore "Backbone.API/Backbone.API.csproj"
 
 # Run	
