@@ -1,18 +1,29 @@
-﻿using Backbone.Infrastructure.EventBus;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.API.Configuration;
 
 public class BackboneConfiguration
 {
+    [Required]
     public AuthenticationConfiguration Authentication { get; set; } = new();
+
     public CorsConfiguration Cors { get; set; } = new();
+
     public SwaggerUiConfiguration SwaggerUi { get; set; }
+
+    [Required]
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
+
+    [Required]
     public ModulesConfiguration Modules { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
+        [Required]
         public string ValidIssuer { get; set; }
+
+        [Required]
         public string JwtSigningCertificate { get; set; }
     }
 
@@ -24,21 +35,34 @@ public class BackboneConfiguration
 
     public class SwaggerUiConfiguration
     {
+        [Required]
         public string TokenUrl { get; set; }
     }
 
     public class BackboneInfrastructureConfiguration
     {
+        [Required]
         public EventBusConfiguration EventBus { get; set; } = new();
     }
 
     public class ModulesConfiguration
     {
+        [Required]
         public ChallengesConfiguration Challenges { get; set; } = new();
+
+        [Required]
         public FilesConfiguration Files { get; set; } = new();
+
+        [Required]
         public MessagesConfiguration Messages { get; set; } = new();
+
+        [Required]
         public RelationshipsConfiguration Relationships { get; set; } = new();
+
+        [Required]
         public SynchronizationConfiguration Synchronization { get; set; } = new();
+
+        [Required]
         public TokensConfiguration Tokens { get; set; } = new();
     }
 }

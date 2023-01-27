@@ -19,8 +19,7 @@ public static class IConfigurationBuilderExtensions
                 appConfigurationOptions
                     .Connect(new Uri(azureAppConfigurationConfiguration.Endpoint), credentials)
                     .ConfigureKeyVault(vaultOptions => vaultOptions.SetCredential(credentials))
-                    .Select("*", "")
-                    .Select("*", "Challenges");
+                    .Select("*");
             });
     }
 }

@@ -8,6 +8,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Synchronization.Application.Extensions;
@@ -48,15 +49,17 @@ app.Run();
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services
-        .Configure<Challenges.Application.ApplicationOptions>(configuration.GetSection("Modules:Challenges:Application"))
-        .Configure<Files.Application.ApplicationOptions>(configuration.GetSection("Modules:Files:Application"))
-        .Configure<Messages.Application.ApplicationOptions>(configuration.GetSection("Modules:Messages:Application"))
-        .Configure<Relationships.Application.ApplicationOptions>(configuration.GetSection("Modules:Relationships:Application"))
-        .Configure<Synchronization.Application.ApplicationOptions>(configuration.GetSection("Modules:Synchronization:Application"))
-        .Configure<Tokens.Application.ApplicationOptions>(configuration.GetSection("Modules:Tokens:Application"));
+        .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
+        .ConfigureAndValidate<Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
+        .ConfigureAndValidate<Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
+        .ConfigureAndValidate<Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
+        .ConfigureAndValidate<Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
+        .ConfigureAndValidate<Synchronization.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Synchronization:Application").Bind(options))
+        .ConfigureAndValidate<Tokens.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Tokens:Application").Bind(options));
 
-    var parsedConfiguration = new BackboneConfiguration();
-    configuration.Bind(parsedConfiguration);
+#pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+#pragma warning restore ASP0000
 
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
@@ -123,8 +126,8 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     var env = webApplicationBuilder.Environment;
 
     webApplicationBuilder.Configuration
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
     if (env.IsDevelopment())

@@ -1,11 +1,16 @@
-﻿namespace Backbone.Infrastructure.EventBus;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backbone.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {
+    [Required]
     public string Vendor { get; set; }
 
+    [Required]
     public string ConnectionInfo { get; set; }
 
+    [Required]
     public string SubscriptionClientName { get; set; }
 
     public string RabbitMQUsername { get; set; }

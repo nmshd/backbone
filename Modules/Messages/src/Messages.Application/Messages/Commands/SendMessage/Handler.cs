@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
 
-    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsMonitor<ApplicationOptions> options, ILogger<Handler> logger)
+    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger)
     {
         _dbContext = dbContext;
         _blobStorage = blobStorage;
@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         _mapper = mapper;
         _eventBus = eventBus;
         _logger = logger;
-        _options = options.CurrentValue;
+        _options = options.Value;
     }
 
     public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)

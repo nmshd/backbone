@@ -1,18 +1,20 @@
-﻿namespace Synchronization.Application;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Synchronization.Application;
 
 public class ApplicationOptions
 {
+    [Required]
     public PaginationOptions Pagination { get; set; } = new();
-    public ValidationOptions Validation { get; set; } = new();
 }
 
 public class PaginationOptions
 {
+    [Required]
+    [Range(1, 1000)]
     public int MaxPageSize { get; set; }
-    public int DefaultPageSize { get; set; }
-}
 
-public class ValidationOptions
-{
-    public int MaxDatawalletModificationPayloadSize { get; set; } = 1000;
+    [Required]
+    [Range(1, 1000)]
+    public int DefaultPageSize { get; set; }
 }
