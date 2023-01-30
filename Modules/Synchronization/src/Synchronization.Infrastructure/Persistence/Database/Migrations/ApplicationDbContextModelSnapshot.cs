@@ -5,11 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Synchronization.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace Synchronization.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

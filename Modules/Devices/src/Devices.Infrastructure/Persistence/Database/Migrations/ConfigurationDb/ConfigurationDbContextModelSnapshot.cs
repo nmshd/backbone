@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Devices.Infrastructure.Persistence.Database.Migrations.ConfigurationDb
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
     partial class ConfigurationDbContextModelSnapshot : ModelSnapshot

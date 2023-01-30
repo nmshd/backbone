@@ -12,7 +12,6 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications

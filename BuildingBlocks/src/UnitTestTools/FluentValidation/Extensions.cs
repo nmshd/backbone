@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
-using FluentValidation.TestHelper;
 using Xunit.Sdk;
 
 namespace Enmeshed.UnitTestTools.FluentValidation

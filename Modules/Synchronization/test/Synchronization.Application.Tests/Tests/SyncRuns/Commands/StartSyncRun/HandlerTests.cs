@@ -11,7 +11,6 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
@@ -209,7 +208,7 @@ public class HandlerTests
             .Build()
             .CreatedBy(_activeIdentity)
             .ExpiresAt(SystemTime.UtcNow.AddDays(-5))
-            .WithExternalEvents(new List<ExternalEvent> {externalEvent})
+            .WithExternalEvents(new List<ExternalEvent> { externalEvent })
             .Create();
         _arrangeContext.SaveEntity(expiredSyncRun);
 
@@ -231,7 +230,7 @@ public class HandlerTests
     }
 
     #region CreateHandler
-    
+
     private ApplicationDbContext CreateDbContext()
     {
         return new ApplicationDbContext(_dbOptions);

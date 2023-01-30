@@ -1,5 +1,4 @@
 ﻿using Azure.Identity;
-using Backbone.API.Extensions;
 
 namespace Backbone.API.Extensions;
 

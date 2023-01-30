@@ -9,7 +9,6 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using Messages.Application.Tests.AutoFixture;
-using Messages.Infrastructure.Persistence.Database;
 using Moq;
 
 namespace Messages.Application.Tests;

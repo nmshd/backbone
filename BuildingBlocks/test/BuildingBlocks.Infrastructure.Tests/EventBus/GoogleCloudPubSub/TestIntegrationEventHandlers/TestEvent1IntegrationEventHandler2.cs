@@ -1,5 +1,4 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
 using FluentAssertions;
 using FluentAssertions.Extensions;

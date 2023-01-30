@@ -10,7 +10,6 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
-using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
@@ -105,7 +104,7 @@ public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> {new(item.Id, "some-random-error-code")};
+        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id, "some-random-error-code") };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
         // Assert
@@ -133,7 +132,7 @@ public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var eventResults = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> {new(item1.Id) {ExternalEventId = item1.Id}};
+        var eventResults = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item1.Id) { ExternalEventId = item1.Id } };
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, eventResults), CancellationToken.None);
 
         // Assert
@@ -155,7 +154,7 @@ public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var datawalletModifications = new List<PushDatawalletModificationItem> {new() {Type = DatawalletModificationDTO.DatawalletModificationType.Create, Collection = "someArbitraryCollection", EncryptedPayload = new byte[] {0}, ObjectIdentifier = "someArbitraryObjectIdentitfier", PayloadCategory = "someArbitraryObjectProperty"}};
+        var datawalletModifications = new List<PushDatawalletModificationItem> { new() { Type = DatawalletModificationDTO.DatawalletModificationType.Create, Collection = "someArbitraryCollection", EncryptedPayload = new byte[] { 0 }, ObjectIdentifier = "someArbitraryObjectIdentitfier", PayloadCategory = "someArbitraryObjectProperty" } };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, datawalletModifications), CancellationToken.None);
 
@@ -181,7 +180,7 @@ public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> {new(item.Id)};
+        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id) };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
         // Assert
@@ -207,7 +206,7 @@ public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> {new(item.Id, "some-random-error-code")};
+        var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id, "some-random-error-code") };
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
 
         // Assert

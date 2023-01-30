@@ -8,7 +8,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.BaseClasses;
-using Files.Infrastructure.Persistence.Database;
 using Moq;
 
 namespace Files.Application.Tests;
@@ -16,7 +15,7 @@ namespace Files.Application.Tests;
 public abstract class HandlerTestsBase : RequestHandlerTestsBase<ApplicationDbContext>
 {
     protected static readonly IdentityAddress ActiveIdentity = TestData.IdentityAddresses.ADDRESS_1;
-    protected static readonly byte[] SomeFileContent = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    protected static readonly byte[] SomeFileContent = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     protected readonly Mock<IBlobStorage> _blobStorageMock;
     protected readonly Mock<IEventBus> _eventBusMock;
     protected readonly IMapper _mapper;

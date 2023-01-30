@@ -7,7 +7,6 @@ using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
-using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;

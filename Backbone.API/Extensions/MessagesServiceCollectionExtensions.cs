@@ -1,7 +1,6 @@
 ﻿using Backbone.API.Configuration;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Infrastructure.Persistence;
-using Messages.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
 
 
