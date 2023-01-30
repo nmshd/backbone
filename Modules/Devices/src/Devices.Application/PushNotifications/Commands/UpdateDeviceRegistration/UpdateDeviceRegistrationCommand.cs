@@ -1,8 +1,8 @@
-﻿using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using MediatR;
 
-namespace Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 public class UpdateDeviceRegistrationCommand : IRequest<Unit>, IMapTo<DeviceRegistration>
 {

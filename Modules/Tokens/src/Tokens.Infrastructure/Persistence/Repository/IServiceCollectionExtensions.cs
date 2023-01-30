@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Tokens.Application.Infrastructure;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public static class IServiceCollectionExtensions
 {

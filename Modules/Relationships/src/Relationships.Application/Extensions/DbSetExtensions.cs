@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class DbSetExtensions
 {

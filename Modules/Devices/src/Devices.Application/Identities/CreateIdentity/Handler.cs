@@ -1,7 +1,7 @@
-﻿using Devices.Application.Devices.DTOs;
-using Devices.Application.Extensions;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Devices.Application.Identities.CreateIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.CreateIdentity;
 
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {

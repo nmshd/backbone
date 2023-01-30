@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Synchronization.Domain.Entities;
+namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(DatawalletModificationIdTypeConverter))]

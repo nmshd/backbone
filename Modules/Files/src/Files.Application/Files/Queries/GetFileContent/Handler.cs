@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Files.Application.Infrastructure.Persistence;
 
-namespace Files.Application.Files.Queries.GetFileContent;
+namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 
 public class Handler : RequestHandlerBase<GetFileContentQuery, GetFileContentResponse>
 {

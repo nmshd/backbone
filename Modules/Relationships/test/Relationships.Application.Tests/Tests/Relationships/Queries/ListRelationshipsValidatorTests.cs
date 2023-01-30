@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using Relationships.Application.Relationships.Queries.ListRelationships;
-using Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
-using Relationships.Domain.Ids;
 using Xunit;
 
 namespace Relationships.Application.Tests.Tests.Relationships.Queries

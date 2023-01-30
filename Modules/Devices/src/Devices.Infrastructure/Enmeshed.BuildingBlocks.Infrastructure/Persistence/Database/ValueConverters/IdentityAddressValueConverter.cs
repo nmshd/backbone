@@ -1,7 +1,7 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters
 {
     public class IdentityAddressValueConverter : ValueConverter<IdentityAddress, string>
     {

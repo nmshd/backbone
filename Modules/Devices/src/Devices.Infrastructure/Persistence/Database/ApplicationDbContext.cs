@@ -1,13 +1,13 @@
 ﻿using System.Data;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database.EntityConfigurations;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {

@@ -1,5 +1,6 @@
+using Backbone.Modules.Synchronization.Domain;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using FluentAssertions;
-using Synchronization.Domain.Entities;
 using Xunit;
 
 namespace Synchronization.Domain.Tests;

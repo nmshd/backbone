@@ -1,15 +1,15 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Tokens.Application.Infrastructure;
-using Tokens.Domain.Entities;
-using Tokens.Infrastructure.Persistence.Database;
 
-namespace Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public class TokenRepository : ITokenRepository
 {

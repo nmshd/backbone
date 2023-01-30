@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {

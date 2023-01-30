@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Relationships.Domain;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
-using Relationships.Domain;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Relationships.Application.MediatR;
+namespace Backbone.Modules.Relationships.Application.MediatR;
 
 public class DomainExceptionTransformerPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
 public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Relationship>
 {

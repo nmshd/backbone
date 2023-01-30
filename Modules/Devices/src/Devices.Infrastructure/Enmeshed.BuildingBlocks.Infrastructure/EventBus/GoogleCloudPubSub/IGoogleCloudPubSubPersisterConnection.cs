@@ -1,6 +1,6 @@
 ﻿using Google.Cloud.PubSub.V1;
 
-namespace Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub
 {
     public interface IGoogleCloudPubSubPersisterConnection
         : IDisposable

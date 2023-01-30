@@ -1,8 +1,8 @@
-﻿using Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Devices.Application.Devices.Commands.DeleteDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 public class DeleteDeviceCommand : IRequest<Unit>
 {

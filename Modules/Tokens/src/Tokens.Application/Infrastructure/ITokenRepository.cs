@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Application.Infrastructure;
+namespace Backbone.Modules.Tokens.Application.Infrastructure;
 
 public interface ITokenRepository : IRepository<Token, TokenId>
 {

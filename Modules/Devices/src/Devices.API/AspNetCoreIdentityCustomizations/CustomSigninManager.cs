@@ -1,9 +1,9 @@
-﻿using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Devices.API.AspNetCoreIdentityCustomizations;
+namespace Backbone.Modules.Devices.API.AspNetCoreIdentityCustomizations;
 
 public class CustomSigninManager : SignInManager<ApplicationUser>
 {

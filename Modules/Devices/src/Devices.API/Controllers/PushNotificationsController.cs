@@ -1,5 +1,5 @@
-﻿using Devices.Application.PushNotifications.Commands.SendTestNotification;
-using Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
+using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using IdentityServer4;
@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Devices.API.Controllers;
+namespace Backbone.Modules.Devices.API.Controllers;
 
 [Route("api/v1/Devices/Self/[controller]")]
 [Authorize(IdentityServerConstants.LocalApi.PolicyName)]

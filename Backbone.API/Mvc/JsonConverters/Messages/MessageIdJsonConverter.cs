@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.StronglyTypedIds;
-using Messages.Domain.Ids;
 
 namespace Backbone.API.Mvc.JsonConverters.Messages;
 

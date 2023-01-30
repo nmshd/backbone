@@ -1,6 +1,6 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Synchronization.Domain.Entities;
-using static Synchronization.Domain.Entities.Datawallet;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Synchronization.Application.Tests;
 

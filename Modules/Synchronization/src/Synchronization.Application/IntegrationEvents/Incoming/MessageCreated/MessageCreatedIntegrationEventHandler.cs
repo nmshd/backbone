@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Application.IntegrationEvents.Outgoing;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 
 public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<MessageCreatedIntegrationEvent>
 {

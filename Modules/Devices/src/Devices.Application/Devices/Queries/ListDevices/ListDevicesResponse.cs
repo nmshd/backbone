@@ -1,7 +1,7 @@
-﻿using Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 
-namespace Devices.Application.Devices.Queries.ListDevices;
+namespace Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 
 public class ListDevicesResponse : PagedResponse<DeviceDTO>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using Challenges.Application.AutoMapper;
-using Challenges.Application.Challenges.Commands.CreateChallenge;
+using Backbone.Modules.Challenges.Application.AutoMapper;
+using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
-namespace Challenges.Application.Extensions;
+namespace Backbone.Modules.Challenges.Application.Extensions;
 
 public static class ApplicationServiceCollectionExtensions
 {

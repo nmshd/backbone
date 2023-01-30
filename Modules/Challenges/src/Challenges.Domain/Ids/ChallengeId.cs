@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Challenges.Domain.Ids;
+namespace Backbone.Modules.Challenges.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(ChallengeIdTypeConverter))]

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Messages.Application;
+using Backbone.Modules.Messages.Application;
 
 namespace Backbone.API.Configuration;
 

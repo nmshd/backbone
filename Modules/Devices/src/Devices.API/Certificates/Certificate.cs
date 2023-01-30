@@ -2,7 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Enmeshed.Tooling.Extensions;
 
-namespace Devices.API.Certificates;
+namespace Backbone.Modules.Devices.API.Certificates;
 
 public static class Certificate
 {

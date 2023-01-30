@@ -1,8 +1,8 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Domain.Entities;
 
-namespace Synchronization.Application.Extensions;
+namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class DatawalletQueryableExtensions
 {

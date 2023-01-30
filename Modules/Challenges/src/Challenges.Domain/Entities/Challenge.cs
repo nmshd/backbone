@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
-using Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Domain.Ids;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Challenges.Domain.Entities;
+namespace Backbone.Modules.Challenges.Domain.Entities;
 
 public class Challenge
 {

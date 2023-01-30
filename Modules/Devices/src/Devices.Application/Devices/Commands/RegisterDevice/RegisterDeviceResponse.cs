@@ -1,6 +1,6 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Devices.Application.Devices.Commands.RegisterDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class RegisterDeviceResponse
 {

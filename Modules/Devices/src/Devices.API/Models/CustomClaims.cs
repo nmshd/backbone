@@ -1,4 +1,4 @@
-﻿namespace Devices.API.Models;
+﻿namespace Backbone.Modules.Devices.API.Models;
 
 public static class CustomClaims
 {

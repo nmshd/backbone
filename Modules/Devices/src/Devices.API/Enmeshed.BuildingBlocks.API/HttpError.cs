@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Enmeshed.BuildingBlocks.API
+namespace Backbone.Modules.Devices.API.Enmeshed.BuildingBlocks.API
 {
     [JsonConverter(typeof(HttpErrorConverter))]
     public class HttpError

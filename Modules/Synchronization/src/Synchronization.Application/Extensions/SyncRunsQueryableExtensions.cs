@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.Extensions;
+namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class SyncRunsQueryableExtensions
 {

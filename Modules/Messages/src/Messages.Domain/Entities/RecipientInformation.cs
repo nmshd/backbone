@@ -1,8 +1,8 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Messages.Domain.Ids;
 
-namespace Messages.Domain.Entities;
+namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class RecipientInformation
 {

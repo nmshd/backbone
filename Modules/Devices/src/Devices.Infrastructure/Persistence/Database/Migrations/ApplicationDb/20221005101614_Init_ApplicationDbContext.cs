@@ -1,9 +1,8 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace Devices.Infrastructure.Persistence.Database.Migrations.ApplicationDb
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.Migrations.ApplicationDb
 {
     public partial class Init_ApplicationDbContext : Migration
     {

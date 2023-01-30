@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Relationships.Common;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Relationships.Common;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Application.Relationships.Queries.ListChanges;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 
 public class ListChangesQuery : IRequest<ListChangesResponse>
 {

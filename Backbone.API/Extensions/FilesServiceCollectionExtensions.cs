@@ -1,5 +1,6 @@
 ﻿using Backbone.API.Configuration;
-using Files.Application.Extensions;
+using Backbone.Modules.Files.Application.Extensions;
+using Backbone.Modules.Files.Infrastructure.Persistence;
 using Files.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
 

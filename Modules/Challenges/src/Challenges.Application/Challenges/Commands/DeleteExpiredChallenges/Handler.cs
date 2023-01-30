@@ -1,10 +1,10 @@
-﻿using Challenges.Application.Infrastructure.Persistence;
-using Challenges.Domain.Entities;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExpiredChallengesResponse>
 {

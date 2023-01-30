@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
-using Relationships.Infrastructure.Persistence.Database.ValueConverters;
 
-namespace Relationships.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase, IRelationshipsDbContext
 {

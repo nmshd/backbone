@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Relationships.Application.Extensions;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Application.IntegrationEvents;
-using Relationships.Application.Relationships.DTOs;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTerminationRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTerminationRequest;
 
 public class Handler : IRequestHandler<CreateRelationshipTerminationRequestCommand, RelationshipChangeMetadataDTO>
 {

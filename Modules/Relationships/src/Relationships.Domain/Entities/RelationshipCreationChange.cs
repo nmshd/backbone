@@ -1,7 +1,7 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Relationships.Domain.Errors;
+﻿using Backbone.Modules.Relationships.Domain.Errors;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipCreationChange : RelationshipChange
 {

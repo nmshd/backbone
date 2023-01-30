@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Synchronization.Domain.Entities;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
-namespace Synchronization.Application.Datawallets.DTOs;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class CreatedDatawalletModificationDTO : IMapTo<DatawalletModification>
 {

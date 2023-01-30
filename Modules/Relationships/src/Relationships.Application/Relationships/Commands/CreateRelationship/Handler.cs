@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Relationships.Application.Extensions;
-using Relationships.Application.Infrastructure;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Application.IntegrationEvents;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationship;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {

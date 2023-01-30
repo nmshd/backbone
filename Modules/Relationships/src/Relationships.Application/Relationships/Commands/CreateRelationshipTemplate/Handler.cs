@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {

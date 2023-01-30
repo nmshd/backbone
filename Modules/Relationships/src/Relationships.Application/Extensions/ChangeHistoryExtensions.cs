@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class ChangeHistoryExtensions
 {

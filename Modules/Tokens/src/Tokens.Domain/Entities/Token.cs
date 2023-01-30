@@ -2,7 +2,7 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Tokens.Domain.Entities;
+namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token
 {

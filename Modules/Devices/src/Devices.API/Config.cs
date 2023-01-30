@@ -1,7 +1,7 @@
-﻿using Devices.API.Models;
+﻿using Backbone.Modules.Devices.API.Models;
 using IdentityServer4.Models;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 public class Config
 {

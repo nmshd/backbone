@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Synchronization.Domain.Entities.Sync;
+namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 [Serializable]
 [TypeConverter(typeof(ExternalEventIdTypeConverter))]

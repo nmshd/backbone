@@ -1,9 +1,9 @@
 ﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
-using Challenges.Application.Challenges.Commands.CreateChallenge;
-using Challenges.Application.Challenges.DTOs;
-using Challenges.Application.Challenges.Queries.GetChallengeById;
-using Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
+using Backbone.Modules.Challenges.Application.Challenges.DTOs;
+using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
+using Backbone.Modules.Challenges.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

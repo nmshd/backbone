@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Tokens.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Tokens.Application.Infrastructure;
 
-namespace Tokens.Application.Tokens.Commands.DeleteToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 
 public class Handler : CommandHandlerBase<DeleteTokenCommand, Unit>
 {

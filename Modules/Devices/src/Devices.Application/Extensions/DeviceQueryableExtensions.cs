@@ -1,9 +1,9 @@
-﻿using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class DeviceQueryableExtensions
 {

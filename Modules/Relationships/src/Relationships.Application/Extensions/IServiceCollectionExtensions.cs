@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
+using Backbone.Modules.Relationships.Application.AutoMapper;
+using Backbone.Modules.Relationships.Application.MediatR;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Relationships.Application.AutoMapper;
-using Relationships.Application.MediatR;
-using Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 
-namespace Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

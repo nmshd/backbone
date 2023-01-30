@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Relationships.Application.Relationships.DTOs;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Ids;
+using MediatR;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTerminationRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTerminationRequest;
 
 public class CreateRelationshipTerminationRequestCommand : IRequest<RelationshipChangeMetadataDTO>
 {

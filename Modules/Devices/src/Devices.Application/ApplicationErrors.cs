@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 
-namespace Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public static class ApplicationErrors
 {

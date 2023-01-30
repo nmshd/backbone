@@ -1,5 +1,10 @@
 ﻿using System.Data;
 using System.Data.Common;
+using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
@@ -8,13 +13,8 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application.Extensions;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Domain.Entities;
-using Synchronization.Domain.Entities.Sync;
-using Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 
-namespace Synchronization.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase, ISynchronizationDbContext
 {

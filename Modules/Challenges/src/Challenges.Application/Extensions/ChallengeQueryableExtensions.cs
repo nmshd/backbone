@@ -1,10 +1,10 @@
-﻿using Challenges.Domain.Entities;
-using Challenges.Domain.Ids;
+﻿using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Challenges.Application.Extensions;
+namespace Backbone.Modules.Challenges.Application.Extensions;
 
 public static class ChallengeQueryableExtensions
 {

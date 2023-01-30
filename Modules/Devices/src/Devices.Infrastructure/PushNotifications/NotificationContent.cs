@@ -2,10 +2,9 @@
 using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Enmeshed.Tooling.Extensions;
 using Newtonsoft.Json;
 
-namespace Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class NotificationContent
 {

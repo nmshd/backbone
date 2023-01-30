@@ -1,6 +1,7 @@
 ﻿using Backbone.API.Configuration;
+using Backbone.Modules.Tokens.Application.Extensions;
+using Backbone.Modules.Tokens.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using Tokens.Application.Extensions;
 using Tokens.Infrastructure.Persistence;
 
 namespace Backbone.API.Extensions;

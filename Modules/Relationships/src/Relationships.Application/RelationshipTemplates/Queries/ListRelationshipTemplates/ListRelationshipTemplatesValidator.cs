@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 // ReSharper disable once UnusedMember.Global
 public class ListRelationshipTemplatesValidator : AbstractValidator<ListRelationshipTemplatesQuery>

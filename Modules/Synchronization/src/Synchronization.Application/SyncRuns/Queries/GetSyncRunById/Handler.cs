@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Application.SyncRuns.DTOs;
 
-namespace Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
 
 public class Handler : IRequestHandler<GetSyncRunByIdQuery, SyncRunDTO>
 {

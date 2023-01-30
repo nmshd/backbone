@@ -1,4 +1,4 @@
-﻿namespace Devices.Application;
+﻿namespace Backbone.Modules.Devices.Application;
 
 public class ApplicationOptions
 {

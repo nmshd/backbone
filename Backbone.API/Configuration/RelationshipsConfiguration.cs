@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Relationships.Application;
+using Backbone.Modules.Relationships.Application;
 
 namespace Backbone.API.Configuration;
 

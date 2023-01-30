@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
-namespace Relationships.Application.Infrastructure.Persistence;
+namespace Backbone.Modules.Relationships.Application.Infrastructure;
 
 public interface IRelationshipsDbContext : IDbContext
 {

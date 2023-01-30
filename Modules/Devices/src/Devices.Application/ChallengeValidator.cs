@@ -1,14 +1,14 @@
 ﻿using System.Text.Json;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.DTOs;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.DTOs;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.Crypto;
 using Enmeshed.Crypto.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public class ChallengeValidator
 {

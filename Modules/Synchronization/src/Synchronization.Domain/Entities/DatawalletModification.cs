@@ -1,7 +1,7 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Synchronization.Domain.Entities;
+namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 public class DatawalletModification
 {

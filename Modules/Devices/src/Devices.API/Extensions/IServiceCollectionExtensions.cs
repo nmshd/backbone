@@ -1,17 +1,18 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Devices.API.ApplicationInsights.TelemetryInitializers;
-using Devices.API.AspNetCoreIdentityCustomizations;
-using Devices.API.Certificates;
-using Devices.Application.Devices.DTOs;
-using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.API.ApplicationInsights.TelemetryInitializers;
+using Backbone.Modules.Devices.API.AspNetCoreIdentityCustomizations;
+using Backbone.Modules.Devices.API.Certificates;
+using Backbone.Modules.Devices.API.Enmeshed.BuildingBlocks.API;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.UserContext;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Infrastructure.UserContext;
 using Enmeshed.Tooling.JsonConverters;
 using FluentValidation;
 using IdentityServer4;
@@ -25,7 +26,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.API.Extensions;
+namespace Backbone.Modules.Devices.API.Extensions;
 
 public static class IServiceCollectionExtensions
 {

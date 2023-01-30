@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Tokens.Domain.Entities;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using MediatR;
 
-namespace Tokens.Application.Tokens.Commands.DeleteToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 
 public class DeleteTokenCommand : IRequest<Unit>
 {

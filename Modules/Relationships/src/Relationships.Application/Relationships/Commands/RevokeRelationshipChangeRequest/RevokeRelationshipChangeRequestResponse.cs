@@ -1,5 +1,5 @@
-﻿using Relationships.Application.Relationships.DTOs;
+﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
-namespace Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
 
 public class RevokeRelationshipChangeRequestResponse : RelationshipMetadataDTO { }

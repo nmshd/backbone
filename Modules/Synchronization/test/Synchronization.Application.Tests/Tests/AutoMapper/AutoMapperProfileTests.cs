@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Synchronization.Application.AutoMapper;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.AutoMapper;

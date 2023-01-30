@@ -1,6 +1,6 @@
-﻿using Challenges.Domain.Ids;
+﻿using Backbone.Modules.Challenges.Domain.Ids;
 
-namespace Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class DeleteExpiredChallengesResponse
 {

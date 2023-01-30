@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Synchronization.Application.SyncRuns.DTOs;
+﻿using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 
-namespace Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 
 public class GetExternalEventsOfSyncRunResponse : PagedResponse<ExternalEventDTO>
 {

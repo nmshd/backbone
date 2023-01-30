@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Synchronization.Domain.Entities;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.Infrastructure;
+namespace Backbone.Modules.Synchronization.Application.Infrastructure;
 
 public interface ISynchronizationDbContext : IDbContext
 {

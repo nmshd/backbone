@@ -1,4 +1,4 @@
-﻿namespace Relationships.Domain.Errors;
+﻿namespace Backbone.Modules.Relationships.Domain.Errors;
 
 public class DomainError : IEquatable<DomainError>
 {

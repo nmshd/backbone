@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Microsoft.EntityFrameworkCore;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class RelationshipTemplateQueryableExtensions
 {

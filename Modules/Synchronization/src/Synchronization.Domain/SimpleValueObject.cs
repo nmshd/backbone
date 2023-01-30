@@ -1,4 +1,4 @@
-﻿namespace Synchronization.Domain;
+﻿namespace Backbone.Modules.Synchronization.Domain;
 
 [Serializable]
 public abstract class SimpleValueObject<T> : ValueObject

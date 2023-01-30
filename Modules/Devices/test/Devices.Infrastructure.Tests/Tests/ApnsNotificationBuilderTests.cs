@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using FluentAssertions;

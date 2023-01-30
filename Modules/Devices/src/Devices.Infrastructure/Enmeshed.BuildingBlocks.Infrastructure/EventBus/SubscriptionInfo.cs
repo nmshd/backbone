@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus
+﻿namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus
 {
     public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
     {

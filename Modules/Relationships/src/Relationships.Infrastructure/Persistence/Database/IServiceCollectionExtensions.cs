@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using Backbone.Modules.Relationships.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Relationships.Application.Infrastructure.Persistence;
 
-namespace Relationships.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

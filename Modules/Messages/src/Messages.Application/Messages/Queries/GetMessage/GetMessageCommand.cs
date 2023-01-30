@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Messages.Application.Messages.DTOs;
-using Messages.Domain.Ids;
+﻿using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Domain.Ids;
+using MediatR;
 
-namespace Messages.Application.Messages.Queries.GetMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 
 public class GetMessageCommand : IRequest<MessageDTO>
 {

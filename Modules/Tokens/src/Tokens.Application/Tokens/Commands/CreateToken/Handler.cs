@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Tokens.Application.Infrastructure;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 {

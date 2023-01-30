@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Tokens.Application.Infrastructure;
-using Tokens.Application.Tokens.DTOs;
 
-namespace Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class Handler : QueryHandlerBase<ListTokensQuery, ListTokensResponse>
 {

@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
-using Messages.Domain.Ids;
 
-namespace Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesCommand : IRequest<ListMessagesResponse>
 {

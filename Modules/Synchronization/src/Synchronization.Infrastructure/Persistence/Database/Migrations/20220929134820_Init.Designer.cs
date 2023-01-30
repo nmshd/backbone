@@ -9,7 +9,7 @@ using Synchronization.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace Synchronization.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220929134820_Init")]

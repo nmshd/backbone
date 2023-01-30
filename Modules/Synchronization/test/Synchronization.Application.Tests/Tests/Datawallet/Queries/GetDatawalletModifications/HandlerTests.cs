@@ -1,4 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+﻿using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -6,13 +10,9 @@ using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Synchronization.Application.AutoMapper;
-using Synchronization.Application.Datawallets.Queries.GetModifications;
-using Synchronization.Domain.Entities;
-using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.DatawalletModifications.Queries.GetDatawalletModifications;
+namespace Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
 public class HandlerTests
 {
@@ -346,14 +346,14 @@ public class HandlerTests
         result.Should().HaveCount(2);
     }
 
-    private static Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
+    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
     {
-        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(version), ActiveIdentity);
+        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(version), ActiveIdentity);
     }
 
-    private static Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
+    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
     {
-        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), owner);
+        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), owner);
     }
 
 

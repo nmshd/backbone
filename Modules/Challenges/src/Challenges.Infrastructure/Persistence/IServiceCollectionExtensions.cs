@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
-using Challenges.Application.Infrastructure.Persistence;
-using Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Challenges.Infrastructure.Persistence;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Challenges.Application.Challenges.DTOs;
-using Challenges.Application.Extensions;
-using Challenges.Application.Infrastructure.Persistence;
-using Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Application.Challenges.DTOs;
+using Backbone.Modules.Challenges.Application.Extensions;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
 
-namespace Challenges.Application.Challenges.Queries.GetChallengeById;
+namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
 
 public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 {

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Files.Application.Extensions;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Files.Application.Extensions;
-using Files.Application.Infrastructure.Persistence;
-using Files.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Files.Application.Files;
+namespace Backbone.Modules.Files.Application.Files;
 
 public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

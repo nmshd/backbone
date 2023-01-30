@@ -1,9 +1,9 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
-using Relationships.Application.Extensions;
-using Relationships.Domain.Entities;
-using Relationships.Infrastructure.Persistence.Database;
 using Xunit;
 
 namespace Relationships.Application.Tests.Extensions;

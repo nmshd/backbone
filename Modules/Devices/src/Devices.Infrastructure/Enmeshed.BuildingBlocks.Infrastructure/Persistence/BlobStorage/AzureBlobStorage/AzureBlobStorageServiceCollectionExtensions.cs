@@ -1,8 +1,8 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureBlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureBlobStorage;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection

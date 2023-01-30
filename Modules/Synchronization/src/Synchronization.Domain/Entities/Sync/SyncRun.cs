@@ -1,7 +1,7 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Synchronization.Domain.Entities.Sync;
+namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun
 {

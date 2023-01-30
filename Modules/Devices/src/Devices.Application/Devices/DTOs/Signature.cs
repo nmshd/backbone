@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Devices.Application.Devices.DTOs;
+namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class Signature
 {

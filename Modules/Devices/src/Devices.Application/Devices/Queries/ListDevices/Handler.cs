@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.Extensions;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Devices.Application.Devices.Queries.ListDevices;
+namespace Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 
 public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
 {

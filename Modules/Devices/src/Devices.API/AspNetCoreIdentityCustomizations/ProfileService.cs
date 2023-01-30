@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
-using Devices.API.Models;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.API.Models;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.Tooling;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 
-namespace Devices.API.AspNetCoreIdentityCustomizations;
+namespace Backbone.Modules.Devices.API.AspNetCoreIdentityCustomizations;
 
 public class ProfileService : IProfileService
 {

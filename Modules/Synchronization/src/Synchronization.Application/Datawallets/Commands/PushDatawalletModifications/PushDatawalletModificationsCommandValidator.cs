@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
-using Synchronization.Application.Datawallets.DTOs;
 
-namespace Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 
 // ReSharper disable once UnusedMember.Global
 public class PushDatawalletModificationsCommandValidator : AbstractValidator<PushDatawalletModificationsCommand>

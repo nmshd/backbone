@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using MediatR;
 
-namespace Relationships.Application.RelationshipTemplates.Command.DeleteRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Command.DeleteRelationshipTemplate;
 
 public class DeleteRelationshipTemplateCommand : IRequest<Unit>
 {

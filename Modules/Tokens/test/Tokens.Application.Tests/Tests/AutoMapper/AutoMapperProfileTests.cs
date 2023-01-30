@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Tokens.Application.AutoMapper;
+using Backbone.Modules.Tokens.Application.AutoMapper;
 using Xunit;
 
 namespace Tokens.Application.Tests.Tests.AutoMapper;

@@ -1,4 +1,8 @@
 ﻿using AutoFixture;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
@@ -8,9 +12,6 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application.AutoMapper;
-using Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Synchronization.Application.Datawallets.DTOs;
 using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
@@ -41,7 +42,7 @@ namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawa
         public async Task Parallel_push_leads_to_an_error_for_one_call()
         {
             var arrangeContext = CreateDbContext();
-            arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
+            arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
 
             // By adding a save-delay to one of the calls, we can ensure that the second one will finish first, and therefore the first one
             // will definitely run into an error regarding the duplicate database index.

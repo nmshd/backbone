@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Enmeshed.StronglyTypedIds;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.API.JsonConverters;
+namespace Backbone.API.Mvc.JsonConverters.Synchronization;
 
 public class SyncRunIdJsonConverter : JsonConverter<SyncRunId>
 {

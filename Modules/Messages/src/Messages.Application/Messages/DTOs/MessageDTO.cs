@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
 
-namespace Messages.Application.Messages.DTOs;
+namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
 public class MessageDTO : IMapTo<Message>
 {

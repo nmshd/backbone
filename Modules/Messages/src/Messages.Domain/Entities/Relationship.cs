@@ -1,7 +1,7 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Ids;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Messages.Domain.Entities;
+namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Relationship
 {

@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+﻿using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
-using Tokens.Infrastructure.Persistence.Database;
-using Tokens.Infrastructure.Persistence.Repository;
 
-namespace Tokens.Infrastructure.Persistence;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

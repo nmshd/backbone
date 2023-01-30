@@ -1,8 +1,8 @@
-﻿using Devices.Application.Infrastructure.PushNotifications;
-using Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
-namespace Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;
+namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;
 
 public class ExternalEventCreatedIntegrationEventHandler : IIntegrationEventHandler<ExternalEventCreatedIntegrationEvent>
 {

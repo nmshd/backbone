@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Relationships.Application.AutoMapper;
+using Backbone.Modules.Relationships.Application.AutoMapper;
 using Xunit;
 
 namespace Relationships.Application.Tests.Tests.AutoMapper;

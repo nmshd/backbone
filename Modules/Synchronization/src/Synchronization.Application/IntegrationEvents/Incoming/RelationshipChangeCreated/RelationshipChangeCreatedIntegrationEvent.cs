@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 
 public class RelationshipChangeCreatedIntegrationEvent : IntegrationEvent
 {

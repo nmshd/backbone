@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using MediatR;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationship;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
 public class CreateRelationshipCommand : IRequest<CreateRelationshipResponse>
 {

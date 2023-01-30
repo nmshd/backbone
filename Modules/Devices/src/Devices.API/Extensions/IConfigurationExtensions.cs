@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Devices.API.Extensions;
+namespace Backbone.Modules.Devices.API.Extensions;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions

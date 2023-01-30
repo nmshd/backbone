@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 
-namespace Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class MessagesQueryableExtensions
 {

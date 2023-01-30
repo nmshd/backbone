@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devices.Infrastructure.Persistence;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

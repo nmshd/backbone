@@ -1,4 +1,4 @@
-﻿namespace Synchronization.Domain;
+﻿namespace Backbone.Modules.Synchronization.Domain;
 
 public class DomainException : Exception
 {

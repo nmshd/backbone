@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.Identities.CreateIdentity;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Identities.CreateIdentity;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -14,7 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Devices.API.Controllers;
+namespace Backbone.Modules.Devices.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(IdentityServerConstants.LocalApi.PolicyName)]

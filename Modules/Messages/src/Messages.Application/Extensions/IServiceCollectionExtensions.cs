@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
+using Backbone.Modules.Messages.Application.AutoMapper;
+using Backbone.Modules.Messages.Application.Messages;
+using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
-using Messages.Application.AutoMapper;
-using Messages.Application.Messages;
-using Messages.Application.Messages.Commands.SendMessage;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

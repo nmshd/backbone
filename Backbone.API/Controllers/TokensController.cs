@@ -1,22 +1,21 @@
-﻿using Backbone.API;
-using Backbone.API.Mvc;
+﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
+using Backbone.Modules.Tokens.Application.Tokens.DTOs;
+using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
+using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Tokens.Application;
-using Tokens.Application.Tokens.Commands.CreateToken;
-using Tokens.Application.Tokens.Commands.DeleteToken;
-using Tokens.Application.Tokens.DTOs;
-using Tokens.Application.Tokens.Queries.GetToken;
-using Tokens.Application.Tokens.Queries.ListTokens;
-using Tokens.Domain.Entities;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Tokens.API.Controllers;
+namespace Backbone.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]

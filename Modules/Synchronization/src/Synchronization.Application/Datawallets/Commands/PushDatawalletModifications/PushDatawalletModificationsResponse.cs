@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Synchronization.Domain.Entities;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
-namespace Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 
 public class PushDatawalletModificationsResponse
 {

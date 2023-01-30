@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Devices.Application.PushNotifications.Commands.SendTestNotification;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 
 public class Validator : AbstractValidator<SendTestNotificationCommand>
 {

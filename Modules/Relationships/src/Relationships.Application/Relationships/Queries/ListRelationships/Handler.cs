@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Relationships.Application.Extensions;
-using Relationships.Application.Infrastructure;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Application.Relationships.DTOs;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Application.Relationships.Queries.ListRelationships;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 
 public class Handler : RequestHandlerBase<ListRelationshipsQuery, ListRelationshipsResponse>
 {

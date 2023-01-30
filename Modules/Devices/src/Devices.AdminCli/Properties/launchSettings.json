@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Start": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;"
+      }
+    }
+  }
+}

@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
-using Messages.Domain.Ids;
 
-namespace Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
 {

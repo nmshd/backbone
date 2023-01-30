@@ -1,15 +1,14 @@
 ﻿using System.Text.RegularExpressions;
 using Autofac;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub
 {
     public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {

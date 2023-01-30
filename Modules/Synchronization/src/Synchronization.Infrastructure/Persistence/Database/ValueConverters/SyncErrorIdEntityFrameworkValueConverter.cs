@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 
 public class SyncErrorIdEntityFrameworkValueConverter : ValueConverter<SyncErrorId, string>
 {

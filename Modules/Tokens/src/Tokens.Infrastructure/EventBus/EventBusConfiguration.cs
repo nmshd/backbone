@@ -1,4 +1,4 @@
-﻿namespace Tokens.Infrastructure.EventBus;
+﻿namespace Backbone.Modules.Tokens.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {

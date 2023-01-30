@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Files.Application.Infrastructure.Persistence;
-using Files.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 {

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.EntityConfigurations;
 
 public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
 {

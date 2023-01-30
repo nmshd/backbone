@@ -6,6 +6,8 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<UserSecretsId>37d5fa75-4084-4d65-8ecd-1f9edfe397af</UserSecretsId>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

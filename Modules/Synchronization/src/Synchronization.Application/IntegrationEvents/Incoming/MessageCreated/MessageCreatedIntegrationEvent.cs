@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {

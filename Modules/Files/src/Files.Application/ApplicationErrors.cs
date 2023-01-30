@@ -1,4 +1,4 @@
-﻿namespace Files.Application;
+﻿namespace Backbone.Modules.Files.Application;
 
 public static class ApplicationErrors
 {

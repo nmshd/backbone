@@ -1,7 +1,7 @@
-﻿using Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using MediatR;
 
-namespace Devices.Application.Identities.CreateIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.CreateIdentity;
 
 public class CreateIdentityCommand : IRequest<CreateIdentityResponse>
 {

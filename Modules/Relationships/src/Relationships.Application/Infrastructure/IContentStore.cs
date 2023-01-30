@@ -1,6 +1,6 @@
-﻿using Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
 
-namespace Relationships.Application.Infrastructure;
+namespace Backbone.Modules.Relationships.Application.Infrastructure;
 
 public interface IContentStore
 {

@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 
-namespace Synchronization.Application;
+namespace Backbone.Modules.Synchronization.Application;
 
 public static class ApplicationErrors
 {

@@ -1,24 +1,23 @@
-﻿using Backbone.API;
-using Backbone.API.Mvc;
+﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
+using Backbone.Modules.Synchronization.Application;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Synchronization.Application;
-using Synchronization.Application.Datawallets.DTOs;
-using Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
-using Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
-using Synchronization.Application.SyncRuns.Commands.StartSyncRun;
-using Synchronization.Application.SyncRuns.DTOs;
-using Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
-using Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
-using Synchronization.Domain.Entities.Sync;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Synchronization.API.Controllers;
+namespace Backbone.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]

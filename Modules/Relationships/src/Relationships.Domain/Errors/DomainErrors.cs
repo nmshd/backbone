@@ -1,7 +1,7 @@
-﻿using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Relationships.Domain.Errors;
+namespace Backbone.Modules.Relationships.Domain.Errors;
 
 public static class DomainErrors
 {

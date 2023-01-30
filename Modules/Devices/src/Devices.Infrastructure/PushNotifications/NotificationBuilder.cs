@@ -1,11 +1,9 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Azure.NotificationHubs;
 
-namespace Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public abstract class NotificationBuilder
 {

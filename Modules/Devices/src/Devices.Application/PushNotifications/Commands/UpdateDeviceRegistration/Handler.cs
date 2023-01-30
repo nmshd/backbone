@@ -1,10 +1,10 @@
-﻿using Devices.Application.Infrastructure.PushNotifications;
-using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 {

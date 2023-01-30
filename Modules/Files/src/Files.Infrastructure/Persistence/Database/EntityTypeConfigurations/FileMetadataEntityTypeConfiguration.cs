@@ -1,8 +1,8 @@
-﻿using Files.Domain.Entities;
+﻿using Backbone.Modules.Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
 public class FileMetadataEntityTypeConfiguration : IEntityTypeConfiguration<FileMetadata>
 {

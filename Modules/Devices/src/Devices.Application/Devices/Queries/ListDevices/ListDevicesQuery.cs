@@ -2,7 +2,7 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Devices.Application.Devices.Queries.ListDevices;
+namespace Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 
 public class ListDevicesQuery : IRequest<ListDevicesResponse>
 {

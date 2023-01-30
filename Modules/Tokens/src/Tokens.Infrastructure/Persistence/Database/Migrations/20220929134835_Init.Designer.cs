@@ -9,7 +9,7 @@ using Tokens.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace Tokens.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220929134835_Init")]

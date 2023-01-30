@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Application.Relationships.DTOs;
+namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
 public class RelationshipTemplateDTO : IMapTo<RelationshipTemplate>
 {

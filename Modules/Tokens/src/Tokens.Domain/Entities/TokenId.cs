@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Tokens.Domain.Entities;
+namespace Backbone.Modules.Tokens.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(TokenIdTypeConverter))]

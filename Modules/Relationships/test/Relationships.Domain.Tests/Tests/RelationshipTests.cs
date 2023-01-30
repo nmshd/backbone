@@ -1,9 +1,10 @@
+using Backbone.Modules.Relationships.Domain;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Errors;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using FluentAssertions;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Errors;
-using Relationships.Domain.Ids;
 using Relationships.Domain.Tests.Extensions;
 using Xunit;
 

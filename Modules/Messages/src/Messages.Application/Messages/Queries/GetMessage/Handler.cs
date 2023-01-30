@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Messages.Application.Extensions;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Messages.Application.Extensions;
-using Messages.Application.Infrastructure.Persistence;
-using Messages.Application.Messages.DTOs;
-using Messages.Domain.Entities;
 
-namespace Messages.Application.Messages.Queries.GetMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 
 public class Handler : IRequestHandler<GetMessageCommand, MessageDTO>
 {

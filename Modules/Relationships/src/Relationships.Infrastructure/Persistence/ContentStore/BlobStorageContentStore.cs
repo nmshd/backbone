@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Relationships.Application.Infrastructure;
-using Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 
-namespace Relationships.Infrastructure.Persistence.ContentStore;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.ContentStore;
 
 public class BlobStorageContentStore : IContentStore
 {

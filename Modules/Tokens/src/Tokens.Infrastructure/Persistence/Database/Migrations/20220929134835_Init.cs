@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Tokens.Infrastructure.Persistence.Database.Migrations;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Migrations;
 
 public partial class Init : Migration
 {

@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using MediatR;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 
 public class CreateRelationshipTemplateCommand : IMapTo<RelationshipTemplate>, IRequest<CreateRelationshipTemplateResponse>
 {

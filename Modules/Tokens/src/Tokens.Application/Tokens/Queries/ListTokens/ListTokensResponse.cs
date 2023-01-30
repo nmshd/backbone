@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Tokens.Application.Tokens.DTOs;
+﻿using Backbone.Modules.Tokens.Application.Tokens.DTOs;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 
-namespace Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class ListTokensResponse : PagedResponse<TokenDTO>
 {

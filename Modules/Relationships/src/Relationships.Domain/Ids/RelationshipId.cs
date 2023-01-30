@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Relationships.Domain.Ids;
+namespace Backbone.Modules.Relationships.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(RelationshipIdTypeConverter))]

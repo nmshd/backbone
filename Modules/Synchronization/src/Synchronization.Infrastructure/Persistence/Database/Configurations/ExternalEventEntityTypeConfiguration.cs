@@ -1,10 +1,10 @@
 ﻿using System.Dynamic;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Infrastructure.Persistence.Database.Configurations;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
 public class ExternalEventEntityTypeConfiguration : IEntityTypeConfiguration<ExternalEvent>
 {

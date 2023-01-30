@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Files.Domain.Entities;
 
-namespace Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class CreateFileResponse : IHaveCustomMapping
 {

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Messages.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

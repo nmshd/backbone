@@ -4,6 +4,9 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Challenges.Application;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
@@ -11,7 +14,6 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
-using Synchronization.Application.Extensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -37,12 +39,12 @@ var app = builder.Build();
 Configure(app);
 
 app
-    .MigrateDbContext<Challenges.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Files.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Relationships.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Synchronization.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Tokens.Infrastructure.Persistence.Database.ApplicationDbContext>();
+    .MigrateDbContext<ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ApplicationDbContext>();
 
 app.Run();
 
@@ -50,12 +52,12 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services
         .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
-        .ConfigureAndValidate<Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
-        .ConfigureAndValidate<Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
-        .ConfigureAndValidate<Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
-        .ConfigureAndValidate<Synchronization.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Synchronization:Application").Bind(options))
-        .ConfigureAndValidate<Tokens.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Tokens:Application").Bind(options));
+        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Synchronization.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Synchronization:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Tokens.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Tokens:Application").Bind(options));
 
 #pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;

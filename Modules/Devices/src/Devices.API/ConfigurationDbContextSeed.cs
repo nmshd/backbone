@@ -1,7 +1,7 @@
 ﻿using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 public class ConfigurationDbContextSeed
 {

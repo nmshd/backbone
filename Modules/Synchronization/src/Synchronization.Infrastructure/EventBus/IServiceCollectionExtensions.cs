@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Synchronization.Infrastructure.EventBus;
+namespace Backbone.Modules.Synchronization.Infrastructure.EventBus;
 
 public static class EventBusServiceCollectionExtensions
 {

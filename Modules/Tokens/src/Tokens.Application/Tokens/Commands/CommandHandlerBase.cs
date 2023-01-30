@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Tokens.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Tokens.Application.Infrastructure;
 
-namespace Tokens.Application.Tokens.Commands;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands;
 
 public abstract class CommandHandlerBase<TRequest, TResponse> : RequestHandlerBase<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Synchronization.Domain.Entities;
+﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 
 public class DatawalletIdEntityFrameworkValueConverter : ValueConverter<DatawalletId, string>
 {

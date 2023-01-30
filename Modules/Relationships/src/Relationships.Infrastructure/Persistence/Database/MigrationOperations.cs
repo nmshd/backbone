@@ -1,8 +1,8 @@
 ﻿using System.Text;
+using Backbone.Modules.Relationships.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Relationships.Application.Infrastructure;
 
-namespace Relationships.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 
 public static class MigrationOperations
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Microsoft.EntityFrameworkCore;
 using Synchronization.Infrastructure.Persistence.Database;
 
 namespace Synchronization.Application.Tests;

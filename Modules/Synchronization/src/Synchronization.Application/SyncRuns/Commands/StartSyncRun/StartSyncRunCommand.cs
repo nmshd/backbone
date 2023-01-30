@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using MediatR;
-using Synchronization.Application.SyncRuns.DTOs;
 
-namespace Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 
 public class StartSyncRunCommand : IRequest<StartSyncRunResponse>
 {

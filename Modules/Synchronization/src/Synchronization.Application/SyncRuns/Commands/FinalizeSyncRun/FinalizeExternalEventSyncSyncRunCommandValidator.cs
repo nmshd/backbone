@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
+﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
-using Synchronization.Application.Datawallets.DTOs;
 
-namespace Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 // ReSharper disable once UnusedMember.Global
 public class FinalizeExternalEventSyncSyncRunCommandValidator : AbstractValidator<FinalizeExternalEventSyncSyncRunCommand>

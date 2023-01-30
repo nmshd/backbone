@@ -4,7 +4,7 @@ using Enmeshed.Tooling;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 
-namespace Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
 {

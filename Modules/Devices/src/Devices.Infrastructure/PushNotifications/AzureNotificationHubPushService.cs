@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using Devices.Application.Infrastructure.PushNotifications;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Logging;
 
-namespace Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class AzureNotificationHubPushService : IPushService
 {

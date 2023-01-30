@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
-namespace Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 
 public class StartSyncRunResponse
 {

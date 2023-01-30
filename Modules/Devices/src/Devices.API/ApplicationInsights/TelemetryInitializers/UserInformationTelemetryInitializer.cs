@@ -3,7 +3,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace Devices.API.ApplicationInsights.TelemetryInitializers;
+namespace Backbone.Modules.Devices.API.ApplicationInsights.TelemetryInitializers;
 
 public class UserInformationTelemetryInitializer : ITelemetryInitializer
 {

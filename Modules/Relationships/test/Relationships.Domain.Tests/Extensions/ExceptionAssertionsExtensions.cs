@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using Backbone.Modules.Relationships.Domain;
+using Backbone.Modules.Relationships.Domain.Errors;
+using FluentAssertions;
 using FluentAssertions.Specialized;
-using Relationships.Domain.Errors;
 
 namespace Relationships.Domain.Tests.Extensions;
 

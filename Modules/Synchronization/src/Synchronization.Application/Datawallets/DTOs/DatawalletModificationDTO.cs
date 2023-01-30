@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Synchronization.Domain.Entities;
 
-namespace Synchronization.Application.Datawallets.DTOs;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class DatawalletModificationDTO : IHaveCustomMapping
 {

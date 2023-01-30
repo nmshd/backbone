@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Devices.Application.Devices.DTOs;
+namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class DeviceDTO : IHaveCustomMapping
 {

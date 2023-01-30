@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Messages.Domain.Entities;
+﻿using Backbone.Modules.Messages.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
-namespace Messages.Application.Messages.DTOs;
+namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
 public class AttachmentDTO : IMapTo<Attachment>
 {

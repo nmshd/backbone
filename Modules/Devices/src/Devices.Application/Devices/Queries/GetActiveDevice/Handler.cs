@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.Extensions;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.Application.Devices.Queries.GetActiveDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 
 public class Handler : IRequestHandler<GetActiveDeviceQuery, DeviceDTO>
 {

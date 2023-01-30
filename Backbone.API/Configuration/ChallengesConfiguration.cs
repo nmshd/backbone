@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Challenges.Application;
+using Backbone.Modules.Challenges.Application;
 
 namespace Backbone.API.Configuration;
 

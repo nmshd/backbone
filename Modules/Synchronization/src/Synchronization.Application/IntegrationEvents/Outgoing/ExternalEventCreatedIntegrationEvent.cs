@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Synchronization.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 
 public class ExternalEventCreatedIntegrationEvent : IntegrationEvent
 {

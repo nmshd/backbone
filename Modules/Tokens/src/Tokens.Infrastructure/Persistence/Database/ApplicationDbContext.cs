@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConverters;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Tokens.Domain.Entities;
-using Tokens.Infrastructure.Persistence.Database.ValueConverters;
 
-namespace Tokens.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase
 {
@@ -13,11 +13,11 @@ public class ApplicationDbContext : AbstractDbContextBase
 
     public virtual DbSet<Token> Tokens { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSqlServer();
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    base.OnConfiguring(optionsBuilder);
+    //    optionsBuilder.UseSqlServer();
+    //}
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

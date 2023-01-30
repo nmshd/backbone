@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Files.Application.Files.DTOs;
+using Backbone.Modules.Files.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Files.Application.Files.DTOs;
-using Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Files.Application.Extensions;
+namespace Backbone.Modules.Files.Application.Extensions;
 
 public static class FileMetadataQueryableExtensions
 {

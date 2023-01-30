@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Application.Tokens.DTOs;
+namespace Backbone.Modules.Tokens.Application.Tokens.DTOs;
 
 public class TokenDTO : IMapTo<Token>
 {

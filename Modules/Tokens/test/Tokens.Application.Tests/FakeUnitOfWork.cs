@@ -1,4 +1,4 @@
-﻿using Tokens.Application.Infrastructure;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure;
 
 namespace Tokens.Application.Tests;
 

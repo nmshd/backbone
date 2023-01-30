@@ -1,4 +1,4 @@
-﻿namespace Relationships.Infrastructure.EventBus;
+﻿namespace Backbone.Modules.Relationships.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.StronglyTypedIds;
-using Files.Domain.Entities;
 
 namespace Backbone.API.Mvc.JsonConverters.Files;
 

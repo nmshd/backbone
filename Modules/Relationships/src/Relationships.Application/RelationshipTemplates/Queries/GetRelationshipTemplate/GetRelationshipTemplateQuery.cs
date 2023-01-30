@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Relationships.Application.Relationships.DTOs;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Ids;
+using MediatR;
 
-namespace Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
 
 public class GetRelationshipTemplateQuery : IRequest<RelationshipTemplateDTO>
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace Devices.API.ApplicationInsights.TelemetryInitializers;
+namespace Backbone.Modules.Devices.API.ApplicationInsights.TelemetryInitializers;
 
 public class CloudRoleNameTelemetryInitializer : ITelemetryInitializer
 {

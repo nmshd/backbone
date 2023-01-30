@@ -1,6 +1,7 @@
 ﻿using Backbone.API.Configuration;
+using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using Synchronization.Application.Extensions;
 using Synchronization.Infrastructure.Persistence;
 
 

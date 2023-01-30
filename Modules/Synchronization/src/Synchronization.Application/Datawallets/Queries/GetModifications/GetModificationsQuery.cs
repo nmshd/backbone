@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 
-namespace Synchronization.Application.Datawallets.Queries.GetModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 
 public class GetModificationsQuery : IRequest<GetModificationsResponse>
 {

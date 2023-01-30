@@ -2,10 +2,10 @@
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.Extensions;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Devices.Application.Devices.Commands.RegisterDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResponse>
 {

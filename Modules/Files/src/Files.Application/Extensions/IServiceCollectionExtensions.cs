@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.MediatR;
-using Files.Application.AutoMapper;
-using Files.Application.Files.Commands.CreateFile;
+﻿using Backbone.Modules.Files.Application.AutoMapper;
+using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
+using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Files.Application.Extensions;
+namespace Backbone.Modules.Files.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

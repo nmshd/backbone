@@ -1,9 +1,9 @@
-﻿using Devices.API.Extensions;
-using Devices.Application;
-using Devices.Application.Extensions;
-using Devices.Infrastructure.EventBus;
-using Devices.Infrastructure.Persistence;
-using Devices.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.API.Extensions;
+using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Crypto.Abstractions;
@@ -12,7 +12,7 @@ using IdentityServer4.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.HttpOverrides;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 public class Startup
 {

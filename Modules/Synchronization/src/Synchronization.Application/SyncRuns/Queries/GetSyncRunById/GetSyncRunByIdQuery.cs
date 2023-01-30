@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
-using Synchronization.Application.SyncRuns.DTOs;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
 
 public class GetSyncRunByIdQuery : IRequest<SyncRunDTO>
 {

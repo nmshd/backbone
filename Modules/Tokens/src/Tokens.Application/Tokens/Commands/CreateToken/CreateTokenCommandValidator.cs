@@ -4,7 +4,7 @@ using Enmeshed.Tooling;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 
-namespace Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class CreateTokenCommandValidator : AbstractValidator<CreateTokenCommand>
 {

@@ -1,7 +1,7 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class CreateFileCommand : IRequest<CreateFileResponse>
 {

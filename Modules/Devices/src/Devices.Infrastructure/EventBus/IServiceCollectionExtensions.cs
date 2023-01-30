@@ -1,7 +1,7 @@
-﻿using Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+﻿using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devices.Infrastructure.EventBus;
+namespace Backbone.Modules.Devices.Infrastructure.EventBus;
 
 public static class EventBusServiceCollectionExtensions
 {

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Synchronization.Application;
+using Backbone.Modules.Synchronization.Application;
 
 namespace Backbone.API.Configuration;
 

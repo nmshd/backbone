@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 
 public class CreateRelationshipTemplateResponse : IMapTo<RelationshipTemplate>
 {

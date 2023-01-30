@@ -1,8 +1,8 @@
-﻿using Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
-using Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;
+﻿using Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
-namespace Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IEventBusExtensions
 {

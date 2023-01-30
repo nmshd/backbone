@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Relationships.Application.Relationships.DTOs;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Ids;
+using MediatR;
 
-namespace Relationships.Application.Relationships.Queries.GetChange;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
 
 public class GetChangeRequest : IRequest<RelationshipChangeDTO>
 {

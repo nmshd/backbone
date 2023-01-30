@@ -1,4 +1,4 @@
-﻿namespace Synchronization.Application.Infrastructure;
+﻿namespace Backbone.Modules.Synchronization.Application.Infrastructure;
 
 public static class DbErrorCodes
 {

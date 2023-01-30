@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
-using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.API.AspNetCoreIdentityCustomizations;
+namespace Backbone.Modules.Devices.API.AspNetCoreIdentityCustomizations;
 
 public class CustomUserStore : UserStore<ApplicationUser>
 {

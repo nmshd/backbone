@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Relationships.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 
 public class RelationshipChangeIdEntityFrameworkValueConverter : ValueConverter<RelationshipChangeId, string>
 {

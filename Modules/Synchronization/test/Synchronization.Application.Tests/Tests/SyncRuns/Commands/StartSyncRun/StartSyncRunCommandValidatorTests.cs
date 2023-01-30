@@ -1,6 +1,6 @@
-﻿using FluentValidation.TestHelper;
-using Synchronization.Application.SyncRuns.Commands.StartSyncRun;
-using Synchronization.Application.SyncRuns.DTOs;
+﻿using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun

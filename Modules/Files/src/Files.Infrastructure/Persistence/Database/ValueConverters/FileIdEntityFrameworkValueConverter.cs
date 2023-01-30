@@ -1,7 +1,7 @@
-﻿using Files.Domain.Entities;
+﻿using Backbone.Modules.Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Files.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;
 
 public class FileIdEntityFrameworkValueConverter : ValueConverter<FileId, string>
 {

@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Synchronization.Application.Datawallets.DTOs;
+﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 
-namespace Synchronization.Application.Datawallets.Queries.GetModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 
 public class GetModificationsResponse : PagedResponse<DatawalletModificationDTO>
 {

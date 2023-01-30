@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 

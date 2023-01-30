@@ -1,6 +1,6 @@
 ﻿using Enmeshed.Tooling;
 
-namespace Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Challenge
 {

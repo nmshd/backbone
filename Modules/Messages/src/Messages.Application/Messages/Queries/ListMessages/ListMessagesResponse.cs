@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Application.Messages.DTOs;
 
-namespace Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesResponse : PagedResponse<MessageDTO>
 {

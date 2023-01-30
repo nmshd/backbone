@@ -1,9 +1,9 @@
-﻿using Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Devices.Application.PushNotifications.Commands.SendTestNotification;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 
 public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
 {

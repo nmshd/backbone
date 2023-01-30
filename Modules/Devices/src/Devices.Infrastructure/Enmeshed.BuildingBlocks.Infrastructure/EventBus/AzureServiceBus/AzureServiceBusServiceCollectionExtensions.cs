@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace

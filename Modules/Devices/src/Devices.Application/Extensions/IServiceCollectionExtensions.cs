@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
-using Devices.Application.AutoMapper;
-using Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.AutoMapper;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

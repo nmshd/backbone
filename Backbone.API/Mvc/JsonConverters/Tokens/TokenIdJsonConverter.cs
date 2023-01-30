@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.StronglyTypedIds;
-using Tokens.Domain.Entities;
 
-namespace Tokens.API.JsonConverters;
+namespace Backbone.API.Mvc.JsonConverters.Tokens;
 
 public class TokenIdJsonConverter : JsonConverter<TokenId>
 {

@@ -1,7 +1,7 @@
-﻿using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Devices.Application.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 
 public interface IPushService
 {

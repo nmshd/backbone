@@ -1,6 +1,6 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Devices.Application.Identities.CreateIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.CreateIdentity;
 
 public class CreateIdentityResponse
 {

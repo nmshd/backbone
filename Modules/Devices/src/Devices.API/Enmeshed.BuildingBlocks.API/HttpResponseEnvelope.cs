@@ -1,5 +1,7 @@
 ﻿// ReSharper disable once CheckNamespace
 
+using Backbone.Modules.Devices.API.Enmeshed.BuildingBlocks.API;
+
 namespace Enmeshed.BuildingBlocks.API
 {
     public class HttpResponseEnvelope

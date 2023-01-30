@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Domain;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Errors;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Relationships.Application.Extensions;
-using Relationships.Application.Infrastructure;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Application.IntegrationEvents;
-using Relationships.Domain;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Errors;
 
-namespace Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 
 public class Handler : IRequestHandler<AcceptRelationshipChangeRequestCommand, AcceptRelationshipChangeRequestResponse>
 {

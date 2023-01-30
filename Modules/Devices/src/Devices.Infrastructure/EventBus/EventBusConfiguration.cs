@@ -1,4 +1,4 @@
-﻿namespace Devices.Infrastructure.EventBus;
+﻿namespace Backbone.Modules.Devices.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {

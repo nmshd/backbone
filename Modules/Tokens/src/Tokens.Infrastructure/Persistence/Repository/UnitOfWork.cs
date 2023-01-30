@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Tokens.Application.Infrastructure;
-using Tokens.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 
-namespace Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public class UnitOfWork : IUnitOfWork
 {

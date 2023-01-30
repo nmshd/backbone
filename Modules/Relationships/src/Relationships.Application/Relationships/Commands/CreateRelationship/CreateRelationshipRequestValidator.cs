@@ -2,7 +2,7 @@
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationship;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
 // ReSharper disable once UnusedMember.Global
 public class CreateRelationshipCommandValidator : AbstractValidator<CreateRelationshipCommand>

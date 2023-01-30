@@ -1,8 +1,8 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Relationships.Domain.Ids;
 
-namespace Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipTemplateAllocation
 {

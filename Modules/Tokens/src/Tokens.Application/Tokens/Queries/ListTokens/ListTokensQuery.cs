@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class ListTokensQuery : IRequest<ListTokensResponse>
 {

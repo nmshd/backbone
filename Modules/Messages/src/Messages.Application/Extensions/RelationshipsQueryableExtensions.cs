@@ -1,7 +1,7 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Entities;
+﻿using Backbone.Modules.Messages.Domain.Entities;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class RelationshipsQueryableExtensions
 {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Messages.Application.AutoMapper;
+using Backbone.Modules.Messages.Application.AutoMapper;
 using Xunit;
 
 namespace Messages.Application.Tests.Tests.AutoMapper;

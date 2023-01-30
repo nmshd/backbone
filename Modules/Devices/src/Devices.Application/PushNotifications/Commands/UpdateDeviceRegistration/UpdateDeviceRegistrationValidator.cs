@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 // ReSharper disable once UnusedMember.Global
 public class UpdateDeviceRegistrationValidator : AbstractValidator<UpdateDeviceRegistrationCommand>

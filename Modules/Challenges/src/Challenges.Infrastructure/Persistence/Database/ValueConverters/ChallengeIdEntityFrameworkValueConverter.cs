@@ -1,7 +1,7 @@
-﻿using Challenges.Domain.Ids;
+﻿using Backbone.Modules.Challenges.Domain.Ids;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Challenges.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
 
 public class ChallengeIdEntityFrameworkValueConverter : ValueConverter<ChallengeId, string>
 {

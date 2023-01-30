@@ -5,7 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Http;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.UserContext
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.UserContext
 {
     public class AspNetCoreUserContext : IUserContext
     {

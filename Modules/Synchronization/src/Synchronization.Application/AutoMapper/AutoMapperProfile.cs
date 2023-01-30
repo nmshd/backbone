@@ -2,7 +2,7 @@
 using AutoMapper;
 using Enmeshed.BuildingBlocks.Application.AutoMapper;
 
-namespace Synchronization.Application.AutoMapper;
+namespace Backbone.Modules.Synchronization.Application.AutoMapper;
 
 public class AutoMapperProfile : AutoMapperProfileBase
 {

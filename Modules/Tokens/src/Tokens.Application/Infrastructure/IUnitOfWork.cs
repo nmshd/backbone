@@ -1,4 +1,4 @@
-﻿namespace Tokens.Application.Infrastructure;
+﻿namespace Backbone.Modules.Tokens.Application.Infrastructure;
 
 public interface IUnitOfWork : IDisposable
 {

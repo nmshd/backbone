@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Relationships.Common;
+using Backbone.Modules.Relationships.Common.FluentValidation;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
-using Relationships.Common;
-using Relationships.Common.FluentValidation;
 
-namespace Relationships.Application.Relationships.Queries.ListChanges;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 
 // ReSharper disable once UnusedMember.Global
 public class ListChangesQueryValidator : AbstractValidator<ListChangesQuery>

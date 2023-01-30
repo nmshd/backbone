@@ -1,10 +1,10 @@
-﻿using Devices.Application;
-using Devices.Application.Devices.Commands.ChangePassword;
-using Devices.Application.Devices.Commands.DeleteDevice;
-using Devices.Application.Devices.Commands.RegisterDevice;
-using Devices.Application.Devices.DTOs;
-using Devices.Application.Devices.Queries.GetActiveDevice;
-using Devices.Application.Devices.Queries.ListDevices;
+﻿using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
+using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
+using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Devices.API.Controllers;
+namespace Backbone.Modules.Devices.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(IdentityServerConstants.LocalApi.PolicyName)]

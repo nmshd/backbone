@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.ContentStore;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
-using Relationships.Application.Infrastructure;
-using Relationships.Infrastructure.Persistence.ContentStore;
-using Relationships.Infrastructure.Persistence.Database;
 
-namespace Relationships.Infrastructure.Persistence;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
@@ -27,6 +27,6 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
+    public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
     public BlobStorageOptions BlobStorageOptions { get; set; } = new();
 }

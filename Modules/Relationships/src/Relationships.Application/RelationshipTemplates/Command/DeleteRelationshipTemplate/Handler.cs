@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Relationships;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.Tooling;
 using MediatR;
-using Relationships.Application.Extensions;
-using Relationships.Application.Infrastructure.Persistence;
-using Relationships.Application.Relationships;
-using Relationships.Domain.Entities;
 
-namespace Relationships.Application.RelationshipTemplates.Command.DeleteRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Command.DeleteRelationshipTemplate;
 
 public class Handler : RequestHandlerBase<DeleteRelationshipTemplateCommand, Unit>
 {

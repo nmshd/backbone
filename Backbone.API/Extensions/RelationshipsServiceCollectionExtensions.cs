@@ -1,7 +1,7 @@
 ﻿using Backbone.API.Configuration;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using Relationships.Application.Extensions;
-using Relationships.Infrastructure.Persistence;
 
 
 namespace Backbone.API.Extensions;

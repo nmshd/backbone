@@ -5,6 +5,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>Enable</Nullable>
+		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

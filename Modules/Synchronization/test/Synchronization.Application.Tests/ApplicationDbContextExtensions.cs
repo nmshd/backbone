@@ -1,4 +1,5 @@
-﻿using Synchronization.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Synchronization.Infrastructure.Persistence.Database;
 
 namespace Synchronization.Application.Tests;
 

@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Files.Application.Infrastructure.Persistence;
-using Files.Domain.Entities;
-using Files.Infrastructure.Persistence.Database.ValueConverters;
+﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Files.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase, IFilesDbContext
 {
@@ -21,12 +21,11 @@ public class ApplicationDbContext : AbstractDbContextBase, IFilesDbContext
         configurationBuilder.Properties<FileId>().AreUnicode(false).AreFixedLength().HaveMaxLength(FileId.MAX_LENGTH).HaveConversion<FileIdEntityFrameworkValueConverter>();
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.UseSqlServer();
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    base.OnConfiguring(optionsBuilder);
+    //    optionsBuilder.UseSqlServer();
+    //}
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

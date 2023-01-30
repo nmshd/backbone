@@ -1,11 +1,10 @@
 ﻿using System.Data;
+using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database
 {
     public class AbstractDbContextBase : DbContext, IDbContext
     {

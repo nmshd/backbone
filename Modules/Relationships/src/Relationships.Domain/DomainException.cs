@@ -1,6 +1,6 @@
-﻿using Relationships.Domain.Errors;
+﻿using Backbone.Modules.Relationships.Domain.Errors;
 
-namespace Relationships.Domain;
+namespace Backbone.Modules.Relationships.Domain;
 
 public class DomainException : Exception
 {

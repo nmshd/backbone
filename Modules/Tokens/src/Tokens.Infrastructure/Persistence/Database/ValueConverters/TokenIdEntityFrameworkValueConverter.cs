@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Tokens.Domain.Entities;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Tokens.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConverters;
 
 public class TokenIdEntityFrameworkValueConverter : ValueConverter<TokenId, string>
 {

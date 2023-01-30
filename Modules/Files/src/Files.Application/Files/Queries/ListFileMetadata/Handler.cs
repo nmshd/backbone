@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Files.Application.Extensions;
+using Backbone.Modules.Files.Application.Files.DTOs;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
-using Files.Application.Extensions;
-using Files.Application.Files.DTOs;
-using Files.Application.Infrastructure.Persistence;
-using Files.Domain.Entities;
 
-namespace Files.Application.Files.Queries.ListFileMetadata;
+namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 
 public class Handler : RequestHandlerBase<ListFileMetadataQuery, ListFileMetadataResponse>
 {

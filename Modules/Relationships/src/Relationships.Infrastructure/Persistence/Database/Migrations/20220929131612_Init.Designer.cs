@@ -5,11 +5,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Relationships.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace Relationships.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220929131612_Init")]

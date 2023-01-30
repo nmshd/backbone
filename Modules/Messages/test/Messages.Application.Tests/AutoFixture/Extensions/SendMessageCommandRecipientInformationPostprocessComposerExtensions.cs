@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.Dsl;
+using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Application.Messages.Commands.SendMessage;
 
 namespace Messages.Application.Tests.AutoFixture.Extensions;
 

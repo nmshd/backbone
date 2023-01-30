@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Domain.Ids;
 using Enmeshed.StronglyTypedIds;
 
 namespace Backbone.API.Mvc.JsonConverters.Challenges;

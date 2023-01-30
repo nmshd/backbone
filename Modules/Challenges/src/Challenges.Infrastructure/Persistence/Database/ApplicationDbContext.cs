@@ -1,11 +1,11 @@
-﻿using Challenges.Application.Infrastructure.Persistence;
-using Challenges.Domain.Entities;
-using Challenges.Domain.Ids;
-using Challenges.Infrastructure.Persistence.Database.ValueConverters;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Challenges.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase, IChallengesDbContext
 {
@@ -22,11 +22,11 @@ public class ApplicationDbContext : AbstractDbContextBase, IChallengesDbContext
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSqlServer();
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    base.OnConfiguring(optionsBuilder);
+    //    optionsBuilder.UseSqlServer();
+    //}
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

@@ -2,7 +2,7 @@
 using Enmeshed.Tooling;
 using Microsoft.AspNetCore.Identity;
 
-namespace Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class ApplicationUser : IdentityUser
 {

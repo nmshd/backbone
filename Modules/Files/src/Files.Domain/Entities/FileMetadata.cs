@@ -2,7 +2,7 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Files.Domain.Entities;
+namespace Backbone.Modules.Files.Domain.Entities;
 
 public class FileMetadata
 {

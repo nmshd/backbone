@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Tokens.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Tokens.Application.Infrastructure;
 
-namespace Tokens.Application.Tokens.Queries;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries;
 
 public abstract class QueryHandlerBase<TRequest, TResponse> : RequestHandlerBase<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

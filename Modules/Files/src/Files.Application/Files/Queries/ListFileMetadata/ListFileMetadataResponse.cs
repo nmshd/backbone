@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Files.Application.Files.DTOs;
+﻿using Backbone.Modules.Files.Application.Files.DTOs;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 
-namespace Files.Application.Files.Queries.ListFileMetadata;
+namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 
 public class ListFileMetadataResponse : PagedResponse<FileMetadataDTO>
 {

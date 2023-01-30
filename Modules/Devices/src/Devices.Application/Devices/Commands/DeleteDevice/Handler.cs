@@ -1,13 +1,13 @@
-﻿using Devices.Application.Devices.DTOs;
-using Devices.Application.Extensions;
-using Devices.Application.Infrastructure.Persistence;
-using Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Devices.Application.Devices.Commands.DeleteDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 public class Handler : IRequestHandler<DeleteDeviceCommand>
 {

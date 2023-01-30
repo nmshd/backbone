@@ -1,12 +1,12 @@
 using System.Reflection;
-using Challenges.Application.Extensions;
-using Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Application.Extensions;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Challenges.Jobs.Cleanup;
+namespace Backbone.Modules.Challenges.Jobs.Cleanup;
 
 public class Program
 {

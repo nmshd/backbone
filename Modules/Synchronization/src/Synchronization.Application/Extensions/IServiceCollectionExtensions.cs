@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Synchronization.Application.AutoMapper;
-using Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
-namespace Synchronization.Application.Extensions;
+namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

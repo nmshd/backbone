@@ -1,6 +1,6 @@
-﻿using Messages.Domain.Ids;
+﻿using Backbone.Modules.Messages.Domain.Ids;
 
-namespace Messages.Domain.Entities;
+namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Attachment
 {

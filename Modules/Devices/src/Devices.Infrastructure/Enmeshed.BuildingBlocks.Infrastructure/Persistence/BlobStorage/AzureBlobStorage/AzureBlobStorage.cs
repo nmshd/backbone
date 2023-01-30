@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureBlobStorage
+namespace Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureBlobStorage
 {
     public class AzureBlobStorage : IBlobStorage, IDisposable
     {

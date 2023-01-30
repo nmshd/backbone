@@ -1,5 +1,6 @@
 ﻿using Backbone.API.Configuration;
-using Challenges.Application.Extensions;
+using Backbone.Modules.Challenges.Application.Extensions;
+using Backbone.Modules.Challenges.Infrastructure.Persistence;
 using Challenges.Infrastructure.Persistence;
 
 namespace Backbone.API.Extensions;

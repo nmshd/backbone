@@ -1,4 +1,4 @@
-﻿namespace Devices.Application.DTOs;
+﻿namespace Backbone.Modules.Devices.Application.DTOs;
 
 public class ChallengeDTO
 {

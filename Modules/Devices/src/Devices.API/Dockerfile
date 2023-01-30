@@ -18,4 +18,4 @@ COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/bkb-devices"
 
-ENTRYPOINT ["dotnet", "Devices.API.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Devices.API.dll"]

@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.Dsl;
-using Messages.Application.Messages.Commands.SendMessage;
+using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 namespace Messages.Application.Tests.AutoFixture.Extensions;
 

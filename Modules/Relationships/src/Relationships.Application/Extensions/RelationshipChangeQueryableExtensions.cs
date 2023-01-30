@@ -1,9 +1,9 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Relationships.Common;
-using Relationships.Domain.Entities;
-using Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Common;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class RelationshipChangeQueryableExtensions
 {

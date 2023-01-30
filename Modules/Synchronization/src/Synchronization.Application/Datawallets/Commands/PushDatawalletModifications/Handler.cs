@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
@@ -6,14 +11,9 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application.Datawallets.DTOs;
-using Synchronization.Application.Extensions;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Application.IntegrationEvents.Outgoing;
-using Synchronization.Domain.Entities;
-using static Synchronization.Domain.Entities.Datawallet;
+using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
-namespace Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 
 public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushDatawalletModificationsResponse>
 {

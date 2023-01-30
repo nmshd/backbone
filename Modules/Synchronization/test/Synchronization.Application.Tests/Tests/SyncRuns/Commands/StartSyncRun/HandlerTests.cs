@@ -1,3 +1,8 @@
+using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -6,10 +11,6 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application.AutoMapper;
-using Synchronization.Application.SyncRuns.Commands.StartSyncRun;
-using Synchronization.Application.SyncRuns.DTOs;
-using Synchronization.Domain.Entities.Sync;
 using Synchronization.Infrastructure.Persistence.Database;
 using Xunit;
 
@@ -39,7 +40,7 @@ public class HandlerTests
         _actContext = CreateDbContext();
         _assertionContext = CreateDbContext();
 
-        _arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
+        _arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
     }
 
     [Fact]

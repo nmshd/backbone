@@ -1,9 +1,9 @@
-﻿using Challenges.Domain.Entities;
-using Challenges.Domain.Ids;
+﻿using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Challenges.Application.Challenges.DTOs;
+namespace Backbone.Modules.Challenges.Application.Challenges.DTOs;
 
 public class ChallengeDTO : IMapTo<Challenge>
 {

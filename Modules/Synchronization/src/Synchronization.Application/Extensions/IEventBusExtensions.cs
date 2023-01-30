@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
-using Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
-using Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+﻿using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
-namespace Synchronization.Application.Extensions;
+namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class IEventBusExtensions
 {

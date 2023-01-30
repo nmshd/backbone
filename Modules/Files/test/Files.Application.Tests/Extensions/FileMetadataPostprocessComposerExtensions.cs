@@ -1,6 +1,6 @@
 ﻿using AutoFixture.Dsl;
+using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Files.Domain.Entities;
 
 namespace Files.Application.Tests.Extensions;
 

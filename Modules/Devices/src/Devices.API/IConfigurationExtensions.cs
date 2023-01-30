@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Devices.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Infrastructure.EventBus;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions

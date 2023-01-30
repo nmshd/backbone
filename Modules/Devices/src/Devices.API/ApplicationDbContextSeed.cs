@@ -1,11 +1,11 @@
-﻿using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 public class ApplicationDbContextSeed
 {

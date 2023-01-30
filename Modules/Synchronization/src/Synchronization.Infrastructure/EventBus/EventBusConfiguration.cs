@@ -1,4 +1,4 @@
-﻿namespace Synchronization.Infrastructure.EventBus;
+﻿namespace Backbone.Modules.Synchronization.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {

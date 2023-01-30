@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
 public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, RefreshExpirationTimeOfSyncRunResponse>
 {

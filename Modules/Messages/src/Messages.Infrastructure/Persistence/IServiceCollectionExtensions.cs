@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Messages.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Messages.Infrastructure.Persistence;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

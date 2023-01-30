@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Synchronization.Application.Datawallets.DTOs;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Domain.Entities;
 
-namespace Synchronization.Application.Datawallets.Queries.GetModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 
 public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsResponse>
 {

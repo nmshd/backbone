@@ -1,13 +1,13 @@
-﻿using Devices.API.ExtensionMethods;
-using Devices.API.Extensions;
-using Devices.Infrastructure.Persistence.Database;
+﻿using System.Reflection;
+using Backbone.Modules.Devices.API.ExtensionMethods;
+using Backbone.Modules.Devices.API.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.Tooling.Extensions;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore;
 using Serilog;
-using System.Reflection;
 
-namespace Devices.API;
+namespace Backbone.Modules.Devices.API;
 
 public class Program
 {
@@ -34,7 +34,7 @@ public class Program
             .ConfigureAppConfiguration((hostingContext, configuration) =>
             {
                 configuration.Sources.Clear();
-                IWebHostEnvironment env = hostingContext.HostingEnvironment;
+                var env = hostingContext.HostingEnvironment;
 
                 configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
@@ -42,19 +42,13 @@ public class Program
 
                 if (env.IsDevelopment())
                 {
-                    Assembly appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                    if (appAssembly != null)
-                    {
-                        configuration.AddUserSecrets(appAssembly, optional: true);
-                    }
+                    var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                    configuration.AddUserSecrets(appAssembly, optional: true);
                 }
 
                 configuration.AddEnvironmentVariables();
 
-                if (args != null)
-                {
-                    configuration.AddCommandLine(args);
-                }
+                configuration.AddCommandLine(args);
 
                 configuration.AddAzureAppConfiguration(hostingContext);
             })

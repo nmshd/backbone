@@ -1,11 +1,11 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Messages.Application.Infrastructure.Persistence;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
-using Messages.Infrastructure.Persistence.Database.ValueConverters;
+﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Messages.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
 public class ApplicationDbContext : AbstractDbContextBase, IMessagesDbContext
 {
@@ -17,12 +17,11 @@ public class ApplicationDbContext : AbstractDbContextBase, IMessagesDbContext
     public virtual DbSet<RecipientInformation> RecipientInformation { get; set; }
     public virtual DbSet<Relationship> Relationships { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        optionsBuilder.UseSqlServer();
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    base.OnConfiguring(optionsBuilder);
+    //    optionsBuilder.UseSqlServer();
+    //}
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Files.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220929134649_Init")]

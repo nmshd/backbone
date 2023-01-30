@@ -2,7 +2,7 @@
 using System.Globalization;
 using Enmeshed.StronglyTypedIds;
 
-namespace Files.Domain.Entities;
+namespace Backbone.Modules.Files.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(FileIdTypeConverter))]

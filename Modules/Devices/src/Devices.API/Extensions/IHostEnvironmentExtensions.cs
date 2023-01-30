@@ -1,4 +1,4 @@
-﻿namespace Devices.API.Extensions;
+﻿namespace Backbone.Modules.Devices.API.Extensions;
 
 public static class IHostEnvironmentExtensions
 {

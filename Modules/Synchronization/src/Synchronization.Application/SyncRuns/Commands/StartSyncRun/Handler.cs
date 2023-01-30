@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Synchronization.Application.Extensions;
-using Synchronization.Application.Infrastructure;
-using Synchronization.Application.SyncRuns.DTOs;
-using Synchronization.Domain.Entities;
-using Synchronization.Domain.Entities.Sync;
-using static Synchronization.Domain.Entities.Datawallet;
+using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
-namespace Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 
 public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse>
 {

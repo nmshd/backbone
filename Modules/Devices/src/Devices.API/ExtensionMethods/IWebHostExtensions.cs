@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Polly;
 
-namespace Devices.API.ExtensionMethods;
+namespace Backbone.Modules.Devices.API.ExtensionMethods;
 
 public static class IWebHostExtensions
 {

@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Tokens.Application.Tokens.DTOs;
-using Tokens.Domain.Entities;
+﻿using Backbone.Modules.Tokens.Application.Tokens.DTOs;
+using Backbone.Modules.Tokens.Domain.Entities;
+using MediatR;
 
-namespace Tokens.Application.Tokens.Queries.GetToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
 public class GetTokenCommand : IRequest<TokenDTO>
 {

@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Files.Domain.Entities;
+﻿using Backbone.Modules.Files.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 
-namespace Files.Application.Files.Queries.ListFileMetadata;
+namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 
 public class ListFileMetadataQuery : IRequest<ListFileMetadataResponse>
 {

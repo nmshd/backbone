@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation.TestHelper;
-using Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Synchronization.Application.Datawallets.DTOs;
 using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications

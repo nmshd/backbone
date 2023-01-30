@@ -1,7 +1,7 @@
 ﻿using AutoFixture.Dsl;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
 
 namespace Messages.Application.Tests.AutoFixture.Extensions;
 

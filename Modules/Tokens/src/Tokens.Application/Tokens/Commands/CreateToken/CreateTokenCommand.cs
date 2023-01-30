@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using MediatR;
-using Tokens.Domain.Entities;
 
-namespace Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class CreateTokenCommand : IRequest<CreateTokenResponse>, IMapTo<Token>
 {

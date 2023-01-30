@@ -1,4 +1,4 @@
-﻿namespace Devices.Domain.Entities;
+﻿namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class DeviceRegistration
 {

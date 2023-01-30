@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Synchronization.Application.Infrastructure;
 
-namespace Synchronization.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

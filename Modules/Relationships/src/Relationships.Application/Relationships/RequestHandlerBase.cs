@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Relationships.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Relationships.Application.Infrastructure.Persistence;
 
-namespace Relationships.Application.Relationships;
+namespace Backbone.Modules.Relationships.Application.Relationships;
 
 public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

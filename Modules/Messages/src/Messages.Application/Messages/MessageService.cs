@@ -1,14 +1,14 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.Modules.Messages.Application.Extensions;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Messages.Application.Extensions;
-using Messages.Application.Infrastructure.Persistence;
-using Messages.Application.IntegrationEvents.Outgoing;
-using Messages.Application.Messages.DTOs;
-using Messages.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace Messages.Application.Messages;
+namespace Backbone.Modules.Messages.Application.Messages;
 
 public class MessageService
 {

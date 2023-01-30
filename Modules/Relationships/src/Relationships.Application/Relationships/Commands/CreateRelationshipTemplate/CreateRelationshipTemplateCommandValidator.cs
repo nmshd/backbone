@@ -4,7 +4,7 @@ using Enmeshed.Tooling;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 
-namespace Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 
 public class CreateRelationshipTemplateCommandValidator : AbstractValidator<CreateRelationshipTemplateCommand>
 {

@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Synchronization.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 
 public class DatawalletModifiedIntegrationEvent : IntegrationEvent
 {

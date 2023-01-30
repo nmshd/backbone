@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Backbone.Modules.Devices.API.Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Mvc;

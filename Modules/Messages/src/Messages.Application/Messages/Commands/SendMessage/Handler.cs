@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Messages.Application.Extensions;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Messages.Application.Extensions;
-using Messages.Application.Infrastructure.Persistence;
-using Messages.Application.IntegrationEvents.Outgoing;
-using Messages.Domain.Entities;
-using Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {

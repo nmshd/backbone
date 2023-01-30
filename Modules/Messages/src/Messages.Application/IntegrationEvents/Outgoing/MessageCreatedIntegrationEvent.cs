@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Messages.Domain.Entities;
+﻿using Backbone.Modules.Messages.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Messages.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
 
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {

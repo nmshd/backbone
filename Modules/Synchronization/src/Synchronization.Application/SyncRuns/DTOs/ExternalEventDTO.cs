@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Synchronization.Domain.Entities.Sync;
 
-namespace Synchronization.Application.SyncRuns.DTOs;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
 public class ExternalEventDTO : IHaveCustomMapping
 {

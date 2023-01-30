@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Enmeshed.StronglyTypedIds;
-using Synchronization.Domain.Entities;
 
-namespace Synchronization.API.JsonConverters;
+namespace Backbone.API.Mvc.JsonConverters.Synchronization;
 
 public class DatawalletIdJsonConverter : JsonConverter<DatawalletId>
 {
