@@ -17,4 +17,4 @@ COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/bkb-challenges"
 
-ENTRYPOINT ["dotnet", "Challenges.Jobs.Cleanup.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Modules.Challenges.Jobs.Cleanup.dll"]
