@@ -24,7 +24,7 @@ public class AzureStorageAccountTests
         using var process = new Process();
         process.StartInfo = processInfo;
         process.Start();
-        process.WaitForExit(10000);
+        process.WaitForExit(TimeSpan.FromSeconds(60));
         if (!process.HasExited)
         {
             process.Kill();
