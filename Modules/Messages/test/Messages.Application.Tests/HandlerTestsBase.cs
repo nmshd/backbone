@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoMapper;
+﻿using AutoMapper;
 using Backbone.Modules.Messages.Application.AutoMapper;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -8,7 +7,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.TestDoubles.Fakes;
-using Messages.Application.Tests.AutoFixture;
 using Moq;
 
 namespace Messages.Application.Tests;
@@ -21,7 +19,6 @@ public abstract class HandlerTestsBase
     protected readonly ApplicationDbContext _arrangeContext;
     protected readonly ApplicationDbContext _assertionContext;
     protected readonly Mock<IEventBus> _eventBusMock;
-    protected readonly Fixture _fixture;
     protected readonly IMapper _mapper;
     protected readonly Mock<IUserContext> _userContextMock;
     protected DateTime _dateTimeNow;
@@ -35,11 +32,6 @@ public abstract class HandlerTestsBase
         _dateTimeYesterday = _dateTimeNow.AddDays(-1);
 
         SystemTime.Set(_dateTimeNow);
-
-        _fixture = new CustomFixture();
-
-        _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
-        _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
         (_arrangeContext, _assertionContext, _actContext) = FakeDbContextFactory.CreateDbContexts<ApplicationDbContext>();
 
