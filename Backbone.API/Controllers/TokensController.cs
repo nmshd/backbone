@@ -42,7 +42,7 @@ public class TokensController : ApiControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetToken([FromRoute] TokenId id)
     {
-        var response = await _mediator.Send(new GetTokenCommand { Id = id });
+        var response = await _mediator.Send(new GetTokenQuery { Id = id });
         return Ok(response);
     }
 

@@ -8,7 +8,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.Tooling;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Command.DeleteRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplate;
 
 public class Handler : RequestHandlerBase<DeleteRelationshipTemplateCommand, Unit>
 {

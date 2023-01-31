@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
-public class GetTokenCommand : IRequest<TokenDTO>
+public class GetTokenQuery : IRequest<TokenDTO>
 {
     public TokenId Id { get; set; }
 }

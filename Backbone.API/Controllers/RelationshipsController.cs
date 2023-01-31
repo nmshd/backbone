@@ -103,7 +103,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetChangeById(RelationshipChangeId id)
     {
-        var relationship = await _mediator.Send(new GetChangeRequest { Id = id });
+        var relationship = await _mediator.Send(new GetChangeQuery { Id = id });
         return Ok(relationship);
     }
 

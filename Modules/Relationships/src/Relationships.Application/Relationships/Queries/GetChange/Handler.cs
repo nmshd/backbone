@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
 
-public class Handler : IRequestHandler<GetChangeRequest, RelationshipChangeDTO>
+public class Handler : IRequestHandler<GetChangeQuery, RelationshipChangeDTO>
 {
     private readonly IContentStore _contentStore;
     private readonly IRelationshipsDbContext _dbContext;
@@ -24,13 +24,13 @@ public class Handler : IRequestHandler<GetChangeRequest, RelationshipChangeDTO>
         _contentStore = contentStore;
     }
 
-    public async Task<RelationshipChangeDTO> Handle(GetChangeRequest request, CancellationToken cancellationToken)
+    public async Task<RelationshipChangeDTO> Handle(GetChangeQuery query, CancellationToken cancellationToken)
     {
         var change = await _dbContext
             .Set<RelationshipChange>()
             .IncludeAll()
             .AsNoTracking()
-            .WithId(request.Id)
+            .WithId(query.Id)
             .WithRelationshipParticipant(_userContext.GetAddress())
             .FirstOrDefaultAsync(cancellationToken);
 

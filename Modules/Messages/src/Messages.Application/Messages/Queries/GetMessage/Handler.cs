@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 
-public class Handler : IRequestHandler<GetMessageCommand, MessageDTO>
+public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 {
     private readonly IMessagesDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<GetMessageCommand, MessageDTO>
         _messageService = messageService;
     }
 
-    public async Task<MessageDTO> Handle(GetMessageCommand request, CancellationToken cancellationToken)
+    public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
     {
         var addressOfActiveIdentity = _userContext.GetAddress();
 

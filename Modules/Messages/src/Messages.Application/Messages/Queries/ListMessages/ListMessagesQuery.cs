@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
-public class ListMessagesCommand : IRequest<ListMessagesResponse>
+public class ListMessagesQuery : IRequest<ListMessagesResponse>
 {
-    public ListMessagesCommand(PaginationFilter paginationFilter, IEnumerable<MessageId> ids)
+    public ListMessagesQuery(PaginationFilter paginationFilter, IEnumerable<MessageId> ids)
     {
         PaginationFilter = paginationFilter;
         Ids = ids;

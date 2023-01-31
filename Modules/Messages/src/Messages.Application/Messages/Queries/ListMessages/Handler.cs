@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
-public class Handler : IRequestHandler<ListMessagesCommand, ListMessagesResponse>
+public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 {
     private readonly IMessagesDbContext _dbContext;
     private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<ListMessagesCommand, ListMessagesResponse
         _messageService = messageService;
     }
 
-    public async Task<ListMessagesResponse> Handle(ListMessagesCommand request, CancellationToken cancellationToken)
+    public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await FindMessagesOfIdentity(_userContext.GetAddress(), request);
 
@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<ListMessagesCommand, ListMessagesResponse
         return response;
     }
 
-    private async Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesCommand request)
+    private async Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request)
     {
         var addressOfActiveIdentity = _userContext.GetAddress();
 

@@ -32,7 +32,7 @@ public class MessagesController : ApiControllerBase
     public async Task<IActionResult> ListMessages([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<MessageId> ids)
     {
-        var command = new ListMessagesCommand(paginationFilter, ids);
+        var command = new ListMessagesQuery(paginationFilter, ids);
 
         command.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -49,7 +49,7 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessage(MessageId id, [FromQuery] bool? noBody)
     {
-        var response = await _mediator.Send(new GetMessageCommand { Id = id, NoBody = noBody == true });
+        var response = await _mediator.Send(new GetMessageQuery { Id = id, NoBody = noBody == true });
         return Ok(response);
     }
 

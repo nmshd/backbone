@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
 
-public class GetChangeRequest : IRequest<RelationshipChangeDTO>
+public class GetChangeQuery : IRequest<RelationshipChangeDTO>
 {
     public RelationshipChangeId Id { get; set; }
 }

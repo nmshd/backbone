@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
-public class Handler : IRequestHandler<GetTokenCommand, TokenDTO>
+public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<GetTokenCommand, TokenDTO>
         _mapper = mapper;
     }
 
-    public async Task<TokenDTO> Handle(GetTokenCommand request, CancellationToken cancellationToken)
+    public async Task<TokenDTO> Handle(GetTokenQuery request, CancellationToken cancellationToken)
     {
         var token = await _unitOfWork.Tokens.Find(request.Id);
         return _mapper.Map<TokenDTO>(token);
