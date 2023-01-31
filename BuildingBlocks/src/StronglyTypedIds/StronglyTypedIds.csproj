@@ -2,12 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
-		<Authors>j&amp;s soft GmbH</Authors>
-		<Company>j&amp;s soft GmbH</Company>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-		<RepositoryUrl>https://github.com/nmshd/bkb-libraries</RepositoryUrl>
 	</PropertyGroup>
 
 </Project>
