@@ -117,6 +117,6 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
         object value,
         JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        JsonSerializer.Serialize(writer, value, options);
     }
 }

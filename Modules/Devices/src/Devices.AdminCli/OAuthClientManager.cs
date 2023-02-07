@@ -1,7 +1,5 @@
-﻿using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database;
+﻿using Devices.API.Models;
 using Enmeshed.StronglyTypedIds;
-using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -11,119 +9,99 @@ namespace Devices.AdminCli;
 
 public class CreatedClientDTO
 {
-    public CreatedClientDTO(string clientId, string name, string clientSecret, int accessTokenLifetime)
+    public CreatedClientDTO(string clientId, string name, string clientSecret)
     {
         ClientId = clientId;
         Name = name;
         ClientSecret = clientSecret;
-        AccessTokenLifetime = accessTokenLifetime;
     }
 
     public string ClientId { get; init; }
     public string Name { get; init; }
     public string ClientSecret { get; init; }
-    public int AccessTokenLifetime { get; init; }
 }
 
 public class ClientDTO
 {
-    public ClientDTO(string clientId, string name, int accessTokenLifetime)
+    public ClientDTO(string clientId, string name)
     {
         ClientId = clientId;
         Name = name;
-        AccessTokenLifetime = accessTokenLifetime;
     }
 
     public string ClientId { get; set; }
     public string Name { get; set; }
-    public int AccessTokenLifetime { get; set; }
 }
 
 public class OAuthClientManager
 {
-    //private readonly ConfigurationDbContext _dbContext;
-
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ApplicationDbContext _applicationDbContext;
-
-    private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _manager;
+    private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
     public OAuthClientManager(
-        //ConfigurationDbContext dbContext,
-        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> manager,
-        UserManager<ApplicationUser> userManager,
-        ApplicationDbContext applicationDbContext)
+        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
-        //_dbContext = dbContext;
-        _manager = manager;
-        _userManager = userManager;
-        _applicationDbContext = applicationDbContext;
+        _applicationManager = applicationManager;
     }
 
-    public async Task<CreatedClientDTO> Create(string? clientId, string? name, string? clientSecret, int? accessTokenLifetime)
+    public async Task<CreatedClientDTO> Create(string? clientId, string? name, string? clientSecret)
     {
         clientSecret = string.IsNullOrEmpty(clientSecret) ? Password.Generate(30) : clientSecret;
         clientId = string.IsNullOrEmpty(clientId) ? ClientIdGenerator.Generate() : clientId;
-        accessTokenLifetime ??= 300;
         name = string.IsNullOrEmpty(name) ? clientId : name;
 
-        if (await _manager.FindByClientIdAsync(clientId) is null)
+        if (await _applicationManager.FindByClientIdAsync(clientId) != null)
         {
-            OpenIddictEntityFrameworkCoreApplication managerResult = await _manager.CreateAsync(new OpenIddictApplicationDescriptor
-            {
-                ClientId = clientId,
-                ClientSecret = clientSecret,
-                DisplayName = name,
-                Permissions =
-                {
-                    Permissions.Endpoints.Authorization,
-                    Permissions.Endpoints.Logout,
-                    Permissions.Endpoints.Token,
-                    Permissions.GrantTypes.Password,
-                    Permissions.GrantTypes.RefreshToken
-                }
-            });
-
-            if (managerResult == null)
-            {
-                throw new Exception($"Failed to create the client: '{name}'");
-            }
+            throw new Exception($"A client with the id '{clientId}' already exists.");
         }
 
-        //ApplicationUser user = new ApplicationUser
-        //{
-        //    Id = clientId,
-        //    UserName = name,
-        //    Device = new Device(new Identity(clientId,
-        //        IdentityAddress.Create(new byte[] { 3, 3, 3, 3, 3 }, "id1"),
-        //        new byte[] { 3, 3, 3, 3, 3 }, 1
-        //    ))
-        //};
+        var managerResult = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        {
+            ClientId = clientId,
+            ClientSecret = clientSecret, // Note: the default implementation automatically hashes the client secret before storing it in the database, for security reasons.
+            DisplayName = name,
+            Permissions =
+            {
+                Permissions.Endpoints.Authorization,
+                Permissions.Endpoints.Logout,
+                Permissions.Endpoints.Token,
+                Permissions.GrantTypes.Password,
+                Permissions.GrantTypes.RefreshToken,
+                Permissions.Prefixes.Scope + CustomScopes.IdentityResources.IDENTITY_INFORMATION,
+                Permissions.Prefixes.Scope + CustomScopes.IdentityResources.DEVICE_INFORMATION,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.CHALLENGES,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.DEVICES,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.MESSAGES,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.SYNCHRONIZATION,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.FILES,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.TOKENS,
+                Permissions.Prefixes.Scope + CustomScopes.Apis.RELATIONSHIPS
+            }
+        });
 
-        //IdentityResult result = await _userManager.CreateAsync(user, clientSecret);
+        if (managerResult == null)
+        {
+            throw new Exception($"Failed to create the client: '{name}'");
+        }
 
-        //if (!result.Succeeded)
-        //{
-        //    string[] errorList = result.Errors.Select(e => e.Description).ToArray();
-        //    throw new Exception($"Failed to create the client: '{name}' with the following errors: {string.Join(", ", errorList)}");
-        //}
-
-        return new CreatedClientDTO(clientId, name, clientSecret, accessTokenLifetime.Value);
+        return new CreatedClientDTO(clientId, name, clientSecret);
     }
 
-    public async void Delete(string clientId)
+    public async Task Delete(string clientId)
     {
-        OpenIddictEntityFrameworkCoreApplication? client = await _manager.FindByIdAsync(clientId);
+        if (string.IsNullOrEmpty(clientId))
+            throw new ArgumentNullException(nameof(clientId));
+
+        var client = await _applicationManager.FindByClientIdAsync(clientId);
 
         if (client == null)
-            throw new Exception($"A client with the client id '{clientId}' does not exist.");
+            throw new ArgumentException($"A client with the client id '{clientId}' does not exist.");
 
-        await _manager.DeleteAsync(client);
+        await _applicationManager.DeleteAsync(client);
     }
 
     public IAsyncEnumerable<ClientDTO> GetAll()
     {
-        return _manager.ListAsync(applications => applications.Select(c => new ClientDTO(c.Id, c.DisplayName, 300)), CancellationToken.None);
+        return _applicationManager.ListAsync(applications => applications.Select(c => new ClientDTO(c.Id, c.DisplayName)), CancellationToken.None);
     }
 }
 
@@ -143,7 +121,7 @@ public static class ClientIdGenerator
 
     public static string Generate()
     {
-        string stringValue = StringUtils.Generate(ValidChars, MAX_LENGTH_WITHOUT_PREFIX);
+        var stringValue = StringUtils.Generate(ValidChars, MAX_LENGTH_WITHOUT_PREFIX);
         return PREFIX + stringValue;
     }
 }

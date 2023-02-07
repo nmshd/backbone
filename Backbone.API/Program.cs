@@ -4,13 +4,14 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Challenges.Application;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Extensions;
+using Devices.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
@@ -39,10 +40,11 @@ var app = builder.Build();
 Configure(app);
 
 app
-    .MigrateDbContext<ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Devices.Infrastructure.Persistence.Database.ApplicationDbContext>((context, _) => { new ApplicationDbContextSeed().SeedAsync(context).Wait(); })
     .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
     .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
     .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ApplicationDbContext>()
     .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ApplicationDbContext>();
 
@@ -52,7 +54,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services
         .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
@@ -66,8 +69,18 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
         .AddCustomApplicationInsights()
+        .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomSwaggerUI(parsedConfiguration.SwaggerUi);
+        .AddCustomOpenIddict(parsedConfiguration.Authentication)
+        .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
+
+    services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+        options.KnownNetworks.Clear();
+        options.KnownProxies.Clear();
+    });
 
     // TODO: M switch to manual validation
     services.AddFluentValidationAutoValidation(config =>
@@ -79,6 +92,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services
         .AddChallenges(parsedConfiguration.Modules.Challenges)
+        .AddDevices(parsedConfiguration.Modules.Devices)
         .AddFiles(parsedConfiguration.Modules.Files)
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
@@ -93,6 +107,8 @@ static void Configure(WebApplication app)
     var telemetryConfiguration = app.Services.GetRequiredService<TelemetryConfiguration>();
     telemetryConfiguration.DisableTelemetry = !app.Configuration.GetApplicationInsightsConfiguration().Enabled;
 
+    app.UseForwardedHeaders();
+
     app.UseMiddleware<RequestResponseTimeMiddleware>()
         .UseMiddleware<ResponseDurationMiddleware>()
         .UseMiddleware<RequestIdMiddleware>();
@@ -106,7 +122,7 @@ static void Configure(WebApplication app)
 
     if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
     {
-        app.UseSwagger().UseSwaggerUI();
+        //app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
     }
 
@@ -119,6 +135,7 @@ static void Configure(WebApplication app)
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
+    eventBus.AddDevicesIntegrationEventSubscriptions();
 
 }
 

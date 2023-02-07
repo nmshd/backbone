@@ -8,9 +8,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/dotnet/sdk:7.0
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
       - run: bash ./.ci/test.sh
   publish-docker-image:
     runs-on: ubuntu-latest

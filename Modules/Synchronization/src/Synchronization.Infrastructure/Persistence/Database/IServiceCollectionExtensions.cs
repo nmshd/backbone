@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,7 +24,6 @@ public static class IServiceCollectionExtensions
                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
             }));
 
-        services.AddScoped<IDbContext, ApplicationDbContext>();
         services.AddScoped<ISynchronizationDbContext, ApplicationDbContext>();
     }
 }

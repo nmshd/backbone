@@ -10,11 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Certificates\jwt-issuer-signing-key.cer" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="Certificates\jwt-issuer-signing-key.cer" />
+		<EmbeddedResource Include="Certificates\jwt-signing-certificate.pfx" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,6 +44,9 @@
 		<ProjectReference Include="..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
+		<ProjectReference Include="..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
+		<ProjectReference Include="..\Modules\Devices\src\Devices.Domain\Devices.Domain.csproj" />
+		<ProjectReference Include="..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Application\Files.Application.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Domain\Files.Domain.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj" />

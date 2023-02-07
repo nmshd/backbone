@@ -7,11 +7,12 @@ using Backbone.Modules.Challenges.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.API.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize]
+[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class ChallengesController : ApiControllerBase
 {
     public ChallengesController(IMediator mediator) : base(mediator)

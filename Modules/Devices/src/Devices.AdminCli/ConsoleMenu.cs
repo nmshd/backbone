@@ -25,7 +25,7 @@ public class ConsoleMenu
 
 public class MenuItem
 {
-    public MenuItem(int order, string description, Action action)
+    public MenuItem(int order, string description, Func<Task> action)
     {
         Order = order;
         Action = action;
@@ -33,6 +33,6 @@ public class MenuItem
     }
 
     public int Order { get; set; }
-    public Action Action { get; set; }
+    public Func<Task> Action { get; set; }
     public string Description { get; set; }
 }

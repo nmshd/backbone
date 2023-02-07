@@ -28,6 +28,7 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
         var query = _dbContext
             .SetReadOnly<Device>()
             .NotDeleted()
+            .IncludeUser()
             .OfIdentity(_activeIdentity);
 
         if (request.Ids.Any())

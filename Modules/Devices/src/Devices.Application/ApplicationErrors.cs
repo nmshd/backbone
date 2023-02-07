@@ -1,9 +1,19 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backbone.Modules.Devices.Application;
 
 public static class ApplicationErrors
 {
+    public static class Authentication
+    {
+        public static ApplicationError InvalidOAuthRequest(string reason = "")
+        {
+            var formattedReason = reason.IsNullOrEmpty() ? "" : $" ({reason})";
+            return new ApplicationError("error.platform.validation.authentication.invalidOAuthRequest", string.IsNullOrEmpty(reason) ? $"The OAuth request is invalid{formattedReason}." : reason);
+        }
+    }
+
     public static class Devices
     {
         public static ApplicationError RegistrationFailed(string message = "")

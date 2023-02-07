@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static void AddApplicationSubscriptions(this IEventBus eventBus)
+    public static void AddDevicesIntegrationEventSubscriptions(this IEventBus eventBus)
     {
         SubscribeToSynchronizationEvents(eventBus);
     }

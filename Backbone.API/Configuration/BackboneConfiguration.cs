@@ -10,7 +10,7 @@ public class BackboneConfiguration
 
     public CorsConfiguration Cors { get; set; } = new();
 
-    public SwaggerUiConfiguration SwaggerUi { get; set; }
+    public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
 
     [Required]
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
@@ -21,10 +21,14 @@ public class BackboneConfiguration
     public class AuthenticationConfiguration
     {
         [Required]
-        public string ValidIssuer { get; set; }
+        [MinLength(1)]
+        public string JwtSigningCertificateSource { get; set; } = "";
+
+        public string JwtSigningCertificate { get; set; } = "";
 
         [Required]
-        public string JwtSigningCertificate { get; set; }
+        [Range(60, 3600)]
+        public int JwtLifetimeInSeconds { get; set; }
     }
 
     public class CorsConfiguration
@@ -49,6 +53,9 @@ public class BackboneConfiguration
     {
         [Required]
         public ChallengesConfiguration Challenges { get; set; } = new();
+
+        [Required]
+        public DevicesConfiguration Devices { get; set; } = new();
 
         [Required]
         public FilesConfiguration Files { get; set; } = new();

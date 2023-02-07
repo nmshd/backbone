@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

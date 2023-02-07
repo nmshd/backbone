@@ -13,12 +13,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.API.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize]
+[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class RelationshipTemplatesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

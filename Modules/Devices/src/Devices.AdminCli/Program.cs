@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenIddict.Client;
 
 namespace Devices.AdminCli;
 
@@ -36,7 +35,7 @@ public class Program
         new(5, "Exit", Exit)
     });
 
-    public static int Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         ApplicationConfiguration configuration;
         try
@@ -45,17 +44,17 @@ public class Program
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine(e.Message);
+            await Console.Error.WriteLineAsync(e.Message);
             return 1;
         }
 
-        ServiceCollection services = new ServiceCollection();
+        var services = new ServiceCollection();
         ConfigureServices(services, configuration);
 
-        ServiceProvider serviceProvider = services.BuildServiceProvider();
+        var serviceProvider = services.BuildServiceProvider();
         _oAuthClientManager = serviceProvider.GetRequiredService<OAuthClientManager>();
 
-        Run();
+        await Run();
 
         return 0;
     }
@@ -68,12 +67,9 @@ public class Program
             options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
             {
                 sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
-                sqlOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
             });
 
             // Register the entity sets needed by OpenIddict.
-            // Note: use the generic overload if you need
-            // to replace the default OpenIddict entities.
             options.UseOpenIddict();
         });
 
@@ -89,7 +85,6 @@ public class Program
             .AddDefaultTokenProviders();
 
         services.AddOpenIddict()
-
             // Register the OpenIddict core components.
             .AddCore(options =>
             {
@@ -97,29 +92,6 @@ public class Program
                 // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
                 options.UseEntityFrameworkCore()
                        .UseDbContext<ApplicationDbContext>();
-            })
-
-            // Register the OpenIddict client components.
-            .AddClient(options =>
-            {
-                // Allow grant_type=password to be negotiated.
-                options.AllowPasswordFlow();
-
-                // Disable token storage, which is not necessary for non-interactive flows like
-                // grant_type=password, grant_type=client_credentials or grant_type=refresh_token.
-                options.DisableTokenStorage();
-
-                // Register the System.Net.Http integration and use the identity of the current
-                // assembly as a more specific user agent, which can be useful when dealing with
-                // providers that use the user agent as a way to throttle requests (e.g Reddit).
-                options.UseSystemNetHttp()
-                       .SetProductInformation(typeof(Program).Assembly);
-
-                // Add a client registration without a client identifier/secret attached.
-                options.AddRegistration(new OpenIddictClientRegistration
-                {
-                    Issuer = new Uri("https://localhost:5000/", UriKind.Absolute)
-                });
             });
 
         services.AddLogging();
@@ -128,24 +100,24 @@ public class Program
 
     private static ApplicationConfiguration GetConfiguration(string[] args)
     {
-        IConfigurationRoot commandLineOptions = new ConfigurationBuilder().AddCommandLine(args, new Dictionary<string, string> { { "-c", "ConfigurationFile" } }).Build();
-        string configurationFile = commandLineOptions.GetValue<string>("ConfigurationFile");
+        var commandLineOptions = new ConfigurationBuilder().AddCommandLine(args, new Dictionary<string, string> { { "-c", "ConfigurationFile" } }).Build();
+        var configurationFile = commandLineOptions.GetValue<string>("ConfigurationFile");
 
-        IConfigurationBuilder configurationBuilder =
+        var configurationBuilder =
             new ConfigurationBuilder()
                 .AddEnvironmentVariables();
 
         if (!string.IsNullOrEmpty(configurationFile))
         {
-            string fullPathToConfigurationFile = Path.Combine(Environment.CurrentDirectory, configurationFile);
+            var fullPathToConfigurationFile = Path.Combine(Environment.CurrentDirectory, configurationFile);
             configurationBuilder = configurationBuilder.AddJsonFile(fullPathToConfigurationFile, true, false);
         }
 
         configurationBuilder = configurationBuilder.AddCommandLine(args);
 
-        IConfigurationRoot configuration = configurationBuilder.Build();
+        var configuration = configurationBuilder.Build();
 
-        ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration
+        var applicationConfiguration = new ApplicationConfiguration
         {
             DbConnectionString = configuration.GetValue<string>("Database:ConnectionString")
         };
@@ -158,43 +130,42 @@ public class Program
         return applicationConfiguration;
     }
 
-    private static void Run()
+    private static async Task Run()
     {
         while (true)
         {
-            MenuItem userChoice = Menu.AskForItemChoice();
-            userChoice.Action.Invoke();
+            var userChoice = Menu.AskForItemChoice();
+            await userChoice.Action.Invoke();
         }
         // ReSharper disable once FunctionNeverReturns
     }
 
-    private static async void CreateClient()
+    private static async Task CreateClient()
     {
-        string? clientId = ConsoleHelpers.ReadOptional("clientId (optional)");
-        string? clientName = ConsoleHelpers.ReadOptional("displayName (optional)");
-        string? clientSecret = ConsoleHelpers.ReadOptional("clientSecret (optional)");
-        int? accessTokenLifetime = ConsoleHelpers.ReadOptionalNumber("accessTokenLifetime (default: 300)", 60, 3_600);
+        var clientId = ConsoleHelpers.ReadOptional("clientId (optional)");
+        var clientName = ConsoleHelpers.ReadOptional("displayName (optional)");
+        var clientSecret = ConsoleHelpers.ReadOptional("clientSecret (optional)");
 
-        CreatedClientDTO createdClient = await _oAuthClientManager.Create(clientId, clientName, clientSecret, accessTokenLifetime);
+        var createdClient = await _oAuthClientManager.Create(clientId, clientName, clientSecret);
 
         Console.WriteLine(JsonSerializer.Serialize(createdClient, _jsonSerializerOptions));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");
     }
 
-    private static async void CreateAnonymousClient()
+    private static async Task CreateAnonymousClient()
     {
-        CreatedClientDTO createdClient = await _oAuthClientManager.Create(null, null, null, null);
+        var createdClient = await _oAuthClientManager.Create(null, null, null);
 
         Console.WriteLine(JsonSerializer.Serialize(createdClient, _jsonSerializerOptions));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");
     }
 
-    private static void DeleteClient()
+    private static async Task DeleteClient()
     {
         try
         {
-            string clientId = ConsoleHelpers.ReadRequired("clientId");
-            _oAuthClientManager.Delete(clientId);
+            var clientId = ConsoleHelpers.ReadRequired("clientId");
+            await _oAuthClientManager.Delete(clientId);
             Console.WriteLine($"Successfully deleted client '{clientId}'");
         }
         catch (Exception ex)
@@ -203,20 +174,21 @@ public class Program
         }
     }
 
-    private static async void ListClients()
+    private static async Task ListClients()
     {
-        IAsyncEnumerable<ClientDTO> clients = _oAuthClientManager.GetAll();
+        var clients = _oAuthClientManager.GetAll();
 
         Console.WriteLine("The following clients are configured:");
 
-        await foreach (ClientDTO client in clients)
+        await foreach (var client in clients)
         {
             Console.WriteLine(JsonSerializer.Serialize(client, _jsonSerializerOptions));
         }
     }
 
-    private static void Exit()
+    private static Task Exit()
     {
         Environment.Exit(0);
+        return Task.CompletedTask;
     }
 }

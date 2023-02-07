@@ -16,12 +16,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NeoSmart.Utils;
+using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.API.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize]
+[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class FilesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

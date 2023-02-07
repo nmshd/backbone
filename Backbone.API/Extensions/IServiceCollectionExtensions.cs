@@ -1,12 +1,16 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
+using Backbone.API.AspNetCoreIdentityCustomizations;
 using Backbone.API.Certificates;
 using Backbone.API.Configuration;
 using Backbone.API.Mvc.ExceptionFilters;
 using Backbone.Infrastructure.UserContext;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Channel;
@@ -15,8 +19,10 @@ using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.API.Extensions;
 
@@ -63,31 +69,25 @@ public static class IServiceCollectionExtensions
 
                 foreach (var jsonConverter in jsonConverters)
                 {
+                    if (jsonConverter == typeof(DynamicJsonConverter)) continue;
                     var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
                     options.JsonSerializerOptions.Converters.Add(instance);
                 }
 
+                options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
-        services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+        services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, policy =>
             {
-                options.TokenValidationParameters.ValidateIssuer = true;
-                options.TokenValidationParameters.ValidIssuer =
-                    configuration.Authentication.ValidIssuer;
-
-                // TODO: M Should we validate Audience?
-                options.TokenValidationParameters.ValidateAudience = false;
-                // options.TokenValidationParameters.ValidAudience = aspNetCoreOptions.Authentication.Audience;
-
-                options.TokenValidationParameters.ValidateIssuerSigningKey = true;
-                options.TokenValidationParameters.IssuerSigningKey =
-                    JwtIssuerSigningKey.Get(configuration.Authentication, env);
-
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
+                policy.AddAuthenticationSchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+                policy.RequireAuthenticatedUser();
             });
+        });
 
         services.AddCors(options =>
         {
@@ -109,6 +109,72 @@ public static class IServiceCollectionExtensions
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
+    {
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                if (environment.IsDevelopment() || environment.IsLocal())
+                {
+                    options.Password.RequiredLength = 1;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                }
+                else
+                {
+                    options.Password.RequiredLength = 10;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                }
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddSignInManager<CustomSigninManager>()
+            .AddUserStore<CustomUserStore>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
+        BackboneConfiguration.AuthenticationConfiguration configuration)
+    {
+        services.AddOpenIddict()
+            .AddCore(options =>
+            {
+                options.UseEntityFrameworkCore()
+                    .UseDbContext<ApplicationDbContext>();
+            })
+            .AddServer(options =>
+            {
+                options.AddSigningCertificate(Certificate.Get(configuration));
+                options.SetTokenEndpointUris("connect/token");
+                options.AllowPasswordFlow();
+                options.SetAccessTokenLifetime(TimeSpan.FromSeconds(configuration.JwtLifetimeInSeconds));
+
+                options
+                    .AddDevelopmentEncryptionCertificate() // for some reason this is necessary even though we don't encrypt the tokens
+                    .AddDevelopmentSigningCertificate();
+
+                options.DisableAccessTokenEncryption();
+
+                options.UseAspNetCore()
+                    .EnableTokenEndpointPassthrough()
+                    .DisableTransportSecurityRequirement();
+
+                options.DisableTokenStorage();
+            })
+            .AddValidation(options =>
+            {
+                // import the configuration (like valid issuer and the signing certificate) from the local OpenIddict server instance.
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
 
         return services;
     }
@@ -164,7 +230,8 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCustomSwaggerUI(this IServiceCollection services, BackboneConfiguration.SwaggerUiConfiguration configuration)
+    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services,
+        BackboneConfiguration.SwaggerUiConfiguration configuration)
     {
         services
             .AddEndpointsApiExplorer()
@@ -189,18 +256,10 @@ public static class IServiceCollectionExtensions
                 c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {securityScheme, new string[] { }}
+                    { securityScheme, Array.Empty<string>() }
                 });
             });
 
         return services;
-    }
-
-    public static AutofacServiceProvider ToAutofacServiceProvider(this IServiceCollection services)
-    {
-        var containerBuilder = new ContainerBuilder();
-        containerBuilder.Populate(services);
-        var container = containerBuilder.Build();
-        return new AutofacServiceProvider(container);
     }
 }

@@ -19,7 +19,9 @@ public static class IServiceCollectionExtensions
             {
                 sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-            });
+            })
+            // Register the entity sets needed by OpenIddict
+            .UseOpenIddict();
         });
 
         services.AddScoped<IDevicesDbContext, ApplicationDbContext>();
