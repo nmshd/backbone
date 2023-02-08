@@ -136,7 +136,6 @@ static void Configure(WebApplication app)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
     eventBus.AddDevicesIntegrationEventSubscriptions();
-
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
