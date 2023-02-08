@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
-using Devices.Domain.Entities;
-using Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

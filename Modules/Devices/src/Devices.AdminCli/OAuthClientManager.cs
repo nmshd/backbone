@@ -1,5 +1,4 @@
-﻿using Devices.API.Models;
-using Enmeshed.StronglyTypedIds;
+﻿using Enmeshed.StronglyTypedIds;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -61,27 +60,13 @@ public class OAuthClientManager
             DisplayName = name,
             Permissions =
             {
-                Permissions.Endpoints.Authorization,
-                Permissions.Endpoints.Logout,
                 Permissions.Endpoints.Token,
-                Permissions.GrantTypes.Password,
-                Permissions.GrantTypes.RefreshToken,
-                Permissions.Prefixes.Scope + CustomScopes.IdentityResources.IDENTITY_INFORMATION,
-                Permissions.Prefixes.Scope + CustomScopes.IdentityResources.DEVICE_INFORMATION,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.CHALLENGES,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.DEVICES,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.MESSAGES,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.SYNCHRONIZATION,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.FILES,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.TOKENS,
-                Permissions.Prefixes.Scope + CustomScopes.Apis.RELATIONSHIPS
+                Permissions.GrantTypes.Password
             }
         });
 
         if (managerResult == null)
-        {
             throw new Exception($"Failed to create the client: '{name}'");
-        }
 
         return new CreatedClientDTO(clientId, name, clientSecret);
     }

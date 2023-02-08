@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Devices.API\Devices.API.csproj" />
+		<ProjectReference Include="..\..\..\..\Backbone.API\Backbone.API.csproj" />
 		<ProjectReference Include="..\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 	</ItemGroup>
 
