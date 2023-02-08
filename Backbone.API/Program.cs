@@ -1,5 +1,6 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.API;
 using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
