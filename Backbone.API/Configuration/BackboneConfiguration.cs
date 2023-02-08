@@ -40,7 +40,7 @@ public class BackboneConfiguration
     public class SwaggerUiConfiguration
     {
         [Required]
-        public string TokenUrl { get; set; }
+        public string TokenUrl { get; set; } = "";
     }
 
     public class BackboneInfrastructureConfiguration

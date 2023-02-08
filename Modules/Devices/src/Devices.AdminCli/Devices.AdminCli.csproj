@@ -9,10 +9,12 @@
 		<ToolCommandName>bbadmin</ToolCommandName>
 		<PackageOutputPath>./bin/nupkg</PackageOutputPath>
 		<ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Devices.API\Devices.API.csproj" />
+		<ProjectReference Include="..\..\..\..\Backbone.API\Backbone.API.csproj" />
 		<ProjectReference Include="..\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 	</ItemGroup>
 

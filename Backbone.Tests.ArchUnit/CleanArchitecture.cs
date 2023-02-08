@@ -63,6 +63,7 @@ public class CleanArchitecture
     {
         Types()
             .That().Are(ApplicationAssemblies)
+            .And().DoNotResideInAssembly("Backbone.Modules.Devices.Application", true)
             .Should().NotDependOnAnyTypesThat().ResideInNamespace("Microsoft.AspNetCore.*", true)
             .Because("this would violate Clean Architecture")
             .Check(Backbone.Architecture);

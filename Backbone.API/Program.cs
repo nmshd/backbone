@@ -122,7 +122,7 @@ static void Configure(WebApplication app)
 
     if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
     {
-        //app.UseSwagger().UseSwaggerUI();
+        app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
     }
 
@@ -136,7 +136,6 @@ static void Configure(WebApplication app)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
     eventBus.AddDevicesIntegrationEventSubscriptions();
-
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
