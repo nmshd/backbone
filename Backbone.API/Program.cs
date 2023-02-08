@@ -9,7 +9,6 @@ using Backbone.Modules.Synchronization.Application.Extensions;
 using Devices.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
-using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
@@ -80,14 +79,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
         options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
-    });
-
-    // TODO: M switch to manual validation
-    services.AddFluentValidationAutoValidation(config =>
-    {
-        config.DisableDataAnnotationsValidation = true;
-        config.ImplicitlyValidateChildProperties = true;
-        config.ImplicitlyValidateRootCollectionElements = true;
     });
 
     services
