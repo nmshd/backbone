@@ -1,11 +1,9 @@
 ﻿using Autofac;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public static class AzureServiceBusServiceCollectionExtensions
 {

@@ -16,7 +16,7 @@ public class ExternalEventBuilder
     {
         _type = ExternalEventType.MessageDelivered;
         _owner = TestDataGenerator.CreateRandomIdentityAddress();
-        _payload = new {SomeArbitraryProperty = "SomeArbitraryValue"};
+        _payload = new { SomeArbitraryProperty = "SomeArbitraryValue" };
     }
 
     public static ExternalEventBuilder Build()
@@ -67,7 +67,7 @@ public class ExternalEventBuilder
 
     public ExternalEvent Create()
     {
-        var externalEvent = new ExternalEvent(_type, _owner, _currentIndex++, _payload ?? new {someAribtraryProperty = "someArbitraryValue"})
+        var externalEvent = new ExternalEvent(_type, _owner, _currentIndex++, _payload ?? new { someAribtraryProperty = "someArbitraryValue" })
         {
             SyncErrorCount = _errorCount
         };

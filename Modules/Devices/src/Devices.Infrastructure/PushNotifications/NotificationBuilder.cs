@@ -7,7 +7,7 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public abstract class NotificationBuilder
 {
-    protected JsonSerializerOptions _jsonSerializerOptions = new() {Converters = {new DateTimeConverter()}, PropertyNamingPolicy = JsonNamingPolicy.CamelCase /*, Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement)*/};
+    protected JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase /*, Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement)*/};
     protected readonly Dictionary<string, string> _headers = new();
 
     public static NotificationBuilder Create(NotificationPlatform platform)

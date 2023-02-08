@@ -1,13 +1,12 @@
-﻿namespace Enmeshed.Crypto.Abstractions
+﻿namespace Enmeshed.Crypto.Abstractions;
+
+public interface ISignatureHelper
 {
-    public interface ISignatureHelper
-    {
-        KeyPair CreateKeyPair();
+    KeyPair CreateKeyPair();
 
-        bool VerifySignature(ConvertibleString message, ConvertibleString signature, ConvertibleString publicKey);
-        ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message);
+    bool VerifySignature(ConvertibleString message, ConvertibleString signature, ConvertibleString publicKey);
+    ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message);
 
-        bool IsValidPublicKey(ConvertibleString publicKey);
-        bool IsValidPrivateKey(ConvertibleString privateKey);
-    }
+    bool IsValidPublicKey(ConvertibleString publicKey);
+    bool IsValidPrivateKey(ConvertibleString privateKey);
 }

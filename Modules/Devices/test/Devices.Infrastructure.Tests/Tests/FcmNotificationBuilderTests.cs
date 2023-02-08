@@ -7,25 +7,25 @@ using FluentAssertions;
 using Microsoft.Azure.NotificationHubs;
 using Xunit;
 
-namespace Devices.Infrastructure.Tests.Tests
+namespace Devices.Infrastructure.Tests.Tests;
+
+public class FcmNotificationBuilderTests
 {
-    public class FcmNotificationBuilderTests
+    [Fact]
+    public void Test1()
     {
-        [Fact]
-        public void Test1()
-        {
-            SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
+        SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
 
-            var builtNotification = NotificationBuilder
-                .Create(NotificationPlatform.Fcm)
-                .SetTag(1)
-                .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-                .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new {SomeProperty = "someValue"}))
-                .Build();
+        var builtNotification = NotificationBuilder
+            .Create(NotificationPlatform.Fcm)
+            .SetTag(1)
+            .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
+            .Build();
 
-            var formattedBuiltNotification = FormatJson(builtNotification.Body);
+        var formattedBuiltNotification = FormatJson(builtNotification.Body);
 
-            var expectedNotification = FormatJson(@"{
+        var expectedNotification = FormatJson(@"{
                 'data': {
                     'android_channel_id': 'ENMESHED',
                     'content-available': '1',
@@ -45,22 +45,21 @@ namespace Devices.Infrastructure.Tests.Tests
                 }
             }");
 
-            formattedBuiltNotification.Should().Be(expectedNotification);
+        formattedBuiltNotification.Should().Be(expectedNotification);
 
-            builtNotification.Headers.Should().BeEmpty();
-            builtNotification.ContentType.Should().Be("application/json;charset=utf-8");
-        }
+        builtNotification.Headers.Should().BeEmpty();
+        builtNotification.ContentType.Should().Be("application/json;charset=utf-8");
+    }
 
-        private string FormatJson(string jsonString)
+    private string FormatJson(string jsonString)
+    {
+        jsonString = jsonString.Replace("'", "\"");
+        var options = new JsonSerializerOptions
         {
-            jsonString = jsonString.Replace("'", "\"");
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            };
+            WriteIndented = true,
+        };
 
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(jsonString);
-            return JsonSerializer.Serialize(jsonElement, options);
-        }
+        var jsonElement = JsonSerializer.Deserialize<JsonElement>(jsonString);
+        return JsonSerializer.Serialize(jsonElement, options);
     }
 }

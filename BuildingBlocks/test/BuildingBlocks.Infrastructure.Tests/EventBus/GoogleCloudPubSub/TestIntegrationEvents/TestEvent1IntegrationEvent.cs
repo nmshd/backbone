@@ -1,8 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents
+namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
+
+public class TestEvent1IntegrationEvent : IntegrationEvent
 {
-    public class TestEvent1IntegrationEvent : IntegrationEvent
-    {
-    }
 }

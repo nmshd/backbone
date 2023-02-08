@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-// ReSharper disable once CheckNamespace
-namespace AspNetCoreTools.ExtensionMethods
+namespace Enmeshed.BuildingBlocks.API.Extensions;
+
+public static class ModelStateDictionaryExtensions
 {
-    public static class ModelStateDictionaryExtensions
+    public static void AddModelError(this ModelStateDictionary modelState, string errorMessage)
     {
-        public static void AddModelError(this ModelStateDictionary modelState, string errorMessage)
-        {
-            modelState.AddModelError(string.Empty, errorMessage);
-        }
+        modelState.AddModelError(string.Empty, errorMessage);
     }
 }

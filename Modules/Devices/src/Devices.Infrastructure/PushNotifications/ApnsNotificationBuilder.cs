@@ -15,7 +15,7 @@ public class ApnsNotificationBuilder : NotificationBuilder
     {
         AddHeader("apns-priority", "5");
     }
-    
+
     public override NotificationBuilder AddContent(NotificationContent content)
     {
         _notification.Content = content;
@@ -35,7 +35,7 @@ public class ApnsNotificationBuilder : NotificationBuilder
 
         return this;
     }
-    
+
     private void SetContentAvailable(bool contentAvailable)
     {
         _notification.APS.ContentAvailable = contentAvailable ? "1" : "0";
@@ -66,7 +66,7 @@ public class ApnsNotificationBuilder : NotificationBuilder
 
         [JsonPropertyName("aps")]
         public PayloadAps APS { get; } = new();
-        
+
         public class PayloadAps
         {
             [JsonPropertyName("content-available")]

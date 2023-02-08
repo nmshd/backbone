@@ -1,4 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
