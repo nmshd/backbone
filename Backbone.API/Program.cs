@@ -46,7 +46,7 @@ app
     .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.RelationshipsDbContext>()
     .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.ApplicationDbContext>()
     .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ApplicationDbContext>()
-    .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ApplicationDbContext>();
+    .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.TokensDbContext>();
 
 app.Run();
 

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase
+public class TokensDbContext : AbstractDbContextBase
 {
-    public ApplicationDbContext() { }
+    public TokensDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public TokensDbContext(DbContextOptions<TokensDbContext> options) : base(options) { }
 
     public virtual DbSet<Token> Tokens { get; set; }
 
@@ -30,6 +30,6 @@ public class ApplicationDbContext : AbstractDbContextBase
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(TokensDbContext).Assembly);
     }
 }
