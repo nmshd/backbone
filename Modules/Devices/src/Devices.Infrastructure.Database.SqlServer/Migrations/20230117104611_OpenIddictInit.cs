@@ -1,7 +1,9 @@
 ﻿
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations;
+
+public partial class OpenIddictInit : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
