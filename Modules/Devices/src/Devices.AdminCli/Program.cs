@@ -61,12 +61,12 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, ApplicationConfiguration applicationConfiguration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<DevicesDbContext>(options =>
         {
             // Configure the context to use Microsoft SQL Server.
             options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
             {
-                sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
+                sqlOptions.MigrationsAssembly(typeof(DevicesDbContext).GetTypeInfo().Assembly.GetName().Name);
             });
 
             // Register the entity sets needed by OpenIddict.
@@ -81,7 +81,7 @@ public class Program
             config.Password.RequireNonAlphanumeric = false;
             config.Password.RequireUppercase = false;
         })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<DevicesDbContext>()
             .AddDefaultTokenProviders();
 
         services.AddOpenIddict()
@@ -91,7 +91,7 @@ public class Program
                 // Configure OpenIddict to use the Entity Framework Core stores and models.
                 // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
                 options.UseEntityFrameworkCore()
-                       .UseDbContext<ApplicationDbContext>();
+                       .UseDbContext<DevicesDbContext>();
             });
 
         services.AddLogging();
