@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase, IChallengesDbContext
+public class ChallengesDbContext : AbstractDbContextBase, IChallengesDbContext
 {
-    public ApplicationDbContext() { }
+    public ChallengesDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options) : base(options) { }
 
     public virtual DbSet<Challenge> Challenges { get; set; }
 
@@ -19,7 +19,7 @@ public class ApplicationDbContext : AbstractDbContextBase, IChallengesDbContext
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(ChallengesDbContext).Assembly);
     }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -167,25 +167,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Infrastructure.Database.SqlServer", "Modules\Relationships\src\Relationships.Infrastructure.Database.SqlServer\Relationships.Infrastructure.Database.SqlServer.csproj", "{DE89033E-BB74-43C0-8983-F07E5C75C8AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Infrastructure.Database.SqlServer", "Modules\Messages\src\Messages.Infrastructure.Database.SqlServer\Messages.Infrastructure.Database.SqlServer.csproj", "{E045E08A-4F57-4249-8F13-66BE5F19E1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Infrastructure.Database.SqlServer", "Modules\Messages\src\Messages.Infrastructure.Database.SqlServer\Messages.Infrastructure.Database.SqlServer.csproj", "{E045E08A-4F57-4249-8F13-66BE5F19E1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Infrastructure.Database.Postgres", "Modules\Messages\src\Messages.Infrastructure.Database.Postgres\Messages.Infrastructure.Database.Postgres.csproj", "{77EEA619-2203-427D-A00D-11AA70B6104B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Infrastructure.Database.Postgres", "Modules\Messages\src\Messages.Infrastructure.Database.Postgres\Messages.Infrastructure.Database.Postgres.csproj", "{77EEA619-2203-427D-A00D-11AA70B6104B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.Infrastructure.Database.SqlServer", "Modules\Files\src\Files.Infrastructure.Database.SqlServer\Files.Infrastructure.Database.SqlServer.csproj", "{EE4AC915-F377-4001-834A-6760B4403415}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Database.SqlServer", "Modules\Files\src\Files.Infrastructure.Database.SqlServer\Files.Infrastructure.Database.SqlServer.csproj", "{EE4AC915-F377-4001-834A-6760B4403415}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.Infrastructure.Database.Postgres", "Modules\Files\src\Files.Infrastructure.Database.Postgres\Files.Infrastructure.Database.Postgres.csproj", "{92D57E34-502F-4CE3-AC43-3E8A53B2FC91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Database.Postgres", "Modules\Files\src\Files.Infrastructure.Database.Postgres\Files.Infrastructure.Database.Postgres.csproj", "{92D57E34-502F-4CE3-AC43-3E8A53B2FC91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.Infrastructure.Database.SqlServer", "Modules\Synchronization\src\Synchronization.Infrastructure.Database.SqlServer\Synchronization.Infrastructure.Database.SqlServer.csproj", "{BFE78AAC-6275-45EB-9B73-07958BB5AFD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Infrastructure.Database.SqlServer", "Modules\Synchronization\src\Synchronization.Infrastructure.Database.SqlServer\Synchronization.Infrastructure.Database.SqlServer.csproj", "{BFE78AAC-6275-45EB-9B73-07958BB5AFD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.Infrastructure.Database.Postgres", "Modules\Synchronization\src\Synchronization.Infrastructure.Database.Postgres\Synchronization.Infrastructure.Database.Postgres.csproj", "{225ABDC8-3612-4236-A2D0-19C1C3638BE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Infrastructure.Database.Postgres", "Modules\Synchronization\src\Synchronization.Infrastructure.Database.Postgres\Synchronization.Infrastructure.Database.Postgres.csproj", "{225ABDC8-3612-4236-A2D0-19C1C3638BE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokens.Infrastructure.Database.SqlServer", "Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj", "{05279D11-8B1A-4C97-9F57-750740803C28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Infrastructure.Database.SqlServer", "Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj", "{05279D11-8B1A-4C97-9F57-750740803C28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokens.Infrastructure.Database.Postgres", "Modules\Tokens\src\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj", "{3749F82D-B5FC-4E1E-BA4E-4A1DA8347F45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Infrastructure.Database.Postgres", "Modules\Tokens\src\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj", "{3749F82D-B5FC-4E1E-BA4E-4A1DA8347F45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.Infrastructure.Database.SqlServer", "Modules\Devices\src\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj", "{5BCBDA68-8CA0-4305-9872-7F4D36BFC10E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Database.SqlServer", "Modules\Devices\src\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj", "{5BCBDA68-8CA0-4305-9872-7F4D36BFC10E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.Infrastructure.Database.Postgres", "Modules\Devices\src\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj", "{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Database.Postgres", "Modules\Devices\src\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj", "{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.Postgres", "Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj", "{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.SqlServer", "Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj", "{82493577-AB78-4338-BE4D-851EEAF8E1A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -449,6 +453,14 @@ Global
 		{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82493577-AB78-4338-BE4D-851EEAF8E1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82493577-AB78-4338-BE4D-851EEAF8E1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82493577-AB78-4338-BE4D-851EEAF8E1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82493577-AB78-4338-BE4D-851EEAF8E1A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -537,6 +549,8 @@ Global
 		{3749F82D-B5FC-4E1E-BA4E-4A1DA8347F45} = {903C38CB-C2E2-42D2-9277-74CE675551E8}
 		{5BCBDA68-8CA0-4305-9872-7F4D36BFC10E} = {AAE79377-8414-4C23-BF0C-678B68A24BC7}
 		{58706D00-9A53-4CC4-8201-46C3CEDCE8F9} = {AAE79377-8414-4C23-BF0C-678B68A24BC7}
+		{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809} = {C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA}
+		{82493577-AB78-4338-BE4D-851EEAF8E1A7} = {C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

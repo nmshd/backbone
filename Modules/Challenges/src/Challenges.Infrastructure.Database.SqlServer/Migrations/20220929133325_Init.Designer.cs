@@ -9,7 +9,7 @@ using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 
 #nullable disable
 
-namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Migrations
+namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(ChallengesDbContext))]
     [Migration("20220929133325_Init")]
