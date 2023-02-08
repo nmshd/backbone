@@ -12,7 +12,7 @@ using Moq;
 
 namespace Files.Application.Tests;
 
-public abstract class HandlerTestsBase : RequestHandlerTestsBase<ApplicationDbContext>
+public abstract class HandlerTestsBase : RequestHandlerTestsBase<FilesDbContext>
 {
     protected static readonly IdentityAddress ActiveIdentity = TestData.IdentityAddresses.ADDRESS_1;
     protected static readonly byte[] SomeFileContent = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };

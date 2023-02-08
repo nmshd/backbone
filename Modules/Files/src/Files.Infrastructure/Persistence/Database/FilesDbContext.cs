@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase, IFilesDbContext
+public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
 {
-    public ApplicationDbContext() { }
+    public FilesDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public FilesDbContext(DbContextOptions<FilesDbContext> options) : base(options) { }
 
     public DbSet<FileMetadata> FileMetadata { get; set; }
 
@@ -31,6 +31,6 @@ public class ApplicationDbContext : AbstractDbContextBase, IFilesDbContext
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(FilesDbContext).Assembly);
     }
 }

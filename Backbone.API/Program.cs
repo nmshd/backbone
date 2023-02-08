@@ -42,7 +42,7 @@ Configure(app);
 app
     .MigrateDbContext<Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ApplicationDbContext>()
     .MigrateDbContext<Backbone.Modules.Devices.Infrastructure.Persistence.Database.ApplicationDbContext>((context, _) => { new ApplicationDbContextSeed().SeedAsync(context).Wait(); })
-    .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.ApplicationDbContext>()
+    .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.FilesDbContext>()
     .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.RelationshipsDbContext>()
     .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.MessagesDbContext>()
     .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.SynchronizationDbContext>()
