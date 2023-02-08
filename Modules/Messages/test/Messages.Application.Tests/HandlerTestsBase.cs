@@ -14,10 +14,10 @@ namespace Messages.Application.Tests;
 public abstract class HandlerTestsBase
 {
     protected static readonly IdentityAddress ActiveIdentity = IdentityAddress.Parse("activeidentity");
-    protected readonly ApplicationDbContext _actContext;
+    protected readonly MessagesDbContext _actContext;
 
-    protected readonly ApplicationDbContext _arrangeContext;
-    protected readonly ApplicationDbContext _assertionContext;
+    protected readonly MessagesDbContext _arrangeContext;
+    protected readonly MessagesDbContext _assertionContext;
     protected readonly Mock<IEventBus> _eventBusMock;
     protected readonly IMapper _mapper;
     protected readonly Mock<IUserContext> _userContextMock;
@@ -33,7 +33,7 @@ public abstract class HandlerTestsBase
 
         SystemTime.Set(_dateTimeNow);
 
-        (_arrangeContext, _assertionContext, _actContext) = FakeDbContextFactory.CreateDbContexts<ApplicationDbContext>();
+        (_arrangeContext, _assertionContext, _actContext) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>();
 
         _userContextMock = new Mock<IUserContext>();
         _userContextMock.Setup(s => s.GetAddress()).Returns(ActiveIdentity);

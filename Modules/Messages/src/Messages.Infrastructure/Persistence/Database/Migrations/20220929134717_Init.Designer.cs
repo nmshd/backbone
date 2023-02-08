@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(MessagesDbContext))]
     [Migration("20220929134717_Init")]
     partial class Init
     {

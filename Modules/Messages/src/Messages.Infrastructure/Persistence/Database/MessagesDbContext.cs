@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase, IMessagesDbContext
+public class MessagesDbContext : AbstractDbContextBase, IMessagesDbContext
 {
-    public ApplicationDbContext() { }
+    public MessagesDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options) { }
 
     public virtual DbSet<Message> Messages { get; set; }
     public virtual DbSet<RecipientInformation> RecipientInformation { get; set; }
@@ -36,6 +36,6 @@ public class ApplicationDbContext : AbstractDbContextBase, IMessagesDbContext
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(MessagesDbContext).Assembly);
     }
 }
