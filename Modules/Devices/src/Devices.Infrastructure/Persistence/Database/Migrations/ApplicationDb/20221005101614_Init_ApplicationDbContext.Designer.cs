@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.Migrations.ApplicationDb
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(DevicesDbContext))]
     [Migration("20221005101614_Init_ApplicationDbContext")]
     partial class Init_ApplicationDbContext
     {

@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
+public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
     {
     }

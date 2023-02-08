@@ -2,11 +2,12 @@
 
 #nullable disable
 
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.Migrations.ApplicationDb
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
     [Migration("20230117104611_OpenIddictInit")]
