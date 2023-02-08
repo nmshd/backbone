@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
-public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
+public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {
     [Fact]
     public async Task Cannot_refresh_expiration_time_of_sync_run_created_by_other_device()

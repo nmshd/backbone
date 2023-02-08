@@ -20,16 +20,16 @@ namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawa
     {
         private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
-        private readonly DbContextOptions<ApplicationDbContext> _dbOptions;
+        private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
         private readonly Fixture _testDataGenerator;
 
         public HandlerTests()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
-            _dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlite(connection).Options;
+            _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
 
-            var setupContext = new ApplicationDbContext(_dbOptions);
+            var setupContext = new SynchronizationDbContext(_dbOptions);
             setupContext.Database.EnsureCreated();
             setupContext.Dispose();
 
@@ -73,9 +73,9 @@ namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawa
             return CreateHandler(_activeIdentity, _activeDevice, CreateDbContext());
         }
 
-        private ApplicationDbContext CreateDbContext()
+        private SynchronizationDbContext CreateDbContext()
         {
-            return new ApplicationDbContext(_dbOptions);
+            return new SynchronizationDbContext(_dbOptions);
         }
 
         private Handler CreateHandlerWithDelayedSave()
@@ -88,7 +88,7 @@ namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawa
             return new ApplicationDbContextWithDelayedSave(_dbOptions, TimeSpan.FromMilliseconds(200));
         }
 
-        private static Handler CreateHandler(IdentityAddress activeIdentity, DeviceId activeDevice, ApplicationDbContext dbContext)
+        private static Handler CreateHandler(IdentityAddress activeIdentity, DeviceId activeDevice, SynchronizationDbContext dbContext)
         {
             var userContext = A.Fake<IUserContext>();
             A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);

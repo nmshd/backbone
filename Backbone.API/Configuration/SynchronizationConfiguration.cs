@@ -36,6 +36,10 @@ public class SynchronizationConfiguration
         {
             [Required]
             [MinLength(1)]
+            public string Provider { get; set; } = string.Empty;
+
+            [Required]
+            [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
         }
     }

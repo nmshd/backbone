@@ -16,11 +16,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase, ISynchronizationDbContext
+public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationDbContext
 {
-    public ApplicationDbContext() { }
+    public SynchronizationDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options) : base(options) { }
 
 
     public DbSet<Datawallet> Datawallets { get; set; }
@@ -51,7 +51,7 @@ public class ApplicationDbContext : AbstractDbContextBase, ISynchronizationDbCon
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
     }
 
     public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter)

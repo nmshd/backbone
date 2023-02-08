@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(SynchronizationDbContext))]
     [Migration("20220929134820_Init")]
     partial class Init
     {

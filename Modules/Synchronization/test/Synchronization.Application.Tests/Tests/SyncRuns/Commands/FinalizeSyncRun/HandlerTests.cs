@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
 
-public class HandlerTests : RequestHandlerTestsBase<ApplicationDbContext>
+public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {
     private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
