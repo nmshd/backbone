@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 
-public class ApplicationDbContext : AbstractDbContextBase, IRelationshipsDbContext
+public class RelationshipsDbContext : AbstractDbContextBase, IRelationshipsDbContext
 {
-    public ApplicationDbContext() { }
+    public RelationshipsDbContext() { }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options) : base(options) { }
 
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<RelationshipChange> RelationshipChanges { get; set; }
@@ -38,6 +38,6 @@ public class ApplicationDbContext : AbstractDbContextBase, IRelationshipsDbConte
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(RelationshipsDbContext).Assembly);
     }
 }

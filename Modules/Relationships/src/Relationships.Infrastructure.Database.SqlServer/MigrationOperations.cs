@@ -2,7 +2,7 @@
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+namespace Relationships.Infrastructure.Database.SqlServer;
 
 public static class MigrationOperations
 {

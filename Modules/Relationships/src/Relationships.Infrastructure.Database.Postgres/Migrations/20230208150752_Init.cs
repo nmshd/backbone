@@ -1,37 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Migrations;
+namespace Relationships.Infrastructure.Database.Postgres.Migrations;
 
+/// <inheritdoc />
 public partial class Init : Migration
 {
+    /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.CreateTable(
             name: "RelationshipTemplates",
             columns: table => new
             {
-                Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                CreatedBy = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                CreatedByDevice = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                MaxNumberOfAllocations = table.Column<int>(type: "int", nullable: true),
-                ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                CreatedBy = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                CreatedByDevice = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                MaxNumberOfAllocations = table.Column<int>(type: "integer", nullable: true),
+                ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
             },
-            constraints: table => table.PrimaryKey("PK_RelationshipTemplates", x => x.Id));
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_RelationshipTemplates", x => x.Id);
+            });
 
         migrationBuilder.CreateTable(
             name: "Relationships",
             columns: table => new
             {
-                Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                RelationshipTemplateId = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: true),
-                From = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                To = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                Status = table.Column<int>(type: "int", nullable: false)
+                Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                RelationshipTemplateId = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: true),
+                From = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                To = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                Status = table.Column<int>(type: "integer", nullable: false)
             },
             constraints: table =>
             {
@@ -47,16 +53,16 @@ public partial class Init : Migration
             name: "RelationshipTemplateAllocations",
             columns: table => new
             {
-                RelationshipTemplateId = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                AllocatedBy = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                AllocatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                AllocatedByDevice = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false)
+                RelationshipTemplateId = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                AllocatedBy = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                AllocatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                AllocatedByDevice = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false)
             },
             constraints: table =>
             {
                 table.PrimaryKey("PK_RelationshipTemplateAllocations", x => new { x.RelationshipTemplateId, x.AllocatedBy });
                 table.ForeignKey(
-                    name: "FK_RelationshipTemplateAllocations_RelationshipTemplates_RelationshipTemplateId",
+                    name: "FK_RelationshipTemplateAllocations_RelationshipTemplates_Relat~",
                     column: x => x.RelationshipTemplateId,
                     principalTable: "RelationshipTemplates",
                     principalColumn: "Id",
@@ -67,18 +73,18 @@ public partial class Init : Migration
             name: "RelationshipChanges",
             columns: table => new
             {
-                Id = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                RelationshipId = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                Type = table.Column<int>(type: "int", nullable: false),
-                Status = table.Column<int>(type: "int", nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                Req_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                Req_CreatedBy = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
-                Req_CreatedByDevice = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                Res_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                Res_CreatedBy = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true),
-                Res_CreatedByDevice = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: true),
-                Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                Id = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                RelationshipId = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                Type = table.Column<int>(type: "integer", nullable: false),
+                Status = table.Column<int>(type: "integer", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                ReqCreatedAt = table.Column<DateTime>(name: "Req_CreatedAt", type: "timestamp with time zone", nullable: false),
+                ReqCreatedBy = table.Column<string>(name: "Req_CreatedBy", type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
+                ReqCreatedByDevice = table.Column<string>(name: "Req_CreatedByDevice", type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                ResCreatedAt = table.Column<DateTime>(name: "Res_CreatedAt", type: "timestamp with time zone", nullable: true),
+                ResCreatedBy = table.Column<string>(name: "Res_CreatedBy", type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true),
+                ResCreatedByDevice = table.Column<string>(name: "Res_CreatedByDevice", type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: true),
+                Discriminator = table.Column<string>(type: "text", nullable: false)
             },
             constraints: table =>
             {
@@ -184,6 +190,7 @@ public partial class Init : Migration
         migrationBuilder.AddCheckConstraintForAtMostOneRelationshipBetweenTwoIdentities();
     }
 
+    /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DeleteCheckConstraintForAtMostOneRelationshipBetweenTwoIdentities();

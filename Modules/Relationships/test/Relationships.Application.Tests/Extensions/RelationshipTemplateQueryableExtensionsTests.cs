@@ -12,12 +12,12 @@ public class RelationshipTemplateQueryableExtensionsTests
 {
     private static readonly DateTime Yesterday = DateTime.UtcNow.AddDays(-1);
 
-    private readonly ApplicationDbContext _arrangeContext;
-    private readonly ApplicationDbContext _actContext;
+    private readonly RelationshipsDbContext _arrangeContext;
+    private readonly RelationshipsDbContext _actContext;
 
     public RelationshipTemplateQueryableExtensionsTests()
     {
-        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<ApplicationDbContext>();
+        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<RelationshipsDbContext>();
     }
 
     [Fact]
