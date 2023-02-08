@@ -4,7 +4,7 @@ using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Devices.AdminCli;
+namespace Backbone.Modules.Devices.AdminCli;
 
 public class CreatedClientDTO
 {

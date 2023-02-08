@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devices.AdminCli;
+namespace Backbone.Modules.Devices.AdminCli;
 
 public class ApplicationConfiguration
 {

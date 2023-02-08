@@ -9,6 +9,8 @@
 		<ToolCommandName>bbadmin</ToolCommandName>
 		<PackageOutputPath>./bin/nupkg</PackageOutputPath>
 		<ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
