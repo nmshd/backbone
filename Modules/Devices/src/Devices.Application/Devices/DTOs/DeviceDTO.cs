@@ -24,7 +24,7 @@ public class DeviceDTO : IHaveCustomMapping
         configuration
             .CreateMap<Device, DeviceDTO>()
             .ForMember(dto => dto.LastLogin,
-                expression => expression.MapFrom(device => new LastLoginInformation {Time = device.User.LastLoginAt}));
+                expression => expression.MapFrom(device => new LastLoginInformation { Time = device.User.LastLoginAt }));
     }
 }
 

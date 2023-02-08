@@ -1,31 +1,30 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
-namespace Enmeshed.BuildingBlocks.API.Mvc.Middleware
+namespace Enmeshed.BuildingBlocks.API.Mvc.Middleware;
+
+public class ResponseDurationMiddleware
 {
-    public class ResponseDurationMiddleware
+    private const string RESPONSE_HEADER_RESPONSE_DURATION = "X-Response-Duration-ms";
+
+    private readonly RequestDelegate _next;
+
+    public ResponseDurationMiddleware(RequestDelegate next)
     {
-        private const string RESPONSE_HEADER_RESPONSE_DURATION = "X-Response-Duration-ms";
+        _next = next;
+    }
 
-        private readonly RequestDelegate _next;
-
-        public ResponseDurationMiddleware(RequestDelegate next)
+    public Task InvokeAsync(HttpContext context)
+    {
+        var watch = new Stopwatch();
+        watch.Start();
+        context.Response.OnStarting(() =>
         {
-            _next = next;
-        }
-
-        public Task InvokeAsync(HttpContext context)
-        {
-            var watch = new Stopwatch();
-            watch.Start();
-            context.Response.OnStarting(() =>
-            {
-                watch.Stop();
-                var responseTimeForCompleteRequest = watch.ElapsedMilliseconds;
-                context.Response.Headers[RESPONSE_HEADER_RESPONSE_DURATION] = responseTimeForCompleteRequest.ToString();
-                return Task.CompletedTask;
-            });
-            return _next(context);
-        }
+            watch.Stop();
+            var responseTimeForCompleteRequest = watch.ElapsedMilliseconds;
+            context.Response.Headers[RESPONSE_HEADER_RESPONSE_DURATION] = responseTimeForCompleteRequest.ToString();
+            return Task.CompletedTask;
+        });
+        return _next(context);
     }
 }

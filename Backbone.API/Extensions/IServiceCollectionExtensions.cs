@@ -13,6 +13,7 @@ using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
@@ -103,8 +104,8 @@ public static class IServiceCollectionExtensions
 
         services
             .AddHealthChecks()
-            .AddSqlServer(configuration.Modules.Challenges.Infrastructure.SqlDatabase
-                .ConnectionString); // TODO: M use separate Connection String
+            // TODO: M use separate Connection String
+            .AddSqlServer(configuration.Modules.Challenges.Infrastructure.SqlDatabase.ConnectionString);
 
         services.AddHttpContextAccessor();
 
@@ -222,6 +223,11 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
+        services.AddFluentValidationAutoValidation(config =>
+        {
+            config.DisableDataAnnotationsValidation = true;
+        });
+
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 

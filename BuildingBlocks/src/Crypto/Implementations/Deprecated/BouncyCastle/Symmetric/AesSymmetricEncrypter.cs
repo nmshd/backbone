@@ -6,95 +6,94 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric
+namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+
+public class AesSymmetricEncrypter : ISymmetricEncrypter
 {
-    public class AesSymmetricEncrypter : ISymmetricEncrypter
+    private readonly int _ivSize;
+    private readonly int _macSize;
+
+    private readonly SecureRandom _randomNumberGenerator;
+
+    public AesSymmetricEncrypter(int macBitSize, int ivBitSize)
     {
-        private readonly int _ivSize;
-        private readonly int _macSize;
+        _randomNumberGenerator = new SecureRandom();
 
-        private readonly SecureRandom _randomNumberGenerator;
+        _macSize = macBitSize;
+        _ivSize = ivBitSize;
+    }
 
-        public AesSymmetricEncrypter(int macBitSize, int ivBitSize)
+    public ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key)
+    {
+        if (encryptedMessage.IsEmpty())
         {
-            _randomNumberGenerator = new SecureRandom();
-
-            _macSize = macBitSize;
-            _ivSize = ivBitSize;
+            throw new ArgumentException("Encrypted Message Required", nameof(encryptedMessage));
         }
 
-        public ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key)
+        var iv = encryptedMessage.BytesRepresentation.Take(_ivSize / 8).ToArray();
+        var cipherText = encryptedMessage.BytesRepresentation.TakeFrom(iv.Length).ToArray();
+        var cipher = CreateDecryptionCipher(iv, key);
+        var plainText = cipher.Decrypt(cipherText);
+
+        return ConvertibleString.FromByteArray(plainText);
+    }
+
+    public ConvertibleString Encrypt(ConvertibleString plaintext, ConvertibleString key)
+    {
+        if (plaintext.IsEmpty())
         {
-            if (encryptedMessage.IsEmpty())
-            {
-                throw new ArgumentException("Encrypted Message Required", nameof(encryptedMessage));
-            }
-
-            var iv = encryptedMessage.BytesRepresentation.Take(_ivSize / 8).ToArray();
-            var cipherText = encryptedMessage.BytesRepresentation.TakeFrom(iv.Length).ToArray();
-            var cipher = CreateDecryptionCipher(iv, key);
-            var plainText = cipher.Decrypt(cipherText);
-
-            return ConvertibleString.FromByteArray(plainText);
+            throw new ArgumentException("Encrypted Message Required", nameof(plaintext));
         }
 
-        public ConvertibleString Encrypt(ConvertibleString plaintext, ConvertibleString key)
+        var iv = GenerateIv();
+        var cipher = CreateEncryptionCipher(iv, key);
+        var cipherText = cipher.Encrypt(plaintext.BytesRepresentation);
+        var encryptedMessage = iv.Concat(cipherText).ToArray();
+
+        return ConvertibleString.FromByteArray(encryptedMessage);
+    }
+
+    private byte[] GenerateIv()
+    {
+        var iv = new byte[_ivSize / 8];
+        _randomNumberGenerator.NextBytes(iv, 0, iv.Length);
+        return iv;
+    }
+
+    private GcmBlockCipher CreateDecryptionCipher(byte[] iv, ConvertibleString key)
+    {
+        var cipher = new GcmBlockCipher(new AesEngine());
+        var parameters = new AeadParameters(new KeyParameter(key.BytesRepresentation), _macSize, iv);
+
+        try
         {
-            if (plaintext.IsEmpty())
-            {
-                throw new ArgumentException("Encrypted Message Required", nameof(plaintext));
-            }
-
-            var iv = GenerateIv();
-            var cipher = CreateEncryptionCipher(iv, key);
-            var cipherText = cipher.Encrypt(plaintext.BytesRepresentation);
-            var encryptedMessage = iv.Concat(cipherText).ToArray();
-
-            return ConvertibleString.FromByteArray(encryptedMessage);
-        }
-
-        private byte[] GenerateIv()
-        {
-            var iv = new byte[_ivSize / 8];
-            _randomNumberGenerator.NextBytes(iv, 0, iv.Length);
-            return iv;
-        }
-
-        private GcmBlockCipher CreateDecryptionCipher(byte[] iv, ConvertibleString key)
-        {
-            var cipher = new GcmBlockCipher(new AesEngine());
-            var parameters = new AeadParameters(new KeyParameter(key.BytesRepresentation), _macSize, iv);
-
-            try
-            {
-                cipher.InitForDecryption(parameters);
-                return cipher;
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException(ex.Message, nameof(key), ex);
-            }
-        }
-
-        private GcmBlockCipher CreateEncryptionCipher(byte[] iv, ConvertibleString key)
-        {
-            var cipher = new GcmBlockCipher(new AesEngine());
-            var parameters = new AeadParameters(new KeyParameter(key.BytesRepresentation), _macSize, iv);
-            try
-            {
-                cipher.InitForEncryption(parameters);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException(ex.Message, nameof(key), ex);
-            }
-
+            cipher.InitForDecryption(parameters);
             return cipher;
         }
-
-        public static AesSymmetricEncrypter CreateWith96BitIv128BitMac()
+        catch (ArgumentException ex)
         {
-            return new AesSymmetricEncrypter(128, 96);
+            throw new ArgumentException(ex.Message, nameof(key), ex);
         }
+    }
+
+    private GcmBlockCipher CreateEncryptionCipher(byte[] iv, ConvertibleString key)
+    {
+        var cipher = new GcmBlockCipher(new AesEngine());
+        var parameters = new AeadParameters(new KeyParameter(key.BytesRepresentation), _macSize, iv);
+        try
+        {
+            cipher.InitForEncryption(parameters);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException(ex.Message, nameof(key), ex);
+        }
+
+        return cipher;
+    }
+
+    public static AesSymmetricEncrypter CreateWith96BitIv128BitMac()
+    {
+        return new AesSymmetricEncrypter(128, 96);
     }
 }

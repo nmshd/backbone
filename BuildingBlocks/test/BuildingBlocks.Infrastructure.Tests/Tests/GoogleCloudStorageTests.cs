@@ -7,143 +7,121 @@ using Google.Cloud.Storage.V1;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
+namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
+
+public class GoogleCloudStorageTests : IAsyncLifetime
 {
-    public class GoogleCloudStorageTests : IAsyncLifetime
+    public const string BUCKET_NAME = "test-bucket-nmshd";
+    private readonly StorageClient _storageClient;
+    private readonly IBlobStorage _blobStorageUnderTest;
+
+    public GoogleCloudStorageTests(ITestOutputHelper output)
     {
-        public const string BUCKET_NAME = "test-bucket-nmshd";
-        private readonly StorageClient _storageClient;
-        private readonly IBlobStorage _blobStorageUnderTest;
+        const string AUTH_JSON = "";
 
-        public GoogleCloudStorageTests(ITestOutputHelper output)
+        _storageClient = StorageClient.Create(GoogleCredential.FromJson(AUTH_JSON));
+
+        var logger = output.BuildLoggerFor<GoogleCloudStorage>();
+        _blobStorageUnderTest = new GoogleCloudStorage(BUCKET_NAME, _storageClient, logger);
+    }
+
+    public Task InitializeAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public async Task DisposeAsync()
+    {
+        var blobs = _storageClient.ListObjectsAsync(BUCKET_NAME);
+
+        await foreach (var blob in blobs)
         {
-            const string AUTH_JSON = "";
-
-            _storageClient = StorageClient.Create(GoogleCredential.FromJson(AUTH_JSON));
-
-            var logger = output.BuildLoggerFor<GoogleCloudStorage>();
-            _blobStorageUnderTest = new GoogleCloudStorage(BUCKET_NAME, _storageClient, logger);
+            await _storageClient.DeleteObjectAsync(BUCKET_NAME, blob.Name);
         }
+    }
 
-        public Task InitializeAsync()
-        {
-            return Task.CompletedTask;
-        }
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task SaveAndFindSingleBlob()
+    {
+        const string BLOB_NAME = "BlobName";
+        var blobContent = "BlobContent".GetBytes();
 
-        public async Task DisposeAsync()
-        {
-            var blobs = _storageClient.ListObjectsAsync(BUCKET_NAME);
+        _blobStorageUnderTest.Add(BLOB_NAME, blobContent);
+        await _blobStorageUnderTest.SaveAsync();
 
-            await foreach (var blob in blobs)
-            {
-                await _storageClient.DeleteObjectAsync(BUCKET_NAME, blob.Name);
-            }
-        }
+        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BLOB_NAME);
+        retrievedBlobContent.Should().Equal(blobContent);
+    }
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task SaveAndFindSingleBlob()
-        {
-            const string BLOB_NAME = "BlobName";
-            var blobContent = "BlobContent".GetBytes();
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task SaveAndFindMultipleBlobs()
+    {
+        var blob1Content = "BlobContent1".GetBytes();
+        var blob2Content = "BlobContent2".GetBytes();
 
-            _blobStorageUnderTest.Add(BLOB_NAME, blobContent);
-            await _blobStorageUnderTest.SaveAsync();
+        _blobStorageUnderTest.Add("BlobName1", blob1Content);
+        _blobStorageUnderTest.Add("BlobName2", blob2Content);
 
-            var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BLOB_NAME);
-            retrievedBlobContent.Should().Equal(blobContent);
-        }
+        await _blobStorageUnderTest.SaveAsync();
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task SaveAndFindMultipleBlobs()
-        {
-            var blob1Content = "BlobContent1".GetBytes();
-            var blob2Content = "BlobContent2".GetBytes();
+        var retrievedBlob1Content = await _blobStorageUnderTest.FindAsync("BlobName1");
+        var retrievedBlob2Content = await _blobStorageUnderTest.FindAsync("BlobName2");
 
-            _blobStorageUnderTest.Add("BlobName1", blob1Content);
-            _blobStorageUnderTest.Add("BlobName2", blob2Content);
+        retrievedBlob1Content.Should().Equal(blob1Content);
+        retrievedBlob2Content.Should().Equal(blob2Content);
+    }
 
-            await _blobStorageUnderTest.SaveAsync();
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task AddBlobWithSameName()
+    {
+        const string blobName = "AddBlobWithSameName";
 
-            var retrievedBlob1Content = await _blobStorageUnderTest.FindAsync("BlobName1");
-            var retrievedBlob2Content = await _blobStorageUnderTest.FindAsync("BlobName2");
+        var blobContent = "BlobContent1"u8.ToArray();
+        _blobStorageUnderTest.Add(blobName, blobContent);
 
-            retrievedBlob1Content.Should().Equal(blob1Content);
-            retrievedBlob2Content.Should().Equal(blob2Content);
-        }
+        blobContent = "BlobContent2"u8.ToArray();
+        _blobStorageUnderTest.Add(blobName, blobContent);
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task AddBlobWithSameName()
-        {
-            const string blobName = "AddBlobWithSameName";
+        var acting = () => _blobStorageUnderTest.SaveAsync();
+        await acting.Should().ThrowAsync<BlobAlreadyExistsException>();
+    }
 
-            var blobContent = "BlobContent1"u8.ToArray();
-            _blobStorageUnderTest.Add(blobName, blobContent);
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task DeleteBlobThatExists()
+    {
+        _blobStorageUnderTest.Add("BlobName", "BlobContent".GetBytes());
+        await _blobStorageUnderTest.SaveAsync();
 
-            blobContent = "BlobContent2"u8.ToArray();
-            _blobStorageUnderTest.Add(blobName, blobContent);
+        _blobStorageUnderTest.Remove("BlobName");
+        await _blobStorageUnderTest.SaveAsync();
 
-            var acting = () => _blobStorageUnderTest.SaveAsync();
-            await acting.Should().ThrowAsync<BlobAlreadyExistsException>();
-        }
+        var acting = () => _blobStorageUnderTest.FindAsync("BlobName");
+        await acting.Should().ThrowAsync<NotFoundException>();
+    }
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task DeleteBlobThatExists()
-        {
-            _blobStorageUnderTest.Add("BlobName", "BlobContent".GetBytes());
-            await _blobStorageUnderTest.SaveAsync();
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task DeleteBlobThatDoesNotExist()
+    {
+        _blobStorageUnderTest.Remove("BlobNameThatDoesNotExist");
 
-            _blobStorageUnderTest.Remove("BlobName");
-            await _blobStorageUnderTest.SaveAsync();
+        var acting = () => _blobStorageUnderTest.FindAsync("BlobNameThatDoesNotExist");
+        await acting.Should().ThrowAsync<NotFoundException>();
+    }
 
-            var acting = () => _blobStorageUnderTest.FindAsync("BlobName");
-            await acting.Should().ThrowAsync<NotFoundException>();
-        }
+    [Fact(Skip = "No valid emulator for GCP")]
+    public async Task SaveAndFindAllBlobs()
+    {
+        var blob1Content = "BlobContent1".GetBytes();
+        var blob2Content = "BlobContent2".GetBytes();
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task DeleteBlobThatDoesNotExist()
-        {
-            _blobStorageUnderTest.Remove("BlobNameThatDoesNotExist");
+        _blobStorageUnderTest.Add("BlobName1", blob1Content);
+        _blobStorageUnderTest.Add("BlobName2", blob2Content);
 
-            var acting = () => _blobStorageUnderTest.FindAsync("BlobNameThatDoesNotExist");
-            await acting.Should().ThrowAsync<NotFoundException>();
-        }
+        await _blobStorageUnderTest.SaveAsync();
 
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task SaveAndFindAllBlobs()
-        {
-            var blob1Content = "BlobContent1".GetBytes();
-            var blob2Content = "BlobContent2".GetBytes();
+        var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
 
-            _blobStorageUnderTest.Add("BlobName1", blob1Content);
-            _blobStorageUnderTest.Add("BlobName2", blob2Content);
-
-            await _blobStorageUnderTest.SaveAsync();
-
-            var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
-
-            retrievedBlobContent.Should().Contain("BlobName1");
-            retrievedBlobContent.Should().Contain("BlobName2");
-        }
-
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task SaveAndFindAllPrefixBlobs()
-        {
-            _blobStorageUnderTest.Add("PREF1_BlobName1", "content".GetBytes());
-            _blobStorageUnderTest.Add("PREF2_BlobName2", "content".GetBytes());
-            await _blobStorageUnderTest.SaveAsync();
-
-            var retrievedBlobContentPrefix1 = await (await _blobStorageUnderTest.FindAllAsync("PREF1_")).ToListAsync();
-
-            retrievedBlobContentPrefix1.Should().Contain("PREF1_BlobName1");
-            retrievedBlobContentPrefix1.Should().NotContain("PREF2_BlobName1");
-        }
-
-        [Fact(Skip = "No valid emulator for GCP")]
-        public async Task EmptyFindAllBlobs()
-        {
-            var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
-
-            retrievedBlobContent.Should().BeEmpty();
-        }
+        retrievedBlobContent.Should().Contain("BlobName1");
+        retrievedBlobContent.Should().Contain("BlobName2");
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-// ReSharper disable once CheckNamespace
-namespace System;
+namespace Enmeshed.Tooling.Extensions;
 
 public static class StringExtensions
 {

@@ -1,58 +1,57 @@
-﻿namespace Enmeshed.BuildingBlocks.API
+﻿namespace Enmeshed.BuildingBlocks.API;
+
+public class HttpResponseEnvelope
 {
-    public class HttpResponseEnvelope
+    public static HttpResponseEnvelope CreateError(HttpError error)
     {
-        public static HttpResponseEnvelope CreateError(HttpError error)
-        {
-            return new HttpResponseEnvelopeError(error);
-        }
-
-        public static HttpResponseEnvelope CreateSuccess()
-        {
-            return new HttpResponseEnvelope();
-        }
-
-        public static HttpResponseEnvelopeResult<T> CreateSuccess<T>(T result)
-        {
-            return new HttpResponseEnvelopeResult<T>(result);
-        }
+        return new HttpResponseEnvelopeError(error);
     }
 
-    public class HttpResponseEnvelopeResult<T> : HttpResponseEnvelope
+    public static HttpResponseEnvelope CreateSuccess()
     {
-        public HttpResponseEnvelopeResult(T result)
-        {
-            Result = result;
-        }
-
-        public T Result { get; set; }
+        return new HttpResponseEnvelope();
     }
 
-    public class PagedHttpResponseEnvelope<T> : HttpResponseEnvelopeResult<IEnumerable<T>>
+    public static HttpResponseEnvelopeResult<T> CreateSuccess<T>(T result)
     {
-        public PagedHttpResponseEnvelope(IEnumerable<T> result, PaginationData paginationData) : base(result)
-        {
-            Pagination = paginationData;
-        }
+        return new HttpResponseEnvelopeResult<T>(result);
+    }
+}
 
-        public PaginationData Pagination { get; set; }
-
-        public class PaginationData
-        {
-            public int PageNumber { get; set; }
-            public int? PageSize { get; set; }
-            public int TotalPages { get; set; }
-            public int TotalRecords { get; set; }
-        }
+public class HttpResponseEnvelopeResult<T> : HttpResponseEnvelope
+{
+    public HttpResponseEnvelopeResult(T result)
+    {
+        Result = result;
     }
 
-    public class HttpResponseEnvelopeError : HttpResponseEnvelope
-    {
-        public HttpResponseEnvelopeError(HttpError error)
-        {
-            Error = error;
-        }
+    public T Result { get; set; }
+}
 
-        public HttpError Error { get; set; }
+public class PagedHttpResponseEnvelope<T> : HttpResponseEnvelopeResult<IEnumerable<T>>
+{
+    public PagedHttpResponseEnvelope(IEnumerable<T> result, PaginationData paginationData) : base(result)
+    {
+        Pagination = paginationData;
     }
+
+    public PaginationData Pagination { get; set; }
+
+    public class PaginationData
+    {
+        public int PageNumber { get; set; }
+        public int? PageSize { get; set; }
+        public int TotalPages { get; set; }
+        public int TotalRecords { get; set; }
+    }
+}
+
+public class HttpResponseEnvelopeError : HttpResponseEnvelope
+{
+    public HttpResponseEnvelopeError(HttpError error)
+    {
+        Error = error;
+    }
+
+    public HttpError Error { get; set; }
 }

@@ -5,44 +5,43 @@ using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Relationships.Application.Tests.Tests.Relationships.Queries
+namespace Relationships.Application.Tests.Tests.Relationships.Queries;
+
+public class ListRelationshipsValidatorTests
 {
-    public class ListRelationshipsValidatorTests
+    [Fact]
+    public void Happy_path()
     {
-        [Fact]
-        public void Happy_path()
-        {
-            var validator = new ListRelationshipsValidator();
+        var validator = new ListRelationshipsValidator();
 
-            var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), new[] { RelationshipId.New() }));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), new[] { RelationshipId.New() }));
 
-            validationResult.ShouldNotHaveAnyValidationErrors();
-        }
+        validationResult.ShouldNotHaveAnyValidationErrors();
+    }
 
-        [Fact]
-        public void Fails_when_Ids_is_null()
-        {
-            var validator = new ListRelationshipsValidator();
+    [Fact]
+    public void Fails_when_Ids_is_null()
+    {
+        var validator = new ListRelationshipsValidator();
 
-            var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), null));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), null));
 
-            validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
-            validationResult.Errors.Should().HaveCount(1);
-            validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-            validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
-        }
+        validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
+        validationResult.Errors.Should().HaveCount(1);
+        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
+        validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
+    }
 
-        [Fact]
-        public void Fails_when_Ids_is_empty()
-        {
-            var validator = new ListRelationshipsValidator();
+    [Fact]
+    public void Fails_when_Ids_is_empty()
+    {
+        var validator = new ListRelationshipsValidator();
 
-            var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), Array.Empty<RelationshipId>()));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), Array.Empty<RelationshipId>()));
 
-            validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
-            validationResult.Errors.Should().HaveCount(1);
-            validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-            validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
-        }
+        validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
+        validationResult.Errors.Should().HaveCount(1);
+        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
+        validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
     }
 }

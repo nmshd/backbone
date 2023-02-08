@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Migrations;
 

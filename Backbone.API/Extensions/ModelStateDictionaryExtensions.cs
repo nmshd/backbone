@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-// ReSharper disable once CheckNamespace
-namespace AspNetCoreTools.ExtensionMethods;
+namespace Backbone.API.Extensions;
 
 public static class ModelStateDictionaryExtensions
 {

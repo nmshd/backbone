@@ -1,12 +1,11 @@
 ﻿using System.Text;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests
+namespace Enmeshed.BuildingBlocks.Infrastructure.Tests;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
+    public static byte[] GetBytes(this string str)
     {
-        public static byte[] GetBytes(this string str)
-        {
-            return Encoding.ASCII.GetBytes(str);
-        }
+        return Encoding.ASCII.GetBytes(str);
     }
 }

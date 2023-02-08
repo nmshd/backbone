@@ -1,8 +1,7 @@
-﻿namespace Enmeshed.Crypto.Abstractions
+﻿namespace Enmeshed.Crypto.Abstractions;
+
+public interface ISymmetricEncrypter
 {
-    public interface ISymmetricEncrypter
-    {
-        ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key);
-        ConvertibleString Encrypt(ConvertibleString plaintext, ConvertibleString key);
-    }
+    ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key);
+    ConvertibleString Encrypt(ConvertibleString plaintext, ConvertibleString key);
 }

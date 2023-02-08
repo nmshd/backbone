@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEventHandlers;
 using Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
+using Enmeshed.Tooling.Extensions;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Google.Api.Gax;

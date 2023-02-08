@@ -1,7 +1,6 @@
 ﻿using Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
 
 namespace Relationships.Infrastructure.Database.Postgres.Migrations;
 
