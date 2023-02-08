@@ -5,8 +5,8 @@ namespace Backbone.API.DTOs;
 public class CreateFileDTO
 {
     public IFormFile Content { get; set; }
-    public IdentityAddress Owner { get; set; }
-    public string OwnerSignature { get; set; }
+    public IdentityAddress? Owner { get; set; }
+    public string? OwnerSignature { get; set; }
 
     public string CipherHash { get; set; }
 
