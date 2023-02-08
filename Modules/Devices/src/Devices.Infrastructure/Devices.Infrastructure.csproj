@@ -42,8 +42,4 @@
 		</ProjectReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Persistence\Database\Migrations\ApplicationDb\" />
-	</ItemGroup>
-
 </Project>
