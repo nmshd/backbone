@@ -124,5 +124,26 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests
             retrievedBlobContent.Should().Contain("BlobName1");
             retrievedBlobContent.Should().Contain("BlobName2");
         }
+
+        [Fact(Skip = "No valid emulator for GCP")]
+        public async Task SaveAndFindAllPrefixBlobs()
+        {
+            _blobStorageUnderTest.Add("PREF1_BlobName1", "content".GetBytes());
+            _blobStorageUnderTest.Add("PREF2_BlobName2", "content".GetBytes());
+            await _blobStorageUnderTest.SaveAsync();
+
+            var retrievedBlobContentPrefix1 = await (await _blobStorageUnderTest.FindAllAsync("PREF1_")).ToListAsync();
+
+            retrievedBlobContentPrefix1.Should().Contain("PREF1_BlobName1");
+            retrievedBlobContentPrefix1.Should().NotContain("PREF2_BlobName1");
+        }
+
+        [Fact(Skip = "No valid emulator for GCP")]
+        public async Task EmptyFindAllBlobs()
+        {
+            var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
+
+            retrievedBlobContent.Should().BeEmpty();
+        }
     }
 }

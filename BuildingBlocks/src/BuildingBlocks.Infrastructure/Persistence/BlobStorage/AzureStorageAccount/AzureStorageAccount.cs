@@ -55,13 +55,13 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync()
+    public Task<IAsyncEnumerable<string>> FindAllAsync(string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         try
         {
             var blobs = _blobContainer
-                .GetBlobsAsync()
+                .GetBlobsAsync(prefix: prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
             return Task.FromResult(blobs);
