@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Migrations;
 

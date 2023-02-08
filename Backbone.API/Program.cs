@@ -6,7 +6,6 @@ using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Extensions;
-using Devices.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation.AspNetCore;

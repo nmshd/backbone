@@ -5,7 +5,7 @@ using Enmeshed.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Devices.API;
+namespace Backbone.API;
 
 public class ApplicationDbContextSeed
 {

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

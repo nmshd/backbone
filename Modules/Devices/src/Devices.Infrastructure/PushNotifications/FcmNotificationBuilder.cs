@@ -15,7 +15,7 @@ public class FcmNotificationBuilder : NotificationBuilder
     {
         SetAndroidChannelId("ENMESHED");
     }
-    
+
     private void SetAndroidChannelId(string channelId)
     {
         _notification.Data.AndroidChannelId = channelId;
@@ -40,7 +40,7 @@ public class FcmNotificationBuilder : NotificationBuilder
 
         return this;
     }
-    
+
     private void SetContentAvailable(bool contentAvailable)
     {
         _notification.Data.ContentAvailable = contentAvailable ? "1" : "0";

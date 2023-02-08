@@ -1,24 +1,23 @@
 ﻿using Enmeshed.Tooling;
 
-namespace Enmeshed.UnitTestTools.BaseClasses
+namespace Enmeshed.UnitTestTools.BaseClasses;
+
+public abstract class AbstractTestsBase : IDisposable
 {
-    public abstract class AbstractTestsBase : IDisposable
+    protected DateTime _dateTimeNow;
+    protected DateTime _dateTimeTomorrow;
+    protected DateTime _dateTimeYesterday;
+
+    protected AbstractTestsBase()
     {
-        protected DateTime _dateTimeNow;
-        protected DateTime _dateTimeTomorrow;
-        protected DateTime _dateTimeYesterday;
+        _dateTimeNow = DateTime.UtcNow;
+        _dateTimeTomorrow = _dateTimeNow.AddDays(1);
+        _dateTimeYesterday = _dateTimeNow.AddDays(-1);
 
-        protected AbstractTestsBase()
-        {
-            _dateTimeNow = DateTime.UtcNow;
-            _dateTimeTomorrow = _dateTimeNow.AddDays(1);
-            _dateTimeYesterday = _dateTimeNow.AddDays(-1);
+        SystemTime.Set(_dateTimeNow);
+    }
 
-            SystemTime.Set(_dateTimeNow);
-        }
-
-        public virtual void Dispose()
-        {
-        }
+    public virtual void Dispose()
+    {
     }
 }

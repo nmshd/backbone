@@ -11,7 +11,7 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class AzureNotificationHubPushService : IPushService
 {
-    private static readonly NotificationPlatform[] SUPPORTED_PLATFORMS = {NotificationPlatform.Fcm, NotificationPlatform.Apns};
+    private static readonly NotificationPlatform[] SUPPORTED_PLATFORMS = { NotificationPlatform.Fcm, NotificationPlatform.Apns };
     private readonly ILogger<AzureNotificationHubPushService> _logger;
     private readonly NotificationHubClient _notificationHubClient;
 
@@ -67,7 +67,7 @@ public class AzureNotificationHubPushService : IPushService
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
         return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
     }
-    
+
     private static int GetNotificationId(object pushNotification)
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
@@ -77,7 +77,7 @@ public class AzureNotificationHubPushService : IPushService
     private static IList<string> GetNotificationTags(IdentityAddress identityId)
     {
         var identityTag = "identityId:" + identityId;
-        return new[] {identityTag};
+        return new[] { identityTag };
     }
 }
 
@@ -85,7 +85,7 @@ public static class TypeExtensions
 {
     public static T GetCustomAttribute<T>(this Type type) where T : Attribute
     {
-        return (T) type.GetCustomAttribute(typeof(T));
+        return (T)type.GetCustomAttribute(typeof(T));
     }
 }
 

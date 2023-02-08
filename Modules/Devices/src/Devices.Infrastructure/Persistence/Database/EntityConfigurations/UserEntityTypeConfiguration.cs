@@ -16,7 +16,7 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<Applicatio
             .Ignore(x => x.PhoneNumber)
             .Ignore(x => x.PhoneNumberConfirmed)
             .Ignore(x => x.TwoFactorEnabled);
-        
+
         builder
             .Property(x => x.UserName)
             .HasMaxLength(Username.MAX_LENGTH)
