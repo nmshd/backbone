@@ -153,4 +153,33 @@ public class AzureStorageAccountTests
 
         CloseAzuriteContainer();
     }
+
+    [Fact(Skip = "Fails because emulator container can't be started")]
+    public async Task AzureAddMultiplePrefixBlobsAndFindAllBlobs()
+    {
+        var azureBlobStorage = ProvisionAzureStorageTests();
+
+        azureBlobStorage.Add("PREFIX1_Blob", "content"u8.ToArray());
+        azureBlobStorage.Add("PREFIX2_Blob", "content"u8.ToArray());
+        await azureBlobStorage.SaveAsync();
+
+        var blobsWithPrefix1 = await (await azureBlobStorage.FindAllAsync("PREFIX1_")).ToListAsync();
+
+        blobsWithPrefix1.Should().Contain("PREFIX1_Blob");
+        blobsWithPrefix1.Should().NotContain("PREFIX2_Blob");
+
+        CloseAzuriteContainer();
+    }
+
+    [Fact(Skip = "Fails because emulator container can't be started")]
+    public async Task AzureEmptyFindAllBlobs()
+    {
+        var azureBlobStorage = ProvisionAzureStorageTests();
+
+        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync()).ToListAsync();
+
+        retrievedBlobContent.Should().BeEmpty();
+
+        CloseAzuriteContainer();
+    }
 }
