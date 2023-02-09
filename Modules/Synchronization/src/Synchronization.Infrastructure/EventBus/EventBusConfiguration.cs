@@ -1,4 +1,6 @@
-﻿namespace Backbone.Modules.Synchronization.Infrastructure.EventBus;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backbone.Modules.Synchronization.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {
@@ -12,5 +14,6 @@ public class EventBusConfiguration
     public string GcpPubSubTopicName { get; set; }
     public string ConnectionInfo { get; set; }
 
+    [RegularExpression("Azure|GoogleCloud")]
     public string Vendor { get; set; }
 }

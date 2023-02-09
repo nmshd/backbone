@@ -17,26 +17,33 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        services.AddDbContext<DevicesDbContext>(dbContextOptions => _ = options.Provider switch
+        switch (options.Provider)
         {
-            SQLSERVER => dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
-            {
-                sqlOptions.CommandTimeout(20);
-                sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-            })
-            .UseOpenIddict(),
+            case SQLSERVER:
+                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
+                    dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    }).UseOpenIddict()
+                );
+                break;
+            case POSTGRES:
+                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
+                    dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    }).UseOpenIddict()
 
-            POSTGRES => dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
-            {
-                sqlOptions.CommandTimeout(20);
-                sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-            })
-            .UseOpenIddict(),
+                );
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {options.Provider}");
 
-            _ => throw new Exception($"Unsupported database provider: {options.Provider}")
-        });
+        }
 
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
     }

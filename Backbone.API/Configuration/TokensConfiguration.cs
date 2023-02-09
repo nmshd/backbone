@@ -23,6 +23,7 @@ public class TokensConfiguration
         {
             [Required]
             [MinLength(1)]
+            [RegularExpression("Azure|GoogleCloud")]
             public string CloudProvider { get; set; } = string.Empty;
 
             [Required]
@@ -36,6 +37,7 @@ public class TokensConfiguration
         {
             [Required]
             [MinLength(1)]
+            [RegularExpression("SqlServer|Postgres")]
             public string Provider { get; set; } = string.Empty;
 
             [Required]

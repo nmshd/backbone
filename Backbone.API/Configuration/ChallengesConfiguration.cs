@@ -21,6 +21,7 @@ public class SqlDatabase
 {
     [Required]
     [MinLength(1)]
+    [RegularExpression("SqlServer|Postgres")]
     public string Provider { get; set; } = string.Empty;
 
     [Required]
