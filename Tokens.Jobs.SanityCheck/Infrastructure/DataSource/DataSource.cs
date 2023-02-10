@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +8,12 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource
     public class DataSource : IDataSource
     {
         private readonly IBlobStorage _blobstorage;
-        private readonly ApplicationDbContext _dbcontext;
+        private readonly ITokenRepository _tokenRepository;
 
-        public DataSource(IBlobStorage blobStorage, ITokensDbContext dbContext)
+        public DataSource(IBlobStorage blobStorage, ITokenRepository tokenRepository)
         {
             _blobstorage = blobStorage;
-            _dbcontext = (ApplicationDbContext)dbContext;
+            _tokenRepository = tokenRepository;
         }
 
         public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource
 
         public async Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
         {
-            return await _dbcontext.Tokens.Select(u => u.Id).ToListAsync(cancellationToken);
+            return await _tokenRepository.GetAllTokenIds();
         }
     }
 }
