@@ -11,9 +11,6 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.EnsureSchema(
-            name: "Challenges");
-
         migrationBuilder.CreateTable(
             name: "AspNetRoles",
             columns: table => new

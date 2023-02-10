@@ -7,9 +7,6 @@ public partial class Init : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.EnsureSchema(
-            name: "Relationships");
-
         migrationBuilder.CreateTable(
             name: "Messages",
             columns: table => new

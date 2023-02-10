@@ -8,9 +8,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "Challenges");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
