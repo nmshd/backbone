@@ -5,7 +5,7 @@ using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Relationships.Application.Tests.Tests.RelationshipTemplates.Queries.ListRelationshipTemplates;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 public class ListRelationshipTemplatesValidatorTests
 {

@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
-namespace Synchronization.Application.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public static class ApplicationDbContextExtensions
 {

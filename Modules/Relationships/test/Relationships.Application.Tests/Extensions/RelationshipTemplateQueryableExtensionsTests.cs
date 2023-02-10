@@ -6,7 +6,7 @@ using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
 
-namespace Relationships.Application.Tests.Extensions;
+namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
 public class RelationshipTemplateQueryableExtensionsTests
 {

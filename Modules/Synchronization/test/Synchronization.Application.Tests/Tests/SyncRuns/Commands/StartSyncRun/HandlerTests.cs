@@ -13,7 +13,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
 
 public class HandlerTests
 {
