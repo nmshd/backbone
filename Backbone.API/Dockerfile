@@ -2,9 +2,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /src
 COPY . .
+
 RUN dotnet restore "Backbone.API/Backbone.API.csproj"
 
-RUN dotnet publish --configuration Release --output /app --no-restore "Backbone.API/Backbone.API.csproj"
+RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app --no-restore "Backbone.API/Backbone.API.csproj"
 
 # Run	
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine

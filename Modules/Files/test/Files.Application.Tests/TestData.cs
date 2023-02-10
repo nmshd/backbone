@@ -1,6 +1,6 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Files.Application.Tests;
+namespace Backbone.Modules.Files.Application.Tests;
 
 public static class TestData
 {

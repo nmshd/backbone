@@ -3,7 +3,7 @@ using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
 public class PushDatawalletModificationsCommandValidatorTests
 {
