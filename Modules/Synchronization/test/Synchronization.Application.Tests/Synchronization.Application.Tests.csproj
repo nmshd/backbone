@@ -9,9 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.17.0">
-            <TreatAsUsed>true</TreatAsUsed>
-        </PackageReference>
+        <PackageReference Include="AutoFixture" Version="4.17.0"/>
         <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
         <PackageReference Include="FakeItEasy" Version="7.3.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />

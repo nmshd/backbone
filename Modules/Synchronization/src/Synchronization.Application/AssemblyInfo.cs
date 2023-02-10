@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Synchronization.Application.Tests")]
+[assembly: InternalsVisibleTo("Backbone.Modules.Synchronization.Application.Tests")]
