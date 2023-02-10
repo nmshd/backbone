@@ -58,6 +58,18 @@ services:
     ports:
       - 1433:1433
 
+  postgres:
+    container_name: bkb-postgres
+    hostname: postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    
+
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
@@ -109,6 +121,7 @@ volumes:
   rabbitmq-volume:
   mssql-server-volume:
     external: true
+  postgres-volume:
   #azure-storage-emulator-volume:
   #  external: true
   elastic_data:
