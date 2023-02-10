@@ -64,6 +64,11 @@ public class TokenRepository : ITokenRepository
         return result.CreatedBy;
     }
 
+    public async Task<IEnumerable<TokenId>> GetAllTokenIds()
+    {
+        return await _readonlyTokensDbSet.Where(Token.IsNotExpired).Select(t => t.Id).ToListAsync();
+    }
+
     private async Task<DbPaginationResult<Token>> Find(IdentityAddress owner, IEnumerable<TokenId> ids, PaginationFilter paginationFilter)
     {
         if (paginationFilter == null)
