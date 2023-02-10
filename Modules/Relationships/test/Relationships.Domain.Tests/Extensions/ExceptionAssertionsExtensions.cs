@@ -1,9 +1,8 @@
-﻿using Backbone.Modules.Relationships.Domain;
-using Backbone.Modules.Relationships.Domain.Errors;
+﻿using Backbone.Modules.Relationships.Domain.Errors;
 using FluentAssertions;
 using FluentAssertions.Specialized;
 
-namespace Relationships.Domain.Tests.Extensions;
+namespace Backbone.Modules.Relationships.Domain.Tests.Extensions;
 
 public static class ExceptionAssertionsExtensions
 {

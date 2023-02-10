@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Application.Infrastructure;
 
-namespace Tokens.Application.Tests;
+namespace Backbone.Modules.Tokens.Application.Tests;
 
 public class FakeUnitOfWork : IUnitOfWork
 {
