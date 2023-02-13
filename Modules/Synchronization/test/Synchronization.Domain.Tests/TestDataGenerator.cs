@@ -1,6 +1,6 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Synchronization.Domain.Tests;
+namespace Backbone.Modules.Synchronization.Domain.Tests;
 
 public static class TestDataGenerator
 {

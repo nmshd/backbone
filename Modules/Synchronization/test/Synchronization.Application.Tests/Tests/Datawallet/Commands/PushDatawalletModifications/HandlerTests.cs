@@ -14,7 +14,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
 public class HandlerTests
 {

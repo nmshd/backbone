@@ -9,7 +9,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
 public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {

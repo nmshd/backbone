@@ -12,7 +12,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
 public class HandlerTests
 {

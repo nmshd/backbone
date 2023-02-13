@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Synchronization.Application.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public class ApplicationDbContextWithDelayedSave : SynchronizationDbContext
 {

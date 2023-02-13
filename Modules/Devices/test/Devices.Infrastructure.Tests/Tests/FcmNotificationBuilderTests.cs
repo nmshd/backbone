@@ -7,7 +7,7 @@ using FluentAssertions;
 using Microsoft.Azure.NotificationHubs;
 using Xunit;
 
-namespace Devices.Infrastructure.Tests.Tests;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests;
 
 public class FcmNotificationBuilderTests
 {
