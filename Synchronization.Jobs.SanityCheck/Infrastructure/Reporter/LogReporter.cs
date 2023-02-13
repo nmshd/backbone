@@ -5,25 +5,25 @@ namespace Synchronization.Jobs.SanityCheck.Infrastructure.Reporter
     public class LogReporter : IReporter
     {
         private readonly ILogger<LogReporter> _logger;
-        private readonly List<DatawalletModificationId> _databaseids;
-        private readonly List<string> _blobids;
+        private readonly List<DatawalletModificationId> _databaseIds;
+        private readonly List<string> _blobIds;
 
         public LogReporter(ILogger<LogReporter> logger)
         {
             _logger = logger;
 
-            _databaseids = new List<DatawalletModificationId>();
-            _blobids = new List<string>();
+            _databaseIds = new List<DatawalletModificationId>();
+            _blobIds = new List<string>();
         }
 
         public void Complete()
         {
-            foreach (var databaseId in _databaseids)
+            foreach (var databaseId in _databaseIds)
             {
                 _logger.LogError("no blob found for datawallet modification id: {databaseId}", databaseId);
             }
 
-            foreach (var blobId in _blobids)
+            foreach (var blobId in _blobIds)
             {
                 _logger.LogError("no database entry found for blob id: {blobId}", blobId);
             }
@@ -31,12 +31,12 @@ namespace Synchronization.Jobs.SanityCheck.Infrastructure.Reporter
 
         public void ReportOrphanedBlobId(string id)
         {
-            _blobids.Add(id);
+            _blobIds.Add(id);
         }
 
         public void ReportOrphanedDatabaseId(DatawalletModificationId id)
         {
-            _databaseids.Add(id);
+            _databaseIds.Add(id);
         }
     }
 }
