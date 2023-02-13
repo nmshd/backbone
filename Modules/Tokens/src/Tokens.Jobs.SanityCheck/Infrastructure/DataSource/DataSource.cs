@@ -23,7 +23,7 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource
 
         public async Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
         {
-            return await _tokenRepository.GetAllTokenIds();
+            return await _tokenRepository.GetAllTokenIds(includeExpired: true);
         }
     }
 }
