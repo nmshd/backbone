@@ -15,8 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-    <ProjectReference Include="..\Modules\Tokens\src\Tokens.Domain\Tokens.Domain.csproj" />
-    <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\Tokens.Application\Tokens.Application.csproj" />
+    <ProjectReference Include="..\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
   </ItemGroup>
+
 </Project>

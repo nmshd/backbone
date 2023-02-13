@@ -1,7 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Application.Infrastructure;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Microsoft.EntityFrameworkCore;
 
 namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource
 {
