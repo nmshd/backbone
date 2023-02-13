@@ -177,9 +177,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Jobs.SanityCheck", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Jobs.SanityCheck.Tests", "Modules\Files\test\Files.Jobs.SanityCheck.Tests\Files.Jobs.SanityCheck.Tests.csproj", "{6289332A-DBF2-4B99-BEFB-AC01A4C9D262}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Jobs.SanityCheck", "Modules\Tokens\src\Tokens.Jobs.SanityCheck\Tokens.Jobs.SanityCheck.csproj", "{537AE372-E3AD-410E-B635-D27DC2B30452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Jobs.SanityCheck", "Modules\Synchronization\src\Synchronization.Jobs.SanityCheck\Synchronization.Jobs.SanityCheck.csproj", "{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Jobs.SanityCheck.Tests", "Modules\Tokens\test\Tokens.Jobs.SanityCheck.Tests\Tokens.Jobs.SanityCheck.Tests.csproj", "{4F0D2C5F-C00C-4C16-8652-0037B6796F1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synchronization.Jobs.SanityCheck.Tests", "Modules\Synchronization\test\Synchronization.Jobs.SanityCheck.Tests\Synchronization.Jobs.SanityCheck.Tests.csproj", "{09517F47-5630-4943-BFBF-9D52A5DF9407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -423,14 +423,14 @@ Global
 		{6289332A-DBF2-4B99-BEFB-AC01A4C9D262}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6289332A-DBF2-4B99-BEFB-AC01A4C9D262}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6289332A-DBF2-4B99-BEFB-AC01A4C9D262}.Release|Any CPU.Build.0 = Release|Any CPU
-		{537AE372-E3AD-410E-B635-D27DC2B30452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{537AE372-E3AD-410E-B635-D27DC2B30452}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{537AE372-E3AD-410E-B635-D27DC2B30452}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{537AE372-E3AD-410E-B635-D27DC2B30452}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F0D2C5F-C00C-4C16-8652-0037B6796F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F0D2C5F-C00C-4C16-8652-0037B6796F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F0D2C5F-C00C-4C16-8652-0037B6796F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F0D2C5F-C00C-4C16-8652-0037B6796F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09517F47-5630-4943-BFBF-9D52A5DF9407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09517F47-5630-4943-BFBF-9D52A5DF9407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09517F47-5630-4943-BFBF-9D52A5DF9407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09517F47-5630-4943-BFBF-9D52A5DF9407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -514,8 +514,8 @@ Global
 		{828F8905-E182-4462-A63F-3C73D4705D95} = {BBE908B0-D642-4002-8A88-9F1726BA8CB6}
 		{1BB56A85-74F8-497F-983C-274D51B25CF4} = {3D324161-C287-4DC0-A9FD-FA3B1A6643FD}
 		{6289332A-DBF2-4B99-BEFB-AC01A4C9D262} = {2D0BC8E9-ED6B-49D9-937C-1616ED40FB3E}
-		{537AE372-E3AD-410E-B635-D27DC2B30452} = {903C38CB-C2E2-42D2-9277-74CE675551E8}
-		{4F0D2C5F-C00C-4C16-8652-0037B6796F1C} = {1E437DEA-7657-48AD-ADA0-7B86608E0768}
+		{35ECFE05-ED44-4C0E-A6CA-F775EA59DFD7} = {1FEB1A37-59AD-403D-B7EC-50AD796BB25C}
+		{09517F47-5630-4943-BFBF-9D52A5DF9407} = {E93EFDC6-CB0D-47BA-B9E4-82A273A2FA46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
