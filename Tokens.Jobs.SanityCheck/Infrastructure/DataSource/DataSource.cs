@@ -7,18 +7,18 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource
 {
     public class DataSource : IDataSource
     {
-        private readonly IBlobStorage _blobstorage;
+        private readonly IBlobStorage _blobStorage;
         private readonly ITokenRepository _tokenRepository;
 
         public DataSource(IBlobStorage blobStorage, ITokenRepository tokenRepository)
         {
-            _blobstorage = blobStorage;
+            _blobStorage = blobStorage;
             _tokenRepository = tokenRepository;
         }
 
         public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
         {
-            var blobIds = await _blobstorage.FindAllAsync();
+            var blobIds = await _blobStorage.FindAllAsync();
             return await blobIds.ToListAsync(cancellationToken);
         }
 

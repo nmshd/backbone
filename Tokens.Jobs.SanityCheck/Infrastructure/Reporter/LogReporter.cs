@@ -5,25 +5,25 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.Reporter
     public class LogReporter : IReporter
     {
         private readonly ILogger<LogReporter> _logger;
-        private readonly List<TokenId> _databaseids;
-        private readonly List<string> _blobids;
+        private readonly List<TokenId> _databaseIds;
+        private readonly List<string> _blobIds;
 
         public LogReporter(ILogger<LogReporter> logger)
         {
             _logger = logger;
 
-            _databaseids = new List<TokenId>();
-            _blobids = new List<string>();
+            _databaseIds = new List<TokenId>();
+            _blobIds = new List<string>();
         }
 
         public void Complete()
         {
-            foreach (var databaseId in _databaseids)
+            foreach (var databaseId in _databaseIds)
             {
                 _logger.LogError("no blob found for token id: {databaseId}", databaseId);
             }
 
-            foreach (var blobId in _blobids)
+            foreach (var blobId in _blobIds)
             {
                 _logger.LogError("no database entry found for blob id: {blobId}", blobId);
             }
@@ -31,12 +31,12 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.Reporter
 
         public void ReportOrphanedBlobId(string id)
         {
-            _blobids.Add(id);
+            _blobIds.Add(id);
         }
 
         public void ReportOrphanedDatabaseId(TokenId id)
         {
-            _databaseids.Add(id);
+            _databaseIds.Add(id);
         }
     }
 }
