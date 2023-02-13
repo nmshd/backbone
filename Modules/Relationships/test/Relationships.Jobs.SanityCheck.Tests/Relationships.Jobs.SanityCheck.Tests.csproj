@@ -24,9 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Modules\Relationships\src\Relationships.Domain\Relationships.Domain.csproj" />
-    <ProjectReference Include="..\Relationships.Jobs.SanityCheck.RelationshipChange\Relationships.Jobs.SanityCheck.RelationshipChange.csproj" />
-    <ProjectReference Include="..\Relationships.Jobs.SanityCheck.RelationshipTemplate\Relationships.Jobs.SanityCheck.RelationshipTemplate.csproj" />
+    <ProjectReference Include="..\..\src\Relationships.Jobs.SanityCheck.RelationshipChange\Relationships.Jobs.SanityCheck.RelationshipChange.csproj" />
+    <ProjectReference Include="..\..\src\Relationships.Jobs.SanityCheck.RelationshipTemplate\Relationships.Jobs.SanityCheck.RelationshipTemplate.csproj" />
   </ItemGroup>
 
 </Project>

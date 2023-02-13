@@ -1,12 +1,11 @@
+using System.Reflection;
 using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Extensions;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
-using System.Reflection;
+using Relationships.Jobs.SanityCheck.RelationshipChange.Extensions;
+using Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+using Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipTemplate;
-
+namespace Relationships.Jobs.SanityCheck.RelationshipChange;
 public class Program
 {
     public static void Main(string[] args)
