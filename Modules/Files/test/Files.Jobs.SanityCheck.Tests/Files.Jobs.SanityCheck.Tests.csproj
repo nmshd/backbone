@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Files.Jobs.SanityCheck\Files.Jobs.SanityCheck.csproj" />
-    <ProjectReference Include="..\Modules\Files\src\Files.Domain\Files.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Files.Jobs.SanityCheck\Files.Jobs.SanityCheck.csproj" />
   </ItemGroup>
 
 </Project>

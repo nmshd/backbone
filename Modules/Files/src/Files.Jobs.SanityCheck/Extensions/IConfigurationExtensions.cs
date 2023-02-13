@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Files.Jobs.SanityCheck;
+namespace Files.Jobs.SanityCheck.Extensions;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions
