@@ -2,7 +2,7 @@
 using Backbone.Modules.Messages.Application.AutoMapper;
 using Xunit;
 
-namespace Messages.Application.Tests.Tests.AutoMapper;
+namespace Backbone.Modules.Messages.Application.Tests.Tests.AutoMapper;
 
 public class AutoMapperProfileTests
 {

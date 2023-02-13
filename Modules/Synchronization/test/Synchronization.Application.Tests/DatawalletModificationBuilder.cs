@@ -2,7 +2,7 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
-namespace Synchronization.Application.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public class DatawalletModificationBuilder
 {

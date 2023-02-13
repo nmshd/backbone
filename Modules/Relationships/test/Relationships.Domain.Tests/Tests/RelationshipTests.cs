@@ -1,14 +1,13 @@
-using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using FluentAssertions;
-using Relationships.Domain.Tests.Extensions;
 using Xunit;
 
-namespace Relationships.Domain.Tests.Tests;
+namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
 
 public class RelationshipTests
 {
