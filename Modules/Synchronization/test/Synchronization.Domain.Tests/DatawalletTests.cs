@@ -1,9 +1,8 @@
-using Backbone.Modules.Synchronization.Domain;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using FluentAssertions;
 using Xunit;
 
-namespace Synchronization.Domain.Tests;
+namespace Backbone.Modules.Synchronization.Domain.Tests;
 
 public class DatawalletTests
 {

@@ -10,7 +10,7 @@ using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.BaseClasses;
 using Moq;
 
-namespace Files.Application.Tests;
+namespace Backbone.Modules.Files.Application.Tests;
 
 public abstract class HandlerTestsBase : RequestHandlerTestsBase<ApplicationDbContext>
 {
