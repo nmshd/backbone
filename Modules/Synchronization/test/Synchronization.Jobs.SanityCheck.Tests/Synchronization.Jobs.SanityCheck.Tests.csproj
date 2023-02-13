@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Domain\Synchronization.Domain.csproj" />
-    <ProjectReference Include="..\Synchronization.Jobs.SanityCheck\Synchronization.Jobs.SanityCheck.csproj" />
+    <ProjectReference Include="..\..\src\Synchronization.Jobs.SanityCheck\Synchronization.Jobs.SanityCheck.csproj" />
   </ItemGroup>
 
 </Project>
