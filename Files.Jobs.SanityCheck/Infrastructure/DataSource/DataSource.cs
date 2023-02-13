@@ -7,24 +7,24 @@ namespace Files.Jobs.SanityCheck.Infrastructure.DataSource
 {
     public class DataSource : IDataSource
     {
-        private readonly IBlobStorage _blobstorage;
-        private readonly IFilesDbContext _dbcontext;
+        private readonly IBlobStorage _blobStorage;
+        private readonly IFilesDbContext _dbContext;
 
         public DataSource(IBlobStorage blobStorage, IFilesDbContext dbContext)
         {
-            _blobstorage = blobStorage;
-            _dbcontext = dbContext;
+            _blobStorage = blobStorage;
+            _dbContext = dbContext;
         }
 
         public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
         {
-            var blobIds = await _blobstorage.FindAllAsync();
+            var blobIds = await _blobStorage.FindAllAsync();
             return await blobIds.ToListAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<FileId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
         {
-            return await _dbcontext.SetReadOnly<FileMetadata>().Select(u => u.Id).ToListAsync(cancellationToken);
+            return await _dbContext.SetReadOnly<FileMetadata>().Select(u => u.Id).ToListAsync(cancellationToken);
         }
     }
 }
