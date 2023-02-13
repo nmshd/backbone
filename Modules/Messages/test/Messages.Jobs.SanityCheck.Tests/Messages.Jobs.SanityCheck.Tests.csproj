@@ -24,8 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Messages.Jobs.SanityCheck\Messages.Jobs.SanityCheck.csproj" />
-      <ProjectReference Include="..\Modules\Messages\src\Messages.Domain\Messages.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Messages.Domain\Messages.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Messages.Jobs.SanityCheck\Messages.Jobs.SanityCheck.csproj" />
     </ItemGroup>
 
 </Project>
