@@ -11,5 +11,5 @@ public interface ITokenRepository : IRepository<Token, TokenId>
     Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter);
     Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter);
     Task<IdentityAddress> GetOwner(TokenId tokenId);
-    Task<IEnumerable<TokenId>> GetAllTokenIds();
+    Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false);
 }

@@ -64,8 +64,13 @@ public class TokenRepository : ITokenRepository
         return result.CreatedBy;
     }
 
-    public async Task<IEnumerable<TokenId>> GetAllTokenIds()
+    public async Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false)
     {
+        if (includeExpired)
+        {
+            return await _readonlyTokensDbSet.Select(t => t.Id).ToListAsync();
+        }
+
         return await _readonlyTokensDbSet.Where(Token.IsNotExpired).Select(t => t.Id).ToListAsync();
     }
 
