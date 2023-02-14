@@ -56,9 +56,7 @@ public class AuthorizationController : ApiControllerBase
 
         var user = await _userManager.FindByNameAsync(request.Username!);
         if (user == null)
-        {
             return InvalidUserCredentials();
-        }
 
         if (request.Password.IsNullOrEmpty())
             throw new OperationFailedException(
@@ -66,9 +64,7 @@ public class AuthorizationController : ApiControllerBase
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, lockoutOnFailure: true);
         if (!result.Succeeded)
-        {
             return InvalidUserCredentials();
-        }
 
         var identity = new ClaimsIdentity(
             claims: new Claim[]
