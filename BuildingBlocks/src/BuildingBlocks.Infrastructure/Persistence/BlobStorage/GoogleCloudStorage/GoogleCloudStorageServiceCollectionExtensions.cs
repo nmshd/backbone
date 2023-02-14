@@ -45,7 +45,7 @@ public static class GoogleCloudStorageServiceCollectionExtensions
                 throw new Exception("A Logger was not registered in the dependency container.");
             }
 
-            return new GoogleCloudStorage(options.BucketName, storageClient, logger);
+            return new GoogleCloudStorage(storageClient, logger);
         });
     }
 }

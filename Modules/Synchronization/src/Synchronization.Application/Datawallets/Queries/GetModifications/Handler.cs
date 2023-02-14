@@ -7,6 +7,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 
@@ -16,12 +17,14 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
     private readonly IBlobStorage _blobStorage;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IMapper _mapper;
+    private readonly BlobOptions _blobOptions;
 
-    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext, IBlobStorage blobStorage)
+    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
+        _blobOptions = blobOptions.Value;
         _activeIdentity = userContext.GetAddress();
     }
 
@@ -52,7 +55,7 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
     {
         try
         {
-            datawalletModification.EncryptedPayload = await _blobStorage.FindAsync(datawalletModification.Id);
+            datawalletModification.EncryptedPayload = await _blobStorage.FindAsync(_blobOptions.RootFolder, datawalletModification.Id);
         }
         catch (NotFoundException)
         {

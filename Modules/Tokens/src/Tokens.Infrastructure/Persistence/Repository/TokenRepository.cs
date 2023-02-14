@@ -8,18 +8,21 @@ using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public class TokenRepository : ITokenRepository
 {
     private readonly IBlobStorage _blobStorage;
+    private readonly TokenRepositoryOptions _options;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokenRepository(ApplicationDbContext dbContext, IBlobStorage blobStorage)
+    public TokenRepository(ApplicationDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
+        _options = options.Value;
         _tokensDbSet = dbContext.Tokens;
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
@@ -30,7 +33,7 @@ public class TokenRepository : ITokenRepository
             .Where(Token.IsNotExpired)
             .FirstWithId(id);
 
-        var getContent = _blobStorage.FindAsync(id);
+        var getContent = _blobStorage.FindAsync(_options.BlobRootFolder, id);
 
         await Task.WhenAll(getMetadata, getContent);
 
@@ -94,7 +97,7 @@ public class TokenRepository : ITokenRepository
 
     private async Task FillContent(Token token)
     {
-        token.Content = await _blobStorage.FindAsync(token.Id);
+        token.Content = await _blobStorage.FindAsync(_options.BlobRootFolder, token.Id);
     }
 
     #region Write
@@ -102,7 +105,7 @@ public class TokenRepository : ITokenRepository
     public void Add(Token token)
     {
         _tokensDbSet.Add(token);
-        _blobStorage.Add(token.Id, token.Content);
+        _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
     }
 
     public void AddRange(IEnumerable<Token> tokens)
@@ -121,7 +124,7 @@ public class TokenRepository : ITokenRepository
     public void Remove(Token token)
     {
         _tokensDbSet.Remove(token);
-        _blobStorage.Remove(token.Id);
+        _blobStorage.Remove(_options.BlobRootFolder, token.Id);
     }
 
     public void RemoveRange(IEnumerable<Token> tokens)
@@ -146,9 +149,11 @@ public static class IDbSetExtensions
     {
         var entity = await query.FirstOrDefaultAsync(t => t.Id == id);
 
-        if (entity == null)
-            throw new NotFoundException(nameof(Token));
-
-        return entity;
+        return entity ?? throw new NotFoundException(nameof(Token));
     }
+}
+
+public class TokenRepositoryOptions
+{
+    public string BlobRootFolder { get; set; }
 }

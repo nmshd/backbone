@@ -4,7 +4,6 @@ using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Relationships;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +11,11 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class Handler : RequestHandlerBase<GetRelationshipTemplateQuery, RelationshipTemplateDTO>
 {
-    private readonly IBlobStorage _blobStorage;
+    private readonly IContentStore _contentStore;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage) : base(dbContext, userContext, mapper)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore) : base(dbContext, userContext, mapper)
     {
-        _blobStorage = blobStorage;
+        _contentStore = contentStore;
     }
 
     public override async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
@@ -33,7 +32,7 @@ public class Handler : RequestHandlerBase<GetRelationshipTemplateQuery, Relation
         _dbContext.Set<RelationshipTemplate>().Update(template);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        template.LoadContent(await _blobStorage.FindAsync(template.Id));
+        await _contentStore.FillContentOfTemplate(template);
 
         return _mapper.Map<RelationshipTemplateDTO>(template);
     }

@@ -24,8 +24,9 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
+    private readonly BlobOptions _blobOptions;
 
-    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger)
+    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions)
     {
         _dbContext = dbContext;
         _blobStorage = blobStorage;
@@ -34,6 +35,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         _eventBus = eventBus;
         _logger = logger;
         _options = options.Value;
+        _blobOptions = blobOptions.Value;
     }
 
     public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
@@ -58,7 +60,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private async Task SaveMessage(Message message, CancellationToken cancellationToken)
     {
         await _dbContext.Set<Message>().AddAsync(message, cancellationToken);
-        _blobStorage.Add(message.Id, message.Body);
+        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
 
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
