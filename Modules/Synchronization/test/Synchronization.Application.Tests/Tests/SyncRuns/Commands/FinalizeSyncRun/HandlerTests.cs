@@ -247,8 +247,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
         var blobStorage = A.Fake<IBlobStorage>();
-        var blobOptions = A.Fake<IOptions<BlobOptions>>();
-        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
+        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
         var mapper = AutoMapperProfile.CreateMapper();
 

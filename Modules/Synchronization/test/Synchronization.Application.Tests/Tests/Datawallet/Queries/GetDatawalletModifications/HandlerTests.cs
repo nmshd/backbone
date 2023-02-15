@@ -364,8 +364,7 @@ public class HandlerTests
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(ActiveIdentity);
 
-        var blobOptions = A.Fake<IOptions<BlobOptions>>();
-        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
+        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
         return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions);
     }

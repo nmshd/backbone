@@ -75,10 +75,10 @@ public class HandlerTests
         return CreateHandler(_activeIdentity, _activeDevice, CreateDbContext());
     }
 
-        private SynchronizationDbContext CreateDbContext()
-        {
-            return new SynchronizationDbContext(_dbOptions);
-        }
+    private SynchronizationDbContext CreateDbContext()
+    {
+        return new SynchronizationDbContext(_dbOptions);
+    }
 
     private Handler CreateHandlerWithDelayedSave()
     {
@@ -102,8 +102,7 @@ public class HandlerTests
 
         var eventBus = A.Fake<IEventBus>();
 
-        var blobOptions = A.Fake<IOptions<BlobOptions>>();
-        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
+        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
         return new Handler(dbContext, userContext, mapper, blobStorage, blobOptions, eventBus);
     }
