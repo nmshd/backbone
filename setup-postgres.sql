@@ -126,7 +126,10 @@ REVOKE USAGE, CREATE ON SCHEMA "Relationships" FROM challenges, synchronization,
 REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices, messages, tokens, relationships;
 
 GRANT USAGE ON SCHEMA "Relationships" TO messages;
-GRANT SELECT, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA "Relationships" TO messages;
+GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationships" TO messages;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
+
+GRANT USAGE ON SCHEMA "Challenges" TO devices;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
 
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
