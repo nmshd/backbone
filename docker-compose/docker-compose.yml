@@ -58,16 +58,25 @@ services:
     ports:
       - 1433:1433
 
-  #postgres:
-  #  container_name: bkb-postgres
-  #  hostname: postgres
-  #  image: postgres
-  #  environment:
-  #    - POSTGRES_PASSWORD=admin
-  #  volumes:
-  #    - postgres-volume:/var/lib/postgresql/data
+  postgres:
+    container_name: bkb-postgres
+    hostname: postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  #pg-admin:
+  #  container_name: bkb-pgadmin
+  #  image: dpage/pgadmin4
   #  ports:
-  #    - 5432:5432
+  #     - 85:80
+  #  environment:
+  #     - PGADMIN_DEFAULT_PASSWORD=admin
+  #     - PGADMIN_DEFAULT_EMAIL=admin@enmeshed.eu
     
 
   rabbitmq:
@@ -122,6 +131,7 @@ volumes:
   mssql-server-volume:
     external: true
   postgres-volume:
+    #external: true
   #azure-storage-emulator-volume:
   #  external: true
   elastic_data:
