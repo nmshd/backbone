@@ -10,29 +10,26 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleC
 public class GoogleCloudStorage : IBlobStorage, IDisposable
 {
     private readonly StorageClient _storageClient;
-    private readonly List<KeyValuePair<string, byte[]>> _changedBlobs;
-    private readonly IList<string> _removedBlobs;
+    private readonly List<ChangedBlob> _changedBlobs;
+    private readonly IList<RemovedBlob> _removedBlobs;
     private readonly ILogger<GoogleCloudStorage> _logger;
-    private readonly string _bucketName;
 
-    public GoogleCloudStorage(string bucketName,
-        StorageClient storageClient, ILogger<GoogleCloudStorage> logger)
+    public GoogleCloudStorage(StorageClient storageClient, ILogger<GoogleCloudStorage> logger)
     {
-        _bucketName = bucketName;
         _storageClient = storageClient;
-        _changedBlobs = new List<KeyValuePair<string, byte[]>>();
-        _removedBlobs = new List<string>();
+        _changedBlobs = new List<ChangedBlob>();
+        _removedBlobs = new List<RemovedBlob>();
         _logger = logger;
     }
 
-    public void Add(string blobId, byte[] content)
+    public void Add(string folder, string blobId, byte[] content)
     {
-        _changedBlobs.Add(new KeyValuePair<string, byte[]>(blobId, content));
+        _changedBlobs.Add(new ChangedBlob(folder, blobId, content));
     }
 
-    public void Remove(string blobId)
+    public void Remove(string folder, string blobId)
     {
-        _removedBlobs.Add(blobId);
+        _removedBlobs.Add(new RemovedBlob(folder, blobId));
     }
 
     public void Dispose()
@@ -41,14 +38,14 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         _removedBlobs.Clear();
     }
 
-    public async Task<byte[]> FindAsync(string blobId)
+    public async Task<byte[]> FindAsync(string folder, string blobId)
     {
         _logger.LogTrace($"Reading blob with key {blobId}...");
 
         try
         {
             var stream = new MemoryStream();
-            await _storageClient.DownloadObjectAsync(_bucketName, blobId, stream);
+            await _storageClient.DownloadObjectAsync(folder, blobId, stream);
             stream.Position = 0;
             _logger.LogTrace($"Found blob with key {blobId}.");
 
@@ -62,13 +59,13 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string? prefix = null)
+    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         try
         {
             var blobs = _storageClient
-                .ListObjectsAsync(_bucketName, prefix)
+                .ListObjectsAsync(folder, prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
             return Task.FromResult(blobs);
@@ -99,24 +96,24 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         _logger.LogTrace($"Uploading {_changedBlobs.Count} changed blobs...");
 
-        var changedBlobs = new List<KeyValuePair<string, byte[]>>(_changedBlobs);
+        var changedBlobs = new List<ChangedBlob>(_changedBlobs);
 
         foreach (var blob in changedBlobs)
         {
-            await EnsureKeyDoesNotExist(blob.Key);
+            await EnsureKeyDoesNotExist(blob.Folder, blob.Name);
 
-            await using var memoryStream = new MemoryStream(blob.Value);
+            await using var memoryStream = new MemoryStream(blob.Content);
 
             try
             {
-                _logger.LogTrace($"Uploading blob with key {blob.Key}...");
-                await _storageClient.UploadObjectAsync(_bucketName, blob.Key, null,
+                _logger.LogTrace($"Uploading blob with key {blob.Name}...");
+                await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null,
                     memoryStream);
-                _logger.LogTrace($"Upload of blob with key {blob.Key} was successful.");
+                _logger.LogTrace($"Upload of blob with key {blob.Name} was successful.");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"There was an error uploading the blob with key {blob.Key}.", ex);
+                _logger.LogError($"There was an error uploading the blob with key {blob.Name}.", ex);
                 throw;
             }
             finally
@@ -126,11 +123,11 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         }
     }
 
-    private async Task EnsureKeyDoesNotExist(string key)
+    private async Task EnsureKeyDoesNotExist(string folder, string key)
     {
         try
         {
-            await _storageClient.GetObjectAsync(_bucketName, key);
+            await _storageClient.GetObjectAsync(folder, key);
             _logger.LogError("The blob with the given key already exists.");
             throw new BlobAlreadyExistsException(key);
         }
@@ -147,21 +144,24 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         _logger.LogTrace($"Deleting {_changedBlobs.Count} blobs...");
 
-        var blobsToDelete = new List<string>(_removedBlobs);
+        var blobsToDelete = new List<RemovedBlob>(_removedBlobs);
 
-        foreach (var blobId in blobsToDelete)
+        foreach (var blob in blobsToDelete)
             try
             {
-                await _storageClient.DeleteObjectAsync(_bucketName, blobId);
-                _removedBlobs.Remove(blobId);
+                await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
+                _removedBlobs.Remove(blob);
             }
             catch (Exception ex)
             {
-                EliminateNotFound(ex, blobId);
-                _logger.LogError($"There was an error deleting the blob with key {blobId}.", ex);
+                EliminateNotFound(ex, blob.Name);
+                _logger.LogError($"There was an error deleting the blob with key {blob}.", ex);
                 throw;
             }
 
         _logger.LogTrace("Deletion successful.");
     }
+
+    private record ChangedBlob(string Folder, string Name, byte[] Content);
+    private record RemovedBlob(string Folder, string Name);
 }

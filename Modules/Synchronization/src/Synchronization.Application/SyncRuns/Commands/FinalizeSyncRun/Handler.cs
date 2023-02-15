@@ -10,6 +10,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
@@ -24,8 +25,9 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly IMapper _mapper;
     private Datawallet _datawallet;
     private SyncRun _syncRun;
+    private readonly BlobOptions _blobOptions;
 
-    public Handler(ISynchronizationDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _blobStorage = blobStorage;
@@ -33,6 +35,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
+        _blobOptions = blobOptions.Value;
     }
 
     public async Task<FinalizeDatawalletVersionUpgradeSyncRunResponse> Handle(FinalizeDatawalletVersionUpgradeSyncRunCommand request, CancellationToken cancellationToken)
@@ -146,7 +149,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
                 _activeDevice);
 
             if (newModification.EncryptedPayload != null)
-                _blobStorage.Add(newModification.Id, newModification.EncryptedPayload);
+                _blobStorage.Add(_blobOptions.RootFolder, newModification.Id, newModification.EncryptedPayload);
 
             newModifications.Add(newModification);
         }

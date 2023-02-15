@@ -2,6 +2,7 @@
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -12,6 +13,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
@@ -100,6 +102,9 @@ public class HandlerTests
 
         var eventBus = A.Fake<IEventBus>();
 
-        return new Handler(dbContext, userContext, mapper, blobStorage, eventBus);
+        var blobOptions = A.Fake<IOptions<BlobOptions>>();
+        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
+
+        return new Handler(dbContext, userContext, mapper, blobStorage, blobOptions, eventBus);
     }
 }

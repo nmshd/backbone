@@ -3,7 +3,6 @@ using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTerminationRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
@@ -114,24 +113,6 @@ public class RelationshipsController : ApiControllerBase
     {
         var relationship = await _mediator.Send(request);
         return Created(relationship);
-    }
-
-    [HttpPost("{relationshipId}/Changes")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateRelationshipChange([FromRoute] RelationshipId relationshipId,
-        CreateRelationshipChangeRequest request)
-    {
-        var change = request.Type switch
-        {
-            RelationshipChangeType.Termination => await _mediator.Send(
-                new CreateRelationshipTerminationRequestCommand { Id = relationshipId }
-            ),
-            RelationshipChangeType.TerminationCancellation => throw new NotImplementedException(),
-            RelationshipChangeType.Creation => throw new NotSupportedException(),
-            _ => throw new NotSupportedException()
-        };
-
-        return Ok(change);
     }
 
     [HttpPut("{relationshipId}/Changes/{changeId}/Accept")]

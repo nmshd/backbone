@@ -11,6 +11,8 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests
 {
+    private const string CONTAINER_NAME = "test-container";
+
     private static void StartAzuriteContainer()
     {
         var processInfo = new ProcessStartInfo("docker",
@@ -65,7 +67,6 @@ public class AzureStorageAccountTests
 
         services.AddAzureStorageAccount(x =>
         {
-            x.ContainerName = "azureblobstoragecontainer";
             x.ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;";
         });
 
@@ -81,10 +82,10 @@ public class AzureStorageAccountTests
         var addBlobName = "AzureSaveAsyncAndFindAsync";
         var addBlobContent = "AzureSaveAsyncAndFindAsync"u8.ToArray();
 
-        azureBlobStorage.Add(addBlobName, addBlobContent);
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);
         await azureBlobStorage.SaveAsync();
 
-        var retrievedBlobContent = await azureBlobStorage.FindAsync(addBlobName);
+        var retrievedBlobContent = await azureBlobStorage.FindAsync(CONTAINER_NAME, addBlobName);
         Assert.Equal(addBlobContent, retrievedBlobContent);
 
         CloseAzuriteContainer();
@@ -98,8 +99,8 @@ public class AzureStorageAccountTests
         const string ADD_BLOB_NAME = "AzureDeleteBlobThatExists";
         var addBlobContent = "AzureDeleteBlobThatExists"u8.ToArray();
 
-        azureBlobStorage.Add(ADD_BLOB_NAME, addBlobContent);
-        azureBlobStorage.Remove(ADD_BLOB_NAME);
+        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, addBlobContent);
+        azureBlobStorage.Remove(CONTAINER_NAME, ADD_BLOB_NAME);
         await azureBlobStorage.SaveAsync();
 
         CloseAzuriteContainer();
@@ -110,7 +111,7 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        azureBlobStorage.Remove("AzureDeleteBlobThatDoesNotExist");
+        azureBlobStorage.Remove(CONTAINER_NAME, "AzureDeleteBlobThatDoesNotExist");
 
         await Assert.ThrowsAsync<NotFoundException>(azureBlobStorage.SaveAsync);
 
@@ -124,8 +125,8 @@ public class AzureStorageAccountTests
 
         const string ADD_BLOB_NAME = "AzureAddBlobWithSameName";
 
-        azureBlobStorage.Add(ADD_BLOB_NAME, "AddBlobWithSameName Before"u8.ToArray());
-        azureBlobStorage.Add(ADD_BLOB_NAME, "AddBlobWithSameName After"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, "AddBlobWithSameName Before"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, "AddBlobWithSameName After"u8.ToArray());
 
         await Assert.ThrowsAsync<BlobAlreadyExistsException>(azureBlobStorage.SaveAsync);
 
@@ -143,11 +144,11 @@ public class AzureStorageAccountTests
         var addBlobContent1 = "AzureAddMultipleBlobsAndFindAllBlobs1"u8.ToArray();
         var addBlobContent2 = "AzureAddMultipleBlobsAndFindAllBlobs2"u8.ToArray();
 
-        azureBlobStorage.Add(ADD_BLOB_NAME1, addBlobContent1);
-        azureBlobStorage.Add(ADD_BLOB_NAME2, addBlobContent2);
+        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME1, addBlobContent1);
+        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME2, addBlobContent2);
         await azureBlobStorage.SaveAsync();
 
-        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync()).ToListAsync();
+        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync(CONTAINER_NAME)).ToListAsync();
 
         retrievedBlobContent.Should().Contain(ADD_BLOB_NAME1);
         retrievedBlobContent.Should().Contain(ADD_BLOB_NAME2);
@@ -160,8 +161,8 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        azureBlobStorage.Add("PREFIX1_Blob", "content"u8.ToArray());
-        azureBlobStorage.Add("PREFIX2_Blob", "content"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX1_Blob", "content"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2_Blob", "content"u8.ToArray());
         await azureBlobStorage.SaveAsync();
 
         var blobsWithPrefix1 = await (await azureBlobStorage.FindAllAsync("PREFIX1_")).ToListAsync();
@@ -177,7 +178,7 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync()).ToListAsync();
+        var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync(CONTAINER_NAME)).ToListAsync();
 
         retrievedBlobContent.Should().BeEmpty();
 

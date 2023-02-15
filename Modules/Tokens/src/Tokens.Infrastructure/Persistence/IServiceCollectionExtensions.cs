@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddDatabase(options.DbOptions);
         services.AddBlobStorage(options.BlobStorageOptions);
-        services.AddRepositories();
+        services.AddRepositories(options.BlobStorageOptions);
     }
 }
 
