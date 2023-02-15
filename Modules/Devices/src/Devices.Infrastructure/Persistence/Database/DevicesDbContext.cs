@@ -6,6 +6,8 @@ using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
@@ -13,6 +15,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 {
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
+    private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
+    private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
@@ -33,8 +37,19 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var executionStrategy =
-            new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
+        ExecutionStrategy? executionStrategy = null;
+        switch (Database.ProviderName)
+        {
+            case SQLSERVER:
+                executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
+                break;
+            case POSTGRES:
+                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll<string>(x => x.ToString()) : new List<string>();
+                executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {Database.ProviderName}");
+        }
 
         await executionStrategy.ExecuteAsync(async () =>
         {

@@ -11,8 +11,8 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Data.SqlClient;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
@@ -58,10 +58,17 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     {
         // Use SqlParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
         // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
-        DbParameter activeIdentityParam = Database.IsSqlServer() ? new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, activeIdentity.StringValue) : new SqliteParameter("createdBy", activeIdentity.StringValue);
+        DbParameter activeIdentityParam = Database.IsSqlServer() ?
+            new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, activeIdentity.StringValue)
+            : new NpgsqlParameter("createdBy", activeIdentity.StringValue);
 
-        var paginationResult = await DatawalletModifications
+        var paginationResult = Database.IsSqlServer()
+            ? await DatawalletModifications
             .FromSqlInterpolated($"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
+            .AsNoTracking()
+            .OrderAndPaginate(m => m.Index, paginationFilter)
+            : await DatawalletModifications
+            .FromSqlInterpolated($@"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ""ObjectIdentifier"", ""Type"", ""PayloadCategory"" ORDER BY ""Index"" DESC) AS rank FROM ""Synchronization"".""DatawalletModifications"" m1 WHERE ""CreatedBy"" = {activeIdentityParam} AND ""Index"" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
             .AsNoTracking()
             .OrderAndPaginate(m => m.Index, paginationFilter);
 
