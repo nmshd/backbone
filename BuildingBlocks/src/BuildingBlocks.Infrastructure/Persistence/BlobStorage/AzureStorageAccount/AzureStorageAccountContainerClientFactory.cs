@@ -10,7 +10,7 @@ public class AzureStorageAccountContainerClientFactory
 {
     private readonly ILogger<AzureStorageAccountContainerClientFactory> _logger;
     private readonly AzureStorageAccountOptions _options;
-    private readonly Dictionary<string, BlobContainerClient> _clients = new();
+    private readonly Dictionary<string, BlobContainerClient> _containerClients = new();
 
     public AzureStorageAccountContainerClientFactory(IOptions<AzureStorageAccountOptions> options, ILogger<AzureStorageAccountContainerClientFactory> logger)
     {
@@ -18,26 +18,40 @@ public class AzureStorageAccountContainerClientFactory
         _options = options.Value;
     }
 
-    public BlobContainerClient GetClient(string containerName)
+    public BlobContainerClient GetContainerClient(string containerName)
     {
-        if (_clients.TryGetValue(containerName, out var existingClient))
-            return existingClient;
+        if (_containerClients.TryGetValue(containerName, out var container))
+            return container;
 
-        var newClient = new BlobContainerClient(_options.ConnectionString, containerName);
-        newClient.CreateIfNotExists();
+        lock (_containerClients)
+        {
+            if (_containerClients.TryGetValue(containerName, out container))
+                return container;
+
+            var newContainer = CreateContainerClient(containerName);
+
+            _containerClients.Add(containerName, newContainer);
+
+            return newContainer;
+        }
+
+    }
+
+    private BlobContainerClient CreateContainerClient(string containerName)
+    {
+        var newContainer = new BlobContainerClient(_options.ConnectionString, containerName);
+        newContainer.CreateIfNotExists();
 
         try
         {
-            newClient.SetAccessPolicy(PublicAccessType.Blob);
+            newContainer.SetAccessPolicy(PublicAccessType.Blob);
         }
         catch (RequestFailedException ex)
         {
-            _logger.LogInformation(ex, "An error was thrown while trying to set the access policy on the BlobContainerClient. This error is ignored.");
+            _logger.LogInformation(ex,
+                "An error was thrown while trying to set the access policy on the BlobContainerClient. This error is ignored.");
         }
 
-        _clients.Add(containerName, newClient);
-
-        return newClient;
+        return newContainer;
     }
-
 }
