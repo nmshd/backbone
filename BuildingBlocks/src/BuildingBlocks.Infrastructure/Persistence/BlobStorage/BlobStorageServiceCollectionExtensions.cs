@@ -24,7 +24,6 @@ public static class BlobStorageServiceCollectionExtensions
             services.AddAzureStorageAccount(azureStorageAccountOptions =>
             {
                 azureStorageAccountOptions.ConnectionString = options.ConnectionInfo;
-                azureStorageAccountOptions.ContainerName = options.Container;
             });
         else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>

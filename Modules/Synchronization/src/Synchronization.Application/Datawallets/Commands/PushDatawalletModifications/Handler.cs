@@ -11,6 +11,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
@@ -20,6 +21,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly IBlobStorage _blobStorage;
+    private readonly BlobOptions _blobOptions;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
@@ -31,11 +33,12 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private DatawalletModification[] _modifications;
     private PushDatawalletModificationsResponse _response;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
+        _blobOptions = blobOptions.Value;
         _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
@@ -128,7 +131,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         foreach (var newModification in modifications)
         {
             if (newModification.EncryptedPayload != null)
-                _blobStorage.Add(newModification.Id, newModification.EncryptedPayload);
+                _blobStorage.Add(_blobOptions.RootFolder, newModification.Id, newModification.EncryptedPayload);
         }
 
         await _blobStorage.SaveAsync();

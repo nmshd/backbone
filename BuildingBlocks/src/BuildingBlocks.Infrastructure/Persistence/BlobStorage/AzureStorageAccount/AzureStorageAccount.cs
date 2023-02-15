@@ -8,39 +8,41 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureSt
 
 public class AzureStorageAccount : IBlobStorage, IDisposable
 {
-    private readonly BlobContainerClient _blobContainer;
-
     private readonly IDictionary<BlobClient, byte[]> _changedBlobs;
     private readonly ILogger<AzureStorageAccount> _logger;
+    private readonly AzureStorageAccountContainerClientFactory _containerClientFactory;
     private readonly IList<BlobClient> _removedBlobs;
 
-    public AzureStorageAccount(BlobContainerClient blobContainer, ILogger<AzureStorageAccount> logger)
+    public AzureStorageAccount(ILogger<AzureStorageAccount> logger, AzureStorageAccountContainerClientFactory containerClientFactory)
     {
-        _blobContainer = blobContainer;
         _logger = logger;
+        _containerClientFactory = containerClientFactory;
         _changedBlobs = new Dictionary<BlobClient, byte[]>();
         _removedBlobs = new List<BlobClient>();
     }
 
-    public void Add(string blobId, byte[] content)
+    public void Add(string folder, string blobId, byte[] content)
     {
-        var blob = _blobContainer.GetBlobClient(blobId);
+        var container = _containerClientFactory.GetClient(folder);
+        var blob = container.GetBlobClient(blobId);
         _changedBlobs.Add(blob, content);
     }
 
-    public void Remove(string blobId)
+    public void Remove(string folder, string blobId)
     {
-        var blob = _blobContainer.GetBlobClient(blobId);
+        var container = _containerClientFactory.GetClient(folder);
+        var blob = container.GetBlobClient(blobId);
         _removedBlobs.Add(blob);
     }
 
-    public async Task<byte[]> FindAsync(string blobId)
+    public async Task<byte[]> FindAsync(string folder, string blobId)
     {
         _logger.LogTrace($"Reading blob with id {blobId}...");
 
+        var container = _containerClientFactory.GetClient(folder);
         try
         {
-            var blob = _blobContainer.GetBlobClient(blobId);
+            var blob = container.GetBlobClient(blobId);
             var stream = new MemoryStream();
             await blob.DownloadToAsync(stream);
             stream.Position = 0;
@@ -55,12 +57,13 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string? prefix = null)
+    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
+        var container = _containerClientFactory.GetClient(folder);
         try
         {
-            var blobs = _blobContainer
+            var blobs = container
                 .GetBlobsAsync(prefix: prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");

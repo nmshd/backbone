@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
@@ -9,17 +8,17 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
-    private readonly IBlobStorage _blobStorage;
     private readonly IRelationshipsDbContext _dbContext;
     private readonly IMapper _mapper;
+    private readonly IContentStore _contentStore;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _mapper = mapper;
-        _blobStorage = blobStorage;
+        _contentStore = contentStore;
     }
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
@@ -31,9 +30,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.ExpiresAt,
             request.Content);
 
-        if (template.Content != null)
-            _blobStorage.Add(template.Id, template.Content);
-        await _blobStorage.SaveAsync();
+        await _contentStore.SaveContentOfTemplate(template);
 
         await _dbContext.Set<RelationshipTemplate>().AddAsync(template, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
