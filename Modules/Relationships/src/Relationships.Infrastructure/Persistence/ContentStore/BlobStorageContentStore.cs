@@ -1,16 +1,19 @@
 ﻿using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.ContentStore;
 
 public class BlobStorageContentStore : IContentStore
 {
     private readonly IBlobStorage _blobStorage;
+    private readonly BlobOptions _blobOptions;
 
-    public BlobStorageContentStore(IBlobStorage blobStorage)
+    public BlobStorageContentStore(IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _blobStorage = blobStorage;
+        _blobOptions = blobOptions.Value;
     }
 
     public async Task SaveContentOfTemplate(RelationshipTemplate template)
@@ -18,13 +21,13 @@ public class BlobStorageContentStore : IContentStore
         if (template.Content == null)
             return;
 
-        _blobStorage.Add(template.Id, template.Content);
+        _blobStorage.Add(_blobOptions.RootFolder, template.Id, template.Content);
         await _blobStorage.SaveAsync();
     }
 
     public async Task FillContentOfTemplate(RelationshipTemplate template)
     {
-        var content = await _blobStorage.FindAsync(template.Id);
+        var content = await _blobStorage.FindAsync(_blobOptions.RootFolder, template.Id);
         template.LoadContent(content);
     }
 
@@ -33,7 +36,7 @@ public class BlobStorageContentStore : IContentStore
         if (changeRequest.Content == null)
             return;
 
-        _blobStorage.Add($"{changeRequest.Id}_Req", changeRequest.Content);
+        _blobStorage.Add(_blobOptions.RootFolder, $"{changeRequest.Id}_Req", changeRequest.Content);
         await _blobStorage.SaveAsync();
     }
 
@@ -42,7 +45,7 @@ public class BlobStorageContentStore : IContentStore
         if (changeResponse.Content == null)
             return;
 
-        _blobStorage.Add($"{changeResponse.Id}_Res", changeResponse.Content);
+        _blobStorage.Add(_blobOptions.RootFolder, $"{changeResponse.Id}_Res", changeResponse.Content);
         await _blobStorage.SaveAsync();
     }
 
@@ -55,12 +58,12 @@ public class BlobStorageContentStore : IContentStore
     {
         if (change.Type == RelationshipChangeType.Creation)
         {
-            var requestContent = await _blobStorage.FindAsync($"{change.Id}_Req");
+            var requestContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Req");
             change.Request.LoadContent(requestContent);
 
             if (change.IsCompleted)
             {
-                var responseContent = await _blobStorage.FindAsync($"{change.Id}_Res");
+                var responseContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Res");
                 change.Response!.LoadContent(responseContent);
             }
         }

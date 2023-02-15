@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
@@ -16,14 +17,16 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
     private CreateFileCommand _request;
+    private readonly BlobOptions _blobOptions;
 
-    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, ILogger<Handler> logger)
+    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
         _logger = logger;
+        _blobOptions = blobOptions.Value;
     }
 
     public async Task<CreateFileResponse> Handle(CreateFileCommand request, CancellationToken cancellationToken)
@@ -42,7 +45,7 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
         var metadata = new FileMetadata(_userContext.GetAddress(), _userContext.GetDeviceId(), _request.Owner, _request.OwnerSignature ?? Array.Empty<byte>(), _request.CipherHash, _request.FileContent.LongLength, _request.ExpiresAt, _request.EncryptedProperties);
 
         await _dbContext.Set<FileMetadata>().AddAsync(metadata, cancellationToken);
-        _blobStorage.Add(metadata.Id, _request.FileContent);
+        _blobStorage.Add(_blobOptions.RootFolder, metadata.Id, _request.FileContent);
 
         await _blobStorage.SaveAsync();
         _logger.LogTrace("Successfully saved metadata.");

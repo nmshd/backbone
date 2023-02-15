@@ -22,7 +22,7 @@ public class GoogleCloudStorageTests : IAsyncLifetime
         _storageClient = StorageClient.Create(GoogleCredential.FromJson(AUTH_JSON));
 
         var logger = output.BuildLoggerFor<GoogleCloudStorage>();
-        _blobStorageUnderTest = new GoogleCloudStorage(BUCKET_NAME, _storageClient, logger);
+        _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, logger);
     }
 
     public Task InitializeAsync()
@@ -46,10 +46,10 @@ public class GoogleCloudStorageTests : IAsyncLifetime
         const string BLOB_NAME = "BlobName";
         var blobContent = "BlobContent".GetBytes();
 
-        _blobStorageUnderTest.Add(BLOB_NAME, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BLOB_NAME);
+        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, BLOB_NAME);
         retrievedBlobContent.Should().Equal(blobContent);
     }
 
@@ -59,13 +59,13 @@ public class GoogleCloudStorageTests : IAsyncLifetime
         var blob1Content = "BlobContent1".GetBytes();
         var blob2Content = "BlobContent2".GetBytes();
 
-        _blobStorageUnderTest.Add("BlobName1", blob1Content);
-        _blobStorageUnderTest.Add("BlobName2", blob2Content);
+        _blobStorageUnderTest.Add(BUCKET_NAME, "BlobName1", blob1Content);
+        _blobStorageUnderTest.Add(BUCKET_NAME, "BlobName2", blob2Content);
 
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlob1Content = await _blobStorageUnderTest.FindAsync("BlobName1");
-        var retrievedBlob2Content = await _blobStorageUnderTest.FindAsync("BlobName2");
+        var retrievedBlob1Content = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName1");
+        var retrievedBlob2Content = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName2");
 
         retrievedBlob1Content.Should().Equal(blob1Content);
         retrievedBlob2Content.Should().Equal(blob2Content);
@@ -74,13 +74,13 @@ public class GoogleCloudStorageTests : IAsyncLifetime
     [Fact(Skip = "No valid emulator for GCP")]
     public async Task AddBlobWithSameName()
     {
-        const string blobName = "AddBlobWithSameName";
+        const string BLOB_NAME = "AddBlobWithSameName";
 
         var blobContent = "BlobContent1"u8.ToArray();
-        _blobStorageUnderTest.Add(blobName, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
 
         blobContent = "BlobContent2"u8.ToArray();
-        _blobStorageUnderTest.Add(blobName, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
 
         var acting = () => _blobStorageUnderTest.SaveAsync();
         await acting.Should().ThrowAsync<BlobAlreadyExistsException>();
@@ -89,22 +89,22 @@ public class GoogleCloudStorageTests : IAsyncLifetime
     [Fact(Skip = "No valid emulator for GCP")]
     public async Task DeleteBlobThatExists()
     {
-        _blobStorageUnderTest.Add("BlobName", "BlobContent".GetBytes());
+        _blobStorageUnderTest.Add(BUCKET_NAME, "BlobName", "BlobContent".GetBytes());
         await _blobStorageUnderTest.SaveAsync();
 
-        _blobStorageUnderTest.Remove("BlobName");
+        _blobStorageUnderTest.Remove(BUCKET_NAME, "BlobName");
         await _blobStorageUnderTest.SaveAsync();
 
-        var acting = () => _blobStorageUnderTest.FindAsync("BlobName");
+        var acting = () => _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName");
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
     public async Task DeleteBlobThatDoesNotExist()
     {
-        _blobStorageUnderTest.Remove("BlobNameThatDoesNotExist");
+        _blobStorageUnderTest.Remove(BUCKET_NAME, "BlobNameThatDoesNotExist");
 
-        var acting = () => _blobStorageUnderTest.FindAsync("BlobNameThatDoesNotExist");
+        var acting = () => _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobNameThatDoesNotExist");
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
@@ -114,12 +114,12 @@ public class GoogleCloudStorageTests : IAsyncLifetime
         var blob1Content = "BlobContent1".GetBytes();
         var blob2Content = "BlobContent2".GetBytes();
 
-        _blobStorageUnderTest.Add("BlobName1", blob1Content);
-        _blobStorageUnderTest.Add("BlobName2", blob2Content);
+        _blobStorageUnderTest.Add(BUCKET_NAME, "BlobName1", blob1Content);
+        _blobStorageUnderTest.Add(BUCKET_NAME, "BlobName2", blob2Content);
 
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync()).ToListAsync();
+        var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync(BUCKET_NAME)).ToListAsync();
 
         retrievedBlobContent.Should().Contain("BlobName1");
         retrievedBlobContent.Should().Contain("BlobName2");

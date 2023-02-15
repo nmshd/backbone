@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -10,6 +11,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
@@ -245,12 +247,14 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
         var blobStorage = A.Fake<IBlobStorage>();
+        var blobOptions = A.Fake<IOptions<BlobOptions>>();
+        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
 
         var mapper = AutoMapperProfile.CreateMapper();
 
         var eventBus = A.Fake<IEventBus>();
 
-        return new Handler(_actContext, blobStorage, userContext, mapper, eventBus);
+        return new Handler(_actContext, blobStorage, blobOptions, userContext, mapper, eventBus);
     }
 
     #endregion

@@ -126,6 +126,10 @@ services:
   #  depends_on:
   #    - elasticsearch
 
+networks:
+    default: 
+        name: backbone
+
 volumes:
   rabbitmq-volume:
   mssql-server-volume:

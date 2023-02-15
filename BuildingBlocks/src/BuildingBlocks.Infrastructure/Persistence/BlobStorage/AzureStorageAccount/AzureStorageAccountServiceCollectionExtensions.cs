@@ -1,7 +1,4 @@
-﻿using Azure;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
@@ -20,23 +17,8 @@ public static class AzureStorageAccountServiceCollectionExtensions
 
     public static void AddAzureStorageAccount(this IServiceCollection services, AzureStorageAccountOptions options)
     {
-        services.AddSingleton(_ =>
-        {
-            var containerClient = new BlobContainerClient(options.ConnectionString, options.ContainerName);
-            containerClient.CreateIfNotExists();
-
-            try
-            {
-                containerClient.SetAccessPolicy(PublicAccessType.Blob);
-            }
-            catch (RequestFailedException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return containerClient;
-        });
-
+        services.Configure<AzureStorageAccountOptions>(opt => opt.ConnectionString = options.ConnectionString);
+        services.AddSingleton<AzureStorageAccountContainerClientFactory>();
         services.AddScoped<IBlobStorage, AzureStorageAccount>();
     }
 }
@@ -44,5 +26,4 @@ public static class AzureStorageAccountServiceCollectionExtensions
 public class AzureStorageAccountOptions
 {
     public string ConnectionString { get; set; } = string.Empty;
-    public string ContainerName { get; set; } = string.Empty;
 }
