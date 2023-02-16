@@ -64,12 +64,12 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T> RunInTransaction<T>(Func<Task<T>> func, List<int> errorNumbersToRetry,
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int> errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         var response = default(T);
 
-        await RunInTransaction(async () => { response = await func(); }, errorNumbersToRetry, isolationLevel);
+        await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
         return response;
     }

@@ -32,7 +32,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
 
-        ExecutionStrategy? executionStrategy = null;
+        ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
@@ -45,7 +45,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
                 throw new Exception($"Unsupported database provider: {Database.ProviderName}");
         }
 
-        await executionStrategy!.ExecuteAsync(async () =>
+        await executionStrategy.ExecuteAsync(async () =>
         {
             await using var transaction = await Database.BeginTransactionAsync(isolationLevel);
             await action();
@@ -58,12 +58,12 @@ public class AbstractDbContextBase : DbContext, IDbContext
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> func, List<int>? errorNumbersToRetry,
+    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         var response = default(T);
 
-        await RunInTransaction(async () => response = await func(), errorNumbersToRetry, isolationLevel);
+        await RunInTransaction(async () => response = await action(), errorNumbersToRetry, isolationLevel);
 
         return response;
     }
