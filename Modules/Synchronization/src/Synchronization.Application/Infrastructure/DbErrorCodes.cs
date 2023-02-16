@@ -2,6 +2,6 @@
 
 public static class DbErrorCodes
 {
-    public const int INDEX_ALREADY_EXISTS = 2601;
-    public const int INDEX_ALREADY_EXISTS_2 = 23505;
+    public const int SQLSERVER_INDEX_ALREADY_EXISTS = 2601;
+    public const int POSTGRES_INDEX_ALREADY_EXISTS = 23505;
 }

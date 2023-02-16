@@ -127,7 +127,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
             await ExternalEvents.AddAsync(externalEvent);
             await SaveChangesAsync(CancellationToken.None);
-        }, new List<int> { DbErrorCodes.INDEX_ALREADY_EXISTS, DbErrorCodes.INDEX_ALREADY_EXISTS_2 });
+        }, new List<int> { DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS });
 
         return externalEvent;
     }
