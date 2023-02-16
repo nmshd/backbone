@@ -9,7 +9,7 @@ namespace Backbone.API.AspNetCoreIdentityCustomizations;
 
 public class CustomUserStore : UserStore<ApplicationUser>
 {
-    public CustomUserStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer) { }
+    public CustomUserStore(DevicesDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer) { }
 
     public override async Task<ApplicationUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
@@ -19,7 +19,7 @@ public class CustomUserStore : UserStore<ApplicationUser>
 
     public override async Task<ApplicationUser?> FindByNameAsync(string userName, CancellationToken cancellationToken = default)
     {
-        var user = await FindUser(u => u.UserName == userName, cancellationToken);
+        var user = await FindUser(u => u.NormalizedUserName == userName, cancellationToken);
         return user;
     }
 

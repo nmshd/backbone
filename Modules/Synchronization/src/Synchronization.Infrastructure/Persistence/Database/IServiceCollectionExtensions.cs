@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,6 +6,11 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
+    private const string SQLSERVER = "SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Synchronization.Infrastructure.Database.SqlServer";
+    private const string POSTGRES = "Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Synchronization.Infrastructure.Database.Postgres";
+
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
         var options = new DbOptions();
@@ -17,19 +21,41 @@ public static class IServiceCollectionExtensions
 
     public static void AddDatabase(this IServiceCollection services, DbOptions options)
     {
-        services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
-            dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
-            {
-                sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
-                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-            }));
+        switch (options.Provider)
+        {
+            case SQLSERVER:
+                services.AddDbContext<SynchronizationDbContext>(dbContextOptions =>
+                    dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    })
+                );
+                break;
+            case POSTGRES:
+                services.AddDbContext<SynchronizationDbContext>(dbContextOptions =>
+                    dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    })
 
-        services.AddScoped<ISynchronizationDbContext, ApplicationDbContext>();
+                );
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {options.Provider}");
+
+        }
+
+        services.AddScoped<ISynchronizationDbContext, SynchronizationDbContext>();
     }
 }
 
 public class DbOptions
 {
+    public string Provider { get; set; }
     public string DbConnectionString { get; set; }
     public RetryOptions RetryOptions { get; set; } = new();
 }

@@ -3,6 +3,8 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 
@@ -10,6 +12,8 @@ public class AbstractDbContextBase : DbContext, IDbContext
 {
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
+    private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
+    private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
 
     protected AbstractDbContextBase()
     {
@@ -27,8 +31,19 @@ public class AbstractDbContextBase : DbContext, IDbContext
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var executionStrategy =
-            new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
+
+        ExecutionStrategy executionStrategy;
+        switch (Database.ProviderName)
+        {
+            case SQLSERVER:
+                executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
+                break;
+            case POSTGRES:
+                executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry?.ConvertAll(x => x.ToString()));
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {Database.ProviderName}");
+        }
 
         await executionStrategy.ExecuteAsync(async () =>
         {
@@ -43,12 +58,12 @@ public class AbstractDbContextBase : DbContext, IDbContext
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> func, List<int>? errorNumbersToRetry,
+    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         var response = default(T);
 
-        await RunInTransaction(async () => response = await func(), errorNumbersToRetry, isolationLevel);
+        await RunInTransaction(async () => response = await action(), errorNumbersToRetry, isolationLevel);
 
         return response;
     }

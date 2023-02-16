@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,27 +7,50 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
+    private const string SQLSERVER = "SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
+    private const string POSTGRES = "Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
+
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
+        switch (options.Provider)
         {
-            dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
-            {
-                sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
-                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-            })
-            // Register the entity sets needed by OpenIddict
-            .UseOpenIddict();
-        });
+            case SQLSERVER:
+                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
+                    dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    }).UseOpenIddict()
+                );
+                break;
+            case POSTGRES:
+                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
+                    dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(20);
+                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                    }).UseOpenIddict()
 
-        services.AddScoped<IDevicesDbContext, ApplicationDbContext>();
+                );
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {options.Provider}");
+
+        }
+
+        services.AddScoped<IDevicesDbContext, DevicesDbContext>();
     }
 
     public class DbOptions
     {
+        public string Provider { get; set; }
         public string ConnectionString { get; set; }
         public RetryOptions RetryOptions { get; set; } = new();
     }

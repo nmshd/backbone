@@ -21,5 +21,10 @@ public class SqlDatabase
 {
     [Required]
     [MinLength(1)]
-    public string ConnectionString { get; set; } = "";
+    [RegularExpression("SqlServer|Postgres")]
+    public string Provider { get; set; } = string.Empty;
+
+    [Required]
+    [MinLength(1)]
+    public string ConnectionString { get; set; } = string.Empty;
 }

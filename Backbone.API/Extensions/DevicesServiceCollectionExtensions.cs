@@ -17,6 +17,7 @@ public static class DevicesServiceCollectionExtensions
         services.AddDatabase(options =>
         {
             options.ConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
+            options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
         });
 
         services.AddPushNotifications(options =>

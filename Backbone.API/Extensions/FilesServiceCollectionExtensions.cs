@@ -14,6 +14,7 @@ public static class FilesServiceCollectionExtensions
 
         services.AddPersistence(options =>
         {
+            options.DbOptions.Provider = configuration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
 
             options.BlobStorageOptions.ConnectionInfo = configuration.Infrastructure.BlobStorage.ConnectionInfo;

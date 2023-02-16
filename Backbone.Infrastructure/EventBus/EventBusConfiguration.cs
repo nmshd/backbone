@@ -5,6 +5,7 @@ namespace Backbone.Infrastructure.EventBus;
 public class EventBusConfiguration
 {
     [Required]
+    [RegularExpression("Azure|GoogleCloud|RabbitMQ")]
     public string Vendor { get; set; }
 
     [Required]
