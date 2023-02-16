@@ -31,12 +31,6 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public DbSet<SyncRun> SyncRuns { get; set; }
     public DbSet<SyncError> SyncErrors { get; set; }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     base.OnConfiguring(optionsBuilder);
-    //     optionsBuilder.UseSqlServer();
-    // }
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
