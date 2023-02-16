@@ -7,6 +7,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Application.Messages;
 
@@ -17,13 +18,15 @@ public class MessageService
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageService> _logger;
     private readonly IUserContext _userContext;
+    private readonly BlobOptions _blobOptions;
 
-    public MessageService(IMessagesDbContext dbContext, IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, ILogger<MessageService> logger)
+    public MessageService(IMessagesDbContext dbContext, IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, ILogger<MessageService> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
         _userContext = userContext;
         _blobStorage = blobStorage;
+        _blobOptions = blobOptions.Value;
         _logger = logger;
     }
 
@@ -75,7 +78,7 @@ public class MessageService
 
     public async Task FillBody(MessageDTO dto)
     {
-        dto.Body = await _blobStorage.FindAsync(dto.Id);
+        dto.Body = await _blobStorage.FindAsync(_blobOptions.RootFolder, dto.Id);
     }
 
     public async Task FillBodies(IEnumerable<MessageDTO> dtos)

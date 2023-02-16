@@ -20,6 +20,8 @@ public static class IServiceCollectionExtensions
     {
         services.AddDatabase(options.DbOptions);
 
+        services.Configure<BlobOptions>(blobOptions =>
+            blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
         services.AddScoped<IContentStore, BlobStorageContentStore>();
     }

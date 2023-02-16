@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,8 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
     {
         services.AddDatabase(options.DbOptions);
+        services.Configure<BlobOptions>(blobOptions =>
+            blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
     }
 }

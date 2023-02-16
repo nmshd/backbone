@@ -23,6 +23,7 @@ public class SynchronizationConfiguration
         {
             [Required]
             [MinLength(1)]
+            [RegularExpression("Azure|GoogleCloud")]
             public string CloudProvider { get; set; } = string.Empty;
 
             [Required]
@@ -34,6 +35,11 @@ public class SynchronizationConfiguration
 
         public class SqlDatabaseConfiguration
         {
+            [Required]
+            [MinLength(1)]
+            [RegularExpression("SqlServer|Postgres")]
+            public string Provider { get; set; } = string.Empty;
+
             [Required]
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;

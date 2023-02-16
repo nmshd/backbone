@@ -28,14 +28,14 @@ public class Program
 
                 services.AddSingleton<IUserContext, FakeUserContext>();
 
-                services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
+                services.AddDbContext<ChallengesDbContext>(dbContextOptions =>
                     dbContextOptions.UseSqlServer(configuration.GetSection("SqlDatabase")["ConnectionString"], sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
+                        sqlOptions.MigrationsAssembly(typeof(ChallengesDbContext).GetTypeInfo().Assembly.GetName().Name);
                         sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
                     }), ServiceLifetime.Singleton);
 
-                services.AddSingleton<IChallengesDbContext, ApplicationDbContext>();
+                services.AddSingleton<IChallengesDbContext, ChallengesDbContext>();
             });
     }
 }
