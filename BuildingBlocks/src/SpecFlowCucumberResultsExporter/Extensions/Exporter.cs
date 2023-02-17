@@ -12,7 +12,7 @@ public class Exporter : ReportingStepDefinitions
 
         Reporters.FinishedReport += (sender, args) =>
         {
-            var file = new FileInfo(path + fileName);
+            var file = new FileInfo(Path.Combine(path, fileName));
             if (file != null)
             {
                 file.Directory.Create();
