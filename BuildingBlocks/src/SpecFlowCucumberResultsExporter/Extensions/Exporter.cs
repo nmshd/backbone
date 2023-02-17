@@ -6,18 +6,17 @@ public class Exporter : ReportingStepDefinitions
     public static void ExportToCucumber(string path = default, string fileName = default)
     {
         path ??= "../../../TestResults/";
-        fileName ??= $"specflow_cucumber_{DateTimeOffset.UtcNow:yyyyMMdd}";
-        fileName += ".json";
+        fileName ??= $"specflow_cucumber_{DateTimeOffset.UtcNow:yyyyMMdd}.json";
 
         Reporters.Add(new JsonReporter());
 
         Reporters.FinishedReport += (sender, args) =>
         {
-            var file = new System.IO.FileInfo(path);
+            var file = new FileInfo(path + fileName);
             if (file != null)
             {
                 file.Directory.Create();
-                System.IO.File.WriteAllText(file.FullName, args.Reporter.WriteToString());
+                File.WriteAllText(file.FullName, args.Reporter.WriteToString());
             }
         };
     }
