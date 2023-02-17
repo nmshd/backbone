@@ -13,27 +13,27 @@ namespace SpecFlowCucumberResultsExporter.Extensions
         public static TestResult GetResult(this IEnumerable<TestResult> results)
         {
             var testResults = results as TestResult[] ?? results.ToArray();
-            if (testResults.Any(x => x == TestResult.failed))
+            if (testResults.Any(x => x == TestResult.Failed))
             {
-                return TestResult.failed;
+                return TestResult.Failed;
             }
 
-            if (testResults.Any(x => x == TestResult.pending))
+            if (testResults.Any(x => x == TestResult.Pending))
             {
-                return TestResult.pending;
+                return TestResult.Pending;
             }
 
-            if (testResults.Any(x => x == TestResult.skipped))
+            if (testResults.Any(x => x == TestResult.Skipped))
             {
-                return TestResult.skipped;
+                return TestResult.Skipped;
             }
 
-            if (testResults.Any(x => x == TestResult.undefined))
+            if (testResults.Any(x => x == TestResult.Undefined))
             {
-                return TestResult.undefined;
+                return TestResult.Undefined;
             }
 
-            return TestResult.passed;
+            return TestResult.Passed;
         }
 
         internal static TestResult ToTestResult(this ScenarioExecutionStatus executionStatus)
@@ -41,13 +41,13 @@ namespace SpecFlowCucumberResultsExporter.Extensions
             switch (executionStatus)
             {
                 case ScenarioExecutionStatus.OK:
-                    return TestResult.passed;
+                    return TestResult.Passed;
                 case ScenarioExecutionStatus.StepDefinitionPending:
-                    return TestResult.pending;
+                    return TestResult.Pending;
                 case ScenarioExecutionStatus.TestError:
-                    return TestResult.failed;
+                    return TestResult.Failed;
                 default:
-                    return TestResult.undefined;
+                    return TestResult.Undefined;
             }
         }
 

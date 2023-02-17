@@ -28,9 +28,9 @@ public static partial class Reporters
                 }
             }
 
-            feature.Result = feature.Elements.Exists(o => o.Result == TestResult.failed)
-                ? TestResult.failed
-                : TestResult.passed;
+            feature.Result = feature.Elements.Exists(o => o.Result == TestResult.Failed)
+                ? TestResult.Failed
+                : TestResult.Passed;
 
             feature.EndTime = CurrentRunTime;
             OnFinishedFeature(reporter);
@@ -45,9 +45,9 @@ public static partial class Reporters
         {
             var scenario = reporter.CurrentScenario;
             scenario.EndTime = CurrentRunTime;
-            scenario.Result = scenario.Steps.Exists(o => o.Result.Status == TestResult.failed)
-                ? TestResult.failed
-                : TestResult.passed;
+            scenario.Result = scenario.Steps.Exists(o => o.Result.Status == TestResult.Failed)
+                ? TestResult.Failed
+                : TestResult.Passed;
             OnFinishedScenario(reporter);
             reporter.CurrentScenario = null;
         }
@@ -69,7 +69,7 @@ public static partial class Reporters
         var endtime = CurrentRunTime;
         var result = scenarioContext.ScenarioExecutionStatus.ToTestResult();
         var error = scenarioContext.TestError?.ToExceptionInfo().Message;
-        error = error == null && result == TestResult.pending ? new PendingStepException().ToExceptionInfo().Message : string.Empty;
+        error = error == null && result == TestResult.Pending ? new PendingStepException().ToExceptionInfo().Message : string.Empty;
 
         foreach (var reporter in reporters.ToArray())
         {

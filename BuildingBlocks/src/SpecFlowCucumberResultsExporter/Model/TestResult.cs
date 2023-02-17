@@ -1,11 +1,10 @@
-﻿namespace SpecFlowCucumberResultsExporter.Model
+﻿namespace SpecFlowCucumberResultsExporter.Model;
+
+public enum TestResult
 {
-    public enum TestResult
-    {
-        undefined = 0,
-        passed,
-        failed,
-        skipped,
-        pending
-    }
+    Undefined = 0,
+    Passed,
+    Failed,
+    Skipped,
+    Pending
 }

@@ -188,15 +188,15 @@ namespace SpecFlowCucumberResultsExporter.Reporting
                 TestResult testResult;
                 if (actionException is PendingStepException)
                 {
-                    testResult = TestResult.pending;
+                    testResult = TestResult.Pending;
                 }
                 else if (actionException != null)
                 {
-                    testResult = TestResult.failed;
+                    testResult = TestResult.Failed;
                 }
                 else
                 {
-                    testResult = TestResult.passed;
+                    testResult = TestResult.Passed;
                 }
 
 
