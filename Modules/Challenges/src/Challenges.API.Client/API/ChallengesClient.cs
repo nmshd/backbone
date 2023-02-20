@@ -1,51 +1,137 @@
-﻿using System.Net;
+﻿using System.Text.Json;
+using Challenges.API.Client.Interface;
 using Challenges.API.Client.Models;
-using RestSharp;
+using IdentityModel.Client;
 
 namespace Challenges.API.Client.API;
-public class ChallengesClient
+public class ChallengesClient : IChallengesClient
 {
-    private readonly RestClient _client;
+    // Use semaphore to prevent race conditions
+    private static SemaphoreSlim _accessTokenSemaphore;
 
-    public ChallengesClient()
+    private readonly string _baseUrl = "http://localhost:5000";
+    private readonly string _tokenEndpoint = "/connect/token";
+
+    private readonly HttpClient _httpClient;
+    private static AccessTokenResponse _accessToken;
+
+    public ChallengesClient(HttpClient httpClient)
     {
-        _client = new RestClient("http://localhost:5000");
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(_baseUrl);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        _accessToken = null;
 
-        ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
+        _accessTokenSemaphore = new SemaphoreSlim(1, 1);
     }
 
-    public async Task<RestResponse<AccessTokenResponse>> GetAccessTokenAsync(AuthenticationRequest authenticationRequest)
+    public async Task<ChallengeResponse> CreateChallenge(AuthenticationRequest authenticationRequest)
     {
-        var request = new RestRequest("/connect/token", Method.Post);
-        request.AddParameter("grant_type", "password");
-        request.AddParameter("client_id", authenticationRequest.ClientId);
-        request.AddParameter("client_secret", authenticationRequest.ClientSecret);
-        request.AddParameter("username", authenticationRequest.Username);
-        request.AddParameter("password", authenticationRequest.Password);
-
-        return await _client.ExecuteAsync<AccessTokenResponse>(request);
-    }
-
-    public async Task<RestResponse<ChallengeResponse>> CreateChallengeAsync(string accessToken = default)
-    {
-        var request = new RestRequest("/api/v1/challenges", Method.Post);
-        if (!string.IsNullOrEmpty(accessToken))
+        if (authenticationRequest != null)
         {
-            request.AddHeader("Authorization", $"Bearer {accessToken}");
+            var tokenResponse = await GetAccessToken(authenticationRequest);
+            _httpClient.SetBearerToken(tokenResponse.AccessToken);
+        }
+        else
+        {
+            _httpClient.SetBearerToken(null);
         }
 
-        return await _client.ExecuteAsync<ChallengeResponse>(request);
-    }
+        var response = await _httpClient.PostAsync("/api/v1/challenges", null);
 
-    public async Task<RestResponse<ChallengeResponse>> GetChallengeByIdAsync(string id, string accessToken = default)
-    {
-        var request = new RestRequest($"/api/v1/challenges/{id}", Method.Get);
-        if (!string.IsNullOrEmpty(accessToken))
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        var challenge = new ChallengeResponse();
+
+        if (response.IsSuccessStatusCode)
         {
-            request.AddHeader("Authorization", $"Bearer {accessToken}");
+            challenge = JsonSerializer.Deserialize<ChallengeResponse>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        return await _client.ExecuteGetAsync<ChallengeResponse>(request);
+        challenge.StatusCode = response.StatusCode;
+        challenge.ReasonPhrase = response.ReasonPhrase;
+        challenge.IsSuccessStatusCode = response.IsSuccessStatusCode;
+
+        return challenge;
+    }
+
+    public async Task<ChallengeResponse> GetChallengeById(string challengeId, AuthenticationRequest authenticationRequest)
+    {
+        if (authenticationRequest != null)
+        {
+            var tokenResponse = await GetAccessToken(authenticationRequest);
+            _httpClient.SetBearerToken(tokenResponse.AccessToken);
+        }
+        else
+        {
+            _httpClient.SetBearerToken(null);
+        }
+
+        var response = await _httpClient.GetAsync($"/api/v1/challenges/{challengeId}");
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        var challenge = new ChallengeResponse();
+
+        if (response.IsSuccessStatusCode)
+        {
+            challenge = JsonSerializer.Deserialize<ChallengeResponse>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        challenge.StatusCode = response.StatusCode;
+        challenge.ReasonPhrase = response.ReasonPhrase;
+        challenge.IsSuccessStatusCode = response.IsSuccessStatusCode;
+
+        return challenge;
+    }
+
+    public async Task<AccessTokenResponse> GetAccessToken(AuthenticationRequest authenticationRequest)
+    {
+        if (_accessToken is { Expired: false })
+        {
+            return _accessToken;
+        }
+
+        _accessToken = await FetchAccessToken(authenticationRequest);
+        return _accessToken;
+    }
+
+    private async Task<AccessTokenResponse> FetchAccessToken(AuthenticationRequest authenticationRequest)
+    {
+        try
+        {
+            await _accessTokenSemaphore.WaitAsync();
+
+            if (_accessToken is { Expired: false })
+            {
+                return _accessToken;
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Post, _tokenEndpoint)
+            {
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                { "content_type", "application/x-www-form-urlencoded" },
+                { "grant_type", "password" },
+                { "username", authenticationRequest.Username },
+                { "password", authenticationRequest.Password }
+            })
+            };
+
+            Console.WriteLine("Fetching Access Token...");
+
+            var response = await _httpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            Console.WriteLine("Success!");
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<AccessTokenResponse>(responseContent);
+        }
+        finally
+        {
+            _accessTokenSemaphore.Release(1);
+        }
     }
 }
