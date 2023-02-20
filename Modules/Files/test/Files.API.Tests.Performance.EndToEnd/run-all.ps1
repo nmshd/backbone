@@ -10,16 +10,23 @@ node ".\node_modules\webpack\bin\webpack.js"
 Get-ChildItem -Path "./dist" -Filter *.test.js |
 
 Foreach-Object {
+    #Large test configuration
     $VUS = 1
     $ITERATIONS = 100
 
-    $LowIterationsList = (
+    #Medium test configuration
+    if(("").contains($_.Name)){
+        $VUS = 1
+        $ITERATIONS = 50
+    }
+
+    #Small test configuration
+    if((
         "get-download.test.js",
         "post-with-auth.test.js",
         "post-without-auth.test.js"
-    )
-
-    if($LowIterationsList.contains($_.Name)){
+    ).contains($_.Name)){
+        $VUS = 1
         $ITERATIONS = 10
     }
 
