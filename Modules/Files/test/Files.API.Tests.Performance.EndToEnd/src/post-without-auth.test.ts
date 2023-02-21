@@ -5,12 +5,30 @@ import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js"
 const host = __ENV.HOST;
 const apiEndpoint = host + "/api/v1/";
 
+export function getSizeVus(size: string){
+    switch(size){
+        case "S": return 1;
+        case "M": return 1;
+        case "L": return 1;
+        default: throw new Error("Invalid 'Size' value");
+    }
+}
+
+export function getSizeIterations(size: string){
+    switch(size){
+        case "S": return 1;
+        case "M": return 5;
+        case "L": return 10;
+        default: throw new Error("Invalid 'Size' value");
+    }
+}
+
 export const options: Options = {
-    vus: Number(__ENV.VUS),
+    vus: getSizeVus(__ENV.SIZE),
     thresholds: {
         http_req_duration: ["p(90)<160", "p(98)<190"],
     },
-    iterations: Number(__ENV.ITERATIONS)
+    iterations: getSizeIterations(__ENV.SIZE)
 };
 
 export default function (): void {

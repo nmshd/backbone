@@ -10,12 +10,30 @@ export interface Data {
     fileId: string
 }
 
+export function getSizeVus(size: string){
+    switch(size){
+        case "S": return 1;
+        case "M": return 1;
+        case "L": return 1;
+        default: throw new Error("Invalid 'Size' value");
+    }
+}
+
+export function getSizeIterations(size: string){
+    switch(size){
+        case "S": return 10;
+        case "M": return 50;
+        case "L": return 100;
+        default: throw new Error("Invalid 'Size' value");
+    }
+}
+
 export const options: Options = {
-    vus: Number(__ENV.VUS),
+    vus: getSizeVus(__ENV.SIZE),
     thresholds: {
         http_req_duration: ["p(90)<160", "p(98)<190"],
     },
-    iterations: Number(__ENV.ITERATIONS)
+    iterations: getSizeIterations(__ENV.SIZE)
 };
 
 export function setup () {
