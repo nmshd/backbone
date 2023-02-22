@@ -125,6 +125,8 @@ public static class IServiceCollectionExtensions
                     options.Password.RequireLowercase = false;
                     options.Password.RequireDigit = false;
                     options.Password.RequireNonAlphanumeric = false;
+
+                    options.User.AllowedUserNameCharacters += " ";
                 }
                 else
                 {
