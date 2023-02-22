@@ -23,9 +23,5 @@
     "webpack-glob-entries": "^1.0.1"
   },
   "scripts": {
-    "get-test": "k6 run -e HOST=http://localhost:5000 -e VUS=1 -e ITERATIONS=100 -e CLIENT_SECRET=test dist/get.test.js",
-    "post-with-authentication": "k6 run -e HOST=http://localhost:5000 -e VUS=1 -e ITERATIONS=100 -e CLIENT_SECRET=test dist/post.with.authentication.test.js",
-    "post-without-authentication": "k6 run -e HOST=http://localhost:5000 -e VUS=1 -e ITERATIONS=100 dist/post.without.authentication.test.js",
-    "start": "webpack && npm run get-test && npm run post-with-authentication && npm run post-without-authentication"
   }
 }
