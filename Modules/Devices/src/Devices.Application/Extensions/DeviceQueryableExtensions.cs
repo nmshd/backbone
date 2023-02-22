@@ -11,10 +11,7 @@ public static class DeviceQueryableExtensions
     {
         var device = await query.WithId(id).FirstOrDefaultAsync(cancellationToken);
 
-        if (device == null)
-            throw new NotFoundException(nameof(Device));
-
-        return device;
+        return device ?? throw new NotFoundException(nameof(Device));
     }
 
     public static IQueryable<Device> WithId(this IQueryable<Device> query, DeviceId id)
