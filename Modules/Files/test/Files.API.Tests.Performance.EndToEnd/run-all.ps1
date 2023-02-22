@@ -1,6 +1,6 @@
 Param(
-    [parameter(Mandatory)] $baseUrl,
-    [parameter(Mandatory)] $userName,
+    [parameter(Mandatory)] $baseurl,
+    [parameter(Mandatory)] $username,
     [parameter(Mandatory)] $password,
     [parameter(Mandatory)] $size
 )
@@ -8,12 +8,12 @@ Param(
 Write-Host "Running files performance tests..."
 
 npm install
-node ".\node_modules\webpack\bin\webpack.js"
+npx webpack
 
 Get-ChildItem -Path "./dist" -Filter *.test.js |
 
 Foreach-Object {
-    k6 run -e HOST=$baseUrl -e USERNAME=$userName -e PASSWORD=$password -e CLIENT_SECRET=test -e SIZE=$size $_.FullName
+    k6 run -e HOST=$baseurl -e USERNAME=$username -e PASSWORD=$password -e CLIENT_SECRET=test -e SIZE=$size $_.FullName
 }
 
 Write-Host "OK"
