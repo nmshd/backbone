@@ -5,7 +5,7 @@ import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js"
 const host = __ENV.HOST;
 const apiEndpoint = host+"/api/v1/";
 
-export interface Data {
+interface Data {
     authToken: string,
     challengeId: string
 }
