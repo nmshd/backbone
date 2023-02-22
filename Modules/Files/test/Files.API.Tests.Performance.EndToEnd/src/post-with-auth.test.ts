@@ -3,40 +3,31 @@ import { Options } from "k6/options";
 import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
 
 const host = __ENV.HOST;
-const apiEndpoint = host + "/api/v1/";
+const apiEndpoint = host + "/api/v1";
 
-export function getSizeVus(size: string){
-    switch(size){
-        case "S": return 1;
-        case "M": return 1;
-        case "L": return 1;
-        default: throw new Error("Invalid 'Size' value");
-    }
-}
-
-export function getSizeIterations(size: string){
-    switch(size){
-        case "S": return 1;
-        case "M": return 5;
-        case "L": return 10;
+function translateSize() {
+    switch(__ENV.SIZE){
+        case "S": return { vus: 1, iterations: 1 };
+        case "M": return { vus: 2, iterations: 5 };
+        case "L": return { vus: 3, iterations: 10 };
         default: throw new Error("Invalid 'Size' value");
     }
 }
 
 export const options: Options = {
-    vus: getSizeVus(__ENV.SIZE),
+    vus: translateSize().vus,
     thresholds: {
         http_req_duration: ["p(90)<160", "p(98)<190"],
     },
-    iterations: getSizeIterations(__ENV.SIZE)
+    iterations: translateSize().iterations
 };
 
 export function setup() {
     const bodyConnectToken = {
         client_id: "test",
         client_secret: __ENV.CLIENT_SECRET,
-        username: "USRa",
-        password: "a",
+        username: __ENV.USERNAME,
+        password: __ENV.PASSWORD,
         grant_type: "password"
     };
 
@@ -59,12 +50,12 @@ export default function (authToken: string): void {
         const bodyFileContent = {
             content: http.file("For performance testing purposes.", "PerformanceTest.txt"),
             cipherHash: "AAAA",
-            expiresAt: getDate().toJSON().slice(0, 10),
+            expiresAt: getTomorrowDate().toJSON().slice(0, 10),
             encryptedProperties: "AAAA"
         }
 
         const response = http.post(
-            `${apiEndpoint}Files`,
+            `${apiEndpoint}/Files`,
             bodyFileContent,
             {
                 headers: {
@@ -77,7 +68,7 @@ export default function (authToken: string): void {
     });
 };
 
-export function getDate(){
+function getTomorrowDate(){
     const date = new Date();
     date.setDate(date.getDate() + 1)
 
