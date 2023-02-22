@@ -1,6 +1,7 @@
 import http from "k6/http";
 import { Options } from "k6/options";
 import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
+import { getJwt } from "./utils";
 
 const host = __ENV.HOST;
 const apiEndpoint = host+"/api/v1";
@@ -27,26 +28,7 @@ export const options: Options = {
 };
 
 export function setup () {
-    const bodyConnectToken = {
-        client_id: "test",
-        client_secret: __ENV.CLIENT_SECRET,
-        username: __ENV.USERNAME,
-        password: __ENV.PASSWORD,
-        grant_type: "password"
-    };
-
-    const authToken = http.post(
-        `${host}/connect/token`,
-        bodyConnectToken,
-        {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        }
-    ).json("access_token")!
-    .toString();
-
-    return { authToken: authToken }
+    return { authToken: getJwt() };
 }
 
 export default function (data: Data): void {

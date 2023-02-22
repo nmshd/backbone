@@ -1,9 +1,5 @@
 {
-  "name": "typescript",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "ssh://git@github.com/k6io/example-typescript.git",
-  "author": "Simon Aronsson <simme@k6.io>",
+  "name": "performance-test-files",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "7.13.16",
@@ -22,12 +18,5 @@
     "webpack": "^5.75.0",
     "webpack-cli": "4.6.0",
     "webpack-glob-entries": "^1.0.1"
-  },
-  "scripts": {
-    "test:get": "k6 run -e HOST=http://localhost:5000 -e SIZE=S -e CLIENT_SECRET=test dist/get.test.js",
-    "test:get-metadata": "k6 run -e HOST=http://localhost:5000 -e SIZE=S -e CLIENT_SECRET=test dist/get-metadata.test.js",
-    "test:download-file": "k6 run -e HOST=http://localhost:5000 -e SIZE=S -e CLIENT_SECRET=test dist/download-file.test.js",
-    "test:post-with-authentication": "k6 run -e HOST=http://localhost:5000 -e SIZE=S -e CLIENT_SECRET=test dist/post-with-auth.test.js",
-    "test": "webpack && npm run test:get && npm run test:get-metadata && npm run test:download-file && npm run test:post-with-authentication"
   }
 }

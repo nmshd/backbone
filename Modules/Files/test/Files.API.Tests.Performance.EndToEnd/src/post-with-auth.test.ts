@@ -1,6 +1,7 @@
 import http from "k6/http";
 import { Options } from "k6/options";
 import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
+import { getJwt } from "./utils";
 
 const host = __ENV.HOST;
 const apiEndpoint = host + "/api/v1";
@@ -23,26 +24,7 @@ export const options: Options = {
 };
 
 export function setup() {
-    const bodyConnectToken = {
-        client_id: "test",
-        client_secret: __ENV.CLIENT_SECRET,
-        username: __ENV.USERNAME,
-        password: __ENV.PASSWORD,
-        grant_type: "password"
-    };
-
-    const authToken = http.post(
-        `${host}/connect/token`,
-        bodyConnectToken,
-        {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        }
-    ).json("access_token")!
-    .toString();
-
-    return authToken;
+    return getJwt();
 }
 
 export default function (authToken: string): void {
@@ -50,7 +32,7 @@ export default function (authToken: string): void {
         const bodyFileContent = {
             content: http.file("For performance testing purposes.", "PerformanceTest.txt"),
             cipherHash: "AAAA",
-            expiresAt: getTomorrowDate().toJSON().slice(0, 10),
+            expiresAt: tomorrow().toJSON().slice(0, 10),
             encryptedProperties: "AAAA"
         }
 
@@ -68,7 +50,7 @@ export default function (authToken: string): void {
     });
 };
 
-function getTomorrowDate(){
+function tomorrow(){
     const date = new Date();
     date.setDate(date.getDate() + 1)
 
