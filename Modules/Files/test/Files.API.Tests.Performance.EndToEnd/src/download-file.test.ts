@@ -4,10 +4,11 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt } from "./utils";
+import { getJwt, assertEnvVarExists } from "./utils";
 
-const host = __ENV.HOST;
-const apiEndpoint = host + "/api/v1";
+assertEnvVarExists();
+
+const apiEndpoint = __ENV.HOST + "/api/v1";
 
 interface Data {
   authToken: string;

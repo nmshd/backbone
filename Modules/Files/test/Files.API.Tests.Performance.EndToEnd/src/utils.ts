@@ -1,6 +1,5 @@
 import http from "k6/http";
-
-const host = __ENV.HOST;
+import exec from "k6/execution";
 
 export function getJwt() {
   const bodyConnectToken = {
@@ -12,7 +11,7 @@ export function getJwt() {
   };
 
   const authToken = http
-    .post(`${host}/connect/token`, bodyConnectToken, {
+    .post(`${__ENV.HOST}/connect/token`, bodyConnectToken, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -21,4 +20,26 @@ export function getJwt() {
     .toString();
 
   return authToken;
+}
+
+export function assertEnvVarExists() {
+  if (!__ENV.HOST) {
+    exec.test.abort("Invalid 'HOST' parameter value");
+  }
+
+  if (!__ENV.CLIENT_SECRET) {
+    exec.test.abort("Invalid 'CLIENT_SECRET' parameter value");
+  }
+
+  if (!__ENV.USERNAME) {
+    exec.test.abort("Invalid 'USERNAME' parameter value");
+  }
+
+  if (!__ENV.PASSWORD) {
+    exec.test.abort("Invalid 'PASSWORD' parameter value");
+  }
+
+  if (!__ENV.SIZE) {
+    exec.test.abort("Invalid 'SIZE' parameter value");
+  }
 }
