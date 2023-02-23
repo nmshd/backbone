@@ -13,7 +13,7 @@ done
 echo "Running challenges performance tests..."
 
 npm install
-node "./node_modules/webpack/bin/webpack.js"
+npx webpack
 
 for file in "./dist/"*.test.js ; do 
     k6 run -e HOST=$BASEURL -e USERNAME=$USERNAME -e PASSWORD=$PASSWORD -e CLIENT_SECRET=test -e SIZE=$SIZE $file

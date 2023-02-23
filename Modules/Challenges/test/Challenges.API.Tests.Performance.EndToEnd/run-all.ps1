@@ -8,7 +8,7 @@ Param(
 Write-Host "Running challenges performance tests..."
 
 npm install
-node "./node_modules/webpack/bin/webpack.js"
+npx webpack
 
 Get-ChildItem -Path "./dist" -Filter *.test.js |
 
