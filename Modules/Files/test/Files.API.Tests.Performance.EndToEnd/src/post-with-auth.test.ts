@@ -9,7 +9,7 @@ import { getJwt } from "./utils";
 const host = __ENV.HOST;
 const apiEndpoint = host + "/api/v1";
 
-function translateSize() {
+function size() {
   switch (__ENV.SIZE) {
     case "S":
       return { vus: 1, iterations: 1 };
@@ -23,11 +23,11 @@ function translateSize() {
 }
 
 export const options: Options = {
-  vus: translateSize().vus,
+  vus: size().vus,
   thresholds: {
     http_req_duration: ["p(90)<160", "p(98)<190"],
   },
-  iterations: translateSize().iterations,
+  iterations: size().iterations,
 };
 
 export function setup() {
