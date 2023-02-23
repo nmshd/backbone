@@ -35,8 +35,8 @@ export const options: Options = {
   iterations: size().iterations,
 };
 
-export function setup() {
-  return { authToken: getJwt() };
+export function setup(): Data {
+  return { authToken: getJwt() } as Data;
 }
 
 export default function (data: Data): void {

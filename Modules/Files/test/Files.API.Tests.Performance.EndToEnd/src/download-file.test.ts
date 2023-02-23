@@ -36,7 +36,7 @@ export const options: Options = {
   iterations: size().iterations,
 };
 
-export function setup() {
+export function setup(): Data {
   const authToken = getJwt();
 
   const bodyFileContent = {
@@ -61,7 +61,7 @@ export function setup() {
   return {
     authToken: authToken,
     fileId: fileId,
-  };
+  } as Data;
 }
 
 export default function (data: Data): void {

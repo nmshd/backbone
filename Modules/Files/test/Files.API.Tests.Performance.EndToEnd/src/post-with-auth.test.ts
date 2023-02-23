@@ -10,6 +10,10 @@ assertEnvVarExists();
 
 const apiEndpoint = __ENV.HOST + "/api/v1";
 
+interface Data {
+  authToken: string;
+}
+
 function size() {
   switch (__ENV.SIZE) {
     case "S":
@@ -31,11 +35,11 @@ export const options: Options = {
   iterations: size().iterations,
 };
 
-export function setup() {
-  return getJwt();
+export function setup(): Data {
+  return { authToken: getJwt() } as Data;
 }
 
-export default function (authToken: string): void {
+export default function (data: Data): void {
   describe("Upload a File with Authentication:", () => {
     const bodyFileContent = {
       content: http.file(
@@ -49,7 +53,7 @@ export default function (authToken: string): void {
 
     const response = http.post(`${apiEndpoint}/Files`, bodyFileContent, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${data.authToken}`,
       },
     });
 
