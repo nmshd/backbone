@@ -1,6 +1,18 @@
 import http from "k6/http";
 import exec from "k6/execution";
 
+export interface Size {
+  vus: number;
+  iterations: number;
+}
+
+export function tomorrow(): Date {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+
+  return date;
+}
+
 export function getJwt() {
   const bodyConnectToken = {
     client_id: "test",

@@ -4,7 +4,7 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists } from "./utils";
+import { getJwt, assertEnvVarExists, Size, tomorrow } from "./utils";
 
 assertEnvVarExists();
 
@@ -13,11 +13,6 @@ const apiEndpoint = __ENV.HOST + "/api/v1";
 interface Data {
   authToken: string;
   fileId: string;
-}
-
-interface Size {
-  vus: number;
-  iterations: number;
 }
 
 function size(): Size {
@@ -79,11 +74,4 @@ export default function (data: Data): void {
 
     expect(response.status, "response status").to.equal(200);
   });
-}
-
-function tomorrow(): Date {
-  const date = new Date();
-  date.setDate(date.getDate() + 1);
-
-  return date;
 }
