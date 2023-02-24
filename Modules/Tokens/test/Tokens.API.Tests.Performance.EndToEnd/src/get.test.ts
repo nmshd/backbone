@@ -23,11 +23,11 @@ interface Size {
 function size(): Size {
   switch (__ENV.SIZE) {
     case "S":
-      return { vus: 1, iterations: 10 } as Size;
+      return { vus: 1, iterations: 10 };
     case "M":
-      return { vus: 10, iterations: 50 } as Size;
+      return { vus: 10, iterations: 50 };
     case "L":
-      return { vus: 50, iterations: 100 } as Size;
+      return { vus: 50, iterations: 100 };
     default:
       throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
   }
@@ -61,7 +61,7 @@ export function setup(): Data {
   return {
     authToken: authToken,
     tokenId: tokenId,
-  } as Data;
+  };
 }
 
 export default function (data: Data): void {

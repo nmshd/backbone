@@ -22,11 +22,11 @@ interface Size {
 function size(): Size {
   switch (__ENV.SIZE) {
     case "S":
-      return { vus: 1, iterations: 1 } as Size;
+      return { vus: 1, iterations: 1 };
     case "M":
-      return { vus: 2, iterations: 5 } as Size;
+      return { vus: 2, iterations: 5 };
     case "L":
-      return { vus: 3, iterations: 10 } as Size;
+      return { vus: 3, iterations: 10 };
     default:
       throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
   }
@@ -41,7 +41,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: getJwt() } as Data;
+  return { authToken: getJwt() };
 }
 
 export default function (data: Data): void {
