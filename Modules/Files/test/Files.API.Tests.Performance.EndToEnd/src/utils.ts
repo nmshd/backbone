@@ -24,22 +24,22 @@ export function getJwt() {
 
 export function assertEnvVarExists() {
   if (!__ENV.HOST) {
-    exec.test.abort("Invalid 'HOST' parameter value");
+    exec.test.abort("Parameter 'HOST' cannot be null or empty");
   }
 
   if (!__ENV.CLIENT_SECRET) {
-    exec.test.abort("Invalid 'CLIENT_SECRET' parameter value");
+    exec.test.abort("Parameter 'CLIENT_SECRET' cannot be null or empty");
   }
 
   if (!__ENV.USERNAME) {
-    exec.test.abort("Invalid 'USERNAME' parameter value");
+    exec.test.abort("Parameter 'USERNAME' cannot be null or empty");
   }
 
   if (!__ENV.PASSWORD) {
-    exec.test.abort("Invalid 'PASSWORD' parameter value");
+    exec.test.abort("Parameter 'PASSWORD' cannot be null or empty");
   }
 
   if (!__ENV.SIZE) {
-    exec.test.abort("Invalid 'SIZE' parameter value");
+    exec.test.abort("Parameter 'SIZE' cannot be null or empty");
   }
 }
