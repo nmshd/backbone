@@ -4,7 +4,7 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists } from "./utils";
+import { getJwt, assertEnvVarExists, Size, tomorrow } from "./utils";
 
 assertEnvVarExists();
 
@@ -12,11 +12,6 @@ const apiEndpoint = __ENV.HOST + "/api/v1";
 
 interface Data {
   authToken: string;
-}
-
-interface Size {
-  vus: number;
-  iterations: number;
 }
 
 function size(): Size {
@@ -45,25 +40,23 @@ export function setup(): Data {
 }
 
 export default function (data: Data): void {
-  describe("Upload a Token with Authentication:", () => {
+  describe("Post a Token with Authentication:", () => {
     const bodyTokenContent = {
-      content: "123",
+      content: "AAAA",
       expiresAt: tomorrow().toJSON().slice(0, 10),
     };
 
-    const response = http.post(`${apiEndpoint}/Tokens`, bodyTokenContent, {
-      headers: {
-        Authorization: `Bearer ${data.authToken}`,
-      },
-    });
+    const response = http.post(
+      `${apiEndpoint}/Tokens`,
+      JSON.stringify(bodyTokenContent),
+      {
+        headers: {
+          Authorization: `Bearer ${data.authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     expect(response.status, "response status").to.equal(201);
   });
-}
-
-function tomorrow(): Date {
-  const date = new Date();
-  date.setDate(date.getDate() + 1);
-
-  return date;
 }
