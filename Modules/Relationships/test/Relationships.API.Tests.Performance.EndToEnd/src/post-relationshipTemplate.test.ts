@@ -13,7 +13,12 @@ interface Data {
   authToken: string;
 }
 
-function size() {
+interface Size {
+  vus: number;
+  iterations: number;
+}
+
+function size(): Size {
   switch (__ENV.SIZE) {
     case "S":
       return { vus: 1, iterations: 10 };
@@ -22,7 +27,7 @@ function size() {
     case "L":
       return { vus: 50, iterations: 100 };
     default:
-      throw new Error("Invalid 'Size' value");
+      throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
   }
 }
 
@@ -34,8 +39,8 @@ export const options: Options = {
   iterations: size().iterations,
 };
 
-export function setup() {
-  return getJwt();
+export function setup(): Data {
+  return { authToken: getJwt() };
 }
 
 export default function (data: Data): void {
