@@ -4,18 +4,23 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists, Size, tomorrow } from "./utils";
+import {
+  getAuthorizationHeader,
+  getConfiguration,
+  Size,
+  tomorrow,
+} from "./utils";
 
-assertEnvVarExists();
+const configuration = getConfiguration();
 
-const apiEndpoint = __ENV.HOST + "/api/v1";
+const apiEndpoint = configuration.Host + "/api/v1";
 
 interface Data {
   authToken: string;
 }
 
 function size(): Size {
-  switch (__ENV.SIZE) {
+  switch (configuration.Size) {
     case "S":
       return { vus: 1, iterations: 1 };
     case "M":
@@ -23,7 +28,7 @@ function size(): Size {
     case "L":
       return { vus: 3, iterations: 10 };
     default:
-      throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
+      throw new Error("Invalid 'Size' value: " + configuration.Size);
   }
 }
 
@@ -36,7 +41,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: getJwt() };
+  return { authToken: getAuthorizationHeader(configuration) };
 }
 
 export default function (data: Data): void {
@@ -51,7 +56,7 @@ export default function (data: Data): void {
       JSON.stringify(bodyTokenContent),
       {
         headers: {
-          Authorization: `Bearer ${data.authToken}`,
+          Authorization: data.authToken,
           "Content-Type": "application/json",
         },
       }

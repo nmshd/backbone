@@ -1,6 +1,14 @@
 import http from "k6/http";
 import exec from "k6/execution";
 
+export interface Configuration {
+  Host: string;
+  Client_Secret: string;
+  Username: string;
+  Password: string;
+  Size: string;
+}
+
 export interface Size {
   vus: number;
   iterations: number;
@@ -13,17 +21,17 @@ export function tomorrow(): Date {
   return date;
 }
 
-export function getJwt() {
+export function getAuthorizationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
-    client_secret: __ENV.CLIENT_SECRET,
-    username: __ENV.USERNAME,
-    password: __ENV.PASSWORD,
+    client_secret: configuration.Client_Secret,
+    username: configuration.Username,
+    password: configuration.Password,
     grant_type: "password",
   };
 
   const authToken = http
-    .post(`${__ENV.HOST}/connect/token`, bodyConnectToken, {
+    .post(`${configuration.Host}/connect/token`, bodyConnectToken, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -31,27 +39,27 @@ export function getJwt() {
     .json("access_token")!
     .toString();
 
-  return authToken;
+  return `Bearer ${authToken}`;
 }
 
-export function assertEnvVarExists() {
-  if (!__ENV.HOST) {
-    exec.test.abort("Parameter 'HOST' cannot be null or empty");
-  }
+export function getConfiguration(): Configuration {
+  assertEnvVarExists("HOST");
+  assertEnvVarExists("CLIENT_SECRET");
+  assertEnvVarExists("USER");
+  assertEnvVarExists("PASSWORD");
+  assertEnvVarExists("SIZE");
 
-  if (!__ENV.CLIENT_SECRET) {
-    exec.test.abort("Parameter 'CLIENT_SECRET' cannot be null or empty");
-  }
+  return {
+    Host: __ENV.HOST,
+    Client_Secret: __ENV.CLIENT_SECRET,
+    Username: __ENV.USER,
+    Password: __ENV.PASSWORD,
+    Size: __ENV.SIZE,
+  };
+}
 
-  if (!__ENV.USERNAME) {
-    exec.test.abort("Parameter 'USERNAME' cannot be null or empty");
-  }
-
-  if (!__ENV.PASSWORD) {
-    exec.test.abort("Parameter 'PASSWORD' cannot be null or empty");
-  }
-
-  if (!__ENV.SIZE) {
-    exec.test.abort("Parameter 'SIZE' cannot be null or empty");
+function assertEnvVarExists(parameter: string) {
+  if (!__ENV[parameter]) {
+    exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
   }
 }

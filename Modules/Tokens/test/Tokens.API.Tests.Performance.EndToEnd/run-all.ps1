@@ -1,6 +1,6 @@
 Param(
     [parameter(Mandatory)] $baseUrl,
-    [parameter(Mandatory)] $username,
+    [parameter(Mandatory)] $user,
     [parameter(Mandatory)] $password,
     [parameter(Mandatory)] $size
 )
@@ -13,7 +13,7 @@ npx webpack
 Get-ChildItem -Path "./dist" -Filter *.test.js |
 
 Foreach-Object {
-    k6 run -e HOST=$baseUrl -e USERNAME=$username -e PASSWORD=$password -e CLIENT_SECRET=test -e SIZE=$size $_.FullName
+    k6 run -e HOST=$baseUrl -e USER=$user -e PASSWORD=$password -e CLIENT_SECRET=test -e SIZE=$size $_.FullName
 }
 
 Write-Host "OK"
