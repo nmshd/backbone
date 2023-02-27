@@ -5,7 +5,7 @@ import {
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
 import {
-  getAuthenticationHeader,
+  getAuthorizationHeader,
   getConfiguration,
   Size,
   tomorrow,
@@ -42,7 +42,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  const authToken = getAuthenticationHeader(configuration);
+  const authToken = getAuthorizationHeader(configuration);
 
   const bodyFileContent = {
     content: http.file(

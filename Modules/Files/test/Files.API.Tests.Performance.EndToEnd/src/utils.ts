@@ -21,7 +21,7 @@ export function tomorrow(): Date {
   return date;
 }
 
-export function getAuthenticationHeader(configuration: Configuration): string {
+export function getAuthorizationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
     client_secret: configuration.Client_Secret,
