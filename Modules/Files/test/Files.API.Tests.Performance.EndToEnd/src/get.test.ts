@@ -4,7 +4,7 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists, Size } from "./utils";
+import { getAuthenticationHeader, assertEnvVarExists, Size } from "./utils";
 
 assertEnvVarExists();
 
@@ -36,14 +36,14 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: getJwt() };
+  return { authToken: getAuthenticationHeader() };
 }
 
 export default function (data: Data): void {
   describe("Get list of Files:", () => {
     const response = http.get(`${apiEndpoint}/Files`, {
       headers: {
-        Authorization: `Bearer ${data.authToken}`,
+        Authorization: data.authToken,
       },
     });
 

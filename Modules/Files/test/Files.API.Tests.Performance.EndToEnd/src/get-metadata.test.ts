@@ -4,7 +4,12 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists, Size, tomorrow } from "./utils";
+import {
+  getAuthenticationHeader,
+  assertEnvVarExists,
+  Size,
+  tomorrow,
+} from "./utils";
 
 assertEnvVarExists();
 
@@ -37,7 +42,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  const authToken = getJwt();
+  const authToken = getAuthenticationHeader();
 
   const bodyFileContent = {
     content: http.file(
@@ -52,7 +57,7 @@ export function setup(): Data {
   const fileId = http
     .post(`${apiEndpoint}/Files`, bodyFileContent, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: authToken,
       },
     })
     .json("result.id")!
@@ -68,7 +73,7 @@ export default function (data: Data): void {
   describe("Get a File metadata:", () => {
     const response = http.get(`${apiEndpoint}/Files/${data.fileId}/metadata`, {
       headers: {
-        Authorization: `Bearer ${data.authToken}`,
+        Authorization: data.authToken,
       },
     });
 

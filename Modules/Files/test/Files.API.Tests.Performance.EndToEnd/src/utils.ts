@@ -13,7 +13,7 @@ export function tomorrow(): Date {
   return date;
 }
 
-export function getJwt() {
+export function getAuthenticationHeader() {
   const bodyConnectToken = {
     client_id: "test",
     client_secret: __ENV.CLIENT_SECRET,
@@ -31,7 +31,7 @@ export function getJwt() {
     .json("access_token")!
     .toString();
 
-  return authToken;
+  return `Bearer ${authToken}`;
 }
 
 export function assertEnvVarExists() {
