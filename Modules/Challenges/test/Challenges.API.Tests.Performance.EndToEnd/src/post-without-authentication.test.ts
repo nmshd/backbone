@@ -6,9 +6,9 @@ import {
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
 import { getConfiguration } from "./utils";
 
-getConfiguration();
+const configuration = getConfiguration();
 
-const apiEndpoint = __ENV.HOST + "/api/v1";
+const apiEndpoint = configuration.Host + "/api/v1";
 
 interface Size {
   vus: number;
@@ -16,7 +16,7 @@ interface Size {
 }
 
 function size(): Size {
-  switch (__ENV.SIZE) {
+  switch (configuration.Size) {
     case "S":
       return { vus: 1, iterations: 10 };
     case "M":
@@ -24,7 +24,7 @@ function size(): Size {
     case "L":
       return { vus: 50, iterations: 100 };
     default:
-      throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
+      throw new Error("Invalid 'Size' value: " + configuration.Size);
   }
 }
 
