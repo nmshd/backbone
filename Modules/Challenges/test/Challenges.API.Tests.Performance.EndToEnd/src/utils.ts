@@ -45,7 +45,7 @@ export function getConfiguration(): Configuration {
   return {
     Host: __ENV.HOST,
     Client_Secret: __ENV.CLIENT_SECRET,
-    User: __ENV.User,
+    User: __ENV.USER,
     Password: __ENV.PASSWORD,
     Size: __ENV.SIZE,
   };
