@@ -43,31 +43,23 @@ export function getAuthorizationHeader(configuration: Configuration): string {
 }
 
 export function getConfiguration(): Configuration {
-  if (!__ENV.HOST) {
-    exec.test.abort("Parameter 'HOST' cannot be null or empty");
-  }
-
-  if (!__ENV.CLIENT_SECRET) {
-    exec.test.abort("Parameter 'CLIENT_SECRET' cannot be null or empty");
-  }
-
-  if (!__ENV.USERNAME) {
-    exec.test.abort("Parameter 'USERNAME' cannot be null or empty");
-  }
-
-  if (!__ENV.PASSWORD) {
-    exec.test.abort("Parameter 'PASSWORD' cannot be null or empty");
-  }
-
-  if (!__ENV.SIZE) {
-    exec.test.abort("Parameter 'SIZE' cannot be null or empty");
-  }
+  assertEnvVarExists("HOST");
+  assertEnvVarExists("CLIENT_SECRET");
+  assertEnvVarExists("USER");
+  assertEnvVarExists("PASSWORD");
+  assertEnvVarExists("SIZE");
 
   return {
     Host: __ENV.HOST,
     Client_Secret: __ENV.CLIENT_SECRET,
-    Username: __ENV.USERNAME,
+    Username: __ENV.USER,
     Password: __ENV.PASSWORD,
     Size: __ENV.SIZE,
   };
+}
+
+function assertEnvVarExists(parameter: string) {
+  if (!__ENV[parameter]) {
+    exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
+  }
 }
