@@ -4,9 +4,9 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getJwt, assertEnvVarExists } from "./utils";
+import { getAuthenticationHeader, getConfiguration } from "./utils";
 
-assertEnvVarExists();
+getConfiguration();
 
 const apiEndpoint = __ENV.HOST + "/api/v1";
 
@@ -42,15 +42,13 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  const authToken = getJwt();
-
   const challengeId = http
     .post(`${apiEndpoint}/Challenges`)
     .json("result.id")!
     .toString();
 
   return {
-    authToken: authToken,
+    authToken: `Bearer ${getAuthenticationHeader()}`,
     challengeId: challengeId,
   };
 }
@@ -59,7 +57,7 @@ export default function (data: Data): void {
   describe("Get a Challenge:", () => {
     const response = http.get(`${apiEndpoint}/Challenges/${data.challengeId}`, {
       headers: {
-        Authorization: `Bearer ${data.authToken}`,
+        Authorization: `${data.authToken}`,
       },
     });
     expect(response.status, "response status").to.equal(200);

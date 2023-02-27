@@ -4,9 +4,9 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { assertEnvVarExists } from "./utils";
+import { getConfiguration } from "./utils";
 
-assertEnvVarExists();
+getConfiguration();
 
 const apiEndpoint = __ENV.HOST + "/api/v1";
 
