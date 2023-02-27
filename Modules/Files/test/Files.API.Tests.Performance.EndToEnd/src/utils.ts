@@ -1,6 +1,14 @@
 import http from "k6/http";
 import exec from "k6/execution";
 
+export interface Configuration {
+  Host: string;
+  Client_Secret: string;
+  Username: string;
+  Password: string;
+  Size: string;
+}
+
 export interface Size {
   vus: number;
   iterations: number;
@@ -13,17 +21,17 @@ export function tomorrow(): Date {
   return date;
 }
 
-export function getAuthenticationHeader() {
+export function getAuthenticationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
-    client_secret: __ENV.CLIENT_SECRET,
-    username: __ENV.USERNAME,
-    password: __ENV.PASSWORD,
+    client_secret: configuration.Client_Secret,
+    username: configuration.Username,
+    password: configuration.Password,
     grant_type: "password",
   };
 
   const authToken = http
-    .post(`${__ENV.HOST}/connect/token`, bodyConnectToken, {
+    .post(`${configuration.Host}/connect/token`, bodyConnectToken, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -34,7 +42,19 @@ export function getAuthenticationHeader() {
   return `Bearer ${authToken}`;
 }
 
-export function assertEnvVarExists() {
+export function getConfiguration(): Configuration {
+  assertAllRequiredEnvVarsExist();
+
+  return {
+    Host: __ENV.HOST,
+    Client_Secret: __ENV.CLIENT_SECRET,
+    Username: __ENV.USERNAME,
+    Password: __ENV.PASSWORD,
+    Size: __ENV.SIZE,
+  };
+}
+
+export function assertAllRequiredEnvVarsExist() {
   if (!__ENV.HOST) {
     exec.test.abort("Parameter 'HOST' cannot be null or empty");
   }

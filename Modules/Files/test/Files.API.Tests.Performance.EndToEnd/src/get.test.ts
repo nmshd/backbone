@@ -4,18 +4,18 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getAuthenticationHeader, assertEnvVarExists, Size } from "./utils";
+import { getAuthenticationHeader, getConfiguration, Size } from "./utils";
 
-assertEnvVarExists();
+const configuration = getConfiguration();
 
-const apiEndpoint = __ENV.HOST + "/api/v1";
+const apiEndpoint = configuration.Host + "/api/v1";
 
 interface Data {
   authToken: string;
 }
 
 function size(): Size {
-  switch (__ENV.SIZE) {
+  switch (configuration.Size) {
     case "S":
       return { vus: 1, iterations: 10 };
     case "M":
@@ -23,7 +23,7 @@ function size(): Size {
     case "L":
       return { vus: 50, iterations: 100 };
     default:
-      throw new Error("Invalid 'Size' value: " + __ENV.SIZE);
+      throw new Error("Invalid 'Size' value: " + configuration.Size);
   }
 }
 
@@ -36,7 +36,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: getAuthenticationHeader() };
+  return { authToken: getAuthenticationHeader(configuration) };
 }
 
 export default function (data: Data): void {
