@@ -43,18 +43,6 @@ export function getAuthenticationHeader(configuration: Configuration): string {
 }
 
 export function getConfiguration(): Configuration {
-  assertAllRequiredEnvVarsExist();
-
-  return {
-    Host: __ENV.HOST,
-    Client_Secret: __ENV.CLIENT_SECRET,
-    Username: __ENV.USERNAME,
-    Password: __ENV.PASSWORD,
-    Size: __ENV.SIZE,
-  };
-}
-
-export function assertAllRequiredEnvVarsExist() {
   if (!__ENV.HOST) {
     exec.test.abort("Parameter 'HOST' cannot be null or empty");
   }
@@ -74,4 +62,12 @@ export function assertAllRequiredEnvVarsExist() {
   if (!__ENV.SIZE) {
     exec.test.abort("Parameter 'SIZE' cannot be null or empty");
   }
+
+  return {
+    Host: __ENV.HOST,
+    Client_Secret: __ENV.CLIENT_SECRET,
+    Username: __ENV.USERNAME,
+    Password: __ENV.PASSWORD,
+    Size: __ENV.SIZE,
+  };
 }
