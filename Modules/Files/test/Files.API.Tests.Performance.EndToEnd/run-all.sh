@@ -15,7 +15,7 @@ npm install
 npx webpack
 
 for file in "./dist/"*.test.js ; do 
-    k6 run -e HOST=$BASEURL -e USER=$USERNAME -e PASSWORD=$PASSWORD -e CLIENT_SECRET=test -e SIZE=$SIZE $file
+    k6 run -e HOST=$BASEURL -e USER=$USER -e PASSWORD=$PASSWORD -e CLIENT_SECRET=test -e SIZE=$SIZE $file
 done
 
 echo "OK"
