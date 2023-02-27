@@ -1,7 +1,7 @@
 import http from "k6/http";
 import exec from "k6/execution";
 
-export function getJwt() {
+export function getAuthenticationHeader() {
   const bodyConnectToken = {
     client_id: "test",
     client_secret: __ENV.CLIENT_SECRET,
@@ -22,7 +22,7 @@ export function getJwt() {
   return authToken;
 }
 
-export function assertEnvVarExists() {
+export function getConfiguration() {
   if (!__ENV.HOST) {
     exec.test.abort("Parameter 'HOST' cannot be null or empty");
   }

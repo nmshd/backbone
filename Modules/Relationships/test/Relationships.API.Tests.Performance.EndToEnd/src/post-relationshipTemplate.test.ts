@@ -4,9 +4,9 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { assertEnvVarExists, getJwt } from "./utils";
+import { getConfiguration, getAuthenticationHeader } from "./utils";
 
-assertEnvVarExists();
+getConfiguration();
 const apiEndpoint = __ENV.HOST + "/api/v1";
 
 interface Data {
@@ -40,7 +40,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: getJwt() };
+  return { authToken: `Bearer ${getAuthenticationHeader()}` };
 }
 
 export default function (data: Data): void {
@@ -56,7 +56,7 @@ export default function (data: Data): void {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${data.authToken}`,
+          Authorization: data.authToken,
         },
       }
     );

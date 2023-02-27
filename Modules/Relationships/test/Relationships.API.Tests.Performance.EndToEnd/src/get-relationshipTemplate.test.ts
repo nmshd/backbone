@@ -4,9 +4,9 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { assertEnvVarExists, getJwt } from "./utils";
+import { getConfiguration, getAuthenticationHeader } from "./utils";
 
-assertEnvVarExists();
+getConfiguration();
 
 const apiEndpoint = __ENV.HOST + "/api/v1";
 
@@ -42,7 +42,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  const authToken = getJwt();
+  const authToken = `Bearer ${getAuthenticationHeader()}`;
 
   const body = {
     maxNumberOfAllocations: 1,
@@ -53,7 +53,7 @@ export function setup(): Data {
     .post(`${apiEndpoint}/RelationshipTemplates`, JSON.stringify(body), {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
+        Authorization: authToken,
       },
     })
     .json("result.id")!
@@ -71,7 +71,7 @@ export default function (data: Data): void {
       `${apiEndpoint}RelationshipTemplates/${data.relationshipTemplateId}`,
       {
         headers: {
-          Authorization: `Bearer ${data.authToken}`,
+          Authorization: data.authToken,
         },
       }
     );
