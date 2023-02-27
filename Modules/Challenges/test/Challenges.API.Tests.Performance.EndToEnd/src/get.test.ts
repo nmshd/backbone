@@ -43,7 +43,7 @@ export function setup(): Data {
     .toString();
 
   return {
-    authToken: `Bearer ${getAuthenticationHeader(configuration)}`,
+    authToken: getAuthenticationHeader(configuration),
     challengeId: challengeId,
   };
 }

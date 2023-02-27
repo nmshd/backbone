@@ -36,7 +36,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  return { authToken: `Bearer ${getAuthenticationHeader(configuration)}` };
+  return { authToken: getAuthenticationHeader(configuration) };
 }
 
 export default function (authToken: string): void {

@@ -4,7 +4,7 @@ import exec from "k6/execution";
 export interface Configuration {
   Host: string;
   Client_Secret: string;
-  Username: string;
+  User: string;
   Password: string;
   Size: string;
 }
@@ -18,7 +18,7 @@ export function getAuthenticationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
     client_secret: configuration.Client_Secret,
-    username: configuration.Username,
+    username: configuration.User,
     password: configuration.Password,
     grant_type: "password",
   };
@@ -36,31 +36,23 @@ export function getAuthenticationHeader(configuration: Configuration): string {
 }
 
 export function getConfiguration(): Configuration {
-  if (!__ENV.HOST) {
-    exec.test.abort("Parameter 'HOST' cannot be null or empty");
-  }
-
-  if (!__ENV.CLIENT_SECRET) {
-    exec.test.abort("Parameter 'CLIENT_SECRET' cannot be null or empty");
-  }
-
-  if (!__ENV.USERNAME) {
-    exec.test.abort("Parameter 'USERNAME' cannot be null or empty");
-  }
-
-  if (!__ENV.PASSWORD) {
-    exec.test.abort("Parameter 'PASSWORD' cannot be null or empty");
-  }
-
-  if (!__ENV.SIZE) {
-    exec.test.abort("Parameter 'SIZE' cannot be null or empty");
-  }
+  assertEnvVarExists("HOST");
+  assertEnvVarExists("CLIENT_SECRET");
+  assertEnvVarExists("USER");
+  assertEnvVarExists("PASSWORD");
+  assertEnvVarExists("SIZE");
 
   return {
     Host: __ENV.HOST,
     Client_Secret: __ENV.CLIENT_SECRET,
-    Username: __ENV.USERNAME,
+    User: __ENV.User,
     Password: __ENV.PASSWORD,
     Size: __ENV.SIZE,
   };
+}
+
+function assertEnvVarExists(parameter: string) {
+  if (!__ENV[parameter]) {
+    exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
+  }
 }

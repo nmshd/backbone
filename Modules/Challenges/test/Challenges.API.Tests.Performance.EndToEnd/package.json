@@ -22,6 +22,5 @@
     "webpack-cli": "4.6.0",
     "webpack-glob-entries": "^1.0.1"
   },
-  "scripts": {
-  }
+  "scripts": {}
 }
