@@ -14,7 +14,7 @@ export interface Size {
   iterations: number;
 }
 
-export function getAuthenticationHeader(configuration: Configuration): string {
+export function getAuthorizationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
     client_secret: configuration.Client_Secret,
@@ -43,7 +43,7 @@ export function getConfiguration(): Configuration {
   assertEnvVarExists("SIZE");
 
   return {
-    Host: __ENV.HOST,
+    Host: simplifyHost(__ENV.HOST),
     Client_Secret: __ENV.CLIENT_SECRET,
     User: __ENV.USER,
     Password: __ENV.PASSWORD,
@@ -55,4 +55,12 @@ function assertEnvVarExists(parameter: string) {
   if (!__ENV[parameter]) {
     exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
   }
+}
+
+function simplifyHost(host: string): string {
+  if (host.endsWith("/")) {
+    host = host.slice(0, -1);
+  }
+
+  return host;
 }

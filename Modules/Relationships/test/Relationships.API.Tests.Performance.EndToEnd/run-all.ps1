@@ -5,7 +5,7 @@ Param(
     [parameter(Mandatory)] $size
 )
 
-Write-Host "Running Relationship Templates performance tests..."
+Write-Host "Running Relationships performance tests..."
 
 npm install
 npx webpack

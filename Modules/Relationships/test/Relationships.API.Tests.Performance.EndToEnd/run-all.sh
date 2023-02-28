@@ -9,7 +9,7 @@ do
     esac
 done
 
-echo "Running Relationship Templates performance tests..."
+echo "Running Relationships performance tests..."
 
 npm install
 npx webpack

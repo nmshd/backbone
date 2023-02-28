@@ -4,7 +4,7 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getConfiguration, getAuthenticationHeader, Size } from "./utils";
+import { getConfiguration, getAuthorizationHeader, Size } from "./utils";
 
 const configuration = getConfiguration();
 
@@ -37,7 +37,7 @@ export const options: Options = {
 };
 
 export function setup(): Data {
-  const authToken = getAuthenticationHeader(configuration);
+  const authToken = getAuthorizationHeader(configuration);
 
   const body = {
     maxNumberOfAllocations: 1,
