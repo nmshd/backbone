@@ -50,7 +50,7 @@ export function getConfiguration(): Configuration {
   assertEnvVarExists("SIZE");
 
   return {
-    Host: __ENV.HOST,
+    Host: simplifyHost(__ENV.HOST),
     Client_Secret: __ENV.CLIENT_SECRET,
     Username: __ENV.USER,
     Password: __ENV.PASSWORD,
@@ -58,8 +58,16 @@ export function getConfiguration(): Configuration {
   };
 }
 
-function assertEnvVarExists(parameter: string) {
+function assertEnvVarExists(parameter: string): void {
   if (!__ENV[parameter]) {
     exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
   }
+}
+
+function simplifyHost(host: string): string {
+  if (host.charAt(host.length - 1) == "/") {
+    host = host.slice(0, -1);
+  }
+
+  return host;
 }
