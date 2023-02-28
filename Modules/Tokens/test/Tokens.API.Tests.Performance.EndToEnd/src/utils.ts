@@ -65,7 +65,7 @@ function assertEnvVarExists(parameter: string): void {
 }
 
 function simplifyHost(host: string): string {
-  if (host.charAt(host.length - 1) == "/") {
+  if (host.endsWith("/")) {
     host = host.slice(0, -1);
   }
 
