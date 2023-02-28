@@ -54,6 +54,7 @@ export function setup(): Data {
     .json("result.id")!
     .toString();
 
+  console.log("ID:", relationshipTemplateId);
   return {
     authToken: authToken,
     relationshipTemplateId: relationshipTemplateId,
@@ -63,7 +64,7 @@ export function setup(): Data {
 export default function (data: Data): void {
   describe("Get List of Relationship Templates", () => {
     const response = http.get(
-      `${apiEndpoint}RelationshipTemplates/${data.relationshipTemplateId}`,
+      `${apiEndpoint}/RelationshipTemplates/${data.relationshipTemplateId}`,
       {
         headers: {
           Authorization: data.authToken,
