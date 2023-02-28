@@ -4,7 +4,7 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getAuthenticationHeader, getConfiguration, Size } from "./utils";
+import { getAuthorizationHeader, getConfiguration, Size } from "./utils";
 
 const configuration = getConfiguration();
 
@@ -43,7 +43,7 @@ export function setup(): Data {
     .toString();
 
   return {
-    authToken: getAuthenticationHeader(configuration),
+    authToken: getAuthorizationHeader(configuration),
     challengeId: challengeId,
   };
 }
