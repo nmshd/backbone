@@ -22,15 +22,15 @@ public class HandlerTests
 
     private static readonly IdentityAddress ActiveIdentity = TestDataGenerator.CreateRandomIdentityAddress();
 
-    private readonly ApplicationDbContext _arrangeContext;
-    private readonly ApplicationDbContext _actContext;
+    private readonly SynchronizationDbContext _arrangeContext;
+    private readonly SynchronizationDbContext _actContext;
     private readonly Handler _handler;
 
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<ApplicationDbContext>();
+        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<SynchronizationDbContext>();
         _handler = CreateHandler();
     }
 
@@ -364,8 +364,7 @@ public class HandlerTests
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(ActiveIdentity);
 
-        var blobOptions = A.Fake<IOptions<BlobOptions>>();
-        A.CallTo(() => blobOptions.Value).Returns(new BlobOptions { RootFolder = "not-relevant" });
+        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
         return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions);
     }

@@ -19,7 +19,7 @@ public class TokenRepository : ITokenRepository
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokenRepository(ApplicationDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
+    public TokenRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
         _options = options.Value;

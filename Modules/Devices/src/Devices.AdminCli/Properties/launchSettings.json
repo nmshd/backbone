@@ -3,7 +3,9 @@
     "Start": {
       "commandName": "Project",
       "environmentVariables": {
-        "Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;"
+        "Database__Provider": "SqlServer",
+        "Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;" //SqlServer
+        //"Database__ConnectionString": "User ID=devices;Password=Passw0rd;Server=host.docker.internal;Port=5432;Database=enmeshed;" //Postgres
       }
     }
   }

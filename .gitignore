@@ -348,3 +348,6 @@ MigrationBackup/
 
 ci.conf
 out.yaml
+
+#Performance Tests
+dist

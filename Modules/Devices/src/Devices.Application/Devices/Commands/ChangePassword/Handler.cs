@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
             if (!changePasswordResult.Succeeded)
                 throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
-        _logger.LogTrace($"Successfuly changed password for device with id '{_activeDevice}'.");
+        _logger.LogTrace($"Successfully changed password for device with id '{_activeDevice}'.");
 
         return Unit.Value;
     }
