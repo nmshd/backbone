@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +11,13 @@ namespace Backbone.Modules.Devices.AdminCli;
 public class ApplicationConfiguration
 {
     public string DbConnectionString { get; set; } = null!;
+    public string Provider { get; set; } = null!;
 
     public void Validate()
     {
+        if (string.IsNullOrEmpty(Provider))
+            throw new Exception($"{nameof(Provider)} must not be empty.");
+
         if (string.IsNullOrEmpty(DbConnectionString))
             throw new Exception($"{nameof(DbConnectionString)} must not be empty.");
     }
@@ -34,6 +37,11 @@ public class Program
         new(4, "List clients", ListClients),
         new(5, "Exit", Exit)
     });
+
+    private const string SQLSERVER = "SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
+    private const string POSTGRES = "Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
 
     public static async Task<int> Main(string[] args)
     {
@@ -61,17 +69,38 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, ApplicationConfiguration applicationConfiguration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        switch (applicationConfiguration.Provider)
         {
-            // Configure the context to use Microsoft SQL Server.
-            options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
-            {
-                sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name);
-            });
+            case SQLSERVER:
+                services.AddDbContext<DevicesDbContext>(options =>
+                {
+                    // Configure the context to use Microsoft SQL Server.
+                    options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                    });
 
-            // Register the entity sets needed by OpenIddict.
-            options.UseOpenIddict();
-        });
+                    // Register the entity sets needed by OpenIddict.
+                    options.UseOpenIddict();
+                });
+                break;
+            case POSTGRES:
+                services.AddDbContext<DevicesDbContext>(options =>
+                {
+                    // Configure the context to use Microsoft SQL Server.
+                    options.UseNpgsql(applicationConfiguration.DbConnectionString, sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                    });
+
+                    // Register the entity sets needed by OpenIddict.
+                    options.UseOpenIddict();
+                });
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {applicationConfiguration.Provider}");
+
+        }
 
         // Register the Identity services.
         services.AddIdentity<ApplicationUser, IdentityRole>(config =>
@@ -81,7 +110,7 @@ public class Program
             config.Password.RequireNonAlphanumeric = false;
             config.Password.RequireUppercase = false;
         })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<DevicesDbContext>()
             .AddDefaultTokenProviders();
 
         services.AddOpenIddict()
@@ -91,7 +120,7 @@ public class Program
                 // Configure OpenIddict to use the Entity Framework Core stores and models.
                 // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
                 options.UseEntityFrameworkCore()
-                       .UseDbContext<ApplicationDbContext>();
+                       .UseDbContext<DevicesDbContext>();
             });
 
         services.AddLogging();
@@ -119,7 +148,8 @@ public class Program
 
         var applicationConfiguration = new ApplicationConfiguration
         {
-            DbConnectionString = configuration.GetValue<string>("Database:ConnectionString")
+            DbConnectionString = configuration.GetValue<string>("Database:ConnectionString"),
+            Provider = configuration.GetValue<string>("Database:Provider")
         };
 
         applicationConfiguration.Validate();

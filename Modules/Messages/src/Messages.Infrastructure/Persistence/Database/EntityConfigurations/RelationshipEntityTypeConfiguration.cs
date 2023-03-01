@@ -10,7 +10,7 @@ public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Rela
     {
         builder.HasKey(r => r.Id);
 
-        builder.ToTable(nameof(Relationship) + "s", "Relationships");
+        builder.ToTable(nameof(Relationship) + "s", "Relationships", x => x.ExcludeFromMigrations());
 
         builder.Property(x => x.CreatedAt);
         builder.Property(x => x.From);

@@ -125,6 +125,8 @@ public static class IServiceCollectionExtensions
                     options.Password.RequireLowercase = false;
                     options.Password.RequireDigit = false;
                     options.Password.RequireNonAlphanumeric = false;
+
+                    options.User.AllowedUserNameCharacters += " ";
                 }
                 else
                 {
@@ -135,7 +137,7 @@ public static class IServiceCollectionExtensions
                     options.Password.RequireNonAlphanumeric = true;
                 }
             })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<DevicesDbContext>()
             .AddSignInManager<CustomSigninManager>()
             .AddUserStore<CustomUserStore>();
 
@@ -149,7 +151,7 @@ public static class IServiceCollectionExtensions
             .AddCore(options =>
             {
                 options.UseEntityFrameworkCore()
-                    .UseDbContext<ApplicationDbContext>();
+                    .UseDbContext<DevicesDbContext>();
             })
             .AddServer(options =>
             {

@@ -8,9 +8,9 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly ApplicationDbContext _context;
+    private readonly TokensDbContext _context;
 
-    public UnitOfWork(ApplicationDbContext context, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> repositoryOptions)
+    public UnitOfWork(TokensDbContext context, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> repositoryOptions)
     {
         _context = context;
         _blobStorage = blobStorage;

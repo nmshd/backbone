@@ -11,19 +11,19 @@ public class ApplicationDbContextSeed
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
-    public async Task SeedAsync(ApplicationDbContext context)
+    public async Task SeedAsync(DevicesDbContext context)
     {
         await SeedEverything(context);
     }
 
-    private async Task SeedEverything(ApplicationDbContext context)
+    private async Task SeedEverything(DevicesDbContext context)
     {
         await context.Database.EnsureCreatedAsync();
 
         await SeedApplicationUsers(context);
     }
 
-    private async Task SeedApplicationUsers(ApplicationDbContext context)
+    private async Task SeedApplicationUsers(DevicesDbContext context)
     {
         if (await context.Users.AnyAsync())
             return;

@@ -12,6 +12,7 @@ public static class TokensServiceCollectionExtensions
     {
         services.AddPersistence(options =>
         {
+            options.DbOptions.Provider = configuration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
 
             options.BlobStorageOptions.CloudProvider = configuration.Infrastructure.BlobStorage.CloudProvider;

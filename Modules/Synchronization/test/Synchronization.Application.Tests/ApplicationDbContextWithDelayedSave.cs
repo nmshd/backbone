@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Application.Tests;
 
-public class ApplicationDbContextWithDelayedSave : ApplicationDbContext
+public class ApplicationDbContextWithDelayedSave : SynchronizationDbContext
 {
     private readonly TimeSpan _delay;
 
-    public ApplicationDbContextWithDelayedSave(DbContextOptions<ApplicationDbContext> options, TimeSpan delay) : base(options)
+    public ApplicationDbContextWithDelayedSave(DbContextOptions<SynchronizationDbContext> options, TimeSpan delay) : base(options)
     {
         _delay = delay;
     }

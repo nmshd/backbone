@@ -8,7 +8,7 @@ RUN dotnet restore "Backbone.API/Backbone.API.csproj"
 RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app --no-restore "Backbone.API/Backbone.API.csproj"
 
 # Run	
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.3-alpine3.16
 EXPOSE 80
 WORKDIR /app
 ENV Logging__Console__FormatterName=
