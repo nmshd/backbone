@@ -8,14 +8,14 @@ import { getConfiguration, getAuthorizationHeader, Size } from "./utils";
 
 const configuration = getConfiguration();
 
-const apiEndpoint = configuration.Host + "/api/v1";
+const apiEndpoint = configuration.host + "/api/v1";
 
 interface Data {
   authToken: string;
 }
 
 function size(): Size {
-  switch (configuration.Size) {
+  switch (configuration.size) {
     case "S":
       return { vus: 1, iterations: 10 };
     case "M":
@@ -23,7 +23,7 @@ function size(): Size {
     case "L":
       return { vus: 50, iterations: 100 };
     default:
-      throw new Error("Invalid 'Size' value: " + configuration.Size);
+      throw new Error("Invalid 'Size' value: " + configuration.size);
   }
 }
 
