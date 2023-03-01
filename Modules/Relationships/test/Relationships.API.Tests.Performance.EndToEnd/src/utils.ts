@@ -2,11 +2,11 @@ import http from "k6/http";
 import exec from "k6/execution";
 
 export interface Configuration {
-  Host: string;
-  Client_Secret: string;
-  User: string;
-  Password: string;
-  Size: string;
+  host: string;
+  clientSecret: string;
+  user: string;
+  password: string;
+  size: string;
 }
 
 export interface Size {
@@ -17,14 +17,14 @@ export interface Size {
 export function getAuthorizationHeader(configuration: Configuration): string {
   const bodyConnectToken = {
     client_id: "test",
-    client_secret: configuration.Client_Secret,
-    username: configuration.User,
-    password: configuration.Password,
+    client_secret: configuration.clientSecret,
+    username: configuration.user,
+    password: configuration.password,
     grant_type: "password",
   };
 
   const authToken = http
-    .post(`${configuration.Host}/connect/token`, bodyConnectToken, {
+    .post(`${configuration.host}/connect/token`, bodyConnectToken, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -43,11 +43,11 @@ export function getConfiguration(): Configuration {
   assertEnvVarExists("SIZE");
 
   return {
-    Host: simplifyHost(__ENV.HOST),
-    Client_Secret: __ENV.CLIENT_SECRET,
-    User: __ENV.USER,
-    Password: __ENV.PASSWORD,
-    Size: __ENV.SIZE,
+    host: simplifyHost(__ENV.HOST),
+    clientSecret: __ENV.CLIENT_SECRET,
+    user: __ENV.USER,
+    password: __ENV.PASSWORD,
+    size: __ENV.SIZE,
   };
 }
 
