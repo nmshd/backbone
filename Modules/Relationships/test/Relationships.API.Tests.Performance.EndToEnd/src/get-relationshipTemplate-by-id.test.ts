@@ -4,7 +4,12 @@ import {
   describe,
   expect,
 } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getConfiguration, getAuthorizationHeader, Size } from "./utils";
+import {
+  getConfiguration,
+  getAuthorizationHeader,
+  Size,
+  tomorrow,
+} from "./utils";
 
 const configuration = getConfiguration();
 
@@ -41,7 +46,7 @@ export function setup(): Data {
 
   const body = {
     maxNumberOfAllocations: 1,
-    expiresAt: "2023-06-07T15:31:56.129Z",
+    expiresAt: tomorrow().toJSON().slice(0, 10),
     content: "AAAA",
   };
   const relationshipTemplateId = http
