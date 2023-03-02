@@ -1,4 +1,5 @@
-﻿Feature: Get Challenge By Id
+﻿@Integration
+Feature: Get Challenge By Id
 
 User requests a Challenge
 

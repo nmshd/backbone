@@ -1,4 +1,5 @@
-﻿Feature: Create a Challenge
+﻿@Integration
+Feature: Create a Challenge
 
 User creates a Challenge
 
