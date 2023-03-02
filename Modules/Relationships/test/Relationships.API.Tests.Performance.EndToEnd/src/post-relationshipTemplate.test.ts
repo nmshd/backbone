@@ -47,9 +47,10 @@ export function setup(): Data {
 export default function (data: Data): void {
   const body = {
     maxNumberOfAllocations: 1,
-    expiresAt: tomorrow().toJSON().slice(0, 10),
+    expiresAt: tomorrow().toJSON(),
     content: "AAAA",
   };
+
   describe("Post a Relationship Template:", () => {
     const response = http.post(
       `${apiEndpoint}/RelationshipTemplates`,

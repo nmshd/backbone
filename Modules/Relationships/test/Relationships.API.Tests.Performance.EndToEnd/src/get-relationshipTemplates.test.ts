@@ -46,7 +46,7 @@ export function setup(): Data {
 
   const body = {
     maxNumberOfAllocations: 1,
-    expiresAt: tomorrow().toJSON().slice(0, 10),
+    expiresAt: tomorrow().toJSON(),
     content: "AAAA",
   };
   const relationshipTemplateId = http
