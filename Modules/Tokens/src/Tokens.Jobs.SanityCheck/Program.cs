@@ -1,6 +1,6 @@
+using System.Reflection;
 using Backbone.Modules.Tokens.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 using Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
@@ -49,8 +49,9 @@ public class Program
             services.AddPersistence(options =>
             {
                 options.DbOptions.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
+                options.DbOptions.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
 
-                options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionString;
+                options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionInfo;
                 options.BlobStorageOptions.CloudProvider = configuration.GetBlobStorageConfiguration().CloudProvider;
                 options.BlobStorageOptions.Container = configuration.GetBlobStorageConfiguration().ContainerName.IsNullOrEmpty() ? "tokens" : configuration.GetBlobStorageConfiguration().ContainerName;
             });
