@@ -1,17 +1,19 @@
 using FluentAssertions.Execution;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
 using SpecFlowChallenges.Specs.API;
 using SpecFlowChallenges.Specs.Extensions;
 using SpecFlowChallenges.Specs.Models;
-using SpecFlowCucumberResultsExporter.Extensions;
 using TechTalk.SpecFlow.Assist;
+using static SpecFlowChallenges.Specs.Configuration.Settings;
 
 namespace SpecFlowChallenges.Specs.StepDefinitions;
 
 [Binding]
 public class ChallengesApiStepDefinitions
 {
+    private readonly IConfiguration _config;
     private readonly RestClient _client;
     private readonly ChallengesApi _challengeApi;
     private string? _challengeId;
@@ -20,9 +22,12 @@ public class ChallengesApiStepDefinitions
     private readonly RequestConfiguration _requestConfiguration;
     private readonly AuthenticationParameters _authenticationParams;
 
-    public ChallengesApiStepDefinitions()
+    public ChallengesApiStepDefinitions(IConfiguration config)
     {
-        _client = new RestClient("http://localhost:5000");
+        _config = config;
+        var settings = _config.GetSection(nameof(HttpConfiguration)).Get<HttpConfiguration>() ?? new HttpConfiguration();
+
+        _client = new RestClient(settings.BaseUrl);
         _challengeApi = new ChallengesApi(_client);
         _challengeId = string.Empty;
         _challengeResponse = new RestResponse<ChallengeResponse>();
@@ -32,18 +37,12 @@ public class ChallengesApiStepDefinitions
             Parameters = new Dictionary<string, string>
             {
                 { "grant_type", "password" },
-                { "client_id", "test" },
-                { "client_secret", "test" },
+                { "client_id", settings.ClientCredentials.ClientId },
+                { "client_secret", settings.ClientCredentials.ClientSecret },
                 { "username", "USRa" },
                 { "password", "a" }
             }
         };
-    }
-
-    [BeforeTestRun(Order = 0)]
-    public static void BeforeTestRun()
-    {
-        Exporter.ExportToCucumber();
     }
 
     [Given(@"the user is authenticated")]
@@ -75,8 +74,15 @@ public class ChallengesApiStepDefinitions
             var challengeResponse = await _challengeApi.CreateChallengeAsync(new RequestConfiguration());
             challengeResponse.IsSuccessStatusCode.Should().BeTrue();
 
-            _challengeId = challengeResponse.Data?.Result?.Id;
-            _challengeId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
+            if (challengeResponse.Data != null)
+            {
+                _challengeId = challengeResponse.Data?.Result?.Id;
+                _challengeId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
+            }
+            else
+            {
+                challengeResponse.Data.Should().NotBeNull();
+            }
         }
     }
 
@@ -117,8 +123,16 @@ public class ChallengesApiStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        var errorMessage = JsonConvert.DeserializeObject<ErrorResponse>(_challengeResponse.Content);
-        errorMessage?.Error.Code.Should().Be(errorCode);
+        if (_challengeResponse.Content != null)
+        {
+            var errorMessage = JsonConvert.DeserializeObject<ErrorResponse>(_challengeResponse.Content);
+            if (errorMessage != null)
+            {
+                errorMessage.Error.Code.Should().Be(errorCode);
+            }
+            errorMessage.Should().NotBeNull();
+        }
+        _challengeResponse.Content.Should().NotBeNull();
     }
 
     [Then(@"the response contains a Challenge")]
@@ -126,24 +140,32 @@ public class ChallengesApiStepDefinitions
     {
         using (new AssertionScope())
         {
-            AssertStatusCodeIsSuccess();
-
-            AssertResponseContentTypeIsJson();
-
-            AssertResponseBodyCompliesWithSchema();
-
-            AssertExpirationDateIsInFuture();
-
-            // Check if Challenge was created by an authenticated user
-            if (_isAuthenticatedChallenge)
+            if (_challengeResponse.Data != null)
             {
-                AssertCreatedByIsNotNull();
-                AssertCreatedByDeviceIsNotNull();
+                AssertStatusCodeIsSuccess();
+
+                AssertResponseContentTypeIsJson();
+
+                AssertResponseBodyCompliesWithSchema();
+
+                AssertExpirationDateIsInFuture();
+
+                // Check if Challenge was created by an authenticated user
+                if (_isAuthenticatedChallenge)
+                {
+                    AssertCreatedByIsNotNull();
+                    AssertCreatedByDeviceIsNotNull();
+                }
+                else
+                {
+                    AssertCreatedByIsNull();
+                    AssertCreatedByDeviceIsNull();
+                }
             }
             else
             {
-                AssertCreatedByIsNull();
-                AssertCreatedByDeviceIsNull();
+                _challengeResponse.Data.Should().NotBeNull();
+
             }
         }
     }

@@ -19,7 +19,7 @@ public class ChallengesApi
     {
         var request = new RestRequest("/connect/token", Method.Post);
 
-        //RestSharp will use the correct content type by default
+        //RestSharp will use the correct content type by default (https://restsharp.dev/usage.html#http-header)
         //request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
 
         foreach (var parameter in authenticationParams.Parameters)
