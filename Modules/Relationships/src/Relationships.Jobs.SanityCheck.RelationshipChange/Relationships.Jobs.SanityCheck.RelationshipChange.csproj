@@ -5,6 +5,7 @@
         <UserSecretsId>dotnet-Relationships.Jobs.SanityCheck.RelationshipChange-484c19fd-393c-4fb6-9876-3979e9b39448</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerfileContext>..\..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
