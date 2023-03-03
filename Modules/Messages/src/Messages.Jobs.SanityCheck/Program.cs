@@ -48,8 +48,9 @@ public class Program
                 services.AddPersistence(options =>
                 {
                     options.DbOptions.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
+                    options.DbOptions.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
 
-                    options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionString;
+                    options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionInfo;
                     options.BlobStorageOptions.CloudProvider = configuration.GetBlobStorageConfiguration().CloudProvider;
                     options.BlobStorageOptions.Container = configuration.GetBlobStorageConfiguration().ContainerName.IsNullOrEmpty() ? "messages" : configuration.GetBlobStorageConfiguration().ContainerName;
                 });

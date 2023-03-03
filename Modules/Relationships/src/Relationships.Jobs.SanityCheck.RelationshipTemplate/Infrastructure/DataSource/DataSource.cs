@@ -2,30 +2,32 @@
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource
+namespace Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
+
+public class DataSource : IDataSource
 {
-    public class DataSource : IDataSource
+    private readonly IBlobStorage _blobStorage;
+    private readonly IRelationshipsDbContext _dbContext;
+    private readonly BlobOptions _blobOptions;
+    private const string BLOB_PREFIX = "RLT";
+
+    public DataSource(IBlobStorage blobStorage, IRelationshipsDbContext dbContext, IOptions<BlobOptions> blobOptions)
     {
-        private readonly IBlobStorage _blobStorage;
-        private readonly IRelationshipsDbContext _dbContext;
-        private const string BLOB_PREFIX = "RLT";
+        _blobStorage = blobStorage;
+        _dbContext = dbContext;
+        _blobOptions = blobOptions.Value;
+    }
 
-        public DataSource(IBlobStorage blobStorage, IRelationshipsDbContext dbContext)
-        {
-            _blobStorage = blobStorage;
-            _dbContext = dbContext;
-        }
+    public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
+    {
+        var blobIds = await _blobStorage.FindAllAsync(_blobOptions.RootFolder, BLOB_PREFIX);
+        return await blobIds.ToListAsync(cancellationToken);
+    }
 
-        public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
-        {
-            var blobIds = await _blobStorage.FindAllAsync(BLOB_PREFIX);
-            return await blobIds.ToListAsync(cancellationToken);
-        }
-
-        public async Task<IEnumerable<RelationshipTemplateId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
-        {
-            return await _dbContext.SetReadOnly<Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate>().Select(u => u.Id).ToListAsync(cancellationToken);
-        }
+    public async Task<IEnumerable<RelationshipTemplateId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.SetReadOnly<Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate>().Select(u => u.Id).ToListAsync(cancellationToken);
     }
 }
