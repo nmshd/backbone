@@ -5,6 +5,7 @@
         <UserSecretsId>dotnet-Synchronization.Jobs.SanityCheck-553687ad-d9d2-47b9-88c5-a8869b426c22</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerfileContext>..\..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>

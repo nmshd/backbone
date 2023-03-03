@@ -5,6 +5,7 @@
         <UserSecretsId>dotnet-Files.Jobs.SanityCheck-9f22e8e4-eb64-498c-9599-b971e0419647</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerfileContext>..\..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
