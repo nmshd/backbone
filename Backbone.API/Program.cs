@@ -117,12 +117,12 @@ static void Configure(WebApplication app)
         IdentityModelEventSource.ShowPII = true;
     }
 
+    app.UseCors();
+
     app.UseAuthentication().UseAuthorization();
 
     app.MapControllers();
     app.MapHealthChecks("/health");
-
-    app.UseCors();
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
