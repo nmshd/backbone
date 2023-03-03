@@ -17,7 +17,6 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Backbone.API.Controllers;
 
-[Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class AuthorizationController : ApiControllerBase
 {
