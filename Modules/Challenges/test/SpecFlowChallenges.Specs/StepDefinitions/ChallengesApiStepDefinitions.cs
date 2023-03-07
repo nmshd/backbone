@@ -1,4 +1,3 @@
-using FluentAssertions.Execution;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
@@ -16,7 +15,7 @@ public class ChallengesApiStepDefinitions
     private readonly IConfiguration _config;
     private readonly RestClient _client;
     private readonly ChallengesApi _challengeApi;
-    private string? _challengeId;
+    private string _challengeId;
     private bool _isAuthenticatedChallenge;
     private RestResponse<ChallengeResponse> _challengeResponse;
     private readonly RequestConfiguration _requestConfiguration;
@@ -69,21 +68,11 @@ public class ChallengesApiStepDefinitions
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        using (new AssertionScope())
-        {
-            var challengeResponse = await _challengeApi.CreateChallengeAsync(new RequestConfiguration());
-            challengeResponse.IsSuccessStatusCode.Should().BeTrue();
+        var challengeResponse = await _challengeApi.CreateChallengeAsync(new RequestConfiguration());
+        challengeResponse.IsSuccessStatusCode.Should().BeTrue();
 
-            if (challengeResponse.Data != null)
-            {
-                _challengeId = challengeResponse.Data?.Result?.Id;
-                _challengeId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
-            }
-            else
-            {
-                challengeResponse.Data.Should().NotBeNull();
-            }
-        }
+        _challengeId = challengeResponse.Data!.Result.Id;
+        _challengeId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
     }
 
     [When(@"a POST request is sent to the Challenges endpoint with")]
@@ -105,8 +94,8 @@ public class ChallengesApiStepDefinitions
         _challengeResponse = await _challengeApi.CreateChallengeAsync(_requestConfiguration);
     }
 
-    [When(@"a GET request is sent to the Challenges/\{id} endpoint with Id ""([^""]*)""")]
-    public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWithId(string id)
+    [When(@"a GET request is sent to the Challenges/\{id} endpoint with ""([^""]*)""")]
+    public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
     {
         switch (id)
         {
@@ -123,55 +112,42 @@ public class ChallengesApiStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_challengeResponse.Content != null)
-        {
-            var errorMessage = JsonConvert.DeserializeObject<ErrorResponse>(_challengeResponse.Content);
-            if (errorMessage != null)
-            {
-                errorMessage.Error.Code.Should().Be(errorCode);
-            }
-            errorMessage.Should().NotBeNull();
-        }
         _challengeResponse.Content.Should().NotBeNull();
+
+        var error = JsonConvert.DeserializeObject<ErrorResponse>(_challengeResponse.Content!);
+
+        error.Should().NotBeNull();
+        error!.Error.Code.Should().Be(errorCode);
     }
 
     [Then(@"the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        using (new AssertionScope())
+        _challengeResponse.Data.Should().NotBeNull();
+
+        AssertStatusCodeIsSuccess();
+
+        AssertResponseContentTypeIsJson();
+
+        AssertResponseBodyCompliesWithSchema();
+
+        AssertExpirationDateIsInFuture();
+
+        // Check if Challenge was created by an authenticated user
+        if (_isAuthenticatedChallenge)
         {
-            if (_challengeResponse.Data != null)
-            {
-                AssertStatusCodeIsSuccess();
-
-                AssertResponseContentTypeIsJson();
-
-                AssertResponseBodyCompliesWithSchema();
-
-                AssertExpirationDateIsInFuture();
-
-                // Check if Challenge was created by an authenticated user
-                if (_isAuthenticatedChallenge)
-                {
-                    AssertCreatedByIsNotNull();
-                    AssertCreatedByDeviceIsNotNull();
-                }
-                else
-                {
-                    AssertCreatedByIsNull();
-                    AssertCreatedByDeviceIsNull();
-                }
-            }
-            else
-            {
-                _challengeResponse.Data.Should().NotBeNull();
-
-            }
+            AssertCreatedByIsNotNull();
+            AssertCreatedByDeviceIsNotNull();
+        }
+        else
+        {
+            AssertCreatedByIsNull();
+            AssertCreatedByDeviceIsNull();
         }
     }
 
     [Then(@"the response status code is (.*)")]
-    public void ThenTheResponseStatusCodeIsBe(int statusCode)
+    public void ThenTheResponseStatusCodeIs(int statusCode)
     {
         ((int)_challengeResponse.StatusCode).Should().Be(statusCode);
     }
