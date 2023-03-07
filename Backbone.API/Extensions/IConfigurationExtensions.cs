@@ -30,12 +30,6 @@ internal static class IConfigurationExtensions
                new AzureAppConfigurationConfiguration();
     }
 
-    public static SqlDatabaseConfiguration GetSqlDatabaseConfiguration(this IConfiguration configuration)
-    {
-        return configuration.GetSection("SqlDatabase").Get<SqlDatabaseConfiguration>() ??
-               new SqlDatabaseConfiguration();
-    }
-
     public static CorsConfiguration GetCorsConfiguration(this IConfiguration configuration)
     {
         return new CorsConfiguration(configuration);
@@ -44,27 +38,22 @@ internal static class IConfigurationExtensions
 
 public class AuthenticationConfiguration
 {
-    public string Authority { get; set; }
-    public string ValidIssuer { get; set; }
-    public string JwtSigningCertificate { get; set; }
+    public string Authority { get; set; } = string.Empty;
+    public string ValidIssuer { get; set; } = string.Empty;
+    public string JwtSigningCertificate { get; set; } = string.Empty;
 }
 
 public class KeyVaultConfiguration
 {
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
+    public string ClientId { get; set; } = string.Empty;
+    public string ClientSecret { get; set; } = string.Empty;
 }
 
 public class AzureAppConfigurationConfiguration
 {
     public bool Enabled => !string.IsNullOrEmpty(ConnectionString + Endpoint);
-    public string ConnectionString { get; set; }
-    public string Endpoint { get; set; }
-}
-
-public class SqlDatabaseConfiguration
-{
-    public string ConnectionString { get; set; }
+    public string ConnectionString { get; set; } = string.Empty;
+    public string Endpoint { get; set; } = string.Empty;
 }
 
 public class CorsConfiguration
