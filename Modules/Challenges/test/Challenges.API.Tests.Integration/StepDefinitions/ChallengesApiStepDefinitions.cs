@@ -1,13 +1,13 @@
+using Challenges.API.Tests.Integration.API;
+using Challenges.API.Tests.Integration.Extensions;
+using Challenges.API.Tests.Integration.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
-using SpecFlowChallenges.Specs.API;
-using SpecFlowChallenges.Specs.Extensions;
-using SpecFlowChallenges.Specs.Models;
 using TechTalk.SpecFlow.Assist;
-using static SpecFlowChallenges.Specs.Configuration.Settings;
+using static Challenges.API.Tests.Integration.Configuration.Settings;
 
-namespace SpecFlowChallenges.Specs.StepDefinitions;
+namespace Challenges.API.Tests.Integration.StepDefinitions;
 
 [Binding]
 public class ChallengesApiStepDefinitions

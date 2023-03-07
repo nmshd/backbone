@@ -1,8 +1,8 @@
 ﻿using System.Net;
+using Challenges.API.Tests.Integration.Models;
 using RestSharp;
-using SpecFlowChallenges.Specs.Models;
 
-namespace SpecFlowChallenges.Specs.API;
+namespace Challenges.API.Tests.Integration.API;
 public class ChallengesApi
 {
     private readonly RestClient _client;

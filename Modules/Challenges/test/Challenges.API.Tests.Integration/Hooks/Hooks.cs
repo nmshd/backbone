@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using SpecFlowCucumberResultsExporter.Extensions;
 
-namespace SpecFlowChallenges.Specs.Hooks;
+namespace Challenges.API.Tests.Integration.Hooks;
 [Binding]
 public sealed class Hooks
 {

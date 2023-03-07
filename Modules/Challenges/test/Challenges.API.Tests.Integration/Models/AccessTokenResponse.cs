@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SpecFlowChallenges.Specs.Models;
+namespace Challenges.API.Tests.Integration.Models;
 public class AccessTokenResponse
 {
     [JsonPropertyName("access_token")]

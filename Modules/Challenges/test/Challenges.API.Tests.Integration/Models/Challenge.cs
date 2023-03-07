@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SpecFlowChallenges.Specs.Models;
-public class ChallengeResult
+namespace Challenges.API.Tests.Integration.Models;
+public class Challenge
 {
     [Required]
     public string Id { get; set; }

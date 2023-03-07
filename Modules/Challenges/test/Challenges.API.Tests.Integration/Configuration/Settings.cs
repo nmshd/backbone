@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SpecFlowChallenges.Specs.Configuration;
+namespace Challenges.API.Tests.Integration.Configuration;
 internal class Settings
 {
     public HttpConfiguration Request { get; set; } = new();

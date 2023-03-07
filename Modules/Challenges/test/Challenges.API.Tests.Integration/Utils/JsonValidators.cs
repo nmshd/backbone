@@ -3,7 +3,7 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
 
-namespace SpecFlowChallenges.Specs.Extensions;
+namespace Challenges.API.Tests.Integration.Extensions;
 public class JsonValidators
 {
     public static bool ValidateJsonSchema<T>(string json, out IList<string> errors)

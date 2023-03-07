@@ -1,4 +1,4 @@
-﻿namespace SpecFlowChallenges.Specs.Models;
+﻿namespace Challenges.API.Tests.Integration.Models;
 public class RequestConfiguration
 {
     public AccessTokenResponse? TokenResponse { get; set; }
