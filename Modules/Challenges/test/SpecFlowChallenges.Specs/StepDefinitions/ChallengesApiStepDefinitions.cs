@@ -25,7 +25,7 @@ public class ChallengesApiStepDefinitions
     public ChallengesApiStepDefinitions(IConfiguration config)
     {
         _config = config;
-        var settings = _config.GetSection(nameof(HttpConfiguration)).Get<HttpConfiguration>() ?? new HttpConfiguration();
+        var settings = _config.GetSection("Http").Get<HttpConfiguration>() ?? new HttpConfiguration();
 
         _client = new RestClient(settings.BaseUrl);
         _challengeApi = new ChallengesApi(_client);
