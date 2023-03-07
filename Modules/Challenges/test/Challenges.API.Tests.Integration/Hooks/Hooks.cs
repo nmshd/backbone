@@ -1,6 +1,9 @@
 ﻿using BoDi;
+using Challenges.API.Tests.Integration.API;
 using Microsoft.Extensions.Configuration;
+using RestSharp;
 using SpecFlowCucumberResultsExporter.Extensions;
+using static Challenges.API.Tests.Integration.Configuration.Settings;
 
 namespace Challenges.API.Tests.Integration.Hooks;
 [Binding]
@@ -17,7 +20,13 @@ public sealed class Hooks
             .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), optional: true, reloadOnChange: true)
             .Build();
 
+        var settings = config.GetSection("Http").Get<HttpConfiguration>() ?? new HttpConfiguration();
+
+        var restClient = new RestClient(settings.BaseUrl);
+        var challengesApi = new ChallengesApi(restClient);
+
         objectContainer.RegisterInstanceAs(config);
+        objectContainer.RegisterInstanceAs(challengesApi);
 
         // Export test results to cucumber format
         Exporter.ExportToCucumber();

@@ -13,7 +13,6 @@ namespace Challenges.API.Tests.Integration.StepDefinitions;
 public class ChallengesApiStepDefinitions
 {
     private readonly IConfiguration _config;
-    private readonly RestClient _client;
     private readonly ChallengesApi _challengeApi;
     private string _challengeId;
     private bool _isAuthenticatedChallenge;
@@ -21,13 +20,11 @@ public class ChallengesApiStepDefinitions
     private readonly RequestConfiguration _requestConfiguration;
     private readonly AuthenticationParameters _authenticationParams;
 
-    public ChallengesApiStepDefinitions(IConfiguration config)
+    public ChallengesApiStepDefinitions(IConfiguration config, ChallengesApi challengeApi)
     {
         _config = config;
         var settings = _config.GetSection("Http").Get<HttpConfiguration>() ?? new HttpConfiguration();
-
-        _client = new RestClient(settings.BaseUrl);
-        _challengeApi = new ChallengesApi(_client);
+        _challengeApi = challengeApi;
         _challengeId = string.Empty;
         _challengeResponse = new RestResponse<ChallengeResponse>();
         _requestConfiguration = new RequestConfiguration();
