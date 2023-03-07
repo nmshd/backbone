@@ -109,7 +109,7 @@ public static class IServiceCollectionExtensions
 
             var moduleName = moduleProperty.Name;
             var module = configuration.Modules.GetType().GetProperty(moduleName).GetValue(configuration.Modules, null);
-            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider");
+            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
             var connectionString = GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString") as string;
 
             switch (provider)
@@ -137,9 +137,9 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static object GetPropertyValue(object source, string propertyName)
+    public static object GetPropertyValue(object source, string propertyPath)
     {
-        foreach (var property in propertyName.Split('.').Select(s => source.GetType().GetProperty(s)))
+        foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
             source = property.GetValue(source, null);
 
         return source;
