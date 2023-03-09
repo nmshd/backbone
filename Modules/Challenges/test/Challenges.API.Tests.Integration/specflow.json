@@ -1,0 +1,7 @@
+{
+  "stepAssemblies": [
+    {
+      "assembly": "SpecFlowCucumberResultsExporter"
+    }
+  ]
+}
