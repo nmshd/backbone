@@ -102,16 +102,47 @@ public static class IServiceCollectionExtensions
             });
         });
 
-        services
-            .AddHealthChecks()
-            // TODO: M use separate Connection String
-            .AddSqlServer(configuration.Modules.Challenges.Infrastructure.SqlDatabase.ConnectionString);
+        var modules = configuration.Modules.GetType().GetProperties();
+        foreach (var moduleProperty in modules)
+        {
+            if (moduleProperty is null) continue;
+
+            var moduleName = moduleProperty.Name;
+            var module = configuration.Modules.GetType().GetProperty(moduleName).GetValue(configuration.Modules, null);
+            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
+            var connectionString = GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString") as string;
+
+            switch (provider)
+            {
+                case "SqlServer":
+                    services.AddHealthChecks().AddSqlServer(
+                        connectionString,
+                        name: moduleName
+                        );
+                    break;
+                case "Postgres":
+                    services.AddHealthChecks().AddNpgSql(
+                        npgsqlConnectionString: connectionString,
+                        name: moduleName);
+                    break;
+                default:
+                    throw new Exception($"Unsupported database provider: {provider}");
+            }
+        }
 
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
         return services;
+    }
+
+    public static object GetPropertyValue(object source, string propertyPath)
+    {
+        foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
+            source = property.GetValue(source, null);
+
+        return source;
     }
 
     public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)

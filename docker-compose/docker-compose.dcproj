@@ -4,14 +4,13 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>24644042-c274-4a5f-8f40-463adc3e7b34</ProjectGuid>
-	  <DockerTargetOS>Linux</DockerTargetOS>
-	  <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <ProjectVersion>2.1</ProjectVersion>
   </PropertyGroup>
-	<ItemGroup>
-		<None Include=".dockerignore" />
-		<None Include="docker-compose.yml" />
-	</ItemGroup>
-	<PropertyGroup>
-		<DockerComposeBuildArguments>--parallel</DockerComposeBuildArguments>
-	</PropertyGroup>
+  <ItemGroup>
+    <None Include="docker-compose.yml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DockerComposeBuildArguments>--parallel</DockerComposeBuildArguments>
+  </PropertyGroup>
 </Project>

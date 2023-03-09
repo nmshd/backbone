@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Relationships.Jobs.SanityCheck.RelationshipTemplate.Extensions;
 
@@ -7,7 +8,7 @@ internal static class IConfigurationExtensions
 {
     public static BlobStorageConfiguration GetBlobStorageConfiguration(this IConfiguration configuration)
     {
-        return new BlobStorageConfiguration(configuration);
+        return configuration.GetSection("BlobStorage").Get<BlobStorageConfiguration>() ?? new BlobStorageConfiguration();
     }
 
     public static SqlDatabaseConfiguration GetSqlDatabaseConfiguration(this IConfiguration configuration)
@@ -18,19 +19,26 @@ internal static class IConfigurationExtensions
 
 public class SqlDatabaseConfiguration
 {
-    public string ConnectionString { get; set; }
+    [Required]
+    [MinLength(1)]
+    [RegularExpression("SqlServer|Postgres")]
+    public string Provider { get; set; } = string.Empty;
+
+    [Required]
+    [MinLength(1)]
+    public string ConnectionString { get; set; } = string.Empty;
 }
 
 public class BlobStorageConfiguration
 {
-    private readonly IConfigurationSection _blobStorageConfiguration;
+    [Required]
+    [MinLength(1)]
+    [RegularExpression("Azure|GoogleCloud")]
+    public string CloudProvider { get; set; } = string.Empty;
 
-    public BlobStorageConfiguration(IConfiguration configuration)
-    {
-        _blobStorageConfiguration = configuration.GetSection("BlobStorage");
-    }
+    [Required]
+    [MinLength(1)]
+    public string ConnectionInfo { get; set; } = string.Empty;
 
-    public string ConnectionString => _blobStorageConfiguration["ConnectionString"] ?? "";
-    public string CloudProvider => _blobStorageConfiguration["CloudProvider"] ?? "Azure";
-    public string ContainerName => _blobStorageConfiguration["ContainerName"] ?? "";
+    public string ContainerName { get; set; } = string.Empty;
 }
