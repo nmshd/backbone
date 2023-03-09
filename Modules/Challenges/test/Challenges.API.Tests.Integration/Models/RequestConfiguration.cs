@@ -1,8 +1,9 @@
 ﻿namespace Challenges.API.Tests.Integration.Models;
 public class RequestConfiguration
 {
-    public AccessTokenResponse? TokenResponse { get; set; }
-    public string ContentType { get; set; }
-    public string AcceptHeader { get; set; }
-    public string Body { get; set; }
+    public AuthenticationParameters AuthenticationParameters { get; set; } = new AuthenticationParameters();
+    public bool IsAuthenticated { get; set; } = false;
+    public string ContentType { get; set; } = string.Empty;
+    public string AcceptHeader { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
 }

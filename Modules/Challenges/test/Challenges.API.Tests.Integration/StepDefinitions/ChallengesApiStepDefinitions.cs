@@ -2,7 +2,6 @@ using Challenges.API.Tests.Integration.API;
 using Challenges.API.Tests.Integration.Extensions;
 using Challenges.API.Tests.Integration.Models;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using RestSharp;
 using TechTalk.SpecFlow.Assist;
 using static Challenges.API.Tests.Integration.Configuration.Settings;
@@ -15,10 +14,8 @@ public class ChallengesApiStepDefinitions
     private readonly IConfiguration _config;
     private readonly ChallengesApi _challengeApi;
     private string _challengeId;
-    private bool _isAuthenticatedChallenge;
-    private RestResponse<ChallengeResponse> _challengeResponse;
+    private HttpResponse<ChallengeResponse> _challengeResponse;
     private readonly RequestConfiguration _requestConfiguration;
-    private readonly AuthenticationParameters _authenticationParams;
 
     public ChallengesApiStepDefinitions(IConfiguration config, ChallengesApi challengeApi)
     {
@@ -26,34 +23,30 @@ public class ChallengesApiStepDefinitions
         var settings = _config.GetSection("Http").Get<HttpConfiguration>() ?? new HttpConfiguration();
         _challengeApi = challengeApi;
         _challengeId = string.Empty;
-        _challengeResponse = new RestResponse<ChallengeResponse>();
-        _requestConfiguration = new RequestConfiguration();
-        _authenticationParams = new AuthenticationParameters
+        _challengeResponse = new HttpResponse<ChallengeResponse>();
+        _requestConfiguration = new RequestConfiguration
         {
-            Parameters = new Dictionary<string, string>
+            AuthenticationParameters = new AuthenticationParameters
             {
-                { "grant_type", "password" },
-                { "client_id", settings.ClientCredentials.ClientId },
-                { "client_secret", settings.ClientCredentials.ClientSecret },
-                { "username", "USRa" },
-                { "password", "a" }
+                GrantType = "password",
+                ClientId = settings.ClientCredentials.ClientId,
+                ClientSecret = settings.ClientCredentials.ClientSecret,
+                UserName = "USRa",
+                Password = "a"
             }
         };
     }
 
     [Given(@"the user is authenticated")]
-    public async Task GivenTheUserIsAuthenticated()
+    public void GivenTheUserIsAuthenticated()
     {
-        var accessTokenResponse = await _challengeApi.GetAccessTokenAsync(_authenticationParams);
-        _requestConfiguration.TokenResponse = accessTokenResponse.Data;
-
-        accessTokenResponse.IsSuccessStatusCode.Should().BeTrue();
+        _requestConfiguration.IsAuthenticated = true;
     }
 
     [Given(@"the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
-        _requestConfiguration.TokenResponse = null;
+        _requestConfiguration.IsAuthenticated = false;
     }
 
     [Given(@"the Accept header is '([^']*)'")]
@@ -65,30 +58,24 @@ public class ChallengesApiStepDefinitions
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = await _challengeApi.CreateChallengeAsync(new RequestConfiguration());
+        var challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
         challengeResponse.IsSuccessStatusCode.Should().BeTrue();
 
-        _challengeId = challengeResponse.Data!.Result.Id;
+        _challengeId = challengeResponse.Data!.Result!.Id;
         _challengeId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
     }
 
     [When(@"a POST request is sent to the Challenges endpoint with")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
     {
-        // Check if the request was made by an authenticated user
-        _isAuthenticatedChallenge = !string.IsNullOrEmpty(_requestConfiguration.TokenResponse?.AccessToken);
-
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
-        _challengeResponse = await _challengeApi.CreateChallengeAsync(requestConfiguration);
+        _challengeResponse = await _challengeApi.CreateChallenge(requestConfiguration);
     }
 
     [When(@"a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        // Check if the request was made by an authenticated user
-        _isAuthenticatedChallenge = !string.IsNullOrEmpty(_requestConfiguration.TokenResponse?.AccessToken);
-
-        _challengeResponse = await _challengeApi.CreateChallengeAsync(_requestConfiguration);
+        _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Challenges/\{id} endpoint with ""([^""]*)""")]
@@ -103,24 +90,21 @@ public class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _challengeResponse = await _challengeApi.GetChallengeByIdAsync(_requestConfiguration, id);
+        _challengeResponse = await _challengeApi.GetChallengeById(_requestConfiguration, id);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _challengeResponse.Content.Should().NotBeNull();
+        _challengeResponse.Data!.Error.Should().NotBeNull();
 
-        var error = JsonConvert.DeserializeObject<ErrorResponse>(_challengeResponse.Content!);
-
-        error.Should().NotBeNull();
-        error!.Error.Code.Should().Be(errorCode);
+        _challengeResponse.Data!.Error!.Code.Should().Be(errorCode);
     }
 
     [Then(@"the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        _challengeResponse.Data.Should().NotBeNull();
+        _challengeResponse.Should().NotBeNull();
 
         AssertStatusCodeIsSuccess();
 
@@ -130,8 +114,7 @@ public class ChallengesApiStepDefinitions
 
         AssertExpirationDateIsInFuture();
 
-        // Check if Challenge was created by an authenticated user
-        if (_isAuthenticatedChallenge)
+        if (_requestConfiguration.IsAuthenticated)
         {
             AssertCreatedByIsNotNull();
             AssertCreatedByDeviceIsNotNull();
@@ -167,26 +150,26 @@ public class ChallengesApiStepDefinitions
 
     private void AssertExpirationDateIsInFuture()
     {
-        _challengeResponse.Data!.Result.ExpiresAt.Should().BeAfter(DateTime.Now);
+        _challengeResponse.Data!.Result!.ExpiresAt.Should().BeAfter(DateTime.Now);
     }
 
     private void AssertCreatedByIsNotNull()
     {
-        _challengeResponse.Data!.Result.CreatedBy.Should().NotBeNull();
+        _challengeResponse.Data!.Result!.CreatedBy.Should().NotBeNull();
     }
 
     private void AssertCreatedByDeviceIsNotNull()
     {
-        _challengeResponse.Data!.Result.CreatedByDevice.Should().NotBeNull();
+        _challengeResponse.Data!.Result!.CreatedByDevice.Should().NotBeNull();
     }
 
     private void AssertCreatedByIsNull()
     {
-        _challengeResponse.Data!.Result.CreatedBy.Should().BeNull();
+        _challengeResponse.Data!.Result!.CreatedBy.Should().BeNull();
     }
 
     private void AssertCreatedByDeviceIsNull()
     {
-        _challengeResponse.Data!.Result.CreatedByDevice.Should().BeNull();
+        _challengeResponse.Data!.Result!.CreatedByDevice.Should().BeNull();
     }
 }
