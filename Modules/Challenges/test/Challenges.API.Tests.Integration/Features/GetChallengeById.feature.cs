@@ -235,7 +235,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("the Accept header is \'application/xml\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 33
- testRunner.When("a GET request is sent to the Challenges/{id} endpoint with \"a valid Id\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("a GET request is sent to the Challenges/{id} endpoint with a valid Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 34
  testRunner.Then("the response status code is 406", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

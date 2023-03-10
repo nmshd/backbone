@@ -1,8 +1,7 @@
 using Challenges.API.Tests.Integration.API;
 using Challenges.API.Tests.Integration.Extensions;
 using Challenges.API.Tests.Integration.Models;
-using Microsoft.Extensions.Configuration;
-using RestSharp;
+using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
 using static Challenges.API.Tests.Integration.Configuration.Settings;
 
@@ -11,16 +10,13 @@ namespace Challenges.API.Tests.Integration.StepDefinitions;
 [Binding]
 public class ChallengesApiStepDefinitions
 {
-    private readonly IConfiguration _config;
     private readonly ChallengesApi _challengeApi;
     private string _challengeId;
     private HttpResponse<ChallengeResponse> _challengeResponse;
     private readonly RequestConfiguration _requestConfiguration;
 
-    public ChallengesApiStepDefinitions(IConfiguration config, ChallengesApi challengeApi)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi)
     {
-        _config = config;
-        var settings = _config.GetSection("Http").Get<HttpConfiguration>() ?? new HttpConfiguration();
         _challengeApi = challengeApi;
         _challengeId = string.Empty;
         _challengeResponse = new HttpResponse<ChallengeResponse>();
@@ -29,8 +25,8 @@ public class ChallengesApiStepDefinitions
             AuthenticationParameters = new AuthenticationParameters
             {
                 GrantType = "password",
-                ClientId = settings.ClientCredentials.ClientId,
-                ClientSecret = settings.ClientCredentials.ClientSecret,
+                ClientId = httpConfiguration.Value.ClientCredentials.ClientId,
+                ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
                 UserName = "USRa",
                 Password = "a"
             }
@@ -78,7 +74,7 @@ public class ChallengesApiStepDefinitions
         _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
     }
 
-    [When(@"a GET request is sent to the Challenges/\{id} endpoint with ""([^""]*)""")]
+    [When(@"a GET request is sent to the Challenges/\{id} endpoint with ""?([^""]*)""?")]
     public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
     {
         switch (id)

@@ -30,5 +30,5 @@ Scenario: Requesting a Challenge with an invalid id as an authenticated user
 Scenario: Requesting a Challenge with an unsupported Accept Header as an authenticated user
 	Given the user is authenticated
 	And the Accept header is 'application/xml'
-	When a GET request is sent to the Challenges/{id} endpoint with "a valid Id"
+	When a GET request is sent to the Challenges/{id} endpoint with a valid Id
 	Then the response status code is 406

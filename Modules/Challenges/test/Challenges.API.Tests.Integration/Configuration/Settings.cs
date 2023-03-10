@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Challenges.API.Tests.Integration.Configuration;
-internal class Settings
+public static class Settings
 {
-    public HttpConfiguration Request { get; set; } = new();
-
     public class HttpConfiguration
     {
         [Required]
