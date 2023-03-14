@@ -26,8 +26,6 @@ public class MessagesConfiguration
             [RegularExpression("Azure|GoogleCloud")]
             public string CloudProvider { get; set; } = string.Empty;
 
-            [Required]
-            [MinLength(1)]
             public string ConnectionInfo { get; set; } = string.Empty;
 
             public string ContainerName { get; set; } = string.Empty;
