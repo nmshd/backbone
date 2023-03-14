@@ -58,7 +58,7 @@ export function getConfiguration(): Configuration {
   };
 }
 
-function assertEnvVarExists(parameter: string) {
+function assertEnvVarExists(parameter: string): void {
   if (!__ENV[parameter]) {
     exec.test.abort(`Parameter '${parameter}' cannot be null or empty`);
   }
