@@ -20,10 +20,7 @@ public static class Dependencies
             .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), optional: true, reloadOnChange: true)
             .Build();
 
-        services.Configure<HttpConfiguration>(options =>
-        {
-            config.GetSection("Http").Bind(options);
-        });
+        services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
         var serviceProvider = services.BuildServiceProvider();
         var httpConfig = serviceProvider.GetRequiredService<IOptions<HttpConfiguration>>().Value;

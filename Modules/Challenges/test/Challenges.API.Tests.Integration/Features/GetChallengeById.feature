@@ -34,10 +34,9 @@ Scenario Outline: Requesting a Challenge with an invalid id as an authenticated 
 	And the response content includes an error with the error code "error.platform.invalidId"
 
 Examples:
-	| id                          |
-	| a123                        |
-	| CHLthishastoomanycharacters |
-	| CHLnotenoughchars           |
-	| !CHLdfhuwnjdfnjnjfnd        |
-	| PHLfdjfdjflndjkfndjk        |
-	| CHL_frfssd_fdfdsed#_        |
+	| id                          | description                 |
+	| CHLthishastoomanycharacters | More than 20 characters     |
+	| CHLnotenoughchars           | Less than 20 characters     |
+	| !CHLdfhuwnjdfnjnjfnd        | Contains invalid characters |
+	| PHLfdjfdjflndjkfndjk        | Does not have CHL prefix    |
+	| CHL_frfssd_fdfdsed#_        | Contains invalid characters |

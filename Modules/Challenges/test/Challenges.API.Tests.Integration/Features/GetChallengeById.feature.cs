@@ -212,17 +212,17 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Requesting a Challenge with an invalid id as an authenticated user")]
-        [NUnit.Framework.TestCaseAttribute("a123", null)]
-        [NUnit.Framework.TestCaseAttribute("CHLthishastoomanycharacters", null)]
-        [NUnit.Framework.TestCaseAttribute("CHLnotenoughchars", null)]
-        [NUnit.Framework.TestCaseAttribute("!CHLdfhuwnjdfnjnjfnd", null)]
-        [NUnit.Framework.TestCaseAttribute("PHLfdjfdjflndjkfndjk", null)]
-        [NUnit.Framework.TestCaseAttribute("CHL_frfssd_fdfdsed#_", null)]
-        public void RequestingAChallengeWithAnInvalidIdAsAnAuthenticatedUser(string id, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("CHLthishastoomanycharacters", "More than 20 characters", null)]
+        [NUnit.Framework.TestCaseAttribute("CHLnotenoughchars", "Less than 20 characters", null)]
+        [NUnit.Framework.TestCaseAttribute("!CHLdfhuwnjdfnjnjfnd", "Contains invalid characters", null)]
+        [NUnit.Framework.TestCaseAttribute("PHLfdjfdjflndjkfndjk", "Does not have CHL prefix", null)]
+        [NUnit.Framework.TestCaseAttribute("CHL_frfssd_fdfdsed#_", "Contains invalid characters", null)]
+        public void RequestingAChallengeWithAnInvalidIdAsAnAuthenticatedUser(string id, string description, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("id", id);
+            argumentsOfScenario.Add("description", description);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requesting a Challenge with an invalid id as an authenticated user", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 30
 this.ScenarioInitialize(scenarioInfo);
