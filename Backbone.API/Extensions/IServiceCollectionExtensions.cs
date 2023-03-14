@@ -191,11 +191,9 @@ public static class IServiceCollectionExtensions
                 options.AllowPasswordFlow();
                 options.SetAccessTokenLifetime(TimeSpan.FromSeconds(configuration.JwtLifetimeInSeconds));
 
-                options
-                    .AddDevelopmentEncryptionCertificate() // for some reason this is necessary even though we don't encrypt the tokens
-                    .AddDevelopmentSigningCertificate();
-
                 options.DisableAccessTokenEncryption();
+
+                options.AddDevelopmentEncryptionCertificate(); // for some reason this is necessary even though we don't encrypt the tokens
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough()
