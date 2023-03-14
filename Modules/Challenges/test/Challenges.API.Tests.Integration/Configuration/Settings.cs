@@ -7,6 +7,7 @@ public static class Settings
     {
         [Required]
         public string BaseUrl { get; set; } = "";
+        [Required]
         public ClientCredentialsConfiguration ClientCredentials { get; set; } = new();
     }
 

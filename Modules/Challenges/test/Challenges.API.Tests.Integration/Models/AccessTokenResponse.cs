@@ -11,7 +11,7 @@ public class AccessTokenResponse
         AccessToken = accessToken;
         TokenType = tokenType;
         ExpiresIn = expiresIn;
-        Expires = DateTime.UtcNow.AddSeconds(expiresIn);
+        ExpiresAt = DateTime.UtcNow.AddSeconds(expiresIn);
     }
 
     [JsonPropertyName("access_token")]
@@ -20,6 +20,6 @@ public class AccessTokenResponse
     public string TokenType { get; set; }
     [JsonPropertyName("expires_in")]
     public int ExpiresIn { get; set; }
-    public DateTime Expires { get; }
-    public bool Expired => (Expires - DateTime.UtcNow).TotalSeconds <= 0;
+    public DateTime ExpiresAt { get; }
+    public bool IsExpired => (ExpiresAt - DateTime.UtcNow).TotalSeconds <= 15;
 }

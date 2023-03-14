@@ -8,25 +8,26 @@ Scenario: Creating a Challenge as an anonymous user
 	When a POST request is sent to the Challenges endpoint
 	Then the response status code is 201
 	And the response contains a Challenge
+	And the Challenge does not contain information about the creator
 
 Scenario: Creating a Challenge as an authenticated user
 	Given the user is authenticated
 	When a POST request is sent to the Challenges endpoint
 	Then the response status code is 201
 	And the response contains a Challenge
+	And the Challenge contains information about the creator
 
 Scenario: Creating a Challenge with a JSON sent in the request content
 	When a POST request is sent to the Challenges endpoint with
 		| Key  | Value                              |
 		| Body | {"this": "is some arbitrary json"} |
-	Then the response status code is 201
-	And the response contains a Challenge
+	Then the response status code is 415
 
 Scenario: Creating a Challenge with an invalid JSON sent in the request content
 	When a POST request is sent to the Challenges endpoint with
 		| Key  | Value                             |
 		| Body | { "thisJSON": "has an extra }" }} |
-	Then the response status code is 400
+	Then the response status code is 415
 
 Scenario: Creating a Challenge with an unsupported Content-Type header
 	When a POST request is sent to the Challenges endpoint with

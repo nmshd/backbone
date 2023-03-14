@@ -176,12 +176,14 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Requesting a Challenge with an invalid id as an authenticated user")]
-        public void RequestingAChallengeWithAnInvalidIdAsAnAuthenticatedUser()
+        [NUnit.Framework.DescriptionAttribute("Requesting a Challenge with an unsupported Accept Header as an authenticated user" +
+            "")]
+        public void RequestingAChallengeWithAnUnsupportedAcceptHeaderAsAnAuthenticatedUser()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requesting a Challenge with an invalid id as an authenticated user", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requesting a Challenge with an unsupported Accept Header as an authenticated user" +
+                    "", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 24
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -196,28 +198,32 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("the user is authenticated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 26
- testRunner.When("a GET request is sent to the Challenges/{id} endpoint with \"a123\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("the Accept header is \'application/xml\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 27
- testRunner.Then("the response status code is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("a GET request is sent to the Challenges/{id} endpoint with a valid Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 28
- testRunner.And("the response content includes an error with the error code \"error.platform.invali" +
-                        "dId\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("the response status code is 406", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Requesting a Challenge with an unsupported Accept Header as an authenticated user" +
-            "")]
-        public void RequestingAChallengeWithAnUnsupportedAcceptHeaderAsAnAuthenticatedUser()
+        [NUnit.Framework.DescriptionAttribute("Requesting a Challenge with an invalid id as an authenticated user")]
+        [NUnit.Framework.TestCaseAttribute("a123", null)]
+        [NUnit.Framework.TestCaseAttribute("CHLthishastoomanycharacters", null)]
+        [NUnit.Framework.TestCaseAttribute("CHLnotenoughchars", null)]
+        [NUnit.Framework.TestCaseAttribute("!CHLdfhuwnjdfnjnjfnd", null)]
+        [NUnit.Framework.TestCaseAttribute("PHLfdjfdjflndjkfndjk", null)]
+        [NUnit.Framework.TestCaseAttribute("CHL_frfssd_fdfdsed#_", null)]
+        public void RequestingAChallengeWithAnInvalidIdAsAnAuthenticatedUser(string id, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requesting a Challenge with an unsupported Accept Header as an authenticated user" +
-                    "", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            argumentsOfScenario.Add("id", id);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requesting a Challenge with an invalid id as an authenticated user", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 30
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -232,13 +238,14 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("the user is authenticated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 32
- testRunner.And("the Accept header is \'application/xml\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When(string.Format("a GET request is sent to the Challenges/{{id}} endpoint with {0}", id), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 33
- testRunner.When("a GET request is sent to the Challenges/{id} endpoint with a valid Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Then("the response status code is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 34
- testRunner.Then("the response status code is 406", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("the response content includes an error with the error code \"error.platform.invali" +
+                        "dId\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

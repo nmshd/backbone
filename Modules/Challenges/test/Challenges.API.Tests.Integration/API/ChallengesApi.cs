@@ -64,7 +64,7 @@ public class ChallengesApi
 
     public async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
-        if (_accessTokenResponse is { Expired: false })
+        if (_accessTokenResponse is { IsExpired: false })
         {
             return _accessTokenResponse;
         }

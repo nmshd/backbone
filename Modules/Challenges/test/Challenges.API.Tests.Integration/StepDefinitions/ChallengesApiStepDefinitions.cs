@@ -74,7 +74,7 @@ public class ChallengesApiStepDefinitions
         _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
     }
 
-    [When(@"a GET request is sent to the Challenges/\{id} endpoint with ""?([^""]*)""?")]
+    [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
     public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
     {
         switch (id)
@@ -109,18 +109,24 @@ public class ChallengesApiStepDefinitions
         AssertResponseBodyCompliesWithSchema();
 
         AssertExpirationDateIsInFuture();
-
-        if (_requestConfiguration.IsAuthenticated)
-        {
-            AssertCreatedByIsNotNull();
-            AssertCreatedByDeviceIsNotNull();
-        }
-        else
-        {
-            AssertCreatedByIsNull();
-            AssertCreatedByDeviceIsNull();
-        }
     }
+
+    [Then(@"the Challenge does not contain information about the creator")]
+    public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
+    {
+        _challengeResponse.Data!.Result!.CreatedBy.Should().BeNull();
+
+        _challengeResponse.Data!.Result!.CreatedByDevice.Should().BeNull();
+    }
+
+    [Then(@"the Challenge contains information about the creator")]
+    public void ThenTheChallengeContainsInformationAboutTheCreator()
+    {
+        _challengeResponse.Data!.Result!.CreatedBy.Should().NotBeNull();
+
+        _challengeResponse.Data!.Result!.CreatedByDevice.Should().NotBeNull();
+    }
+
 
     [Then(@"the response status code is (.*)")]
     public void ThenTheResponseStatusCodeIs(int statusCode)
@@ -147,25 +153,5 @@ public class ChallengesApiStepDefinitions
     private void AssertExpirationDateIsInFuture()
     {
         _challengeResponse.Data!.Result!.ExpiresAt.Should().BeAfter(DateTime.Now);
-    }
-
-    private void AssertCreatedByIsNotNull()
-    {
-        _challengeResponse.Data!.Result!.CreatedBy.Should().NotBeNull();
-    }
-
-    private void AssertCreatedByDeviceIsNotNull()
-    {
-        _challengeResponse.Data!.Result!.CreatedByDevice.Should().NotBeNull();
-    }
-
-    private void AssertCreatedByIsNull()
-    {
-        _challengeResponse.Data!.Result!.CreatedBy.Should().BeNull();
-    }
-
-    private void AssertCreatedByDeviceIsNull()
-    {
-        _challengeResponse.Data!.Result!.CreatedByDevice.Should().BeNull();
     }
 }
