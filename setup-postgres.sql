@@ -1,3 +1,4 @@
+
 /********************************************** Database Configuration **********************************************/
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++ Schemas +++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -20,9 +21,19 @@ CREATE SCHEMA IF NOT EXISTS "Relationships";
 CREATE SCHEMA IF NOT EXISTS "Synchronization";
 CREATE SCHEMA IF NOT EXISTS "Tokens";
 
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 /* DROP USER challenges, devices, messages, files, relationships, synchronization, tokens */ 
  
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'nmshdAdmin') THEN
+      CREATE USER "nmshdAdmin" WITH password 'Passw0rd';
+      RAISE NOTICE 'User "nmshdAdmin" created';
+   END IF;
+END
+$$;
 
 DO
 $$
@@ -102,16 +113,6 @@ ALTER USER relationships SET search_path TO "Relationships";
 ALTER USER synchronization SET search_path TO "Synchronization";
 ALTER USER tokens SET search_path TO "Tokens";
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-ALTER SCHEMA "Challenges" OWNER TO challenges;
-ALTER SCHEMA "Devices" OWNER TO devices;
-ALTER SCHEMA "Messages" OWNER TO messages;
-ALTER SCHEMA "Synchronization" OWNER TO synchronization;
-ALTER SCHEMA "Tokens" OWNER TO tokens;
-ALTER SCHEMA "Relationships" OWNER TO relationships;
-ALTER SCHEMA "Files" OWNER TO files;
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files;
@@ -127,7 +128,6 @@ REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices
 
 GRANT USAGE ON SCHEMA "Relationships" TO messages;
 GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationships" TO messages;
-GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
 
 GRANT USAGE ON SCHEMA "Challenges" TO devices;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
@@ -187,3 +187,22 @@ CREATE TABLE IF NOT EXISTS "Tokens"."__EFMigrationsHistory"
     CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
 );
 ALTER TABLE IF EXISTS "Tokens"."__EFMigrationsHistory" OWNER to tokens;
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+GRANT challenges TO "nmshdAdmin";;
+GRANT devices TO "nmshdAdmin";
+GRANT messages TO "nmshdAdmin";
+GRANT synchronization TO "nmshdAdmin";
+GRANT tokens TO "nmshdAdmin";
+GRANT relationships TO "nmshdAdmin";
+GRANT files TO "nmshdAdmin";
+
+ALTER SCHEMA "Challenges" OWNER TO challenges;
+ALTER SCHEMA "Devices" OWNER TO devices;
+ALTER SCHEMA "Messages" OWNER TO messages;
+ALTER SCHEMA "Synchronization" OWNER TO synchronization;
+ALTER SCHEMA "Tokens" OWNER TO tokens;
+ALTER SCHEMA "Relationships" OWNER TO relationships;
+ALTER SCHEMA "Files" OWNER TO files;
+
