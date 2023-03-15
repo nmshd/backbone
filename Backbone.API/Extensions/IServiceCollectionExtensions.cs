@@ -172,6 +172,8 @@ public static class IServiceCollectionExtensions
             .AddSignInManager<CustomSigninManager>()
             .AddUserStore<CustomUserStore>();
 
+        services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
+
         return services;
     }
 
