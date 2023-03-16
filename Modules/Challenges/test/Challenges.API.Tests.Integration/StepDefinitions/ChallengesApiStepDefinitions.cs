@@ -27,7 +27,7 @@ public class ChallengesApiStepDefinitions
                 GrantType = "password",
                 ClientId = httpConfiguration.Value.ClientCredentials.ClientId,
                 ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
-                UserName = "USRa",
+                Username = "USRa",
                 Password = "a"
             }
         };
@@ -36,13 +36,13 @@ public class ChallengesApiStepDefinitions
     [Given(@"the user is authenticated")]
     public void GivenTheUserIsAuthenticated()
     {
-        _requestConfiguration.IsAuthenticated = true;
+        _requestConfiguration.Authenticate = true;
     }
 
     [Given(@"the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
-        _requestConfiguration.IsAuthenticated = false;
+        _requestConfiguration.Authenticate = false;
     }
 
     [Given(@"the Accept header is '([^']*)'")]
@@ -89,7 +89,7 @@ public class ChallengesApiStepDefinitions
         _challengeResponse = await _challengeApi.GetChallengeById(_requestConfiguration, id);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]*)""")]
+    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         _challengeResponse.Data!.Error.Should().NotBeNull();
@@ -106,7 +106,7 @@ public class ChallengesApiStepDefinitions
 
         AssertResponseContentTypeIsJson();
 
-        AssertResponseBodyCompliesWithSchema();
+        AssertResponseContentCompliesWithSchema();
 
         AssertExpirationDateIsInFuture();
     }
@@ -128,10 +128,11 @@ public class ChallengesApiStepDefinitions
     }
 
 
-    [Then(@"the response status code is (.*)")]
-    public void ThenTheResponseStatusCodeIs(int statusCode)
+    [Then(@"the response status code is (\d+) \((.+)\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode, string expectedStatusCodeMeaning)
     {
-        ((int)_challengeResponse.StatusCode).Should().Be(statusCode);
+        var actualStatusCode = (int)_challengeResponse.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode, $"because {expectedStatusCodeMeaning}");
     }
 
     private void AssertStatusCodeIsSuccess()
@@ -144,10 +145,10 @@ public class ChallengesApiStepDefinitions
         _challengeResponse.ContentType.Should().Be("application/json");
     }
 
-    private void AssertResponseBodyCompliesWithSchema()
+    private void AssertResponseContentCompliesWithSchema()
     {
         JsonValidators.ValidateJsonSchema<ChallengeResponse>(_challengeResponse.Content!, out var errors)
-            .Should().BeTrue($"Response body does not comply with the Challenge schema: {string.Join(", ", errors)}");
+            .Should().BeTrue($"Response content does not comply with the Challenge schema: {string.Join(", ", errors)}");
     }
 
     private void AssertExpirationDateIsInFuture()

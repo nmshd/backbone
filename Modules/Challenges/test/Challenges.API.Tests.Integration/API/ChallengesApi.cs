@@ -33,8 +33,8 @@ public class ChallengesApi
     {
         var request = new RestRequest(endpoint, method);
 
-        if (!string.IsNullOrEmpty(requestConfiguration.Body))
-            request.AddBody(requestConfiguration.Body);
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.AddBody(requestConfiguration.Content);
 
         if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
             request.AddHeader("Content-Type", requestConfiguration.ContentType);
@@ -42,7 +42,7 @@ public class ChallengesApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        if (requestConfiguration.IsAuthenticated)
+        if (requestConfiguration.Authenticate)
         {
             var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
             request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
@@ -72,7 +72,7 @@ public class ChallengesApi
         var request = new RestRequest("/connect/token", Method.Post);
 
         request.AddParameter("grant_type", authenticationParams.GrantType);
-        request.AddParameter("username", authenticationParams.UserName);
+        request.AddParameter("username", authenticationParams.Username);
         request.AddParameter("password", authenticationParams.Password);
         request.AddParameter("client_id", authenticationParams.ClientId);
         request.AddParameter("client_secret", authenticationParams.ClientSecret);

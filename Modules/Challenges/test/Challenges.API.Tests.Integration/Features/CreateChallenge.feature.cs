@@ -99,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("a POST request is sent to the Challenges endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
- testRunner.Then("the response status code is 201", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 201 (Created)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 10
  testRunner.And("the response contains a Challenge", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -135,7 +135,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("a POST request is sent to the Challenges endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.Then("the response status code is 201", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 201 (Created)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 17
  testRunner.And("the response contains a Challenge", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -168,13 +168,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Key",
                             "Value"});
                 table1.AddRow(new string[] {
-                            "Body",
+                            "Content",
                             "{\"this\": \"is some arbitrary json\"}"});
 #line 21
  testRunner.When("a POST request is sent to the Challenges endpoint with", ((string)(null)), table1, "When ");
 #line hidden
 #line 24
- testRunner.Then("the response status code is 415", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 415 (Unsupported Media Type)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -201,13 +201,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Key",
                             "Value"});
                 table2.AddRow(new string[] {
-                            "Body",
+                            "Content",
                             "{ \"thisJSON\": \"has an extra }\" }}"});
 #line 27
  testRunner.When("a POST request is sent to the Challenges endpoint with", ((string)(null)), table2, "When ");
 #line hidden
 #line 30
- testRunner.Then("the response status code is 415", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 415 (Unsupported Media Type)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -237,13 +237,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "ContentType",
                             "application/xml"});
                 table3.AddRow(new string[] {
-                            "Body",
+                            "Content",
                             "<this>is some arbitrary xml</this>"});
 #line 33
  testRunner.When("a POST request is sent to the Challenges endpoint with", ((string)(null)), table3, "When ");
 #line hidden
 #line 37
- testRunner.Then("the response status code is 415", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 415 (Unsupported Media Type)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

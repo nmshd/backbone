@@ -16,8 +16,8 @@ public static class Dependencies
     {
         var services = new ServiceCollection();
 
-        IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), optional: true, reloadOnChange: true)
+        var config = new ConfigurationBuilder()
+            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), optional: false, reloadOnChange: false)
             .Build();
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));

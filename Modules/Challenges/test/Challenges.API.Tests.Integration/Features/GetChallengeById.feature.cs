@@ -99,10 +99,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("a Challenge c", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 9
- testRunner.When("a GET request is sent to the Challenges/{id} endpoint with \"c.Id\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("a GET request is sent to the Challenges/{id} endpoint with c.Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 10
- testRunner.Then("the response status code is 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 200 (OK)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 11
  testRunner.And("the response contains a Challenge", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -135,10 +135,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("a Challenge c", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
- testRunner.When("a GET request is sent to the Challenges/{id} endpoint with \"c.Id\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("a GET request is sent to the Challenges/{id} endpoint with c.Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 17
- testRunner.Then("the response status code is 401", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 401 (Unauthorized)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -169,7 +169,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 22
- testRunner.Then("the response status code is 404", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 404 (Not Found)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -204,7 +204,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("a GET request is sent to the Challenges/{id} endpoint with a valid Id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 28
- testRunner.Then("the response status code is 406", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 406 (Not Acceptable)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -215,8 +215,8 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("CHLthishastoomanycharacters", "More than 20 characters", null)]
         [NUnit.Framework.TestCaseAttribute("CHLnotenoughchars", "Less than 20 characters", null)]
         [NUnit.Framework.TestCaseAttribute("!CHLdfhuwnjdfnjnjfnd", "Contains invalid characters", null)]
-        [NUnit.Framework.TestCaseAttribute("PHLfdjfdjflndjkfndjk", "Does not have CHL prefix", null)]
         [NUnit.Framework.TestCaseAttribute("CHL_frfssd_fdfdsed#_", "Contains invalid characters", null)]
+        [NUnit.Framework.TestCaseAttribute("PHLfdjfdjflndjkfndjk", "Does not have CHL prefix", null)]
         public void RequestingAChallengeWithAnInvalidIdAsAnAuthenticatedUser(string id, string description, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -241,7 +241,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("a GET request is sent to the Challenges/{{id}} endpoint with {0}", id), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 33
- testRunner.Then("the response status code is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the response status code is 400 (Bad Request)", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 34
  testRunner.And("the response content includes an error with the error code \"error.platform.invali" +
