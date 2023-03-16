@@ -1,3 +1,4 @@
+using AutoMapper;
 using Challenges.API.Tests.Integration.API;
 using Challenges.API.Tests.Integration.Extensions;
 using Challenges.API.Tests.Integration.Models;
@@ -14,9 +15,11 @@ public class ChallengesApiStepDefinitions
     private string _challengeId;
     private HttpResponse<ChallengeResponse> _challengeResponse;
     private readonly RequestConfiguration _requestConfiguration;
+    private readonly IMapper _mapper;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IMapper mapper, ChallengesApi challengeApi)
     {
+        _mapper = mapper;
         _challengeApi = challengeApi;
         _challengeId = string.Empty;
         _challengeResponse = new HttpResponse<ChallengeResponse>();
@@ -65,7 +68,9 @@ public class ChallengesApiStepDefinitions
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
     {
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
-        _challengeResponse = await _challengeApi.CreateChallenge(requestConfiguration);
+        var mergedRequestConfiguration = _mapper.Map(_requestConfiguration, requestConfiguration);
+
+        _challengeResponse = await _challengeApi.CreateChallenge(mergedRequestConfiguration);
     }
 
     [When(@"a POST request is sent to the Challenges endpoint")]

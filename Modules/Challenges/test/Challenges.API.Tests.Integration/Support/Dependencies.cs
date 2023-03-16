@@ -1,4 +1,5 @@
 ﻿using Challenges.API.Tests.Integration.API;
+using Challenges.API.Tests.Integration.AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -21,6 +22,7 @@ public static class Dependencies
             .Build();
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
+        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
         var httpConfig = serviceProvider.GetRequiredService<IOptions<HttpConfiguration>>().Value;
