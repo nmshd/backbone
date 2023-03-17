@@ -9,6 +9,7 @@ public class RequestConfiguration
 
     public void SupplementWith(RequestConfiguration other)
     {
+        Authenticate = other.Authenticate;
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;
         Content ??= other.Content;

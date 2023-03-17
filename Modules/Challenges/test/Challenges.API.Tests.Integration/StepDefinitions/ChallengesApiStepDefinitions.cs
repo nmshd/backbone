@@ -130,11 +130,11 @@ public class ChallengesApiStepDefinitions
     }
 
 
-    [Then(@"the response status code is (\d+) \((.+)\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode, string expectedStatusCodeMeaning)
+    [Then(@"the response status code is (\d+) \(.+\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         var actualStatusCode = (int)_challengeResponse.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode, $"because {expectedStatusCodeMeaning}");
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     private void AssertStatusCodeIsSuccess()
