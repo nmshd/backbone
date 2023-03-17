@@ -1,4 +1,3 @@
-using AutoMapper;
 using Challenges.API.Tests.Integration.API;
 using Challenges.API.Tests.Integration.Extensions;
 using Challenges.API.Tests.Integration.Models;
@@ -15,16 +14,16 @@ public class ChallengesApiStepDefinitions
     private string _challengeId;
     private HttpResponse<ChallengeResponse> _challengeResponse;
     private readonly RequestConfiguration _requestConfiguration;
-    private readonly IMapper _mapper;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IMapper mapper, ChallengesApi challengeApi)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi)
     {
-        _mapper = mapper;
         _challengeApi = challengeApi;
         _challengeId = string.Empty;
         _challengeResponse = new HttpResponse<ChallengeResponse>();
         _requestConfiguration = new RequestConfiguration
         {
+            AcceptHeader = "application/json",
+            Content = "Hello",
             AuthenticationParameters = new AuthenticationParameters
             {
                 GrantType = "password",
@@ -68,9 +67,9 @@ public class ChallengesApiStepDefinitions
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
     {
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
-        var mergedRequestConfiguration = _mapper.Map(_requestConfiguration, requestConfiguration);
+        requestConfiguration.SupplementWith(_requestConfiguration);
 
-        _challengeResponse = await _challengeApi.CreateChallenge(mergedRequestConfiguration);
+        _challengeResponse = await _challengeApi.CreateChallenge(requestConfiguration);
     }
 
     [When(@"a POST request is sent to the Challenges endpoint")]

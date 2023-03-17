@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-
-namespace Challenges.API.Tests.Integration.Models;
-public class RequestConfiguration : IHaveCustomMapping
+﻿namespace Challenges.API.Tests.Integration.Models;
+public class RequestConfiguration
 {
     public AuthenticationParameters AuthenticationParameters { get; set; } = new AuthenticationParameters();
     public bool Authenticate { get; set; } = false;
@@ -10,12 +7,10 @@ public class RequestConfiguration : IHaveCustomMapping
     public string AcceptHeader { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
 
-    public void CreateMappings(Profile configuration)
+    public void SupplementWith(RequestConfiguration other)
     {
-        configuration
-            .CreateMap<RequestConfiguration, RequestConfiguration>()
-            .ForMember(dest => dest.ContentType, opt => opt.Condition((src, dest) => string.IsNullOrEmpty(dest.ContentType)))
-            .ForMember(dest => dest.AcceptHeader, opt => opt.Condition((src, dest) => string.IsNullOrEmpty(dest.AcceptHeader)))
-            .ForMember(dest => dest.Content, opt => opt.Condition((src, dest) => string.IsNullOrEmpty(dest.Content)));
+        AcceptHeader = string.IsNullOrEmpty(AcceptHeader) ? other.AcceptHeader : AcceptHeader;
+        ContentType = string.IsNullOrEmpty(ContentType) ? other.ContentType : ContentType;
+        Content = string.IsNullOrEmpty(Content) ? other.Content : Content;
     }
 }
