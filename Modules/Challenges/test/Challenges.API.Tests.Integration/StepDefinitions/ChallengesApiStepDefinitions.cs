@@ -22,8 +22,6 @@ public class ChallengesApiStepDefinitions
         _challengeResponse = new HttpResponse<ChallengeResponse>();
         _requestConfiguration = new RequestConfiguration
         {
-            AcceptHeader = "application/json",
-            Content = "Hello",
             AuthenticationParameters = new AuthenticationParameters
             {
                 GrantType = "password",
