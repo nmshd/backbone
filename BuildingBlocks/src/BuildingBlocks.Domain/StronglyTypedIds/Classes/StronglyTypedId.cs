@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.StronglyTypedIds;
+﻿namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
 public class StronglyTypedIdHelpers
 {

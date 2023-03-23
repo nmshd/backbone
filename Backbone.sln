@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Domain", "Module
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevelopmentKit.Identity", "BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj", "{6275041A-FF15-44C4-8386-4D42A234C890}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds", "BuildingBlocks\src\StronglyTypedIds\StronglyTypedIds.csproj", "{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure", "BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{F157A154-8E45-443C-8021-29BE9D32325F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4B0D1F2-8AD5-481D-96EE-AC2EE7B85A51}"
@@ -187,9 +185,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Database.Postgres", "Modules\Devices\src\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj", "{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.Postgres", "Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj", "{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Infrastructure.Database.Postgres", "Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj", "{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.SqlServer", "Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj", "{82493577-AB78-4338-BE4D-851EEAF8E1A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Infrastructure.Database.SqlServer", "Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj", "{82493577-AB78-4338-BE4D-851EEAF8E1A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Application.Tests", "Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj", "{40F14114-44B0-4EE0-A653-6C8205F6F28C}"
 EndProject
@@ -222,6 +220,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Jobs.SanityCheck.Tests", "Modules\Relationships\test\Relationships.Jobs.SanityCheck.Tests\Relationships.Jobs.SanityCheck.Tests.csproj", "{26CB93EC-6F31-48DB-A61A-5FE67E2ABF73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.API.Tests.Integration", "Modules\Challenges\test\Challenges.API.Tests.Integration\Challenges.API.Tests.Integration.csproj", "{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Domain", "BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{360430CE-6850-4A67-88ED-E9508B7D2658}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -261,10 +261,6 @@ Global
 		{6275041A-FF15-44C4-8386-4D42A234C890}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6275041A-FF15-44C4-8386-4D42A234C890}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6275041A-FF15-44C4-8386-4D42A234C890}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F157A154-8E45-443C-8021-29BE9D32325F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F157A154-8E45-443C-8021-29BE9D32325F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F157A154-8E45-443C-8021-29BE9D32325F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -557,6 +553,10 @@ Global
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360430CE-6850-4A67-88ED-E9508B7D2658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360430CE-6850-4A67-88ED-E9508B7D2658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360430CE-6850-4A67-88ED-E9508B7D2658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360430CE-6850-4A67-88ED-E9508B7D2658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -573,7 +573,6 @@ Global
 		{37800063-6675-46B2-8C84-B2F35728C5CE} = {C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA}
 		{8A21954E-99F6-484A-B7C4-32AC71108285} = {C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA}
 		{6275041A-FF15-44C4-8386-4D42A234C890} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
-		{D1DD9D36-1CF4-40A1-A68D-D8E3F25447F5} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{F157A154-8E45-443C-8021-29BE9D32325F} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{557BD815-AC5A-4880-9455-F0CE4F493EAD} = {0EAF57B8-E97C-469E-A74B-596D78C978B2}
 		{1C0A846B-DD6A-426F-99C0-9479FA9B1AD4} = {3D324161-C287-4DC0-A9FD-FA3B1A6643FD}
@@ -663,6 +662,7 @@ Global
 		{8FDCC45E-8569-431D-AA28-1B8E241EB804} = {C790AF37-65C9-4E9C-A7E1-B57560411EF2}
 		{26CB93EC-6F31-48DB-A61A-5FE67E2ABF73} = {9ED99444-B4ED-43AA-852B-BBC6E4D04C23}
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB} = {EFC1F89E-1C44-4385-A0F6-1F2124260561}
+		{360430CE-6850-4A67-88ED-E9508B7D2658} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
