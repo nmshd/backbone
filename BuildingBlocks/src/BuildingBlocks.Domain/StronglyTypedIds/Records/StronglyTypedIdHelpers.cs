@@ -24,7 +24,7 @@ public class StronglyTypedIdHelpers
 
         var lengthIsValid = stringValue.Length <= _maxLength;
         if (!lengthIsValid)
-            return GenericDomainErrors.InvalidIdLenght($"Id has a length of {stringValue.Length} while the max is {_maxLength}");
+            return GenericDomainErrors.InvalidIdLength($"Id has a length of {stringValue.Length} while the max is {_maxLength}");
 
         var hasOnlyValidChars = stringValue.ContainsOnly(_validChars);
         if (!hasOnlyValidChars)
