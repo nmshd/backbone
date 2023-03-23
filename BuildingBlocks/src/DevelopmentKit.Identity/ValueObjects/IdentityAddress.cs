@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using Enmeshed.StronglyTypedIds;
+using Enmeshed.BuildingBlocks.Domain;
 using SimpleBase;
 
 namespace Enmeshed.DevelopmentKit.Identity.ValueObjects;

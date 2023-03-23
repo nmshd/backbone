@@ -12,7 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\StronglyTypedIds\StronglyTypedIds.csproj" />
+	  <ProjectReference Include="..\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
