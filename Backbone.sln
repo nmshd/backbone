@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
@@ -187,9 +186,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Database.Postgres", "Modules\Devices\src\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj", "{58706D00-9A53-4CC4-8201-46C3CEDCE8F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.Postgres", "Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj", "{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Infrastructure.Database.Postgres", "Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj", "{7E7E9EFA-5E7A-4DA0-AD16-CFCD60BCC809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.Infrastructure.Database.SqlServer", "Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj", "{82493577-AB78-4338-BE4D-851EEAF8E1A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Infrastructure.Database.SqlServer", "Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj", "{82493577-AB78-4338-BE4D-851EEAF8E1A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Application.Tests", "Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj", "{40F14114-44B0-4EE0-A653-6C8205F6F28C}"
 EndProject
@@ -223,7 +222,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Jobs.SanityCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.API.Tests.Integration", "Modules\Challenges\test\Challenges.API.Tests.Integration\Challenges.API.Tests.Integration.csproj", "{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.API.Tests.Integration", "Modules\Devices\test\Devices.API.Tests.Integration\Devices.API.Tests.Integration.csproj", "{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.API.Tests.Integration", "Modules\Devices\test\Devices.API.Tests.Integration\Devices.API.Tests.Integration.csproj", "{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -559,6 +558,10 @@ Global
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -665,6 +668,7 @@ Global
 		{8FDCC45E-8569-431D-AA28-1B8E241EB804} = {C790AF37-65C9-4E9C-A7E1-B57560411EF2}
 		{26CB93EC-6F31-48DB-A61A-5FE67E2ABF73} = {9ED99444-B4ED-43AA-852B-BBC6E4D04C23}
 		{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB} = {EFC1F89E-1C44-4385-A0F6-1F2124260561}
+		{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA} = {F31B1655-A11B-4F30-9BC7-7418B8B915D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
