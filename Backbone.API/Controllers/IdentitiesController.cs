@@ -1,7 +1,9 @@
 ﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,6 +54,14 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(command);
 
         return Created("", response);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(List<IdentityDTO>), StatusCodes.Status200OK)]
+    public async Task<List<IdentityDTO>> GetIdentitiesAsync()
+    {
+        return (await _mediator.Send(new ListIdentitiesQuery())).Identities;
     }
 }
 
