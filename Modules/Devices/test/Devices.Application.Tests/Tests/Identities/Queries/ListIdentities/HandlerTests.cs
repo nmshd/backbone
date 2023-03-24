@@ -49,7 +49,14 @@ public class HandlerTests
         // Arrange
         List<Identity> identitiesList = new()
         {
-            new("ClientId_str", "Address_str", Array.Empty<byte>(), 1)
+            new(TestDataGenerator.CreateRandomDeviceId(),
+            TestDataGenerator.CreateRandomIdentityAddress(),
+            TestDataGenerator.CreateRandomBytes(),
+            1),
+            new(TestDataGenerator.CreateRandomDeviceId(),
+            TestDataGenerator.CreateRandomIdentityAddress(),
+            TestDataGenerator.CreateRandomBytes(),
+            1)
         };
 
         _arrangeContext.SaveEntities(identitiesList.ToArray());
@@ -58,7 +65,7 @@ public class HandlerTests
         var result = await _handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
-        result.Identities.Should().HaveCount(1);
+        result.Identities.Should().HaveCount(2);
     }
 
     [Fact]
