@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
@@ -222,6 +222,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Jobs.SanityCheck.Tests", "Modules\Relationships\test\Relationships.Jobs.SanityCheck.Tests\Relationships.Jobs.SanityCheck.Tests.csproj", "{26CB93EC-6F31-48DB-A61A-5FE67E2ABF73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.API.Tests.Integration", "Modules\Challenges\test\Challenges.API.Tests.Integration\Challenges.API.Tests.Integration.csproj", "{0AB2A1A3-05B2-4F00-8C7D-1F728781C6BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.API.Tests.Integration", "Modules\Devices\test\Devices.API.Tests.Integration\Devices.API.Tests.Integration.csproj", "{816BE0C4-9E0D-4D82-B54A-12D0DBDF41CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
