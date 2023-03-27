@@ -9,6 +9,6 @@ public class Tier
     }
 
 
-    public TierId Id { get; private set; }
-    public TierName Name { get; private set; }
+    public TierId Id { get; }
+    public TierName Name { get; }
 }
