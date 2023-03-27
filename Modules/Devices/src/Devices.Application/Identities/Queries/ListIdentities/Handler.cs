@@ -1,32 +1,30 @@
-﻿using Backbone.Modules.Devices.Application.DTOs;
+﻿using AutoMapper;
+using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Domain.Entities;
-using MediatR;
-using Microsoft.Extensions.Logging;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesResponse>
+public class Handler : RequestHandlerBase<ListIdentitiesQuery, ListIdentitiesResponse>
 {
-    private readonly IDevicesDbContext _dbContext;
-#nullable enable
-    private readonly ILogger<Handler>? _logger;
-#nullable disable
-    public Handler(IDevicesDbContext dbContext,
-        ILogger<Handler> logger
-        )
+    public Handler(IDevicesDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper)
+    {}
+
+    public override async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
-    public Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
-    {
-        _logger?.LogTrace("Getting all Identities");
         var identities = _dbContext.Set<Identity>().ToList();
-        var identitiesDTOList = identities.Select(el =>
+        var query = _dbContext
+            .Set<Identity>();
+
+        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
+
+
+        var identitiesDTOList = dbPaginationResult.ItemsOnPage.Select(el =>
         {
             return new IdentityDTO(el.Address, el.ClientId, el.PublicKey, el.IdentityVersion, el.CreatedAt);
         }).ToList();
 
-        return Task.FromResult(new ListIdentitiesResponse(identitiesDTOList));
-     }
+        return new ListIdentitiesResponse(identitiesDTOList, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+    }
 }
