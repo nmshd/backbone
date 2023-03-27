@@ -4,7 +4,7 @@ public class Tier
 {
     public Tier(TierName name)
     {
-        Id = TierId.Generate().Value;
+        Id = TierId.Generate();
         Name = name;
     }
 

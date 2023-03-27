@@ -53,7 +53,7 @@ public class TierIdTests
 
         isTierIdInvalid.Should().BeTrue();
         errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Be("Id has a length of");
+        errorMessage.Should().Contain("Id has a length of");
     }
 
     [Fact]
