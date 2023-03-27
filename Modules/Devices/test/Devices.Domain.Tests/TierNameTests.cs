@@ -8,13 +8,14 @@ public class TierNameTests
     [Fact]
     public void Can_create_tier_name_with_valid_value()
     {
-        var validLength = 30;
-        var validTierName = TestDataGenerator.GenerateString(validLength);
-        var tierName = TierName.Create(validTierName);
+        var tierNameOne = TierName.Create("a-tier-name");
+        var isTierNameOneValid = tierNameOne.IsSuccess;
 
-        var isTierNameValid = tierName.IsSuccess;
+        var tierNameTwo = TierName.Create("a tier name");
+        var isTierNameTwoValid = tierNameTwo.IsSuccess;
 
-        isTierNameValid.Should().BeTrue();
+        isTierNameOneValid.Should().BeTrue();
+        isTierNameTwoValid.Should().BeTrue();
     }
 
     [Fact]
