@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 
-public class TierIdValueConverter : ValueConverter<TierId, string>
+public class TierIdEntityFrameworkValueConverter : ValueConverter<TierId, string>
 {
-    public TierIdValueConverter() : this(null)
+    public TierIdEntityFrameworkValueConverter() : this(null)
     {
     }
 
-    public TierIdValueConverter(ConverterMappingHints? mappingHints)
+    public TierIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id.Value,
             value => TierId.Create(value).Value,
