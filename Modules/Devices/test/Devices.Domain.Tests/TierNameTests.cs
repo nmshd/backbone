@@ -5,17 +5,15 @@ using Xunit;
 namespace Devices.Domain.Tests;
 public class TierNameTests
 {
-    [Fact]
-    public void Can_create_tier_name_with_valid_value()
+    [Theory]
+    [InlineData("a-tier-name")]
+    [InlineData("a tier name")]
+    public void Can_create_tier_name_with_valid_value(string value)
     {
-        var tierNameOne = TierName.Create("a-tier-name");
-        var isTierNameOneValid = tierNameOne.IsSuccess;
+        var tierName = TierName.Create(value);
+        var isTierNameValid = tierName.IsSuccess;
 
-        var tierNameTwo = TierName.Create("a tier name");
-        var isTierNameTwoValid = tierNameTwo.IsSuccess;
-
-        isTierNameOneValid.Should().BeTrue();
-        isTierNameTwoValid.Should().BeTrue();
+        isTierNameValid.Should().BeTrue();
     }
 
     [Fact]
