@@ -22,6 +22,26 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("character(200)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tier", (string)null);
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -94,7 +114,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Challenges", "Challenges");
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
