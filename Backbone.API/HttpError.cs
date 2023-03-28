@@ -1,4 +1,4 @@
-﻿using Enmeshed.StronglyTypedIds;
+﻿using Enmeshed.BuildingBlocks.Domain;
 
 namespace Backbone.API;
 

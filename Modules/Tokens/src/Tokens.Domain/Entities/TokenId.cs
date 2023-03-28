@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
-using Enmeshed.StronglyTypedIds;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
