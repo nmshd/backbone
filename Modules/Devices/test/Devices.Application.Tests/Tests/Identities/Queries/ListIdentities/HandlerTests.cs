@@ -37,7 +37,7 @@ public class HandlerTests
         // Arrange
         List<Identity> identitiesList = new();
         _arrangeContext.SaveEntities(identitiesList.ToArray());
-        var request = new PaginationFilter();
+        var request = new PaginationFilter() { PageSize = 5 };
 
         // Act
         var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
