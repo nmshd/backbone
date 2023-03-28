@@ -15,7 +15,7 @@ public partial class TierInit : Migration
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                Name = table.Column<string>(type: "char(200)", unicode: false, fixedLength: true, maxLength: 200, nullable: false)
+                Name = table.Column<string>(type: "char(30)", unicode: false, fixedLength: true, maxLength: 30, nullable: false)
             },
             constraints: table =>
             {

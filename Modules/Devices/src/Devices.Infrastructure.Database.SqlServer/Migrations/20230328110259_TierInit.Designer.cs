@@ -35,9 +35,9 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
+                        .HasMaxLength(30)
                         .IsUnicode(false)
-                        .HasColumnType("char(200)")
+                        .HasColumnType("char(30)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
