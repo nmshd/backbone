@@ -11,6 +11,6 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
         builder.ToTable("Tier");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Name).HasMaxLength(200);
+        builder.Property(x => x.Name).HasMaxLength(TierName.MAX_LENGTH);
     }
 }

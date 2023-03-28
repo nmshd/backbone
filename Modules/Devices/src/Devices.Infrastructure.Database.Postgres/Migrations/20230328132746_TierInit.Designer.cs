@@ -35,9 +35,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
+                        .HasMaxLength(30)
                         .IsUnicode(false)
-                        .HasColumnType("character(200)")
+                        .HasColumnType("character(30)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
