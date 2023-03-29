@@ -1,14 +1,11 @@
 ﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
 using OpenIddict.Validation.AspNetCore;
@@ -20,14 +17,12 @@ namespace Backbone.API.Controllers;
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _applicationManager;
-    private readonly ApplicationOptions _options;
+
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager,
-        IOptions<ApplicationOptions> options) : base(mediator)
+        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
         _applicationManager = applicationManager;
-        _options = options.Value;
     }
 
     [HttpPost]
