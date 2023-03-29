@@ -47,7 +47,6 @@ services:
     depends_on:
       - ms-sql-server
       - rabbitmq
-      - backbone
     volumes:
       - ../:/app
 
