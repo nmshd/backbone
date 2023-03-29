@@ -6,6 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 public record TierName
 {
     public string Value { get; }
+    public const int MAX_LENGTH = 30;
 
     private TierName(string value)
     {
@@ -22,8 +23,8 @@ public record TierName
 
     public static DomainError? Validate(string value)
     {
-        if (value.Length > 30)
-            return DomainErrors.InvalidTierName("Tier Name is longer than the 30 characters");
+        if (value.Length > MAX_LENGTH)
+            return DomainErrors.InvalidTierName($"Tier Name is longer than the {MAX_LENGTH} characters");
 
         return null;
     }
