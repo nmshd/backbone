@@ -46,6 +46,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services
        .AddCustomAspNetCore(parsedConfiguration)
        .AddCustomOpenIddict(parsedConfiguration.Authentication)
+       .AddCustomIdentity(environment)
        .AddSwaggerWithCustomUi(parsedConfiguration.SwaggerUi);
 
 
