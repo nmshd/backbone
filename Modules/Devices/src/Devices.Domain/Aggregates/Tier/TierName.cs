@@ -28,4 +28,9 @@ public record TierName
 
         return null;
     }
+
+    public static implicit operator string(TierName name)
+    {
+        return name.Value;
+    }
 }
