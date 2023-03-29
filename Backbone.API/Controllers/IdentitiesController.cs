@@ -2,9 +2,7 @@
 using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
@@ -59,20 +57,6 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(command);
 
         return Created("", response);
-    }
-
-    [HttpGet]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(List<IdentityDTO>), StatusCodes.Status200OK)]
-    public async Task<List<IdentityDTO>> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter)
-    {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var query = await _mediator.Send(new ListIdentitiesQuery(paginationFilter));
-        return query.Identities;
     }
 }
 
