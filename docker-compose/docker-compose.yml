@@ -32,6 +32,25 @@ services:
     volumes:
       - ../:/app
 
+  admin:
+    image: nmshd-admin
+    container_name: admin
+    hostname: adminAPI
+    build:
+      context: ..
+      dockerfile: Admin.API/Dockerfile.debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "5010:80"
+    depends_on:
+      - ms-sql-server
+      - rabbitmq
+      - backbone
+    volumes:
+      - ../:/app
+
   ### infrastructure ###
 
   #azure-storage-emulator:

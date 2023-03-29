@@ -225,6 +225,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Domain", "Bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.API.Tests.Integration", "Modules\Devices\test\Devices.API.Tests.Integration\Devices.API.Tests.Integration.csproj", "{A6CB8130-EE2A-4E27-84EC-ADEAF1F0D262}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.API", "Admin.API\Admin.API.csproj", "{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -563,6 +565,10 @@ Global
 		{A6CB8130-EE2A-4E27-84EC-ADEAF1F0D262}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6CB8130-EE2A-4E27-84EC-ADEAF1F0D262}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6CB8130-EE2A-4E27-84EC-ADEAF1F0D262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
