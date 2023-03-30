@@ -7,6 +7,7 @@ public record TierName
 {
     public string Value { get; }
     public const int MAX_LENGTH = 30;
+    public const int MINIMUM_LENGTH = 3;
 
     private TierName(string value)
     {
@@ -23,8 +24,8 @@ public record TierName
 
     public static DomainError? Validate(string value)
     {
-        if (value.Length > MAX_LENGTH)
-            return DomainErrors.InvalidTierName($"Tier Name is longer than the {MAX_LENGTH} characters");
+        if (value.Length > MAX_LENGTH && value.Length < MINIMUM_LENGTH)
+            return DomainErrors.InvalidTierName($"Tier Name length must be between {MINIMUM_LENGTH} and {MAX_LENGTH}");
 
         return null;
     }
