@@ -9,7 +9,6 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     [Binding]
     public class GetIdentityListStepDefinitions
     {
-
         private readonly RequestConfiguration _requestConfiguration;
         private readonly IdentitiesApi _identitiesApi;
         private HttpResponse<List<IdentityDTO>>? _identitiesResponse;
