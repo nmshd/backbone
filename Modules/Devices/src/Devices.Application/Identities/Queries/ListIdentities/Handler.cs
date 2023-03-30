@@ -2,16 +2,20 @@
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
+using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-public class Handler : RequestHandlerBase<ListIdentitiesQuery, ListIdentitiesResponse>
+public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesResponse>
 {
-    public Handler(IDevicesDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper)
-    {}
+    private readonly IDevicesDbContext _dbContext;
 
-    public override async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
+    public Handler(IDevicesDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
         var identities = _dbContext.Set<Identity>().ToList();
         var query = _dbContext
