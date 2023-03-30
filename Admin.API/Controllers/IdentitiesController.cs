@@ -8,12 +8,10 @@ using Microsoft.Extensions.Options;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using OpenIddict.Validation.AspNetCore;
 
 namespace Admin.API.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class IdentitiesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
@@ -25,7 +23,6 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous]
     [ProducesResponseType(typeof(List<IdentityDTO>), StatusCodes.Status200OK)]
     public async Task<List<IdentityDTO>> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter)
     {

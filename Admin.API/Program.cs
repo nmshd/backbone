@@ -43,11 +43,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-    services
-       .AddCustomAspNetCore(parsedConfiguration)
-       .AddCustomOpenIddict(parsedConfiguration.Authentication)
-       .AddCustomIdentity(environment)
-       .AddSwaggerWithCustomUi(parsedConfiguration.SwaggerUi);
+    services.AddSwaggerWithCustomUi(parsedConfiguration.SwaggerUi);
 
 
     services.AddDevices(parsedConfiguration.Modules.Devices);
