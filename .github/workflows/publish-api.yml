@@ -29,10 +29,10 @@ jobs:
         env:
           GIT_TAG: ${{  github.ref_name }}
       - name: Build Container Image
-        run: ./.ci/api/buildContainerImage.ts
+        run: ./.ci/capi/buildContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
       - name: Publish Container Image
-        run: ./.ci/api/publishContainerImage.ts
+        run: ./.ci/capi/publishContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
