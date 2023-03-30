@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.mts", "lib.ts", "api/buildContainerImage.ts"],
+  "include": ["**/*.mts", "lib.ts", "capi/buildContainerImage.ts"],
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
