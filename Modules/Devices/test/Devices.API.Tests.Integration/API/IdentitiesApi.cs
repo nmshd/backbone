@@ -8,12 +8,10 @@ public class IdentitiesApi
 {
     private const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
-    private static AccessTokenResponse? _accessTokenResponse;
 
     public IdentitiesApi(RestClient client)
     {
         _client = client;
-        _accessTokenResponse = null;
 
         ServicePointManager.ServerCertificateValidationCallback +=
                 (sender, cert, chain, sslPolicyErrors) => true;
@@ -37,12 +35,6 @@ public class IdentitiesApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        if (requestConfiguration.Authenticate)
-        {
-            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
-            request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
-        }
-
         var response = await _client.ExecuteAsync<T>(request);
 
         var result = new HttpResponse<T>
@@ -55,33 +47,5 @@ public class IdentitiesApi
         };
 
         return result;
-    }
-
-    public async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
-    {
-        if (_accessTokenResponse is { IsExpired: false })
-        {
-            return _accessTokenResponse;
-        }
-
-        var request = new RestRequest("/connect/token", Method.Post);
-
-        request.AddParameter("grant_type", authenticationParams.GrantType);
-        request.AddParameter("username", authenticationParams.Username);
-        request.AddParameter("password", authenticationParams.Password);
-        request.AddParameter("client_id", authenticationParams.ClientId);
-        request.AddParameter("client_secret", authenticationParams.ClientSecret);
-
-        var response = await _client.ExecuteAsync<AccessTokenResponse>(request);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorMessage = response.ErrorMessage?.ToString() ?? "Unknown error occurred when requesting an access token.";
-            throw new AccessTokenRequestException(response.StatusCode, errorMessage);
-        }
-
-        _accessTokenResponse = response.Data!;
-
-        return _accessTokenResponse;
     }
 }

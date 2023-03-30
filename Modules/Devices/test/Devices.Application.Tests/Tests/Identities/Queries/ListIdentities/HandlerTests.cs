@@ -99,11 +99,6 @@ public class HandlerTests
 
     private Handler CreateHandler()
     {
-        var userContext = A.Fake<IUserContext>();
-        A.CallTo(() => userContext.GetAddress()).Returns(ActiveIdentity);
-
-        var mapper = AutoMapperProfile.CreateMapper();
-
-        return new Handler(_actContext, userContext, mapper);
+        return new Handler(_actContext);
     }
 }

@@ -17,31 +17,10 @@ namespace Devices.API.Tests.Integration.StepDefinitions
         public GetIdentityListStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi)
         {
             _identitiesApi = identitiesApi;
-            _requestConfiguration = new RequestConfiguration
-            {
-                AuthenticationParameters = new AuthenticationParameters
-                {
-                    GrantType = "password",
-                    ClientId = httpConfiguration.Value.ClientCredentials.ClientId,
-                    ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
-                    Username = "USRa",
-                    Password = "a"
-                }
-            };
+            _requestConfiguration = new RequestConfiguration();
         }
 
-        [Given(@"the user is authenticated")]
-        public void GivenTheUserIsAuthenticated()
-        {
-            _requestConfiguration.Authenticate = true;
-        }
-
-        [Given(@"the user is not authenticated")]
-        public void GivenTheUserIsNotAuthenticated()
-        {
-            _requestConfiguration.Authenticate = false;
-        }
-
+   
         [When(@"a GET request is sent to the Identities/ endpoint")]
         public async Task WhenAGETRequestIsSentToTheIdentitiesEndpointAsync()
         {
@@ -59,7 +38,6 @@ namespace Devices.API.Tests.Integration.StepDefinitions
         public void ThenTheResponseContainsAList()
         {
             _identitiesResponse.Should().NotBeNull();
-            Console.WriteLine(_identitiesResponse!.Data.Count);
             _identitiesResponse!.Data.Should().NotBeEmpty();
         }
     }
