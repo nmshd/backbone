@@ -1,0 +1,38 @@
+name: Publish API Container Image
+
+on:
+  push:
+    tags:
+      - "capi/*"
+
+jobs:
+  publish-api-container-image:
+    name: Publish API Container Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm i --prefix ./.ci
+      - name: Docker Login
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract version from git tag
+        id: extract-version-from-git-tag
+        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
+        env:
+          GIT_TAG: ${{  github.ref_name }}
+      - name: Build Container Image
+        run: ./.ci/capi/buildContainerImage.ts
+        env:
+          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+      - name: Publish Container Image
+        run: ./.ci/capi/publishContainerImage.ts
+        env:
+          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
