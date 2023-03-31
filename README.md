@@ -1,6 +1,6 @@
 # Backbone
 
-[![GitHub Actions CI](https://github.com/nmshd/bkb-backbone/workflows/Publish/badge.svg)](https://github.com/nmshd/bkb-backbone/actions?query=workflow%3APublish)
+[![GitHub Actions CI](https://github.com/nmshd/backbone/workflows/Publish/badge.svg)](https://github.com/nmshd/backbone/actions?query=workflow%3APublish)
 
 The Enmeshed Backbone embraces all central services required by the Enmeshed platform to work. It consists of the underlying infrastructure, its hosted services, and the libraries used within the services.
 

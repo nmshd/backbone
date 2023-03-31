@@ -29,6 +29,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/bkb-backbone"
+LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
 ENTRYPOINT ["/app/Backbone.Modules.Devices.AdminCli"]
