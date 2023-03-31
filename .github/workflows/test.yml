@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
-        run: npm i --prefix ./.ci
+        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
@@ -27,8 +27,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
-        run: npm i --prefix ./.ci
+        run: npm install --prefix ./.ci
       - name: Build image
         run: ./.ci/capi/buildContainerImage.ts
+        env:
+          TAG: test
+  build-acli-container-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Build image
+        run: ./.ci/acli/buildContainerImage.ts
         env:
           TAG: test
