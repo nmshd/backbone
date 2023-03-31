@@ -11,13 +11,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm i --prefix ./.ci
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
-      - run: bash ./.ci/test.sh
-  build-docker-image:
+      - name: Run tests
+        run: ./.ci/test.ts
+  build-capi-container-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: bash ./.ci/buildDockerImage.sh
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm i --prefix ./.ci
+      - name: Build image
+        run: ./.ci/capi/buildContainerImage.ts
+        env:
+          TAG: test
