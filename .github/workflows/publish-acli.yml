@@ -1,4 +1,4 @@
-name: Publish API Container Image
+name: Publish Admin CLI Container Image
 
 on:
   push:
