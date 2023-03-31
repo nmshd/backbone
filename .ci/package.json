@@ -1,17 +1,5 @@
 {
-  "name": "nbp-bkb-env-tracker",
-  "version": "1.0.0",
-  "description": "This repository is for controlling deployment of the [Enmeshed](https://enmeshed.eu/explore) [Backbone](https://enmeshed.eu/explore/backbone) microservices and for keeping track of which version of which service is currently deployed to which environment.",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@git.dev.bildungsraum.de:NBP/enmeshed-env-tracker.git"
-  },
-  "author": "js-soft GmbH <info@js-soft.com> (https://www.js-soft.com/)",
-  "license": "MIT",
   "dependencies": {
     "zx": "^7.2.0"
   },
