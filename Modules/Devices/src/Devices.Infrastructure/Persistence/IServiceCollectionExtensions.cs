@@ -1,5 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -46,6 +48,13 @@ public static class IServiceCollectionExtensions
         }
 
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
+
+        services.AddRepositories();
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddTransient<IIdentityRepository, IdentityRepository>();
     }
 
     public class DbOptions

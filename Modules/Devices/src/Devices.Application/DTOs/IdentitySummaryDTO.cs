@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
-public class IdentityDTO
+public class IdentitySummaryDTO
 {
     public string Address { get; set; }
     public string ClientId { get; set; }
@@ -12,13 +12,16 @@ public class IdentityDTO
 
     public byte IdentityVersion { get; set; }
 
-    public IdentityDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt)
+    public int NumberOfDevices { get; set; }
+
+    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, int numberOfDevices)
     {
         Address = address.ToString();
         ClientId = clientId;
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = createdAt;
+        NumberOfDevices = numberOfDevices;
     }
 
 }

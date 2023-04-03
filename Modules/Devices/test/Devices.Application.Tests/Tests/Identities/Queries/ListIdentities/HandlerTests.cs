@@ -1,53 +1,49 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using FakeItEasy;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 using Backbone.Modules.Devices.Application.Tests;
-using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.AutoMapper;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+
+using FakeItEasy;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
 public class HandlerTests
 {
-    private static readonly IdentityAddress ActiveIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-
-    private readonly DevicesDbContext _arrangeContext;
-    private readonly DevicesDbContext _actContext;
+    private readonly IIdentityRepository _fakeRepository;
     private readonly Handler _handler;
 
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<DevicesDbContext>();
-        _handler = CreateHandler();
+        _fakeRepository = A.Fake<IIdentityRepository>();
+
+        _handler = CreateHandler(); 
     }
 
     [Fact]
-    public async void Returns_empty_list_when_no_loaded_entities()
+    public async void Returns_an_empty_list_when_no_identities_exist()
     {
         // Arrange
-        List<Identity> identitiesList = new();
-        _arrangeContext.SaveEntities(identitiesList.ToArray());
+        var identitiesList = new List<Identity>();
         var request = new PaginationFilter() { PageSize = 5 };
+        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
 
         // Act
         var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
-        result.Identities.Should().HaveCount(0);
+        result.Should().HaveCount(0);
     }
 
     [Fact]
-    public async void Returns_valid_list_when_entities_loaded()
+    public async void Returns_list_when_identities_loaded()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -63,17 +59,17 @@ public class HandlerTests
             1)
         };
 
-        _arrangeContext.SaveEntities(identitiesList.ToArray());
+        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
 
         // Act
         var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
-        result.Identities.Should().HaveCount(2);
+        result.Should().HaveCount(2);
     }
 
     [Fact]
-    public async void Returns_valid_list_when_entities_loaded_and_attributes_match()
+    public async void Returns_list_when_identities_loaded_and_attributes_match()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -84,21 +80,26 @@ public class HandlerTests
             new(expectedClientId, expectedAddress, Array.Empty<byte>(), 1)
         };
 
-        _arrangeContext.SaveEntities(identitiesList.ToArray());
+        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
 
         // Act
         var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
-        result.Identities.Should().HaveCount(1);
-        result.Identities[0].ClientId.Should().Be(expectedClientId);
-        result.Identities[0].Address.Should().Be(expectedAddress);
-        result.Identities[0].PublicKey.Should().BeEquivalentTo(Array.Empty<byte>());
-        result.Identities[0].IdentityVersion.Should().Be(1);
+        result.Should().HaveCount(1);
+        result.First().ClientId.Should().Be(expectedClientId);
+        result.First().Address.Should().Be(expectedAddress);
+        result.First().PublicKey.Should().BeEquivalentTo(Array.Empty<byte>());
+        result.First().IdentityVersion.Should().Be(1);
     }
 
     private Handler CreateHandler()
     {
-        return new Handler(_actContext);
+        return new Handler(_fakeRepository);
+    }
+
+    private DbPaginationResult<Identity> MakeDBPaginationResult(List<Identity> identities)
+    {
+        return new DbPaginationResult<Identity>(identities, identities.Count);
     }
 }
