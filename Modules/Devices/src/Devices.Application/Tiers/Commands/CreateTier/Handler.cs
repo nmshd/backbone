@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -9,13 +9,13 @@ namespace Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 
 public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 {
-    private readonly IDevicesDbContext _dbContext;
+    private readonly ITierRepository _tierRepository;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(IDevicesDbContext dbContext, ILogger<Handler> logger, IEventBus eventBus)
+    public Handler(ITierRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus)
     {
-        _dbContext = dbContext;
+        _tierRepository = tierRepository;
         _logger = logger;
         _eventBus = eventBus;
     }
@@ -25,8 +25,7 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
         var tierName = TierName.Create(request.Name);
         var tier = new Tier(tierName.Value);
 
-        await _dbContext.Set<Tier>().AddAsync(tier, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _tierRepository.AddAsync(tier, cancellationToken);
 
         _logger.LogTrace($"Successfully created tier. Tier ID: {tier.Id.Value}, Tier Name: {tier.Name.Value}");
 
