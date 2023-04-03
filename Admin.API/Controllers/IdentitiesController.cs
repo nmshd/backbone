@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.DTOs;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Admin.API.Mvc;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Admin.API.Controllers;
 
@@ -23,15 +23,15 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(List<IdentityDTO>), StatusCodes.Status200OK)]
-    public async Task<List<IdentityDTO>> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter)
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListIdentitiesResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException(
+            throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var query = await _mediator.Send(new ListIdentitiesQuery(paginationFilter));
-        return query.Identities;
+        var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter));
+        return Paged(identities);
     }
 }
