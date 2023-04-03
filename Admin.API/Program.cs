@@ -7,6 +7,7 @@ using Autofac.Extensions.DependencyInjection;
 using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
+using Backbone.Modules.Devices.Application;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -37,14 +38,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services
         .ConfigureAndValidate<AdminConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options));
+        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options));
 
 #pragma warning disable ASP0000 We retrieve the Configuration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-    services.AddSwaggerWithCustomUi(parsedConfiguration.SwaggerUi);
-
+    services.AddCustomSwaggerWithUi();
 
     services.AddDevices(parsedConfiguration.Modules.Devices);
     services.AddControllers();

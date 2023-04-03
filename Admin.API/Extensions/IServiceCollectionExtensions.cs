@@ -5,8 +5,7 @@ namespace Admin.API.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddSwaggerWithCustomUi(this IServiceCollection services,
-        AdminConfiguration.SwaggerUiConfiguration configuration)
+    public static IServiceCollection AddCustomSwaggerWithUi(this IServiceCollection services)
     {
         services
             .AddEndpointsApiExplorer()
