@@ -1,6 +1,6 @@
 using SpecFlowCucumberResultsExporter.Extensions;
 
-namespace Challenges.API.Tests.Integration.Hooks;
+namespace Devices.API.Tests.Integration.Hooks;
 [Binding]
 public sealed class Hooks
 {

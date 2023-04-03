@@ -1,9 +1,10 @@
 ﻿using System.Net;
+using Challenges.API.Tests.Integration.Models;
 using Devices.API.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
-namespace Challenges.API.Tests.Integration.API;
+namespace Devices.API.Tests.Integration.API;
 public class IdentitiesApi
 {
     private const string ROUTE_PREFIX = "/api/v1";
@@ -17,9 +18,9 @@ public class IdentitiesApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<List<IdentityDTO>>> GetIdentitiesList(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<IdentityResponse>> GetIdentitiesList(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteIdentitiesRequest<List<IdentityDTO>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/identities").ToString(), requestConfiguration);
+        return await ExecuteIdentitiesRequest<IdentityResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Identities").ToString(), requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteIdentitiesRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)

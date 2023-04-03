@@ -1,12 +1,12 @@
-﻿using Challenges.API.Tests.Integration.API;
+﻿using Devices.API.Tests.Integration.API;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
-using static Challenges.API.Tests.Integration.Configuration.Settings;
+using static Devices.API.Tests.Integration.Configuration.Settings;
 
-namespace Challenges.API.Tests.Integration.Support;
+namespace Devices.API.Tests.Integration.Support;
 public static class Dependencies
 {
     private const string APP_SETTINGS_FILE = "appsettings.json";
