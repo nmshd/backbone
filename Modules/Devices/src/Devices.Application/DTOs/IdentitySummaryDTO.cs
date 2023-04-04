@@ -1,4 +1,6 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
@@ -14,14 +16,26 @@ public class IdentitySummaryDTO
 
     public int NumberOfDevices { get; set; }
 
-    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, int numberOfDevices)
+    public IEnumerable<DeviceDTO> Devices { get; set; }
+
+    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices)
     {
         Address = address.ToString();
         ClientId = clientId;
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = createdAt;
-        NumberOfDevices = numberOfDevices;
+        Devices = devices.Select(it => new DeviceDTO()
+        {
+            CreatedAt = it.CreatedAt,
+            CreatedByDevice = it.CreatedByDevice,
+            DeletedAt = it.DeletedAt,
+            DeletedByDevice = it.DeletedByDevice,
+            DeletionCertificate = it.DeletionCertificate,
+            Id = it.Id,
+            LastLogin = new LastLoginInformation() { Time = it.User?.LastLoginAt }
+        });
+        NumberOfDevices = devices.Count();
     }
 
 }

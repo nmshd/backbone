@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
         var dbPaginationResult = await _identityRepository.FindAll(request.PaginationFilter);
         var identitiesDTOList = dbPaginationResult.ItemsOnPage.Select(el =>
         {
-            return new IdentitySummaryDTO(el.Address, el.ClientId, el.PublicKey, el.IdentityVersion, el.CreatedAt, el.Devices.Count);
+            return new IdentitySummaryDTO(el.Address, el.ClientId, el.PublicKey, el.IdentityVersion, el.CreatedAt, el.Devices);
         }).ToList();
 
         return new ListIdentitiesResponse(identitiesDTOList, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
