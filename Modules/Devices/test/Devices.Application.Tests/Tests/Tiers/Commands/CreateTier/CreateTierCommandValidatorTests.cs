@@ -19,6 +19,6 @@ public class CreateTierCommandValidatorTests
         validationResult.ShouldHaveValidationErrorFor(x => x.Name);
         validationResult.Errors.Should().HaveCount(1);
         validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidTierName");
-        validationResult.Errors.First().ErrorMessage.Should().Contain("Tier Name length must be between");
+        validationResult.Errors.First().ErrorMessage.Should().Contain("Tier Name length must have a length between");
     }
 }
