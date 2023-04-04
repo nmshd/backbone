@@ -1,0 +1,95 @@
+<div class="col-12 md:px-5 h-full">
+  <ng-container *ngIf="loading; then loadingPanel; else loadedPanel">
+  </ng-container>
+  <ng-template #loadingPanel>
+    <div class="flex justify-content-center align-items-center h-full">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </ng-template>
+  <ng-template #loadedPanel>
+    <div class="p-component">
+      <div class="p-3 text-700">
+        <div class="text-2xl font-medium">{{ header }}</div>
+      </div>
+    </div>
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="title">
+          <ng-container *ngIf="editMode; then editTitle; else createTitle">
+          </ng-container>
+          <ng-template #editTitle>
+            <div class="text-2xl font-medium">{{ titleEdit }}</div>
+          </ng-template>
+          <ng-template #createTitle>
+            <div class="text-2xl font-medium">{{ titleCreate }}</div>
+          </ng-template>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <p-accordion [multiple]="true">
+            <p-accordionTab
+              header="Details"
+              [selected]="true"
+              headerStyleClass="shadow-1"
+            >
+              <ng-container *ngIf="editMode; then editId"></ng-container>
+              <ng-template #editId>
+                <div class="field">
+                  <label for="id" class="block"><b>Id</b></label>
+                  <div id="id">
+                    {{ tier.id }}
+                  </div>
+                </div>
+              </ng-template>
+              <div class="field">
+                <label for="name" class="block"><b>Name</b></label>
+                <div class="p-inputgroup">
+                  <input
+                    id="name"
+                    #name="ngModel"
+                    type="username"
+                    placeholder="Name"
+                    [(ngModel)]="tier.name"
+                    pInputText
+                    [disabled]="disabled"
+                    required
+                  />
+                </div>
+                <div *ngIf="name.invalid && name.touched">
+                  <div class="p-error block" *ngIf="name.errors?.['required']">
+                    <small>Name is required.</small>
+                  </div>
+                </div>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+          <div class="col-12 text-right">
+            <ng-container
+              *ngIf="editMode; then editButtons; else createButtons"
+            >
+            </ng-container>
+            <ng-template #editButtons>
+              <p-button
+                label="Save"
+                (onClick)="updateTier()"
+                [disabled]="!validateTier()"
+              ></p-button>
+            </ng-template>
+            <ng-template #createButtons>
+              <p-button
+                label="Create"
+                (onClick)="createTier()"
+                [disabled]="disabled || !validateTier()"
+              ></p-button>
+            </ng-template>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+  </ng-template>
+</div>
+<p-toast
+  position="top-center"
+  [breakpoints]="{ '920px': { width: '100%', 'word-break': 'break-word' } }"
+  [preventOpenDuplicates]="true"
+  styleClass="w-6"
+></p-toast>
