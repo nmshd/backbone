@@ -28,7 +28,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
             _identitiesList = _identitiesResponse!.Data!.Result;
         }
 
-        [Then(@"the response status code is (\d*) \((?:[a-z]|[A-Z]|\s)+\)")]
+        [Then(@"the response status code is (\d\d\d) \((?:[a-z]|[A-Z]|\s)+\)")]
         public void ThenTheResponseStatusCodeIsOK(int code)
         {
             _identitiesList.Should().NotBeNull();
