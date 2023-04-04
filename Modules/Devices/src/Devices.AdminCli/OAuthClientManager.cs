@@ -1,4 +1,4 @@
-﻿using Enmeshed.StronglyTypedIds;
+﻿using Enmeshed.BuildingBlocks.Domain;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;

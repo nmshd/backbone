@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.StronglyTypedIds;
+using Enmeshed.BuildingBlocks.Domain;
 
 namespace Backbone.API.Mvc.JsonConverters.Common;
 
