@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-
 using FakeItEasy;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
@@ -43,7 +42,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_list_when_identities_loaded()
+    public async void Returns_a_list_of_all_existing_identities()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -69,7 +68,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_list_when_identities_loaded_and_attributes_match()
+    public async void Returned_identities_have_all_properties_filled_as_expected()
     {
         // Arrange
         var request = new PaginationFilter();
