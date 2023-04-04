@@ -14,14 +14,16 @@
                 [routerLink]="dashboardPanel.routerLink"
             >
                 <p-card
-                    styleClass="text-white-animation 
-          background-color-{{ dashboardPanel.classLabel }}"
+                    styleClass="text-white-animation background-color-{{
+                        dashboardPanel.classLabel
+                    }}"
                 >
                     <ng-template pTemplate="header">
                         <div class="p-2">
                             <span
-                                class="inline-flex border-circle p-3 
-                background-color-{{ dashboardPanel.classLabel }}-highlight "
+                                class="inline-flex border-circle p-3 background-color-{{
+                                    dashboardPanel.classLabel
+                                }}-highlight "
                             >
                                 <i
                                     class="pi {{ dashboardPanel.icon }} text-xl"
