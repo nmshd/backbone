@@ -1,13 +1,13 @@
 <div class="flex layout-wrapper">
-  <app-sidebar></app-sidebar>
-  <div class="layout-main-container flex-grow-1">
-    <div class="main-container-header flex vertical-shadow-1">
-      <app-topbar class="flex flex-grow-1"></app-topbar>
+    <app-sidebar></app-sidebar>
+    <div class="layout-main-container flex-grow-1">
+        <div class="main-container-header flex vertical-shadow-1">
+            <app-topbar class="flex flex-grow-1"></app-topbar>
+        </div>
+        <div class="main-container-content flex">
+            <div class="flex-grow-1">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
     </div>
-    <div class="main-container-content flex">
-      <div class="flex-grow-1">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div>
 </div>

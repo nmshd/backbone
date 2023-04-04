@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { IdentityService } from './identity.service';
 
 describe('IdentityServiceService', () => {
-  let service: IdentityService;
+    let service: IdentityService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(IdentityService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(IdentityService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

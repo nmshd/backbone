@@ -4,66 +4,66 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class TierService {
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-  getTiers(event: LazyLoadEvent): Observable<TierDTO> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      params: new HttpParams()
-        .set('skip', event.first!)
-        .set('take', event.rows!)
-        .set('sort', event.sortField!)
-        .set('sortOrder', event.sortOrder!),
-      filters: event.filters,
-    };
+    getTiers(event: LazyLoadEvent): Observable<TierDTO> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+            params: new HttpParams()
+                .set('skip', event.first!)
+                .set('take', event.rows!)
+                .set('sort', event.sortField!)
+                .set('sortOrder', event.sortOrder!),
+            filters: event.filters,
+        };
 
-    return this.http.get<TierDTO>('tier', httpOptions);
-  }
+        return this.http.get<TierDTO>('tier', httpOptions);
+    }
 
-  getTierById(id: string): Observable<Tier> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      params: new HttpParams().set('id', id),
-    };
+    getTierById(id: string): Observable<Tier> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+            params: new HttpParams().set('id', id),
+        };
 
-    return this.http.get<Tier>('tier', httpOptions);
-  }
+        return this.http.get<Tier>('tier', httpOptions);
+    }
 
-  createTier(tier: Tier): Observable<Tier> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    createTier(tier: Tier): Observable<Tier> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        };
 
-    return this.http.post<Tier>('tier', tier, httpOptions);
-  }
+        return this.http.post<Tier>('tier', tier, httpOptions);
+    }
 
-  updateTier(tier: Tier): Observable<Tier> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    updateTier(tier: Tier): Observable<Tier> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        };
 
-    return this.http.put<Tier>('tier', tier, httpOptions);
-  }
+        return this.http.put<Tier>('tier', tier, httpOptions);
+    }
 }
 
 export interface TierDTO {
-  tiers: Tier[];
-  totalRecords: number;
+    tiers: Tier[];
+    totalRecords: number;
 }
 
 export interface Tier {
-  id?: string;
-  name?: string;
-  // quotas?: Quotas[];
+    id?: string;
+    name?: string;
+    // quotas?: Quotas[];
 }
