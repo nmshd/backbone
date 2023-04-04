@@ -1,4 +1,5 @@
-﻿Feature: GetTokenById
+﻿@Integration
+Feature: GetTokenById
 
 User requests a Token
 

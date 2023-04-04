@@ -1,4 +1,5 @@
-﻿Feature: CreateToken
+﻿@Integration
+Feature: CreateToken
 
 User creates a Token
 
