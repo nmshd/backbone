@@ -12,12 +12,12 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
-public class IdentityRepository : IIdentityRepository
+public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identityDbSet;
     private readonly IQueryable<Identity> _readonlyIdentityDbSet;
 
-    public IdentityRepository(DevicesDbContext dbContext)
+    public IdentitiesRepository(DevicesDbContext dbContext)
     {
         _identityDbSet = dbContext.Identities;
         _readonlyIdentityDbSet = dbContext.Identities.AsNoTracking();

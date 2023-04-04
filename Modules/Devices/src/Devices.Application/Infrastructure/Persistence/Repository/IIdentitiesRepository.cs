@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
-public interface IIdentityRepository
+public interface IIdentitiesRepository
 {
     Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter);
 }

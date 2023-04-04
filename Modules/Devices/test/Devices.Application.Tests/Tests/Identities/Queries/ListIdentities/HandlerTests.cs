@@ -15,14 +15,14 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Li
 
 public class HandlerTests
 {
-    private readonly IIdentityRepository _fakeRepository;
+    private readonly IIdentitiesRepository _fakeRepository;
     private readonly Handler _handler;
 
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        _fakeRepository = A.Fake<IIdentityRepository>();
+        _fakeRepository = A.Fake<IIdentitiesRepository>();
 
         _handler = CreateHandler(); 
     }

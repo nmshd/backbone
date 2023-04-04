@@ -5,9 +5,9 @@ using MediatR;
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesResponse>
 {
-    private readonly IIdentityRepository _identityRepository;
+    private readonly IIdentitiesRepository _identityRepository;
 
-    public Handler(IIdentityRepository repository)
+    public Handler(IIdentitiesRepository repository)
     {
         _identityRepository = repository;
     }
