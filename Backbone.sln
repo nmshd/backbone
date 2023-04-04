@@ -226,6 +226,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.API.Tests.Integration", "Modules\Devices\test\Devices.API.Tests.Integration\Devices.API.Tests.Integration.csproj", "{A6CB8130-EE2A-4E27-84EC-ADEAF1F0D262}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.API", "Admin.API\Admin.API.csproj", "{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9D0E3DF3-BCB4-4C7A-BE3F-FF6BC5E17903} = {9D0E3DF3-BCB4-4C7A-BE3F-FF6BC5E17903}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Domain.Tests", "Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj", "{DE3E8558-E961-4D2F-AFA1-13D36DB164D9}"
 EndProject

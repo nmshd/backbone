@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Infrastructure.EventBus;
 
 namespace Admin.API.Configuration;
 
@@ -28,5 +29,14 @@ public class AdminConfiguration
 
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
+    }
+
+    [Required]
+    public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
+
+    public class AdminInfrastructureConfiguration
+    {
+        [Required]
+        public EventBusConfiguration EventBus { get; set; } = new();
     }
 }

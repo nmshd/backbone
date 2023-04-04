@@ -8,6 +8,7 @@ using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
 using Backbone.Modules.Devices.Application;
+using Backbone.Infrastructure.EventBus;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -49,6 +50,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddDevices(parsedConfiguration.Modules.Devices);
     services.AddControllers();
     services.AddHealthChecks();
+
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
