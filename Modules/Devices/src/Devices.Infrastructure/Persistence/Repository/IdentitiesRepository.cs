@@ -15,7 +15,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     public IdentitiesRepository(DevicesDbContext dbContext)
     {
         _identities = dbContext.Identities;
-        _readonlyIdentities = dbContext.Identities.AsNoTracking();
+        _readonlyIdentities = dbContext.Identities.AsNoTracking().Include(i => i.Devices);
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
