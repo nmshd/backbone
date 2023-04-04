@@ -16,13 +16,13 @@ import { SidebarModule } from 'primeng/sidebar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { IdentityListComponent } from './components/quotas-component/identity-component/identity-list/identity-list.component';
-import { DashboardComponent } from './components/dashboard-component/dashboard.component';
-import { SidebarComponent } from './components/sidebar-component/sidebar.component';
-import { PageNotFoundComponent } from './components/error-component/page-not-found/page-not-found.component';
-import { TierListComponent } from './components/quotas-component/tier-component/tier-list/tier-list.component';
-import { TierEditComponent } from './components/quotas-component/tier-component/tier-edit/tier-edit.component';
-import { TopbarComponent } from './components/topbar-component/topbar.component';
+import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { PageNotFoundComponent } from './components/error/page-not-found/page-not-found.component';
+import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
+import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
+import { TopbarComponent } from './components/topbar/topbar.component';
 import { SidebarService } from './services/sidebar-service/sidebar.service';
 
 @NgModule({
