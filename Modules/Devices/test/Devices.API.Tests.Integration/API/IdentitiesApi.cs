@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Challenges.API.Tests.Integration.Models;
 using Devices.API.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;

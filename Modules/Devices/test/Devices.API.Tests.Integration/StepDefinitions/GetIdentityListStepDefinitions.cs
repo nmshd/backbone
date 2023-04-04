@@ -1,4 +1,4 @@
-using Challenges.API.Tests.Integration.Models;
+using Devices.API.Tests.Integration.Models;
 using Devices.API.Tests.Integration.API;
 using Devices.API.Tests.Integration.Models;
 
