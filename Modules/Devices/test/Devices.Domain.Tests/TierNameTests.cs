@@ -16,11 +16,12 @@ public class TierNameTests
         isTierNameValid.Should().BeTrue();
     }
 
-    [Fact]
-    public void Cannot_create_tier_name_with_invalid_name_length()
+    [Theory]
+    [InlineData(31)]
+    [InlineData(2)]
+    public void Cannot_create_tier_name_with_invalid_name_length(int length)
     {
-        var invalidLength = 31;
-        var invalidTierName = TestDataGenerator.GenerateString(invalidLength);
+        var invalidTierName = TestDataGenerator.GenerateString(length);
         var tierName = TierName.Create(invalidTierName);
 
         var isTierNameInvalid = tierName.IsFailure;
@@ -29,6 +30,6 @@ public class TierNameTests
 
         isTierNameInvalid.Should().BeTrue();
         errorCode.Should().Be("error.platform.validation.invalidTierName");
-        errorMessage.Should().Be("Tier Name is longer than the 30 characters");
+        errorMessage.Should().Be($"Tier Name length must be between {TierName.MIN_LENGTH} and {TierName.MAX_LENGTH}");
     }
 }

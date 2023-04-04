@@ -28,5 +28,4 @@ public record TierId : StronglyTypedId
             return Result.Failure<TierId, DomainError>(validationResult);
         return Result.Success<TierId, DomainError>(new TierId(value));
     }
-
 }
