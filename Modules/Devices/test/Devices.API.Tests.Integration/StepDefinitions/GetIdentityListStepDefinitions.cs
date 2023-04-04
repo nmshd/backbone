@@ -9,7 +9,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     {
         private readonly RequestConfiguration _requestConfiguration;
         private readonly IdentitiesApi _identitiesApi;
-        private HttpResponse<IdentityResponse>? _identitiesResponse;
+        private HttpResponse<ListIdentitiesResponse>? _identitiesResponse;
         private List<IdentitySummaryDTO>? _identitiesList;
 
         public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi)

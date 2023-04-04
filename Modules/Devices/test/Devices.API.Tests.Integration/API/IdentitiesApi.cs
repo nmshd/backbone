@@ -18,9 +18,9 @@ public class IdentitiesApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<IdentityResponse>> GetIdentitiesList(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<ListIdentitiesResponse>> GetIdentitiesList(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteIdentitiesRequest<IdentityResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Identities").ToString(), requestConfiguration);
+        return await ExecuteIdentitiesRequest<ListIdentitiesResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Identities").ToString(), requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteIdentitiesRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)

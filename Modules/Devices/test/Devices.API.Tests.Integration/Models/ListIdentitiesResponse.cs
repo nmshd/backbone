@@ -1,8 +1,7 @@
-﻿using Devices.API.Tests.Integration.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Challenges.API.Tests.Integration.Models;
-public class IdentityResponse
+namespace Devices.API.Tests.Integration.Models;
+public class ListIdentitiesResponse
 {
     public List<IdentitySummaryDTO>? Result { get; set; }
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
