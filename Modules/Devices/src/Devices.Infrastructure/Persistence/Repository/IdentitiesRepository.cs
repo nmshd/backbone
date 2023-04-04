@@ -15,12 +15,14 @@ public class IdentitiesRepository : IIdentitiesRepository
     public IdentitiesRepository(DevicesDbContext dbContext)
     {
         _identities = dbContext.Identities;
-        _readonlyIdentities = dbContext.Identities.AsNoTracking().Include(i => i.Devices);
+        _readonlyIdentities = dbContext.Identities.AsNoTracking();
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
     {
-        var paginationResult = await _readonlyIdentities.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var paginationResult = await _readonlyIdentities
+            .Include(i => i.Devices)
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
         return paginationResult;
     }
 }
