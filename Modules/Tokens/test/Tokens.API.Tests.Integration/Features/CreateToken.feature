@@ -6,60 +6,55 @@ User creates a Token
 Scenario: Creating a Token as an authenticated user
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value      |
-		| Content   | QQ==       |
-		| ExpiresAt | <tomorrow> |
+		| Key     | Value                                         |
+		| Content | {"content": "QQ==","expiresAt": "<tomorrow>"} |
 	Then the response status code is 201 (Created)
 	And the response contains a Token
 
 Scenario: Creating a Token as an anonymous user
 	Given the user is unauthenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value      |
-		| Content   | QQ==       |
-		| ExpiresAt | <tomorrow> |
+		| Key     | Value                                         |
+		| Content | {"content": "QQ==","expiresAt": "<tomorrow>"} |
 	Then the response status code is 401 (Unauthorized)
 
 Scenario: Creating a Token without the "Content" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value      |
-		| ExpiresAt | <tomorrow> |
+		| Key     | Value                       |
+		| Content | {"expiresAt": "<tomorrow>"} |
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
 Scenario: Creating a Token with an empty "Content" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value      |
-		| Content   |            |
-		| ExpiresAt | <tomorrow> |
+		| Key     | Value                                     |
+		| Content | {"content": "","expiresAt": "<tomorrow>"} |
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
 Scenario: Creating a Token with an invalid base64 in the "Content" property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value            |
-		| Content   | <invalid base64> |
-		| ExpiresAt | <tomorrow>       |
+		| Key     | Value                                                     |
+		| Content | {"content": "<invalid base64>","expiresAt": "<tomorrow>"} |
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
 Scenario: Creating a Token without the "expiresAt" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key     | Value |
-		| Content | QQ==  |
+		| Key     | Value               |
+		| Content | {"content": "QQ=="} |
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
 Scenario: Creating a Token with a date in the past in the "expiresAt" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key       | Value       |
-		| Content   | QQ==        |
-		| ExpiresAt | <yesterday> |
+		| Key     | Value                                          |
+		| Content | {"content": "QQ==","expiresAt": "<yesterday>"} |
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 

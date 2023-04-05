@@ -6,7 +6,6 @@ public class RequestConfiguration
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }
     public string? Content { get; set; }
-    public string? ExpiresAt { get; set; }
 
     public void SupplementWith(RequestConfiguration other)
     {
@@ -15,6 +14,5 @@ public class RequestConfiguration
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;
         Content ??= other.Content;
-        ExpiresAt ??= other.ExpiresAt;
     }
 }

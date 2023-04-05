@@ -27,9 +27,9 @@ Scenario: Requesting a peer Token as an authenticated user
 Scenario: Requesting a list of own Tokens
 	Given the user is authenticated
 	And the user created multiple Tokens
-	When a GET request is sent to the Tokens endpoint with the Tokens list
+	When a GET request is sent to the Tokens endpoint with a list of ids of own Tokens
 	Then the response status code is 200 (OK)
-	And the response does not contain any peer Tokens
+	And the response contains all Tokens with the given ids
 
 Scenario: Requesting a nonexistent Token as an authenticated user
 	Given the user is authenticated

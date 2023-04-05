@@ -18,39 +18,31 @@ public class TokensApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<TokenResponse<Token>>> CreateToken(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<Response<Token>>> CreateToken(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteTokenRequest<TokenResponse<Token>>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
+        return await ExecuteTokenRequest<Response<Token>>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<TokenResponse<Token>>> GetTokenById(RequestConfiguration requestConfiguration, string id)
+    public async Task<HttpResponse<Response<Token>>> GetTokenById(RequestConfiguration requestConfiguration, string id)
     {
-        return await ExecuteTokenRequest<TokenResponse<Token>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
+        return await ExecuteTokenRequest<Response<Token>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<TokenResponse<IEnumerable<Token>>>> GetTokenById(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
+    public async Task<HttpResponse<Response<IEnumerable<Token>>>> GetTokenById(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
     {
         var endpoint = new PathString(ROUTE_PREFIX).Add("/tokens").ToString();
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
         endpoint = $"{endpoint}?{queryString}";
 
-        return await ExecuteTokenRequest<TokenResponse<IEnumerable<Token>>>(Method.Get, endpoint, requestConfiguration);
+        return await ExecuteTokenRequest<Response<IEnumerable<Token>>>(Method.Get, endpoint, requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteTokenRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new RestRequest(endpoint, method);
 
-        if (!string.IsNullOrEmpty(requestConfiguration.ExpiresAt) || !string.IsNullOrEmpty(requestConfiguration.ExpiresAt))
-        {
-            var tokenRequest = new TokenRequest
-            {
-                Content = requestConfiguration.Content,
-                ExpiresAt = requestConfiguration.ExpiresAt
-            };
-
-            request.AddJsonBody(tokenRequest);
-        }
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.AddJsonBody(requestConfiguration.Content);
 
         if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
             request.AddHeader("Content-Type", requestConfiguration.ContentType);
@@ -79,7 +71,7 @@ public class TokensApi
         return result;
     }
 
-    public async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
+    private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
         if (UserAccessTokens.TryGetValue(authenticationParams.ClientId, out var accessToken))
         {
