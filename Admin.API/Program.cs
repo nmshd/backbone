@@ -44,11 +44,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-    services.AddCustomSwaggerWithUi();
-
-    services.AddDevices(parsedConfiguration.Modules.Devices);
-    services.AddControllers();
-    services.AddHealthChecks();
+    services.AddCustomAspNetCore(parsedConfiguration, environment)
+    .AddCustomFluentValidation()
+    .AddCustomSwaggerWithUi()
+    .AddDevices(parsedConfiguration.Modules.Devices)
+    .AddHealthChecks();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
