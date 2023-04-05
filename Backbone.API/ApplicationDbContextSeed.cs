@@ -66,7 +66,7 @@ public class ApplicationDbContextSeed
         if(await context.Tiers.AnyAsync())
             return;
 
-        await context.Tiers.AddAsync(new Tier(TierName.Create("Basic Tier").Value));
+        await context.Tiers.AddAsync(new Tier(TierName.Create("Basic").Value));
 
         await context.SaveChangesAsync();
     }
