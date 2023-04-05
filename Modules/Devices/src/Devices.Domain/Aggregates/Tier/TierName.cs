@@ -6,6 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 public record TierName
 {
     public string Value { get; }
+    public const int MIN_LENGTH = 3;
     public const int MAX_LENGTH = 30;
     public const int MINIMUM_LENGTH = 3;
 
@@ -24,8 +25,8 @@ public record TierName
 
     public static DomainError? Validate(string value)
     {
-        if (value.Length > MAX_LENGTH || value.Length < MINIMUM_LENGTH)
-            return DomainErrors.InvalidTierName($"Tier Name length must be between {MINIMUM_LENGTH} and {MAX_LENGTH}");
+        if (value.Length > MAX_LENGTH || value.Length < MIN_LENGTH)
+            return DomainErrors.InvalidTierName($"Tier Name length must be between {MIN_LENGTH} and {MAX_LENGTH}");
 
         return null;
     }

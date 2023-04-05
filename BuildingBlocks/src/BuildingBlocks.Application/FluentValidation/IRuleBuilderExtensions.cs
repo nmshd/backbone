@@ -11,9 +11,9 @@ public static class IRuleBuilderExtensions
     {
         ruleBuilder.Custom((v, context) =>
         {
-            var r = validator(v);
-            if (r != null)
-                context.AddFailure(new ValidationFailure(context.PropertyName, r.Message, v) { ErrorCode = r.Code });
+            var domainError = validator(v);
+            if (domainError != null)
+                context.AddFailure(new ValidationFailure(context.PropertyName, domainError.Message, v) { ErrorCode = domainError.Code });
         });
     }
 }

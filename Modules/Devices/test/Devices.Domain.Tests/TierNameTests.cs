@@ -30,6 +30,6 @@ public class TierNameTests
 
         isTierNameInvalid.Should().BeTrue();
         errorCode.Should().Be("error.platform.validation.invalidTierName");
-        errorMessage.Should().Be($"Tier Name length must be between {TierName.MINIMUM_LENGTH} and {TierName.MAX_LENGTH}");
+        errorMessage.Should().Be($"Tier Name length must be between {TierName.MIN_LENGTH} and {TierName.MAX_LENGTH}");
     }
 }
