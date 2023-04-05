@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+﻿﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
