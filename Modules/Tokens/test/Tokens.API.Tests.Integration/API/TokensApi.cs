@@ -73,7 +73,7 @@ public class TokensApi
 
     private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
-        if (UserAccessTokens.TryGetValue(authenticationParams.ClientId, out var accessToken))
+        if (UserAccessTokens.TryGetValue(authenticationParams.Username, out var accessToken))
         {
             if (accessToken is { IsExpired: false })
             {
@@ -99,7 +99,7 @@ public class TokensApi
 
         var newAccessToken = response.Data!;
 
-        UserAccessTokens[authenticationParams.ClientId] = newAccessToken;
+        UserAccessTokens[authenticationParams.Username] = newAccessToken;
 
         return newAccessToken;
     }

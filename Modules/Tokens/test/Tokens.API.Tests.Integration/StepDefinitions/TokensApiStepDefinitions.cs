@@ -218,6 +218,26 @@ public class TokensApiStepDefinitions
         _tokenResponse = httpResponse;
     }
 
+    [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
+    public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListContainingT_IdP_Id()
+    {
+        var tokenIds = new List<string> { _tokenId, _peerTokenId };
+        var response = await _tokensApi.GetTokenById(_requestConfiguration, tokenIds);
+
+        _tokenResponse.StatusCode = response.StatusCode;
+
+        var tokens = response.Data!.Result!;
+
+        _responseTokens.AddRange(tokens);
+    }
+
+    [Then(@"the response only contains the own Token")]
+    public void ThenTheResponseOnlyContainsTheOwnToken()
+    {
+        _responseTokens.Should().HaveCount(1).And.ContainSingle(token => token.Id == _tokenId);
+    }
+
+
     [Then(@"the response contains all Tokens with the given ids")]
     public void ThenTheResponseContainsAllTokensWithTheGivenIds()
     {
