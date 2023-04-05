@@ -8,6 +8,7 @@ using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
 using Backbone.Modules.Devices.Application;
+using Backbone.Infrastructure.EventBus;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -44,11 +45,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-    services.AddCustomAspNetCore(parsedConfiguration, environment)
-    .AddCustomFluentValidation()
-    .AddCustomSwaggerWithUi()
-    .AddDevices(parsedConfiguration.Modules.Devices)
-    .AddHealthChecks();
+    services.AddCustomSwaggerWithUi();
+
+    services.AddDevices(parsedConfiguration.Modules.Devices);
+    services.AddControllers();
+    services.AddHealthChecks();
+
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

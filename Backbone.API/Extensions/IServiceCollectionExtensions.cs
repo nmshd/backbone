@@ -137,7 +137,7 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    private static object GetPropertyValue(object source, string propertyPath)
+    public static object GetPropertyValue(object source, string propertyPath)
     {
         foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
             source = property.GetValue(source, null);

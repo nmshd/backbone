@@ -1,4 +1,4 @@
-using Devices.API.Tests.Integration.Models;
+using Challenges.API.Tests.Integration.Models;
 using Devices.API.Tests.Integration.API;
 using Devices.API.Tests.Integration.Models;
 
@@ -9,7 +9,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     {
         private readonly RequestConfiguration _requestConfiguration;
         private readonly IdentitiesApi _identitiesApi;
-        private HttpResponse<ListIdentitiesResponse>? _identitiesResponse;
+        private HttpResponse<IdentityResponse>? _identitiesResponse;
         private List<IdentitySummaryDTO>? _identitiesList;
 
         public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi)
@@ -28,7 +28,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
             _identitiesList = _identitiesResponse!.Data!.Result;
         }
 
-        [Then(@"the response status code is (\d\d\d) \((?:[a-z]|[A-Z]|\s)+\)")]
+        [Then(@"the response status code is (\d*) \((?:[a-z]|[A-Z]|\s)+\)")]
         public void ThenTheResponseStatusCodeIsOK(int code)
         {
             _identitiesList.Should().NotBeNull();

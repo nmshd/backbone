@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+
 using FakeItEasy;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
@@ -14,14 +15,14 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Li
 
 public class HandlerTests
 {
-    private readonly IIdentitiesRepository _fakeRepository;
+    private readonly IIdentityRepository _fakeRepository;
     private readonly Handler _handler;
 
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        _fakeRepository = A.Fake<IIdentitiesRepository>();
+        _fakeRepository = A.Fake<IIdentityRepository>();
 
         _handler = CreateHandler(); 
     }
@@ -42,7 +43,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_a_list_of_all_existing_identities()
+    public async void Returns_list_when_identities_loaded()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -68,7 +69,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returned_identities_have_all_properties_filled_as_expected()
+    public async void Returns_list_when_identities_loaded_and_attributes_match()
     {
         // Arrange
         var request = new PaginationFilter();
