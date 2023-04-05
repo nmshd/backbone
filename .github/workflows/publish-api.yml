@@ -1,13 +1,13 @@
-name: Publish Admin CLI Container Image
+name: Publish API Container Image
 
 on:
   push:
     tags:
-      - "acli/*"
+      - "capi/*"
 
 jobs:
-  publish-acli-container-image:
-    name: Publish Admin CLI Container Image
+  publish-api-container-image:
+    name: Publish API Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
-        run: npm install --prefix ./.ci
+        run: npm i --prefix ./.ci
       - name: Docker Login
         uses: docker/login-action@v2.1.0
         with:
@@ -27,12 +27,12 @@ jobs:
         id: extract-version-from-git-tag
         run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
         env:
-          GIT_TAG: ${{ github.ref_name }}
+          GIT_TAG: ${{  github.ref_name }}
       - name: Build Container Image
-        run: ./.ci/acli/buildContainerImage.ts
+        run: ./.ci/capi/buildContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
-      - name: Push Container Image
-        run: ./.ci/acli/pushContainerImage.ts
+      - name: Publish Container Image
+        run: ./.ci/capi/publishContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}

@@ -10,12 +10,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Run Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
-        run: npm install --prefix ./.ci
+        run: npm i --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
@@ -23,26 +22,13 @@ jobs:
       - name: Run tests
         run: ./.ci/test.ts
   build-capi-container-image:
-    name: Build Consumer API Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
-        run: npm install --prefix ./.ci
+        run: npm i --prefix ./.ci
       - name: Build image
         run: ./.ci/capi/buildContainerImage.ts
-        env:
-          TAG: test
-  build-acli-container-image:
-    name: Build Admin CLI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/acli/buildContainerImage.ts
         env:
           TAG: test
