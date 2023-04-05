@@ -25,7 +25,7 @@ public record TierName
     public static DomainError? Validate(string value)
     {
         if (value.Length > MAX_LENGTH || value.Length < MIN_LENGTH)
-            return DomainErrors.InvalidTierName($"Tier Name length must have a length between {MIN_LENGTH} and {MAX_LENGTH}");
+            return DomainErrors.InvalidTierName($"Tier Name length must be between {MIN_LENGTH} and {MAX_LENGTH}");
 
         return null;
     }
