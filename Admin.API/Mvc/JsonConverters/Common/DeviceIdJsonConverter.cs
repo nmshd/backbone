@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace Backbone.API.Mvc.JsonConverters.Common;
+namespace Admin.API.Mvc.JsonConverters.Common;
 
 public class DeviceIdJsonConverter : JsonConverter<DeviceId?>
 {
