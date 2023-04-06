@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.API;
 
-public class ApplicationDbContextSeed
+public class DevicesDbContextSeed
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
