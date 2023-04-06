@@ -6,5 +6,9 @@
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+    </ItemGroup>
     
 </Project>
