@@ -8,7 +8,6 @@ public record TierName
     public string Value { get; }
     public const int MIN_LENGTH = 3;
     public const int MAX_LENGTH = 30;
-    public const int MINIMUM_LENGTH = 3;
 
     private TierName(string value)
     {
