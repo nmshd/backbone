@@ -237,7 +237,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Common", "Modules\Qu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Domain", "Modules\Quotas\src\Quotas.Domain\Quotas.Domain.csproj", "{6DA882B3-0371-4EEB-ACE8-DE7C7EC2134A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Infrastrcuture", "Modules\Quotas\src\Quotas.Infrastrcuture\Quotas.Infrastrcuture.csproj", "{A326741C-C030-4535-BA73-2B508E337CF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Infrastructure", "Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj", "{A326741C-C030-4535-BA73-2B508E337CF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Infrastructure.Database.Postgres", "Modules\Quotas\src\Quotas.Infrastructure.Database.Postgres\Quotas.Infrastructure.Database.Postgres.csproj", "{B3AE103B-619F-4D78-8CB1-8BC5BFFDEB1B}"
 EndProject
