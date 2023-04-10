@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-internal class QuotasRepository
+internal class QuotasRepository : IQuotasRepository
 {
 }
