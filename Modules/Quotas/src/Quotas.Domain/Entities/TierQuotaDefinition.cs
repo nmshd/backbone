@@ -1,5 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Entities
-{
-    public class TierQuotaDefinition
-    { }
-}
+﻿namespace Backbone.Modules.Quotas.Domain.Entities;
+
+public class TierQuotaDefinition
+{ }

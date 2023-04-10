@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-internal class MetricStatusesRepository : IMetricStatusesRepository
+public class MetricStatusesRepository : IMetricStatusesRepository
 {
 }
