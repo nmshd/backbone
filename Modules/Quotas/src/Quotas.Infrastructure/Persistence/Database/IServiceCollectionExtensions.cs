@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
@@ -24,7 +24,7 @@ public static class IServiceCollectionExtensions
         switch (options.Provider)
         {
             case SQLSERVER:
-                services.AddDbContext<FilesDbContext>(dbContextOptions =>
+                services.AddDbContext<QuotasDbContext>(dbContextOptions =>
                     dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(20);
@@ -34,7 +34,7 @@ public static class IServiceCollectionExtensions
                 );
                 break;
             case POSTGRES:
-                services.AddDbContext<FilesDbContext>(dbContextOptions =>
+                services.AddDbContext<QuotasDbContext>(dbContextOptions =>
                     dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(20);
@@ -49,7 +49,7 @@ public static class IServiceCollectionExtensions
 
         }
 
-        services.AddScoped<IFilesDbContext, FilesDbContext>();
+        services.AddScoped<IQuotasDbContext, QuotasDbContext>();
     }
 }
 
