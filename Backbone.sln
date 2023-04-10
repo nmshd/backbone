@@ -243,6 +243,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Infrastructure.Datab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Infrastructure.Database.SqlServer", "Modules\Quotas\src\Quotas.Infrastructure.Database.SqlServer\Quotas.Infrastructure.Database.SqlServer.csproj", "{E2262502-F55A-4967-9D09-30F670BBB045}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4192A28C-45C0-4D20-B880-F417B8AB752F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -724,6 +726,7 @@ Global
 		{A326741C-C030-4535-BA73-2B508E337CF0} = {C258DF5B-0AE0-4DDF-9284-60671699C6ED}
 		{B3AE103B-619F-4D78-8CB1-8BC5BFFDEB1B} = {C258DF5B-0AE0-4DDF-9284-60671699C6ED}
 		{E2262502-F55A-4967-9D09-30F670BBB045} = {C258DF5B-0AE0-4DDF-9284-60671699C6ED}
+		{4192A28C-45C0-4D20-B880-F417B8AB752F} = {78F88787-78AB-41E5-9A64-6B77B6CCFBCD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
