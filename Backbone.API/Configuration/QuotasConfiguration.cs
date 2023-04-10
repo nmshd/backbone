@@ -16,9 +16,6 @@ public class QuotasConfiguration
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
-        [Required]
-        public BlobStorageConfiguration BlobStorage { get; set; } = new();
-
         public class SqlDatabaseConfiguration
         {
             [Required]
