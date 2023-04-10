@@ -1,6 +1,5 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Entities
+﻿namespace Backbone.Modules.Quotas.Domain.Entities;
+
+public class Identity
 {
-    public class Identity
-    {
-    }
 }

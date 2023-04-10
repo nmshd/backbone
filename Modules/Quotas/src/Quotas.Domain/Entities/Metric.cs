@@ -1,7 +1,6 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Entities
+﻿namespace Backbone.Modules.Quotas.Domain.Entities;
+
+public class Metric
 {
-    public class Metric
-    {
-        public MetricStatus MetricStatus { get; set; }
-    }
+    public MetricStatus MetricStatus { get; set; }
 }
