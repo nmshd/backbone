@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messages.Infrastructure\Messages.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
