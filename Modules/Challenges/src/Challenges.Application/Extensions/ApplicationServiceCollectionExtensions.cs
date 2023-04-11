@@ -14,7 +14,7 @@ public static class ApplicationServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateChallengeCommand).GetTypeInfo().Assembly);
+        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<CreateChallengeCommand>());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
