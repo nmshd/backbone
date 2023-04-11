@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
-public class DeleteDeviceCommand : IRequest<Unit>
+public class DeleteDeviceCommand : IRequest
 {
     public DeviceId DeviceId { get; set; }
     public byte[] DeletionCertificate { get; set; }
