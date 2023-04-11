@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
+import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
 @Component({
     selector: 'app-tier-edit',
@@ -62,7 +63,7 @@ export class TierEditComponent {
             this.tierService
                 .getTierById(this.tierId!)
                 .subscribe({
-                    next: (data: any) => {
+                    next: (data: HttpResponseEnvelope<Tier>) => {
                         if (data && data.result) {
                             this.tier = data.result;
                         }

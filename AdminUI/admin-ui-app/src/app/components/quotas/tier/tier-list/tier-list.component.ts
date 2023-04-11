@@ -2,11 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import {
-    Tier,
-    TierService,
-    TierDTO,
-} from 'src/app/services/tier-service/tier.service';
+import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
+import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
 @Component({
     selector: 'app-tier-list',
@@ -48,7 +45,7 @@ export class TierListComponent {
             this.tierService
                 .getTiers(event)
                 .subscribe({
-                    next: (data: TierDTO) => {
+                    next: (data: PagedHttpResponseEnvelope<Tier>) => {
                         if (data) {
                             this.tiers = data.result;
                             if (data.pagination) {
