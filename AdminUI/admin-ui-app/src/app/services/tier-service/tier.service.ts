@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -12,8 +13,7 @@ export class TierService {
     apiUrl: string;
 
     constructor(private http: HttpClient) {
-        // TODO: Get from configuration
-        this.apiUrl = 'http://localhost:5010/api/v1/Tiers';
+        this.apiUrl = environment.apiUrl + '/Tiers';
     }
 
     getTiers(
