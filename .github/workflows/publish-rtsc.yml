@@ -6,8 +6,8 @@ on:
       - "rtsc/*"
 
 jobs:
-  publish-rsc-container-image:
-    name: Publish Relationships Sanity Check Container Image
+  publish-rtsc-container-image:
+    name: Publish Relationship Templates Sanity Check Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read

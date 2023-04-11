@@ -73,7 +73,7 @@ jobs:
           TAG: test
           MODULE: Messages
   build-rtsc-container-image:
-    name: Build Relationships Sanity Check Container Image
+    name: Build Relationship Templates Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -87,7 +87,7 @@ jobs:
           MODULE: Relationships
           PROJECT_SUFFIX: RelationshipTemplate
   build-rcsc-container-image:
-    name: Build Relationships Sanity Check Container Image
+    name: Build Relationship Changes Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

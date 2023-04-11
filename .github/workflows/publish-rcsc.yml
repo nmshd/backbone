@@ -6,7 +6,7 @@ on:
       - "rcsc/*"
 
 jobs:
-  publish-rsc-container-image:
+  publish-rcsc-container-image:
     name: Publish Relationship Changes Sanity Check Container Image
     runs-on: ubuntu-latest
     permissions:

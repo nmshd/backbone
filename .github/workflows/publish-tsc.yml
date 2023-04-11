@@ -1,13 +1,13 @@
-name: Publish Synchronization Sanity Check Container Image
+name: Publish Tokens Sanity Check Container Image
 
 on:
   push:
     tags:
-      - "ssc/*"
+      - "tsc/*"
 
 jobs:
-  publish-ssc-container-image:
-    name: Publish Synchronization Sanity Check Container Image
+  publish-tsc-container-image:
+    name: Publish Tokens Sanity Check Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
