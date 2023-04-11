@@ -1,4 +1,4 @@
-name: Publish API Container Image
+name: Publish Consumer API Container Image
 
 on:
   push:
