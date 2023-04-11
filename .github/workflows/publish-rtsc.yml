@@ -3,7 +3,7 @@ name: Publish Relationship Templates Sanity Check Container Image
 on:
   push:
     tags:
-      - "rsc/*"
+      - "rtsc/*"
 
 jobs:
   publish-rsc-container-image:
