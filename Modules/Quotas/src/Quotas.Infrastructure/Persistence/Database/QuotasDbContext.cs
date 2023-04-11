@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
-public class QuotasDbContext : AbstractDbContextBase, IQuotasDbContext
+public class QuotasDbContext : AbstractDbContextBase
 {
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options): base(options)
     { }
