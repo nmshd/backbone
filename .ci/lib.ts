@@ -12,3 +12,10 @@ export function getRequiredEnvVar(envVarName: string) {
   }
   return envVar;
 }
+
+export function toCamelCase(input: string) {
+  const first = input.charAt(0).toLowerCase();
+  const remaining = input.substring(1);
+  const result = first + remaining;
+  return result;
+}

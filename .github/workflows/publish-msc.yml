@@ -1,13 +1,13 @@
-name: Publish Consumer API Container Image
+name: Publish Messages Sanity Check Container Image
 
 on:
   push:
     tags:
-      - "capi/*"
+      - "msc/*"
 
 jobs:
-  publish-capi-container-image:
-    name: Publish Consumer API Container Image
+  publish-msc-container-image:
+    name: Publish Messages Sanity Check Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,10 +29,12 @@ jobs:
         env:
           GIT_TAG: ${{ github.ref_name }}
       - name: Build Container Image
-        run: ./.ci/capi/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          MODULE: Messages
       - name: Push Container Image
-        run: ./.ci/capi/pushContainerImage.ts
+        run: ./.ci/sc/pushContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          MODULE: Messages
