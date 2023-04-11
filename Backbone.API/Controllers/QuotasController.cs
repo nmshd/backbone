@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using OpenIddict.Validation.AspNetCore;
 
+namespace Backbone.API.Controllers;
+
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class QuotasController : ApiControllerBase
