@@ -1,10 +1,10 @@
-﻿using Backbone.API.Mvc;
+﻿using Admin.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Backbone.API.Controllers;
+namespace Admin.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

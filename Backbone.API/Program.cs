@@ -92,8 +92,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens)
-        .AddQuotas(parsedConfiguration.Modules.Quotas);
+        .AddTokens(parsedConfiguration.Modules.Tokens);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }

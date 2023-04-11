@@ -71,8 +71,5 @@ public class BackboneConfiguration
 
         [Required]
         public TokensConfiguration Tokens { get; set; } = new();
-
-        [Required]
-        public QuotasConfiguration Quotas { get; set; } = new();
     }
 }
