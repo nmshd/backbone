@@ -55,7 +55,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/fsc/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
   build-msc-container-image:
@@ -67,7 +67,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/msc/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
   build-rsc-container-image:
@@ -79,7 +79,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/rsc/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
   build-ssc-container-image:
@@ -91,7 +91,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/ssc/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
   build-tsc-container-image:
@@ -103,6 +103,6 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/tsc/buildContainerImage.ts
+        run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
