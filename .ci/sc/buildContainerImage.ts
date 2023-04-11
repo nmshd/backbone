@@ -4,7 +4,10 @@ import { getRequiredEnvVar, toCamelCase } from "../lib.js";
 
 const tag = getRequiredEnvVar("TAG");
 const moduleName = getRequiredEnvVar("MODULE");
+const projectSuffix = $.env["PROJECT_SUFFIX"]
+  ? `.${$.env["PROJECT_SUFFIX"]}`
+  : "";
 
 const moduleNameCamelCase = toCamelCase(moduleName);
 
-await $`docker build --file ./Modules/${moduleName}/src/${moduleName}.Jobs.SanityCheck/Dockerfile --tag ghcr.io/nmshd/backbone-${moduleNameCamelCase}-sanity-check:${tag} .`;
+await $`docker build --file ./Modules/${moduleName}/src/${moduleName}.Jobs.SanityCheck${projectSuffix}/Dockerfile --tag ghcr.io/nmshd/backbone-${moduleNameCamelCase}-sanity-check:${tag} .`;

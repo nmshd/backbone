@@ -1,4 +1,4 @@
-name: Publish Relationships Sanity Check Container Image
+name: Publish Relationship Changes Sanity Check Container Image
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish-rsc-container-image:
-    name: Publish Relationships Sanity Check Container Image
+    name: Publish Relationship Changes Sanity Check Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,6 +33,7 @@ jobs:
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
           MODULE: Relationships
+          PROJECT_SUFFIX: RelationshipChange
       - name: Push Container Image
         run: ./.ci/sc/pushContainerImage.ts
         env:
