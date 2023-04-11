@@ -62,9 +62,9 @@ export class TierEditComponent {
             this.tierService
                 .getTierById(this.tierId!)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: any) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
                         }
                     },
                     error: (err: any) => {
@@ -87,10 +87,18 @@ export class TierEditComponent {
             this.tierService
                 .createTier(this.tier)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: any) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
                         }
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Successfully added tier.',
+                            sticky: true,
+                        });
+                        this.tierId = data.id;
+                        this.editMode = true;
                     },
                     error: (err: any) =>
                         this.messageService.add({
@@ -110,9 +118,15 @@ export class TierEditComponent {
             this.tierService
                 .updateTier(this.tier)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: any) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Successfully updated tier.',
+                                sticky: true,
+                            });
                         }
                     },
                     error: (err: any) =>
@@ -136,7 +150,6 @@ export class TierEditComponent {
 
     initTier() {
         this.tier = {
-            id: '',
             name: '',
         } as Tier;
 

@@ -50,8 +50,13 @@ export class TierListComponent {
                 .subscribe({
                     next: (data: TierDTO) => {
                         if (data) {
-                            this.tiers = data.tiers;
-                            this.totalRecords = data.totalRecords;
+                            this.tiers = data.result;
+                            if (data.pagination) {
+                                this.totalRecords =
+                                    data.pagination.totalRecords!;
+                            } else {
+                                this.totalRecords = data.result.length;
+                            }
                         }
                     },
                     error: (err: any) =>

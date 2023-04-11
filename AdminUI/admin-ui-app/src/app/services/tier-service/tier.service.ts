@@ -11,59 +11,50 @@ export class TierService {
 
     getTiers(event: LazyLoadEvent): Observable<TierDTO> {
         const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
             params: new HttpParams()
-                .set('skip', event.first!)
-                .set('take', event.rows!)
-                .set('sort', event.sortField!)
-                .set('sortOrder', event.sortOrder!),
-            filters: event.filters,
+                .set('PageNumber', event.first! / event.rows! + 1)
+                .set('PageSize', event.rows!),
         };
 
-        return this.http.get<TierDTO>('tier', httpOptions);
+        return this.http.get<TierDTO>(
+            'http://localhost:5010/api/v1/Tiers',
+            httpOptions
+        );
     }
 
     getTierById(id: string): Observable<Tier> {
         const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
             params: new HttpParams().set('id', id),
         };
 
-        return this.http.get<Tier>('tier', httpOptions);
+        return this.http.get<Tier>(
+            'http://localhost:5010/api/v1/Tiers',
+            httpOptions
+        );
     }
 
     createTier(tier: Tier): Observable<Tier> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        };
-
-        return this.http.post<Tier>('tier', tier, httpOptions);
+        return this.http.post<Tier>('http://localhost:5010/api/v1/Tiers', tier);
     }
 
     updateTier(tier: Tier): Observable<Tier> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
-        };
-
-        return this.http.put<Tier>('tier', tier, httpOptions);
+        return this.http.put<Tier>('http://localhost:5010/api/v1/Tiers', tier);
     }
 }
 
 export interface TierDTO {
-    tiers: Tier[];
-    totalRecords: number;
+    result: Tier[];
+    pagination: Pagination;
 }
 
 export interface Tier {
     id?: string;
     name?: string;
-    // quotas?: Quotas[];
+}
+
+interface Pagination {
+    pageNumber?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalRecords?: number;
 }
