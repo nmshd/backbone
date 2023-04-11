@@ -5,11 +5,6 @@ namespace Backbone.Modules.Quotas.Application;
 public class ApplicationOptions
 {
     [Required]
-    [MinLength(3)]
-    [MaxLength(3)]
-    public string AddressPrefix { get; set; }
-
-    [Required]
     public PaginationOptions Pagination { get; set; } = new();
 }
 
