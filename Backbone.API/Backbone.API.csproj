@@ -77,6 +77,7 @@
 		<ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
+        <ProjectReference Include="..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

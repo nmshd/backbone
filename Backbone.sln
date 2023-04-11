@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backbone.API", "Backbone.API\Backbone.API.csproj", "{1236D230-99E8-4352-9D93-94EEDCC0E064}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A326741C-C030-4535-BA73-2B508E337CF0} = {A326741C-C030-4535-BA73-2B508E337CF0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Challenges", "Challenges", "{DF1C4335-5043-4365-B753-6A8698528E4B}"
 EndProject
@@ -247,7 +250,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4192A28C-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Application.Tests", "Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj", "{78711621-A1FE-4868-8BB1-B886E1AB3879}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quotas.Domain.Tests", "Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj", "{C7DFAE72-C164-43A6-8C81-FCCA4582710B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Domain.Tests", "Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj", "{C7DFAE72-C164-43A6-8C81-FCCA4582710B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
