@@ -1,4 +1,4 @@
-name: Publish Relationships Sanity Check Container Image
+name: Publish Relationship Templates Sanity Check Container Image
 
 on:
   push:
