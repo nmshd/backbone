@@ -88,7 +88,7 @@ export class TierEditComponent {
             this.tierService
                 .createTier(this.tier)
                 .subscribe({
-                    next: (data: any) => {
+                    next: (data: HttpResponseEnvelope<Tier>) => {
                         if (data && data.result) {
                             this.tier = data.result;
                         }
@@ -98,7 +98,7 @@ export class TierEditComponent {
                             detail: 'Successfully added tier.',
                             sticky: true,
                         });
-                        this.tierId = data.id;
+                        this.tierId = data.result.id;
                         this.editMode = true;
                     },
                     error: (err: any) =>
@@ -119,7 +119,7 @@ export class TierEditComponent {
             this.tierService
                 .updateTier(this.tier)
                 .subscribe({
-                    next: (data: any) => {
+                    next: (data: HttpResponseEnvelope<Tier>) => {
                         if (data && data.result) {
                             this.tier = data.result;
                             this.messageService.add({
