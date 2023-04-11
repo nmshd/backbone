@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+      <ProjectReference Include="..\..\..\Relationships\src\Relationships.Application\Relationships.Application.csproj" />
+      <ProjectReference Include="..\Quotas.Domain\Quotas.Domain.csproj" />
+    </ItemGroup>
+    
+</Project>
