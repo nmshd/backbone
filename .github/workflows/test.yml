@@ -47,7 +47,7 @@ jobs:
         env:
           TAG: test
   build-fsc-container-image:
-    name: Build Challenges Sanity Check Container Image
+    name: Build Files Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
