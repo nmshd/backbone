@@ -47,7 +47,7 @@ jobs:
         env:
           TAG: test
   build-fsc-container-image:
-    name: Build Admin CLI Container Image
+    name: Build Challenges Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -58,8 +58,9 @@ jobs:
         run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
+          MODULE: Files
   build-msc-container-image:
-    name: Build Admin CLI Container Image
+    name: Build Messages Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,8 +71,9 @@ jobs:
         run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
+          MODULE: Messages
   build-rsc-container-image:
-    name: Build Admin CLI Container Image
+    name: Build Relationships Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -82,8 +84,9 @@ jobs:
         run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
+          MODULE: Relationships
   build-ssc-container-image:
-    name: Build Admin CLI Container Image
+    name: Build Synchronization Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -94,8 +97,9 @@ jobs:
         run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
+          MODULE: Synchronization
   build-tsc-container-image:
-    name: Build Admin CLI Container Image
+    name: Build Tokens Sanity Check Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -106,3 +110,4 @@ jobs:
         run: ./.ci/sc/buildContainerImage.ts
         env:
           TAG: test
+          MODULE: Tokens
