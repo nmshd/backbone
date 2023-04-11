@@ -21,7 +21,7 @@ public class BackboneConfiguration
     public class AuthenticationConfiguration
     {
         [Required]
-        [MinLength(1)]
+        [RegularExpression("file|config")]
         public string JwtSigningCertificateSource { get; set; } = "";
 
         public string JwtSigningCertificate { get; set; } = "";
