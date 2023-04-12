@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.API;
 
-public class ApplicationDbContextSeed
+public class DevicesDbContextSeed
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
@@ -21,6 +22,7 @@ public class ApplicationDbContextSeed
         await context.Database.EnsureCreatedAsync();
 
         await SeedApplicationUsers(context);
+        await SeedBasicTier(context);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
@@ -55,6 +57,16 @@ public class ApplicationDbContextSeed
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
         await context.Users.AddAsync(user);
+
+        await context.SaveChangesAsync();
+    }
+
+    private async Task SeedBasicTier(DevicesDbContext context)
+    {
+        if(await context.Tiers.AnyAsync())
+            return;
+
+        await context.Tiers.AddAsync(new Tier(TierName.Create("Basic").Value));
 
         await context.SaveChangesAsync();
     }

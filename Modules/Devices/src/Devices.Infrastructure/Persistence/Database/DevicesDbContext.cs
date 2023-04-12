@@ -1,7 +1,9 @@
 ﻿using System.Data;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -28,6 +30,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DbSet<Device> Devices { get; set; }
 
     public DbSet<Challenge> Challenges { get; set; }
+
+    public DbSet<Tier> Tiers { get; set; }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
@@ -89,6 +93,10 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
         configurationBuilder.Properties<Username>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(Username.MAX_LENGTH).HaveConversion<UsernameValueConverter>();
+        configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<TierName>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();

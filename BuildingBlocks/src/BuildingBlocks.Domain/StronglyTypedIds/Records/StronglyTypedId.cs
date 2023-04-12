@@ -23,4 +23,9 @@ public abstract record StronglyTypedId
     {
         Value = value;
     }
+
+    public static implicit operator string(StronglyTypedId id)
+    {
+        return id.Value;
+    }
 }

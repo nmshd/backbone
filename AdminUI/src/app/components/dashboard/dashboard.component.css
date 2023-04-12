@@ -1,0 +1,19 @@
+:host ::ng-deep .background-color-identities {
+    background-color: cornflowerblue !important;
+    color: aliceblue !important;
+}
+
+:host ::ng-deep .background-color-identities-highlight {
+    background-color: aliceblue !important;
+    color: cornflowerblue !important;
+}
+
+.zoom-animation {
+    transition: 0.3s;
+}
+
+.zoom-animation:hover {
+    transform: scale(1.05);
+    /*transform: translateY(-10px);*/
+    transition: 0.3s;
+}
