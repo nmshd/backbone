@@ -13,7 +13,7 @@ public static class IServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateRelationshipTemplateCommand).GetTypeInfo().Assembly);
+        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<CreateRelationshipTemplateCommand>());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(DomainExceptionTransformerPipelineBehavior<,>));

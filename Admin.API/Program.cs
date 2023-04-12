@@ -49,6 +49,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     .AddCustomFluentValidation()
     .AddCustomSwaggerWithUi()
     .AddDevices(parsedConfiguration.Modules.Devices)
+    .AddQuotas(parsedConfiguration.Modules.Quotas)
     .AddHealthChecks();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);

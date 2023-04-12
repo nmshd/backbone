@@ -38,5 +38,8 @@ public class AdminConfiguration
 
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
+        
+        [Required]
+        public QuotasConfiguration Quotas { get; set; } = new();
     }
 }

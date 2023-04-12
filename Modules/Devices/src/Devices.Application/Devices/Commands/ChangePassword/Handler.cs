@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         var currentDevice = await _dbContext
             .SetReadOnly<Device>()
@@ -41,7 +41,5 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
                 throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
         _logger.LogTrace($"Successfully changed password for device with id '{_activeDevice}'.");
-
-        return Unit.Value;
     }
 }
