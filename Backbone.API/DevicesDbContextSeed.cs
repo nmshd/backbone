@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -76,7 +77,7 @@ public class DevicesDbContextSeed
     {
         try
         {
-            var basicTier = (from t in context.Tiers where t.Name == TierName.BASIC_DEFAULT_NAME select t).First();
+            var basicTier = await context.Tiers.BasicTier(CancellationToken.None);
             var identitiesWithoutTier = from i in context.Identities where i.Tier == null select i;
             await identitiesWithoutTier.ForEachAsync(it =>
             {
