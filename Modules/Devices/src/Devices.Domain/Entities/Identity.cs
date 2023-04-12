@@ -5,7 +5,7 @@ namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Identity
 {
-    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, byte identityVersion)
+    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, byte identityVersion, Tier tier)
     {
         ClientId = clientId;
         Address = address;
@@ -13,6 +13,7 @@ public class Identity
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
         Devices = new List<Device>();
+        Tier = tier;
     }
 
     public string? ClientId { get; set; }

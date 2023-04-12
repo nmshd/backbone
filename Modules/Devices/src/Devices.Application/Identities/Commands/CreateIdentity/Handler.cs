@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -44,7 +45,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, command.IdentityVersion);
+        var basicTier = await _dbContext.Set<Tier>().BasicTier(cancellationToken);
+
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, command.IdentityVersion, basicTier);
 
         var user = new ApplicationUser(newIdentity);
 
