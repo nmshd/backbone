@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
+import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
 @Component({
     selector: 'app-tier-edit',
@@ -62,9 +63,9 @@ export class TierEditComponent {
             this.tierService
                 .getTierById(this.tierId!)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: HttpResponseEnvelope<Tier>) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
                         }
                     },
                     error: (err: any) => {
@@ -87,10 +88,18 @@ export class TierEditComponent {
             this.tierService
                 .createTier(this.tier)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: HttpResponseEnvelope<Tier>) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
                         }
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Successfully added tier.',
+                            sticky: true,
+                        });
+                        this.tierId = data.result.id;
+                        this.editMode = true;
                     },
                     error: (err: any) =>
                         this.messageService.add({
@@ -110,9 +119,15 @@ export class TierEditComponent {
             this.tierService
                 .updateTier(this.tier)
                 .subscribe({
-                    next: (data: Tier) => {
-                        if (data) {
-                            this.tier = data;
+                    next: (data: HttpResponseEnvelope<Tier>) => {
+                        if (data && data.result) {
+                            this.tier = data.result;
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Successfully updated tier.',
+                                sticky: true,
+                            });
                         }
                     },
                     error: (err: any) =>
@@ -136,7 +151,6 @@ export class TierEditComponent {
 
     initTier() {
         this.tier = {
-            id: '',
             name: '',
         } as Tier;
 
