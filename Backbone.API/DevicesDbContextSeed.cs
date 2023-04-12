@@ -23,6 +23,7 @@ public class DevicesDbContextSeed
 
         await SeedApplicationUsers(context);
         await SeedBasicTier(context);
+        await AddBasicTierToIdentities(context);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
@@ -63,11 +64,30 @@ public class DevicesDbContextSeed
 
     private async Task SeedBasicTier(DevicesDbContext context)
     {
-        if(await context.Tiers.AnyAsync())
+        if (await context.Tiers.AnyAsync())
             return;
 
-        await context.Tiers.AddAsync(new Tier(TierName.Create("Basic").Value));
+        await context.Tiers.AddAsync(new Tier(TierName.Create(TierName.BASIC_DEFAULT_NAME).Value));
 
         await context.SaveChangesAsync();
+    }
+
+    private async Task AddBasicTierToIdentities(DevicesDbContext context)
+    {
+        try
+        {
+            var basicTier = (from t in context.Tiers where t.Name == TierName.BASIC_DEFAULT_NAME select t).First();
+            var identitiesWithoutTier = from i in context.Identities where i.Tier == null select i;
+            await identitiesWithoutTier.ForEachAsync(it =>
+            {
+                it.Tier = basicTier;
+            });
+
+            await context.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            throw new Exception("Basic Tier was not found.");
+        }
     }
 }
