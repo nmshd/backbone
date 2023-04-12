@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Identity
 {
-    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, byte identityVersion, Tier tier)
+    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, Tier tier, byte identityVersion)
     {
         ClientId = clientId;
         Address = address;

@@ -39,7 +39,7 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRA",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 1, 1, 1, 1, 1 }, "id1"),
-                new byte[] { 1, 1, 1, 1, 1 }, 1
+                new byte[] { 1, 1, 1, 1, 1 }, await context.Tiers.BasicTier(CancellationToken.None), 1
             )),
             CreatedAt = SystemTime.UtcNow
         };
@@ -53,7 +53,7 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRB",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, 1
+                new byte[] { 2, 2, 2, 2, 2 }, await context.Tiers.BasicTier(CancellationToken.None), 1
             )),
             CreatedAt = SystemTime.UtcNow
         };
