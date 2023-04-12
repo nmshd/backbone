@@ -8,7 +8,6 @@ public class Tier
         Name = name;
     }
 
-
     public TierId Id { get; }
     public TierName Name { get; }
 }

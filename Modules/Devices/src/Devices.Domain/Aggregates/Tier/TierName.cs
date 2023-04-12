@@ -5,6 +5,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public record TierName
 {
+    public const string BASIC_DEFAULT_NAME = "Basic";
     public string Value { get; }
     public const int MIN_LENGTH = 3;
     public const int MAX_LENGTH = 30;

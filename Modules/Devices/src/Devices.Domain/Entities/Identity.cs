@@ -1,4 +1,5 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
@@ -25,6 +26,8 @@ public class Identity
     public List<Device> Devices { get; set; }
 
     public byte IdentityVersion { get; set; }
+
+    public Tier? Tier { get; set; }
 
     public bool IsNew()
     {
