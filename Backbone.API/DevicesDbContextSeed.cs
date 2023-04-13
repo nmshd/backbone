@@ -22,14 +22,18 @@ public class DevicesDbContextSeed
     {
         await context.Database.EnsureCreatedAsync();
 
-        await SeedApplicationUsers(context);
         await SeedBasicTier(context);
+        await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
     {
         if (await context.Users.AnyAsync())
+            return;
+
+        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None);
+        if (basicTier == null)
             return;
 
         var user = new ApplicationUser
@@ -39,8 +43,9 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRA",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 1, 1, 1, 1, 1 }, "id1"),
-                new byte[] { 1, 1, 1, 1, 1 }, await context.Tiers.BasicTier(CancellationToken.None), 1
-            )),
+                new byte[] { 1, 1, 1, 1, 1 }, 1
+            )
+            { Tier = basicTier }),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "a");
@@ -53,8 +58,9 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRB",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, await context.Tiers.BasicTier(CancellationToken.None), 1
-            )),
+                new byte[] { 2, 2, 2, 2, 2 }, 1
+            )
+            { Tier = basicTier }),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
@@ -75,20 +81,16 @@ public class DevicesDbContextSeed
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
-        try
-        {
-            var basicTier = await context.Tiers.BasicTier(CancellationToken.None);
-            var identitiesWithoutTier = from i in context.Identities where i.Tier == null select i;
-            await identitiesWithoutTier.ForEachAsync(it =>
-            {
-                it.Tier = basicTier;
-            });
+        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None);
+        if(basicTier == null)
+            return;
 
-            await context.SaveChangesAsync();
-        }
-        catch (Exception)
+        var identitiesWithoutTier = context.Identities.Where(i => i.Tier == null).ToList();
+        identitiesWithoutTier.ForEach(it =>
         {
-            throw new Exception("Basic Tier was not found.");
-        }
+            it.Tier = basicTier;
+        });
+
+        await context.SaveChangesAsync();
     }
 }
