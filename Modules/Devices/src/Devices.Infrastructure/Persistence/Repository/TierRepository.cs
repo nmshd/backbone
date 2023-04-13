@@ -1,6 +1,9 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -22,4 +25,10 @@ public class TierRepository : ITierRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
+    {
+        var paginationResult = await _tiersDbSet
+            .OrderAndPaginate(d => d.Name, paginationFilter);
+        return paginationResult;
+    }
 }

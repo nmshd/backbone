@@ -33,10 +33,6 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         _logger.LogTrace($"Successfully published TierCreatedIntegrationEvent. Tier ID: {tier.Id.Value}, Tier Name: {tier.Name.Value}");
 
-        return new CreateTierResponse
-        {
-            Id = tier.Id,
-            Name = tier.Name
-        };
+        return new CreateTierResponse(tier.Id, tier.Name);
     }
 }
