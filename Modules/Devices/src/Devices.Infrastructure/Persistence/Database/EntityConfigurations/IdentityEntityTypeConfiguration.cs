@@ -10,6 +10,8 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
     {
         builder.HasKey(x => x.Address);
 
+        builder.HasOne(x => x.Tier);
+
         builder.Property(x => x.ClientId).HasMaxLength(200);
     }
 }

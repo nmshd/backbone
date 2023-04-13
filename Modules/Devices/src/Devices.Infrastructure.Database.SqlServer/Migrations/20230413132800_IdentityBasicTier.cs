@@ -5,7 +5,7 @@
 namespace Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityTier : Migration
+    public partial class IdentityBasicTier : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,14 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
-                nullable: true);
+                nullable: true,
+                defaultValue: "");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tier_Name",
+                table: "Tier",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
@@ -29,7 +36,8 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tier",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -38,6 +46,10 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tier_TierId",
                 table: "Identities");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Tier_Name",
+                table: "Tier");
 
             migrationBuilder.DropIndex(
                 name: "IX_Identities_TierId",
