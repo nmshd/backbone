@@ -4,9 +4,9 @@ import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import {
     Identity,
-    IdentityDTO,
     IdentityService,
 } from 'src/app/services/identity-service/identity.service';
+import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
 @Component({
     selector: 'app-identity-list-component',
@@ -43,15 +43,19 @@ export class IdentityListComponent {
 
     loadIdentities(event: LazyLoadEvent) {
         this.loading = true;
-
         setTimeout(() => {
             this.identityService
                 .getIdentities(event)
                 .subscribe({
-                    next: (data: IdentityDTO) => {
+                    next: (data: PagedHttpResponseEnvelope<Identity>) => {
                         if (data) {
-                            this.identities = data.identities;
-                            this.totalRecords = data.totalRecords;
+                            this.identities = data.result;
+                            if (data.pagination) {
+                                this.totalRecords =
+                                    data.pagination.totalRecords!;
+                            } else {
+                                this.totalRecords = data.result.length;
+                            }
                         }
                     },
                     error: (err: any) =>
@@ -66,13 +70,8 @@ export class IdentityListComponent {
         }, 1000);
     }
 
-    loadIdentitiesMock(event: LazyLoadEvent) {
-        this.loading = true;
-
-        setTimeout(() => {
-            this.mockFake();
-            this.loading = false;
-        }, 1000);
+    dateConvert(date: any) {
+        return new Date(date).toLocaleDateString();
     }
 
     clear() {
@@ -86,21 +85,5 @@ export class IdentityListComponent {
 
     editIdentity(identity: Identity) {
         this.router.navigate([`/identities`, identity.address]);
-    }
-
-    mockFake() {
-        let identities: Identity[] = [];
-
-        for (let i = 0; i < 10; i++) {
-            identities.push({
-                address: Math.random().toString(36).slice(2),
-                clientId: Math.random().toString(36).slice(2),
-                publicKey: Math.random().toString(36).slice(2),
-                createdAt: new Date(),
-                identityVersion: Math.random().toString(36).slice(2),
-            });
-        }
-        this.identities = identities;
-        this.totalRecords = 10;
     }
 }
