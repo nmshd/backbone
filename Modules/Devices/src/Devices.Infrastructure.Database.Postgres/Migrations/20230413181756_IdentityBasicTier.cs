@@ -5,7 +5,7 @@
 namespace Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityTier : Migration
+    public partial class IdentityBasicTier : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 fixedLength: true,
                 maxLength: 20,
                 nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tier_Name",
+                table: "Tier",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
@@ -38,6 +44,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tier_TierId",
                 table: "Identities");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Tier_Name",
+                table: "Tier");
 
             migrationBuilder.DropIndex(
                 name: "IX_Identities_TierId",

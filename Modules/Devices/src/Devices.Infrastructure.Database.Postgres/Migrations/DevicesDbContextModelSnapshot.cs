@@ -39,6 +39,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Tier", (string)null);
                 });
 
