@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
@@ -22,4 +23,8 @@ public class TierRepository : ITierRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.GetBasicTier(cancellationToken);
+    }
 }

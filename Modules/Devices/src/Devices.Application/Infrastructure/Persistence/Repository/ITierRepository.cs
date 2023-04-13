@@ -5,4 +5,6 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface ITierRepository
 {
     Task AddAsync(Tier tier, CancellationToken cancellationToken);
+
+    Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
 }
