@@ -10,11 +10,6 @@ public static class TestDataGenerator
         return IdentityAddress.Create(CreateRandomBytes(), "id1");
     }
 
-    public static Tier CreateRandomTier()
-    {
-        return new(TierName.Create(TierName.BASIC_DEFAULT_NAME).Value);
-    }
-
     public static DeviceId CreateRandomDeviceId()
     {
         return DeviceId.New();
