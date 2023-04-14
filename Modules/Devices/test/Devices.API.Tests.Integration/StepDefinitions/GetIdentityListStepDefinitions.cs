@@ -1,4 +1,3 @@
-using Devices.API.Tests.Integration.Models;
 using Devices.API.Tests.Integration.API;
 using Devices.API.Tests.Integration.Models;
 
@@ -7,13 +6,15 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     [Binding]
     public class GetIdentityListStepDefinitions
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly RequestConfiguration _requestConfiguration;
         private readonly IdentitiesApi _identitiesApi;
         private HttpResponse<ListIdentitiesResponse>? _identitiesResponse;
         private List<IdentitySummaryDTO>? _identitiesList;
 
-        public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi)
+        public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi, ScenarioContext scenarioContext)
         {
+            _scenarioContext = scenarioContext;
             _identitiesApi = identitiesApi;
             _requestConfiguration = new RequestConfiguration();
         }
@@ -26,13 +27,9 @@ namespace Devices.API.Tests.Integration.StepDefinitions
             _identitiesResponse.Should().NotBeNull();
             _identitiesResponse!.Data.Should().NotBeNull();
             _identitiesList = _identitiesResponse!.Data!.Result;
-        }
 
-        [Then(@"the response status code is (\d\d\d) \((?:[a-z]|[A-Z]|\s)+\)")]
-        public void ThenTheResponseStatusCodeIsOK(int code)
-        {
-            _identitiesList.Should().NotBeNull();
-            ((int)_identitiesResponse!.StatusCode).Should().Be(code);
+            _scenarioContext["Data"] = _identitiesList;
+            _scenarioContext["ResponseStatus"] = _identitiesResponse!.StatusCode;
         }
 
         [Then(@"the response contains a paginated list of Identities")]

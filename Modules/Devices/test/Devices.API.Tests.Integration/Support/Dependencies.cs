@@ -27,8 +27,10 @@ public static class Dependencies
 
         var restClient = new RestClient(httpConfig.BaseUrl);
         var identitiesApi = new IdentitiesApi(restClient);
+        var tiersApi = new TiersApi(restClient);
 
         services.AddSingleton(identitiesApi);
+        services.AddSingleton(tiersApi);
 
         return services;
     }
