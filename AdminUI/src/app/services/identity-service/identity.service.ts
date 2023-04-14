@@ -2,33 +2,33 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
+import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class IdentityService {
-    constructor(private http: HttpClient) {}
+    apiUrl: string;
 
-    getIdentities(event: LazyLoadEvent): Observable<IdentityDTO> {
+    constructor(private http: HttpClient) {
+        this.apiUrl = environment.apiUrl + '/Identities';
+    }
+
+    getIdentities(
+        event: LazyLoadEvent
+    ): Observable<PagedHttpResponseEnvelope<Identity>> {
         const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-            }),
             params: new HttpParams()
-                .set('skip', event.first!)
-                .set('take', event.rows!)
-                .set('sort', event.sortField!)
-                .set('sortOrder', event.sortOrder!),
-            filters: event.filters,
+                .set('PageNumber', event.first! / event.rows! + 1)
+                .set('PageSize', event.rows!),
         };
 
-        return this.http.get<IdentityDTO>('identity', httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<Identity>>(
+            this.apiUrl,
+            httpOptions
+        );
     }
-}
-
-export interface IdentityDTO {
-    identities: Identity[];
-    totalRecords: number;
 }
 
 export interface Identity {
