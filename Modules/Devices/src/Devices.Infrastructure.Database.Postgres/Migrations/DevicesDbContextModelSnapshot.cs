@@ -189,15 +189,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("TierId")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
                     b.HasKey("Address");
-
-                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -552,15 +544,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("Identity");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
-                {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", "Tier")
-                        .WithMany()
-                        .HasForeignKey("TierId");
-
-                    b.Navigation("Tier");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

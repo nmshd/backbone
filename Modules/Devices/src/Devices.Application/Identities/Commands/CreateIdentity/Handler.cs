@@ -50,10 +50,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, command.IdentityVersion)
-        {
-            Tier = basicTier
-        };
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, basicTier.Id, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 

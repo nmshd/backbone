@@ -28,4 +28,12 @@ public record TierId : StronglyTypedId
             return Result.Failure<TierId, DomainError>(validationResult);
         return Result.Success<TierId, DomainError>(new TierId(value));
     }
+
+    public static TierId New()
+    {
+   
+        var tierIdAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        return new TierId(PREFIX + tierIdAsString);
+        
+    }
 }

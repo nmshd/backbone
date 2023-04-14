@@ -22,4 +22,9 @@ public static class TestDataGenerator
         random.NextBytes(bytes);
         return bytes;
     }
+
+    public static TierId CreateRandomTierId()
+    {
+        return TierId.New();
+    }
 }

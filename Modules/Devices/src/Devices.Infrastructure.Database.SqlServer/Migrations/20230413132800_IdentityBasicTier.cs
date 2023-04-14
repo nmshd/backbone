@@ -37,7 +37,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
                 column: "TierId",
                 principalTable: "Tier",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />

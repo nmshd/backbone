@@ -51,10 +51,12 @@ public class HandlerTests
             new(TestDataGenerator.CreateRandomDeviceId(),
             TestDataGenerator.CreateRandomIdentityAddress(),
             TestDataGenerator.CreateRandomBytes(),
+            TestDataGenerator.CreateRandomTierId(),
             1),
             new(TestDataGenerator.CreateRandomDeviceId(),
             TestDataGenerator.CreateRandomIdentityAddress(),
             TestDataGenerator.CreateRandomBytes(),
+            TestDataGenerator.CreateRandomTierId(),
             1)
         };
 
@@ -74,9 +76,10 @@ public class HandlerTests
         var request = new PaginationFilter();
         var expectedClientId = TestDataGenerator.CreateRandomDeviceId();
         var expectedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var expectedTierId = TestDataGenerator.CreateRandomTierId();
         List<Identity> identitiesList = new()
         {
-            new(expectedClientId, expectedAddress, Array.Empty<byte>(), 1)
+            new(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1)
         };
 
         A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
@@ -89,6 +92,7 @@ public class HandlerTests
         result.First().ClientId.Should().Be(expectedClientId);
         result.First().Address.Should().Be(expectedAddress);
         result.First().PublicKey.Should().BeEquivalentTo(Array.Empty<byte>());
+        result.First().TierId.Should().BeEquivalentTo(expectedTierId);
         result.First().IdentityVersion.Should().Be(1);
     }
 
