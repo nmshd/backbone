@@ -43,9 +43,8 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRA",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 1, 1, 1, 1, 1 }, "id1"),
-                new byte[] { 1, 1, 1, 1, 1 }, 1
-            )
-            { Tier = basicTier }),
+                new byte[] { 1, 1, 1, 1, 1 }, basicTier.Id, 1
+            )),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "a");
@@ -58,9 +57,8 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRB",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, 1
-            )
-            { Tier = basicTier }),
+                new byte[] { 2, 2, 2, 2, 2 }, basicTier.Id, 1
+            )),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
@@ -81,16 +79,8 @@ public class DevicesDbContextSeed
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
-        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None);
-        if(basicTier == null)
-            return;
-
-        var identitiesWithoutTier = context.Identities.Where(i => i.Tier == null).ToList();
-        identitiesWithoutTier.ForEach(it =>
-        {
-            it.Tier = basicTier;
-        });
-
-        await context.SaveChangesAsync();
+        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
+        
+        await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }
