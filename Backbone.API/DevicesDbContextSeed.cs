@@ -26,7 +26,7 @@ public class DevicesDbContextSeed
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
-    static private async Task<Tier> GetBasicTier(DevicesDbContext context)
+    private static async Task<Tier> GetBasicTier(DevicesDbContext context)
     {
         return await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
     }
