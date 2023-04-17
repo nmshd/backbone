@@ -70,6 +70,7 @@ public class HandlerTests
 
         // Assert
         result.Should().HaveCount(1);
+        result.First().Id.Should().NotBeNull();
         result.First().Name.Should().Be(expectedName);
     }
 
