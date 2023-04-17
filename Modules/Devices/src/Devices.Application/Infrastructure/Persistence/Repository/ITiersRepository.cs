@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
-public interface ITierRepository
+public interface ITiersRepository
 {
     Task AddAsync(Tier tier, CancellationToken cancellationToken);
 

@@ -5,9 +5,9 @@ using MediatR;
 namespace Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
 {
-    private readonly ITierRepository _tierRepository;
+    private readonly ITiersRepository _tierRepository;
 
-    public Handler(ITierRepository repository)
+    public Handler(ITiersRepository repository)
     {
         _tierRepository = repository;
     }
@@ -15,11 +15,8 @@ public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
     public async Task<ListTiersResponse> Handle(ListTiersQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _tierRepository.FindAll(request.PaginationFilter);
-        var tiersDTOList = dbPaginationResult.ItemsOnPage.Select(el =>
-        {
-            return new TierDTO(el.Id, el.Name);
-        }).ToList();
+        var tierDTOs = dbPaginationResult.ItemsOnPage.Select(el => new TierDTO(el.Id, el.Name)).ToList();
 
-        return new ListTiersResponse(tiersDTOList, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListTiersResponse(tierDTOs, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }

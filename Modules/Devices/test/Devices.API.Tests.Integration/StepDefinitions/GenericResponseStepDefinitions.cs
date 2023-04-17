@@ -13,7 +13,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
         }
 
         [Then(@"the response status code is (\d\d\d) \((?:[a-z]|[A-Z]|\s)+\)")]
-        public void ThenTheResponseStatusCodeIsOK(int code)
+        public void ThenTheResponseStatusCodeIs(int code)
         {
             _data = _scenarioContext["Data"];
             _responseStatus = _scenarioContext["ResponseStatus"];

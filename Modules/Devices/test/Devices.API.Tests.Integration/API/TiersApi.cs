@@ -17,7 +17,7 @@ public class TiersApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<ListTiersResponse>> GetTiersList(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<ListTiersResponse>> GetTiers(RequestConfiguration requestConfiguration)
     {
         return await ExecuteTiersRequest<ListTiersResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Tiers").ToString(), requestConfiguration);
     }

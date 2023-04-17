@@ -23,7 +23,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
         [When(@"a GET request is sent to the Tiers/ endpoint")]
         public async Task WhenAGETRequestIsSentToTheTiersEndpointAsync()
         {
-            _tiersResponse = await _tiersApi.GetTiersList(_requestConfiguration);
+            _tiersResponse = await _tiersApi.GetTiers(_requestConfiguration);
             _tiersResponse.Should().NotBeNull();
             _tiersResponse!.Data.Should().NotBeNull();
             _tiersList = _tiersResponse!.Data!.Result;

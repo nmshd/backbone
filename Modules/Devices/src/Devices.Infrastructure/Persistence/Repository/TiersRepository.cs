@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
-public class TierRepository : ITierRepository
+public class TiersRepository : ITiersRepository
 {
     private readonly DbSet<Tier> _tiersDbSet;
     private readonly DevicesDbContext _dbContext;
 
-    public TierRepository(DevicesDbContext dbContext)
+    public TiersRepository(DevicesDbContext dbContext)
     {
         _dbContext = dbContext;
         _tiersDbSet = dbContext.Set<Tier>();
