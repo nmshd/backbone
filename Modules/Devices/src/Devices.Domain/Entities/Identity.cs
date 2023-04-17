@@ -28,7 +28,6 @@ public class Identity
 
     public byte IdentityVersion { get; set; }
 
-    [ForeignKey(nameof(Tier))]
     public TierId? TierId { get; set; }
 
     public bool IsNew()
