@@ -189,12 +189,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("TierId")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
                     b.HasKey("Address");
 
                     b.ToTable("Identities");
