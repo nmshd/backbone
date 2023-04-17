@@ -26,15 +26,17 @@ public class DevicesDbContextSeed
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
+    static private async Task<Tier> GetBasicTier(DevicesDbContext context)
+    {
+        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
+    }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
     {
         if (await context.Users.AnyAsync())
             return;
 
-        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None);
-        if (basicTier == null)
-            return;
+        var basicTier = await GetBasicTier(context);
 
         var user = new ApplicationUser
         {
@@ -79,8 +81,7 @@ public class DevicesDbContextSeed
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
-        var basicTier = await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
-        
+        var basicTier = await GetBasicTier(context);
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }
