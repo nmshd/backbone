@@ -10,14 +10,14 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="7.0.0" />
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
 		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.4.0" />
 		<PackageReference Include="Google.Cloud.Storage.V1" Version="4.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
