@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Devices.API.Tests.Integration.StepDefinitions
+namespace Devices.API.Tests.Integration.Models
 {
     public class ResponseData
     {

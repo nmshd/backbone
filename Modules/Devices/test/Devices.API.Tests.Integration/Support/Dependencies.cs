@@ -1,5 +1,5 @@
 ﻿using Devices.API.Tests.Integration.API;
-using Devices.API.Tests.Integration.StepDefinitions;
+using Devices.API.Tests.Integration.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

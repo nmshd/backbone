@@ -1,3 +1,5 @@
+using Devices.API.Tests.Integration.Models;
+
 namespace Devices.API.Tests.Integration.StepDefinitions
 {
     [Binding]
