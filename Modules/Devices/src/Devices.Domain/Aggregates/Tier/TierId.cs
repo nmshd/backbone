@@ -31,9 +31,7 @@ public record TierId : StronglyTypedId
 
     public static TierId New()
     {
-   
         var tierIdAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new TierId(PREFIX + tierIdAsString);
-        
+        return new TierId(PREFIX + tierIdAsString);   
     }
 }
