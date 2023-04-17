@@ -15,11 +15,8 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
     public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _identityRepository.FindAll(request.PaginationFilter);
-        var identitiesDTOList = dbPaginationResult.ItemsOnPage.Select(el =>
-        {
-            return new IdentitySummaryDTO(el.Address, el.ClientId, el.PublicKey, el.IdentityVersion, el.CreatedAt, el.Devices);
-        }).ToList();
+        var identitiesDTOs = dbPaginationResult.ItemsOnPage.Select(el => new IdentitySummaryDTO(el.Address, el.ClientId, el.PublicKey, el.IdentityVersion, el.CreatedAt, el.Devices)).ToList();
 
-        return new ListIdentitiesResponse(identitiesDTOList, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListIdentitiesResponse(identitiesDTOs, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }

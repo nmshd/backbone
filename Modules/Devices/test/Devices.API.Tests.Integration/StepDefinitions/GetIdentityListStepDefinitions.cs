@@ -23,7 +23,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
         [When(@"a GET request is sent to the Identities/ endpoint")]
         public async Task WhenAGETRequestIsSentToTheIdentitiesEndpointAsync()
         {
-            _identitiesResponse = await _identitiesApi.GetIdentitiesList(_requestConfiguration);
+            _identitiesResponse = await _identitiesApi.GetIdentities(_requestConfiguration);
             _identitiesResponse.Should().NotBeNull();
             _identitiesResponse!.Data.Should().NotBeNull();
             _identitiesList = _identitiesResponse!.Data!.Result;
