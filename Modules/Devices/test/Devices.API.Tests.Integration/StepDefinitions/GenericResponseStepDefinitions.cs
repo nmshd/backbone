@@ -3,23 +3,19 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     [Binding]
     public class GenericResponseStepDefinitions
     {
-        private ScenarioContext _scenarioContext;
-        private object? _data;
-        private object? _responseStatus;
+        private readonly ResponseData _genericResponseData;
 
-        public GenericResponseStepDefinitions(ScenarioContext scenarioContext)
+        public GenericResponseStepDefinitions(ResponseData genericResponseData)
         {
-            _scenarioContext = scenarioContext;
+            _genericResponseData = genericResponseData;
         }
 
         [Then(@"the response status code is (\d\d\d) \((?:[a-z]|[A-Z]|\s)+\)")]
         public void ThenTheResponseStatusCodeIs(int code)
         {
-            _data = _scenarioContext["Data"];
-            _responseStatus = _scenarioContext["ResponseStatus"];
+            var responseStatus = _genericResponseData.ResponseStatus;
 
-            _data.Should().NotBeNull();
-            ((int)_responseStatus).Should().Be(code);
+            ((int)responseStatus).Should().Be(code);
         }
     }
 }

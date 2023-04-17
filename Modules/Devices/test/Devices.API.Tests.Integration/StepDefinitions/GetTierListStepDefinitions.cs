@@ -6,15 +6,15 @@ namespace Devices.API.Tests.Integration.StepDefinitions
     [Binding]
     public class GetTierListStepDefinitions
     {
-        private readonly ScenarioContext _scenarioContext;
+        private readonly ResponseData _genericResponseData;
         private readonly RequestConfiguration _requestConfiguration;
         private readonly TiersApi _tiersApi;
         private HttpResponse<ListTiersResponse>? _tiersResponse;
         private List<TierDTO>? _tiersList;
 
-        public GetTierListStepDefinitions(TiersApi tiersApi, ScenarioContext scenarioContext)
+        public GetTierListStepDefinitions(TiersApi tiersApi, ResponseData genericResponseData)
         {
-            _scenarioContext = scenarioContext;
+            _genericResponseData = genericResponseData;
             _tiersApi = tiersApi;
             _requestConfiguration = new RequestConfiguration();
         }
@@ -28,8 +28,7 @@ namespace Devices.API.Tests.Integration.StepDefinitions
             _tiersResponse!.Data.Should().NotBeNull();
             _tiersList = _tiersResponse!.Data!.Result;
 
-            _scenarioContext["Data"] = _tiersList;
-            _scenarioContext["ResponseStatus"] = _tiersResponse!.StatusCode;
+            _genericResponseData.ResponseStatus = _tiersResponse!.StatusCode;
         }
 
         [Then(@"the response contains a paginated list of Tiers")]
