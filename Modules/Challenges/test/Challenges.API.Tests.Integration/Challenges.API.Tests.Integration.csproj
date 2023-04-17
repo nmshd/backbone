@@ -14,8 +14,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
-    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.0" />
-    <PackageReference Include="RestSharp" Version="110.1.0" />
+    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="SolidToken.SpecFlow.DependencyInjection" Version="3.9.3" />
     <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
     <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
