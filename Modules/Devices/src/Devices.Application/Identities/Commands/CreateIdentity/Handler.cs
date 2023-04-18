@@ -2,9 +2,10 @@
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -20,14 +21,16 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     private readonly ChallengeValidator _challengeValidator;
     private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
+    private readonly IEventBus _eventBus;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationOptions> applicationOptions, ITierRepository tiersRepository)
+    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITierRepository tiersRepository)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _challengeValidator = challengeValidator;
         _logger = logger;
+        _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
         _tiersRepository = tiersRepository;
     }
@@ -60,6 +63,10 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
 
         _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
+
+        _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
+
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {newIdentity.TierId}");
 
         return new CreateIdentityResponse
         {
