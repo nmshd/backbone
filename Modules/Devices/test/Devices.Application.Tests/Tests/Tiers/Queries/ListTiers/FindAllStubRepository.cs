@@ -22,4 +22,9 @@ public class FindAllStubRepository : ITiersRepository
     {
         return Task.FromResult(_tiers);
     }
+
+    public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

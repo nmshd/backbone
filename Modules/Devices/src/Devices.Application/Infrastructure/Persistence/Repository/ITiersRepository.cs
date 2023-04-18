@@ -9,4 +9,6 @@ public interface ITiersRepository
     Task AddAsync(Tier tier, CancellationToken cancellationToken);
 
     Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter);
+
+    Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
 }
