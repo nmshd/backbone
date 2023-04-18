@@ -1,3 +1,4 @@
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Tests;
@@ -20,5 +21,10 @@ public static class TestDataGenerator
         var bytes = new byte[10];
         random.NextBytes(bytes);
         return bytes;
+    }
+
+    public static TierId CreateRandomTierId()
+    {
+        return TierId.New();
     }
 }

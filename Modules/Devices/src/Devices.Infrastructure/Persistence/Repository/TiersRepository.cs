@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
@@ -30,5 +31,10 @@ public class TiersRepository : ITiersRepository
         var paginationResult = await _tiersDbSet
             .OrderAndPaginate(d => d.Name, paginationFilter);
         return paginationResult;
+    }
+    
+    public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.GetBasicTier(cancellationToken);
     }
 }
