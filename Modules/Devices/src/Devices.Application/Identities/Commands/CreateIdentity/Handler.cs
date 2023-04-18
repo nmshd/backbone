@@ -16,13 +16,13 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {
     private readonly ApplicationOptions _applicationOptions;
-    private readonly ITierRepository _tiersRepository;
+    private readonly ITiersRepository _tiersRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationOptions> applicationOptions, ITierRepository tiersRepository)
+    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository)
     {
         _dbContext = dbContext;
         _userManager = userManager;

@@ -1,29 +1,20 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
-using Xunit;
+﻿using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Application.Tests;
 using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using FakeItEasy;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Pagination;
+using FluentAssertions;
+using FluentAssertions.Execution;
+using Xunit;
+using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
 public class HandlerTests
 {
-    private readonly IIdentitiesRepository _fakeRepository;
-    private readonly Handler _handler;
-
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-
-        _fakeRepository = A.Fake<IIdentitiesRepository>();
-
-        _handler = CreateHandler(); 
     }
 
     [Fact]
@@ -32,10 +23,10 @@ public class HandlerTests
         // Arrange
         var identitiesList = new List<Identity>();
         var request = new PaginationFilter() { PageSize = 5 };
-        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
 
         // Act
-        var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(0);
@@ -60,10 +51,10 @@ public class HandlerTests
             1)
         };
 
-        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
 
         // Act
-        var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(2);
@@ -82,10 +73,10 @@ public class HandlerTests
             new(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1)
         };
 
-        A.CallTo(() => _fakeRepository.FindAll(request)).Returns(MakeDBPaginationResult(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
 
         // Act
-        var result = await _handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(1);
@@ -96,9 +87,9 @@ public class HandlerTests
         result.First().IdentityVersion.Should().Be(1);
     }
 
-    private Handler CreateHandler()
+    private Handler CreateHandler(FindAllStubRepository findAllStubRepository)
     {
-        return new Handler(_fakeRepository);
+        return new Handler(findAllStubRepository);
     }
 
     private DbPaginationResult<Identity> MakeDBPaginationResult(List<Identity> identities)
