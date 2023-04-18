@@ -32,10 +32,10 @@ services:
     volumes:
       - ../:/app
 
-  admin:
-    image: nmshd-admin
-    container_name: admin
-    hostname: adminAPI
+  adminAPI:
+    image: nmshd-admin-api
+    container_name: admin-api
+    hostname: admin-api
     build:
       context: ..
       dockerfile: Admin.API/Dockerfile.debug
@@ -49,6 +49,21 @@ services:
       - rabbitmq
     volumes:
       - ../:/app
+    
+  adminUI:
+    image: nmshd-admin-ui
+    container_name: admin-ui
+    hostname: admin-ui
+    build:
+      dockerfile: Dockerfile.debug
+      context: "../AdminUI/"
+    ports:
+      - "5020:4200"
+    depends_on:
+      - "adminAPI"
+    volumes:
+      - ../AdminUI/src:/app/src/:ro
+    command: "ng serve --host 0.0.0.0"
 
   ### infrastructure ###
 
