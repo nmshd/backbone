@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpecFlowCucumberResultsExporter.Model
-{
+namespace SpecFlowCucumberResultsExporter.Model;
+
 	public class Embedding
 	{
 		public Embedding(string mimeType, string base64data)
@@ -16,4 +16,3 @@ namespace SpecFlowCucumberResultsExporter.Model
 		[JsonProperty("data")]
 		public string Base64Data { get; set; }
 	}
-}
