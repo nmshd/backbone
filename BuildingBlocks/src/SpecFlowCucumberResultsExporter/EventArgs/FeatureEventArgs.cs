@@ -1,9 +1,9 @@
 ﻿using SpecFlowCucumberResultsExporter.Model;
 using SpecFlowCucumberResultsExporter.Reporting;
 
-namespace SpecFlowCucumberResultsExporter.EventArgs
-{
-    public class FeatureEventArgs : ReportEventArgs
+namespace SpecFlowCucumberResultsExporter.EventArgs;
+
+public class FeatureEventArgs : ReportEventArgs
 	{
 		public FeatureEventArgs(Reporter reporter)
 			: base(reporter)
@@ -13,4 +13,3 @@ namespace SpecFlowCucumberResultsExporter.EventArgs
 
 		public Feature Feature { get; internal set; }
 	}
-}
