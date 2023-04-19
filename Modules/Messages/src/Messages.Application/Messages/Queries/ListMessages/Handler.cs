@@ -48,7 +48,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
         var query = _dbContext
             .Set<Message>()
             .AsQueryable()
-            .IncludeAllReferences(addressOfActiveIdentity);
+            .IncludeAllReferences();
 
         if (request.Ids.Any())
             query = query.WithIdsIn(request.Ids);
