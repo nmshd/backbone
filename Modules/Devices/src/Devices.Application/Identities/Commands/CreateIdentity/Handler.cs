@@ -66,7 +66,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {newIdentity.TierId}");
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {basicTier.Name}");
 
         return new CreateIdentityResponse
         {
