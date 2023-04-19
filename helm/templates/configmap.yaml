@@ -2,8 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: configuration
-  labels:
-    {{- include "backbone.labels" . | nindent 4 }}
+  labels: {{- include "global.labels" . | nindent 4 }}
 data:
   appsettings.override.json: |-
-    {{- mustToPrettyJson .Values.configuration | toString | nindent 4 }}
+    {{- mustToPrettyJson .Values.global.configuration | toString | nindent 4 }}

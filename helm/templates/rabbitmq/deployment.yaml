@@ -1,10 +1,10 @@
-{{- if .Values.rabbitmq.enabled }}
+{{- if .Values.rabbitmq.create }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rabbitmq
   labels:
-    {{- include "backbone.labels" . | nindent 4 }}
+    {{- include "global.labels" . | nindent 4 }}
     app: rabbitmq
 spec:
   replicas: 1

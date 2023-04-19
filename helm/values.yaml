@@ -1,24 +1,193 @@
-nameOverride: ""
+global:
+  # environment - possible values: "Development"/"Production"
+  environment: ""
 
-# environment - possible values: "Development"/"Production"
-environment: Production
+  # provider - possible values: "Azure"/"GoogleCloud"
+  provider: ""
 
-# provider - possible values: "Azure"/"GoogleCloud"
-provider: GoogleCloud
+  serviceAccount:
+    create: false
+    # name - defaults to the name of the chart
+    name: ""
+    annotations: {}
 
-serviceAccount:
-  create: true
-  # name - defaults to the name of the chart
-  name: ""
-  annotations: {}
+  configuration:
+    Authentication:
+      JwtLifetimeInSeconds: 300
+      # JwtSigningCertificateSource - possible values: "config"/"file"
+      JwtSigningCertificateSource: "config"
+      # JwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via Kubernetes secret
+      JwtSigningCertificate: ""
+    Cors:
+      # AllowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
+      AllowedOrigins: ""
+      # AllowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
+      ExposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
+    SwaggerUi:
+      # TokenUrl - the URL from which the Swagger UI can obtain a JWT; it usually follows the pattern "<backbone-base-url>/connect/token"
+      TokenUrl: ""
+    Infrastructure:
+      EventBus:
+        # Vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
+        Vendor: ""
+        # ConnectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
+        ConnectionInfo: ""
+        SubscriptionClientName: "Backbone"
+        # RabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
+        RabbitMQUsername: ""
+        # RabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
+        RabbitMQPassword: ""
+        # ConnectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the consumer API should retry to connect to the RabbitMQ service
+        ConnectionRetryCount: 5
+        # GcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
+        GcpPubSubProjectId: ""
+        # GcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the consumer API should publish events to
+        GcpPubSubTopicName: ""
+    Modules:
+      Challenges:
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+      Devices:
+        Application:
+          # AddressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
+          AddressPrefix: id1
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          AzureNotificationHub:
+            HubName: ""
+      Files:
+        Application:
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          BlobStorage:
+            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            CloudProvider: ""
+            # ConnectionInfo - should be set via Kubernetes secret
+            ConnectionInfo: ""
+            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            ContainerName: ""
+      Messages:
+        Application:
+          # MaxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
+          MaxNumberOfUnreceivedMessagesFromOneSender: 20
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          BlobStorage:
+            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            CloudProvider: ""
+            # ConnectionInfo - should be set via Kubernetes secret
+            ConnectionInfo: ""
+            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            ContainerName: ""
+      Relationships:
+        Application:
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          BlobStorage:
+            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            CloudProvider: ""
+            # ConnectionInfo - should be set via Kubernetes secret
+            ConnectionInfo: ""
+            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            ContainerName: ""
+      Synchronization:
+        Application:
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          BlobStorage:
+            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            CloudProvider: ""
+            # ConnectionInfo - should be set via Kubernetes secret
+            ConnectionInfo: ""
+            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            ContainerName: ""
+      Tokens:
+        Application:
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          Pagination:
+            DefaultPageSize: 50
+            MaxPageSize: 200
+        Infrastructure:
+          SqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            Provider: ""
+            # ConnectionString - should be set via Kubernetes secret
+            ConnectionString: ""
+          BlobStorage:
+            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            CloudProvider: ""
+            # ConnectionInfo - should be set via Kubernetes secret
+            ConnectionInfo: ""
+            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            ContainerName: ""
+    Serilog:
+      Using:
+        - Serilog.Sinks.ApplicationInsights
+      MinimumLevel:
+        Default: Debug
+      Enrich:
+        - FromLogContext
+        - WithMachineName
+        - WithProcessId
+        - WithThreadId
+        - WithEnvironmentName
+      WriteTo:
+        - Name: Console
+          Args:
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss}|{Level} => CorrelationID:{CorrelationID} => RequestId:{RequestId} => RequestPath:{RequestPath}{NewLine}    {SourceContext}{NewLine}    {Message}{NewLine}{Exception}"
 
 consumerApi:
-  name: consumer-api
+  nameOverride: ""
   replicas: 1
 
   image:
-    repository: ghcr.io/nmshd/backbone-consumer-api
-    tag: v0.0.12
+    repository: "ghcr.io/nmshd/backbone-consumer-api"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
   resources:
@@ -29,21 +198,37 @@ consumerApi:
       cpu: "400m"
       memory: "1Gi"
 
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 1000
+  # securityContext:
+  # capabilities:
+  #   drop:
+  #     - "ALL"
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
-  podSecurityContext:
-    fsGroup: 2000
+  # podSecurityContext:
+  # fsGroup: 2000
 
   podAnnotations: {}
 
+  # env - environment variables for the consumer API container
+  #############################################################################
+  # IMPORTANT
+  # The following environment variables are required:
+  # - Authentication__JwtSigningCertificate
+  # - Modules__Challenges__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Devices__Infrastructure__AzureNotificationHub__ConnectionString
+  # - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Files__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString
+  #############################################################################
+  env: []
+
   service:
-    type: ClusterIP
+    type: "ClusterIP"
     port: 80
 
   nodeSelector: {}
@@ -57,6 +242,7 @@ consumerApi:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
+  # httpRoute - the configuration of the HttpRoute for the consumer API
   httpRoute:
     # parentRefName - the name of the gateway this Route wants to be attached to
     parentRefName: ""
@@ -64,20 +250,30 @@ consumerApi:
     parentRefNamespace: ""
     hostnames: []
 
-  # backendConfig - only applicable for Google Cloud
+  # httpRoute - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
   backendConfig:
     healthCheck:
+      # checkIntervalSec - time from the start of one prober's check to the start of its next check
       checkIntervalSec: 15
+      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
       timeoutSec: 15
+      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
       healthyThreshold: 1
+      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
 
 adminCli:
-  name: admin-cli
+  nameOverride: ""
+
+  configuration:
+    Database:
+      # Provider - possible values: "Postgres"/"SqlServer"
+      Provider: "Postgres"
 
   image:
-    repository: ghcr.io/nmshd/backbone-admin-cli
-    tag: v1.0.0
+    repository: "ghcr.io/nmshd/backbone-admin-cli"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
   resources:
@@ -88,16 +284,24 @@ adminCli:
       cpu: "400m"
       memory: "1Gi"
 
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 1000
+  # securityContext:
+  #   capabilities:
+  #     drop:
+  #       - ALL
+  #   readOnlyRootFilesystem: true
+  #   runAsNonRoot: true
+  #   runAsUser: 1000
 
-  podSecurityContext:
-    fsGroup: 2000
+  # env - environment variables for the admin CLI container
+  #############################################################################
+  # IMPORTANT
+  # The following environment variables are required:
+  # - Database__ConnectionString
+  #############################################################################
+  env: []
+
+  # podSecurityContext:
+  #   fsGroup: 2000
 
   podAnnotations: {}
 
@@ -107,7 +311,7 @@ adminCli:
 
 rabbitmq:
   # create - if a RabbitMQ service should be created, set this to true; if you want to use an existing one, set it to false
-  create: true
+  create: false
   resources:
     requests:
       cpu: "100m"
@@ -115,194 +319,3 @@ rabbitmq:
     limits:
       cpu: "200m"
       memory: "256Mi"
-  # ingress:
-  #   enabled: false
-  #   className: ""
-  #   annotations:
-  #     {}
-  #     # kubernetes.io/ingress.class: nginx
-  #     # kubernetes.io/tls-acme: "true"
-  #   hosts:
-  #     - host: chart-example.local
-  #       paths:
-  #         - path: /
-  #           pathType: ImplementationSpecific
-  #   tls: []
-  #   #  - secretName: chart-example-tls
-  #   #    hosts:
-  #   #      - chart-example.local
-
-secrets:
-  - name: challenges-sql-connectionstring
-    value: "1" # a Kubernetes secret will be created for this
-  - name: devices-sql-connectionstring
-    value: "2"
-  - name: files-sql-connectionstring
-    value: "3"
-  - name: messages-sql-connectionstring
-    value: "4"
-  - name: relationships-sql-connectionstring
-    value: 5"
-  - name: synchronization-sql-connectionstring
-    value: "6"
-  - name: tokens-sql-connectionstring
-    value: "7"
-
-  - name: devices-notificationhub-connectionstring
-    value: "8"
-  - name: jwt-signing-certificate
-    value: "9"
-
-configuration:
-  Authentication:
-    JwtLifetimeInSeconds: 300
-    # JwtSigningCertificateSource - possible values: "config"/"file"
-    JwtSigningCertificateSource: config
-    # JwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via Kubernetes secret
-    JwtSigningCertificate: ""
-  Cors:
-    # AllowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
-    AllowedOrigins: ""
-    # AllowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
-    ExposedHeaders: X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id
-  SwaggerUi:
-    # TokenUrl - the URL from which the Swagger UI can obtain a JWT; it usually follows the pattern "<backbone-base-url>/connect/token"
-    TokenUrl: ""
-  Infrastructure:
-    EventBus:
-      # Vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
-      Vendor: RabbitMQ
-      # ConnectionInfo - the host name of the RabbitMQ service if Vendor is "RabbitMQ"; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
-      ConnectionInfo: rabbitmq
-      SubscriptionClientName: Backbone
-      # RabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
-      RabbitMQUsername: admin
-      # RabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
-      RabbitMQPassword: ""
-      # ConnectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the consumer API should retry to connect to the RabbitMQ service
-      ConnectionRetryCount: 5
-      # GcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
-      GcpPubSubProjectId: ""
-      # GcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the consumer API should publish events to
-      GcpPubSubTopicName: ""
-  Modules:
-    Challenges:
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-    Devices:
-      Application:
-        # AddressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
-        AddressPrefix: id1
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        AzureNotificationHub:
-          HubName: ""
-    Files:
-      Application:
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        BlobStorage:
-          # CloudProvider - possible values: "GoogleCloud"/"Azure"
-          CloudProvider: ""
-          # ConnectionInfo - should be set via Kubernetes secret
-          ConnectionInfo: ""
-          # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-          ContainerName: ""
-    Messages:
-      Application:
-        # MaxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
-        MaxNumberOfUnreceivedMessagesFromOneSender: 20
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        BlobStorage:
-          # CloudProvider - possible values: "GoogleCloud"/"Azure"
-          CloudProvider: ""
-          # ConnectionInfo - should be set via Kubernetes secret
-          ConnectionInfo: ""
-          # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-          ContainerName: ""
-    Relationships:
-      Application:
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        BlobStorage:
-          # CloudProvider - possible values: "GoogleCloud"/"Azure"
-          CloudProvider: ""
-          # ConnectionInfo - should be set via Kubernetes secret
-          ConnectionInfo: ""
-          # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-          ContainerName: ""
-    Synchronization:
-      Application:
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        BlobStorage:
-          # CloudProvider - possible values: "GoogleCloud"/"Azure"
-          CloudProvider: ""
-          # ConnectionInfo - should be set via Kubernetes secret
-          ConnectionInfo: ""
-          # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-          ContainerName: ""
-    Tokens:
-      Application:
-        # Pagination - the following options describe the default and maximum page size for the different endpoints
-        Pagination:
-          DefaultPageSize: 50
-          MaxPageSize: 200
-      Infrastructure:
-        SqlDatabase:
-          # Provider - possible values: "Postgres"/"SqlServer"
-          Provider: ""
-          # ConnectionString - should be set via Kubernetes secret
-          ConnectionString: ""
-        BlobStorage:
-          # CloudProvider - possible values: "GoogleCloud"/"Azure"
-          CloudProvider: ""
-          # ConnectionInfo - should be set via Kubernetes secret
-          ConnectionInfo: ""
-          # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-          ContainerName: ""

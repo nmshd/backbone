@@ -1,0 +1,9 @@
+dependencies:
+- name: admincli
+  repository: file://charts/admincli
+  version: 1.0.0
+- name: consumerapi
+  repository: file://charts/consumerapi
+  version: 1.0.0
+digest: sha256:77c9d5cebf38f8c556fbe9345519e3b75786860ce567fb4181e8fc050ca30a98
+generated: "2023-04-18T08:01:06.234306894+02:00"
