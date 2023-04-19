@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine as build-stage
+FROM node:18.16-alpine as build-stage
 EXPOSE 4200
 
 WORKDIR /app
