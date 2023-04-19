@@ -8,6 +8,7 @@ using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
@@ -47,6 +48,7 @@ app
     .MigrateDbContext<Backbone.Modules.Devices.Infrastructure.Persistence.Database.DevicesDbContext>((context, _) => { new DevicesDbContextSeed().SeedAsync(context).Wait(); })
     .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.FilesDbContext>()
     .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.RelationshipsDbContext>()
+    .MigrateDbContext<Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QuotasDbContext>()
     .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.MessagesDbContext>()
     .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.SynchronizationDbContext>()
     .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.TokensDbContext>();
@@ -59,6 +61,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
         .ConfigureAndValidate<Backbone.Modules.Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Quotas.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Quotas:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
@@ -92,7 +95,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens);
+        .AddTokens(parsedConfiguration.Modules.Tokens)
+        .AddQuotas(parsedConfiguration.Modules.Quotas);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }

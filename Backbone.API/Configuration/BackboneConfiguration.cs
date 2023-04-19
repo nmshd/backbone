@@ -58,6 +58,9 @@ public class BackboneConfiguration
         public DevicesConfiguration Devices { get; set; } = new();
 
         [Required]
+        public QuotasConfiguration Quotas { get; set; } = new();
+
+        [Required]
         public FilesConfiguration Files { get; set; } = new();
 
         [Required]

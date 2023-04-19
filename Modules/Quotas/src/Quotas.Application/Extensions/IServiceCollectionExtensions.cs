@@ -16,4 +16,3 @@ public static class IServiceCollectionExtensions
         // services.AddValidatorsFromAssemblyContaining<...>(); // needs to be filled as soon as there is the first validator
     }
 }
-
