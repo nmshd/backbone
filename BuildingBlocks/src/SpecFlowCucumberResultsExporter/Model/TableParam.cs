@@ -1,28 +1,27 @@
 ﻿using System.Xml.Serialization;
 
-namespace SpecFlowCucumberResultsExporter.Model
+namespace SpecFlowCucumberResultsExporter.Model;
+
+public class TableParam
 {
-    public class TableParam
+    public List<string> Columns { get; set; }
+
+    [XmlIgnore]
+    public List<Dictionary<string, string>> Rows { get; set; }
+
+    public int GetMaxColumnCharacters(int columnIndex)
     {
-        public List<string> Columns { get; set; }
-
-        [XmlIgnore]
-        public List<Dictionary<string, string>> Rows { get; set; }
-
-        public int GetMaxColumnCharacters(int columnIndex)
+        int result = 0;
+        foreach (Dictionary<string, string> row in Rows)
         {
-            int result = 0;
-            foreach (Dictionary<string, string> row in Rows)
+            foreach (string value in row.Values)
             {
-                foreach (string value in row.Values)
+                if (value.Length > result)
                 {
-                    if (value.Length > result)
-                    {
-                        result = value.Length;
-                    }
+                    result = value.Length;
                 }
             }
-            return result;
         }
+        return result;
     }
 }

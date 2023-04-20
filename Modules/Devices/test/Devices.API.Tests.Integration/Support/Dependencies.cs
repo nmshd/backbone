@@ -1,4 +1,5 @@
 ﻿using Devices.API.Tests.Integration.API;
+using Devices.API.Tests.Integration.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -27,8 +28,12 @@ public static class Dependencies
 
         var restClient = new RestClient(httpConfig.BaseUrl);
         var identitiesApi = new IdentitiesApi(restClient);
+        var tiersApi = new TiersApi(restClient);
 
         services.AddSingleton(identitiesApi);
+        services.AddSingleton(tiersApi);
+
+        services.AddScoped<ResponseData>();
 
         return services;
     }

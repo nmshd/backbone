@@ -1,91 +1,90 @@
 ﻿using System.Reflection;
 using SpecFlowCucumberResultsExporter.Model;
 
-namespace SpecFlowCucumberResultsExporter.Extensions
+namespace SpecFlowCucumberResultsExporter.Extensions;
+
+public static class Extensions
 {
-    public static class Extensions
+    public static TestResult GetResult(this IEnumerable<ReportItem> items)
     {
-        public static TestResult GetResult(this IEnumerable<ReportItem> items)
+        return items.Select(x => x.Result).GetResult();
+    }
+
+    public static TestResult GetResult(this IEnumerable<TestResult> results)
+    {
+        var testResults = results as TestResult[] ?? results.ToArray();
+        if (testResults.Any(x => x == TestResult.Failed))
         {
-            return items.Select(x => x.Result).GetResult();
+            return TestResult.Failed;
         }
 
-        public static TestResult GetResult(this IEnumerable<TestResult> results)
+        if (testResults.Any(x => x == TestResult.Pending))
         {
-            var testResults = results as TestResult[] ?? results.ToArray();
-            if (testResults.Any(x => x == TestResult.Failed))
-            {
-                return TestResult.Failed;
-            }
+            return TestResult.Pending;
+        }
 
-            if (testResults.Any(x => x == TestResult.Pending))
-            {
+        if (testResults.Any(x => x == TestResult.Skipped))
+        {
+            return TestResult.Skipped;
+        }
+
+        if (testResults.Any(x => x == TestResult.Undefined))
+        {
+            return TestResult.Undefined;
+        }
+
+        return TestResult.Passed;
+    }
+
+    internal static TestResult ToTestResult(this ScenarioExecutionStatus executionStatus)
+    {
+        switch (executionStatus)
+        {
+            case ScenarioExecutionStatus.OK:
+                return TestResult.Passed;
+            case ScenarioExecutionStatus.StepDefinitionPending:
                 return TestResult.Pending;
-            }
-
-            if (testResults.Any(x => x == TestResult.Skipped))
-            {
-                return TestResult.Skipped;
-            }
-
-            if (testResults.Any(x => x == TestResult.Undefined))
-            {
+            case ScenarioExecutionStatus.TestError:
+                return TestResult.Failed;
+            default:
                 return TestResult.Undefined;
-            }
-
-            return TestResult.Passed;
         }
+    }
 
-        internal static TestResult ToTestResult(this ScenarioExecutionStatus executionStatus)
+    internal static IEnumerable<string> GetPendingSteps(this ScenarioContext scenarioContenxt)
+    {
+        return typeof(ScenarioContext)
+            .GetProperty("PendingSteps", BindingFlags.NonPublic | BindingFlags.Instance)
+            .GetValue(scenarioContenxt, null) as IEnumerable<string>
+               ?? new string[0];
+    }
+
+    internal static string ReplaceFirst(this string s, string find, string replace)
+    {
+        var first = s.IndexOf(find, StringComparison.Ordinal);
+        return s.Substring(0, first) + replace + s.Substring(first + find.Length);
+    }
+
+    internal static string GetParamName(this MethodInfo method, int index)
+    {
+        var retVal = string.Empty;
+
+        if (method != null && method.GetParameters().Length > index)
         {
-            switch (executionStatus)
-            {
-                case ScenarioExecutionStatus.OK:
-                    return TestResult.Passed;
-                case ScenarioExecutionStatus.StepDefinitionPending:
-                    return TestResult.Pending;
-                case ScenarioExecutionStatus.TestError:
-                    return TestResult.Failed;
-                default:
-                    return TestResult.Undefined;
-            }
+            retVal = method.GetParameters()[index].Name;
         }
 
-        internal static IEnumerable<string> GetPendingSteps(this ScenarioContext scenarioContenxt)
+
+        return retVal;
+    }
+
+    internal static ExceptionInfo ToExceptionInfo(this Exception ex)
+    {
+        if (ex == null)
         {
-            return typeof(ScenarioContext)
-                .GetProperty("PendingSteps", BindingFlags.NonPublic | BindingFlags.Instance)
-                .GetValue(scenarioContenxt, null) as IEnumerable<string>
-                   ?? new string[0];
+            return null;
         }
 
-        internal static string ReplaceFirst(this string s, string find, string replace)
-        {
-            var first = s.IndexOf(find, StringComparison.Ordinal);
-            return s.Substring(0, first) + replace + s.Substring(first + find.Length);
-        }
-
-        internal static string GetParamName(this MethodInfo method, int index)
-        {
-            var retVal = string.Empty;
-
-            if (method != null && method.GetParameters().Length > index)
-            {
-                retVal = method.GetParameters()[index].Name;
-            }
-
-
-            return retVal;
-        }
-
-        internal static ExceptionInfo ToExceptionInfo(this Exception ex)
-        {
-            if (ex == null)
-            {
-                return null;
-            }
-
-            return new ExceptionInfo(ex);
-        }
+        return new ExceptionInfo(ex);
     }
 }

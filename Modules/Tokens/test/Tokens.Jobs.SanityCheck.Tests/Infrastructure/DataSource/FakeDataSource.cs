@@ -1,21 +1,20 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
 using Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 
-namespace Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource
+namespace Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+
+public class FakeDataSource : IDataSource
 {
-    public class FakeDataSource : IDataSource
+    public List<TokenId> DatabaseIds { get; } = new();
+    public List<string> BlobIds { get; } = new();
+
+    public Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
     {
-        public List<TokenId> DatabaseIds { get; } = new();
-        public List<string> BlobIds { get; } = new();
+        return Task.FromResult(BlobIds as IEnumerable<string>);
+    }
 
-        public Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
-        {
-            return Task.FromResult(BlobIds as IEnumerable<string>);
-        }
-
-        public Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
-        {
-            return Task.FromResult(DatabaseIds as IEnumerable<TokenId>);
-        }
+    public Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
+    {
+        return Task.FromResult(DatabaseIds as IEnumerable<TokenId>);
     }
 }

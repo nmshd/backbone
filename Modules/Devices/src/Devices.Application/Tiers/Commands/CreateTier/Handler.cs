@@ -9,11 +9,11 @@ namespace Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 
 public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 {
-    private readonly ITierRepository _tierRepository;
+    private readonly ITiersRepository _tierRepository;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ITierRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus)
+    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus)
     {
         _tierRepository = tierRepository;
         _logger = logger;
@@ -33,10 +33,6 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         _logger.LogTrace($"Successfully published TierCreatedIntegrationEvent. Tier ID: {tier.Id.Value}, Tier Name: {tier.Name.Value}");
 
-        return new CreateTierResponse
-        {
-            Id = tier.Id,
-            Name = tier.Name
-        };
+        return new CreateTierResponse(tier.Id, tier.Name);
     }
 }

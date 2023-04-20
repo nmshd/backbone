@@ -12,11 +12,11 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.Create
 public class HandlerTests
 {
     private readonly Handler _handler;
-    private readonly ITierRepository _tierRepository;
+    private readonly ITiersRepository _tierRepository;
 
     public HandlerTests()
     {
-        _tierRepository = A.Fake<ITierRepository>();
+        _tierRepository = A.Fake<ITiersRepository>();
         _handler = CreateHandler();
     }
 

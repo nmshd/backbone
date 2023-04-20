@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -38,6 +38,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Tier", (string)null);
                 });
@@ -186,7 +189,15 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
+                    b.Property<string>("TierId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
                     b.HasKey("Address");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -541,6 +552,13 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("TierId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

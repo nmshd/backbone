@@ -1,11 +1,13 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Identity
 {
-    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, byte identityVersion)
+    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
         Address = address;
@@ -13,6 +15,7 @@ public class Identity
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
         Devices = new List<Device>();
+        TierId = tierId;
     }
 
     public string? ClientId { get; set; }
@@ -24,6 +27,8 @@ public class Identity
     public List<Device> Devices { get; set; }
 
     public byte IdentityVersion { get; set; }
+
+    public TierId? TierId { get; set; }
 
     public bool IsNew()
     {
