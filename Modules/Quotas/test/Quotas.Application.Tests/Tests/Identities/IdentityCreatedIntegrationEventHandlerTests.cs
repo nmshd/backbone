@@ -6,14 +6,14 @@ using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities
 {
-    public class HandlerTests
+    public class IdentityCreatedIntegrationEventHandlerTests
     {
         private readonly ILogger<IdentityCreatedIntegrationEventHandler> _logger;
 
-        public HandlerTests() { }
+        public IdentityCreatedIntegrationEventHandlerTests() { }
 
         [Fact]
-        public async void Returns_add_when_identities_created()
+        public async void Successfully_creates_identity_after_consuming_integration_event()
         {
             // Arrange
             var address = "id17RDEphijMPFGLbhqLWWgJfat";

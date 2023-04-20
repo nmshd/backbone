@@ -5,14 +5,14 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
-public class HandlerTests
+public class TierCreatedIntegrationEventHandlerTests
 {
     private readonly ILogger<TierCreatedIntegrationEventHandler> _tiersLogger;
 
-    public HandlerTests() { }
+    public TierCreatedIntegrationEventHandlerTests() { }
 
     [Fact]
-    public async void Returns_add_when_tiers_created()
+    public async void Successfully_creates_tier_after_consuming_integration_event()
     {
         // Arrange
         var id = "1";

@@ -21,6 +21,7 @@ public class QuotasDbContext : AbstractDbContextBase, IQuotasDbContext
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(QuotasDbContext).Assembly);
+
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

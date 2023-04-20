@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Quotas.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20230419134742_Init_Quotas")]
+    [Migration("20230420115928_Init_Quotas")]
     partial class Init_Quotas
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

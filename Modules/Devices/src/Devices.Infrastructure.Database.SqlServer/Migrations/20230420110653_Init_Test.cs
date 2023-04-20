@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.SqlServer.Migrations
+namespace Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatedIdentitiesTiersQuota : Migration
+    public partial class Init_Test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

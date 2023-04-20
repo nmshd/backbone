@@ -16,9 +16,9 @@ public class IdentityCreatedIntegrationEventHandler
 
     public async Task Handle(IdentityCreatedIntegrationEvent integrationEvent)
     {
-        var identities = new Identity(integrationEvent.Address, integrationEvent.TierId);
-        await _identitiesRepository.Add(identities, CancellationToken.None);
+        var identity = new Identity(integrationEvent.Address, integrationEvent.TierId);
+        await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.LogTrace($"Successfully created identities. Identity Address: {identities.Address}, Tier ID: {identities.TierId}");
+        _logger.LogTrace($"Successfully created identities. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
     }
 }

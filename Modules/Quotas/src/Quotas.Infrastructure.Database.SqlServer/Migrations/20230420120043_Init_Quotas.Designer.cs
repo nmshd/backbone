@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20230419133243_CreatedIdentitiesTiersQuota")]
-    partial class CreatedIdentitiesTiersQuota
+    [Migration("20230420120043_Init_Quotas")]
+    partial class Init_Quotas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
