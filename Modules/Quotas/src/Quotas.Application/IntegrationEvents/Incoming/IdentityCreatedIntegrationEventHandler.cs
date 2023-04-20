@@ -19,6 +19,6 @@ public class IdentityCreatedIntegrationEventHandler
         var identity = new Identity(integrationEvent.Address, integrationEvent.TierId);
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.LogTrace($"Successfully created identities. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
+        _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
     }
 }

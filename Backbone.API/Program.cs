@@ -8,7 +8,6 @@ using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
@@ -61,7 +60,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
         .ConfigureAndValidate<Backbone.Modules.Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Quotas.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Quotas:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
