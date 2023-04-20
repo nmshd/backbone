@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -25,8 +26,9 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
     private readonly BlobOptions _blobOptions;
+    private readonly IMessagesRepository _messagesRepository;
 
-    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions)
+    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions, IMessagesRepository messagesRepository)
     {
         _dbContext = dbContext;
         _blobStorage = blobStorage;
@@ -36,11 +38,12 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         _logger = logger;
         _options = options.Value;
         _blobOptions = blobOptions.Value;
+        _messagesRepository = messagesRepository;
     }
 
     public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var recipients = await ValidateRecipients(request);
+        var recipients = await ValidateRecipients(request, cancellationToken);
 
         var message = new Message(
             _userContext.GetAddress(),
@@ -59,14 +62,13 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
     private async Task SaveMessage(Message message, CancellationToken cancellationToken)
     {
-        await _dbContext.Set<Message>().AddAsync(message, cancellationToken);
-        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
+        await _messagesRepository.Add(message, cancellationToken);
 
+        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
         await _blobStorage.SaveAsync();
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request)
+    private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Validating recipients...");
 
@@ -87,11 +89,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
-            var numberOfUnreceivedMessagesFromActiveIdentity = await _dbContext
-                .SetReadOnly<Message>()
-                .FromASpecificSender(sender)
-                .WithASpecificRecipientWhoDidNotReceiveTheMessage(recipientDto.Address)
-                .CountAsync();
+            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromActiveIdentity(sender, recipientDto, cancellationToken);
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {
