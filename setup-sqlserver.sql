@@ -52,7 +52,7 @@ IF NOT EXISTS(SELECT *
 FROM sys.server_principals
 WHERE name = 'quotas')
 BEGIN
-	CREATE LOGIN files WITH PASSWORD = 'Passw0rd'
+	CREATE LOGIN quotas WITH PASSWORD = 'Passw0rd'
 	PRINT 'Login "quotas" created' ;
 END
 GO
