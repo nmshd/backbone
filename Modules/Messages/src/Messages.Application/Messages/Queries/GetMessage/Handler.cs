@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
-using Backbone.Modules.Messages.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
@@ -25,7 +23,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
     public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
     {
-        var message = await _messagesRepository.Find(request.Id, cancellationToken);
+        var message = await _messagesRepository.Find(request.Id, _userContext.GetAddress(), cancellationToken);
         
         await _messageService.MarkMessageAsReceived(message, cancellationToken);
 

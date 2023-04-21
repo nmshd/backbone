@@ -6,7 +6,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
@@ -16,19 +15,17 @@ public class MessagesRepository : IMessagesRepository
 {
     private readonly DbSet<Message> _messages;
     private readonly IQueryable<Message> _readOnlyMessages;
-    private readonly IUserContext _userContext;
 
-    public MessagesRepository(MessagesDbContext dbContext, IUserContext userContext)
+    public MessagesRepository(MessagesDbContext dbContext)
     {
         _messages = dbContext.Messages;
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
-        _userContext = userContext;
     }
-    public async Task<Message> Find(MessageId id, CancellationToken cancellationToken)
+    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken)
     {
         return await _readOnlyMessages
             .IncludeAllReferences()
-            .WithSenderOrRecipient(_userContext.GetAddress())
+            .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
     }
 
@@ -56,10 +53,8 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, CancellationToken cancellationToken)
+    public Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, IdentityAddress addressOfActiveIdentity, CancellationToken cancellationToken)
     {
-        var addressOfActiveIdentity = _userContext.GetAddress();
-
         var query = _readOnlyMessages
             .AsQueryable()
             .IncludeAllReferences();

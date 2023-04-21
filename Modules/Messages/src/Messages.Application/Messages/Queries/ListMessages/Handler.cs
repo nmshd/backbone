@@ -9,15 +9,13 @@ namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 {
-    private readonly IMessagesDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly MessageService _messageService;
     private readonly IMessagesRepository _messagesRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IMessagesDbContext dbContext, IUserContext userContext, IMapper mapper, MessageService messageService, IMessagesRepository messagesRepository)
+    public Handler(IUserContext userContext, IMapper mapper, MessageService messageService, IMessagesRepository messagesRepository)
     {
-        _dbContext = dbContext;
         _userContext = userContext;
         _mapper = mapper;
         _messageService = messageService;
@@ -26,7 +24,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
     public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _messagesRepository.FindMessagesOfIdentity(_userContext.GetAddress(), request, cancellationToken);
+        var dbPaginationResult = await _messagesRepository.FindMessagesOfIdentity(_userContext.GetAddress(), request, _userContext.GetAddress(), cancellationToken);
 
         var response = new ListMessagesResponse(_mapper.Map<IEnumerable<MessageDTO>>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
 
