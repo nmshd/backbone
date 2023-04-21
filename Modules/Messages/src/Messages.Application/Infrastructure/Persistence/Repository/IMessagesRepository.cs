@@ -9,7 +9,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 public interface IMessagesRepository
 {
-    Task<DbPaginationResult<Message>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task<DbPaginationResult<Message>> FindAll(PaginationFilter paginationFilter);
     Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, CancellationToken cancellationToken);
     Task<Message> Find(MessageId id, CancellationToken cancellationToken);
     Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken);

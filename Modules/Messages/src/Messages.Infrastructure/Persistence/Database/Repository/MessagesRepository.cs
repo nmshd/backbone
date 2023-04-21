@@ -24,7 +24,7 @@ public class MessagesRepository : IMessagesRepository
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
         _userContext = userContext;
     }
-    async Task<Message> IMessagesRepository.Find(MessageId id, CancellationToken cancellationToken)
+    public async Task<Message> Find(MessageId id, CancellationToken cancellationToken)
     {
         return await _readOnlyMessages
             .IncludeAllReferences()
@@ -32,12 +32,12 @@ public class MessagesRepository : IMessagesRepository
             .FirstWithId(id, cancellationToken);
     }
 
-    async Task<Message> IMessagesRepository.FindPlain(MessageId id, CancellationToken cancellationToken)
+    public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
     {
         return await _readOnlyMessages.FirstWithId(id, cancellationToken);
     }
 
-    async Task<DbPaginationResult<Message>> IMessagesRepository.FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<Message>> FindAll(PaginationFilter paginationFilter)
     {
         return await _readOnlyMessages.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
     }
