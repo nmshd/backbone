@@ -95,7 +95,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(Username.MAX_LENGTH).HaveConversion<UsernameValueConverter>();
         configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<TierName>().AreUnicode(false).AreFixedLength()
+        configurationBuilder.Properties<TierName>().AreUnicode()
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
