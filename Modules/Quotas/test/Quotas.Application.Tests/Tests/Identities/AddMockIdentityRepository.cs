@@ -2,17 +2,15 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
-public class AddIdentityRepository : IIdentitiesRepository
+public class AddMockIdentityRepository : IIdentitiesRepository
 {
-    private readonly Identity _identities;
-    
-    public AddIdentityRepository(Identity identities) 
-    {
-        _identities = identities;
-    }
-
+    public bool WasCalled { get; private set; }
+    public Identity? WasCalledWith { get; private set; }
+ 
     public Task Add(Identity identity, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_identities);
+        WasCalled = true;
+        WasCalledWith = identity;
+        return Task.FromResult(WasCalledWith);
     }
 }
