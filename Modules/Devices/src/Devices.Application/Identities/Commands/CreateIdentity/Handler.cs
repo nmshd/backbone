@@ -1,8 +1,11 @@
 ﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -14,18 +17,22 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {
     private readonly ApplicationOptions _applicationOptions;
+    private readonly ITiersRepository _tiersRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
+    private readonly IEventBus _eventBus;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationOptions> applicationOptions)
+    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _challengeValidator = challengeValidator;
         _logger = logger;
+        _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
+        _tiersRepository = tiersRepository;
     }
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
@@ -44,7 +51,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, command.IdentityVersion);
+        var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
+
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, basicTier.Id, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
@@ -54,6 +63,10 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
 
         _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
+
+        _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
+
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {basicTier.Name}");
 
         return new CreateIdentityResponse
         {

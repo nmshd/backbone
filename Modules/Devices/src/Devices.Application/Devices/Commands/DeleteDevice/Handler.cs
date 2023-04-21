@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
         var device = await _dbContext.Set<Device>()
             .OfIdentity(_userContext.GetAddress())
@@ -43,7 +43,5 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogTrace($"Successfully marked device with id '{request.DeviceId}' as deleted.");
-
-        return Unit.Value;
     }
 }

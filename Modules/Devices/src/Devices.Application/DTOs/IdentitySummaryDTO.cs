@@ -10,6 +10,8 @@ public class IdentitySummaryDTO
     public string ClientId { get; set; }
     public byte[] PublicKey { get; set; }
 
+    public string TierId { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public byte IdentityVersion { get; set; }
@@ -18,7 +20,7 @@ public class IdentitySummaryDTO
 
     public IEnumerable<DeviceDTO> Devices { get; set; }
 
-    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices)
+    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices, string tierId)
     {
         Address = address.ToString();
         ClientId = clientId;
@@ -36,6 +38,7 @@ public class IdentitySummaryDTO
             LastLogin = new LastLoginInformation() { Time = it.User?.LastLoginAt }
         });
         NumberOfDevices = devices.Count();
+        TierId = tierId;
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Infrastructure.EventBus;
 
 namespace Admin.API.Configuration;
 
@@ -7,6 +8,9 @@ public class AdminConfiguration
     public CorsConfiguration Cors { get; set; } = new();
 
     public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
+
+    [Required]
+    public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
 
     [Required]
     public ModulesConfiguration Modules { get; set; } = new();
@@ -23,10 +27,19 @@ public class AdminConfiguration
         public string TokenUrl { get; set; } = "";
     }
 
+    public class AdminInfrastructureConfiguration
+    {
+        [Required]
+        public EventBusConfiguration EventBus { get; set; } = new();
+    }
+
     public class ModulesConfiguration
     {
 
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
+        
+        [Required]
+        public QuotasConfiguration Quotas { get; set; } = new();
     }
 }

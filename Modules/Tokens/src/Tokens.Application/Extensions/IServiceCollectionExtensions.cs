@@ -12,7 +12,7 @@ public static class IServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateTokenCommand).GetTypeInfo().Assembly);
+        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<CreateTokenCommand>());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
