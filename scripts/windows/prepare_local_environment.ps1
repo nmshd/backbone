@@ -1,8 +1,6 @@
 
 Write-Host "Setting environment variables..."
-$AzureNotificationHubConnectionString = Read-Host -Prompt "Enter the Azure Notification Hub Connection String"
 $AzureStorageAccountConnectionString = Read-Host -Prompt "Enter the Azure Storage Account Connection String"
-[Environment]::SetEnvironmentVariable("ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING", $AzureNotificationHubConnectionString, "User")
 [Environment]::SetEnvironmentVariable("ENMESHED_BLOB_STORAGE_CONNECTION_STRING", $AzureStorageAccountConnectionString, "User")
 Write-Host "OK"
 
