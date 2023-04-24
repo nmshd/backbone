@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.Azure.NotificationHubs;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 
 /// <summary>
 ///     See corresponding Unit Tests for an example of a built notification.

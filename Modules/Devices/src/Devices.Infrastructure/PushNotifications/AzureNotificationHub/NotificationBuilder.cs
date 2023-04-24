@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Azure.NotificationHubs;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 
 public abstract class NotificationBuilder
 {

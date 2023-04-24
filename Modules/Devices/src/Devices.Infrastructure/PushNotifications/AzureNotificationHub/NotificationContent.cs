@@ -4,7 +4,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Newtonsoft.Json;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 
 public class NotificationContent
 {

@@ -3,11 +3,12 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 
 public class AzureNotificationHubPushService : IPushService
 {
@@ -21,13 +22,13 @@ public class AzureNotificationHubPushService : IPushService
         _logger = logger;
     }
 
-    public async Task RegisterDeviceAsync(IdentityAddress identityId, DeviceRegistration registration)
+    public async Task RegisterDeviceAsync(IdentityAddress identity, DeviceRegistration registration)
     {
         var installation = new Installation
         {
             InstallationId = registration.InstallationId,
             PushChannel = registration.Handle,
-            Tags = GetNotificationTags(identityId),
+            Tags = GetNotificationTags(identity),
             Platform = registration.Platform switch
             {
                 "apns" => NotificationPlatform.Apns,
