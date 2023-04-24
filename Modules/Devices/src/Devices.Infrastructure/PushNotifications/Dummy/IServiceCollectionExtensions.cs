@@ -9,6 +9,6 @@ public static class IServiceCollectionExtensions
 {
     public static void AddDummyPushNotifications(this IServiceCollection services)
     {
-        services.AddTransient<IPushService, DummyNotificationService>();
+        services.AddTransient<IPushService, DummyPushService>();
     }
 }
