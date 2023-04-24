@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
-public class AddMockTiersRepository : ITierRepository
+public class AddMockTiersRepository : ITiersRepository
 {
     public bool WasCalled { get; private set; }
     public Tier? WasCalledWith { get; private set; }

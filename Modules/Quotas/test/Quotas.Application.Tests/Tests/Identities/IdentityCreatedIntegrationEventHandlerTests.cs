@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming;
+﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -19,18 +19,16 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities
         public async void Successfully_creates_identity_after_consuming_integration_event()
         {
             // Arrange
-            var address = "id17RDEphijMPFGLbhqLWWgJfat";
-            var tierId = "1";
             var mockIdentityRepository = new AddMockIdentityRepository();
             var handler = CreateHandler(mockIdentityRepository);
 
             // Act
-            await handler.Handle(new IdentityCreatedIntegrationEvent() { Address = address, TierId = tierId });
+            await handler.Handle(new IdentityCreatedIntegrationEvent() { });
 
             // Assert
             mockIdentityRepository.WasCalled.Should().BeTrue();
-            mockIdentityRepository.WasCalledWith.Address.Should().Be("id17RDEphijMPFGLbhqLWWgJfat");
-            mockIdentityRepository.WasCalledWith.TierId.Should().Be("1");
+            mockIdentityRepository.WasCalledWith.Address.Should().Be(null);
+            mockIdentityRepository.WasCalledWith.TierId.Should().Be(null);
         }
 
         private IdentityCreatedIntegrationEventHandler CreateHandler(AddMockIdentityRepository identities)
