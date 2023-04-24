@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -44,8 +43,6 @@ public static class IServiceCollectionExtensions
                 throw new Exception($"Unsupported database provider: {options.Provider}");
 
         }
-
-        services.AddScoped<IQuotasDbContext, QuotasDbContext>();
     }
 
     public class DbOptions

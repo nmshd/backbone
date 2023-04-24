@@ -2,13 +2,13 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 public class TierCreatedIntegrationEventHandler
 {
-    private readonly ITierRepository _tierRepository;
+    private readonly ITiersRepository _tierRepository;
     private readonly ILogger<TierCreatedIntegrationEventHandler> _logger;
 
-    public TierCreatedIntegrationEventHandler(ITierRepository tierRepository, ILogger<TierCreatedIntegrationEventHandler> logger )
+    public TierCreatedIntegrationEventHandler(ITiersRepository tierRepository, ILogger<TierCreatedIntegrationEventHandler> logger)
     {
         _tierRepository = tierRepository;
         _logger = logger;
@@ -17,7 +17,7 @@ public class TierCreatedIntegrationEventHandler
 
     public async Task Handle(TierCreatedIntegrationEvent integrationEvent)
     {
-        var tier = new Tier(integrationEvent.Id,integrationEvent.Name);
+        var tier = new Tier(integrationEvent.Id, integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
         _logger.LogTrace($"Successfully created tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");

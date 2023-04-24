@@ -1,9 +1,9 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 public class IdentityCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Address { get; set; }
+    public string Address { get; }
 
-    public string TierId { get; set; }
+    public string Tier { get; }
 }

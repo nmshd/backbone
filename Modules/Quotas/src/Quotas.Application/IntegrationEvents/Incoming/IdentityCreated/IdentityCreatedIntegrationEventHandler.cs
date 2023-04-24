@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 public class IdentityCreatedIntegrationEventHandler
 {
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -16,7 +16,7 @@ public class IdentityCreatedIntegrationEventHandler
 
     public async Task Handle(IdentityCreatedIntegrationEvent integrationEvent)
     {
-        var identity = new Identity(integrationEvent.Address, integrationEvent.TierId);
+        var identity = new Identity(integrationEvent.Address, integrationEvent.Tier);
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
         _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");

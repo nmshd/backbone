@@ -4,12 +4,12 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
-public class TierRepository : ITierRepository
+public class TiersRepository : ITiersRepository
 {
     private readonly DbSet<Tier> _tiersDbSet;
     private readonly QuotasDbContext _dbContext;
 
-    public TierRepository(QuotasDbContext dbContext)
+    public TiersRepository(QuotasDbContext dbContext)
     {
         _dbContext = dbContext;
         _tiersDbSet = dbContext.Set<Tier>();

@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 public class IdentitiesRepository : IIdentitiesRepository
 {
-    private readonly DbSet<Identity> _identityDbSet;
+    private readonly DbSet<Identity> _identitiesDbSet;
     private readonly QuotasDbContext _dbContext;
 
     public IdentitiesRepository(QuotasDbContext dbContext)
     {
         _dbContext = dbContext;
-        _identityDbSet = dbContext.Set<Identity>();
+        _identitiesDbSet = dbContext.Set<Identity>();
     }
 
     public async Task Add(Identity identity, CancellationToken cancellationToken)
     {
-        await _identityDbSet.AddAsync(identity, cancellationToken);
+        await _identitiesDbSet.AddAsync(identity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

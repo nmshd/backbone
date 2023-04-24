@@ -8,7 +8,7 @@ public class Identity
         TierId = tierId;
     }
 
-    public string Address { get; set; }
+    public string Address { get; }
     
-    public string TierId { get; set; }
+    public string TierId { get; }
 }
