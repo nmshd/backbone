@@ -1,12 +1,11 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
-public class QuotasDbContext : AbstractDbContextBase, IQuotasDbContext
+public class QuotasDbContext : AbstractDbContextBase
 {
     public QuotasDbContext() { }
 
@@ -21,10 +20,16 @@ public class QuotasDbContext : AbstractDbContextBase, IQuotasDbContext
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(QuotasDbContext).Assembly);
-
+        
+        builder.Entity<Identity>(i =>
+        {
+            i.HasOne<Tier>()
+            .WithMany()
+            .HasForeignKey(c => c.TierId);
+        });
     }
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    protected void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
     }

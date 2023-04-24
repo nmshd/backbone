@@ -24,12 +24,20 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Entities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
 
                     b.Property<string>("TierId")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
                     b.HasKey("Address");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -37,14 +45,27 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(30)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tiers");
+                    b.ToTable("Tier", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Entities.Identity", b =>
+                {
+                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("TierId");
                 });
 #pragma warning restore 612, 618
         }
