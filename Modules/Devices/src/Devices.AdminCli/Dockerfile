@@ -5,6 +5,7 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
+
 COPY ["Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj", "Modules/Devices/src/Devices.AdminCli/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -17,17 +18,22 @@ COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Mod
 COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.csproj", "BuildingBlocks/src/BuildingBlocks.Application/"]
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
+
 RUN dotnet restore "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj"
+
 COPY . .
+
 WORKDIR "/src/Modules/Devices/src/Devices.AdminCli"
-RUN dotnet build /property:UseAppHost=true --no-restore --runtime linux-x64 -c Release -o /app/build --self-contained true "Devices.AdminCli.csproj" 
+RUN dotnet build /property:UseAppHost=true /property:UseAppHost=true /property:DebugType=None --no-restore --runtime linux-x64 -c Release -o /app/build --self-contained true "Devices.AdminCli.csproj" 
 
 FROM build AS publish
 RUN dotnet publish "Devices.AdminCli.csproj" --runtime linux-x64 --no-restore -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish/Backbone.Modules.Devices.AdminCli ./backbone
+
+ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
