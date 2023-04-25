@@ -2,7 +2,7 @@
   "profiles": {
     "Start": {
       "commandName": "Project",
-      "commandLineArgs": "client delete --clientId some-non-existing-client", // enter an existing command here in order to debug it
+      "commandLineArgs": "client delete some-non-existing-client", // enter an existing command here in order to debug it
       "environmentVariables": {
         "Database__Provider": "SqlServer",
         "Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;" //SqlServer
