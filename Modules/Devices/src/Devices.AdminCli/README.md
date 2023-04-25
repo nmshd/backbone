@@ -1,53 +1,18 @@
 # Admin CLI
 
-The Admin CLI is a command line interface for managing the Backbone. At the moment, the following commands exist:
+The Admin CLI is a command line interface for managing the Backbone.
 
-## Commands
+## How to use
 
-Note: all commands need a connection string and a database provider. They can be provided on two ways:
+Currently we only deploy the Admin CLI as Docker image. In order to run it, you can, for example, use the following command:
 
-- via options of the command (see tables below)
+```
+docker run -it ghcr.io/nmshd/backbone-admin-cli:<tag>
+```
+
+This will open a shell in the container. From there, you can run the tool with the `backbone` command. You can see all available commands by running `backbone --help`.
+
+Note: all commands need a connection string and a database provider. These can be supplied in two ways:
+
+- via command options (see `backbone --help`)
 - via the environment variables `Database__Provider` and `Database__ConnectionString`
-
-## `backbone client list [options]`
-
-Lists all existing OAuth clients
-
-Options:
-
-```
--p, --dbProvider           The database provider. Possible values: Postgres, SqlServer
--c, --dbConnectionString   The connection string to the database.
--?, -h, --help             Show help and usage information
-```
-
-## `backbone client create [options]`
-
-Creates an OAuth client.
-
-Options:
-
-```
--p, --dbProvider           The database provider. Possible values: Postgres, SqlServer
--c, --dbConnectionString   The connection string to the database.
---clientId                 The clientId of the OAuth client. Default: a randomly generated string.
---clientSecret             The clientSecret of the OAuth client. Default: a randomly generated string.
---displayName              The displayName of the OAuth client. Default: the clientId.
--?, -h, --help             Show help and usage information
-```
-
-## `backbone client delete [options] <clientIds>`
-
-Deletes the OAuth client with the given `clientId`s.
-
-Options:
-
-```
--p, --dbProvider           The database provider. Possible values: Postgres, SqlServer
--c, --dbConnectionString   The connection string to the database.
--?, -h, --help             Show help and usage information
-```
-
-Arguments:
-
-A space separated list of one or more `clientId`s.
