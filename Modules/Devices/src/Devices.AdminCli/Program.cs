@@ -18,8 +18,11 @@ public class Program
     private static readonly JsonSerializerOptions JsonSerializerOptions =
         new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-    private static readonly Option<string> DbConnectionStringOption = new("-c", "The connection string to the database.");
-    private static readonly Option<string> DbProviderOption = new("-p", "The database provider. Possible values: Postgres, SqlServer");
+    private static readonly Option<string> DbConnectionStringOption =
+        new("-c", "The connection string to the database.");
+
+    private static readonly Option<string> DbProviderOption =
+        new("-p", "The database provider. Possible values: Postgres, SqlServer");
 
     private static async Task Main(string[] args)
     {
@@ -54,7 +57,7 @@ public class Program
 
             command.AddCommand(CreateClientCommand);
             command.AddCommand(ListClientsCommand);
-            command.AddCommand(DeleteClientCommand);
+            command.AddCommand(DeleteClientsCommand);
             return command;
         }
     }
@@ -78,7 +81,7 @@ public class Program
                 IsRequired = false,
                 Description = "The displayName of the OAuth client. Default: the clientId."
             };
-            
+
             var clientSecret = new Option<string>("--clientSecret")
             {
                 IsRequired = false,
@@ -91,7 +94,8 @@ public class Program
             command.AddOption(displayName);
             command.AddOption(clientSecret);
 
-            command.SetHandler(CreateClient, DbProviderOption, DbConnectionStringOption, clientId, displayName, clientSecret);
+            command.SetHandler(CreateClient, DbProviderOption, DbConnectionStringOption, clientId, displayName,
+                clientSecret);
 
             return command;
         }
@@ -113,27 +117,27 @@ public class Program
             return command;
         }
     }
-
-    private static Command DeleteClientCommand
+    
+    private static Command DeleteClientsCommand
     {
         get
         {
             var command = new Command("delete")
             {
-                Description = "Deletes the OAuth client with the given clientId"
+                Description = "Deletes the OAuth clients with the given clientId's"
             };
 
-            var clientId = new Option<string>("--clientId")
+            var clientIds = new Argument<string[]>("clientIds")
             {
-                IsRequired = true,
-                Description = "The clientId of the OAuth client to delete."
+                Arity = ArgumentArity.OneOrMore,
+                Description = "The clientId's that should be deleted."
             };
 
             command.AddOption(DbProviderOption);
             command.AddOption(DbConnectionStringOption);
-            command.AddOption(clientId);
+            command.AddArgument(clientIds);
 
-            command.SetHandler(DeleteClient, DbProviderOption, DbConnectionStringOption, clientId);
+            command.SetHandler(DeleteClients, DbProviderOption, DbConnectionStringOption, clientIds);
 
             return command;
         }
@@ -162,20 +166,22 @@ public class Program
             Console.WriteLine(JsonSerializer.Serialize(client, JsonSerializerOptions));
         }
     }
-
-    private static async Task DeleteClient(string? dbProvider, string? dbConnectionString, string clientId)
+    
+    private static async Task DeleteClients(string? dbProvider, string? dbConnectionString, string[] clientIds)
     {
         var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
 
-        try
+        foreach (var clientId in clientIds)
         {
-            await oAuthClientManager.Delete(clientId);
-            Console.WriteLine($"Successfully deleted client '{clientId}'");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-            Environment.Exit(1);
+            try
+            {
+                await oAuthClientManager.Delete(clientId);
+                Console.WriteLine($"Successfully deleted client '{clientId}'");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 
@@ -239,16 +245,16 @@ public class Program
 
     private static string? ValidateDbConnectionString(string? connectionString)
     {
-        return connectionString.IsNullOrEmpty() ?
-            "You need to specify a database connection string by passing it via an option (-c/--connectionString) or by setting it via environment variable (Database__ConnectionString/Database:ConnectionString)." :
-            null;
+        return connectionString.IsNullOrEmpty()
+            ? "You need to specify a database connection string by passing it via an option (-c/--connectionString) or by setting it via environment variable (Database__ConnectionString/Database:ConnectionString)."
+            : null;
     }
 
     private static string? ValidateProvider(string? provider)
     {
-        return provider.IsNullOrEmpty() ?
-            "You need to specify a database provider by passing it via an option (-p/--provider) or by setting it via environment variable (Database__Provider/Database:Provider)." :
-            null;
+        return provider.IsNullOrEmpty()
+            ? "You need to specify a database provider by passing it via an option (-p/--provider) or by setting it via environment variable (Database__Provider/Database:Provider)."
+            : null;
     }
 
     private static string? GetDbProviderFromEnvVar()
@@ -265,7 +271,7 @@ public class Program
     {
         var connectionString = Environment.GetEnvironmentVariable("Database__ConnectionString");
 
-        if(connectionString.IsNullOrEmpty())
+        if (connectionString.IsNullOrEmpty())
             connectionString = Environment.GetEnvironmentVariable("Database:ConnectionString");
 
         return connectionString;
