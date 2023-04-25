@@ -1,224 +1,279 @@
-﻿using System.Text.Json;
+﻿using System.CommandLine;
+using System.Text.Json;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.AdminCli;
 
-public class ApplicationConfiguration
-{
-    public string DbConnectionString { get; set; } = null!;
-    public string Provider { get; set; } = null!;
-
-    public void Validate()
-    {
-        if (string.IsNullOrEmpty(Provider))
-            throw new Exception($"{nameof(Provider)} must not be empty.");
-
-        if (string.IsNullOrEmpty(DbConnectionString))
-            throw new Exception($"{nameof(DbConnectionString)} must not be empty.");
-    }
-}
-
 public class Program
 {
-    private static OAuthClientManager _oAuthClientManager = null!;
-
-    private static readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
-
-    private static readonly ConsoleMenu Menu = new(new MenuItem[]
-    {
-        new(1, "Create client", CreateClient),
-        new(2, "Create anonymous client", CreateAnonymousClient),
-        new(3, "Delete client", DeleteClient),
-        new(4, "List clients", ListClients),
-        new(5, "Exit", Exit)
-    });
-
-    private const string SQLSERVER = "SqlServer";
-    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
+    private const string SQL_SERVER = "SqlServer";
+    private const string SQL_SERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
     private const string POSTGRES = "Postgres";
     private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
 
-    public static async Task<int> Main(string[] args)
+    private static readonly JsonSerializerOptions JsonSerializerOptions =
+        new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+    private static readonly Option<string> DbConnectionStringOption = new("-c", "The connection string to the database.");
+    private static readonly Option<string> DbProviderOption = new("-p", "The database provider. Possible values: Postgres, SqlServer");
+
+    private static async Task Main(string[] args)
     {
-        ApplicationConfiguration configuration;
-        try
+        var rootCommand = new RootCommand();
+
+        DbProviderOption.AddAlias("--dbProvider");
+        DbProviderOption.SetDefaultValueFactory(GetDbProviderFromEnvVar);
+        DbProviderOption.AddValidator(result =>
         {
-            configuration = GetConfiguration(args);
-        }
-        catch (Exception e)
+            result.ErrorMessage = ValidateProvider(result.GetValueOrDefault<string>());
+        });
+
+        DbConnectionStringOption.AddAlias("--dbConnectionString");
+        DbConnectionStringOption.SetDefaultValueFactory(GetDbConnectionStringFromEnvVar);
+        DbConnectionStringOption.AddValidator(result =>
         {
-            await Console.Error.WriteLineAsync(e.Message);
-            return 1;
-        }
+            result.ErrorMessage = ValidateDbConnectionString(result.GetValueOrDefault<string>());
+        });
 
-        var services = new ServiceCollection();
-        ConfigureServices(services, configuration);
+        rootCommand.AddOption(DbConnectionStringOption);
+        rootCommand.AddOption(DbProviderOption);
 
-        var serviceProvider = services.BuildServiceProvider();
-        _oAuthClientManager = serviceProvider.GetRequiredService<OAuthClientManager>();
-
-        await Run();
-
-        return 0;
+        rootCommand.AddCommand(ClientCommand);
+        await rootCommand.InvokeAsync(args);
     }
 
-    private static void ConfigureServices(IServiceCollection services, ApplicationConfiguration applicationConfiguration)
+    private static Command ClientCommand
+    {
+        get
+        {
+            var command = new Command("client");
+
+            command.AddCommand(CreateClientCommand);
+            command.AddCommand(ListClientsCommand);
+            command.AddCommand(DeleteClientCommand);
+            return command;
+        }
+    }
+
+    private static Command CreateClientCommand
+    {
+        get
+        {
+            var command = new Command("create", "Create an OAuth client")
+            {
+                Description = "Create an OAuth client"
+            };
+
+            var clientId = new Option<string>("--clientId")
+            {
+                IsRequired = false,
+                Description = "The clientId of the OAuth client. Default: a randomly generated string."
+            };
+            var displayName = new Option<string>("--displayName")
+            {
+                IsRequired = false,
+                Description = "The displayName of the OAuth client. Default: the clientId."
+            };
+            
+            var clientSecret = new Option<string>("--clientSecret")
+            {
+                IsRequired = false,
+                Description = "The clientSecret of the OAuth client. Default: a randomly generated string."
+            };
+
+            command.AddOption(DbProviderOption);
+            command.AddOption(DbConnectionStringOption);
+            command.AddOption(clientId);
+            command.AddOption(displayName);
+            command.AddOption(clientSecret);
+
+            command.SetHandler(CreateClient, DbProviderOption, DbConnectionStringOption, clientId, displayName, clientSecret);
+
+            return command;
+        }
+    }
+
+    private static Command ListClientsCommand
+    {
+        get
+        {
+            var command = new Command("list")
+            {
+                Description = "List all existing OAuth clients"
+            };
+
+            command.AddOption(DbProviderOption);
+            command.AddOption(DbConnectionStringOption);
+
+            command.SetHandler(ListClients, DbProviderOption, DbConnectionStringOption);
+            return command;
+        }
+    }
+
+    private static Command DeleteClientCommand
+    {
+        get
+        {
+            var command = new Command("delete")
+            {
+                Description = "Deletes the OAuth client with the given clientId"
+            };
+
+            var clientId = new Option<string>("--clientId")
+            {
+                IsRequired = true,
+                Description = "The clientId of the OAuth client to delete."
+            };
+
+            command.AddOption(DbProviderOption);
+            command.AddOption(DbConnectionStringOption);
+            command.AddOption(clientId);
+
+            command.SetHandler(DeleteClient, DbProviderOption, DbConnectionStringOption, clientId);
+
+            return command;
+        }
+    }
+
+    private static async Task CreateClient(string? dbProvider, string? dbConnectionString, string? clientId,
+        string? displayName, string? clientSecret)
+    {
+        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+
+        var createdClient = await oAuthClientManager.Create(clientId, displayName, clientSecret);
+
+        Console.WriteLine(JsonSerializer.Serialize(createdClient, JsonSerializerOptions));
+        Console.WriteLine("Please note the secret since you cannot obtain it later.");
+    }
+
+    private static async Task ListClients(string? dbProvider, string? dbConnectionString)
+    {
+        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+
+        var clients = oAuthClientManager.GetAll();
+        Console.WriteLine("The following clients are configured:");
+
+        await foreach (var client in clients)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(client, JsonSerializerOptions));
+        }
+    }
+
+    private static async Task DeleteClient(string? dbProvider, string? dbConnectionString, string clientId)
+    {
+        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+
+        try
+        {
+            await oAuthClientManager.Delete(clientId);
+            Console.WriteLine($"Successfully deleted client '{clientId}'");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            Environment.Exit(1);
+        }
+    }
+
+    private static OAuthClientManager GetOAuthClientManager(string dbProvider, string dbConnectionString)
+    {
+        var services = new ServiceCollection();
+        ConfigureServices(services,
+            new ApplicationConfiguration { Provider = dbProvider, DbConnectionString = dbConnectionString });
+
+        var serviceProvider = services.BuildServiceProvider();
+        return serviceProvider.GetRequiredService<OAuthClientManager>();
+    }
+
+    private static void ConfigureServices(IServiceCollection services,
+        ApplicationConfiguration applicationConfiguration)
     {
         switch (applicationConfiguration.Provider)
         {
-            case SQLSERVER:
+            case SQL_SERVER:
                 services.AddDbContext<DevicesDbContext>(options =>
                 {
-                    // Configure the context to use Microsoft SQL Server.
                     options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                        sqlOptions.MigrationsAssembly(SQL_SERVER_MIGRATIONS_ASSEMBLY);
                     });
 
-                    // Register the entity sets needed by OpenIddict.
                     options.UseOpenIddict();
                 });
                 break;
             case POSTGRES:
                 services.AddDbContext<DevicesDbContext>(options =>
                 {
-                    // Configure the context to use Microsoft SQL Server.
                     options.UseNpgsql(applicationConfiguration.DbConnectionString, sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                     });
 
-                    // Register the entity sets needed by OpenIddict.
                     options.UseOpenIddict();
                 });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {applicationConfiguration.Provider}");
-
         }
 
-        // Register the Identity services.
-        services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-        {
-            config.Password.RequireDigit = false;
-            config.Password.RequiredLength = 4;
-            config.Password.RequireNonAlphanumeric = false;
-            config.Password.RequireUppercase = false;
-        })
-            .AddEntityFrameworkStores<DevicesDbContext>()
-            .AddDefaultTokenProviders();
+        services
+            .AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<DevicesDbContext>();
 
-        services.AddOpenIddict()
-            // Register the OpenIddict core components.
+        services
+            .AddOpenIddict()
             .AddCore(options =>
             {
-                // Configure OpenIddict to use the Entity Framework Core stores and models.
-                // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
-                options.UseEntityFrameworkCore()
-                       .UseDbContext<DevicesDbContext>();
+                options
+                    .UseEntityFrameworkCore()
+                    .UseDbContext<DevicesDbContext>();
             });
 
         services.AddLogging();
         services.AddTransient<OAuthClientManager>();
     }
 
-    private static ApplicationConfiguration GetConfiguration(string[] args)
+    private static string? ValidateDbConnectionString(string? connectionString)
     {
-        var commandLineOptions = new ConfigurationBuilder().AddCommandLine(args, new Dictionary<string, string> { { "-c", "ConfigurationFile" } }).Build();
-        var configurationFile = commandLineOptions.GetValue<string>("ConfigurationFile");
-
-        var configurationBuilder =
-            new ConfigurationBuilder()
-                .AddEnvironmentVariables();
-
-        if (!string.IsNullOrEmpty(configurationFile))
-        {
-            var fullPathToConfigurationFile = Path.Combine(Environment.CurrentDirectory, configurationFile);
-            configurationBuilder = configurationBuilder.AddJsonFile(fullPathToConfigurationFile, true, false);
-        }
-
-        configurationBuilder = configurationBuilder.AddCommandLine(args);
-
-        var configuration = configurationBuilder.Build();
-
-        var applicationConfiguration = new ApplicationConfiguration
-        {
-            DbConnectionString = configuration.GetValue<string>("Database:ConnectionString"),
-            Provider = configuration.GetValue<string>("Database:Provider")
-        };
-
-        applicationConfiguration.Validate();
-
-        Console.WriteLine("The following configuration is used: ");
-        Console.WriteLine(JsonSerializer.Serialize(applicationConfiguration, _jsonSerializerOptions));
-
-        return applicationConfiguration;
+        return connectionString.IsNullOrEmpty() ?
+            "You need to specify a database connection string by passing it via an option (-c/--connectionString) or by setting it via environment variable (Database__ConnectionString/Database:ConnectionString)." :
+            null;
     }
 
-    private static async Task Run()
+    private static string? ValidateProvider(string? provider)
     {
-        while (true)
-        {
-            var userChoice = Menu.AskForItemChoice();
-            await userChoice.Action.Invoke();
-        }
-        // ReSharper disable once FunctionNeverReturns
+        return provider.IsNullOrEmpty() ?
+            "You need to specify a database provider by passing it via an option (-p/--provider) or by setting it via environment variable (Database__Provider/Database:Provider)." :
+            null;
     }
 
-    private static async Task CreateClient()
+    private static string? GetDbProviderFromEnvVar()
     {
-        var clientId = ConsoleHelpers.ReadOptional("clientId (optional)");
-        var clientName = ConsoleHelpers.ReadOptional("displayName (optional)");
-        var clientSecret = ConsoleHelpers.ReadOptional("clientSecret (optional)");
+        var provider = Environment.GetEnvironmentVariable("Database__Provider");
 
-        var createdClient = await _oAuthClientManager.Create(clientId, clientName, clientSecret);
+        if (provider.IsNullOrEmpty())
+            provider = Environment.GetEnvironmentVariable("Database:Provider");
 
-        Console.WriteLine(JsonSerializer.Serialize(createdClient, _jsonSerializerOptions));
-        Console.WriteLine("Please note the secret since you cannot obtain it later.");
+        return provider;
     }
 
-    private static async Task CreateAnonymousClient()
+    private static string? GetDbConnectionStringFromEnvVar()
     {
-        var createdClient = await _oAuthClientManager.Create(null, null, null);
+        var connectionString = Environment.GetEnvironmentVariable("Database__ConnectionString");
 
-        Console.WriteLine(JsonSerializer.Serialize(createdClient, _jsonSerializerOptions));
-        Console.WriteLine("Please note the secret since you cannot obtain it later.");
+        if(connectionString.IsNullOrEmpty())
+            connectionString = Environment.GetEnvironmentVariable("Database:ConnectionString");
+
+        return connectionString;
     }
+}
 
-    private static async Task DeleteClient()
-    {
-        try
-        {
-            var clientId = ConsoleHelpers.ReadRequired("clientId");
-            await _oAuthClientManager.Delete(clientId);
-            Console.WriteLine($"Successfully deleted client '{clientId}'");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-    }
-
-    private static async Task ListClients()
-    {
-        var clients = _oAuthClientManager.GetAll();
-
-        Console.WriteLine("The following clients are configured:");
-
-        await foreach (var client in clients)
-        {
-            Console.WriteLine(JsonSerializer.Serialize(client, _jsonSerializerOptions));
-        }
-    }
-
-    private static Task Exit()
-    {
-        Environment.Exit(0);
-        return Task.CompletedTask;
-    }
+public class ApplicationConfiguration
+{
+    public string DbConnectionString { get; set; } = null!;
+    public string Provider { get; set; } = null!;
 }
