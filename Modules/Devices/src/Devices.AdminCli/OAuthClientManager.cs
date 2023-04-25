@@ -22,14 +22,14 @@ public class CreatedClientDTO
 
 public class ClientDTO
 {
-    public ClientDTO(string clientId, string name)
+    public ClientDTO(string clientId, string displayName)
     {
         ClientId = clientId;
-        Name = name;
+        DisplayName = displayName;
     }
 
     public string ClientId { get; set; }
-    public string Name { get; set; }
+    public string DisplayName { get; set; }
 }
 
 public class OAuthClientManager
@@ -86,7 +86,7 @@ public class OAuthClientManager
 
     public IAsyncEnumerable<ClientDTO> GetAll()
     {
-        return _applicationManager.ListAsync(applications => applications.Select(c => new ClientDTO(c.Id, c.DisplayName)), CancellationToken.None);
+        return _applicationManager.ListAsync(applications => applications.Select(c => new ClientDTO(c.ClientId, c.DisplayName)), CancellationToken.None);
     }
 }
 
