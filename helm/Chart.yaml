@@ -1,5 +1,5 @@
 apiVersion: v2
-name: backbone
+name: backbone-helm-chart
 description: A Helm chart for Kubernetes
 
 type: application
