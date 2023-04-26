@@ -6,5 +6,5 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 public interface IPushService
 {
     Task SendNotificationAsync(IdentityAddress recipient, object notification);
-    Task RegisterDeviceAsync(IdentityAddress identityId, DeviceRegistration registration);
+    Task RegisterDeviceAsync(IdentityAddress identity, DeviceRegistration registration);
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -21,14 +22,21 @@ public class DevicesDbContextSeed
     {
         await context.Database.EnsureCreatedAsync();
 
-        await SeedApplicationUsers(context);
         await SeedBasicTier(context);
+        await SeedApplicationUsers(context);
+        await AddBasicTierToIdentities(context);
+    }
+    private static async Task<Tier> GetBasicTier(DevicesDbContext context)
+    {
+        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
     {
         if (await context.Users.AnyAsync())
             return;
+
+        var basicTier = await GetBasicTier(context);
 
         var user = new ApplicationUser
         {
@@ -37,7 +45,7 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRA",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 1, 1, 1, 1, 1 }, "id1"),
-                new byte[] { 1, 1, 1, 1, 1 }, 1
+                new byte[] { 1, 1, 1, 1, 1 }, basicTier.Id, 1
             )),
             CreatedAt = SystemTime.UtcNow
         };
@@ -51,7 +59,7 @@ public class DevicesDbContextSeed
             NormalizedUserName = "USRB",
             Device = new Device(new Identity("test",
                 IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, 1
+                new byte[] { 2, 2, 2, 2, 2 }, basicTier.Id, 1
             )),
             CreatedAt = SystemTime.UtcNow
         };
@@ -63,11 +71,17 @@ public class DevicesDbContextSeed
 
     private async Task SeedBasicTier(DevicesDbContext context)
     {
-        if(await context.Tiers.AnyAsync())
+        if (await context.Tiers.AnyAsync())
             return;
 
-        await context.Tiers.AddAsync(new Tier(TierName.Create("Basic").Value));
+        await context.Tiers.AddAsync(new Tier(TierName.Create(TierName.BASIC_DEFAULT_NAME).Value));
 
         await context.SaveChangesAsync();
+    }
+
+    private async Task AddBasicTierToIdentities(DevicesDbContext context)
+    {
+        var basicTier = await GetBasicTier(context);
+        await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }

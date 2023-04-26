@@ -1,9 +1,9 @@
 ﻿using SpecFlowCucumberResultsExporter.Model;
 using SpecFlowCucumberResultsExporter.Reporting;
 
-namespace SpecFlowCucumberResultsExporter.EventArgs
-{
-    public class StepEventArgs : ScenarioEventArgs
+namespace SpecFlowCucumberResultsExporter.EventArgs;
+
+public class StepEventArgs : ScenarioEventArgs
 	{
 		public StepEventArgs(Reporter reporter)
 			: base(reporter)
@@ -13,4 +13,3 @@ namespace SpecFlowCucumberResultsExporter.EventArgs
 
 		public Step Step { get; internal set; }
 	}
-}

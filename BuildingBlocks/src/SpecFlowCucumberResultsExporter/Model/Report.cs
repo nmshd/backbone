@@ -1,7 +1,6 @@
-﻿namespace SpecFlowCucumberResultsExporter.Model
+﻿namespace SpecFlowCucumberResultsExporter.Model;
+
+public class Report : ReportItem
 {
-    public class Report : ReportItem
-    {
-        public List<Feature> Features { get; set; }
-    }
+    public List<Feature> Features { get; set; }
 }
