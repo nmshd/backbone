@@ -8,7 +8,6 @@ using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +19,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
@@ -28,8 +26,18 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private readonly IUserContext _userContext;
     private readonly BlobOptions _blobOptions;
     private readonly IMessagesRepository _messagesRepository;
+    private readonly IRelationshipsRepository _relationshipsRepository;
 
-    public Handler(IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions, IMessagesRepository messagesRepository)
+    public Handler(
+        IBlobStorage blobStorage,
+        IUserContext userContext,
+        IMapper mapper,
+        IEventBus eventBus,
+        IOptionsSnapshot<ApplicationOptions> options,
+        ILogger<Handler> logger,
+        IOptions<BlobOptions> blobOptions,
+        IMessagesRepository messagesRepository,
+        IRelationshipsRepository relationshipsRepository)
     {
         _blobStorage = blobStorage;
         _userContext = userContext;
@@ -39,6 +47,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         _options = options.Value;
         _blobOptions = blobOptions.Value;
         _messagesRepository = messagesRepository;
+        _relationshipsRepository = relationshipsRepository;
     }
 
     public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
@@ -77,11 +86,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _dbContext
-                .SetReadOnly<Relationship>()
-                .WithParticipants(sender, recipientDto.Address)
-                .Select(r => r.Id)
-                .FirstOrDefaultAsync();
+            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationShipBetweenSenderAndRecipient(sender, recipientDto.Address);
 
             if (idOfRelationshipBetweenSenderAndRecipient == null)
             {

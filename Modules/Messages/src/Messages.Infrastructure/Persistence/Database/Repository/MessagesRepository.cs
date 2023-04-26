@@ -9,7 +9,6 @@ using Enmeshed.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
