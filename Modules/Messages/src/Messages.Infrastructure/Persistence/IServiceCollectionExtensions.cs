@@ -25,6 +25,7 @@ public static class IServiceCollectionExtensions
         services.AddBlobStorage(options.BlobStorageOptions);
 
         services.AddTransient<IMessagesRepository, MessagesRepository>();
+        services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
     }
 }
 
