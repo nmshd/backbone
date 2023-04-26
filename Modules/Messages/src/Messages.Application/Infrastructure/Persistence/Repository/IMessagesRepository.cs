@@ -5,6 +5,7 @@ using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 public interface IMessagesRepository
@@ -14,4 +15,5 @@ public interface IMessagesRepository
     Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken);
     Task<MessageId> Add(Message message, CancellationToken cancellationToken);
     Task<int> CountUnreceivedMessagesFromActiveIdentity(IdentityAddress sender, SendMessageCommandRecipientInformation recipientDto, CancellationToken cancellationToken);
+    EntityEntry<Message> Update(Message message);
 }

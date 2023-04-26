@@ -9,17 +9,20 @@ using Enmeshed.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
 {
     private readonly DbSet<Message> _messages;
     private readonly IQueryable<Message> _readOnlyMessages;
+    private readonly MessagesDbContext _dbContext;
 
     public MessagesRepository(MessagesDbContext dbContext)
     {
         _messages = dbContext.Messages;
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
+        _dbContext = dbContext;
     }
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken)
     {
@@ -42,6 +45,7 @@ public class MessagesRepository : IMessagesRepository
     public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)
     {
         var add = await _messages.AddAsync(message, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return add.Entity.Id;
     }
 
@@ -66,5 +70,12 @@ public class MessagesRepository : IMessagesRepository
         query = query.DoNotSendBeforePropertyIsNotInTheFuture();
 
         return query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
+    }
+
+    public EntityEntry<Message> Update(Message message)
+    {
+        var m = _messages.Update(message);
+        _dbContext.SaveChanges();
+        return m;
     }
 }
