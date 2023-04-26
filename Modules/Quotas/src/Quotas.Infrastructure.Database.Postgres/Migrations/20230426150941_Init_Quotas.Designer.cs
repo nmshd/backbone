@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Quotas.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20230421155550_Init_Quotas")]
+    [Migration("20230426150941_Init_Quotas")]
     partial class Init_Quotas
     {
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tier", (string)null);
+                    b.ToTable("Tiers");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Entities.Identity", b =>

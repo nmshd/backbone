@@ -11,7 +11,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tier",
+                name: "Tiers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -19,7 +19,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tier", x => x.Id);
+                    table.PrimaryKey("PK_Tiers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,9 +33,9 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 {
                     table.PrimaryKey("PK_Identities", x => x.Address);
                     table.ForeignKey(
-                        name: "FK_Identities_Tier_TierId",
+                        name: "FK_Identities_Tiers_TierId",
                         column: x => x.TierId,
-                        principalTable: "Tier",
+                        principalTable: "Tiers",
                         principalColumn: "Id");
                 });
 
@@ -52,7 +52,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 name: "Identities");
 
             migrationBuilder.DropTable(
-                name: "Tier");
+                name: "Tiers");
         }
     }
 }
