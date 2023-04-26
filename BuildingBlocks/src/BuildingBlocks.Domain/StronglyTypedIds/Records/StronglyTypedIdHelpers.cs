@@ -20,11 +20,11 @@ public class StronglyTypedIdHelpers
     {
         var hasPrefix = stringValue.StartsWith(_prefix);
         if (!hasPrefix)
-            return GenericDomainErrors.InvalidIdPrefix($"Id starts with {stringValue.Take(3)} instead of {_prefix}");
+            return GenericDomainErrors.InvalidIdPrefix($"Id starts with {new string(stringValue.Take(3).ToArray())} instead of {_prefix}");
 
-        var lengthIsValid = stringValue.Length <= _maxLength;
+        var lengthIsValid = stringValue.Length == _maxLength;
         if (!lengthIsValid)
-            return GenericDomainErrors.InvalidIdLength($"Id has a length of {stringValue.Length} while the max is {_maxLength}");
+            return GenericDomainErrors.InvalidIdLength($"Id has a length of {stringValue.Length} instead of {_maxLength}");
 
         var hasOnlyValidChars = stringValue.ContainsOnly(_validChars);
         if (!hasOnlyValidChars)

@@ -1,8 +1,8 @@
 ﻿using Backbone.API.Mvc;
 using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Relationships.Application;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Ids;

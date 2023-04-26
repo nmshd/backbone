@@ -1,14 +1,13 @@
 using Newtonsoft.Json;
 
-namespace SpecFlowCucumberResultsExporter.Model
+namespace SpecFlowCucumberResultsExporter.Model;
+
+public class StepResult
 {
-    public class StepResult
-    {
-        public long Duration { get; set; }
+    public long Duration { get; set; }
 
-        public TestResult Status { get; set; }
+    public TestResult Status { get; set; }
 
-        [JsonProperty("error_message")]
-        public string Error { get; set; }
-    }
+    [JsonProperty("error_message")]
+    public string Error { get; set; }
 }

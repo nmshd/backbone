@@ -1,13 +1,12 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter
+namespace Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
+
+public interface IReporter
 {
-    public interface IReporter
-    {
-        void ReportOrphanedDatabaseId(RelationshipTemplateId id);
+    void ReportOrphanedDatabaseId(RelationshipTemplateId id);
 
-        void ReportOrphanedBlobId(string id);
+    void ReportOrphanedBlobId(string id);
 
-        void Complete();
-    }
+    void Complete();
 }

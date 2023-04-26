@@ -10,9 +10,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
 
-      - Modules__Devices__Infrastructure__AzureNotificationHub__ConnectionString=${ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (Endpoint=sb://<namespace-name>.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=<shared-access-key>)
-      - Modules__Devices__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (Endpoint=sb://<namespace-name>.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=<shared-access-key>)
-
       - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
 
       - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
@@ -32,10 +29,10 @@ services:
     volumes:
       - ../:/app
 
-  admin:
-    image: nmshd-admin
-    container_name: admin
-    hostname: adminAPI
+  adminAPI:
+    image: nmshd-admin-api
+    container_name: admin-api
+    hostname: admin-api
     build:
       context: ..
       dockerfile: Admin.API/Dockerfile.debug
@@ -49,6 +46,20 @@ services:
       - rabbitmq
     volumes:
       - ../:/app
+    
+  adminUI:
+    image: nmshd-admin-ui
+    container_name: admin-ui
+    hostname: admin-ui
+    build:
+      dockerfile: Dockerfile.debug
+      context: "../AdminUI/"
+    ports:
+      - "5020:4200"
+    depends_on:
+      - "adminAPI"
+    volumes:
+      - ../AdminUI/src:/app/src/:ro
 
   ### infrastructure ###
 

@@ -17,12 +17,34 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tier", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -82,7 +104,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Challenge", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -95,10 +117,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Challenges", "Challenges");
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -142,7 +167,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
                 {
                     b.Property<string>("Address")
                         .HasMaxLength(36)
@@ -164,7 +189,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("TierId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
                     b.HasKey("Address");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -503,26 +536,33 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("OpenIddictTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("Devices.Domain.Entities.Device", "Device")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Device", "Device")
                         .WithOne("User")
-                        .HasForeignKey("Devices.Domain.Entities.ApplicationUser", "DeviceId")
+                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", "DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Device");
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
                 {
-                    b.HasOne("Devices.Domain.Entities.Identity", "Identity")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identity", "Identity")
                         .WithMany("Devices")
                         .HasForeignKey("IdentityAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("TierId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -536,7 +576,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -545,7 +585,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -560,7 +600,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -569,7 +609,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -600,13 +640,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("Authorization");
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
                 {
                     b.Navigation("User")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
                 {
                     b.Navigation("Devices");
                 });

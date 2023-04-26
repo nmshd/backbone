@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -55,6 +55,7 @@ public static class IServiceCollectionExtensions
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+        services.AddTransient<ITiersRepository, TiersRepository>();
     }
 
     public class DbOptions

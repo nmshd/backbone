@@ -14,10 +14,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
     <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.18.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
-    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.0" />
+    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
@@ -31,6 +31,8 @@
     <ProjectReference Include="..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
     <ProjectReference Include="..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     <ProjectReference Include="..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
+    <ProjectReference Include="..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

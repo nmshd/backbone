@@ -1,13 +1,12 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Tokens.Jobs.SanityCheck.Infrastructure.Reporter
+namespace Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
+
+public interface IReporter
 {
-    public interface IReporter
-    {
-        void ReportOrphanedDatabaseId(TokenId id);
+    void ReportOrphanedDatabaseId(TokenId id);
 
-        void ReportOrphanedBlobId(string id);
+    void ReportOrphanedBlobId(string id);
 
-        void Complete();
-    }
+    void Complete();
 }
