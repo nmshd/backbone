@@ -23,6 +23,19 @@ jobs:
       - name: Run tests
         run: ./.ci/test.ts
 
+  build-helm-chart:
+    name: Build Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Build Helm Chart
+        run: ./.ci/helm/build.ts
+        env:
+          VERSION: 0.0.0
+
   build-capi-container-image:
     name: Build Consumer API Container Image
     runs-on: ubuntu-latest
