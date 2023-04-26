@@ -3,7 +3,7 @@ import { $ } from "zx";
 import { getRequiredEnvVar } from "../lib.js";
 import { readFile, writeFile, copyFile, rename, rm } from "fs/promises";
 
-const tag = getRequiredEnvVar("TAG");
+const version = getRequiredEnvVar("VERSION");
 
 const HELM_CHART_FILENAME = `helm/Chart.yaml`;
 const HELM_CHART_VERSION_PLACEHOLDER = `<chartVersion>`;
@@ -21,7 +21,7 @@ async function backupChart() {
 async function fillVersionPlaceholderInChart() {
   const chartFile = (await readFile(HELM_CHART_FILENAME))
     .toString("utf-8")
-    .replace(HELM_CHART_VERSION_PLACEHOLDER, tag);
+    .replace(HELM_CHART_VERSION_PLACEHOLDER, version);
 
   await writeFile(HELM_CHART_FILENAME, chartFile);
 }
