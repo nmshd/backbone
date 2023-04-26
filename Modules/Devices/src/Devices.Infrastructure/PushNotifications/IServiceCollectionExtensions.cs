@@ -1,4 +1,7 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -7,64 +10,31 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPushNotifications(this IServiceCollection services, Action<PushNotificationsOptions> setupOptions)
-    {
-        var options = new PushNotificationsOptions();
-        setupOptions?.Invoke(options);
+    public const string PROVIDER_AZURE_NOTIFICATION_HUB = "AzureNotificationHub";
+    public const string PROVIDER_DUMMY = "Dummy";
 
-        services.AddTransient<IPushService>(sp =>
+    public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
+    {
+        switch (options.Provider)
         {
-            var client = NotificationHubClient.CreateClientFromConnectionString(options.ConnectionString, options.HubName);
-            var logger = sp.GetService<ILogger<AzureNotificationHubPushService>>();
-
-            return new AzureNotificationHubPushService(client, logger);
-        });
-    }
-
-    public class PushNotificationsOptions
-    {
-        public string ConnectionString { get; set; }
-        public string HubName { get; set; }
+            case PROVIDER_AZURE_NOTIFICATION_HUB:
+                services.AddAzureNotificationHubPushNotifications(options.AzureNotificationHub);
+                break;
+            case PROVIDER_DUMMY: 
+                services.AddDummyPushNotifications();
+                break;
+            default:
+                throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
+        }
     }
 }
 
-public static class NotificationHubClientExtensions
+public class PushNotificationOptions
 {
-    public static async Task<List<string>> GetAllInstallations(this NotificationHubClient client)
-    {
-        var allRegistrations = await client.GetAllRegistrationsAsync(0);
-        var continuationToken = allRegistrations.ContinuationToken;
-        var registrationDescriptionsList = new List<RegistrationDescription>(allRegistrations);
-        while (!string.IsNullOrWhiteSpace(continuationToken))
-        {
-            var otherRegistrations = await client.GetAllRegistrationsAsync(continuationToken, 0);
-            registrationDescriptionsList.AddRange(otherRegistrations);
-            continuationToken = otherRegistrations.ContinuationToken;
-        }
+    [Required]
+    [RegularExpression(
+        $"{IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
+    public string Provider { get; set; } = IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB;
 
-        var deviceInstallationList = new List<string>();
-
-        foreach (var registration in registrationDescriptionsList)
-        {
-            var installationId = "";
-
-            foreach (var tag in registration.Tags)
-            {
-                if (tag.Contains("InstallationId:"))
-                    installationId = new Guid(tag[(tag.IndexOf(":", StringComparison.InvariantCulture) + 1)..]).ToString();
-            }
-
-            deviceInstallationList.Add(installationId);
-        }
-
-        return deviceInstallationList;
-    }
-
-    public static async Task DeleteAllInstallations(this NotificationHubClient client)
-    {
-        foreach (var installation in await client.GetAllInstallations())
-        {
-            await client.DeleteInstallationAsync(installation);
-        }
-    }
+    public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 }

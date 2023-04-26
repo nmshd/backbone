@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 namespace Backbone.API.Configuration;
 
@@ -17,7 +18,7 @@ public class DevicesConfiguration
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
         [Required]
-        public AzureNotificationHubConfiguration AzureNotificationHub { get; set; } = new();
+        public PushNotificationOptions PushNotifications { get; set; } = new();
 
         public class SqlDatabaseConfiguration
         {
@@ -29,17 +30,6 @@ public class DevicesConfiguration
             [Required]
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
-        }
-
-        public class AzureNotificationHubConfiguration
-        {
-            [Required]
-            [MinLength(1)]
-            public string ConnectionString { get; set; } = "";
-
-            [Required]
-            [MinLength(1)]
-            public string HubName { get; set; } = "";
         }
 
     }
