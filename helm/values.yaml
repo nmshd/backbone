@@ -180,7 +180,7 @@ global:
           Args:
             outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss}|{Level} => CorrelationID:{CorrelationID} => RequestId:{RequestId} => RequestPath:{RequestPath}{NewLine}    {SourceContext}{NewLine}    {Message}{NewLine}{Exception}"
 
-consumerApi:
+consumerapi:
   nameOverride: ""
   replicas: 1
 
@@ -262,7 +262,7 @@ consumerApi:
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
 
-adminCli:
+admincli:
   nameOverride: ""
 
   configuration:
