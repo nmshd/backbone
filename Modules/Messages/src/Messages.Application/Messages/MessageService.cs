@@ -5,6 +5,7 @@ using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,15 +15,14 @@ namespace Backbone.Modules.Messages.Application.Messages;
 public class MessageService
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IMessagesDbContext _dbContext;
+    private readonly IDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageService> _logger;
     private readonly IUserContext _userContext;
     private readonly BlobOptions _blobOptions;
 
-    public MessageService(IMessagesDbContext dbContext, IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, ILogger<MessageService> logger)
+    public MessageService(IEventBus eventBus, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, ILogger<MessageService> logger)
     {
-        _dbContext = dbContext;
         _eventBus = eventBus;
         _userContext = userContext;
         _blobStorage = blobStorage;

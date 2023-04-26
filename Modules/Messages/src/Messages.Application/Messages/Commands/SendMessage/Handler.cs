@@ -8,6 +8,7 @@ using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly IMessagesDbContext _dbContext;
+    private readonly IDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
@@ -28,9 +29,8 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private readonly BlobOptions _blobOptions;
     private readonly IMessagesRepository _messagesRepository;
 
-    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions, IMessagesRepository messagesRepository)
+    public Handler(IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions, IMessagesRepository messagesRepository)
     {
-        _dbContext = dbContext;
         _blobStorage = blobStorage;
         _userContext = userContext;
         _mapper = mapper;
