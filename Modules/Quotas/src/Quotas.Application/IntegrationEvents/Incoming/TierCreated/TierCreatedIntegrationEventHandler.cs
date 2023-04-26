@@ -1,9 +1,10 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
-public class TierCreatedIntegrationEventHandler
+public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierCreatedIntegrationEvent>
 {
     private readonly ITiersRepository _tierRepository;
     private readonly ILogger<TierCreatedIntegrationEventHandler> _logger;
@@ -12,7 +13,6 @@ public class TierCreatedIntegrationEventHandler
     {
         _tierRepository = tierRepository;
         _logger = logger;
-
     }
 
     public async Task Handle(TierCreatedIntegrationEvent integrationEvent)

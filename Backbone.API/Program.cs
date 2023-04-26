@@ -18,6 +18,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Backbone.Modules.Quotas.Application.Extensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -136,6 +137,7 @@ static void Configure(WebApplication app)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
     eventBus.AddDevicesIntegrationEventSubscriptions();
+    eventBus.AddQuotasIntegrationEventSubscriptions();
 }
 
 static Task WriteResponse(HttpContext context, HealthReport healthReport)

@@ -1,4 +1,6 @@
-﻿using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -43,6 +45,8 @@ public static class IServiceCollectionExtensions
                 throw new Exception($"Unsupported database provider: {options.Provider}");
 
         }
+        services.AddTransient<ITiersRepository, TiersRepository>();
+        services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
     }
 
     public class DbOptions

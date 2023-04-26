@@ -3,7 +3,7 @@
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 public class IdentityCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Address { get; }
+    public string Address { get; private set; }
 
-    public string Tier { get; }
+    public string Tier { get; private set; }
 }

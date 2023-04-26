@@ -1,9 +1,10 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
-public class IdentityCreatedIntegrationEventHandler
+public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<IdentityCreatedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<IdentityCreatedIntegrationEventHandler> _logger;
