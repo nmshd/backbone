@@ -77,7 +77,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationShipBetweenSenderAndRecipient(sender, recipientDto.Address);
+            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationshipBetweenSenderAndRecipient(sender, recipientDto.Address);
 
             if (idOfRelationshipBetweenSenderAndRecipient == null)
             {
@@ -85,7 +85,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
-            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromActiveIdentity(sender, recipientDto, cancellationToken);
+            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToReceiver(sender, recipientDto.Address, cancellationToken);
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {

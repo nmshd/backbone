@@ -6,5 +6,5 @@ namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repos
 #nullable enable
 public interface IRelationshipsRepository
 {
-    Task<RelationshipId?> GetIdOfRelationShipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress address);
+    Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress identityA, IdentityAddress identityB);
 }

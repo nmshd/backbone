@@ -15,7 +15,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
 #nullable enable
-    public Task<RelationshipId?> GetIdOfRelationShipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
+    public Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
     {
         return _dbContext.Relationships
             .AsNoTracking()

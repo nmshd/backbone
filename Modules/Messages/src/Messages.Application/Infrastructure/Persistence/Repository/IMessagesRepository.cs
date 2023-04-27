@@ -11,7 +11,7 @@ public interface IMessagesRepository
     Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, CancellationToken cancellationToken);
     Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken);
     Task<MessageId> Add(Message message, CancellationToken cancellationToken);
-    Task<int> CountUnreceivedMessagesFromActiveIdentity(IdentityAddress sender, SendMessageCommandRecipientInformation recipientDto, CancellationToken cancellationToken);
+    Task<int> CountUnreceivedMessagesFromSenderToReceiver(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken);
     Task Update(Message message);
     Task FetchedMessage(Message message, IdentityAddress address, DeviceId deviceId);
 }

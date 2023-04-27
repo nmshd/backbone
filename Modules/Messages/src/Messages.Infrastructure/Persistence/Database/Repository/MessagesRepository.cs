@@ -5,10 +5,8 @@ using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Enmeshed.BuildingBlocks.Application.Extensions;
-using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
@@ -52,11 +50,11 @@ public class MessagesRepository : IMessagesRepository
         return add.Entity.Id;
     }
 
-    public Task<int> CountUnreceivedMessagesFromActiveIdentity(IdentityAddress sender, SendMessageCommandRecipientInformation recipientDto, CancellationToken cancellationToken)
+    public Task<int> CountUnreceivedMessagesFromSenderToReceiver(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
         return _readOnlyMessages
             .FromASpecificSender(sender)
-            .WithASpecificRecipientWhoDidNotReceiveTheMessage(recipientDto.Address)
+            .WithASpecificRecipientWhoDidNotReceiveTheMessage(recipient)
             .CountAsync(cancellationToken);
     }
 
@@ -74,11 +72,10 @@ public class MessagesRepository : IMessagesRepository
             .OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
     }
 
-    public Task Update(Message message)
+    public async Task Update(Message message)
     {
         _messages.Update(message);
-        _dbContext.SaveChanges();
-        return Task.CompletedTask;
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task FetchedMessage(Message message, IdentityAddress address, DeviceId deviceId)
