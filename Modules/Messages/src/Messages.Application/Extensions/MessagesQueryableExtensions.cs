@@ -18,7 +18,7 @@ public static class MessagesQueryableExtensions
 
     public static async Task<Message> FirstWithId(this IQueryable<Message> query, MessageId id, CancellationToken cancellationToken)
     {
-        var message = await query.FirstOrDefaultAsync(m => m.Id == id);
+        var message = await query.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
 
         if (message == null)
             throw new NotFoundException(nameof(Message));
