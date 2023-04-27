@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -35,11 +35,6 @@ public class MessagesRepository : IMessagesRepository
     public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
     {
         return await _readOnlyMessages.FirstWithId(id, cancellationToken);
-    }
-
-    public async Task<IEnumerable<Message>> FindAll()
-    {
-        return await _readOnlyMessages.ToListAsync();
     }
 
     public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)

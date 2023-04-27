@@ -1,9 +1,8 @@
 ﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -13,13 +12,13 @@ public class DataSource : IDataSource
 {
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
-    private readonly IMessagesRepository _messagesRepository;
+    private readonly MessagesDbContext _dbContext;
 
-    public DataSource(IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IMessagesRepository messagesRepository)
+    public DataSource(IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, MessagesDbContext dbContext)
     {
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
-        _messagesRepository = messagesRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
@@ -30,7 +29,6 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<MessageId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        var allMessages = await _messagesRepository.FindAll();
-        return allMessages.Select(u => u.Id);
+        return await _dbContext.SetReadOnly<Message>().Select(u => u.Id).ToListAsync(cancellationToken);
     }
 }
