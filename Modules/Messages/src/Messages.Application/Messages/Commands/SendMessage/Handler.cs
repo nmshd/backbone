@@ -18,34 +18,28 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
-    private readonly IBlobStorage _blobStorage;
     private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
-    private readonly BlobOptions _blobOptions;
     private readonly IMessagesRepository _messagesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
 
     public Handler(
-        IBlobStorage blobStorage,
         IUserContext userContext,
         IMapper mapper,
         IEventBus eventBus,
         IOptionsSnapshot<ApplicationOptions> options,
         ILogger<Handler> logger,
-        IOptions<BlobOptions> blobOptions,
         IMessagesRepository messagesRepository,
         IRelationshipsRepository relationshipsRepository)
     {
-        _blobStorage = blobStorage;
         _userContext = userContext;
         _mapper = mapper;
         _eventBus = eventBus;
         _logger = logger;
         _options = options.Value;
-        _blobOptions = blobOptions.Value;
         _messagesRepository = messagesRepository;
         _relationshipsRepository = relationshipsRepository;
     }
@@ -72,9 +66,6 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     private async Task SaveMessage(Message message, CancellationToken cancellationToken)
     {
         await _messagesRepository.Add(message, cancellationToken);
-
-        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
-        await _blobStorage.SaveAsync();
     }
 
     private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)

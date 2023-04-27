@@ -9,6 +9,9 @@ using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -16,12 +19,16 @@ public class MessagesRepository : IMessagesRepository
     private readonly DbSet<Message> _messages;
     private readonly IQueryable<Message> _readOnlyMessages;
     private readonly MessagesDbContext _dbContext;
+    private readonly IBlobStorage _blobStorage;
+    private readonly BlobOptions _blobOptions;
 
-    public MessagesRepository(MessagesDbContext dbContext)
+    public MessagesRepository(MessagesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _messages = dbContext.Messages;
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
         _dbContext = dbContext;
+        _blobStorage = blobStorage;
+        _blobOptions = blobOptions.Value;
     }
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken)
     {
@@ -40,6 +47,8 @@ public class MessagesRepository : IMessagesRepository
     {
         var add = await _messages.AddAsync(message, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
+        await _blobStorage.SaveAsync();
         return add.Entity.Id;
     }
 
