@@ -24,7 +24,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
-using ILogger = Serilog.ILogger;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.API.Extensions;
