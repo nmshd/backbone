@@ -67,10 +67,10 @@ public class MessagesRepository : IMessagesRepository
         return query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
     }
 
-    public EntityEntry<Message> Update(Message message)
+    public Message Update(Message message)
     {
         var m = _messages.Update(message);
         _dbContext.SaveChanges();
-        return m;
+        return m.Entity;
     }
 }
