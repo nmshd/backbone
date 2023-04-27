@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
     public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _messagesRepository.FindMessagesOfIdentity(_userContext.GetAddress(), request, _userContext.GetAddress(), cancellationToken);
+        var dbPaginationResult = await _messagesRepository.FindMessagesOfIdentity(_userContext.GetAddress(), request, cancellationToken);
 
         var response = new ListMessagesResponse(_mapper.Map<IEnumerable<MessageDTO>>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
 

@@ -1,4 +1,4 @@
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -57,7 +57,7 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, IdentityAddress addressOfActiveIdentity, CancellationToken cancellationToken)
+    public Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, CancellationToken cancellationToken)
     {
         var query = _readOnlyMessages
             .AsQueryable()
