@@ -81,7 +81,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication)
+        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment)
         .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>

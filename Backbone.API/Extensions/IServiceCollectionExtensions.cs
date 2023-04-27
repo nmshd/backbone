@@ -179,7 +179,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
-        BackboneConfiguration.AuthenticationConfiguration configuration)
+        BackboneConfiguration.AuthenticationConfiguration configuration, IHostEnvironment environment)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -191,6 +191,10 @@ public static class IServiceCollectionExtensions
             {
                 if (configuration.JwtSigningCertificate.IsNullOrEmpty())
                 {
+                    if (environment.IsProduction())
+                        throw new Exception(
+                            $"For production scenarios, you need to set a '{nameof(configuration.JwtSigningCertificate)}'.");
+
                     Log.Logger.Warning("Using development signing certificate. Note that this is not recommended for production scenarios!");
                     options.AddDevelopmentSigningCertificate();
                 }
