@@ -9,6 +9,11 @@ public static class StringExtensions
         return @string == string.Empty;
     }
 
+    public static bool IsNullOrEmpty(this string? @string)
+    {
+        return string.IsNullOrEmpty(@string);
+    }
+
     public static bool MatchesRegex(this string text, string regexString)
     {
         var regex = new Regex(regexString);
