@@ -28,9 +28,4 @@ public class QuotasDbContext : AbstractDbContextBase
             .HasForeignKey(c => c.TierId);
         });
     }
-
-    protected void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        base.ConfigureConventions(configurationBuilder);
-    }
 }
