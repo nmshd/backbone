@@ -1,17 +1,16 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using Autofac;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.AspNetCoreIdentityCustomizations;
-using Backbone.API.Certificates;
 using Backbone.API.Configuration;
 using Backbone.API.Mvc.ExceptionFilters;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Channel;
@@ -24,6 +23,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
+using Serilog;
+using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.API.Extensions;
 
@@ -105,12 +106,11 @@ public static class IServiceCollectionExtensions
         var modules = configuration.Modules.GetType().GetProperties();
         foreach (var moduleProperty in modules)
         {
-            if (moduleProperty is null) continue;
-
             var moduleName = moduleProperty.Name;
-            var module = configuration.Modules.GetType().GetProperty(moduleName).GetValue(configuration.Modules, null);
+            var module = moduleProperty.GetValue(configuration.Modules)!;
+            
             var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString") as string;
+            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString")!;
 
             switch (provider)
             {
@@ -137,10 +137,10 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    private static object GetPropertyValue(object source, string propertyPath)
+    private static object? GetPropertyValue(object? source, string propertyPath)
     {
-        foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
-            source = property.GetValue(source, null);
+        foreach (var property in propertyPath.Split('.').Select(s => source?.GetType().GetProperty(s)))
+            source = property?.GetValue(source, null);
 
         return source;
     }
@@ -178,7 +178,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
-        BackboneConfiguration.AuthenticationConfiguration configuration)
+        BackboneConfiguration.AuthenticationConfiguration configuration, IHostEnvironment environment)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -188,7 +188,21 @@ public static class IServiceCollectionExtensions
             })
             .AddServer(options =>
             {
-                options.AddSigningCertificate(Certificate.Get(configuration));
+                if (configuration.JwtSigningCertificate.IsNullOrEmpty())
+                {
+                    if (environment.IsProduction())
+                        throw new Exception(
+                            $"For production scenarios, you need to set a '{nameof(configuration.JwtSigningCertificate)}'.");
+
+                    Log.Logger.Warning("Using development signing certificate. Note that this is not recommended for production scenarios!");
+                    options.AddDevelopmentSigningCertificate();
+                }
+                else
+                {
+                    var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
+                    var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+                    options.AddSigningCertificate(certificate);
+                }
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowPasswordFlow();
                 options.SetAccessTokenLifetime(TimeSpan.FromSeconds(configuration.JwtLifetimeInSeconds));
