@@ -61,10 +61,9 @@ public class MessagesRepository : IMessagesRepository
         if (request.Ids.Any())
             query = query.WithIdsIn(request.Ids);
 
-        query = query.WithSenderOrRecipient(identityAddress);
-        query = query.DoNotSendBeforePropertyIsNotInTheFuture();
-
-        return query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
+        return query.WithSenderOrRecipient(identityAddress)
+            .DoNotSendBeforePropertyIsNotInTheFuture()
+            .OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
     }
 
     public Message Update(Message message)
