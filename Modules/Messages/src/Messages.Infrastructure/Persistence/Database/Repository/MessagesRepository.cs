@@ -28,9 +28,9 @@ public class MessagesRepository : IMessagesRepository
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
     }
-    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken)
+    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return await _readOnlyMessages
+        return await (track ? _messages : _readOnlyMessages)
             .IncludeAllReferences()
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
@@ -58,9 +58,9 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter)
+    public Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, bool track = false)
     {
-        var query = _readOnlyMessages
+        var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
             .IncludeAllReferences();
 
