@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -37,9 +37,9 @@ public class MessagesRepository : IMessagesRepository
         return await _readOnlyMessages.FirstWithId(id, cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Message>> FindAll(PaginationFilter paginationFilter)
+    public async Task<IEnumerable<Message>> FindAll()
     {
-        return await _readOnlyMessages.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        return await _readOnlyMessages.ToListAsync();
     }
 
     public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -30,7 +30,7 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<MessageId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        var allMessages = await _messagesRepository.FindAll(new PaginationFilter() { PageNumber = 1, PageSize = int.MaxValue });
-        return allMessages.ItemsOnPage.Select(u => u.Id);
+        var allMessages = await _messagesRepository.FindAll();
+        return allMessages.Select(u => u.Id);
     }
 }
