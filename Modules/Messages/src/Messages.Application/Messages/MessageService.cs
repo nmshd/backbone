@@ -31,48 +31,16 @@ public class MessageService
         _messagesRepository = messagesRepository;
     }
 
-    public async Task MarkMessageAsReceived(Message message, CancellationToken cancellationToken)
+    public async Task MarkMessagesAsReceived(IEnumerable<Message> messages)
     {
-        var wasSet = MarkMessageAsReceived(message);
-
-        if (wasSet)
-            _eventBus.Publish(new MessageDeliveredIntegrationEvent(message, _userContext.GetAddress()));
+        await Task.WhenAll(messages.Select(MarkMessageAsReceived));
     }
 
-    public async Task MarkMessagesAsReceived(IEnumerable<Message> messages, CancellationToken cancellationToken)
+    public Task MarkMessageAsReceived(Message message)
     {
-        var messagesWithSetReceptionDate = new List<Message>();
+        _messagesRepository.FetchedMessage(message, _userContext.GetAddress(), _userContext.GetDeviceId());
 
-        foreach (var message in messages)
-        {
-            var wasSet = MarkMessageAsReceived(message);
-
-            if (wasSet)
-                messagesWithSetReceptionDate.Add(message);
-        }
-
-        _logger.LogTrace($"Marked {messagesWithSetReceptionDate.Count} messages as received.");
-
-        foreach (var message in messagesWithSetReceptionDate)
-        {
-            _eventBus.Publish(new MessageDeliveredIntegrationEvent(message, _userContext.GetAddress()));
-        }
-    }
-
-    private bool MarkMessageAsReceived(Message message)
-    {
-        var recipient = message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress());
-
-        if (recipient == null || recipient.ReceivedAt.HasValue)
-            return false;
-
-        recipient.ReceivedMessage(_userContext.GetDeviceId());
-        
-        _messagesRepository.Update(message);
-
-        _logger.LogTrace($"Marked message with id {message.Id} as received for recipient {recipient.Address}.");
-
-        return true;
+        return Task.CompletedTask;
     }
 
     public async Task FillBody(MessageDTO dto)

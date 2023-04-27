@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
     {
         var message = await _messagesRepository.Find(request.Id, _userContext.GetAddress(), cancellationToken);
         
-        await _messageService.MarkMessageAsReceived(message, cancellationToken);
+        await _messageService.MarkMessageAsReceived(message);
 
         var response = _mapper.Map<MessageDTO>(message);
 

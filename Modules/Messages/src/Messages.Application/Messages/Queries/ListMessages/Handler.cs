@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
         await _messageService.FillBodies(response);
 
-        await _messageService.MarkMessagesAsReceived(dbPaginationResult.ItemsOnPage, cancellationToken);
+        await _messageService.MarkMessagesAsReceived(dbPaginationResult.ItemsOnPage);
 
         response.PrepareForActiveIdentity(_userContext.GetAddress());
 

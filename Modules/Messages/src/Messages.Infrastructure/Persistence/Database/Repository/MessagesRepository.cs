@@ -1,15 +1,14 @@
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -71,5 +70,14 @@ public class MessagesRepository : IMessagesRepository
         _messages.Update(message);
         _dbContext.SaveChanges();
         return Task.CompletedTask;
+    }
+
+    public async Task FetchedMessage(Message message, IdentityAddress address, DeviceId deviceId)
+    {
+        var recipient = message.Recipients.FirstWithIdOrDefault(address);
+
+        recipient.ReceivedMessage(deviceId);
+
+        await Update(message);
     }
 }

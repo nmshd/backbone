@@ -28,7 +28,10 @@ public class RecipientInformation
 
     public void ReceivedMessage(DeviceId receivedByDevice)
     {
-        ReceivedAt = SystemTime.UtcNow;
-        ReceivedByDevice = receivedByDevice;
+        if (!ReceivedAt.HasValue)
+        {
+            ReceivedAt = SystemTime.UtcNow;
+            ReceivedByDevice = receivedByDevice;
+        }
     }
 }
