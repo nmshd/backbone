@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -24,7 +23,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
     public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _messagesRepository.FindMessagesOfIdentity(_userContext.GetAddress(), request, cancellationToken);
+        var dbPaginationResult = await _messagesRepository.FindMessagesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter);
 
         var response = new ListMessagesResponse(_mapper.Map<IEnumerable<MessageDTO>>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
 

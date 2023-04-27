@@ -6,10 +6,10 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Microsoft.EntityFrameworkCore;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -58,18 +58,18 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public Task<DbPaginationResult<Message>> FindMessagesOfIdentity(IdentityAddress identityAddress, ListMessagesQuery request, CancellationToken cancellationToken)
+    public Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter)
     {
         var query = _readOnlyMessages
             .AsQueryable()
             .IncludeAllReferences();
 
-        if (request.Ids.Any())
-            query = query.WithIdsIn(request.Ids);
+        if (ids.Any())
+            query = query.WithIdsIn(ids);
 
-        return query.WithSenderOrRecipient(identityAddress)
+        return query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
-            .OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
     }
 
     public async Task Update(Message message)
