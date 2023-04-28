@@ -29,16 +29,16 @@ public class MessagesRepository : IMessagesRepository
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
     }
-    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool noBody = false)
+    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool fillBody = true)
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAllReferences()
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
 
-        if (noBody == false)
+        if (fillBody)
         {
-            message.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id));
+            await FillBody(message);
         }
 
         return message;
@@ -79,12 +79,14 @@ public class MessagesRepository : IMessagesRepository
             .DoNotSendBeforePropertyIsNotInTheFuture()
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        foreach (var msg in messages.ItemsOnPage)
-        {
-            msg.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, msg.Id));
-        }
+        await Task.WhenAll(messages.ItemsOnPage.Select(FillBody).ToArray());
 
         return messages;
+    }
+
+    private async Task FillBody(Message message)
+    {
+        await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id);
     }
 
     public async Task Update(Message message)

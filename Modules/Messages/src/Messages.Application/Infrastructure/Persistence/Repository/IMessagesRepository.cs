@@ -8,7 +8,7 @@ namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repos
 public interface IMessagesRepository
 {
     Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, bool track = false);
-    Task<Message> Find(MessageId id, IdentityAddress requiredParticipant, CancellationToken cancellationToken, bool track = false, bool noBody = false);
+    Task<Message> Find(MessageId id, IdentityAddress requiredParticipant, CancellationToken cancellationToken, bool track = false, bool fillBody = true);
     Task<MessageId> Add(Message message, CancellationToken cancellationToken);
     Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken);
     Task Update(Message message);
