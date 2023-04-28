@@ -75,9 +75,16 @@ public class MessagesRepository : IMessagesRepository
         if (ids.Any())
             query = query.WithIdsIn(ids);
 
-        return await query.WithSenderOrRecipient(requiredParticipant)
+        var messages = await query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+
+        foreach (var msg in messages.ItemsOnPage)
+        {
+            msg.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, msg.Id));
+        }
+
+        return messages;
     }
 
     public async Task Update(Message message)
