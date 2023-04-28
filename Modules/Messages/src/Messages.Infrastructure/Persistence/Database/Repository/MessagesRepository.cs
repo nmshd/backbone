@@ -10,9 +10,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Messages.Application.Messages.DTOs;
-using AutoMapper;
-using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -22,16 +20,14 @@ public class MessagesRepository : IMessagesRepository
     private readonly MessagesDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
-    private readonly IMapper _mapper;
 
-    public MessagesRepository(MessagesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IMapper mapper)
+    public MessagesRepository(MessagesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _messages = dbContext.Messages;
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
-        _mapper = mapper;
     }
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool noBody = false)
     {
