@@ -39,7 +39,7 @@ public class Message : IIdentifiable<MessageId>
     {
         if(Body != null)
         {
-            throw new InvalidOperationException($"The Body of the message {Id} is already filled.");
+            throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }
         Body = bytes;
     }
