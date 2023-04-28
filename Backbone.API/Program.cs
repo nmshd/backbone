@@ -12,6 +12,8 @@ using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -25,18 +27,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
-using Backbone.Modules.Quotas.Application.Extensions;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Files.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 
 Log.Logger = new LoggerConfiguration()
-.WriteTo.Console()
+    .WriteTo.Console()
     .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);

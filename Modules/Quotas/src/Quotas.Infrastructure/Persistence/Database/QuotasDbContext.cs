@@ -7,8 +7,6 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {
-    public QuotasDbContext() { }
-
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options) { }
 
     public DbSet<Identity> Identities { get; set; }
@@ -20,12 +18,5 @@ public class QuotasDbContext : AbstractDbContextBase
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(QuotasDbContext).Assembly);
-        
-        builder.Entity<Identity>(i =>
-        {
-            i.HasOne<Tier>()
-            .WithMany()
-            .HasForeignKey(c => c.TierId);
-        });
     }
 }

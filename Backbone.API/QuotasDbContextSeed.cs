@@ -26,9 +26,9 @@ public class QuotasDbContextSeed
         if (await context.Identities.AnyAsync())
             return;
 
-        foreach (var identityDevices in _devicesDbContext.Identities)
+        foreach (var sourceIdentity in _devicesDbContext.Identities)
         {
-            await context.Identities.AddAsync(new Identity(identityDevices.Address, identityDevices.TierId));
+            await context.Identities.AddAsync(new Identity(sourceIdentity.Address, sourceIdentity.TierId));
         }
 
         await context.SaveChangesAsync();
@@ -39,9 +39,9 @@ public class QuotasDbContextSeed
         if (await context.Tiers.AnyAsync())
             return;
 
-        foreach (var tierDevices in _devicesDbContext.Tiers)
+        foreach (var sourceTier in _devicesDbContext.Tiers)
         {
-            await context.Tiers.AddAsync(new Tier(tierDevices.Id, tierDevices.Name));
+            await context.Tiers.AddAsync(new Tier(sourceTier.Id, sourceTier.Name));
         }
 
         await context.SaveChangesAsync();
