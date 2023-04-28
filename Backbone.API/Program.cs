@@ -19,6 +19,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+
 Log.Logger = new LoggerConfiguration()
 .WriteTo.Console()
     .CreateBootstrapLogger();
@@ -43,14 +52,14 @@ var app = builder.Build();
 Configure(app);
 
 app
-    .MigrateDbContext<Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ChallengesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Devices.Infrastructure.Persistence.Database.DevicesDbContext>((context, _) => { new DevicesDbContextSeed().SeedAsync(context).Wait(); })
-    .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.FilesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.RelationshipsDbContext>()
-    .MigrateDbContext<Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<Backbone.Modules.Devices.Infrastructure.Persistence.Database.DevicesDbContext>()).SeedAsync(context).Wait(); })
-    .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.MessagesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.SynchronizationDbContext>()
-    .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.TokensDbContext>();
+    .MigrateDbContext<ChallengesDbContext>()
+    .MigrateDbContext<DevicesDbContext>((context, _) => { new DevicesDbContextSeed().SeedAsync(context).Wait(); })
+    .MigrateDbContext<FilesDbContext>()
+    .MigrateDbContext<RelationshipsDbContext>()
+    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+    .MigrateDbContext<MessagesDbContext>()
+    .MigrateDbContext<SynchronizationDbContext>()
+    .MigrateDbContext<TokensDbContext>();
 
 app.Run();
 
