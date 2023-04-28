@@ -26,12 +26,12 @@ public class RecipientInformation
     public RelationshipId RelationshipId { get; }
     public MessageId MessageId { get; }
 
-    public void FetchedMessage(DeviceId receivedByDevice)
+    public void FetchedMessage(DeviceId fetchedByDevice)    
     {
         if (!ReceivedAt.HasValue)
         {
             ReceivedAt = SystemTime.UtcNow;
-            ReceivedByDevice = receivedByDevice;
+            ReceivedByDevice = fetchedByDevice;
         }
     }
 }
