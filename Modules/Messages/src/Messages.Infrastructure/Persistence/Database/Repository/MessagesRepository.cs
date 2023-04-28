@@ -58,9 +58,9 @@ public class MessagesRepository : IMessagesRepository
         return add.Entity.Id;
     }
 
-    public Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    public async Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
-        return _readOnlyMessages
+        return await _readOnlyMessages
             .FromASpecificSender(sender)
             .WithASpecificRecipientWhoDidNotReceiveTheMessage(recipient)
             .CountAsync(cancellationToken);
