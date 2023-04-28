@@ -31,17 +31,17 @@ public class MessagesRepository : IMessagesRepository
     }
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool noBody = false)
     {
-        var msg = await (track ? _messages : _readOnlyMessages)
+        var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAllReferences()
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
 
         if (noBody == false)
         {
-            msg.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, msg.Id));
+            message.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id));
         }
 
-        return msg;
+        return message;
     }
 
     public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
