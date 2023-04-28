@@ -88,10 +88,7 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task Update(IEnumerable<Message> messages)
     {
-        foreach (var message in messages)
-        {
-            _messages.Update(message);
-        }
+        _dbContext.UpdateRange(messages);
         await _dbContext.SaveChangesAsync();
     }
 }
