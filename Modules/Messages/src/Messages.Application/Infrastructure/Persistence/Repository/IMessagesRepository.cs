@@ -12,5 +12,5 @@ public interface IMessagesRepository
     Task<MessageId> Add(Message message, CancellationToken cancellationToken);
     Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken);
     Task Update(Message message);
-    Task Update(IEnumerable<Message> message);
+    Task Update(IEnumerable<Message> messages);
 }
