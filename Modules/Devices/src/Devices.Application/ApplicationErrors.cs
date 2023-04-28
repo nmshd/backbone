@@ -1,5 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Microsoft.IdentityModel.Tokens;
+using Enmeshed.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application;
 

@@ -7,8 +7,15 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -84,7 +91,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication)
+        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment)
         .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
