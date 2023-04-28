@@ -10,6 +10,9 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
+using AutoMapper;
+using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -19,21 +22,27 @@ public class MessagesRepository : IMessagesRepository
     private readonly MessagesDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
+    private readonly IMapper _mapper;
 
-    public MessagesRepository(MessagesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
+    public MessagesRepository(MessagesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IMapper mapper)
     {
         _messages = dbContext.Messages;
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
+        _mapper = mapper;
     }
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return await (track ? _messages : _readOnlyMessages)
+        var msg = await (track ? _messages : _readOnlyMessages)
             .IncludeAllReferences()
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
+
+        msg.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, msg.Id));
+
+        return msg;
     }
 
     public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
@@ -50,7 +59,7 @@ public class MessagesRepository : IMessagesRepository
         return add.Entity.Id;
     }
 
-    public Task<int> CountUnreceivedMessagesFromSenderToReceiver(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    public Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
         return _readOnlyMessages
             .FromASpecificSender(sender)
@@ -58,7 +67,7 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, bool track = false)
+    public async Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, bool track = false)
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
@@ -67,7 +76,7 @@ public class MessagesRepository : IMessagesRepository
         if (ids.Any())
             query = query.WithIdsIn(ids);
 
-        return query.WithSenderOrRecipient(requiredParticipant)
+        return await query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
     }
@@ -78,12 +87,12 @@ public class MessagesRepository : IMessagesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task FetchedMessage(Message message, IdentityAddress address, DeviceId deviceId)
+    public async Task Update(IEnumerable<Message> messages)
     {
-        var recipient = message.Recipients.FirstWithIdOrDefault(address);
-
-        recipient.ReceivedMessage(deviceId);
-
-        await Update(message);
+        foreach (var message in messages)
+        {
+            _messages.Update(message);
+        }
+        await _dbContext.SaveChangesAsync();
     }
 }

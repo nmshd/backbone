@@ -56,16 +56,11 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
             recipients);
 
-        await SaveMessage(message, cancellationToken);
+        await _messagesRepository.Add(message, cancellationToken);
 
         _eventBus.Publish(new MessageCreatedIntegrationEvent(message));
 
         return _mapper.Map<SendMessageResponse>(message);
-    }
-
-    private async Task SaveMessage(Message message, CancellationToken cancellationToken)
-    {
-        await _messagesRepository.Add(message, cancellationToken);
     }
 
     private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
@@ -85,7 +80,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
-            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToReceiver(sender, recipientDto.Address, cancellationToken);
+            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {

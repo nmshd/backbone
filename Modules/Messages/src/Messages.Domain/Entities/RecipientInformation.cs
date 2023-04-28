@@ -26,7 +26,7 @@ public class RecipientInformation
     public RelationshipId RelationshipId { get; }
     public MessageId MessageId { get; }
 
-    public void ReceivedMessage(DeviceId receivedByDevice)
+    public void FetchedMessage(DeviceId receivedByDevice)
     {
         if (!ReceivedAt.HasValue)
         {
