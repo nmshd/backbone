@@ -11,6 +11,6 @@ public class AddMockIdentitiesRepository : IIdentitiesRepository
     {
         WasCalled = true;
         WasCalledWith = identity;
-        return Task.FromResult(identity);
+        return Task.CompletedTask;
     }
 }

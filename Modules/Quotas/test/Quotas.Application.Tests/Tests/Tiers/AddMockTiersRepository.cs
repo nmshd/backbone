@@ -11,6 +11,6 @@ public class AddMockTiersRepository : ITiersRepository
     {
         WasCalled = true;
         WasCalledWith = tier;
-        return Task.FromResult(tier);
+        return Task.CompletedTask;
     }
 }

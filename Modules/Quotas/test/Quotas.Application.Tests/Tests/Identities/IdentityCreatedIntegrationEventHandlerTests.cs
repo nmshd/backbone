@@ -22,8 +22,8 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities
 
             // Assert
             mockIdentityRepository.WasCalled.Should().BeTrue();
-            mockIdentityRepository.WasCalledWith.Address.Should().Be("id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm");
-            mockIdentityRepository.WasCalledWith.TierId.Should().Be("TIRFxoL0U24aUqZDSAWc");
+            mockIdentityRepository.WasCalledWith.Address.Should().Be(address);
+            mockIdentityRepository.WasCalledWith.TierId.Should().Be(tier);
         }
 
         private IdentityCreatedIntegrationEventHandler CreateHandler(AddMockIdentitiesRepository identities)

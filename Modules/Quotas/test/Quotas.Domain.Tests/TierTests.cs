@@ -13,7 +13,7 @@ namespace Quotas.Domain.Tests
             var tierName = "my-test-tier";
             var tier = new Tier(tierId, tierName);
 
-            tier.Id.Should().Be("TIREYSCQI6XaMygco7Bw");
+            tier.Id.Should().Be(tierId);
             tier.Name.Should().Be(tierName);
         }
     }
