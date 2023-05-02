@@ -18,7 +18,5 @@ public static class IServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(SendMessageCommandValidator).Assembly);
-
-        services.AddTransient<MessageService>();
     }
 }

@@ -9,7 +9,7 @@ namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class MessagesQueryableExtensions
 {
-    public static IQueryable<Message> IncludeAllReferences(this IQueryable<Message> messages, IdentityAddress addressOfActiveIdentity)
+    public static IQueryable<Message> IncludeAllReferences(this IQueryable<Message> messages)
     {
         return messages
             .Include(m => m.Recipients)

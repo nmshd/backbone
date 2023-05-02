@@ -30,8 +30,17 @@ public class Message : IIdentifiable<MessageId>
     public DeviceId CreatedByDevice { get; }
 
     public DateTime? DoNotSendBefore { get; }
-    public byte[] Body { get; }
+    public byte[] Body { get; private set; }
 
     public IReadOnlyCollection<Attachment> Attachments { get; }
     public IReadOnlyCollection<RecipientInformation> Recipients { get; }
+
+    public void LoadBody(byte[] bytes)
+    {
+        if(Body != null)
+        {
+            throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
+        }
+        Body = bytes;
+    }
 }
