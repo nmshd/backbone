@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
-public class Handler : IRequestHandler<SeedTestUsersCommand, SeedTestUsersResponse>
+public class Handler : IRequestHandler<SeedTestUsersCommand>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
     private readonly DbSet<ApplicationUser> _usersDb;
