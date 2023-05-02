@@ -1,13 +1,9 @@
 ﻿using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +12,6 @@ namespace Backbone.API;
 
 public class DevicesDbContextSeed
 {
-    private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
     private readonly IMediator _mediator;
 
     public DevicesDbContextSeed(IMediator mediator)
@@ -45,19 +40,22 @@ public class DevicesDbContextSeed
     private async Task SeedApplicationUsers(DevicesDbContext context)
     {
         if (await context.Users.AnyAsync())
-        return;
+            return;
 
         await _mediator.Send(new SeedTestUsersCommand());
     }
 
     private async Task SeedBasicTier(DevicesDbContext context)
     {
-        var basicTier = await GetBasicTier(context);
-
-        if (basicTier != null)
+        try
+        {
+            var basicTier = await GetBasicTier(context);
             return;
-
-        await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
+        }
+        catch (Exception)
+        {
+            await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
+        }
     }
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
