@@ -13,6 +13,8 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -59,6 +61,7 @@ app
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
+    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
     .MigrateDbContext<TokensDbContext>();
@@ -104,7 +107,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens);
+        .AddTokens(parsedConfiguration.Modules.Tokens)
+        .AddQuotas(parsedConfiguration.Modules.Quotas);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
@@ -146,6 +150,7 @@ static void Configure(WebApplication app)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
     eventBus.AddDevicesIntegrationEventSubscriptions();
+    eventBus.AddQuotasIntegrationEventSubscriptions();
 }
 
 static Task WriteResponse(HttpContext context, HealthReport healthReport)

@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens", "Quotas")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
@@ -19,8 +19,8 @@ function AddMigration {
 
     $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
 
-    $cmd = "dotnet ef migrations add --startup-project $startupProject --project $migrationProject --context $dbContextName --output-dir Migrations --verbose $migrationName"
-
+    $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName"
+    
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
 }

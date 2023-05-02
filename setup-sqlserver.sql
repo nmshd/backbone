@@ -48,6 +48,13 @@ BEGIN
 	CREATE LOGIN tokens WITH PASSWORD = 'Passw0rd'
 	PRINT 'Login "tokens" created' ;
 END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
+WHERE name = 'quotas')
+BEGIN
+	CREATE LOGIN quotas WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "quotas" created' ;
+END
 GO
 
 IF NOT (EXISTS (SELECT name
@@ -120,6 +127,14 @@ BEGIN
 	PRINT 'Schema "Files" created' ;
 END
 
+IF NOT EXISTS ( SELECT *
+FROM sys.schemas
+WHERE name = N'Quotas' )
+BEGIN
+	EXEC('CREATE SCHEMA [Quotas]')
+	PRINT 'Schema "Quotas" created' ;
+END
+
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 IF NOT EXISTS (SELECT *
 FROM sys.database_principals
@@ -176,6 +191,15 @@ BEGIN
 	CREATE USER relationships FOR LOGIN relationships	WITH DEFAULT_SCHEMA = Relationships
 	PRINT 'User "relationships" created' ;
 END
+
+
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'quotas')
+BEGIN
+	CREATE USER quotas FOR LOGIN quotas	WITH DEFAULT_SCHEMA = Quotas
+	PRINT 'User "Quotas" created' ;
+END
 	
 GO
 
@@ -188,23 +212,25 @@ ALTER AUTHORIZATION ON SCHEMA::Synchronization TO synchronization
 ALTER AUTHORIZATION ON SCHEMA::Tokens TO tokens
 ALTER AUTHORIZATION ON SCHEMA::Relationships TO relationships
 ALTER AUTHORIZATION ON SCHEMA::Files TO files
+ALTER AUTHORIZATION ON SCHEMA::Quotas TO quotas
 PRINT 'Finished changing schema owners' ;
 GO
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
-GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files
+GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files, quotas
 GRANT CREATE FUNCTION TO relationships
 GO
 
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Challenges TO synchronization, devices, messages, tokens, relationships, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Synchronization TO challenges, devices, messages, tokens, relationships, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Messages TO challenges, synchronization, devices, tokens, relationships, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Devices TO challenges, synchronization, messages, tokens, relationships, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Tokens TO challenges, synchronization, devices, messages, relationships, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, synchronization, devices, messages, tokens, files
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Challenges TO synchronization, devices, messages, tokens, relationships, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Synchronization TO challenges, devices, messages, tokens, relationships, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Messages TO challenges, synchronization, devices, tokens, relationships, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Devices TO challenges, synchronization, messages, tokens, relationships, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Tokens TO challenges, synchronization, devices, messages, relationships, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, synchronization, devices, messages, tokens, files, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships, quotas
+DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchronization, devices, messages, tokens, relationships, files
 
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
