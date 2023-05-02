@@ -2,10 +2,8 @@
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.API;
@@ -32,9 +30,9 @@ public class DevicesDbContextSeed
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
-    private static async Task<Tier> GetBasicTier(DevicesDbContext context)
+    private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
     {
-        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? throw new Exception("Basic Tier was not found.");
+        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? null;
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
@@ -47,12 +45,7 @@ public class DevicesDbContextSeed
 
     private async Task SeedBasicTier(DevicesDbContext context)
     {
-        try
-        {
-            var basicTier = await GetBasicTier(context);
-            return;
-        }
-        catch (Exception)
+        if(await GetBasicTier(context) == null)
         {
             await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
         }
@@ -61,6 +54,11 @@ public class DevicesDbContextSeed
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
         var basicTier = await GetBasicTier(context);
+        if(basicTier == null)
+        {
+            return;
+        }
+
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }
