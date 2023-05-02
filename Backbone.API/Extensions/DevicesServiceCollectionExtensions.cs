@@ -20,11 +20,7 @@ public static class DevicesServiceCollectionExtensions
             options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
         });
 
-        services.AddPushNotifications(options =>
-        {
-            options.ConnectionString = configuration.Infrastructure.AzureNotificationHub.ConnectionString;
-            options.HubName = configuration.Infrastructure.AzureNotificationHub.HubName;
-        });
+        services.AddPushNotifications(configuration.Infrastructure.PushNotifications);
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 

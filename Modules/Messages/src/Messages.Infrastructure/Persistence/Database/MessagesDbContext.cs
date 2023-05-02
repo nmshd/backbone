@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
-public class MessagesDbContext : AbstractDbContextBase, IMessagesDbContext
+public class MessagesDbContext : AbstractDbContextBase
 {
     public MessagesDbContext() { }
 

@@ -20,10 +20,6 @@ public class BackboneConfiguration
 
     public class AuthenticationConfiguration
     {
-        [Required]
-        [RegularExpression("file|config")]
-        public string JwtSigningCertificateSource { get; set; } = "";
-
         public string JwtSigningCertificate { get; set; } = "";
 
         [Required]
@@ -56,6 +52,9 @@ public class BackboneConfiguration
 
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
+
+        [Required]
+        public QuotasConfiguration Quotas { get; set; } = new();
 
         [Required]
         public FilesConfiguration Files { get; set; } = new();

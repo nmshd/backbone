@@ -7,8 +7,17 @@ using Backbone.API.Configuration;
 using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -43,13 +52,14 @@ var app = builder.Build();
 Configure(app);
 
 app
-    .MigrateDbContext<Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ChallengesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Devices.Infrastructure.Persistence.Database.DevicesDbContext>((context, _) => { new DevicesDbContextSeed().SeedAsync(context).Wait(); })
-    .MigrateDbContext<Backbone.Modules.Files.Infrastructure.Persistence.Database.FilesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Relationships.Infrastructure.Persistence.Database.RelationshipsDbContext>()
-    .MigrateDbContext<Backbone.Modules.Messages.Infrastructure.Persistence.Database.MessagesDbContext>()
-    .MigrateDbContext<Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.SynchronizationDbContext>()
-    .MigrateDbContext<Backbone.Modules.Tokens.Infrastructure.Persistence.Database.TokensDbContext>();
+    .MigrateDbContext<ChallengesDbContext>()
+    .MigrateDbContext<DevicesDbContext>((context, _) => { new DevicesDbContextSeed().SeedAsync(context).Wait(); })
+    .MigrateDbContext<FilesDbContext>()
+    .MigrateDbContext<RelationshipsDbContext>()
+    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+    .MigrateDbContext<MessagesDbContext>()
+    .MigrateDbContext<SynchronizationDbContext>()
+    .MigrateDbContext<TokensDbContext>();
 
 app.Run();
 
@@ -74,7 +84,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication)
+        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment)
         .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
@@ -92,7 +102,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens);
+        .AddTokens(parsedConfiguration.Modules.Tokens)
+        .AddQuotas(parsedConfiguration.Modules.Quotas);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
@@ -134,6 +145,7 @@ static void Configure(WebApplication app)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.AddSynchronizationIntegrationEventSubscriptions();
     eventBus.AddDevicesIntegrationEventSubscriptions();
+    eventBus.AddQuotasIntegrationEventSubscriptions();
 }
 
 static Task WriteResponse(HttpContext context, HealthReport healthReport)

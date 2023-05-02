@@ -11,6 +11,7 @@ DROP SCHEMA "Messages" cascade;
 DROP SCHEMA "Relationships" cascade;
 DROP SCHEMA "Synchronization" cascade;
 DROP SCHEMA "Tokens" cascade;
+DROP SCHEMA "Quotas" cascade;
 */
 
 CREATE SCHEMA IF NOT EXISTS "Challenges";
@@ -20,10 +21,11 @@ CREATE SCHEMA IF NOT EXISTS "Messages";
 CREATE SCHEMA IF NOT EXISTS "Relationships";
 CREATE SCHEMA IF NOT EXISTS "Synchronization";
 CREATE SCHEMA IF NOT EXISTS "Tokens";
+CREATE SCHEMA IF NOT EXISTS "Quotas";
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-/* DROP USER challenges, devices, messages, files, relationships, synchronization, tokens */ 
+/* DROP USER challenges, devices, messages, files, relationships, synchronization, tokens, quotas */ 
  
 DO
 $$
@@ -105,6 +107,16 @@ BEGIN
 END
 $$;
 
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'quotas') THEN
+      CREATE USER quotas WITH password 'Passw0rd';
+      RAISE NOTICE 'User "quotas" created';
+   END IF;
+END
+$$;
+
 ALTER USER challenges SET search_path TO "Challenges";
 ALTER USER devices SET search_path TO "Devices";
 ALTER USER files SET search_path TO "Files";
@@ -112,19 +124,21 @@ ALTER USER messages SET search_path TO "Messages";
 ALTER USER relationships SET search_path TO "Relationships";
 ALTER USER synchronization SET search_path TO "Synchronization";
 ALTER USER tokens SET search_path TO "Tokens";
+ALTER USER quotas SET search_path TO "Quotas";
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-/*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files;
+/*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files, Quotas;
 GRANT CREATE ON SCHEMA Relationships TO relationships;*/
 
-REVOKE USAGE, CREATE ON SCHEMA "Challenges" FROM synchronization, devices, messages, tokens, relationships, files;
-REVOKE USAGE, CREATE ON SCHEMA "Synchronization" FROM challenges, devices, messages, tokens, relationships, files;
-REVOKE USAGE, CREATE ON SCHEMA "Messages" FROM challenges, synchronization, devices, tokens, relationships, files;
-REVOKE USAGE, CREATE ON SCHEMA "Devices" FROM challenges, synchronization, messages, tokens, relationships, files;
-REVOKE USAGE, CREATE ON SCHEMA "Tokens" FROM challenges, synchronization, devices, messages, relationships, files;
-REVOKE USAGE, CREATE ON SCHEMA "Relationships" FROM challenges, synchronization, devices, messages, tokens, files;
-REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices, messages, tokens, relationships;
+REVOKE USAGE, CREATE ON SCHEMA "Challenges" FROM synchronization, devices, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Synchronization" FROM challenges, devices, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Messages" FROM challenges, synchronization, devices, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Devices" FROM challenges, synchronization, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Tokens" FROM challenges, synchronization, devices, messages, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Relationships" FROM challenges, synchronization, devices, messages, tokens, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices, messages, tokens, relationships, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Quotas" FROM challenges, synchronization, devices, messages, tokens, relationships, files;
 
 GRANT USAGE ON SCHEMA "Relationships" TO messages;
 GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationships" TO messages;
@@ -188,6 +202,14 @@ CREATE TABLE IF NOT EXISTS "Tokens"."__EFMigrationsHistory"
 );
 ALTER TABLE IF EXISTS "Tokens"."__EFMigrationsHistory" OWNER to tokens;
 
+CREATE TABLE IF NOT EXISTS "Quotas"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Quotas"."__EFMigrationsHistory" OWNER to quotas;
+
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 GRANT challenges TO "nmshdAdmin";;
@@ -197,6 +219,7 @@ GRANT synchronization TO "nmshdAdmin";
 GRANT tokens TO "nmshdAdmin";
 GRANT relationships TO "nmshdAdmin";
 GRANT files TO "nmshdAdmin";
+GRANT quotas TO "nmshdAdmin";
 
 ALTER SCHEMA "Challenges" OWNER TO challenges;
 ALTER SCHEMA "Devices" OWNER TO devices;
@@ -205,4 +228,5 @@ ALTER SCHEMA "Synchronization" OWNER TO synchronization;
 ALTER SCHEMA "Tokens" OWNER TO tokens;
 ALTER SCHEMA "Relationships" OWNER TO relationships;
 ALTER SCHEMA "Files" OWNER TO files;
+ALTER SCHEMA "Quotas" OWNER TO quotas;
 
