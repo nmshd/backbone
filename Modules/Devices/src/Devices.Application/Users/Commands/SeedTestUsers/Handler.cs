@@ -11,13 +11,11 @@ namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 public class Handler : IRequestHandler<SeedTestUsersCommand>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
-    private readonly DbSet<ApplicationUser> _usersDb;
     private readonly IDevicesDbContext _dbContext;
     private readonly ITiersRepository _tiersRepository;
 
     public Handler(IDevicesDbContext context, ITiersRepository tiersRepository, IPasswordHasher<ApplicationUser> passwordHasher)
     {
-        _usersDb = context.Set<ApplicationUser>();
         _dbContext = context;
         _tiersRepository = tiersRepository;
         _passwordHasher = passwordHasher;
@@ -39,7 +37,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "a");
-        await _usersDb.AddAsync(user);
+        await _dbContext.Set<ApplicationUser>().AddAsync(user);
 
         user = new ApplicationUser
         {
@@ -53,7 +51,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
-        await _usersDb.AddAsync(user);
+        await _dbContext.Set<ApplicationUser>().AddAsync(user);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
