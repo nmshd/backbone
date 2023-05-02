@@ -65,8 +65,11 @@ global:
             Provider: ""
             # ConnectionString - should be set via Kubernetes secret
             ConnectionString: ""
-          AzureNotificationHub:
-            HubName: ""
+          PushNotifications:
+            # Provider - possible values: "AzureNotificationHub"/"Dummy"
+            Provider: ""
+            AzureNotificationHub:
+              HubName: ""
       Files:
         Application:
           # Pagination - the following options describe the default and maximum page size for the different endpoints
