@@ -39,7 +39,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: Database__Provider
-              value: {{ .Values.global.configuration.Modules.Devices.Infrastructure.SqlDatabase.Provider }}
+              value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
