@@ -77,7 +77,7 @@ public class TokensApiStepDefinitions
         var httpResponse = await _tokensApi.CreateToken(requestConfiguration);
         httpResponse.IsSuccessStatusCode.Should().BeTrue();
 
-        var token = httpResponse.Data!.Result!;
+        var token = httpResponse.Content!.Result!;
 
         _tokenId = token.Id;
         _tokenId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
@@ -102,7 +102,7 @@ public class TokensApiStepDefinitions
         var httpResponse = await _tokensApi.CreateToken(requestConfiguration);
         httpResponse.IsSuccessStatusCode.Should().BeTrue();
 
-        var token = httpResponse.Data!.Result!;
+        var token = httpResponse.Content!.Result!;
 
         _peerTokenId = token.Id!;
         _peerTokenId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
@@ -129,7 +129,7 @@ public class TokensApiStepDefinitions
             response.Should().NotBeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            _givenOwnTokens.Add(response.Data!.Result!);
+            _givenOwnTokens.Add(response.Content!.Result!);
         }
     }
 
@@ -142,7 +142,7 @@ public class TokensApiStepDefinitions
 
         _tokenResponse.StatusCode = response.StatusCode;
 
-        var tokens = response.Data!.Result!;
+        var tokens = response.Content!.Result!;
         tokens.Should().NotBeNull();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
 
@@ -226,7 +226,7 @@ public class TokensApiStepDefinitions
 
         _tokenResponse.StatusCode = response.StatusCode;
 
-        var tokens = response.Data!.Result!;
+        var tokens = response.Content!.Result!;
 
         _responseTokens.AddRange(tokens);
     }
@@ -252,9 +252,9 @@ public class TokensApiStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tokenResponse.Data!.Error.Should().NotBeNull();
+        _tokenResponse.Content!.Error.Should().NotBeNull();
 
-        _tokenResponse.Data!.Error!.Code.Should().Be(errorCode);
+        _tokenResponse.Content!.Error!.Code.Should().Be(errorCode);
     }
 
     [Then(@"the response contains a Token")]
@@ -295,7 +295,7 @@ public class TokensApiStepDefinitions
 
     private void AssertResponseContentCompliesWithSchema<T>()
     {
-        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(JsonConvert.SerializeObject(_tokenResponse.Data!), out var errors)
+        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(JsonConvert.SerializeObject(_tokenResponse.Content!), out var errors)
             .Should().BeTrue($"Response content does not comply with the {nameof(ResponseContent<T>)} schema: {string.Join(", ", errors)}");
     }
 }
