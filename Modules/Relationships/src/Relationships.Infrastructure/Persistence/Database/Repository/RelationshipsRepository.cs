@@ -14,10 +14,12 @@ using Microsoft.Extensions.Options;
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 public class RelationshipsRepository : IRelationshipsRepository
 {
-    private readonly DbSet<RelationshipTemplate> _templates;
+    private readonly DbSet<Relationship> _relationships;
     private readonly DbSet<RelationshipChange> _changes;
-    private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
+    private readonly DbSet<RelationshipTemplate> _templates;
+    private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly IQueryable<RelationshipChange> _readOnlyChanges;
+    private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
@@ -25,10 +27,12 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IContentStore contentStore)
     {
-        _templates = dbContext.RelationshipTemplates;
-        _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
+        _relationships = dbContext.Relationships;
+        _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
         _changes = dbContext.RelationshipChanges;
         _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
+        _templates = dbContext.RelationshipTemplates;
+        _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
@@ -43,6 +47,22 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return add.Entity.Id;
+    }
+
+    public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    {
+        // TODO: Missing .IncludeAll()
+        var relationship = await(track ? _relationships : _readOnlyRelationships)
+                            .WithId(id)
+                            .WithParticipant(identityAddress)
+                            .FirstWithId(id, cancellationToken);
+
+        if (fillContent)
+        {
+            await FillContentChanges(relationship.Changes);
+        }
+
+        return relationship;
     }
 
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
@@ -101,6 +121,11 @@ public class RelationshipsRepository : IRelationshipsRepository
     private async Task FillContentChange(RelationshipChange change)
     {
         await _contentStore.FillContentOfChange(change);
+    }
+
+    private async Task FillContentChanges(IEnumerable<RelationshipChange> changes)
+    {
+        await _contentStore.FillContentOfChanges(changes);
     }
 
     private async Task FillContentTemplate(RelationshipTemplate template)
