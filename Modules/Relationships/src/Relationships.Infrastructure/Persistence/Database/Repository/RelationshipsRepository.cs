@@ -1,8 +1,10 @@
-﻿using Backbone.Modules.Relationships.Application.Infrastructure;
+﻿using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -34,5 +36,32 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return add.Entity.Id;
+    }
+
+    public async Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    {
+        var template = await (track ? _templates : _readOnlyTemplates)
+                    .Include(r => r.Allocations)
+                    .NotExpiredFor(identityAddress)
+                    .NotDeleted()
+                    .FirstWithId(id, cancellationToken);
+
+        if (fillContent)
+        {
+            await FillContentTemplate(template);
+        }
+
+        return template;
+    }
+
+    public async Task UpdateRelationshipTemplate(RelationshipTemplate template)
+    {
+        _templates.Update(template);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task FillContentTemplate(RelationshipTemplate template)
+    {
+        await _contentStore.FillContentOfTemplate(template);
     }
 }
