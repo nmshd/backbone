@@ -66,7 +66,7 @@ public class TokensApiStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy")
+            ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -89,7 +89,7 @@ public class TokensApiStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy")
+            ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -116,7 +116,7 @@ public class TokensApiStepDefinitions
             var createTokenRequest = new CreateTokenRequest
             {
                 Content = "QQ==",
-                ExpiresAt = DateTime.Now.AddDays(1).ToString("dd-MM-yyyy")
+                ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
             };
 
             var requestConfiguration = new RequestConfiguration
@@ -160,10 +160,10 @@ public class TokensApiStepDefinitions
             switch (requestConfiguration.Content)
             {
                 case var c when c.Contains("<tomorrow>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", DateTime.Now.AddDays(1).ToString("dd-MM-yyyy"));
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", DateTime.Now.AddDays(1).ToString("MM-dd-yyyy"));
                     break;
                 case var c when c.Contains("<yesterday>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", DateTime.Now.AddDays(-1).ToString("dd-MM-yyyy"));
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy"));
                     break;
                 default:
                     break;
@@ -231,10 +231,12 @@ public class TokensApiStepDefinitions
         _responseTokens.AddRange(tokens);
     }
 
-    [Then(@"the response only contains the own Token")]
+    [Then(@"the response contains both Tokens")]
     public void ThenTheResponseOnlyContainsTheOwnToken()
     {
-        _responseTokens.Should().HaveCount(1).And.ContainSingle(token => token.Id == _tokenId);
+        _responseTokens.Should().HaveCount(2)
+            .And.Contain(token => token.Id == _tokenId)
+            .And.Contain(token => token.Id == _peerTokenId);
     }
 
 

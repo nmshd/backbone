@@ -37,7 +37,7 @@ Scenario: Requesting an own and peer tokens
 	And a peer Token p
 	When a GET request is sent to the Tokens endpoint with a list containing t.Id, p.Id
 	Then the response status code is 200 (OK)
-	And the response only contains the own Token
+	And the response contains both Tokens
 
 Scenario: Requesting a nonexistent Token as an authenticated user
 	Given the user is authenticated
