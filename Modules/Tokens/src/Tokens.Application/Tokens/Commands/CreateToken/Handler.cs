@@ -10,10 +10,10 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 {
     private readonly IMapper _mapper;
-    private readonly ITokenRepository _tokenRepository;
+    private readonly ITokensRepository _tokenRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, ITokenRepository tokenRepository)
+    public Handler(IUserContext userContext, IMapper mapper, ITokensRepository tokenRepository)
     {
         
         _userContext = userContext;

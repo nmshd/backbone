@@ -10,9 +10,9 @@ public class DataSource : IDataSource
 {
     private readonly IBlobStorage _blobStorage;
     private readonly TokenRepositoryOptions _repositoryOptions;
-    private readonly ITokenRepository _tokenRepository;
+    private readonly ITokensRepository _tokenRepository;
 
-    public DataSource(IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> repositoryOptions, ITokenRepository tokenRepository)
+    public DataSource(IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> repositoryOptions, ITokensRepository tokenRepository)
     {
         _blobStorage = blobStorage;
         _repositoryOptions = repositoryOptions.Value;

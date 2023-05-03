@@ -11,14 +11,14 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository;
 
-public class TokenRepository : ITokenRepository
+public class TokensRepository : ITokensRepository
 {
     private readonly IBlobStorage _blobStorage;
     private readonly TokenRepositoryOptions _options;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokenRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
+    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
         _options = options.Value;
@@ -54,16 +54,6 @@ public class TokenRepository : ITokenRepository
     public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter)
     {
         return await Find(owner, Array.Empty<TokenId>(), paginationFilter);
-    }
-
-    public async Task<IdentityAddress> GetOwner(TokenId tokenId)
-    {
-        var result = await _readonlyTokensDbSet.Select(t => new { t.CreatedBy, t.Id }).FirstOrDefaultAsync(t => t.Id == tokenId);
-
-        if (result == null)
-            throw new NotFoundException(nameof(Token));
-
-        return result.CreatedBy;
     }
 
     public async Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false)
@@ -117,30 +107,10 @@ public class TokenRepository : ITokenRepository
         _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
     }
 
-    public async Task AddRange(IEnumerable<Token> tokens)
-    {
-        await Task.WhenAll(tokens.Select(Add));
-    }
-
-    public async Task Remove(TokenId id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task Remove(Token token)
     {
         await _tokensDbSet.AddAsync(token);
         _blobStorage.Remove(_options.BlobRootFolder, token.Id);
-    }
-
-    public async Task RemoveRange(IEnumerable<Token> tokens)
-    {
-        await Task.WhenAll(tokens.Select(Remove));
-    }
-
-    public async Task Update(Token entity)
-    {
-        await _tokensDbSet.AddAsync(entity);
     }
 
     #endregion

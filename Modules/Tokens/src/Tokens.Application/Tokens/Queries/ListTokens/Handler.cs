@@ -9,11 +9,11 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
 {
-    private readonly ITokenRepository _tokenRepository;
+    private readonly ITokensRepository _tokenRepository;
     private readonly IMapper _mapper;
     private readonly IdentityAddress _activeIdentity;
 
-    public Handler(ITokenRepository tokenRepository, IUserContext userContext, IMapper mapper)
+    public Handler(ITokensRepository tokenRepository, IUserContext userContext, IMapper mapper)
     {
         _tokenRepository = tokenRepository;
         _mapper = mapper;

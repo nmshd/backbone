@@ -8,7 +8,7 @@ public static class IServiceCollectionExtensions
 {
     public static void AddRepositories(this IServiceCollection services, BlobStorageOptions blobStorageOptions)
     {
-        services.AddTransient<ITokenRepository, TokenRepository>();
+        services.AddTransient<ITokensRepository, TokensRepository>();
         services.Configure<TokenRepositoryOptions>(options => options.BlobRootFolder = blobStorageOptions.Container);
     }
 }

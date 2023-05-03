@@ -10,10 +10,10 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 public class Handler : IRequestHandler<DeleteTokenCommand>
 {
     private readonly ILogger<Handler> _logger;
-    private readonly ITokenRepository _tokenRepository;
+    private readonly ITokensRepository _tokenRepository;
     private readonly IdentityAddress _activeIdentity;
 
-    public Handler(IUserContext userContext, ILogger<Handler> logger, ITokenRepository tokenRepository) : base()
+    public Handler(IUserContext userContext, ILogger<Handler> logger, ITokensRepository tokenRepository) : base()
     {
         _logger = logger;
         _tokenRepository = tokenRepository;
