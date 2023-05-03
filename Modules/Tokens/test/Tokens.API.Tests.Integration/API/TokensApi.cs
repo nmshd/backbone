@@ -18,23 +18,23 @@ public class TokensApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<Response<Token>>> CreateToken(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<ResponseContent<Token>>> CreateToken(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteTokenRequest<Response<Token>>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
+        return await ExecuteTokenRequest<ResponseContent<Token>>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<Response<Token>>> GetTokenById(RequestConfiguration requestConfiguration, string id)
+    public async Task<HttpResponse<ResponseContent<Token>>> GetTokenById(RequestConfiguration requestConfiguration, string id)
     {
-        return await ExecuteTokenRequest<Response<Token>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
+        return await ExecuteTokenRequest<ResponseContent<Token>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<Response<IEnumerable<Token>>>> GetTokenById(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
+    public async Task<HttpResponse<ResponseContent<IEnumerable<Token>>>> GetTokenById(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
     {
         var endpoint = new PathString(ROUTE_PREFIX).Add("/tokens").ToString();
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
         endpoint = $"{endpoint}?{queryString}";
 
-        return await ExecuteTokenRequest<Response<IEnumerable<Token>>>(Method.Get, endpoint, requestConfiguration);
+        return await ExecuteTokenRequest<ResponseContent<IEnumerable<Token>>>(Method.Get, endpoint, requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteTokenRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
@@ -64,8 +64,7 @@ public class TokensApi
             HttpMethod = response.Request!.Method.ToString(),
             StatusCode = response.StatusCode,
             Data = response.Data,
-            ContentType = response.ContentType,
-            Content = response.Content
+            ContentType = response.ContentType
         };
 
         return result;

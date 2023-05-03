@@ -18,7 +18,7 @@ public class TokensApiStepDefinitions
     private string _peerTokenId;
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<Response<Token>> _tokenResponse;
+    private HttpResponse<ResponseContent<Token>> _tokenResponse;
     private readonly RequestConfiguration _requestConfiguration;
 
     public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi)
@@ -28,7 +28,7 @@ public class TokensApiStepDefinitions
         _peerTokenId = string.Empty;
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
-        _tokenResponse = new HttpResponse<Response<Token>>();
+        _tokenResponse = new HttpResponse<ResponseContent<Token>>();
         _requestConfiguration = new RequestConfiguration
         {
             AuthenticationParameters = new AuthenticationParameters
@@ -295,7 +295,7 @@ public class TokensApiStepDefinitions
 
     private void AssertResponseContentCompliesWithSchema<T>()
     {
-        JsonValidators.ValidateJsonSchema<Response<T>>(_tokenResponse.Content!, out var errors)
-            .Should().BeTrue($"Response content does not comply with the {nameof(Response<T>)} schema: {string.Join(", ", errors)}");
+        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(JsonConvert.SerializeObject(_tokenResponse.Data!), out var errors)
+            .Should().BeTrue($"Response content does not comply with the {nameof(ResponseContent<T>)} schema: {string.Join(", ", errors)}");
     }
 }
