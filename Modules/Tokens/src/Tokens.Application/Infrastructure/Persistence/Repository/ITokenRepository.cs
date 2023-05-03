@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Tokens.Application.Infrastructure;
+namespace Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 
 public interface ITokenRepository : IRepository<Token, TokenId>
 {

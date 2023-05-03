@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -10,7 +10,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository;
 
 public class TokenRepository : ITokenRepository
 {

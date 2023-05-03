@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 

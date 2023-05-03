@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 

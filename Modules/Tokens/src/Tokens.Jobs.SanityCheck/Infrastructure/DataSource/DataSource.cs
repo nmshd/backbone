@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.Options;
 
