@@ -8,17 +8,17 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 {
     private readonly IMapper _mapper;
-    private readonly ITokensRepository _tokenRepository;
+    private readonly ITokensRepository _tokensRepository;
 
-    public Handler(IMapper mapper, ITokensRepository tokenRepository)
+    public Handler(IMapper mapper, ITokensRepository tokensRepository)
     {
         _mapper = mapper;
-        _tokenRepository = tokenRepository;
+        _tokensRepository = tokensRepository;
     }
 
     public async Task<TokenDTO> Handle(GetTokenQuery request, CancellationToken cancellationToken)
     {
-        var token = await _tokenRepository.Find(request.Id);
+        var token = await _tokensRepository.Find(request.Id);
         return _mapper.Map<TokenDTO>(token);
     }
 }

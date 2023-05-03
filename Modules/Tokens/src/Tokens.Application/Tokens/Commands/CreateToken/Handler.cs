@@ -10,22 +10,22 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 {
     private readonly IMapper _mapper;
-    private readonly ITokensRepository _tokenRepository;
+    private readonly ITokensRepository _tokensRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, ITokensRepository tokenRepository)
+    public Handler(IUserContext userContext, IMapper mapper, ITokensRepository tokensRepository)
     {
         
         _userContext = userContext;
         _mapper = mapper;
-        _tokenRepository = tokenRepository;
+        _tokensRepository = tokensRepository;
     }
 
     public async Task<CreateTokenResponse> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
         var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt);
 
-        await _tokenRepository.Add(newTokenEntity);
+        await _tokensRepository.Add(newTokenEntity);
 
         return _mapper.Map<CreateTokenResponse>(newTokenEntity);
     }

@@ -14,11 +14,11 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository
 public class TokensRepository : ITokensRepository
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly TokenRepositoryOptions _options;
+    private readonly tokensRepositoryOptions _options;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
+    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<tokensRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
         _options = options.Value;
@@ -126,7 +126,7 @@ public static class IDbSetExtensions
     }
 }
 
-public class TokenRepositoryOptions
+public class tokensRepositoryOptions
 {
     public string BlobRootFolder { get; set; }
 }

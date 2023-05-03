@@ -10,24 +10,24 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 public class Handler : IRequestHandler<DeleteTokenCommand>
 {
     private readonly ILogger<Handler> _logger;
-    private readonly ITokensRepository _tokenRepository;
+    private readonly ITokensRepository _tokensRepository;
     private readonly IdentityAddress _activeIdentity;
 
-    public Handler(IUserContext userContext, ILogger<Handler> logger, ITokensRepository tokenRepository) : base()
+    public Handler(IUserContext userContext, ILogger<Handler> logger, ITokensRepository tokensRepository) : base()
     {
         _logger = logger;
-        _tokenRepository = tokenRepository;
+        _tokensRepository = tokensRepository;
         _activeIdentity = userContext.GetAddress();
     }
 
     public async Task Handle(DeleteTokenCommand request, CancellationToken cancellationToken)
     {
-        var token = await _tokenRepository.Find(request.Id);
+        var token = await _tokensRepository.Find(request.Id);
 
         if (token.CreatedBy != _activeIdentity)
             throw new ActionForbiddenException();
 
-        await _tokenRepository.Remove(token);
+        await _tokensRepository.Remove(token);
 
         _logger.LogTrace($"Successfully deleted token with id {token.Id}.");
     }

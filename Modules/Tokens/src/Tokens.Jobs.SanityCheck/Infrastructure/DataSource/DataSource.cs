@@ -9,14 +9,14 @@ namespace Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 public class DataSource : IDataSource
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly TokenRepositoryOptions _repositoryOptions;
-    private readonly ITokensRepository _tokenRepository;
+    private readonly tokensRepositoryOptions _repositoryOptions;
+    private readonly ITokensRepository _tokensRepository;
 
-    public DataSource(IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> repositoryOptions, ITokensRepository tokenRepository)
+    public DataSource(IBlobStorage blobStorage, IOptions<tokensRepositoryOptions> repositoryOptions, ITokensRepository tokensRepository)
     {
         _blobStorage = blobStorage;
         _repositoryOptions = repositoryOptions.Value;
-        _tokenRepository = tokenRepository;
+        _tokensRepository = tokensRepository;
     }
 
     public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
@@ -27,6 +27,6 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        return await _tokenRepository.GetAllTokenIds(includeExpired: true);
+        return await _tokensRepository.GetAllTokenIds(includeExpired: true);
     }
 }

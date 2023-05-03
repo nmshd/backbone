@@ -9,13 +9,13 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
 {
-    private readonly ITokensRepository _tokenRepository;
+    private readonly ITokensRepository _tokensRepository;
     private readonly IMapper _mapper;
     private readonly IdentityAddress _activeIdentity;
 
-    public Handler(ITokensRepository tokenRepository, IUserContext userContext, IMapper mapper)
+    public Handler(ITokensRepository tokensRepository, IUserContext userContext, IMapper mapper)
     {
-        _tokenRepository = tokenRepository;
+        _tokensRepository = tokensRepository;
         _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
     }
@@ -23,8 +23,8 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
     public async Task<ListTokensResponse> Handle(ListTokensQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = request.Ids.Any()
-            ? await _tokenRepository.FindAllWithIds(request.Ids, request.PaginationFilter)
-            : await _tokenRepository.FindAllOfOwner(_activeIdentity, request.PaginationFilter);
+            ? await _tokensRepository.FindAllWithIds(request.Ids, request.PaginationFilter)
+            : await _tokensRepository.FindAllOfOwner(_activeIdentity, request.PaginationFilter);
 
         return new ListTokensResponse(_mapper.Map<IEnumerable<TokenDTO>>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
