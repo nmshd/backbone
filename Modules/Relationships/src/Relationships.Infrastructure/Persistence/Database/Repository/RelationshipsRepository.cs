@@ -15,7 +15,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Rep
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<RelationshipTemplate> _templates;
+    private readonly DbSet<RelationshipChange> _changes;
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
+    private readonly IQueryable<RelationshipChange> _readOnlyChanges;
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
@@ -25,6 +27,8 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         _templates = dbContext.RelationshipTemplates;
         _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
+        _changes = dbContext.RelationshipChanges;
+        _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
@@ -39,6 +43,22 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return add.Entity.Id;
+    }
+
+    public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    {
+        // TODO: Missing .IncludeAll()
+        var change = await (track ? _changes : _readOnlyChanges)
+                            .WithId(id)
+                            .WithRelationshipParticipant(identityAddress)
+                            .FirstOrDefaultAsync(cancellationToken);
+
+        if (fillContent)
+        {
+            await FillContentChange(change);
+        }
+
+        return change;
     }
 
     public async Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
@@ -76,6 +96,11 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task FillContentChange(RelationshipChange change)
+    {
+        await _contentStore.FillContentOfChange(change);
     }
 
     private async Task FillContentTemplate(RelationshipTemplate template)
