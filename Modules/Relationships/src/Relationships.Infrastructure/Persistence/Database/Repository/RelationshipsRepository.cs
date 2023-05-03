@@ -4,6 +4,9 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -52,6 +55,21 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
 
         return template;
+    }
+
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
+    {
+        var query = (track ? _templates : _readOnlyTemplates)
+                    .AsQueryable()
+                    .NotExpiredFor(identityAddress)
+                    .NotDeleted()
+                    .WithIdIn(ids);
+
+        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+
+        await Task.WhenAll(templates.ItemsOnPage.Select(FillContentTemplate).ToArray());
+
+        return templates;
     }
 
     public async Task UpdateRelationshipTemplate(RelationshipTemplate template)
