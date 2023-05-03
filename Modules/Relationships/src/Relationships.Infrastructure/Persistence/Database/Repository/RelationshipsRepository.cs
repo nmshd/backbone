@@ -51,9 +51,8 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
-        // TODO: Missing .IncludeAll()
         var relationship = await(track ? _relationships : _readOnlyRelationships)
-                            .WithId(id)
+                            .IncludeAll()
                             .WithParticipant(identityAddress)
                             .FirstWithId(id, cancellationToken);
 
