@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 
-public class DeleteTokenCommand : IRequest<Unit>
+public class DeleteTokenCommand : IRequest
 {
     public TokenId Id { get; set; }
 }

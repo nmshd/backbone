@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
@@ -112,42 +111,36 @@ public class TokenRepository : ITokenRepository
 
     #region Write
 
-    public void Add(Token token)
+    public async Task Add(Token token)
     {
-        _tokensDbSet.Add(token);
+        await _tokensDbSet.AddAsync(token);
         _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
     }
 
-    public void AddRange(IEnumerable<Token> tokens)
+    public async Task AddRange(IEnumerable<Token> tokens)
     {
-        foreach (var token in tokens)
-        {
-            Add(token);
-        }
+        await Task.WhenAll(tokens.Select(Add));
     }
 
-    public void Remove(TokenId id)
+    public async Task Remove(TokenId id)
     {
         throw new NotImplementedException();
     }
 
-    public void Remove(Token token)
+    public async Task Remove(Token token)
     {
-        _tokensDbSet.Remove(token);
+        await _tokensDbSet.AddAsync(token);
         _blobStorage.Remove(_options.BlobRootFolder, token.Id);
     }
 
-    public void RemoveRange(IEnumerable<Token> tokens)
+    public async Task RemoveRange(IEnumerable<Token> tokens)
     {
-        foreach (var token in tokens)
-        {
-            Remove(token);
-        }
+        await Task.WhenAll(tokens.Select(Remove));
     }
 
-    public void Update(Token entity)
+    public async Task Update(Token entity)
     {
-        _tokensDbSet.Update(entity);
+        await _tokensDbSet.AddAsync(entity);
     }
 
     #endregion

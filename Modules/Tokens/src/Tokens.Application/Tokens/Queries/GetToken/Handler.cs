@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Tokens.Application.Infrastructure;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using MediatR;
 
@@ -8,17 +8,17 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 {
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITokenRepository _tokenRepository;
 
-    public Handler(IUnitOfWork unitOfWork, IMapper mapper)
+    public Handler(IMapper mapper, ITokenRepository tokenRepository)
     {
-        _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _tokenRepository = tokenRepository;
     }
 
     public async Task<TokenDTO> Handle(GetTokenQuery request, CancellationToken cancellationToken)
     {
-        var token = await _unitOfWork.Tokens.Find(request.Id);
+        var token = await _tokenRepository.Find(request.Id);
         return _mapper.Map<TokenDTO>(token);
     }
 }
