@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
@@ -8,17 +8,15 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
-    private readonly IRelationshipsDbContext _dbContext;
+    private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IMapper _mapper;
-    private readonly IContentStore _contentStore;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore)
+    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IMapper mapper)
     {
-        _dbContext = dbContext;
+        _relationshipsRepository = relationshipsRepository;
         _userContext = userContext;
         _mapper = mapper;
-        _contentStore = contentStore;
     }
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
@@ -30,10 +28,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.ExpiresAt,
             request.Content);
 
-        await _contentStore.SaveContentOfTemplate(template);
-
-        await _dbContext.Set<RelationshipTemplate>().AddAsync(template, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _relationshipsRepository.AddRelationshipTemplate(template, cancellationToken);
 
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
     }
