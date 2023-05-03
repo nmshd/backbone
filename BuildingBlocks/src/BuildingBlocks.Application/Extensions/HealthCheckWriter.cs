@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text;
 using System.Text.Json;
 
-namespace Admin.API.Extensions;
+namespace Enmeshed.BuildingBlocks.Application.Extensions;
 
 public static class HealthCheckWriter
 {
