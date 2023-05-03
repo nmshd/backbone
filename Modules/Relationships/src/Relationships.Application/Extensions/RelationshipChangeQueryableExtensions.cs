@@ -2,11 +2,20 @@
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class RelationshipChangeQueryableExtensions
 {
+    public static IQueryable<RelationshipChange> IncludeAll(this IQueryable<RelationshipChange> changes)
+    {
+        return changes
+            .Include(m => m.Relationship)
+            .Include(m => m.Request)
+            .Include(m => m.Response);
+    }
+
     public static IQueryable<RelationshipChange> CompletedAt(this IQueryable<RelationshipChange> query, OptionalDateRange completedAt)
     {
         var newQuery = query;

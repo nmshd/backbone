@@ -47,8 +47,8 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
-        // TODO: Missing .IncludeAll()
         var change = await (track ? _changes : _readOnlyChanges)
+                            .IncludeAll()
                             .WithId(id)
                             .WithRelationshipParticipant(identityAddress)
                             .FirstOrDefaultAsync(cancellationToken);
