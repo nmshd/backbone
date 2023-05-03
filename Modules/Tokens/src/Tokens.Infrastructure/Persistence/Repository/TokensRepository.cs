@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
@@ -9,16 +10,16 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public class TokensRepository : ITokensRepository
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly tokensRepositoryOptions _options;
+    private readonly TokensRepositoryOptions _options;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<tokensRepositoryOptions> options)
+    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokensRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
         _options = options.Value;
@@ -126,7 +127,7 @@ public static class IDbSetExtensions
     }
 }
 
-public class tokensRepositoryOptions
+public class TokensRepositoryOptions
 {
     public string BlobRootFolder { get; set; }
 }
