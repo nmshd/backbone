@@ -27,6 +27,7 @@ public static class IServiceCollectionExtensions
         services.AddBlobStorage(options.BlobStorageOptions);
         services.AddScoped<IContentStore, BlobStorageContentStore>();
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
+        services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
     }
 }
 
