@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Application.Extensions;
+﻿using System.Threading;
+using Backbone.Modules.Relationships.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Common;
@@ -78,6 +79,13 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
+    public async Task<Relationship> FindRelationshipPlain(RelationshipId id, CancellationToken cancellationToken)
+    {
+        return await _readOnlyRelationships
+                            .IncludeAll()
+                            .FirstWithId(id, cancellationToken);
+    }
+
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var change = await (track ? _changes : _readOnlyChanges)
@@ -107,6 +115,12 @@ public class RelationshipsRepository : IRelationshipsRepository
         await Task.WhenAll(templates.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentChange).ToArray());
 
         return templates;
+    }
+
+    public async Task Update(Relationship relationship)
+    {
+        _relationships.Update(relationship);
+        await _dbContext.SaveChangesAsync();
     }
 
     private async Task FillContentChange(RelationshipChange change)
