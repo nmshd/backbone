@@ -28,7 +28,7 @@ public class TokensApi
         return await ExecuteTokenRequest<Token>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<IEnumerable<Token>>> GetTokenByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
+    public async Task<HttpResponse<IEnumerable<Token>>> GetTokensByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
     {
         var endpoint = new PathString(ROUTE_PREFIX).Add("/tokens").ToString();
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
