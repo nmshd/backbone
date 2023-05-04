@@ -3,7 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text;
 using System.Text.Json;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions;
+namespace Enmeshed.BuildingBlocks.API.Extensions;
 
 public static class HealthCheckWriter
 {

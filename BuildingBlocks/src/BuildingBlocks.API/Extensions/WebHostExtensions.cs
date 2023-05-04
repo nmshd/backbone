@@ -57,7 +57,7 @@ public static class WebHostExtensions
     }
 
     public static IHost MigrateDbContext<TContext>(this IHost webHost,
-        Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+        Action<TContext, IServiceProvider>? seeder = null) where TContext : DbContext
     {
         using var scope = webHost.Services.CreateScope();
 
@@ -86,8 +86,7 @@ public static class WebHostExtensions
                 //apply to transient exceptions.
 
                 context.Database.Migrate();
-
-                seeder(context, services);
+                seeder?.Invoke(context, services);
             });
 
 

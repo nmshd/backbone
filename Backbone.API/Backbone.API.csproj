@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+		<ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj" />
