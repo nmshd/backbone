@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Application.Infrastructure;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -12,17 +12,19 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
-public class TokenRepository : ITokenRepository
+public class TokensRepository : ITokensRepository
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly TokenRepositoryOptions _options;
+    private readonly TokensRepositoryOptions _options;
+    private readonly TokensDbContext _dbContext;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokenRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokenRepositoryOptions> options)
+    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokensRepositoryOptions> options)
     {
         _blobStorage = blobStorage;
         _options = options.Value;
+        _dbContext = dbContext;
         _tokensDbSet = dbContext.Tokens;
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
@@ -57,16 +59,6 @@ public class TokenRepository : ITokenRepository
         return await Find(owner, Array.Empty<TokenId>(), paginationFilter);
     }
 
-    public async Task<IdentityAddress> GetOwner(TokenId tokenId)
-    {
-        var result = await _readonlyTokensDbSet.Select(t => new { t.CreatedBy, t.Id }).FirstOrDefaultAsync(t => t.Id == tokenId);
-
-        if (result == null)
-            throw new NotFoundException(nameof(Token));
-
-        return result.CreatedBy;
-    }
-
     public async Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false)
     {
         var query = _readonlyTokensDbSet;
@@ -95,7 +87,6 @@ public class TokenRepository : ITokenRepository
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
         await FillContent(dbPaginationResult.ItemsOnPage);
-
         return dbPaginationResult;
     }
 
@@ -112,42 +103,12 @@ public class TokenRepository : ITokenRepository
 
     #region Write
 
-    public void Add(Token token)
+    public async Task Add(Token token)
     {
-        _tokensDbSet.Add(token);
+        await _tokensDbSet.AddAsync(token);
         _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
-    }
-
-    public void AddRange(IEnumerable<Token> tokens)
-    {
-        foreach (var token in tokens)
-        {
-            Add(token);
-        }
-    }
-
-    public void Remove(TokenId id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Remove(Token token)
-    {
-        _tokensDbSet.Remove(token);
-        _blobStorage.Remove(_options.BlobRootFolder, token.Id);
-    }
-
-    public void RemoveRange(IEnumerable<Token> tokens)
-    {
-        foreach (var token in tokens)
-        {
-            Remove(token);
-        }
-    }
-
-    public void Update(Token entity)
-    {
-        _tokensDbSet.Update(entity);
+        await _blobStorage.SaveAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     #endregion
@@ -163,7 +124,7 @@ public static class IDbSetExtensions
     }
 }
 
-public class TokenRepositoryOptions
+public class TokensRepositoryOptions
 {
     public string BlobRootFolder { get; set; }
 }

@@ -2,7 +2,6 @@
 using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
-using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
@@ -61,15 +60,5 @@ public class TokensController : ApiControllerBase
         var response = await _mediator.Send(new ListTokensQuery(paginationFilter, ids));
 
         return Paged(response);
-    }
-
-    [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteToken(TokenId id)
-    {
-        await _mediator.Send(new DeleteTokenCommand { Id = id });
-
-        return NoContent();
     }
 }
