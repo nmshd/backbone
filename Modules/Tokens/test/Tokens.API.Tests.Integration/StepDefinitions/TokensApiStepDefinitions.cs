@@ -18,8 +18,10 @@ public class TokensApiStepDefinitions
     private string _peerTokenId;
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<ResponseContent<Token>> _tokenResponse;
+    private HttpResponse<Token> _tokenResponse;
     private readonly RequestConfiguration _requestConfiguration;
+    private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+    private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
     public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi)
     {
@@ -28,7 +30,7 @@ public class TokensApiStepDefinitions
         _peerTokenId = string.Empty;
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
-        _tokenResponse = new HttpResponse<ResponseContent<Token>>();
+        _tokenResponse = new HttpResponse<Token>();
         _requestConfiguration = new RequestConfiguration
         {
             AuthenticationParameters = new AuthenticationParameters
@@ -66,7 +68,7 @@ public class TokensApiStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
+            ExpiresAt = TomorrowAsString
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -89,7 +91,7 @@ public class TokensApiStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
+            ExpiresAt = TomorrowAsString
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -116,7 +118,7 @@ public class TokensApiStepDefinitions
             var createTokenRequest = new CreateTokenRequest
             {
                 Content = "QQ==",
-                ExpiresAt = DateTime.Now.AddDays(1).ToString("MM-dd-yyyy")
+                ExpiresAt = TomorrowAsString
             };
 
             var requestConfiguration = new RequestConfiguration
@@ -138,7 +140,7 @@ public class TokensApiStepDefinitions
     {
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
-        var response = await _tokensApi.GetTokenById(_requestConfiguration, tokenIds);
+        var response = await _tokensApi.GetTokenByIds(_requestConfiguration, tokenIds);
 
         _tokenResponse.StatusCode = response.StatusCode;
 
@@ -160,10 +162,10 @@ public class TokensApiStepDefinitions
             switch (requestConfiguration.Content)
             {
                 case var c when c.Contains("<tomorrow>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", DateTime.Now.AddDays(1).ToString("MM-dd-yyyy"));
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", TomorrowAsString);
                     break;
                 case var c when c.Contains("<yesterday>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy"));
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", YesterdayAsString);
                     break;
                 default:
                     break;
@@ -222,7 +224,7 @@ public class TokensApiStepDefinitions
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListContainingT_IdP_Id()
     {
         var tokenIds = new List<string> { _tokenId, _peerTokenId };
-        var response = await _tokensApi.GetTokenById(_requestConfiguration, tokenIds);
+        var response = await _tokensApi.GetTokenByIds(_requestConfiguration, tokenIds);
 
         _tokenResponse.StatusCode = response.StatusCode;
 
@@ -295,7 +297,7 @@ public class TokensApiStepDefinitions
 
     private void AssertResponseContentCompliesWithSchema<T>()
     {
-        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(JsonConvert.SerializeObject(_tokenResponse.Content!), out var errors)
+        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(_tokenResponse.RawContent!, out var errors)
             .Should().BeTrue($"Response content does not comply with the {nameof(ResponseContent<T>)} schema: {string.Join(", ", errors)}");
     }
 }
