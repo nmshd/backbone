@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -86,7 +86,6 @@ public class TokensRepository : ITokensRepository
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        //var allblobs = await _blobStorage.FindAllAsync(_options.BlobRootFolder, _options.BlobRootFolder);
         await FillContent(dbPaginationResult.ItemsOnPage);
         return dbPaginationResult;
     }
