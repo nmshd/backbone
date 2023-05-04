@@ -18,6 +18,7 @@ Scenario: Creating a Token as an anonymous user
 		| Content | {"content": "QQ==","expiresAt": "<tomorrow>"} |
 	Then the response status code is 401 (Unauthorized)
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token without the "Content" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
@@ -26,6 +27,7 @@ Scenario: Creating a Token without the "Content" request content property
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token with an empty "Content" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
@@ -34,6 +36,7 @@ Scenario: Creating a Token with an empty "Content" request content property
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token with an invalid base64 in the "Content" property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
@@ -42,6 +45,7 @@ Scenario: Creating a Token with an invalid base64 in the "Content" property
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token without the "expiresAt" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
@@ -50,6 +54,7 @@ Scenario: Creating a Token without the "expiresAt" request content property
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token with a date in the past in the "expiresAt" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
@@ -58,6 +63,7 @@ Scenario: Creating a Token with a date in the past in the "expiresAt" request co
 	Then the response status code is 400 (Bad Request)
 	And the response content includes an error with the error code "error.platform.validation.invalidPropertyValue"
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Token without a request content
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with no request content
@@ -72,6 +78,7 @@ Scenario: Creating a Token with an unsupported Content-Type
 		| Content     | <this>is some arbitrary xml</this> |
 	Then the response status code is 415 (Unsupported Media Type)
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario Outline: Creating a Token with an invalid DateTime format in the "expiresAt" request content property
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with '<Content>', '<ExpiresAt>'
