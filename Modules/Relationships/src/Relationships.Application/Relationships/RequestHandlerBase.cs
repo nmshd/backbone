@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
@@ -10,12 +9,10 @@ public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<
 {
     protected readonly IdentityAddress _activeIdentity;
     protected readonly DeviceId _activeDevice;
-    protected readonly IRelationshipsDbContext _dbContext;
     protected readonly IMapper _mapper;
 
-    protected RequestHandlerBase(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper)
+    protected RequestHandlerBase(IUserContext userContext, IMapper mapper)
     {
-        _dbContext = dbContext;
         _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
