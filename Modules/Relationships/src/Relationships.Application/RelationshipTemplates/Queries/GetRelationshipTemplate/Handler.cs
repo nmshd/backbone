@@ -9,21 +9,21 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class Handler : RequestHandlerBase<GetRelationshipTemplateQuery, RelationshipTemplateDTO>
 {
-    private readonly IRelationshipsRepository _relationshipsRepository;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
     // TODO: Remove dbContext
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IRelationshipsRepository relationshipsRepository) : base(dbContext, userContext, mapper)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository) : base(dbContext, userContext, mapper)
     {
-        _relationshipsRepository = relationshipsRepository;
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
     }
 
     public override async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
     {
-        var template = await _relationshipsRepository.FindRelationshipTemplate(request.Id, _activeIdentity, cancellationToken, track: true);
+        var template = await _relationshipTemplatesRepository.FindRelationshipTemplate(request.Id, _activeIdentity, cancellationToken, track: true);
 
         template.AllocateFor(_activeIdentity, _activeDevice);
 
-        await _relationshipsRepository.UpdateRelationshipTemplate(template);
+        await _relationshipTemplatesRepository.UpdateRelationshipTemplate(template);
 
         return _mapper.Map<RelationshipTemplateDTO>(template);
     }

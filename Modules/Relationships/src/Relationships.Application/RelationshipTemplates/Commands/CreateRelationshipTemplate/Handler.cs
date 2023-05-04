@@ -8,13 +8,13 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
-    private readonly IRelationshipsRepository _relationshipsRepository;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IMapper mapper)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext, IMapper mapper)
     {
-        _relationshipsRepository = relationshipsRepository;
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
         _mapper = mapper;
     }
@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.ExpiresAt,
             request.Content);
 
-        await _relationshipsRepository.AddRelationshipTemplate(template, cancellationToken);
+        await _relationshipTemplatesRepository.AddRelationshipTemplate(template, cancellationToken);
 
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
     }

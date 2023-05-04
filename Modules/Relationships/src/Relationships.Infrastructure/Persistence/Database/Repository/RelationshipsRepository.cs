@@ -17,10 +17,8 @@ public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
     private readonly DbSet<RelationshipChange> _changes;
-    private readonly DbSet<RelationshipTemplate> _templates;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly IQueryable<RelationshipChange> _readOnlyChanges;
-    private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
@@ -32,22 +30,10 @@ public class RelationshipsRepository : IRelationshipsRepository
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
         _changes = dbContext.RelationshipChanges;
         _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
-        _templates = dbContext.RelationshipTemplates;
-        _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
         _contentStore = contentStore;
-    }
-
-    public async Task<RelationshipTemplateId> AddRelationshipTemplate(RelationshipTemplate template, CancellationToken cancellationToken)
-    {
-        await _contentStore.SaveContentOfTemplate(template);
-
-        var add = await _templates.AddAsync(template, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return add.Entity.Id;
     }
 
     public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids, RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt, IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool onlyPeerChanges = false, bool track = false)
@@ -123,43 +109,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         return templates;
     }
 
-    public async Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
-    {
-        var template = await (track ? _templates : _readOnlyTemplates)
-                    .Include(r => r.Allocations)
-                    .NotExpiredFor(identityAddress)
-                    .NotDeleted()
-                    .FirstWithId(id, cancellationToken);
-
-        if (fillContent)
-        {
-            await FillContentTemplate(template);
-        }
-
-        return template;
-    }
-
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
-    {
-        var query = (track ? _templates : _readOnlyTemplates)
-                    .AsQueryable()
-                    .NotExpiredFor(identityAddress)
-                    .NotDeleted()
-                    .WithIdIn(ids);
-
-        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
-
-        await Task.WhenAll(templates.ItemsOnPage.Select(FillContentTemplate).ToArray());
-
-        return templates;
-    }
-
-    public async Task UpdateRelationshipTemplate(RelationshipTemplate template)
-    {
-        _templates.Update(template);
-        await _dbContext.SaveChangesAsync();
-    }
-
     private async Task FillContentChange(RelationshipChange change)
     {
         await _contentStore.FillContentOfChange(change);
@@ -168,10 +117,5 @@ public class RelationshipsRepository : IRelationshipsRepository
     private async Task FillContentChanges(IEnumerable<RelationshipChange> changes)
     {
         await _contentStore.FillContentOfChanges(changes);
-    }
-
-    private async Task FillContentTemplate(RelationshipTemplate template)
-    {
-        await _contentStore.FillContentOfTemplate(template);
     }
 }
