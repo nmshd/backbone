@@ -14,8 +14,7 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
     private readonly IUserContext _userContext;
 
     public Handler(IUserContext userContext, IMapper mapper, ITokensRepository tokensRepository)
-    {
-        
+    {   
         _userContext = userContext;
         _mapper = mapper;
         _tokensRepository = tokensRepository;
