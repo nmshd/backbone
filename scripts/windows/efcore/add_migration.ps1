@@ -4,8 +4,7 @@ Param(
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
-$env:ASPNETCORE_ENVIRONMENT = 'Local'
-
+$environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
 $startupProject = "$repoRoot\Backbone.API"
@@ -19,7 +18,7 @@ function AddMigration {
 
     $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
 
-    $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName"
+    $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName -- --environment $environment"
     
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
