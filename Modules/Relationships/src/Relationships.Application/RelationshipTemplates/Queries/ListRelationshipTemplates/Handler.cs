@@ -1,24 +1,27 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
-public class Handler : RequestHandlerBase<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
+public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
 {
+    private readonly IMapper _mapper;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
+    private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository) : base(dbContext, userContext, mapper)
+    public Handler(IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
+        _mapper= mapper;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
+        _userContext = userContext;
     }
 
-    public override async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
+    public async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids, _activeIdentity, request.PaginationFilter, track: true);
+        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, track: true);
 
         return new ListRelationshipTemplatesResponse(_mapper.Map<RelationshipTemplateDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
