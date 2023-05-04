@@ -16,6 +16,7 @@ public class TokensRepository : ITokensRepository
 {
     private readonly IBlobStorage _blobStorage;
     private readonly TokensRepositoryOptions _options;
+    private readonly TokensDbContext _dbContext;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
@@ -23,6 +24,7 @@ public class TokensRepository : ITokensRepository
     {
         _blobStorage = blobStorage;
         _options = options.Value;
+        _dbContext = dbContext;
         _tokensDbSet = dbContext.Tokens;
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
@@ -84,8 +86,8 @@ public class TokensRepository : ITokensRepository
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
+        //var allblobs = await _blobStorage.FindAllAsync(_options.BlobRootFolder, _options.BlobRootFolder);
         await FillContent(dbPaginationResult.ItemsOnPage);
-
         return dbPaginationResult;
     }
 
@@ -106,12 +108,8 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
-    }
-
-    public async Task Remove(Token token)
-    {
-        await _tokensDbSet.AddAsync(token);
-        _blobStorage.Remove(_options.BlobRootFolder, token.Id);
+        await _dbContext.SaveChangesAsync();
+        await _blobStorage.SaveAsync();
     }
 
     #endregion

@@ -11,6 +11,5 @@ public interface ITokensRepository
     Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter);
     Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false);
     Task Add(Token token);
-    Task Remove(Token token);
     Task<Token> Find(TokenId tokenId);
 }
