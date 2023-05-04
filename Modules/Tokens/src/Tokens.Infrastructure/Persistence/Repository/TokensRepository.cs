@@ -1,4 +1,4 @@
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -107,8 +107,8 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
-        await _dbContext.SaveChangesAsync();
         await _blobStorage.SaveAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     #endregion
