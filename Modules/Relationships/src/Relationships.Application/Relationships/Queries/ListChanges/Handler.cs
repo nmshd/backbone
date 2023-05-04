@@ -1,47 +1,23 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 
 public class Handler : RequestHandlerBase<ListChangesQuery, ListChangesResponse>
 {
-    private readonly IContentStore _contentStore;
+    private readonly IRelationshipsRepository _relationshipsRepository;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore) : base(dbContext, userContext, mapper)
+    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IRelationshipsRepository relationshipsRepository) : base(dbContext, userContext, mapper)
     {
-        _contentStore = contentStore;
+        _relationshipsRepository = relationshipsRepository;
     }
 
     public override async Task<ListChangesResponse> Handle(ListChangesQuery request, CancellationToken cancellationToken)
     {
-        var query = _dbContext
-            .Set<RelationshipChange>()
-            .IncludeAll()
-            .AsNoTracking()
-            .WithType(request.Type)
-            .WithStatus(request.Status)
-            .ModifiedAt(request.ModifiedAt)
-            .CreatedAt(request.CreatedAt)
-            .CompletedAt(request.CompletedAt)
-            .CreatedBy(request.CreatedBy)
-            .CompletedBy(request.CompletedBy)
-            .WithRelationshipParticipant(_activeIdentity);
-
-        if (request.Ids.Any())
-            query = query.WithIdIn(request.Ids);
-
-        if (request.OnlyPeerChanges)
-            query = query.OnlyPeerChanges(_activeIdentity);
-
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
-
-        await _contentStore.FillContentOfChanges(dbPaginationResult.ItemsOnPage);
+        var dbPaginationResult = await _relationshipsRepository.FindChangesWithIds(request.Ids, request.Type, request.Status, request.ModifiedAt, request.CreatedAt, request.CompletedAt, request.CreatedBy, request.CompletedBy, _activeIdentity, request.PaginationFilter, track: false);
 
         return new ListChangesResponse(_mapper.Map<RelationshipChangeDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
