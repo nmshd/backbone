@@ -80,6 +80,21 @@ public class RelationshipsRepository : IRelationshipsRepository
         return change;
     }
 
+    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
+    {
+        var query = (track ? _relationships : _readOnlyRelationships)
+                    .AsQueryable()
+                    .IncludeAll()
+                    .WithParticipant(identityAddress)
+                    .WithIdIn(ids);
+
+        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+
+        await Task.WhenAll(templates.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentChange).ToArray());
+
+        return templates;
+    }
+
     public async Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
