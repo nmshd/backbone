@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -131,5 +132,27 @@ public class RelationshipsRepository : IRelationshipsRepository
     private async Task FillContentChanges(IEnumerable<RelationshipChange> changes)
     {
         await _contentStore.FillContentOfChanges(changes);
+    }
+
+    public async Task<RelationshipId> Add(Relationship relationship, CancellationToken cancellationToken)
+    {
+        var add = await _relationships.AddAsync(relationship, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return add.Entity.Id;
+    }
+
+    public async Task<int> CountNumberOfRelationshipsOfTemplate(RelationshipTemplateId relationshipTemplateId, CancellationToken cancellationToken)
+    {
+        return await _readOnlyRelationships
+                    .CountAsync(r => r.RelationshipTemplateId == relationshipTemplateId, cancellationToken);
+    }
+
+    public async Task<bool> RelationshipBetweenActiveIdentityAndTemplateOwnerExists(IdentityAddress identityAddress, IdentityAddress createdBy, CancellationToken cancellationToken)
+    {
+        return await _readOnlyRelationships
+                    .BetweenParticipants(identityAddress, createdBy)
+                    .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected && r.Status != RelationshipStatus.Revoked)
+                    .AnyAsync(cancellationToken);
     }
 }
