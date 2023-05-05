@@ -1,29 +1,23 @@
-﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
-using Backbone.Modules.Challenges.Domain.Entities;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExpiredChallengesResponse>
 {
-    private readonly IChallengesDbContext _dbContext;
+    private readonly IChallengesRepository _challengesRepository;
     private readonly ILogger<DeleteExpiredChallengesCommand> _logger;
 
-    public Handler(ILogger<DeleteExpiredChallengesCommand> logger, IChallengesDbContext dbContext)
+    public Handler(ILogger<DeleteExpiredChallengesCommand> logger, IChallengesRepository challengesRepository)
     {
         _logger = logger;
-        _dbContext = dbContext;
+        _challengesRepository = challengesRepository;
     }
 
     public async Task<DeleteExpiredChallengesResponse> Handle(DeleteExpiredChallengesCommand request, CancellationToken cancellationToken)
     {
-        var idsOfExpiredChallenges = await _dbContext
-            .Set<Challenge>()
-            .Where(Challenge.CanBeCleanedUp)
-            .Select(c => c.Id)
-            .ToListAsync(cancellationToken);
+        var idsOfExpiredChallenges = await _challengesRepository.FindExpiredChallenges(cancellationToken);
 
         if (idsOfExpiredChallenges.Count == 0)
         {
@@ -32,18 +26,14 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
         }
 
         _logger.LogInformation($"Found {idsOfExpiredChallenges.Count} expired challenges. Beginning to delete...");
-
-        _dbContext
-            .Set<Challenge>()
-            .RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge { Id = id }));
-
+       
         if (cancellationToken.IsCancellationRequested)
         {
             _logger.LogWarning("Cancellation was request. Stopping execution...");
             return DeleteExpiredChallengesResponse.NoDeletedChallenges();
         }
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _challengesRepository.DeleteExpiredChallenges(idsOfExpiredChallenges, cancellationToken);
 
         _logger.LogInformation($"Deletion of {idsOfExpiredChallenges.Count} challenges successful.");
 

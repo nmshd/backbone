@@ -1,7 +1,9 @@
 using System.Reflection;
 using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,7 @@ public class Program
                     }), ServiceLifetime.Singleton);
 
                 services.AddSingleton<IChallengesDbContext, ChallengesDbContext>();
+                services.AddSingleton<IChallengesRepository, ChallengesRepository>();
             });
     }
 }
