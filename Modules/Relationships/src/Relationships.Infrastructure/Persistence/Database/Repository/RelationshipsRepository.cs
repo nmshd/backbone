@@ -82,7 +82,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<Relationship> FindRelationshipPlain(RelationshipId id, CancellationToken cancellationToken)
     {
-        return await _readOnlyRelationships
+        return await _relationships
                             .IncludeAll()
                             .FirstWithId(id, cancellationToken);
     }
