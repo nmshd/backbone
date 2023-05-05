@@ -2,7 +2,7 @@
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.API.DTOs.Validators;
+namespace Files.ConsumerApi.DTOs.Validators;
 
 public class CreateFileDTOValidator : AbstractValidator<CreateFileDTO>
 {

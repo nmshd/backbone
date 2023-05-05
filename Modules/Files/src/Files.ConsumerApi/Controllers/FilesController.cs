@@ -1,7 +1,4 @@
 ﻿using System.Net.Mime;
-using Backbone.API.DTOs;
-using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using Backbone.Modules.Files.Application.Files.DTOs;
@@ -9,20 +6,24 @@ using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.Domain.Entities;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
+using Files.ConsumerApi.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NeoSmart.Utils;
-using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.API.Controllers;
+namespace Files.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize("OpenIddict.Validation.AspNetCore")]
 public class FilesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

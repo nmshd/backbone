@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Files.Application;
 
-namespace Backbone.API.Configuration;
+namespace Files.ConsumerApi;
 
-public class FilesConfiguration
+public class Configuration
 {
     [Required]
     public ApplicationOptions Application { get; set; } = new();

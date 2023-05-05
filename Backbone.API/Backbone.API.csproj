@@ -39,7 +39,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+		<ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
+		<ProjectReference Include="..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj" />
 		<ProjectReference Include="..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
@@ -49,6 +51,7 @@
 		<ProjectReference Include="..\Modules\Devices\src\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj" />
 		<ProjectReference Include="..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Application\Files.Application.csproj" />
+		<ProjectReference Include="..\Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Domain\Files.Domain.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Infrastructure.Database.Postgres\Files.Infrastructure.Database.Postgres.csproj" />
 		<ProjectReference Include="..\Modules\Files\src\Files.Infrastructure.Database.SqlServer\Files.Infrastructure.Database.SqlServer.csproj" />

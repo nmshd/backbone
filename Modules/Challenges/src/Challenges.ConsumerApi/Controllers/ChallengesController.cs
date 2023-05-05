@@ -1,18 +1,19 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
+﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
 using Backbone.Modules.Challenges.Domain.Ids;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Validation.AspNetCore;
 
-namespace Backbone.API.Controllers;
+namespace Challenges.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize("OpenIddict.Validation.AspNetCore")]
 public class ChallengesController : ApiControllerBase
 {
     public ChallengesController(IMediator mediator) : base(mediator)

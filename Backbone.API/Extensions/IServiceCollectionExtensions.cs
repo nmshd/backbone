@@ -21,6 +21,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
@@ -313,6 +314,19 @@ public static class IServiceCollectionExtensions
                 });
             });
 
+        return services;
+    }
+
+    public static IServiceCollection AddModule<TStartup>(this IServiceCollection services, string moduleName, IConfiguration configuration)
+        where TStartup : Enmeshed.BuildingBlocks.API.IStartup, new()
+    {
+        // Register assembly in MVC so it can find controllers of the module
+        services.AddControllers().ConfigureApplicationPartManager(manager =>
+            manager.ApplicationParts.Add(new AssemblyPart(typeof(TStartup).Assembly)));
+
+        var startup = new TStartup();
+        startup.ConfigureServices(services, configuration.GetSection($"Modules:{moduleName}"));
+        
         return services;
     }
 }

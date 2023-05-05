@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Challenges.Application;
 
-namespace Backbone.API.Configuration;
+namespace Challenges.ConsumerApi;
 
-public class ChallengesConfiguration
+public class Configuration
 {
     public ApplicationOptions Application { get; set; } = new();
 

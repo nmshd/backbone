@@ -5,12 +5,10 @@ namespace Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
 
 public class UtcDateTimeConverter : JsonConverter<DateTime>
 {
-    internal const string DEFAULT_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffZ";
-    private readonly string _format;
+    internal const string FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffZ";
 
-    public UtcDateTimeConverter(string format = DEFAULT_FORMAT)
+    public UtcDateTimeConverter()
     {
-        _format = format;
     }
 
     public override bool CanConvert(Type objectType)
@@ -30,17 +28,14 @@ public class UtcDateTimeConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.ToUniversalTime().ToString(_format));
+        writer.WriteStringValue(value.ToUniversalTime().ToString(FORMAT));
     }
 }
 
 public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
 {
-    private readonly string _format;
-
-    public NullableUtcDateTimeConverter(string format = UtcDateTimeConverter.DEFAULT_FORMAT)
+    public NullableUtcDateTimeConverter()
     {
-        _format = format;
     }
 
     public override bool CanConvert(Type objectType)
@@ -59,6 +54,6 @@ public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
         if (!value.HasValue)
             writer.WriteNullValue();
         else
-            writer.WriteStringValue(value.Value.ToUniversalTime().ToString(_format));
+            writer.WriteStringValue(value.Value.ToUniversalTime().ToString(UtcDateTimeConverter.FORMAT));
     }
 }

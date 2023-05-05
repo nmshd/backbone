@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+        <ProjectReference Include="..\Files.Application\Files.Application.csproj" />
+        <ProjectReference Include="..\Files.Domain\Files.Domain.csproj" />
+        <ProjectReference Include="..\Files.Infrastructure\Files.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
+    </ItemGroup>
+</Project>

@@ -48,16 +48,10 @@ public class BackboneConfiguration
     public class ModulesConfiguration
     {
         [Required]
-        public ChallengesConfiguration Challenges { get; set; } = new();
-
-        [Required]
         public DevicesConfiguration Devices { get; set; } = new();
 
         [Required]
         public QuotasConfiguration Quotas { get; set; } = new();
-
-        [Required]
-        public FilesConfiguration Files { get; set; } = new();
 
         [Required]
         public MessagesConfiguration Messages { get; set; } = new();

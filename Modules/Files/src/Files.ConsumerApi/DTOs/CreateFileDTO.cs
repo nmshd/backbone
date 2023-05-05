@@ -1,6 +1,7 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Microsoft.AspNetCore.Http;
 
-namespace Backbone.API.DTOs;
+namespace Files.ConsumerApi.DTOs;
 
 public class CreateFileDTO
 {

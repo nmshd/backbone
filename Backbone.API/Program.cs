@@ -70,9 +70,11 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddModule<Challenges.ConsumerApi.Startup>("Challenges", configuration);
+    services.AddModule<Files.ConsumerApi.Startup>("Files", configuration);
+
     services
         .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<Backbone.Modules.Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
         .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
@@ -101,9 +103,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     });
 
     services
-        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddDevices(parsedConfiguration.Modules.Devices)
-        .AddFiles(parsedConfiguration.Modules.Files)
         .AddMessages(parsedConfiguration.Modules.Messages)
         .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddSynchronization(parsedConfiguration.Modules.Synchronization)
