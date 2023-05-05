@@ -3,8 +3,7 @@ Param(
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
-$env:ASPNETCORE_ENVIRONMENT = 'Local'
-
+$environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $startupProject = "$repoRoot\Backbone.API"
 $dbContextName = "${moduleName}DbContext"
@@ -18,7 +17,7 @@ function RemoveMigration {
 
     $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
 
-    $cmd = "dotnet ef migrations remove --startup-project $startupProject --project $migrationProject --context $dbContextName --force"
+    $cmd = "dotnet ef migrations remove --startup-project $startupProject --project $migrationProject --context $dbContextName --force -- --environment $environment"
 
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
