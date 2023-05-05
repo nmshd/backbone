@@ -44,13 +44,12 @@ public class MessagesRepository : IMessagesRepository
         return message;
     }
 
-    public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)
+    public async Task Add(Message message, CancellationToken cancellationToken)
     {
-        var add = await _messages.AddAsync(message, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
+        await _messages.AddAsync(message, cancellationToken);
         await _blobStorage.SaveAsync();
-        return add.Entity.Id;
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
