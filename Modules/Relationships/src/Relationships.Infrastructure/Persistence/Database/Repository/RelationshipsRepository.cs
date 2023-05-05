@@ -107,11 +107,11 @@ public class RelationshipsRepository : IRelationshipsRepository
                     .WithParticipant(identityAddress)
                     .WithIdIn(ids);
 
-        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(templates.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentOfChange).ToArray());
+        await Task.WhenAll(relationships.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentOfChange).ToArray());
 
-        return templates;
+        return relationships;
     }
 
     public async Task Update(Relationship relationship)
