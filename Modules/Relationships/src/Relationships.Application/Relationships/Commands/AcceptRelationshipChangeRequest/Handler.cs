@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Domain;
