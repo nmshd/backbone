@@ -8,27 +8,32 @@ using Backbone.API.Extensions;
 using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Challenges.ConsumerApi;
+using Devices.ConsumerApi;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
+using Files.ConsumerApi;
 using MediatR;
+using Messages.ConsumerApi;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Quotas.ConsumerApi;
+using Relationships.ConsumerApi;
 using Serilog;
-using Module = Backbone.API.Extensions.Module;
+using Synchronization.ConsumerApi;
+using Tokens.ConsumerApi;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -75,14 +80,14 @@ app.Run();
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services
-        .AddModule<Challenges.ConsumerApi.Startup>("Challenges", configuration)
-        .AddModule<Devices.ConsumerApi.Startup>("Devices", configuration)
-        .AddModule<Files.ConsumerApi.Startup>("Files", configuration)
-        .AddModule<Messages.ConsumerApi.Startup>("Messages", configuration)
-        .AddModule<Quotas.ConsumerApi.Startup>("Quotas", configuration)
-        .AddModule<Relationships.ConsumerApi.Startup>("Relationships", configuration)
-        .AddModule<Synchronization.ConsumerApi.Startup>("Synchronization", configuration)
-        .AddModule<Tokens.ConsumerApi.Startup>("Tokens", configuration);
+        .AddModule<ChallengesModule>(configuration)
+        .AddModule<DevicesModule>(configuration)
+        .AddModule<FilesModule>(configuration)
+        .AddModule<MessagesModule>(configuration)
+        .AddModule<QuotasModule>(configuration)
+        .AddModule<RelationshipsModule>(configuration)
+        .AddModule<SynchronizationModule>(configuration)
+        .AddModule<TokensModule>(configuration);
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
@@ -145,12 +150,11 @@ static void Configure(WebApplication app)
     });
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
-    var modules = app.Services.GetService<IEnumerable<Module>>();
+    var modules = app.Services.GetService<IEnumerable<IModule>>();
 
     foreach (var module in modules)
     {
-        module.Startup.Configure(app);
-        module.Startup.ConfigureEventBus(eventBus);
+        module.ConfigureEventBus(eventBus);
     }
 
 }

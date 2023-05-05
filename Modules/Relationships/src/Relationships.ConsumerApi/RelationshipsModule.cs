@@ -1,20 +1,20 @@
-﻿using Backbone.Modules.Messages.Application;
-using Backbone.Modules.Messages.Application.Extensions;
-using Backbone.Modules.Messages.Infrastructure.Persistence;
-using Enmeshed.BuildingBlocks.API.Extensions;
+﻿using Backbone.Modules.Relationships.Application;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 
-namespace Messages.ConsumerApi;
+namespace Relationships.ConsumerApi;
 
-public class Startup : IStartup
+public class RelationshipsModule : IModule
 {
+    public string Name => "Relationships";
+
     public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
@@ -31,13 +31,12 @@ public class Startup : IStartup
             options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
             options.BlobStorageOptions.Container =
                 parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                    ? "messages"
+                    ? "relationships"
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
         });
 
         services.AddApplication();
 
-        services.AddSqlDatabaseHealthCheck("Messages", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public void Configure(WebApplication app)

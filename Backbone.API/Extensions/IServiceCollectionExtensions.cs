@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.AspNetCoreIdentityCustomizations;
 using Backbone.API.Configuration;
@@ -9,6 +10,7 @@ using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
@@ -25,7 +27,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
-using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.API.Extensions;
@@ -283,27 +284,21 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddModule<TStartup>(this IServiceCollection services, string moduleName, IConfiguration configuration)
-        where TStartup : Enmeshed.BuildingBlocks.API.IStartup, new()
+    public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
+        where TModule : IModule, new()
     {
         // Register assembly in MVC so it can find controllers of the module
         services.AddControllers().ConfigureApplicationPartManager(manager =>
-            manager.ApplicationParts.Add(new AssemblyPart(typeof(TStartup).Assembly)));
+            manager.ApplicationParts.Add(new AssemblyPart(typeof(TModule).Assembly)));
 
-        var startup = new TStartup();
+        var module = new TModule();
 
-        var moduleConfiguration = configuration.GetSection($"Modules:{moduleName}");
+        var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
 
-        startup.ConfigureServices(services, moduleConfiguration);
+        module.ConfigureServices(services, moduleConfiguration);
 
-        services.AddSingleton(new Module { Name = moduleName, Startup = startup });
+        services.AddSingleton<IModule>(module);
 
         return services;
     }
-}
-
-public class Module
-{
-    public string Name { get; init; }
-    public IStartup Startup { get; init; }
 }

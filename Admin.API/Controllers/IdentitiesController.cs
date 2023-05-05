@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.DTOs;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Admin.API.Mvc;

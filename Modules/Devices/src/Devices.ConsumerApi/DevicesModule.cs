@@ -2,23 +2,21 @@
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Devices.ConsumerApi;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
-using Enmeshed.Tooling.Extensions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 
 namespace Devices.ConsumerApi;
 
-public class Startup : IStartup
+public class DevicesModule : IModule
 {
+    public string Name => "Devices";
+
     public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
@@ -39,10 +37,6 @@ public class Startup : IStartup
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
         services.AddSqlDatabaseHealthCheck("Devices", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
-    }
-
-    public void Configure(WebApplication app)
-    {
     }
 
     public void ConfigureEventBus(IEventBus eventBus)
