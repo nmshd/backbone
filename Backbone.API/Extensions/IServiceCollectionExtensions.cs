@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
+using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.API.Extensions;
@@ -104,48 +105,13 @@ public static class IServiceCollectionExtensions
             });
         });
 
-        var modules = configuration.Modules.GetType().GetProperties();
-        foreach (var moduleProperty in modules)
-        {
-            var moduleName = moduleProperty.Name;
-            var module = moduleProperty.GetValue(configuration.Modules)!;
-            
-            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString")!;
-
-            switch (provider)
-            {
-                case "SqlServer":
-                    services.AddHealthChecks().AddSqlServer(
-                        connectionString,
-                        name: moduleName
-                        );
-                    break;
-                case "Postgres":
-                    services.AddHealthChecks().AddNpgSql(
-                        npgsqlConnectionString: connectionString,
-                        name: moduleName);
-                    break;
-                default:
-                    throw new Exception($"Unsupported database provider: {provider}");
-            }
-        }
-
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
         return services;
     }
-
-    private static object? GetPropertyValue(object? source, string propertyPath)
-    {
-        foreach (var property in propertyPath.Split('.').Select(s => source?.GetType().GetProperty(s)))
-            source = property?.GetValue(source, null);
-
-        return source;
-    }
-
+    
     public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -325,8 +291,19 @@ public static class IServiceCollectionExtensions
             manager.ApplicationParts.Add(new AssemblyPart(typeof(TStartup).Assembly)));
 
         var startup = new TStartup();
-        startup.ConfigureServices(services, configuration.GetSection($"Modules:{moduleName}"));
-        
+
+        var moduleConfiguration = configuration.GetSection($"Modules:{moduleName}");
+
+        startup.ConfigureServices(services, moduleConfiguration);
+
+        services.AddSingleton(new Module { Name = moduleName, Startup = startup });
+
         return services;
     }
+}
+
+public class Module
+{
+    public string Name { get; init; }
+    public IStartup Startup { get; init; }
 }

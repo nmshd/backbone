@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Tokens.Application;
 
-namespace Backbone.API.Configuration;
+namespace Tokens.ConsumerApi;
 
-public class DevicesConfiguration
+public class Configuration
 {
     [Required]
     public ApplicationOptions Application { get; set; } = new();
@@ -18,7 +17,19 @@ public class DevicesConfiguration
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
         [Required]
-        public PushNotificationOptions PushNotifications { get; set; } = new();
+        public BlobStorageConfiguration BlobStorage { get; set; } = new();
+
+        public class BlobStorageConfiguration
+        {
+            [Required]
+            [MinLength(1)]
+            [RegularExpression("Azure|GoogleCloud")]
+            public string CloudProvider { get; set; } = string.Empty;
+
+            public string ConnectionInfo { get; set; } = string.Empty;
+
+            public string ContainerName { get; set; } = string.Empty;
+        }
 
         public class SqlDatabaseConfiguration
         {
@@ -31,6 +42,5 @@ public class DevicesConfiguration
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
         }
-
     }
 }

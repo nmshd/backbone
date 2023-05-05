@@ -1,23 +1,25 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application;
+﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.API.Controllers;
+namespace Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

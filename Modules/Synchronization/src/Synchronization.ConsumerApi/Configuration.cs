@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Synchronization.Application;
 
-namespace Backbone.API.Configuration;
+namespace Synchronization.ConsumerApi;
 
-public class SynchronizationConfiguration
+public class Configuration
 {
     [Required]
     public ApplicationOptions Application { get; set; } = new();

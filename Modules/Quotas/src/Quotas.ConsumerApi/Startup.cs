@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Challenges.Application;
-using Backbone.Modules.Challenges.Application.Extensions;
-using Backbone.Modules.Challenges.Infrastructure.Persistence;
-using Enmeshed.BuildingBlocks.API.Extensions;
+﻿using Backbone.API.Configuration;
+using Backbone.Modules.Quotas.Application;
+using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 
-namespace Challenges.ConsumerApi;
+namespace Quotas.ConsumerApi;
 
 public class Startup : IStartup
 {
@@ -29,7 +29,7 @@ public class Startup : IStartup
             dbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
-        services.AddSqlDatabaseHealthCheck("Challenges", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        //services.AddSqlDatabaseHealthCheck("Quotas", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public void Configure(WebApplication app)
@@ -38,6 +38,6 @@ public class Startup : IStartup
 
     public void ConfigureEventBus(IEventBus eventBus)
     {
-        
+        eventBus.AddQuotasIntegrationEventSubscriptions();
     }
 }

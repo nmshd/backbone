@@ -1,24 +1,25 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Relationships.Application;
+﻿using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.API.Controllers;
+namespace Relationships.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize("OpenIddict.Validation.AspNetCore")]
 public class RelationshipTemplatesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

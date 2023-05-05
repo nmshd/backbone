@@ -13,4 +13,25 @@ public static class ServiceCollectionExtensions
         var container = containerBuilder.Build();
         return new AutofacServiceProvider(container);
     }
+
+    public static void AddSqlDatabaseHealthCheck(this IServiceCollection services, string name, string provider,
+        string connectionString)
+    {
+        switch (provider)
+        {
+            case "SqlServer":
+                services.AddHealthChecks().AddSqlServer(
+                    connectionString,
+                    name: name
+                );
+                break;
+            case "Postgres":
+                services.AddHealthChecks().AddNpgSql(
+                    npgsqlConnectionString: connectionString,
+                    name: name);
+                break;
+            default:
+                throw new Exception($"Unsupported database provider: {provider}");
+        }
+    }
 }

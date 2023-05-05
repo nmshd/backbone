@@ -1,13 +1,14 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
+﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Backbone.API.Controllers;
+namespace Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/Devices/Self/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

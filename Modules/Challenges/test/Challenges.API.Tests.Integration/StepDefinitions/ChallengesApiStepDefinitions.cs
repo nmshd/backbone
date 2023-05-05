@@ -1,6 +1,6 @@
 using Challenges.API.Tests.Integration.API;
-using Challenges.API.Tests.Integration.Extensions;
 using Challenges.API.Tests.Integration.Models;
+using Challenges.API.Tests.Integration.Utils;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
 using static Challenges.API.Tests.Integration.Configuration.Settings;

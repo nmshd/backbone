@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Domain.Exceptions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
 

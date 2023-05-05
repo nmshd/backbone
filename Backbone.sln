@@ -252,9 +252,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Domain.Tests", "Modu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Domain.Tests", "Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj", "{06C80BAE-3B73-49C0-9420-CDB7EA969058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenges.ConsumerApi", "Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj", "{84BA182A-6E24-4437-A7DB-13D2D675E14B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.ConsumerApi", "Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj", "{84BA182A-6E24-4437-A7DB-13D2D675E14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.ConsumerApi", "Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj", "{B301A0EE-BFA9-4268-8DC3-4F5865992543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.ConsumerApi", "Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj", "{B301A0EE-BFA9-4268-8DC3-4F5865992543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.ConsumerApi", "Modules\Messages\src\Messages.ConsumerApi\Messages.ConsumerApi.csproj", "{762E3613-2C9D-412B-B17D-9C087E9CF419}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Relationships.ConsumerApi", "Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj", "{60CAE514-B713-4F3F-8B5D-D3BB34E3805F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.ConsumerApi", "Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj", "{0C2FA416-00D3-4E1E-87B1-C7E48E162B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokens.ConsumerApi", "Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj", "{E57EB47C-41CF-4956-835F-D933A0D97D8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.ConsumerApi", "Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj", "{66694B90-62FA-410F-8178-AC1641DB8D11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.ConsumerApi", "Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj", "{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -638,6 +650,30 @@ Global
 		{B301A0EE-BFA9-4268-8DC3-4F5865992543}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B301A0EE-BFA9-4268-8DC3-4F5865992543}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B301A0EE-BFA9-4268-8DC3-4F5865992543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{762E3613-2C9D-412B-B17D-9C087E9CF419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{762E3613-2C9D-412B-B17D-9C087E9CF419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{762E3613-2C9D-412B-B17D-9C087E9CF419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{762E3613-2C9D-412B-B17D-9C087E9CF419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60CAE514-B713-4F3F-8B5D-D3BB34E3805F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60CAE514-B713-4F3F-8B5D-D3BB34E3805F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60CAE514-B713-4F3F-8B5D-D3BB34E3805F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60CAE514-B713-4F3F-8B5D-D3BB34E3805F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C2FA416-00D3-4E1E-87B1-C7E48E162B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C2FA416-00D3-4E1E-87B1-C7E48E162B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C2FA416-00D3-4E1E-87B1-C7E48E162B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C2FA416-00D3-4E1E-87B1-C7E48E162B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E57EB47C-41CF-4956-835F-D933A0D97D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E57EB47C-41CF-4956-835F-D933A0D97D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E57EB47C-41CF-4956-835F-D933A0D97D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E57EB47C-41CF-4956-835F-D933A0D97D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66694B90-62FA-410F-8178-AC1641DB8D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66694B90-62FA-410F-8178-AC1641DB8D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66694B90-62FA-410F-8178-AC1641DB8D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66694B90-62FA-410F-8178-AC1641DB8D11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -758,6 +794,12 @@ Global
 		{06C80BAE-3B73-49C0-9420-CDB7EA969058} = {F31B1655-A11B-4F30-9BC7-7418B8B915D7}
 		{84BA182A-6E24-4437-A7DB-13D2D675E14B} = {C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA}
 		{B301A0EE-BFA9-4268-8DC3-4F5865992543} = {3D324161-C287-4DC0-A9FD-FA3B1A6643FD}
+		{762E3613-2C9D-412B-B17D-9C087E9CF419} = {001D37F5-B3C5-4288-A2EA-F50DEFD8E2C0}
+		{60CAE514-B713-4F3F-8B5D-D3BB34E3805F} = {C790AF37-65C9-4E9C-A7E1-B57560411EF2}
+		{0C2FA416-00D3-4E1E-87B1-C7E48E162B01} = {1FEB1A37-59AD-403D-B7EC-50AD796BB25C}
+		{E57EB47C-41CF-4956-835F-D933A0D97D8A} = {903C38CB-C2E2-42D2-9277-74CE675551E8}
+		{66694B90-62FA-410F-8178-AC1641DB8D11} = {C258DF5B-0AE0-4DDF-9284-60671699C6ED}
+		{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1} = {AAE79377-8414-4C23-BF0C-678B68A24BC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 

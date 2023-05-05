@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Synchronization.Application;
+using Backbone.Modules.Relationships.Application;
 
-namespace Backbone.API.Configuration;
+namespace Relationships.ConsumerApi;
 
-public class TokensConfiguration
+public class Configuration
 {
     [Required]
     public ApplicationOptions Application { get; set; } = new();

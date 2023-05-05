@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Relationships.Application;
+using Backbone.Modules.Messages.Application;
 
-namespace Backbone.API.Configuration;
+namespace Messages.ConsumerApi;
 
-public class RelationshipsConfiguration
+public class Configuration
 {
     [Required]
     public ApplicationOptions Application { get; set; } = new();

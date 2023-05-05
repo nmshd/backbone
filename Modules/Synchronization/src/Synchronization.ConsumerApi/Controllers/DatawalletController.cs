@@ -1,23 +1,24 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Synchronization.Application;
+﻿using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.API.Controllers;
+namespace Synchronization.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize("OpenIddict.Validation.AspNetCore")]
 public class DatawalletController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

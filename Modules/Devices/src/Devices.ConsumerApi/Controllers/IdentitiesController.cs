@@ -1,16 +1,18 @@
-﻿using Backbone.API.Mvc;
-using Backbone.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Backbone.API.Controllers;
+namespace Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

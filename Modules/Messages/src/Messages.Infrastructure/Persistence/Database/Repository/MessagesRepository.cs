@@ -43,19 +43,13 @@ public class MessagesRepository : IMessagesRepository
 
         return message;
     }
-
-    public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
+    
+    public async Task Add(Message message, CancellationToken cancellationToken)
     {
-        return await _readOnlyMessages.FirstWithId(id, cancellationToken);
-    }
-
-    public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)
-    {
-        var add = await _messages.AddAsync(message, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
+        var add = await _messages.AddAsync(message, cancellationToken);
         await _blobStorage.SaveAsync();
-        return add.Entity.Id;
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<int> CountUnreceivedMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
@@ -86,7 +80,7 @@ public class MessagesRepository : IMessagesRepository
 
     private async Task FillBody(Message message)
     {
-        await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id);
+        message.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id));
     }
 
     public async Task Update(Message message)

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Files.Application;
-using Backbone.Modules.Files.Application.Extensions;
-using Backbone.Modules.Files.Infrastructure.Persistence;
+﻿using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Application.Extensions;
+using Backbone.Modules.Tokens.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using IStartup = Enmeshed.BuildingBlocks.API.IStartup;
 
-namespace Files.ConsumerApi;
+namespace Tokens.ConsumerApi;
 
 public class Startup : IStartup
 {
@@ -22,22 +22,22 @@ public class Startup : IStartup
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
-        services.AddApplication();
-
         services.AddPersistence(options =>
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
-            options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
             options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
+            options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
             options.BlobStorageOptions.Container =
                 parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                    ? "files"
+                    ? "tokens"
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
         });
 
-        services.AddSqlDatabaseHealthCheck("Files", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddApplication();
+        
+        services.AddSqlDatabaseHealthCheck("Tokens", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public void Configure(WebApplication app)

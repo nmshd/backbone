@@ -10,6 +10,8 @@
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Challenges.Application\Challenges.Application.csproj" />
     <ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj" />
+    <ProjectReference Include="..\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj" />
+    <ProjectReference Include="..\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj" />
     <ProjectReference Include="..\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
   </ItemGroup>
 

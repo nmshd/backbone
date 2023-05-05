@@ -9,11 +9,11 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
-        <ProjectReference Include="..\Files.Application\Files.Application.csproj" />
-        <ProjectReference Include="..\Files.Domain\Files.Domain.csproj" />
-        <ProjectReference Include="..\Files.Infrastructure.Database.Postgres\Files.Infrastructure.Database.Postgres.csproj" />
-        <ProjectReference Include="..\Files.Infrastructure.Database.SqlServer\Files.Infrastructure.Database.SqlServer.csproj" />
-        <ProjectReference Include="..\Files.Infrastructure\Files.Infrastructure.csproj" />
+        <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
+        <ProjectReference Include="..\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

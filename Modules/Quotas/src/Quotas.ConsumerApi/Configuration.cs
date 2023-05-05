@@ -2,7 +2,7 @@
 
 namespace Backbone.API.Configuration;
 
-public class QuotasConfiguration
+public class Configuration
 {
     [Required]
     public QuotasInfrastructure Infrastructure { get; set; } = new();

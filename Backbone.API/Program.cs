@@ -9,7 +9,6 @@ using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -29,6 +28,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Module = Backbone.API.Extensions.Module;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -55,13 +55,17 @@ Configure(app);
 
 app
     .MigrateDbContext<ChallengesDbContext>()
-    .MigrateDbContext<DevicesDbContext>((context, sp) => {
+    .MigrateDbContext<DevicesDbContext>((context, sp) =>
+    {
         var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
         devicesDbContextSeed.SeedAsync(context).Wait();
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+    .MigrateDbContext<QuotasDbContext>((context, sp) =>
+    {
+        new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait();
+    })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
     .MigrateDbContext<TokensDbContext>();
@@ -70,20 +74,21 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
-    services.AddModule<Challenges.ConsumerApi.Startup>("Challenges", configuration);
-    services.AddModule<Files.ConsumerApi.Startup>("Files", configuration);
-
     services
-        .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Synchronization.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Synchronization:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Tokens.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Tokens:Application").Bind(options));
+        .AddModule<Challenges.ConsumerApi.Startup>("Challenges", configuration)
+        .AddModule<Devices.ConsumerApi.Startup>("Devices", configuration)
+        .AddModule<Files.ConsumerApi.Startup>("Files", configuration)
+        .AddModule<Messages.ConsumerApi.Startup>("Messages", configuration)
+        .AddModule<Quotas.ConsumerApi.Startup>("Quotas", configuration)
+        .AddModule<Relationships.ConsumerApi.Startup>("Relationships", configuration)
+        .AddModule<Synchronization.ConsumerApi.Startup>("Synchronization", configuration)
+        .AddModule<Tokens.ConsumerApi.Startup>("Tokens", configuration);
+
+    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var parsedConfiguration =
+        services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
 
     services
@@ -101,14 +106,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
     });
-
-    services
-        .AddDevices(parsedConfiguration.Modules.Devices)
-        .AddMessages(parsedConfiguration.Modules.Messages)
-        .AddRelationships(parsedConfiguration.Modules.Relationships)
-        .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens)
-        .AddQuotas(parsedConfiguration.Modules.Quotas);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
@@ -148,9 +145,14 @@ static void Configure(WebApplication app)
     });
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
-    eventBus.AddSynchronizationIntegrationEventSubscriptions();
-    eventBus.AddDevicesIntegrationEventSubscriptions();
-    eventBus.AddQuotasIntegrationEventSubscriptions();
+    var modules = app.Services.GetService<IEnumerable<Module>>();
+
+    foreach (var module in modules)
+    {
+        module.Startup.Configure(app);
+        module.Startup.ConfigureEventBus(eventBus);
+    }
+
 }
 
 static Task WriteResponse(HttpContext context, HealthReport healthReport)

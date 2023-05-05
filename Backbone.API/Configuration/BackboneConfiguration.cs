@@ -15,9 +15,6 @@ public class BackboneConfiguration
     [Required]
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    [Required]
-    public ModulesConfiguration Modules { get; set; } = new();
-
     public class AuthenticationConfiguration
     {
         public string JwtSigningCertificate { get; set; } = "";
@@ -43,26 +40,5 @@ public class BackboneConfiguration
     {
         [Required]
         public EventBusConfiguration EventBus { get; set; } = new();
-    }
-
-    public class ModulesConfiguration
-    {
-        [Required]
-        public DevicesConfiguration Devices { get; set; } = new();
-
-        [Required]
-        public QuotasConfiguration Quotas { get; set; } = new();
-
-        [Required]
-        public MessagesConfiguration Messages { get; set; } = new();
-
-        [Required]
-        public RelationshipsConfiguration Relationships { get; set; } = new();
-
-        [Required]
-        public SynchronizationConfiguration Synchronization { get; set; } = new();
-
-        [Required]
-        public TokensConfiguration Tokens { get; set; } = new();
     }
 }
