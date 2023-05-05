@@ -156,7 +156,6 @@ static void Configure(WebApplication app)
     {
         module.ConfigureEventBus(eventBus);
     }
-
 }
 
 static Task WriteResponse(HttpContext context, HealthReport healthReport)
