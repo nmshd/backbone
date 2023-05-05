@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.AspNetCoreIdentityCustomizations;
 using Backbone.API.Configuration;
-using Backbone.API.Mvc.ExceptionFilters;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -26,6 +25,7 @@ using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
+using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 
 namespace Backbone.API.Extensions;
 
