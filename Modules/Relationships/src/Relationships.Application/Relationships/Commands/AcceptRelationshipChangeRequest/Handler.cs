@@ -14,19 +14,17 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Acce
 
 public class Handler : IRequestHandler<AcceptRelationshipChangeRequestCommand, AcceptRelationshipChangeRequestResponse>
 {
-    private readonly IContentStore _contentStore;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore, IRelationshipsRepository relationshipsRepository)
+    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
     {
         _userContext = userContext;
         _relationshipsRepository = relationshipsRepository;
         _mapper = mapper;
         _eventBus = eventBus;
-        _contentStore = contentStore;
     }
 
     public async Task<AcceptRelationshipChangeRequestResponse> Handle(AcceptRelationshipChangeRequestCommand changeRequest, CancellationToken cancellationToken)
@@ -37,7 +35,7 @@ public class Handler : IRequestHandler<AcceptRelationshipChangeRequestCommand, A
 
         try
         {
-            await _contentStore.SaveContentOfChangeResponse(change.Response);
+            await _relationshipsRepository.SaveContentOfChangeResponse(change.Response);
         }
         catch (BlobAlreadyExistsException)
         {

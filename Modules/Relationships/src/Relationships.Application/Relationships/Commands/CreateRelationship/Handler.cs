@@ -14,7 +14,6 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {
-    private readonly IContentStore _contentStore;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -25,14 +24,13 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private CreateRelationshipCommand _request;
     private RelationshipTemplate _template;
 
-    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
+    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _userContext = userContext;
         _mapper = mapper;
         _relationshipsRepository = relationshipsRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;
-        _contentStore = contentStore;
     }
 
 
@@ -82,7 +80,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _userContext.GetDeviceId(),
             _request.Content);
 
-        await _contentStore.SaveContentOfChangeRequest(_relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Request);
+        await _relationshipsRepository.SaveContentOfChangeRequest(_relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Request);
 
         try
         {

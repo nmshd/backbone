@@ -22,9 +22,8 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
-    private readonly IContentStore _contentStore;
 
-    public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IContentStore contentStore)
+    public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
@@ -33,7 +32,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
-        _contentStore = contentStore;
     }
 
     public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids, RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt, IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool onlyPeerChanges = false, bool track = false)
@@ -58,7 +56,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(changes.ItemsOnPage.Select(FillContentChange).ToArray());
+        await Task.WhenAll(changes.ItemsOnPage.Select(FillContentOfChange).ToArray());
 
         return changes;
     }
@@ -72,7 +70,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         if (fillContent)
         {
-            await FillContentChanges(relationship.Changes);
+            await FillContentOfChanges(relationship.Changes);
         }
 
         return relationship;
@@ -95,7 +93,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         if (fillContent)
         {
-            await FillContentChange(change);
+            await FillContentOfChange(change);
         }
 
         return change;
@@ -111,7 +109,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(templates.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentChange).ToArray());
+        await Task.WhenAll(templates.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentOfChange).ToArray());
 
         return templates;
     }
@@ -122,15 +120,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    private async Task FillContentChange(RelationshipChange change)
-    {
-        await _contentStore.FillContentOfChange(change);
-    }
-
-    private async Task FillContentChanges(IEnumerable<RelationshipChange> changes)
-    {
-        await _contentStore.FillContentOfChanges(changes);
-    }
 
     public async Task<RelationshipId> Add(Relationship relationship, CancellationToken cancellationToken)
     {
@@ -152,5 +141,43 @@ public class RelationshipsRepository : IRelationshipsRepository
                     .BetweenParticipants(identityAddress, createdBy)
                     .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected && r.Status != RelationshipStatus.Revoked)
                     .AnyAsync(cancellationToken);
+    }
+
+    public async Task SaveContentOfChangeRequest(RelationshipChangeRequest changeRequest)
+    {
+        if (changeRequest.Content == null)
+            return;
+
+        _blobStorage.Add(_blobOptions.RootFolder, $"{changeRequest.Id}_Req", changeRequest.Content);
+        await _blobStorage.SaveAsync();
+    }
+
+    public async Task SaveContentOfChangeResponse(RelationshipChangeResponse changeResponse)
+    {
+        if (changeResponse.Content == null)
+            return;
+
+        _blobStorage.Add(_blobOptions.RootFolder, $"{changeResponse.Id}_Res", changeResponse.Content);
+        await _blobStorage.SaveAsync();
+    }
+
+    private async Task FillContentOfChange(RelationshipChange change)
+    {
+        if (change.Type == RelationshipChangeType.Creation)
+        {
+            var requestContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Req");
+            change.Request.LoadContent(requestContent);
+
+            if (change.IsCompleted)
+            {
+                var responseContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Res");
+                change.Response!.LoadContent(responseContent);
+            }
+        }
+    }
+
+    private async Task FillContentOfChanges(IEnumerable<RelationshipChange> changes)
+    {
+        await Task.WhenAll(changes.Select(FillContentOfChange).ToArray());
     }
 }

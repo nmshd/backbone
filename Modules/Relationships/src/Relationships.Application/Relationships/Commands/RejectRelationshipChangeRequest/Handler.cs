@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Domain;
@@ -14,19 +13,17 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Reje
 
 public class Handler : IRequestHandler<RejectRelationshipChangeRequestCommand, RejectRelationshipChangeRequestResponse>
 {
-    private readonly IContentStore _contentStore;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore, IRelationshipsRepository relationshipsRepository)
+    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
     {
         _userContext = userContext;
         _relationshipsRepository = relationshipsRepository;
         _mapper = mapper;
         _eventBus = eventBus;
-        _contentStore = contentStore;
     }
 
     public async Task<RejectRelationshipChangeRequestResponse> Handle(RejectRelationshipChangeRequestCommand changeRequest, CancellationToken cancellationToken)
@@ -37,7 +34,7 @@ public class Handler : IRequestHandler<RejectRelationshipChangeRequestCommand, R
 
         try
         {
-            await _contentStore.SaveContentOfChangeResponse(change.Response);
+            await _relationshipsRepository.SaveContentOfChangeResponse(change.Response);
         }
         catch (BlobAlreadyExistsException)
         {

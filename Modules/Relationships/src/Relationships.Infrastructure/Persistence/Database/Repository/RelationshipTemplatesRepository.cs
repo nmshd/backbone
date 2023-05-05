@@ -19,21 +19,19 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
-    private readonly IContentStore _contentStore;
 
-    public RelationshipTemplatesRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IContentStore contentStore)
+    public RelationshipTemplatesRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _templates = dbContext.RelationshipTemplates;
         _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
-        _contentStore = contentStore;
     }
 
     public async Task<RelationshipTemplateId> AddRelationshipTemplate(RelationshipTemplate template, CancellationToken cancellationToken)
     {
-        await _contentStore.SaveContentOfTemplate(template);
+        await SaveContentOfTemplate(template);
 
         var add = await _templates.AddAsync(template, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -51,7 +49,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
         if (fillContent)
         {
-            await FillContentTemplate(template);
+            await FillContentOfTemplate(template);
         }
 
         return template;
@@ -67,7 +65,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(templates.ItemsOnPage.Select(FillContentTemplate).ToArray());
+        await Task.WhenAll(templates.ItemsOnPage.Select(FillContentOfTemplate).ToArray());
 
         return templates;
     }
@@ -78,8 +76,23 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    private async Task FillContentTemplate(RelationshipTemplate template)
+    private async Task FillContentOfTemplate(RelationshipTemplate template)
     {
-        await _contentStore.FillContentOfTemplate(template);
+        var content = await _blobStorage.FindAsync(_blobOptions.RootFolder, template.Id);
+        template.LoadContent(content);
+    }
+
+    private async Task FillContentOfTemplates(IEnumerable<RelationshipTemplate> templates)
+    {
+        await Task.WhenAll(templates.Select(FillContentOfTemplate).ToArray());
+    }
+
+    private async Task SaveContentOfTemplate(RelationshipTemplate template)
+    {
+        if (template.Content == null)
+            return;
+
+        _blobStorage.Add(_blobOptions.RootFolder, template.Id, template.Content);
+        await _blobStorage.SaveAsync();
     }
 }
