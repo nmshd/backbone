@@ -44,11 +44,6 @@ public class MessagesRepository : IMessagesRepository
         return message;
     }
 
-    public async Task<Message> FindPlain(MessageId id, CancellationToken cancellationToken)
-    {
-        return await _readOnlyMessages.FirstWithId(id, cancellationToken);
-    }
-
     public async Task<MessageId> Add(Message message, CancellationToken cancellationToken)
     {
         var add = await _messages.AddAsync(message, cancellationToken);
