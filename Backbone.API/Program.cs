@@ -150,7 +150,7 @@ static void Configure(WebApplication app)
     });
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
-    var modules = app.Services.GetService<IEnumerable<IModule>>();
+    var modules = app.Services.GetRequiredService<IEnumerable<IModule>>();
 
     foreach (var module in modules)
     {
