@@ -37,7 +37,6 @@ public class Handler : IRequestHandler<AcceptRelationshipChangeRequestCommand, A
 
         try
         {
-            // TODO: Refactor this
             await _contentStore.SaveContentOfChangeResponse(change.Response);
         }
         catch (BlobAlreadyExistsException)
