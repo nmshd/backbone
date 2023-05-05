@@ -10,6 +10,7 @@ using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;

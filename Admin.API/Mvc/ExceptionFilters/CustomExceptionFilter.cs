@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Admin.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
