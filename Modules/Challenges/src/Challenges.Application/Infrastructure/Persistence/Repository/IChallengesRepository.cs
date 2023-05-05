@@ -8,8 +8,6 @@ public interface IChallengesRepository
 
     Task<Challenge> Add(Challenge challenge, CancellationToken cancellationToken);
 
-    Task Update(Challenge challenge, CancellationToken cancellationToken);
-
     Task DeleteExpiredChallenges(List<ChallengeId> idsOfExpiredChallenges, CancellationToken cancellationToken);
 
     Task<List<ChallengeId>> FindExpiredChallenges(CancellationToken cancellationToken);

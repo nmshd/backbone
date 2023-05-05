@@ -20,8 +20,6 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
     {
         var challenge = await _challengesRepository.Find(request.Id, cancellationToken);
        
-        await _challengesRepository.Update(challenge, cancellationToken);
-
         var response = _mapper.Map<ChallengeDTO>(challenge);
 
         return response;

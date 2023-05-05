@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Backbone.Modules.Challenges.Application.Extensions;
+﻿using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
@@ -30,12 +29,6 @@ public class ChallengesRepository : IChallengesRepository
         return add.Entity;
     }
 
-    public async Task Update(Challenge challenge, CancellationToken cancellationToken)
-    {
-        _challenges.Update(challenge);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<List<ChallengeId>> FindExpiredChallenges(CancellationToken cancellationToken)
     {
         var idsOfExpiredChallenges = await _dbContext
@@ -49,8 +42,7 @@ public class ChallengesRepository : IChallengesRepository
 
     public async Task DeleteExpiredChallenges(List<ChallengeId> idsOfExpiredChallenges, CancellationToken cancellationToken)
     {
-        _challenges
-            .RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge { Id = id }));
+        _challenges.RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge { Id = id }));
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
