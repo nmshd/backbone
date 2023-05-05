@@ -1,50 +1,42 @@
 ﻿using System.Net;
-using ConsumerApi.Tests.Integration.Tokens.Models;
+using ConsumerApi.Tests.Integration.Models;
 using ConsumerApi.Tests.Integration.Utils.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
-namespace ConsumerApi.Tests.Integration.Tokens.API;
+namespace ConsumerApi.Tests.Integration.API;
 
-public class TokensApi
+public class ChallengesApi
 {
     private const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
-    private static readonly Dictionary<string, AccessTokenResponse> UserAccessTokens = new();
+    private static AccessTokenResponse? _accessTokenResponse;
 
-    public TokensApi(RestClient client)
+    public ChallengesApi(RestClient client)
     {
         _client = client;
+        _accessTokenResponse = null;
 
         ServicePointManager.ServerCertificateValidationCallback +=
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<Token>> CreateToken(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<ChallengeResponse>> CreateChallenge(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteTokenRequest<Token>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
+        return await ExecuteChallengeRequest<ChallengeResponse>(Method.Post, new PathString(ROUTE_PREFIX).Add("/challenges").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<Token>> GetTokenById(RequestConfiguration requestConfiguration, string id)
+    public async Task<HttpResponse<ChallengeResponse>> GetChallengeById(RequestConfiguration requestConfiguration, string id)
     {
-        return await ExecuteTokenRequest<Token>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
+        return await ExecuteChallengeRequest<ChallengeResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/challenges/{id}").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<IEnumerable<Token>>> GetTokensByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
-    {
-        var endpoint = new PathString(ROUTE_PREFIX).Add("/tokens").ToString();
-        var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
-        endpoint = $"{endpoint}?{queryString}";
-
-        return await ExecuteTokenRequest<IEnumerable<Token>>(Method.Get, endpoint, requestConfiguration);
-    }
-
-    private async Task<HttpResponse<T>> ExecuteTokenRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    private async Task<HttpResponse<T>> ExecuteChallengeRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new RestRequest(endpoint, method);
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
-            request.AddJsonBody(requestConfiguration.Content);
+            request.AddBody(requestConfiguration.Content);
 
         if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
             request.AddHeader("Content-Type", requestConfiguration.ContentType);
@@ -58,29 +50,25 @@ public class TokensApi
             request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
         }
 
-        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
+        var response = await _client.ExecuteAsync<T>(request);
 
         var result = new HttpResponse<T>
         {
             IsSuccessStatusCode = response.IsSuccessStatusCode,
-            HttpMethod = response.Request!.Method.ToString(),
             StatusCode = response.StatusCode,
-            Content = response.Data,
+            Data = response.Data,
             ContentType = response.ContentType,
-            RawContent = response.Content
+            Content = response.Content
         };
 
         return result;
     }
 
-    private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
+    public async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
-        if (UserAccessTokens.TryGetValue(authenticationParams.Username, out var accessToken))
+        if (_accessTokenResponse is { IsExpired: false })
         {
-            if (accessToken is { IsExpired: false })
-            {
-                return accessToken;
-            }
+            return _accessTokenResponse;
         }
 
         var request = new RestRequest("/connect/token", Method.Post);
@@ -99,10 +87,8 @@ public class TokensApi
             throw new AccessTokenRequestException(response.StatusCode, errorMessage);
         }
 
-        var newAccessToken = response.Data!;
+        _accessTokenResponse = response.Data!;
 
-        UserAccessTokens[authenticationParams.Username] = newAccessToken;
-
-        return newAccessToken;
+        return _accessTokenResponse;
     }
 }

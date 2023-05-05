@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ConsumerApi.Tests.Integration.Tokens.Models;
+namespace ConsumerApi.Tests.Integration.Utils.Models;
 public class HttpResponse<T>
 {
     public ResponseContent<T> Content { get; set; }

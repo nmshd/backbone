@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace ConsumerApi.Tests.Integration.Tokens.Models;
-public class ResponseContent<T>
+namespace ConsumerApi.Tests.Integration.Models;
+
+public class ChallengeResponse
 {
-    public T? Result { get; set; }
+    public Challenge? Result { get; set; }
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Error? Error { get; set; }
 }

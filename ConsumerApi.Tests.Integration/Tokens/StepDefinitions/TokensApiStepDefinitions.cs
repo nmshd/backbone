@@ -2,16 +2,18 @@ using System.Net;
 using ConsumerApi.Tests.Integration.Tokens.API;
 using ConsumerApi.Tests.Integration.Tokens.Models;
 using ConsumerApi.Tests.Integration.Tokens.Utils;
+using ConsumerApi.Tests.Integration.Utils.Models;
+using ConsumerApi.Tests.Integration.Utils.StepDefinitions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 using TechTalk.SpecFlow.Assist;
-using static ConsumerApi.Tests.Integration.Tokens.Configuration.Settings;
+using static ConsumerApi.Tests.Integration.Utils.Configuration.Settings;
 
 namespace ConsumerApi.Tests.Integration.Tokens.StepDefinitions;
 
 [Binding]
-public class TokensApiStepDefinitions
+public class TokensApiStepDefinitions : BaseStepDefinitions
 {
     private readonly TokensApi _tokensApi;
     private string _tokenId;
@@ -19,11 +21,10 @@ public class TokensApiStepDefinitions
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
     private HttpResponse<Token> _tokenResponse;
-    private readonly RequestConfiguration _requestConfiguration;
     private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi)
+    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi) : base(httpConfiguration)
     {
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
@@ -31,35 +32,6 @@ public class TokensApiStepDefinitions
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
         _tokenResponse = new HttpResponse<Token>();
-        _requestConfiguration = new RequestConfiguration
-        {
-            AuthenticationParameters = new AuthenticationParameters
-            {
-                GrantType = "password",
-                ClientId = httpConfiguration.Value.ClientCredentials.ClientId,
-                ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
-                Username = "USRa",
-                Password = "a"
-            }
-        };
-    }
-
-    [Given(@"the user is authenticated")]
-    public void GivenTheUserIsAuthenticated()
-    {
-        _requestConfiguration.Authenticate = true;
-    }
-
-    [Given(@"the user is unauthenticated")]
-    public void GivenTheUserIsUnauthenticated()
-    {
-        _requestConfiguration.Authenticate = false;
-    }
-
-    [Given(@"the Accept header is '([^']*)'")]
-    public void GivenTheAcceptHeaderIs(string acceptHeader)
-    {
-        _requestConfiguration.AcceptHeader = acceptHeader;
     }
 
     [Given(@"an own Token t")]

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ConsumerApi.Tests.Integration.Tokens.Models;
+namespace ConsumerApi.Tests.Integration.Utils.Models;
+
 public class AccessTokenResponse
 {
     public AccessTokenResponse(

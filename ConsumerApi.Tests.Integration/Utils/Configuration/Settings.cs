@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ConsumerApi.Tests.Integration.Tokens.Configuration;
+﻿namespace ConsumerApi.Tests.Integration.Utils.Configuration;
 
 public static class Settings
 {

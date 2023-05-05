@@ -1,4 +1,7 @@
-﻿namespace ConsumerApi.Tests.Integration.Tokens.Models;
+﻿using ConsumerApi.Tests.Integration.Utils.Models;
+
+namespace ConsumerApi.Tests.Integration.Models;
+
 public class RequestConfiguration
 {
     public AuthenticationParameters AuthenticationParameters { get; set; } = new AuthenticationParameters();
@@ -9,7 +12,6 @@ public class RequestConfiguration
 
     public void SupplementWith(RequestConfiguration other)
     {
-        AuthenticationParameters = other.AuthenticationParameters;
         Authenticate = other.Authenticate;
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;

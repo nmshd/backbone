@@ -1,4 +1,5 @@
-﻿namespace ConsumerApi.Tests.Integration.Tokens.Models;
+﻿namespace ConsumerApi.Tests.Integration.Utils.Models;
+
 public class AuthenticationParameters
 {
     public string GrantType { get; set; }
