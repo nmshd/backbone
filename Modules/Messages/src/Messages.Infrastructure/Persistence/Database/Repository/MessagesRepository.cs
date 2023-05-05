@@ -86,7 +86,7 @@ public class MessagesRepository : IMessagesRepository
 
     private async Task FillBody(Message message)
     {
-        await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id);
+        message.LoadBody(await _blobStorage.FindAsync(_blobOptions.RootFolder, message.Id));
     }
 
     public async Task Update(Message message)
