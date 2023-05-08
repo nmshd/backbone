@@ -6,12 +6,14 @@ namespace Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
 public class UtcDateTimeConverter : JsonConverter<DateTime>
 {
     internal const string DEFAULT_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffZ";
-    private readonly string _format;
+    private readonly string? _format;
 
-    public UtcDateTimeConverter(string format = DEFAULT_FORMAT)
+    public UtcDateTimeConverter(string format)
     {
         _format = format;
     }
+
+    public UtcDateTimeConverter() : this(DEFAULT_FORMAT) { }
 
     public override bool CanConvert(Type objectType)
     {
@@ -38,10 +40,11 @@ public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
 {
     private readonly string _format;
 
-    public NullableUtcDateTimeConverter(string format = UtcDateTimeConverter.DEFAULT_FORMAT)
+    public NullableUtcDateTimeConverter(string format)
     {
         _format = format;
     }
+    public NullableUtcDateTimeConverter() : this(UtcDateTimeConverter.DEFAULT_FORMAT) { }
 
     public override bool CanConvert(Type objectType)
     {
