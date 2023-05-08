@@ -9,12 +9,6 @@ namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class RelationshipQueryableExtensions
 {
-    public static IQueryable<Relationship> IncludeAll(this IQueryable<Relationship> query)
-    {
-        return query
-            .Include(m => m.RelationshipTemplate);
-    }
-
     public static IQueryable<Relationship> NotTerminated(this IQueryable<Relationship> query)
     {
         return query.Where(r => r.Status != RelationshipStatus.Terminated);
