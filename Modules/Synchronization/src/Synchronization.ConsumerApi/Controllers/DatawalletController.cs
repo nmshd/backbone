@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Application;
+﻿using Backbone.API;
+using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;

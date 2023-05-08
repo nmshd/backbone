@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using Backbone.API;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using Backbone.Modules.Files.Application.Files.DTOs;

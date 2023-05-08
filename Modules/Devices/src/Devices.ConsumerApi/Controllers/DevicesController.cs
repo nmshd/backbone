@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application;
+﻿using Backbone.API;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;

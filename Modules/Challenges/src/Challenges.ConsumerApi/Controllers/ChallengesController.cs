@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
+﻿using Backbone.API;
+using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
 using Backbone.Modules.Challenges.Domain.Ids;
