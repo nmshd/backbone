@@ -19,23 +19,18 @@ public class UtcDateTimeConverter : JsonConverter<DateTime>
     {
         return objectType == typeof(DateTime);
     }
-
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var stringValue = reader.GetString();
-
         if (stringValue == null)
             throw new Exception("Value cannot be null");
-
         return DateTime.Parse(stringValue);
     }
-
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value.ToUniversalTime().ToString(_format));
     }
 }
-
 public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
 {
     private readonly string _format;
@@ -50,13 +45,11 @@ public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
     {
         return objectType == typeof(DateTime?);
     }
-
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var stringValue = reader.GetString();
         return stringValue == null ? null : DateTime.Parse(stringValue);
     }
-
     public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
         if (!value.HasValue)

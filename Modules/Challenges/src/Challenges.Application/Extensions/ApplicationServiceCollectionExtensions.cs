@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Backbone.Modules.Challenges.Application.AutoMapper;
+﻿using Backbone.Modules.Challenges.Application.AutoMapper;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.MediatR;

@@ -7,25 +7,33 @@ using Backbone.API.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Challenges.ConsumerApi;
+using Devices.ConsumerApi;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
+using Files.ConsumerApi;
 using MediatR;
+using Messages.ConsumerApi;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Quotas.ConsumerApi;
+using Relationships.ConsumerApi;
 using Serilog;
+using Synchronization.ConsumerApi;
+using Tokens.ConsumerApi;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -52,13 +60,17 @@ Configure(app);
 
 app
     .MigrateDbContext<ChallengesDbContext>()
-    .MigrateDbContext<DevicesDbContext>((context, sp) => {
+    .MigrateDbContext<DevicesDbContext>((context, sp) =>
+    {
         var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
         devicesDbContextSeed.SeedAsync(context).Wait();
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+    .MigrateDbContext<QuotasDbContext>((context, sp) =>
+    {
+        new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait();
+    })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
     .MigrateDbContext<TokensDbContext>();
@@ -68,17 +80,20 @@ app.Run();
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services
-        .ConfigureAndValidate<BackboneConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<Backbone.Modules.Challenges.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Challenges:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Devices.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Files.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Files:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Messages.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Messages:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Synchronization.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Synchronization:Application").Bind(options))
-        .ConfigureAndValidate<Backbone.Modules.Tokens.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Tokens:Application").Bind(options));
+        .AddModule<ChallengesModule>(configuration)
+        .AddModule<DevicesModule>(configuration)
+        .AddModule<FilesModule>(configuration)
+        .AddModule<MessagesModule>(configuration)
+        .AddModule<QuotasModule>(configuration)
+        .AddModule<RelationshipsModule>(configuration)
+        .AddModule<SynchronizationModule>(configuration)
+        .AddModule<TokensModule>(configuration);
+
+    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var parsedConfiguration =
+        services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
 
     services
@@ -96,16 +111,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
     });
-
-    services
-        .AddChallenges(parsedConfiguration.Modules.Challenges)
-        .AddDevices(parsedConfiguration.Modules.Devices)
-        .AddFiles(parsedConfiguration.Modules.Files)
-        .AddMessages(parsedConfiguration.Modules.Messages)
-        .AddRelationships(parsedConfiguration.Modules.Relationships)
-        .AddSynchronization(parsedConfiguration.Modules.Synchronization)
-        .AddTokens(parsedConfiguration.Modules.Tokens)
-        .AddQuotas(parsedConfiguration.Modules.Quotas);
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
@@ -145,9 +150,12 @@ static void Configure(WebApplication app)
     });
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
-    eventBus.AddSynchronizationIntegrationEventSubscriptions();
-    eventBus.AddDevicesIntegrationEventSubscriptions();
-    eventBus.AddQuotasIntegrationEventSubscriptions();
+    var modules = app.Services.GetRequiredService<IEnumerable<IModule>>();
+
+    foreach (var module in modules)
+    {
+        module.ConfigureEventBus(eventBus);
+    }
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

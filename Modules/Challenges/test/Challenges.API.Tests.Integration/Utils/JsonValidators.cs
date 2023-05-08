@@ -3,7 +3,7 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
 
-namespace Challenges.API.Tests.Integration.Extensions;
+namespace Challenges.API.Tests.Integration.Utils;
 public class JsonValidators
 {
     private static readonly Dictionary<Type, JSchema> CachedSchemas = new();

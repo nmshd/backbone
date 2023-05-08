@@ -29,6 +29,7 @@ public class MessagesRepository : IMessagesRepository
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
     }
+
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool fillBody = true)
     {
         var message = await (track ? _messages : _readOnlyMessages)

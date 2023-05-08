@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace Quotas.Domain.Tests
+namespace Backbone.Modules.Quotas.Domain.Tests
 {
     public class TierTests
     {

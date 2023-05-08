@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Backbone.API.ApplicationInsights.TelemetryInitializers;
 using Backbone.API.AspNetCoreIdentityCustomizations;
 using Backbone.API.Configuration;
@@ -8,6 +9,7 @@ using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.Tooling.Extensions;
@@ -21,6 +23,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
@@ -104,48 +107,13 @@ public static class IServiceCollectionExtensions
             });
         });
 
-        var modules = configuration.Modules.GetType().GetProperties();
-        foreach (var moduleProperty in modules)
-        {
-            var moduleName = moduleProperty.Name;
-            var module = moduleProperty.GetValue(configuration.Modules)!;
-            
-            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString")!;
-
-            switch (provider)
-            {
-                case "SqlServer":
-                    services.AddHealthChecks().AddSqlServer(
-                        connectionString,
-                        name: moduleName
-                        );
-                    break;
-                case "Postgres":
-                    services.AddHealthChecks().AddNpgSql(
-                        npgsqlConnectionString: connectionString,
-                        name: moduleName);
-                    break;
-                default:
-                    throw new Exception($"Unsupported database provider: {provider}");
-            }
-        }
-
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
         return services;
     }
-
-    private static object? GetPropertyValue(object? source, string propertyPath)
-    {
-        foreach (var property in propertyPath.Split('.').Select(s => source?.GetType().GetProperty(s)))
-            source = property?.GetValue(source, null);
-
-        return source;
-    }
-
+    
     public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
