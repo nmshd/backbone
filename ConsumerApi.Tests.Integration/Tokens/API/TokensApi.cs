@@ -65,7 +65,7 @@ public class TokensApi
             IsSuccessStatusCode = response.IsSuccessStatusCode,
             HttpMethod = response.Request!.Method.ToString(),
             StatusCode = response.StatusCode,
-            Content = response.Data,
+            Content = response.Data!,
             ContentType = response.ContentType,
             RawContent = response.Content
         };

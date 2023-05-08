@@ -1,9 +1,7 @@
-﻿using ConsumerApi.Tests.Integration.Utils.Models;
-using ConsumerApi.Tests.Integration.Utils.Support;
-using Microsoft.Extensions.Options;
-using static ConsumerApi.Tests.Integration.Utils.Configuration.Settings;
+﻿using AdminApi.Tests.Integration.Utils.Models;
+using AdminApi.Tests.Integration.Utils.Support;
 
-namespace ConsumerApi.Tests.Integration.Utils.StepDefinitions;
+namespace AdminApi.Tests.Integration.Utils.StepDefinitions;
 
 [Binding]
 public class BaseStepDefinitions<T>
@@ -11,20 +9,10 @@ public class BaseStepDefinitions<T>
     protected readonly RequestConfiguration _requestConfiguration;
     protected HttpResponse<T> _response;
 
-    protected BaseStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpResponse<T> response)
+    protected BaseStepDefinitions(HttpResponse<T> response)
     {
         _response = response;
-        _requestConfiguration = new RequestConfiguration
-        {
-            AuthenticationParameters = new AuthenticationParameters
-            {
-                GrantType = "password",
-                ClientId = httpConfiguration.Value.ClientCredentials.ClientId,
-                ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
-                Username = "USRa",
-                Password = "a"
-            }
-        };
+        _requestConfiguration = new RequestConfiguration();
     }
 
     [Given(@"the user is authenticated")]
@@ -65,6 +53,7 @@ public class BaseStepDefinitions<T>
 
         AssertStatusCodeIsSuccess();
         AssertResponseContentTypeIsJson();
+        AssertResponseContentCompliesWithSchema();
     }
 
     protected void AssertStatusCodeIsSuccess()
@@ -77,9 +66,9 @@ public class BaseStepDefinitions<T>
         _response.ContentType.Should().Be("application/json");
     }
 
-    protected void AssertResponseContentCompliesWithSchema<T1>()
+    protected void AssertResponseContentCompliesWithSchema()
     {
-        JsonValidators.ValidateJsonSchema<ResponseContent<T1>>(_response.RawContent!, out var errors)
-            .Should().BeTrue($"Response content does not comply with the {typeof(T1).FullName} schema: {string.Join(", ", errors)}");
+        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(_response.RawContent!, out var errors)
+            .Should().BeTrue($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
     }
 }

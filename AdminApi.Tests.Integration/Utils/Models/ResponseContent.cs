@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace AdminApi.Tests.Integration.Models;
+namespace AdminApi.Tests.Integration.Utils.Models;
 
-public class ListTiersResponse
+public class ResponseContent<T>
 {
-    public List<TierDTO>? Result { get; set; }
+    public T? Result { get; set; }
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Error? Error { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using AdminApi.Tests.Integration.Models;
+using AdminApi.Tests.Integration.Utils.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
@@ -18,9 +19,9 @@ public class TiersApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<ListTiersResponse>> GetTiers(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteTiersRequest<ListTiersResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Tiers").ToString(), requestConfiguration);
+        return await ExecuteTiersRequest<List<TierDTO>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Tiers").ToString(), requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteTiersRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
@@ -36,15 +37,15 @@ public class TiersApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        var response = await _client.ExecuteAsync<T>(request);
+        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
         var result = new HttpResponse<T>
         {
             IsSuccessStatusCode = response.IsSuccessStatusCode,
             StatusCode = response.StatusCode,
-            Data = response.Data,
+            Content = response.Data!,
             ContentType = response.ContentType,
-            Content = response.Content
+            RawContent = response.Content
         };
 
         return result;

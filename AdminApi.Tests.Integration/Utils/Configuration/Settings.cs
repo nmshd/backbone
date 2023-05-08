@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AdminApi.Tests.Integration.Configuration;
+namespace AdminApi.Tests.Integration.Utils.Configuration;
 
 public static class Settings
 {

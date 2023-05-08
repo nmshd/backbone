@@ -1,6 +1,4 @@
-﻿using ConsumerApi.Tests.Integration.Utils.Models;
-
-namespace ConsumerApi.Tests.Integration.Models;
+﻿namespace AdminApi.Tests.Integration.Utils.Models;
 
 public class RequestConfiguration
 {
@@ -12,6 +10,7 @@ public class RequestConfiguration
 
     public void SupplementWith(RequestConfiguration other)
     {
+        AuthenticationParameters = other.AuthenticationParameters;
         Authenticate = other.Authenticate;
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;

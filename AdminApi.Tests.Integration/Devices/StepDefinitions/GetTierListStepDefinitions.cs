@@ -1,34 +1,30 @@
 using AdminApi.Tests.Integration.API;
 using AdminApi.Tests.Integration.Models;
+using AdminApi.Tests.Integration.Utils.Models;
+using AdminApi.Tests.Integration.Utils.StepDefinitions;
 
 namespace AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-public class GetTierListStepDefinitions
+[Scope(Feature = "Get Tier List")]
+public class GetTierListStepDefinitions : BaseStepDefinitions<List<TierDTO>>
 {
-    private readonly ResponseData _responseData;
-    private readonly RequestConfiguration _requestConfiguration;
     private readonly TiersApi _tiersApi;
-    private HttpResponse<ListTiersResponse>? _tiersResponse;
     private List<TierDTO>? _tiersList;
 
-    public GetTierListStepDefinitions(TiersApi tiersApi, ResponseData responseData)
+    public GetTierListStepDefinitions(TiersApi tiersApi) : base(new HttpResponse<List<TierDTO>>())
     {
-        _responseData = responseData;
         _tiersApi = tiersApi;
-        _requestConfiguration = new RequestConfiguration();
     }
-
 
     [When(@"a GET request is sent to the Tiers/ endpoint")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpointAsync()
     {
-        _tiersResponse = await _tiersApi.GetTiers(_requestConfiguration);
-        _tiersResponse.Should().NotBeNull();
-        _tiersResponse!.Data.Should().NotBeNull();
-        _tiersList = _tiersResponse!.Data!.Result;
-
-        _responseData.ResponseStatus = _tiersResponse!.StatusCode;
+        _response = await _tiersApi.GetTiers(_requestConfiguration);
+        _response.Should().NotBeNull();
+        _response!.Content.Should().NotBeNull();
+        _response.StatusCode = _response!.StatusCode;
+        _tiersList = _response!.Content!.Result;
     }
 
     [Then(@"the response contains a paginated list of Tiers")]

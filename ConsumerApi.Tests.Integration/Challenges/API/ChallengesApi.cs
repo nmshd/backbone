@@ -21,14 +21,14 @@ public class ChallengesApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<ChallengeResponse>> CreateChallenge(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<Challenge>> CreateChallenge(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteChallengeRequest<ChallengeResponse>(Method.Post, new PathString(ROUTE_PREFIX).Add("/challenges").ToString(), requestConfiguration);
+        return await ExecuteChallengeRequest<Challenge>(Method.Post, new PathString(ROUTE_PREFIX).Add("/challenges").ToString(), requestConfiguration);
     }
 
-    public async Task<HttpResponse<ChallengeResponse>> GetChallengeById(RequestConfiguration requestConfiguration, string id)
+    public async Task<HttpResponse<Challenge>> GetChallengeById(RequestConfiguration requestConfiguration, string id)
     {
-        return await ExecuteChallengeRequest<ChallengeResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/challenges/{id}").ToString(), requestConfiguration);
+        return await ExecuteChallengeRequest<Challenge>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/challenges/{id}").ToString(), requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteChallengeRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
@@ -50,15 +50,15 @@ public class ChallengesApi
             request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
         }
 
-        var response = await _client.ExecuteAsync<T>(request);
+        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
         var result = new HttpResponse<T>
         {
             IsSuccessStatusCode = response.IsSuccessStatusCode,
             StatusCode = response.StatusCode,
-            Data = response.Data,
+            Content = response.Data!,
             ContentType = response.ContentType,
-            Content = response.Content
+            RawContent = response.Content
         };
 
         return result;

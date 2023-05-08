@@ -1,34 +1,31 @@
 using AdminApi.Tests.Integration.API;
 using AdminApi.Tests.Integration.Models;
+using AdminApi.Tests.Integration.Utils.Models;
+using AdminApi.Tests.Integration.Utils.StepDefinitions;
 
 namespace AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-public class GetIdentityListStepDefinitions
+[Scope(Feature = "Get Identity List")]
+public class GetIdentityListStepDefinitions : BaseStepDefinitions<List<IdentitySummaryDTO>>
 {
-    private readonly ResponseData _responseData;
-    private readonly RequestConfiguration _requestConfiguration;
     private readonly IdentitiesApi _identitiesApi;
-    private HttpResponse<ListIdentitiesResponse>? _identitiesResponse;
     private List<IdentitySummaryDTO>? _identitiesList;
 
-    public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi, ResponseData responseData)
+    public GetIdentityListStepDefinitions(IdentitiesApi identitiesApi) : base(new HttpResponse<List<IdentitySummaryDTO>>())
     {
-        _responseData = responseData;
         _identitiesApi = identitiesApi;
-        _requestConfiguration = new RequestConfiguration();
     }
 
 
     [When(@"a GET request is sent to the Identities/ endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesEndpointAsync()
     {
-        _identitiesResponse = await _identitiesApi.GetIdentities(_requestConfiguration);
-        _identitiesResponse.Should().NotBeNull();
-        _identitiesResponse!.Data.Should().NotBeNull();
-        _identitiesList = _identitiesResponse!.Data!.Result;
-
-        _responseData.ResponseStatus = _identitiesResponse!.StatusCode;
+        _response = await _identitiesApi.GetIdentities(_requestConfiguration);
+        _response.Should().NotBeNull();
+        _response!.Content.Should().NotBeNull();
+        _response.StatusCode = _response!.StatusCode;
+        _identitiesList = _response!.Content!.Result;
     }
 
     [Then(@"the response contains a paginated list of Identities")]

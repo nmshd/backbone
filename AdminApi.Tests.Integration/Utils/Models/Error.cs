@@ -1,4 +1,4 @@
-﻿namespace ConsumerApi.Tests.Integration.Utils.Models;
+﻿namespace AdminApi.Tests.Integration.Utils.Models;
 
 public class Error
 {

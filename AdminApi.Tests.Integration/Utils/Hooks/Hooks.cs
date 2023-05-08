@@ -1,6 +1,6 @@
-using SpecFlowCucumberResultsExporter.Extensions;
+﻿using SpecFlowCucumberResultsExporter.Extensions;
 
-namespace AdminApi.Tests.Integration.Hooks;
+namespace AdminApi.Tests.Integration.Utils.Hooks;
 
 [Binding]
 public sealed class Hooks

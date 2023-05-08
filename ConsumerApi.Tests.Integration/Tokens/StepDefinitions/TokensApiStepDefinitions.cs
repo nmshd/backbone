@@ -1,7 +1,6 @@
 using System.Net;
 using ConsumerApi.Tests.Integration.Tokens.API;
 using ConsumerApi.Tests.Integration.Tokens.Models;
-using ConsumerApi.Tests.Integration.Tokens.Utils;
 using ConsumerApi.Tests.Integration.Utils.Models;
 using ConsumerApi.Tests.Integration.Utils.StepDefinitions;
 using Microsoft.Extensions.Options;
@@ -13,25 +12,25 @@ using static ConsumerApi.Tests.Integration.Utils.Configuration.Settings;
 namespace ConsumerApi.Tests.Integration.Tokens.StepDefinitions;
 
 [Binding]
-public class TokensApiStepDefinitions : BaseStepDefinitions
+[Scope(Feature = "CreateToken")]
+[Scope(Feature = "GetTokenById")]
+public class TokensApiStepDefinitions : BaseStepDefinitions<Token>
 {
     private readonly TokensApi _tokensApi;
     private string _tokenId;
     private string _peerTokenId;
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<Token> _tokenResponse;
     private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi) : base(httpConfiguration)
+    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi) : base(httpConfiguration, new HttpResponse<Token>())
     {
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
         _peerTokenId = string.Empty;
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
-        _tokenResponse = new HttpResponse<Token>();
     }
 
     [Given(@"an own Token t")]
@@ -114,7 +113,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
 
         var response = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
 
-        _tokenResponse.StatusCode = response.StatusCode;
+        _response.StatusCode = response.StatusCode;
 
         var tokens = response.Content!.Result!;
         tokens.Should().NotBeNull();
@@ -144,14 +143,14 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             }
         }
 
-        _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _response = await _tokensApi.CreateToken(requestConfiguration);
     }
 
     [When(@"a POST request is sent to the Tokens endpoint with no request content")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
         _requestConfiguration.Content = null;
-        _tokenResponse = await _tokensApi.CreateToken(_requestConfiguration);
+        _response = await _tokensApi.CreateToken(_requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Tokens/{id} endpoint with ""?(.*?)""?")]
@@ -169,7 +168,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
                 id = "TOKjVPS6h1082AuBVBaR";
                 break;
         }
-        _tokenResponse = await _tokensApi.GetTokenById(_requestConfiguration, id);
+        _response = await _tokensApi.GetTokenById(_requestConfiguration, id);
     }
 
     [When(@"a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
@@ -189,7 +188,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.SupplementWith(_requestConfiguration);
 
         var httpResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _tokenResponse = httpResponse;
+        _response = httpResponse;
     }
 
     [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
@@ -198,7 +197,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var tokenIds = new List<string> { _tokenId, _peerTokenId };
         var response = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
 
-        _tokenResponse.StatusCode = response.StatusCode;
+        _response.StatusCode = response.StatusCode;
 
         var tokens = response.Content!.Result!;
 
@@ -223,53 +222,17 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             .And.BeEquivalentTo(_givenOwnTokens.Select(t => t.Id), options => options.WithoutStrictOrdering());
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
-    {
-        _tokenResponse.Content!.Error.Should().NotBeNull();
-
-        _tokenResponse.Content!.Error!.Code.Should().Be(errorCode);
-    }
-
     [Then(@"the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
-        _tokenResponse.Should().NotBeNull();
-
-        AssertStatusCodeIsSuccess();
-
-        AssertResponseContentTypeIsJson();
-
-        if (_tokenResponse.HttpMethod == Method.Get.ToString())
+        AssertResponseIntegrity();
+        if (_response.HttpMethod == Method.Get.ToString())
         {
             AssertResponseContentCompliesWithSchema<Token>();
         }
-        else if (_tokenResponse.HttpMethod == Method.Post.ToString())
+        else if (_response.HttpMethod == Method.Post.ToString())
         {
             AssertResponseContentCompliesWithSchema<CreateTokenResponse>();
         }
-    }
-
-    [Then(@"the response status code is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        var actualStatusCode = (int)_tokenResponse.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
-    }
-
-    private void AssertStatusCodeIsSuccess()
-    {
-        _tokenResponse.IsSuccessStatusCode.Should().BeTrue();
-    }
-
-    private void AssertResponseContentTypeIsJson()
-    {
-        _tokenResponse.ContentType.Should().Be("application/json");
-    }
-
-    private void AssertResponseContentCompliesWithSchema<T>()
-    {
-        JsonValidators.ValidateJsonSchema<ResponseContent<T>>(_tokenResponse.RawContent!, out var errors)
-            .Should().BeTrue($"Response content does not comply with the {nameof(ResponseContent<T>)} schema: {string.Join(", ", errors)}");
     }
 }

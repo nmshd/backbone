@@ -1,4 +1,6 @@
-﻿namespace ConsumerApi.Tests.Integration.Utils.Configuration;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ConsumerApi.Tests.Integration.Utils.Configuration;
 
 public static class Settings
 {

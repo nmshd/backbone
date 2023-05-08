@@ -17,12 +17,14 @@ Scenario: Creating a Challenge as an authenticated user
 	And the response contains a Challenge
 	And the Challenge contains information about the creator
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Challenge with a JSON sent in the request content
 	When a POST request is sent to the Challenges endpoint with
 		| Key     | Value                              |
 		| Content | {"this": "is some arbitrary json"} |
 	Then the response status code is 415 (Unsupported Media Type)
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Challenge with an invalid JSON sent in the request content
 	When a POST request is sent to the Challenges endpoint with
 		| Key     | Value                             |

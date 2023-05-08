@@ -6,7 +6,7 @@ using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
 using static AdminApi.Tests.Integration.Utils.Configuration.Settings;
 
-namespace AdminApi.Tests.Integration.Support;
+namespace AdminApi.Tests.Integration.Utils.Support;
 
 public static class Dependencies
 {
@@ -27,6 +27,7 @@ public static class Dependencies
         var httpConfig = serviceProvider.GetRequiredService<IOptions<HttpConfiguration>>().Value;
 
         var restClient = new RestClient(httpConfig.BaseUrl);
+
         var identitiesApi = new IdentitiesApi(restClient);
         var tiersApi = new TiersApi(restClient);
 

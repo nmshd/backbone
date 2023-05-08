@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using AdminApi.Tests.Integration.Models;
+using AdminApi.Tests.Integration.Utils.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
@@ -18,9 +19,9 @@ public class IdentitiesApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    public async Task<HttpResponse<ListIdentitiesResponse>> GetIdentities(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<List<IdentitySummaryDTO>>> GetIdentities(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteIdentitiesRequest<ListIdentitiesResponse>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Identities").ToString(), requestConfiguration);
+        return await ExecuteIdentitiesRequest<List<IdentitySummaryDTO>>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/Identities").ToString(), requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteIdentitiesRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
@@ -36,15 +37,15 @@ public class IdentitiesApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        var response = await _client.ExecuteAsync<T>(request);
+        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
         var result = new HttpResponse<T>
         {
             IsSuccessStatusCode = response.IsSuccessStatusCode,
             StatusCode = response.StatusCode,
-            Data = response.Data,
+            Content = response.Data!,
             ContentType = response.ContentType,
-            Content = response.Content
+            RawContent = response.Content
         };
 
         return result;
