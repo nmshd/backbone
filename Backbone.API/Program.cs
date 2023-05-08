@@ -18,6 +18,7 @@ using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Challenges.ConsumerApi;
 using Devices.ConsumerApi;
 using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
 using Files.ConsumerApi;
