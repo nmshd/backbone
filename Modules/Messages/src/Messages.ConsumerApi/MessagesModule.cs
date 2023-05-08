@@ -37,7 +37,7 @@ public class MessagesModule : IModule
 
         services.AddApplication();
 
-        services.AddSqlDatabaseHealthCheck("Messages", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
     
     public void ConfigureEventBus(IEventBus eventBus)

@@ -2,9 +2,9 @@
 using Backbone.Modules.Relationships.Application.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Tooling.Extensions;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -22,6 +22,8 @@ public class RelationshipsModule : IModule
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
+        services.AddApplication();
+
         services.AddPersistence(options =>
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
@@ -35,14 +37,9 @@ public class RelationshipsModule : IModule
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
         });
 
-        services.AddApplication();
-
+        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
-
-    public void Configure(WebApplication app)
-    {
-    }
-
+    
     public void ConfigureEventBus(IEventBus eventBus)
     {
     }

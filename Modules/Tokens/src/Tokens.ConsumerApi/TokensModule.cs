@@ -36,8 +36,8 @@ public class TokensModule : IModule
         });
 
         services.AddApplication();
-        
-        services.AddSqlDatabaseHealthCheck("Tokens", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+
+        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public void ConfigureEventBus(IEventBus eventBus)

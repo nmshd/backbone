@@ -37,7 +37,7 @@ public class FilesModule : IModule
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
         });
 
-        services.AddSqlDatabaseHealthCheck("Files", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
     
     public void ConfigureEventBus(IEventBus eventBus)

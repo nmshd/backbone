@@ -37,7 +37,7 @@ public class SynchronizationModule : IModule
 
         services.AddApplication();
 
-        services.AddSqlDatabaseHealthCheck("Synchronization", parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
     
     public void ConfigureEventBus(IEventBus eventBus)
