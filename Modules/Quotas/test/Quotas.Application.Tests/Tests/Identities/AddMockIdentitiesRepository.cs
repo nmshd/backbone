@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 public class AddMockIdentitiesRepository : IIdentitiesRepository
