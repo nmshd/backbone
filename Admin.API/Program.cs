@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
 using Backbone.Modules.Devices.Application;
 using Backbone.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.API.Extensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

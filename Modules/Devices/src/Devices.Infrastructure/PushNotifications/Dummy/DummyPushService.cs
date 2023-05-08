@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Google.Apis.Logging;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Cms;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 

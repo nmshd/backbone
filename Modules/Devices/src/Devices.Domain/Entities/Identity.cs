@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 

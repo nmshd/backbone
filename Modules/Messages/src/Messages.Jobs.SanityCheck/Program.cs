@@ -1,10 +1,11 @@
 using System.Reflection;
 using Backbone.Modules.Messages.Infrastructure.Persistence;
-using Messages.Jobs.SanityCheck;
+using Enmeshed.Tooling.Extensions;
 using Messages.Jobs.SanityCheck.Extensions;
 using Messages.Jobs.SanityCheck.Infrastructure.DataSource;
 using Messages.Jobs.SanityCheck.Infrastructure.Reporter;
-using Enmeshed.Tooling.Extensions;
+
+namespace Messages.Jobs.SanityCheck;
 
 public class Program
 {

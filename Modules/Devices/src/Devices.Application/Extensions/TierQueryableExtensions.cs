@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Application.Extensions;

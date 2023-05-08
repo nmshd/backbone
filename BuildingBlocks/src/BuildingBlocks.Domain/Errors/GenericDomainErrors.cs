@@ -1,6 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
-
-namespace BuildingBlocks.Domain.Exceptions;
+﻿namespace Enmeshed.BuildingBlocks.Domain.Errors;
 
 public static class GenericDomainErrors
 {
