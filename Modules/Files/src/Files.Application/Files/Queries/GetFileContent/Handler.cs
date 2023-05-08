@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<GetFileContentQuery, GetFileContentRespon
 
     public async Task<GetFileContentResponse> Handle(GetFileContentQuery request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.FindById(request.Id);
+        var file = await _filesRepository.Find(request.Id);
 
         return new GetFileContentResponse()
         {
