@@ -11,5 +11,7 @@ public class FileMetadataEntityTypeConfiguration : IEntityTypeConfiguration<File
         builder.HasIndex(m => m.CreatedBy);
 
         builder.Property(m => m.CipherHash).IsRequired();
+
+        builder.Ignore(m => m.Content);
     }
 }

@@ -45,6 +45,17 @@ public class FileMetadata
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }
 
+    public byte[] Content { get; private set; }
+
+    public void LoadContent(byte[] bytes)
+    {
+        if (Content != null)
+        {
+            throw new InvalidOperationException($"The Content of the file {Id} is already filled. It is not possible to change it.");
+        }
+        Content = bytes;
+    }
+
     public DateTime ExpiresAt { get; set; }
 
     public byte[] EncryptedProperties { get; set; }
