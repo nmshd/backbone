@@ -44,11 +44,11 @@ public class MessagesRepository : IMessagesRepository
 
         return message;
     }
-    
+
     public async Task Add(Message message, CancellationToken cancellationToken)
     {
         _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
-        var add = await _messages.AddAsync(message, cancellationToken);
+        await _messages.AddAsync(message, cancellationToken);
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
