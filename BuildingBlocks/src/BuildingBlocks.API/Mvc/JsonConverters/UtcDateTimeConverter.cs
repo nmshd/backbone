@@ -13,10 +13,7 @@ public class UtcDateTimeConverter : JsonConverter<DateTime>
         _format = format;
     }
 
-    public UtcDateTimeConverter()
-    {
-        _format = DEFAULT_FORMAT;
-    }
+    public UtcDateTimeConverter() : base(DEFAULT_FORMAT) { }
 
     public override bool CanConvert(Type objectType)
     {
