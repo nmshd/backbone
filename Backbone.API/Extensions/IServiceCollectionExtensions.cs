@@ -283,22 +283,4 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-
-    public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : IModule, new()
-    {
-        // Register assembly in MVC so it can find controllers of the module
-        services.AddControllers().ConfigureApplicationPartManager(manager =>
-            manager.ApplicationParts.Add(new AssemblyPart(typeof(TModule).Assembly)));
-
-        var module = new TModule();
-
-        var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
-
-        module.ConfigureServices(services, moduleConfiguration);
-
-        services.AddSingleton<IModule>(module);
-
-        return services;
-    }
 }
