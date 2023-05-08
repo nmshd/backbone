@@ -18,31 +18,22 @@ public class ChallengesRepository : IChallengesRepository
     public async Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken)
     {
         return await _challenges
-            .NotExpired()
             .FirstWithId(id, cancellationToken);
     }
 
-    public async Task<Challenge> Add(Challenge challenge, CancellationToken cancellationToken)
+    public async Task Add(Challenge challenge, CancellationToken cancellationToken)
     {
-        var add = await _challenges.AddAsync(challenge, cancellationToken);
+        await _challenges.AddAsync(challenge, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        return add.Entity;
     }
 
-    public async Task<List<ChallengeId>> FindExpiredChallenges(CancellationToken cancellationToken)
+    public async Task DeleteExpiredChallenges(CancellationToken cancellationToken)
     {
-        var idsOfExpiredChallenges = await _dbContext
-            .Set<Challenge>()
-            .Where(Challenge.CanBeCleanedUp)
-            .Select(c => c.Id)
-            .ToListAsync(cancellationToken);
-
-        return idsOfExpiredChallenges;
+        await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync();
     }
 
-    public async Task DeleteExpiredChallenges(List<ChallengeId> idsOfExpiredChallenges, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Challenge>> FindAll(CancellationToken cancellationToken)
     {
-        _challenges.RemoveRange(idsOfExpiredChallenges.Select(id => new Challenge { Id = id }));
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _challenges.ToListAsync();
     }
 }

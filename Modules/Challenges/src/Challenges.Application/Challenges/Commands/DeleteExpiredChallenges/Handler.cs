@@ -17,25 +17,19 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
     public async Task<DeleteExpiredChallengesResponse> Handle(DeleteExpiredChallengesCommand request, CancellationToken cancellationToken)
     {
-        var idsOfExpiredChallenges = await _challengesRepository.FindExpiredChallenges(cancellationToken);
+        var challenges = await _challengesRepository.FindAll(cancellationToken);
 
-        if (idsOfExpiredChallenges.Count == 0)
-        {
-            _logger.LogInformation("No expired challenges found.");
-            return DeleteExpiredChallengesResponse.NoDeletedChallenges();
-        }
+        var idsOfExpiredChallenges = challenges.Where(x => x.IsExpired()).Select(x => x.Id);
 
-        _logger.LogInformation($"Found {idsOfExpiredChallenges.Count} expired challenges. Beginning to delete...");
-       
         if (cancellationToken.IsCancellationRequested)
         {
             _logger.LogWarning("Cancellation was request. Stopping execution...");
             return DeleteExpiredChallengesResponse.NoDeletedChallenges();
         }
 
-        await _challengesRepository.DeleteExpiredChallenges(idsOfExpiredChallenges, cancellationToken);
+        await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
 
-        _logger.LogInformation($"Deletion of {idsOfExpiredChallenges.Count} challenges successful.");
+        _logger.LogInformation($"Deletion of {idsOfExpiredChallenges.Count()} challenges successful.");
 
         var response = new DeleteExpiredChallengesResponse(idsOfExpiredChallenges);
 

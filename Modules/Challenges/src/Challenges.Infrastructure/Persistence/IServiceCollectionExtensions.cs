@@ -47,7 +47,6 @@ public static class IServiceCollectionExtensions
 
         }
 
-        services.AddScoped<IChallengesDbContext, ChallengesDbContext>();
         services.AddScoped<IChallengesRepository, ChallengesRepository>();
     }
 
