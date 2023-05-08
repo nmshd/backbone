@@ -44,10 +44,7 @@ public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
     {
         _format = format;
     }
-    public NullableUtcDateTimeConverter()
-    {
-        _format = UtcDateTimeConverter.DEFAULT_FORMAT;
-    }
+    public NullableUtcDateTimeConverter() : base(UtcDateTimeConverter.DEFAULT_FORMAT) { }
 
     public override bool CanConvert(Type objectType)
     {
