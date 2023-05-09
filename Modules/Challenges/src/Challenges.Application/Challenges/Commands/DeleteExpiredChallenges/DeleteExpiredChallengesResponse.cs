@@ -4,7 +4,7 @@ public class DeleteExpiredChallengesResponse
 {
     public DeleteExpiredChallengesResponse(int deletedChallenges)
     {
-        DeletedChallenges = deletedChallenges;
+        NumberOfDeletedChallenges = deletedChallenges;
     }
 
     public int NumberOfDeletedChallenges { get; set; }
