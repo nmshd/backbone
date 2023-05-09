@@ -27,13 +27,8 @@ public class ChallengesRepository : IChallengesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteExpiredChallenges(CancellationToken cancellationToken)
+    public async Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken)
     {
-        await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync();
-    }
-
-    public async Task<IEnumerable<Challenge>> FindAll(CancellationToken cancellationToken)
-    {
-        return await _challenges.ToListAsync();
+        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync();
     }
 }

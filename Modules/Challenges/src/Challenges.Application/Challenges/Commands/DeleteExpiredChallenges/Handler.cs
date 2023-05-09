@@ -17,21 +17,17 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
     public async Task<DeleteExpiredChallengesResponse> Handle(DeleteExpiredChallengesCommand request, CancellationToken cancellationToken)
     {
-        var challenges = await _challengesRepository.FindAll(cancellationToken);
-
-        var idsOfExpiredChallenges = challenges.Where(x => x.IsExpired()).Select(x => x.Id);
-
         if (cancellationToken.IsCancellationRequested)
         {
             _logger.LogWarning("Cancellation was request. Stopping execution...");
             return DeleteExpiredChallengesResponse.NoDeletedChallenges();
         }
 
-        await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
+        var deletedChallengesCount = await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
 
-        _logger.LogInformation($"Deletion of {idsOfExpiredChallenges.Count()} challenges successful.");
+        _logger.LogInformation($"Deletion of {deletedChallengesCount} challenges successful.");
 
-        var response = new DeleteExpiredChallengesResponse(idsOfExpiredChallenges);
+        var response = new DeleteExpiredChallengesResponse(deletedChallengesCount);
 
         return response;
     }

@@ -6,9 +6,7 @@ public interface IChallengesRepository
 {
     Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Challenge>> FindAll(CancellationToken cancellationToken);
-
     Task Add(Challenge challenge, CancellationToken cancellationToken);
 
-    Task DeleteExpiredChallenges(CancellationToken cancellationToken);
+    Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken);
 }

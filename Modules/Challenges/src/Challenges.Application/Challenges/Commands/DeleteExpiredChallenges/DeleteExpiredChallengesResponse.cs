@@ -1,18 +1,16 @@
-﻿using Backbone.Modules.Challenges.Domain.Ids;
-
-namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+﻿namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class DeleteExpiredChallengesResponse
 {
-    public DeleteExpiredChallengesResponse(IEnumerable<ChallengeId> deletedChallenges)
+    public DeleteExpiredChallengesResponse(int deletedChallenges)
     {
         DeletedChallenges = deletedChallenges;
     }
 
-    public IEnumerable<ChallengeId> DeletedChallenges { get; set; }
+    public int DeletedChallenges { get; set; }
 
     public static DeleteExpiredChallengesResponse NoDeletedChallenges()
     {
-        return new DeleteExpiredChallengesResponse(Array.Empty<ChallengeId>());
+        return new DeleteExpiredChallengesResponse(0);
     }
 }
