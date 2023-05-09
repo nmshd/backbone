@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -28,27 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Features\Challenges\POST.feature.cs">
-      <DependentUpon>POST.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Challenges\{id}\GET.feature.cs">
-      <DependentUpon>GET.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Tokens\POST.feature.cs">
-      <Visible>true</Visible>
-      <DependentUpon>POST.feature</DependentUpon>
-      <DesignTime>true</DesignTime>
-      <AutoGen>true</AutoGen>
-    </Compile>
-    <Compile Update="Features\Tokens\{id}\GET.feature.cs">
-      <Visible>true</Visible>
-      <DependentUpon>GET.feature</DependentUpon>
-      <DesignTime>true</DesignTime>
-      <AutoGen>true</AutoGen>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

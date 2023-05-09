@@ -31,21 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Features\Identities\GET.feature.cs">
-      <Visible>true</Visible>
-      <DependentUpon>GET.feature</DependentUpon>
-      <DesignTime>true</DesignTime>
-      <AutoGen>true</AutoGen>
-    </Compile>
-    <Compile Update="Features\Tiers\GET.feature.cs">
-      <Visible>true</Visible>
-      <DependentUpon>GET.feature</DependentUpon>
-      <DesignTime>true</DesignTime>
-      <AutoGen>true</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
