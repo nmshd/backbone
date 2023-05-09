@@ -45,7 +45,7 @@ public class FileMetadata
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }
 
-    public byte[] Content { get; private set; }
+    public byte[]? Content { get; private set; }
 
     public void LoadContent(byte[] bytes)
     {
