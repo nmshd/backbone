@@ -1,8 +1,5 @@
-﻿using Backbone.Modules.Files.Application.Files.DTOs;
-using Backbone.Modules.Files.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Files.Application.Extensions;
 
@@ -31,15 +28,5 @@ public static class FileMetadataQueryableExtensions
     public static IQueryable<FileMetadata> WithId(this IQueryable<FileMetadata> query, FileId id)
     {
         return query.Where(e => e.Id == id);
-    }
-
-    public static async Task<FileMetadataDTO> FirstWithId(this IQueryable<FileMetadataDTO> query, FileId id, CancellationToken cancellationToken)
-    {
-        var challenge = await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-
-        if (challenge == null)
-            throw new NotFoundException("File");
-
-        return challenge;
     }
 }
