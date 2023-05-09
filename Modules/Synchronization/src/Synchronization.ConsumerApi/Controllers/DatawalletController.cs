@@ -1,4 +1,4 @@
-﻿using Backbone.API;
+﻿using ConsumerAPI;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;

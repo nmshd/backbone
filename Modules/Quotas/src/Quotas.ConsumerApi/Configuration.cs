@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.API.Configuration;
+namespace ConsumerAPI.Configuration;
 
 public class Configuration
 {

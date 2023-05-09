@@ -1,4 +1,4 @@
-﻿using Backbone.API;
+﻿using ConsumerAPI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;

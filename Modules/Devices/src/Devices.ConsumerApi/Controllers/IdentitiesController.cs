@@ -1,4 +1,4 @@
-﻿using Backbone.API;
+﻿using ConsumerAPI;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Enmeshed.BuildingBlocks.API;

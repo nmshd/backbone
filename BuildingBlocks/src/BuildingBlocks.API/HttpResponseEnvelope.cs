@@ -1,4 +1,4 @@
-﻿namespace Backbone.API;
+﻿namespace ConsumerAPI;
 
 public class HttpResponseEnvelope
 {

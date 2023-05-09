@@ -1,4 +1,4 @@
-﻿using Backbone.API;
+﻿using ConsumerAPI;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;

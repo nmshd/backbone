@@ -5,7 +5,7 @@ Param(
 
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
-$startupProject = "$repoRoot\Backbone.API"
+$startupProject = "$repoRoot\ConsumerAPI"
 $dbContextName = "${moduleName}DbContext"
 
 function RemoveMigration {    
