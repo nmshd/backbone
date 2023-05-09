@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ConsumerAPI.AspNetCoreIdentityCustomizations;
+namespace ConsumerApi.AspNetCoreIdentityCustomizations;
 
 public class CustomLookupNormalizer : ILookupNormalizer
 {

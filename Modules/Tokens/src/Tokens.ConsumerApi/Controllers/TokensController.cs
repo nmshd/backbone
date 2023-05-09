@@ -1,4 +1,4 @@
-﻿using ConsumerAPI;
+﻿using ConsumerApi;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;

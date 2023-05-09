@@ -1,7 +1,7 @@
 ﻿using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace ConsumerAPI.ApplicationInsights.TelemetryInitializers;
+namespace ConsumerApi.ApplicationInsights.TelemetryInitializers;
 
 public class CloudRoleNameTelemetryInitializer : ITelemetryInitializer
 {

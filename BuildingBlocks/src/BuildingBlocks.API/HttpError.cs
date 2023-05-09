@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI;
+namespace ConsumerApi;
 
 //[JsonConverter(typeof(HttpErrorConverter))]
 public class HttpError

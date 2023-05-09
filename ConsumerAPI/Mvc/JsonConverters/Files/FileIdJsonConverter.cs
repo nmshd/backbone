@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI.Mvc.JsonConverters.Files;
+namespace ConsumerApi.Mvc.JsonConverters.Files;
 
 public class FileIdJsonConverter : JsonConverter<FileId>
 {

@@ -3,7 +3,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConsumerAPI.Mvc;
+namespace ConsumerApi.Mvc;
 
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]

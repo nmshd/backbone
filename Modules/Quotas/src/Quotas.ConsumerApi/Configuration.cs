@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ConsumerAPI.Configuration;
+namespace ConsumerApi.Configuration;
 
 public class Configuration
 {

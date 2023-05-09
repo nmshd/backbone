@@ -3,9 +3,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /src
 COPY . .
 
-RUN dotnet restore "ConsumerAPI/ConsumerAPI.csproj"
+RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 
-RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app --no-restore "ConsumerAPI/ConsumerAPI.csproj"
+RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app --no-restore "ConsumerApi/ConsumerApi.csproj"
 
 # Run	
 FROM mcr.microsoft.com/dotnet/aspnet:7.0.3-alpine3.16
@@ -18,4 +18,4 @@ COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
-ENTRYPOINT ["dotnet", "ConsumerAPI.dll"]
+ENTRYPOINT ["dotnet", "ConsumerApi.dll"]

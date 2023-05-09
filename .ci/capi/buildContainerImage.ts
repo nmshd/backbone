@@ -4,4 +4,4 @@ import { getRequiredEnvVar } from "../lib.js";
 
 const tag = getRequiredEnvVar("TAG");
 
-await $`docker build --file ./ConsumerAPI/Dockerfile --tag ghcr.io/nmshd/backbone:${tag} --tag ghcr.io/nmshd/backbone-consumer-api:${tag} .`;
+await $`docker build --file ./ConsumerApi/Dockerfile --tag ghcr.io/nmshd/backbone:${tag} --tag ghcr.io/nmshd/backbone-consumer-api:${tag} .`;

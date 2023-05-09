@@ -1,4 +1,4 @@
-﻿using ConsumerAPI;
+﻿using ConsumerApi;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;

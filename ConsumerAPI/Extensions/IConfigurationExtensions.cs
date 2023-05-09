@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ConsumerAPI.Extensions;
+namespace ConsumerApi.Extensions;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions

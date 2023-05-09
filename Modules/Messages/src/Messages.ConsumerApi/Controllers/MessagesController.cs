@@ -1,4 +1,4 @@
-﻿using ConsumerAPI;
+﻿using ConsumerApi;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Backbone.Modules.Messages.Application.Messages.DTOs;

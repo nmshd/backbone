@@ -1,4 +1,4 @@
-﻿namespace ConsumerAPI;
+﻿namespace ConsumerApi;
 
 public class HttpResponseEnvelope
 {

@@ -1,6 +1,6 @@
 ﻿using Enmeshed.Tooling.Extensions;
 
-namespace ConsumerAPI.Mvc.Middleware;
+namespace ConsumerApi.Mvc.Middleware;
 
 public class RequestResponseTimeMiddleware
 {

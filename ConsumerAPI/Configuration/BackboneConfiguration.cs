@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
 
-namespace ConsumerAPI.Configuration;
+namespace ConsumerApi.Configuration;
 
 public class BackboneConfiguration
 {

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI.Mvc.JsonConverters.Challenges;
+namespace ConsumerApi.Mvc.JsonConverters.Challenges;
 
 public class ChallengeIdJsonConverter : JsonConverter<ChallengeId>
 {

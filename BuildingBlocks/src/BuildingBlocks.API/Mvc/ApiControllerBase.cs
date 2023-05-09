@@ -1,5 +1,5 @@
 ﻿using System.Net.Mime;
-using ConsumerAPI;
+using ConsumerApi;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Http;

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI.Mvc.JsonConverters.Tokens;
+namespace ConsumerApi.Mvc.JsonConverters.Tokens;
 
 public class TokenIdJsonConverter : JsonConverter<TokenId>
 {

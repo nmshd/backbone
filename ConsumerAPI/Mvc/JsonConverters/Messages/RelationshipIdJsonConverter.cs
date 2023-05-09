@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI.Mvc.JsonConverters.Messages;
+namespace ConsumerApi.Mvc.JsonConverters.Messages;
 
 public class RelationshipIdJsonConverter : JsonConverter<RelationshipId>
 {

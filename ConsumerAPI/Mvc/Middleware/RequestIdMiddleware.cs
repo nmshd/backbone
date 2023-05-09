@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ConsumerAPI.Mvc.Middleware;
+namespace ConsumerApi.Mvc.Middleware;
 
 public class RequestIdMiddleware
 {

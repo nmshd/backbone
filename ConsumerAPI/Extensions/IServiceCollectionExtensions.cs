@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using ConsumerAPI.ApplicationInsights.TelemetryInitializers;
-using ConsumerAPI.AspNetCoreIdentityCustomizations;
-using ConsumerAPI.Configuration;
+using ConsumerApi.ApplicationInsights.TelemetryInitializers;
+using ConsumerApi.AspNetCoreIdentityCustomizations;
+using ConsumerApi.Configuration;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -30,7 +30,7 @@ using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 
-namespace ConsumerAPI.Extensions;
+namespace ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {

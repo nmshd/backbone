@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using ConsumerAPI.Mvc;
+using ConsumerApi.Mvc;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -16,7 +16,7 @@ using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace ConsumerAPI.Controllers;
+namespace ConsumerApi.Controllers;
 
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class AuthorizationController : ApiControllerBase

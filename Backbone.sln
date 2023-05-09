@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerAPI", "ConsumerAPI\ConsumerAPI.csproj", "{1236D230-99E8-4352-9D93-94EEDCC0E064}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\ConsumerApi.csproj", "{1236D230-99E8-4352-9D93-94EEDCC0E064}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A326741C-C030-4535-BA73-2B508E337CF0} = {A326741C-C030-4535-BA73-2B508E337CF0}
 	EndProjectSection

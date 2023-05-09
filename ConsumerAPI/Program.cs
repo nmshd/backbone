@@ -1,9 +1,9 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using ConsumerAPI;
-using ConsumerAPI.Configuration;
-using ConsumerAPI.Extensions;
-using ConsumerAPI.Mvc.Middleware;
+using ConsumerApi;
+using ConsumerApi.Configuration;
+using ConsumerApi.Extensions;
+using ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Extensions;

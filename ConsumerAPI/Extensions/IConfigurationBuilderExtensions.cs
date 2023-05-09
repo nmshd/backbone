@@ -1,6 +1,6 @@
 ﻿using Azure.Identity;
 
-namespace ConsumerAPI.Extensions;
+namespace ConsumerApi.Extensions;
 
 public static class IConfigurationBuilderExtensions
 {

@@ -7,7 +7,7 @@ Param(
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$startupProject = "$repoRoot\ConsumerAPI"
+$startupProject = "$repoRoot\ConsumerApi"
 
 function AddMigration {    
     param (

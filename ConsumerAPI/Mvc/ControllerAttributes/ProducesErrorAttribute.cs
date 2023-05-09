@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ConsumerAPI.Mvc.ControllerAttributes;
+namespace ConsumerApi.Mvc.ControllerAttributes;
 
 public class ProducesErrorAttribute : ProducesResponseTypeAttribute
 {

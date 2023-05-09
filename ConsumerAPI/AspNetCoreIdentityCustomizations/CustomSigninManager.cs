@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace ConsumerAPI.AspNetCoreIdentityCustomizations;
+namespace ConsumerApi.AspNetCoreIdentityCustomizations;
 
 public class CustomSigninManager : SignInManager<ApplicationUser>
 {

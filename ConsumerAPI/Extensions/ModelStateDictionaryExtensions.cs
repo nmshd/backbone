@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ConsumerAPI.Extensions;
+namespace ConsumerApi.Extensions;
 
 public static class ModelStateDictionaryExtensions
 {

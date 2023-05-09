@@ -6,7 +6,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsumerAPI;
+namespace ConsumerApi;
 
 public class DevicesDbContextSeed
 {

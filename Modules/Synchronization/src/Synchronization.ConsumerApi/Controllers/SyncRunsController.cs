@@ -1,4 +1,4 @@
-﻿using ConsumerAPI;
+﻿using ConsumerApi;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;

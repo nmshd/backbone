@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsumerAPI.AspNetCoreIdentityCustomizations;
+namespace ConsumerApi.AspNetCoreIdentityCustomizations;
 
 public class CustomUserStore : UserStore<ApplicationUser>
 {

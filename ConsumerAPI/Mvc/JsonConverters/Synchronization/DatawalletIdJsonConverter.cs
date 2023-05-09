@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerAPI.Mvc.JsonConverters.Synchronization;
+namespace ConsumerApi.Mvc.JsonConverters.Synchronization;
 
 public class DatawalletIdJsonConverter : JsonConverter<DatawalletId>
 {

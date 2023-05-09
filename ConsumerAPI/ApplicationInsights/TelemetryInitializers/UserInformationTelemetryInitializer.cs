@@ -3,7 +3,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace ConsumerAPI.ApplicationInsights.TelemetryInitializers;
+namespace ConsumerApi.ApplicationInsights.TelemetryInitializers;
 
 public class UserInformationTelemetryInitializer : ITelemetryInitializer
 {

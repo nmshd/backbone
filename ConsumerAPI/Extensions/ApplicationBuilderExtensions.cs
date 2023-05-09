@@ -1,7 +1,7 @@
-﻿using ConsumerAPI.Mvc.Middleware;
+﻿using ConsumerApi.Mvc.Middleware;
 using Microsoft.IdentityModel.Logging;
 
-namespace ConsumerAPI.Extensions;
+namespace ConsumerApi.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
