@@ -28,6 +28,15 @@ public class FilesRepository : IFilesRepository
         _blobOptions = blobOptions.Value;
     }
 
+    public async Task Add(FileMetadata fileMetadata, byte[] body, CancellationToken cancellationToken)
+    {
+        _blobStorage.Add(_blobOptions.RootFolder, fileMetadata.Id, body);
+        await _files.AddAsync(fileMetadata, cancellationToken);
+        await _blobStorage.SaveAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+    }
+
     public async Task<FileMetadata> Find(FileId fileId, bool track = false, bool fillBody = true)
     {
         var file = (track ? _files : _readOnlyFiles)

@@ -8,4 +8,5 @@ public interface IFilesRepository
 {
     Task<FileMetadata> Find(FileId id, bool track = false, bool fillContent = true);
     Task<DbPaginationResult<FileMetadata>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter);
+    Task Add(FileMetadata fileMetadata, byte[] body, CancellationToken cancellationToken);
 }
