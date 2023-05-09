@@ -31,6 +31,12 @@ public class BaseApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
+        if (requestConfiguration.Authenticate)
+        {
+            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
+            request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
+        }
+
         var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
         var result = new HttpResponse<T>
