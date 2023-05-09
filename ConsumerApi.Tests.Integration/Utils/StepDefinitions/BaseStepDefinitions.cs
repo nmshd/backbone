@@ -1,7 +1,7 @@
-﻿using ConsumerApi.Tests.Integration.Utils.Models;
+﻿using ConsumerApi.Tests.Integration.Utils.Configuration;
+using ConsumerApi.Tests.Integration.Utils.Models;
 using ConsumerApi.Tests.Integration.Utils.Support;
 using Microsoft.Extensions.Options;
-using static ConsumerApi.Tests.Integration.Utils.Configuration.Settings;
 
 namespace ConsumerApi.Tests.Integration.Utils.StepDefinitions;
 

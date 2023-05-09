@@ -31,15 +31,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Devices\Features\IdentityList.feature.cs">
+    <Compile Update="Features\Identities\GET.feature.cs">
       <Visible>true</Visible>
-      <DependentUpon>%(Filename)</DependentUpon>
+      <DependentUpon>GET.feature</DependentUpon>
       <DesignTime>true</DesignTime>
       <AutoGen>true</AutoGen>
     </Compile>
-    <Compile Update="Devices\Features\TierList.feature.cs">
+    <Compile Update="Features\Tiers\GET.feature.cs">
       <Visible>true</Visible>
-      <DependentUpon>%(Filename)</DependentUpon>
+      <DependentUpon>GET.feature</DependentUpon>
       <DesignTime>true</DesignTime>
       <AutoGen>true</AutoGen>
     </Compile>
@@ -48,14 +48,6 @@
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Devices\Features\IdentityList.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </None>
-    <None Update="Devices\Features\TierList.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </None>
     <None Update="specflow.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

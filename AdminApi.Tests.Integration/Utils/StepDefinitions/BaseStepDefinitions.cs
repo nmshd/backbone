@@ -16,32 +16,32 @@ public class BaseStepDefinitions<T>
     }
 
     [Given(@"the user is authenticated")]
-    protected void GivenTheUserIsAuthenticated()
+    public void GivenTheUserIsAuthenticated()
     {
         _requestConfiguration.Authenticate = true;
     }
 
     [Given(@"the user is unauthenticated")]
-    protected void GivenTheUserIsUnauthenticated()
+    public void GivenTheUserIsUnauthenticated()
     {
         _requestConfiguration.Authenticate = false;
     }
 
     [Given(@"the Accept header is '([^']*)'")]
-    protected void GivenTheAcceptHeaderIs(string acceptHeader)
+    public void GivenTheAcceptHeaderIs(string acceptHeader)
     {
         _requestConfiguration.AcceptHeader = acceptHeader;
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
-    protected void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         var actualStatusCode = (int)_response.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
-    protected void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         _response.Content!.Error.Should().NotBeNull();
         _response.Content!.Error!.Code.Should().Be(errorCode);

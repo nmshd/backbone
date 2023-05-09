@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Challenges\Features\CreateChallenge.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Challenges\Features\GetChallengeById.feature.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
@@ -36,21 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Challenges\Features\CreateChallenge.feature.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
+    <Compile Update="Features\Challenges\POST.feature.cs">
+      <DependentUpon>POST.feature</DependentUpon>
     </Compile>
-    <Compile Update="Challenges\Features\GetChallengeById.feature.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
+    <Compile Update="Features\Challenges\{id}\GET.feature.cs">
+      <DependentUpon>GET.feature</DependentUpon>
     </Compile>
-    <Compile Update="Tokens\Features\CreateToken.feature.cs">
+    <Compile Update="Features\Tokens\POST.feature.cs">
       <Visible>true</Visible>
-      <DependentUpon>%(Filename)</DependentUpon>
+      <DependentUpon>POST.feature</DependentUpon>
       <DesignTime>true</DesignTime>
       <AutoGen>true</AutoGen>
     </Compile>
-    <Compile Update="Tokens\Features\GetTokenById.feature.cs">
+    <Compile Update="Features\Tokens\{id}\GET.feature.cs">
       <Visible>true</Visible>
-      <DependentUpon>%(Filename)</DependentUpon>
+      <DependentUpon>GET.feature</DependentUpon>
       <DesignTime>true</DesignTime>
       <AutoGen>true</AutoGen>
     </Compile>
@@ -63,22 +58,14 @@
     <None Update="specflow.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Tokens\Features\CreateToken.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </None>
-    <None Update="Tokens\Features\GetTokenById.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Challenges\Features\CreateChallenge.feature">
+    <SpecFlowFeatureFiles Update="Features\Challenges\POST.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Challenges\Features\GetChallengeById.feature">
+    <SpecFlowFeatureFiles Update="Features\Challenges\{id}\GET.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

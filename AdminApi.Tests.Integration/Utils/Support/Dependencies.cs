@@ -1,10 +1,10 @@
 ﻿using AdminApi.Tests.Integration.API;
+using AdminApi.Tests.Integration.Utils.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
-using static AdminApi.Tests.Integration.Utils.Configuration.Settings;
 
 namespace AdminApi.Tests.Integration.Utils.Support;
 

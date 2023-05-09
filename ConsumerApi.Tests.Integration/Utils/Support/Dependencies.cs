@@ -1,11 +1,10 @@
 ﻿using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Tokens.API;
+using ConsumerApi.Tests.Integration.Utils.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
-using static ConsumerApi.Tests.Integration.Utils.Configuration.Settings;
 
 namespace ConsumerApi.Tests.Integration.Utils.Support;
 
