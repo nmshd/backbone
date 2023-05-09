@@ -7,7 +7,7 @@ public class DeleteExpiredChallengesResponse
         DeletedChallenges = deletedChallenges;
     }
 
-    public int DeletedChallenges { get; set; }
+    public int NumberOfDeletedChallenges { get; set; }
 
     public static DeleteExpiredChallengesResponse NoDeletedChallenges()
     {
