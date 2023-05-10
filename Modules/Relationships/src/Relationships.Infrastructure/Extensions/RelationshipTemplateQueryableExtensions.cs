@@ -5,7 +5,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipTemplateQueryableExtensions
 {

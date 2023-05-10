@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Application.Extensions;
-using Backbone.Modules.Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.TestDoubles.Fakes;

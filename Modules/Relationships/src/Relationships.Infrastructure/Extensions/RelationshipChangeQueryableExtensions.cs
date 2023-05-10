@@ -3,7 +3,7 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipChangeQueryableExtensions
 {

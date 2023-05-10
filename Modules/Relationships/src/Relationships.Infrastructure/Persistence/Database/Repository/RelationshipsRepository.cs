@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Relationships.Application.Extensions;
-using Backbone.Modules.Relationships.Application.Infrastructure;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;

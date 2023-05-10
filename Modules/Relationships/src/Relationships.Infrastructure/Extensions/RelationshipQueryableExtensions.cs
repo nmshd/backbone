@@ -5,7 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipQueryableExtensions
 {
