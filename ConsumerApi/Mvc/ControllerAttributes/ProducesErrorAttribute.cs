@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Enmeshed.BuildingBlocks.API;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ConsumerApi.Mvc.ControllerAttributes;
 

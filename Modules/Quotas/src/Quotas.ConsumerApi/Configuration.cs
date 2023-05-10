@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ConsumerApi.Configuration;
+namespace Quotas.ConsumerApi;
 
 public class Configuration
 {

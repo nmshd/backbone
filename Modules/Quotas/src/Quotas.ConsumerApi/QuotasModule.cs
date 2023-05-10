@@ -1,5 +1,4 @@
-﻿using ConsumerApi.Configuration;
-using Backbone.Modules.Quotas.Application;
+﻿using Backbone.Modules.Quotas.Application;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence;
 using Enmeshed.BuildingBlocks.API;

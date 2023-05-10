@@ -1,4 +1,4 @@
-﻿namespace ConsumerApi;
+﻿namespace Enmeshed.BuildingBlocks.API;
 
 public class HttpResponseEnvelope
 {
