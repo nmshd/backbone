@@ -1,5 +1,4 @@
 ﻿using ConsumerApi.Tests.Integration.Models;
-using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 namespace ConsumerApi.Tests.Integration.API;
@@ -20,7 +19,7 @@ public class TokensApi : BaseApi
 
     public async Task<HttpResponse<IEnumerable<Token>>> GetTokensByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
     {
-        var endpoint = new PathString(ROUTE_PREFIX).Add("/tokens").ToString();
+        var endpoint = "/tokens";
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
         endpoint = $"{endpoint}?{queryString}";
 

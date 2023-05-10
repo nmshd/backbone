@@ -20,7 +20,6 @@ public class TiersStepDefinitions : BaseStepDefinitions<List<TierDTO>>
         _response = await _tiersApi.GetTiers(_requestConfiguration);
         _response.Should().NotBeNull();
         _response!.Content.Should().NotBeNull();
-        _response.StatusCode = _response!.StatusCode;
     }
 
     [Then(@"the response contains a paginated list of Tiers")]

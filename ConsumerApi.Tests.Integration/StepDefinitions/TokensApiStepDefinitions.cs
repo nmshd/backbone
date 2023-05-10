@@ -51,7 +51,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions<Token>
         var token = httpResponse.Content!.Result!;
 
         _tokenId = token.Id;
-        _tokenId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
+        _tokenId.Should().NotBeNullOrEmpty();
     }
 
     [Given(@"a peer Token p")]
@@ -76,7 +76,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions<Token>
         var token = httpResponse.Content!.Result!;
 
         _peerTokenId = token.Id!;
-        _peerTokenId.Should().NotBeNullOrEmpty(because: "Required value for 'Id' is missing.");
+        _peerTokenId.Should().NotBeNullOrEmpty();
     }
 
     [Given(@"the user created multiple Tokens")]
@@ -111,12 +111,11 @@ public class TokensApiStepDefinitions : BaseStepDefinitions<Token>
 
         var response = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
 
-        _response.StatusCode = response.StatusCode;
-
         var tokens = response.Content!.Result!;
         tokens.Should().NotBeNull();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
 
+        _response.StatusCode = response.StatusCode;
         _responseTokens.AddRange(tokens);
     }
 
@@ -185,8 +184,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions<Token>
 
         requestConfiguration.SupplementWith(_requestConfiguration);
 
-        var httpResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _response = httpResponse;
+        _response = await _tokensApi.CreateToken(requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]

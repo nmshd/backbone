@@ -21,7 +21,7 @@ public class BaseApi
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).ToString(), Method.Get);
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, Method.Get);
 
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
@@ -48,7 +48,7 @@ public class BaseApi
 
     protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).ToString(), Method.Post);
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, Method.Post);
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.AddBody(requestConfiguration.Content);
