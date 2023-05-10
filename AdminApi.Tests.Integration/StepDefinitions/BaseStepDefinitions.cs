@@ -6,10 +6,10 @@ namespace AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 public class BaseStepDefinitions<T>
 {
-    protected readonly RequestConfiguration _requestConfiguration;
-    protected HttpResponse<T> _response;
+    public readonly RequestConfiguration _requestConfiguration;
+    public HttpResponse<T> _response;
 
-    protected BaseStepDefinitions(HttpResponse<T> response)
+    public BaseStepDefinitions(HttpResponse<T> response)
     {
         _response = response;
         _requestConfiguration = new RequestConfiguration();
@@ -47,7 +47,7 @@ public class BaseStepDefinitions<T>
         _response.Content!.Error!.Code.Should().Be(errorCode);
     }
 
-    protected void AssertResponseIntegrity()
+    public void AssertResponseIntegrity()
     {
         _response.Should().NotBeNull();
 
@@ -56,17 +56,17 @@ public class BaseStepDefinitions<T>
         AssertResponseContentCompliesWithSchema();
     }
 
-    protected void AssertStatusCodeIsSuccess()
+    public void AssertStatusCodeIsSuccess()
     {
         _response.IsSuccessStatusCode.Should().BeTrue();
     }
 
-    protected void AssertResponseContentTypeIsJson()
+    public void AssertResponseContentTypeIsJson()
     {
         _response.ContentType.Should().Be("application/json");
     }
 
-    protected void AssertResponseContentCompliesWithSchema()
+    public void AssertResponseContentCompliesWithSchema()
     {
         JsonValidators.ValidateJsonSchema<ResponseContent<T>>(_response.RawContent!, out var errors)
             .Should().BeTrue($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
