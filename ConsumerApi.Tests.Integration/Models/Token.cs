@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 
 namespace ConsumerApi.Tests.Integration.Models;
+
 public class Token
 {
     [Required]

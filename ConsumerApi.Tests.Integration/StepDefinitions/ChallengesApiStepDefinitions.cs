@@ -1,8 +1,6 @@
 using ConsumerApi.Tests.Integration.API;
+using ConsumerApi.Tests.Integration.Configuration;
 using ConsumerApi.Tests.Integration.Models;
-using ConsumerApi.Tests.Integration.Utils.Configuration;
-using ConsumerApi.Tests.Integration.Utils.Models;
-using ConsumerApi.Tests.Integration.Utils.StepDefinitions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
 

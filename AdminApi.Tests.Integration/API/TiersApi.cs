@@ -1,6 +1,4 @@
 ﻿using AdminApi.Tests.Integration.Models;
-using AdminApi.Tests.Integration.Utils.API;
-using AdminApi.Tests.Integration.Utils.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 

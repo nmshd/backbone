@@ -1,6 +1,4 @@
 ﻿using ConsumerApi.Tests.Integration.Models;
-using ConsumerApi.Tests.Integration.Utils.API;
-using ConsumerApi.Tests.Integration.Utils.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 

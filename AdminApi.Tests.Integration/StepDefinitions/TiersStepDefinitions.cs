@@ -1,7 +1,5 @@
 using AdminApi.Tests.Integration.API;
 using AdminApi.Tests.Integration.Models;
-using AdminApi.Tests.Integration.Utils.Models;
-using AdminApi.Tests.Integration.Utils.StepDefinitions;
 
 namespace AdminApi.Tests.Integration.StepDefinitions;
 
