@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
@@ -9,13 +9,13 @@ namespace Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChal
 
 public class Handler : IRequestHandler<CreateChallengeCommand, ChallengeDTO>
 {
-    private readonly IChallengesDbContext _dbContext;
+    private readonly IChallengesRepository _challengesRepository;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IChallengesDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(IChallengesRepository challengesRepository, IUserContext userContext, IMapper mapper)
     {
-        _dbContext = dbContext;
+        _challengesRepository = challengesRepository;
         _userContext = userContext;
         _mapper = mapper;
     }
@@ -23,8 +23,11 @@ public class Handler : IRequestHandler<CreateChallengeCommand, ChallengeDTO>
     public async Task<ChallengeDTO> Handle(CreateChallengeCommand request, CancellationToken cancellationToken)
     {
         var challenge = new Challenge(_userContext.GetAddressOrNull(), _userContext.GetDeviceIdOrNull());
-        await _dbContext.Set<Challenge>().AddAsync(challenge, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return _mapper.Map<ChallengeDTO>(challenge);
+
+        await _challengesRepository.Add(challenge, cancellationToken);
+
+        var response = _mapper.Map<ChallengeDTO>(challenge);
+
+        return response;
     }
 }
