@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Tests;
-using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
+﻿using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;

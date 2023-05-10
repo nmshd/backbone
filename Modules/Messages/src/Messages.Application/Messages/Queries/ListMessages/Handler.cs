@@ -2,7 +2,6 @@
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
@@ -28,7 +27,9 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
         foreach (var message in dbPaginationResult.ItemsOnPage)
         {
             var recipient = message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress());
-            recipient.FetchedMessage(_userContext.GetDeviceId());
+
+            if(recipient != null)
+                recipient.FetchedMessage(_userContext.GetDeviceId());
         }
         await _messagesRepository.Update(dbPaginationResult.ItemsOnPage);
 

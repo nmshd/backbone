@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Entities;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IndividualQuota : Quota
 { }

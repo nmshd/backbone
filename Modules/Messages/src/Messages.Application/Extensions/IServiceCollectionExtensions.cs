@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using Backbone.Modules.Messages.Application.AutoMapper;
-using Backbone.Modules.Messages.Application.Messages;
+﻿using Backbone.Modules.Messages.Application.AutoMapper;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;

@@ -5,7 +5,6 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 public class Handler : IRequestHandler<SeedTestUsersCommand>
