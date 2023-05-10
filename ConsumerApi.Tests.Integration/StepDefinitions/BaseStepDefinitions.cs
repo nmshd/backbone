@@ -8,8 +8,8 @@ namespace ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 public class BaseStepDefinitions<T>
 {
-    public readonly RequestConfiguration _requestConfiguration;
-    public HttpResponse<T> _response;
+    protected readonly RequestConfiguration _requestConfiguration;
+    protected HttpResponse<T> _response;
 
     public BaseStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpResponse<T> response)
     {
