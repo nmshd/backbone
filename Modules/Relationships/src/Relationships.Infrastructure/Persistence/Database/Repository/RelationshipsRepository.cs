@@ -120,12 +120,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<int> CountNumberOfRelationshipsOfTemplate(RelationshipTemplateId relationshipTemplateId, CancellationToken cancellationToken)
-    {
-        return await _readOnlyRelationships
-                    .CountAsync(r => r.RelationshipTemplateId == relationshipTemplateId, cancellationToken);
-    }
-
     public async Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken)
     {
         return await _readOnlyRelationships
