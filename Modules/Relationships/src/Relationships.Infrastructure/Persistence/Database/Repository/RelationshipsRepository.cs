@@ -121,12 +121,10 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
 
-    public async Task<RelationshipId> Add(Relationship relationship, CancellationToken cancellationToken)
+    public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {
-        var add = await _relationships.AddAsync(relationship, cancellationToken);
+        await _relationships.AddAsync(relationship, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return add.Entity.Id;
     }
 
     public async Task<int> CountNumberOfRelationshipsOfTemplate(RelationshipTemplateId relationshipTemplateId, CancellationToken cancellationToken)

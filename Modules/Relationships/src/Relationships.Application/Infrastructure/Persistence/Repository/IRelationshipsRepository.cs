@@ -13,7 +13,7 @@ public interface IRelationshipsRepository
     Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
     Task<Relationship> FindRelationshipPlain(RelationshipId id, CancellationToken cancellationToken);
     Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
-    Task<RelationshipId> Add(Relationship relationship, CancellationToken cancellationToken);
+    Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
 
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);

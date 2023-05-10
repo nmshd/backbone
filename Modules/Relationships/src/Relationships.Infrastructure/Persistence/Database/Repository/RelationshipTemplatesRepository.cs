@@ -29,14 +29,12 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         _blobOptions = blobOptions.Value;
     }
 
-    public async Task<RelationshipTemplateId> Add(RelationshipTemplate template, CancellationToken cancellationToken)
+    public async Task Add(RelationshipTemplate template, CancellationToken cancellationToken)
     {
         await SaveContentOfTemplate(template);
 
-        var add = await _templates.AddAsync(template, cancellationToken);
+        await _templates.AddAsync(template, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return add.Entity.Id;
     }
 
     public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
