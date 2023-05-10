@@ -49,7 +49,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
     private async Task ReadTemplateFromDb()
     {
-        _template = await _relationshipTemplatesRepository.FindRelationshipTemplate(_request.RelationshipTemplateId, _userContext.GetAddress(), _cancellationToken, track: true, fillContent: false);
+        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _userContext.GetAddress(), _cancellationToken, track: true, fillContent: false);
     }
 
     private async Task EnsureRelationshipCanBeEstablished()

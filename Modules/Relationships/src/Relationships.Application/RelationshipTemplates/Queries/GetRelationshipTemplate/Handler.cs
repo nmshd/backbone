@@ -21,11 +21,11 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
 
     public async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
     {
-        var template = await _relationshipTemplatesRepository.FindRelationshipTemplate(request.Id, _userContext.GetAddress(), cancellationToken, track: true);
+        var template = await _relationshipTemplatesRepository.Find(request.Id, _userContext.GetAddress(), cancellationToken, track: true);
 
         template.AllocateFor(_userContext.GetAddress(), _userContext.GetDeviceId());
 
-        await _relationshipTemplatesRepository.UpdateRelationshipTemplate(template);
+        await _relationshipTemplatesRepository.Update(template);
 
         return _mapper.Map<RelationshipTemplateDTO>(template);
     }

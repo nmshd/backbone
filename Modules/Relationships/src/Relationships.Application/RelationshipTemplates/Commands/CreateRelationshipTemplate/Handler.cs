@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.ExpiresAt,
             request.Content);
 
-        await _relationshipTemplatesRepository.AddRelationshipTemplate(template, cancellationToken);
+        await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
     }

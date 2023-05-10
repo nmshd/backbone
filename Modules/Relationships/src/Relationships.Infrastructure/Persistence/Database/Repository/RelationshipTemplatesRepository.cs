@@ -29,7 +29,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         _blobOptions = blobOptions.Value;
     }
 
-    public async Task<RelationshipTemplateId> AddRelationshipTemplate(RelationshipTemplate template, CancellationToken cancellationToken)
+    public async Task<RelationshipTemplateId> Add(RelationshipTemplate template, CancellationToken cancellationToken)
     {
         await SaveContentOfTemplate(template);
 
@@ -39,7 +39,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return add.Entity.Id;
     }
 
-    public async Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
                     .Include(r => r.Allocations)
@@ -70,7 +70,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
-    public async Task UpdateRelationshipTemplate(RelationshipTemplate template)
+    public async Task Update(RelationshipTemplate template)
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();

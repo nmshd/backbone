@@ -8,7 +8,7 @@ namespace Backbone.Modules.Relationships.Application.Infrastructure.Persistence.
 public interface IRelationshipTemplatesRepository
 {
     Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false);
-    Task<RelationshipTemplate> FindRelationshipTemplate(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
-    Task<RelationshipTemplateId> AddRelationshipTemplate(RelationshipTemplate template, CancellationToken cancellationToken);
-    Task UpdateRelationshipTemplate(RelationshipTemplate template);
+    Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
+    Task<RelationshipTemplateId> Add(RelationshipTemplate template, CancellationToken cancellationToken);
+    Task Update(RelationshipTemplate template);
 }
