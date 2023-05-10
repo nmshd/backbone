@@ -10,12 +10,12 @@ public class TokensApi : BaseApi
 
     public async Task<HttpResponse<Token>> CreateToken(RequestConfiguration requestConfiguration)
     {
-        return await ExecuteRequest<Token>(Method.Post, new PathString(ROUTE_PREFIX).Add("/tokens").ToString(), requestConfiguration);
+        return await Post<Token>("/tokens", requestConfiguration);
     }
 
     public async Task<HttpResponse<Token>> GetTokenById(RequestConfiguration requestConfiguration, string id)
     {
-        return await ExecuteRequest<Token>(Method.Get, new PathString(ROUTE_PREFIX).Add($"/tokens/{id}").ToString(), requestConfiguration);
+        return await Get<Token>($"/tokens/{id}", requestConfiguration);
     }
 
     public async Task<HttpResponse<IEnumerable<Token>>> GetTokensByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
@@ -24,6 +24,6 @@ public class TokensApi : BaseApi
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
         endpoint = $"{endpoint}?{queryString}";
 
-        return await ExecuteRequest<IEnumerable<Token>>(Method.Get, endpoint, requestConfiguration);
+        return await Get<IEnumerable<Token>>(endpoint, requestConfiguration);
     }
 }

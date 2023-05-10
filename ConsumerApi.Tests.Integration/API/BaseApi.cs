@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using ConsumerApi.Tests.Integration.Models;
+using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 namespace ConsumerApi.Tests.Integration.API;
@@ -18,9 +19,36 @@ public class BaseApi
                 (sender, cert, chain, sslPolicyErrors) => true;
     }
 
-    protected async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(endpoint, method);
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).ToString(), Method.Get);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
+            request.AddHeader("Accept", requestConfiguration.AcceptHeader);
+
+        if (requestConfiguration.Authenticate)
+        {
+            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
+            request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
+        }
+
+        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
+
+        var result = new HttpResponse<T>
+        {
+            IsSuccessStatusCode = response.IsSuccessStatusCode,
+            StatusCode = response.StatusCode,
+            Content = response.Data!,
+            ContentType = response.ContentType,
+            RawContent = response.Content
+        };
+
+        return result;
+    }
+
+    protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).ToString(), Method.Post);
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.AddBody(requestConfiguration.Content);
