@@ -56,7 +56,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(changes.ItemsOnPage.Select(FillContentOfChange).ToArray());
+        await FillContentOfChanges(changes.ItemsOnPage);
 
         return changes;
     }
@@ -109,7 +109,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
         var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(relationships.ItemsOnPage.SelectMany(r => r.Changes).Select(FillContentOfChange).ToArray());
+        await FillContentOfChanges(relationships.ItemsOnPage.SelectMany(r => r.Changes));
 
         return relationships;
     }

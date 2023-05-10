@@ -63,7 +63,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
-        await Task.WhenAll(templates.ItemsOnPage.Select(FillContentOfTemplate).ToArray());
+        await FillContentOfTemplates(templates.ItemsOnPage);
 
         return templates;
     }
