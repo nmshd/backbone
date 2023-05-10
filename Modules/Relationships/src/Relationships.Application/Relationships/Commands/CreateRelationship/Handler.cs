@@ -106,9 +106,4 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     {
         return _mapper.Map<CreateRelationshipResponse>(_relationship);
     }
-
-    private async Task<int> GetNumberOfRelationshipsOfTemplate(RelationshipTemplateId id)
-    {
-        return await _relationshipsRepository.CountNumberOfRelationshipsOfTemplate(id, _cancellationToken);
-    }
 }
