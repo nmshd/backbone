@@ -76,13 +76,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<Relationship> FindRelationshipPlain(RelationshipId id, CancellationToken cancellationToken)
-    {
-        return await _relationships
-                            .IncludeAll(_dbContext)
-                            .FirstWithId(id, cancellationToken);
-    }
-
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var change = await (track ? _changes : _readOnlyChanges)

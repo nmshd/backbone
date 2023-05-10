@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<RevokeRelationshipChangeRequestCommand, R
 
     public async Task<RevokeRelationshipChangeRequestResponse> Handle(RevokeRelationshipChangeRequestCommand changeRequest, CancellationToken cancellationToken)
     {
-        var relationship = await _relationshipsRepository.FindRelationshipPlain(changeRequest.Id, cancellationToken);
+        var relationship = await _relationshipsRepository.FindRelationship(changeRequest.Id, _userContext.GetAddress(), cancellationToken, track: true, fillContent: false);
 
         var change = relationship.RevokeChange(changeRequest.ChangeId, _userContext.GetAddress(), _userContext.GetDeviceId(), changeRequest.ResponseContent);
 
