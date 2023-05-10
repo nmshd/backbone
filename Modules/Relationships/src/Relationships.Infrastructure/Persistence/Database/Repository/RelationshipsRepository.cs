@@ -135,10 +135,10 @@ public class RelationshipsRepository : IRelationshipsRepository
                     .CountAsync(r => r.RelationshipTemplateId == relationshipTemplateId, cancellationToken);
     }
 
-    public async Task<bool> RelationshipBetweenActiveIdentityAndTemplateOwnerExists(IdentityAddress identityAddress, IdentityAddress createdBy, CancellationToken cancellationToken)
+    public async Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken)
     {
         return await _readOnlyRelationships
-                    .BetweenParticipants(identityAddress, createdBy)
+                    .BetweenParticipants(identityAddressA, identityAddressB)
                     .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected && r.Status != RelationshipStatus.Revoked)
                     .AnyAsync(cancellationToken);
     }

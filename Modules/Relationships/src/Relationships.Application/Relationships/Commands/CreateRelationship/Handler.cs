@@ -66,7 +66,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
     private async Task EnsureThereIsNoExistingRelationshipBetweenActiveIdentityAndTemplateOwner()
     {
-        var relationshipExists = await _relationshipsRepository.RelationshipBetweenActiveIdentityAndTemplateOwnerExists(_userContext.GetAddress(), _template.CreatedBy, _cancellationToken);
+        var relationshipExists = await _relationshipsRepository.RelationshipBetweenTwoIdentitiesExists(_userContext.GetAddress(), _template.CreatedBy, _cancellationToken);
 
         if (relationshipExists)
             throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(_template.CreatedBy));

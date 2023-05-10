@@ -16,7 +16,7 @@ public interface IRelationshipsRepository
     Task<RelationshipId> Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
 
-    Task<bool> RelationshipBetweenActiveIdentityAndTemplateOwnerExists(IdentityAddress identityAddress, IdentityAddress createdBy, CancellationToken cancellationToken);
+    Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task<int> CountNumberOfRelationshipsOfTemplate(RelationshipTemplateId relationshipTemplateId, CancellationToken cancellationToken);
 
     Task SaveContentOfChangeRequest(RelationshipChangeRequest changeRequest);
