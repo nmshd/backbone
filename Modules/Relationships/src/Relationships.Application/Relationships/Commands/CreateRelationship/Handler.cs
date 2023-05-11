@@ -79,9 +79,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             _request.Content);
-
-        await _relationshipsRepository.SaveContentOfChangeRequest(_relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Request);
-
+        
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
 
     }
