@@ -6,7 +6,7 @@ Param(
 
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
-$startupProject = "$repoRoot\Backbone.API"
+$startupProject = "$repoRoot\ConsumerApi"
 $dbContextName = "${moduleName}DbContext"
 
 function UpdateLocalDatabase {    

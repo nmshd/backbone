@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Messages.Application;
+﻿using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
