@@ -22,22 +22,22 @@ public class TiersController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListTiersResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTiersAsync([FromQuery] PaginationFilter paginationFilter)
+    public async Task<IActionResult> GetTiersAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var tiers = await _mediator.Send(new ListTiersQuery(paginationFilter));
+        var tiers = await _mediator.Send(new ListTiersQuery(paginationFilter), cancellationToken);
         return Paged(tiers);
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(CreateTierResponse), StatusCodes.Status201Created)]
-    public async Task<CreatedResult> PostTiers([FromBody] CreateTierCommand command)
+    public async Task<CreatedResult> PostTiers([FromBody] CreateTierCommand command, CancellationToken cancellationToken)
     {
-        var createdTier = await _mediator.Send(command);
+        var createdTier = await _mediator.Send(command, cancellationToken);
         return Created(createdTier);
     }
 }

@@ -24,18 +24,18 @@ public class ChallengesController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChallengeDTO>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CreateChallengeCommand());
+        var response = await _mediator.Send(new CreateChallengeCommand(), cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChallengeDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById([FromRoute] ChallengeId id)
+    public async Task<IActionResult> GetById([FromRoute] ChallengeId id, CancellationToken cancellationToken)
     {
-        var @event = await _mediator.Send(new GetChallengeByIdQuery { Id = id });
+        var @event = await _mediator.Send(new GetChallengeByIdQuery { Id = id }, cancellationToken);
         return Ok(@event);
     }
 }
