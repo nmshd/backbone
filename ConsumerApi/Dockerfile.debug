@@ -1,0 +1,6 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0
+EXPOSE 80
+
+WORKDIR /app
+
+ENTRYPOINT ["dotnet", "run", "--project", "ConsumerApi/ConsumerApi.csproj"]

@@ -1,6 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Domain;
 
-namespace Backbone.API;
+namespace Enmeshed.BuildingBlocks.API;
 
 //[JsonConverter(typeof(HttpErrorConverter))]
 public class HttpError

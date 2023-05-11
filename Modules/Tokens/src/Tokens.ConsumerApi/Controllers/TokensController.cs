@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Tokens.Application;
+﻿using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;

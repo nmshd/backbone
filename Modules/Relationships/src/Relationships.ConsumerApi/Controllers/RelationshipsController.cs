@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Relationships.Application;
+﻿using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;

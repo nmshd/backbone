@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Synchronization.Application;
+﻿using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
