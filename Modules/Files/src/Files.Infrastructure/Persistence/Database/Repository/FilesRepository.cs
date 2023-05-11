@@ -4,12 +4,12 @@ using Microsoft.Extensions.Options;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Backbone.Modules.Files.Domain.Entities;
-using Backbone.Modules.Files.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using File = Backbone.Modules.Files.Domain.Entities.File;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database.QueryableExtensions;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 public class FilesRepository : IFilesRepository
