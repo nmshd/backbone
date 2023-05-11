@@ -9,13 +9,6 @@ namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class MessagesQueryableExtensions
 {
-    public static IQueryable<Message> IncludeAllReferences(this IQueryable<Message> messages)
-    {
-        return messages
-            .Include(m => m.Recipients)
-            .Include(m => m.Attachments);
-    }
-
     public static async Task<Message> FirstWithId(this IQueryable<Message> query, MessageId id, CancellationToken cancellationToken)
     {
         var message = await query.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
