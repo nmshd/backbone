@@ -20,7 +20,18 @@ public class BaseApi
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).ToString(), Method.Get);
+        return await ExecuteRequest<T>(Method.Get, endpoint, requestConfiguration);
+    }
+
+    private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.AddBody(requestConfiguration.Content);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
+            request.AddHeader("Content-Type", requestConfiguration.ContentType);
 
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);

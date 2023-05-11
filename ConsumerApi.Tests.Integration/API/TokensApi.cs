@@ -9,17 +9,17 @@ public class TokensApi : BaseApi
 
     public async Task<HttpResponse<Token>> CreateToken(RequestConfiguration requestConfiguration)
     {
-        return await Post<Token>("/tokens", requestConfiguration);
+        return await Post<Token>("/Tokens", requestConfiguration);
     }
 
     public async Task<HttpResponse<Token>> GetTokenById(RequestConfiguration requestConfiguration, string id)
     {
-        return await Get<Token>($"/tokens/{id}", requestConfiguration);
+        return await Get<Token>($"/Tokens/{id}", requestConfiguration);
     }
 
     public async Task<HttpResponse<IEnumerable<Token>>> GetTokensByIds(RequestConfiguration requestConfiguration, IEnumerable<string> ids)
     {
-        var endpoint = "/tokens";
+        var endpoint = "/Tokens";
         var queryString = string.Join("&", ids.Select(id => $"ids={id}"));
         endpoint = $"{endpoint}?{queryString}";
 

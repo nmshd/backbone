@@ -1,5 +1,6 @@
 using ConsumerApi.Tests.Integration.API;
 using ConsumerApi.Tests.Integration.Configuration;
+using ConsumerApi.Tests.Integration.Extensions;
 using ConsumerApi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
@@ -9,15 +10,17 @@ namespace ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "POST Challenge")]
 [Scope(Feature = "GET Challenge")]
-public class ChallengesApiStepDefinitions : BaseStepDefinitions<Challenge>
+public class ChallengesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly ChallengesApi _challengeApi;
     private string _challengeId;
+    private HttpResponse<Challenge> _response;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi) : base(httpConfiguration, new HttpResponse<Challenge>())
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi) : base(httpConfiguration)
     {
         _challengeApi = challengeApi;
         _challengeId = string.Empty;
+        _response = new HttpResponse<Challenge>();
     }
 
     [Given(@"a Challenge c")]
@@ -63,7 +66,10 @@ public class ChallengesApiStepDefinitions : BaseStepDefinitions<Challenge>
     [Then(@"the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        AssertResponseIntegrity();
+        _response.AssertResponseHasValue();
+        _response.AssertStatusCodeIsSuccess();
+        _response.AssertResponseContentTypeIs("application/json");
+
         AssertExpirationDateIsInFuture();
     }
 
@@ -79,6 +85,20 @@ public class ChallengesApiStepDefinitions : BaseStepDefinitions<Challenge>
     {
         _response.Content!.Result!.CreatedBy.Should().NotBeNull();
         _response.Content!.Result!.CreatedByDevice.Should().NotBeNull();
+    }
+
+    [Then(@"the response status code is (\d+) \(.+\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    {
+        var actualStatusCode = (int)_response.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode);
+    }
+
+    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    {
+        _response.Content!.Error.Should().NotBeNull();
+        _response.Content!.Error!.Code.Should().Be(errorCode);
     }
 
     private void AssertExpirationDateIsInFuture()

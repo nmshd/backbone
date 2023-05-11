@@ -21,34 +21,17 @@ public class BaseApi
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, Method.Get);
-
-        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
-            request.AddHeader("Accept", requestConfiguration.AcceptHeader);
-
-        if (requestConfiguration.Authenticate)
-        {
-            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
-            request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
-        }
-
-        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
-
-        var result = new HttpResponse<T>
-        {
-            IsSuccessStatusCode = response.IsSuccessStatusCode,
-            StatusCode = response.StatusCode,
-            Content = response.Data!,
-            ContentType = response.ContentType,
-            RawContent = response.Content
-        };
-
-        return result;
+        return await ExecuteRequest<T>(Method.Get, endpoint, requestConfiguration);
     }
 
     protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, Method.Post);
+        return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
+    }
+
+    private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.AddBody(requestConfiguration.Content);
@@ -79,7 +62,7 @@ public class BaseApi
         return result;
     }
 
-    public async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
+    private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
         if (_accessTokenResponse is { IsExpired: false })
         {

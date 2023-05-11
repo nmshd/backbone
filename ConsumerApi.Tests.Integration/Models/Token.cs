@@ -13,4 +13,24 @@ public class Token
     public string? CreatedBy { get; set; }
     public string? CreatedByDevice { get; set; }
     public string? Content { get; set; }
+
+    public bool ShouldSerializeExpiresAt()
+    {
+        return ExpiresAt != null;
+    }
+
+    public bool ShouldSerializeCreatedBy()
+    {
+        return CreatedBy != null;
+    }
+
+    public bool ShouldSerializeCreatedByDevice()
+    {
+        return CreatedByDevice != null;
+    }
+
+    public bool ShouldSerializeContent()
+    {
+        return Content != null;
+    }
 }

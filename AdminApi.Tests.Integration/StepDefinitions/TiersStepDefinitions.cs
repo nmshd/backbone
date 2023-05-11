@@ -5,13 +5,15 @@ namespace AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tiers")]
-public class TiersStepDefinitions : BaseStepDefinitions<List<TierDTO>>
+public class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
+    private HttpResponse<List<TierDTO>> _response;
 
-    public TiersStepDefinitions(TiersApi tiersApi) : base(new HttpResponse<List<TierDTO>>())
+    public TiersStepDefinitions(TiersApi tiersApi) : base()
     {
         _tiersApi = tiersApi;
+        _response = new HttpResponse<List<TierDTO>>();
     }
 
     [When(@"a GET request is sent to the Tiers/ endpoint")]
@@ -27,5 +29,12 @@ public class TiersStepDefinitions : BaseStepDefinitions<List<TierDTO>>
     {
         _response!.Content!.Result.Should().NotBeNull();
         _response!.Content!.Result.Should().NotBeEmpty();
+    }
+
+    [Then(@"the response status code is (\d+) \(.+\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    {
+        var actualStatusCode = (int)_response.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 }

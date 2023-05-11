@@ -9,11 +9,11 @@ public class ChallengesApi : BaseApi
 
     public async Task<HttpResponse<Challenge>> CreateChallenge(RequestConfiguration requestConfiguration)
     {
-        return await Post<Challenge>("/challenges", requestConfiguration);
+        return await Post<Challenge>("/Challenges", requestConfiguration);
     }
 
     public async Task<HttpResponse<Challenge>> GetChallengeById(RequestConfiguration requestConfiguration, string id)
     {
-        return await Get<Challenge>($"/challenges/{id}", requestConfiguration);
+        return await Get<Challenge>($"/Challenges/{id}", requestConfiguration);
     }
 }
