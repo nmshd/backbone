@@ -17,12 +17,12 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backbone.Modules.Files.Domain.Entities.FileMetadata", b =>
+            modelBuilder.Entity("Backbone.Modules.Files.Domain.Entities.File", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -107,7 +107,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("FileMetadata");
+                    b.ToTable("FileMetadata", (string)null);
                 });
 #pragma warning restore 612, 618
         }

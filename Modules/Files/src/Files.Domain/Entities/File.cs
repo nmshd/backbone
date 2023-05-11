@@ -6,6 +6,10 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File
 {
+#pragma warning disable CS8618
+    private File() { }
+#pragma warning restore CS8618
+
     public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
     {
         Id = FileId.New();
