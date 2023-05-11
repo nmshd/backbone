@@ -1,9 +1,12 @@
+﻿using System.Threading;
+using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
@@ -13,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
@@ -23,7 +27,8 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
 
-    public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
+    public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage,
+        IOptions<BlobOptions> blobOptions)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
@@ -34,19 +39,23 @@ public class RelationshipsRepository : IRelationshipsRepository
         _blobOptions = blobOptions.Value;
     }
 
-    public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids, RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt, IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool onlyPeerChanges = false, bool track = false)
+    public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids,
+        RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
+        OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt,
+        IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress,
+        PaginationFilter paginationFilter, bool onlyPeerChanges = false, bool track = false)
     {
         var query = (track ? _changes : _readOnlyChanges)
-                    .AsQueryable()
-                    .IncludeAll(_dbContext)
-                    .WithType(relationshipChangeType)
-                    .WithStatus(relationshipChangeStatus)
-                    .ModifiedAt(modifiedAt)
-                    .CreatedAt(createdAt)
-                    .CompletedAt(completedAt)
-                    .CreatedBy(createdBy)
-                    .CompletedBy(completedBy)
-                    .WithRelationshipParticipant(identityAddress);
+            .AsQueryable()
+            .IncludeAll(_dbContext)
+            .WithType(relationshipChangeType)
+            .WithStatus(relationshipChangeStatus)
+            .ModifiedAt(modifiedAt)
+            .CreatedAt(createdAt)
+            .CompletedAt(completedAt)
+            .CreatedBy(createdBy)
+            .CompletedBy(completedBy)
+            .WithRelationshipParticipant(identityAddress);
 
         if (ids.Any())
             query = query.WithIdIn(ids);
@@ -61,12 +70,13 @@ public class RelationshipsRepository : IRelationshipsRepository
         return changes;
     }
 
-    public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
+        CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
-        var relationship = await(track ? _relationships : _readOnlyRelationships)
-                            .IncludeAll(_dbContext)
-                            .WithParticipant(identityAddress)
-                            .FirstWithId(id, cancellationToken);
+        var relationship = await (track ? _relationships : _readOnlyRelationships)
+            .IncludeAll(_dbContext)
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
 
         if (fillContent)
         {
@@ -76,13 +86,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id,
+        IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false,
+        bool fillContent = true)
     {
         var change = await (track ? _changes : _readOnlyChanges)
-                            .IncludeAll(_dbContext)
-                            .WithId(id)
-                            .WithRelationshipParticipant(identityAddress)
-                            .FirstOrDefaultAsync(cancellationToken);
+            .IncludeAll(_dbContext)
+            .WithId(id)
+            .WithRelationshipParticipant(identityAddress)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (fillContent)
         {
@@ -92,13 +104,14 @@ public class RelationshipsRepository : IRelationshipsRepository
         return change;
     }
 
-    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
+    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
+        IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
     {
         var query = (track ? _relationships : _readOnlyRelationships)
-                    .AsQueryable()
-                    .IncludeAll(_dbContext)
-                    .WithParticipant(identityAddress)
-                    .WithIdIn(ids);
+            .AsQueryable()
+            .IncludeAll(_dbContext)
+            .WithParticipant(identityAddress)
+            .WithIdIn(ids);
 
         var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
 
@@ -110,6 +123,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Update(Relationship relationship)
     {
         _relationships.Update(relationship);
+        await SaveContentOfLatestChange(relationship);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -117,6 +131,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {
         await _relationships.AddAsync(relationship, cancellationToken);
+        await SaveContentOfLatestChange(relationship);
         try
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -130,32 +145,28 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
     }
 
-    public async Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken)
+    public async Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA,
+        IdentityAddress identityAddressB, CancellationToken cancellationToken)
     {
         return await _readOnlyRelationships
-                    .BetweenParticipants(identityAddressA, identityAddressB)
-                    .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected && r.Status != RelationshipStatus.Revoked)
-                    .AnyAsync(cancellationToken);
+            .BetweenParticipants(identityAddressA, identityAddressB)
+            .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
+                        r.Status != RelationshipStatus.Revoked)
+            .AnyAsync(cancellationToken);
     }
 
-    public async Task SaveContentOfChangeRequest(RelationshipChangeRequest changeRequest)
+    public async Task SaveContentOfLatestChange(Relationship relationship)
     {
-        if (changeRequest.Content == null)
-            return;
+        var latestChange = relationship.Changes.OrderByDescending(c => c.CreatedAt).First();
 
-        _blobStorage.Add(_blobOptions.RootFolder, $"{changeRequest.Id}_Req", changeRequest.Content);
+        if(relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
+            _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Req", latestChange.Request.Content);
+        else if(latestChange.Response?.Content != null)
+            _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Res", latestChange.Response.Content);
+
         await _blobStorage.SaveAsync();
     }
-
-    public async Task SaveContentOfChangeResponse(RelationshipChangeResponse changeResponse)
-    {
-        if (changeResponse.Content == null)
-            return;
-
-        _blobStorage.Add(_blobOptions.RootFolder, $"{changeResponse.Id}_Res", changeResponse.Content);
-        await _blobStorage.SaveAsync();
-    }
-
+    
     private async Task FillContentOfChange(RelationshipChange change)
     {
         if (change.Type == RelationshipChangeType.Creation)
