@@ -1,25 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Enmeshed.BuildingBlocks.Application.Extensions;
 
-public static class DbSetExtensions
+public static class IQueryableExtensions
 {
     public static IQueryable<TEntity> IncludeAll<TEntity>(
-        this DbSet<TEntity> dbSet,
+        this IQueryable<TEntity> query,
+        DbContext context,
         int maxDepth = int.MaxValue) where TEntity : class
     {
-        IQueryable<TEntity> result = dbSet;
-        var context = dbSet.GetService<ICurrentDbContext>().Context;
         var includePaths = GetIncludePaths<TEntity>(context, maxDepth);
 
         foreach (var includePath in includePaths)
         {
-            result = result.Include(includePath);
+            query = query.Include(includePath);
         }
 
-        return result;
+        return query;
     }
 
     /// <remarks>
