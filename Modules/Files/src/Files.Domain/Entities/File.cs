@@ -4,9 +4,9 @@ using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
-public class FileMetadata
+public class File
 {
-    public FileMetadata(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
+    public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
     {
         Id = FileId.New();
 
@@ -19,6 +19,8 @@ public class FileMetadata
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
+
+        Content = content;
 
         ExpiresAt = expiresAt;
 
@@ -45,30 +47,30 @@ public class FileMetadata
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }
 
-    public byte[]? Content { get; private set; }
+    public byte[] Content { get; private set; }
 
-    public void LoadContent(byte[] bytes)
+    public void LoadContent(byte[] content)
     {
         if (Content != null)
         {
             throw new InvalidOperationException($"The Content of the file {Id} is already filled. It is not possible to change it.");
         }
-        Content = bytes;
+        Content = content;
     }
 
     public DateTime ExpiresAt { get; set; }
 
     public byte[] EncryptedProperties { get; set; }
 
-    public static Expression<Func<FileMetadata, bool>> IsExpired =>
+    public static Expression<Func<File, bool>> IsExpired =>
         file => file.ExpiresAt <= SystemTime.UtcNow;
 
-    public static Expression<Func<FileMetadata, bool>> IsNotExpired =>
+    public static Expression<Func<File, bool>> IsNotExpired =>
         file => file.ExpiresAt > SystemTime.UtcNow;
 
-    public static Expression<Func<FileMetadata, bool>> IsDeleted =>
+    public static Expression<Func<File, bool>> IsDeleted =>
         file => file.DeletedAt != null;
 
-    public static Expression<Func<FileMetadata, bool>> IsNotDeleted =>
+    public static Expression<Func<File, bool>> IsNotDeleted =>
         file => file.DeletedAt == null;
 }

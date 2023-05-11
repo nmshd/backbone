@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
@@ -21,24 +21,24 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 
     public async Task<CreateFileResponse> Handle(CreateFileCommand request, CancellationToken cancellationToken)
     {
-        var fileMetadata = new FileMetadata(
+        var file = new File(
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             request.Owner,
             request.OwnerSignature ?? Array.Empty<byte>(),
             request.CipherHash,
+            request.FileContent,
             request.FileContent.LongLength,
             request.ExpiresAt,
             request.EncryptedProperties
         );
 
         await _filesRepository.Add(
-            fileMetadata,
-            request.FileContent,
+            file,
             cancellationToken
         );
         
-        var response = _mapper.Map<CreateFileResponse>(fileMetadata);
+        var response = _mapper.Map<CreateFileResponse>(file);
 
         return response;
     }

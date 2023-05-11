@@ -9,12 +9,13 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 public class FilesRepository : IFilesRepository
 {
-    private readonly DbSet<FileMetadata> _files;
-    private readonly IQueryable<FileMetadata> _readOnlyFiles;
+    private readonly DbSet<File> _files;
+    private readonly IQueryable<File> _readOnlyFiles;
     private readonly FilesDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
@@ -28,16 +29,16 @@ public class FilesRepository : IFilesRepository
         _blobOptions = blobOptions.Value;
     }
 
-    public async Task Add(FileMetadata fileMetadata, byte[] body, CancellationToken cancellationToken)
+    public async Task Add(File file, CancellationToken cancellationToken)
     {
-        _blobStorage.Add(_blobOptions.RootFolder, fileMetadata.Id, body);
-        await _files.AddAsync(fileMetadata, cancellationToken);
+        _blobStorage.Add(_blobOptions.RootFolder, file.Id, file.Content);
+        await _files.AddAsync(file, cancellationToken);
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
 
     }
 
-    public async Task<FileMetadata> Find(FileId fileId, bool track = false, bool fillBody = true)
+    public async Task<File> Find(FileId fileId, bool track = false, bool fillContent = true)
     {
         var file = (track ? _files : _readOnlyFiles)
             .WithId(fileId)
@@ -45,7 +46,7 @@ public class FilesRepository : IFilesRepository
             .NotDeleted()
             .FirstOrDefault();
 
-        if (fillBody)
+        if (fillContent)
         {
             var fileContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, fileId);
             file.LoadContent(fileContent);
@@ -54,10 +55,10 @@ public class FilesRepository : IFilesRepository
         return file;
     }
 
-    public async Task<DbPaginationResult<FileMetadata>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter)
     {
         var query = _dbContext
-            .SetReadOnly<FileMetadata>()
+            .SetReadOnly<File>()
             .CreatedBy(creatorAddress)
             .NotExpired()
             .NotDeleted();
