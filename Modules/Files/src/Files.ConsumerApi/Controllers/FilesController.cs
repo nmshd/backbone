@@ -37,7 +37,7 @@ public class FilesController : ApiControllerBase
     [Consumes("multipart/form-data")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateFileResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UploadFile([FromForm] CreateFileDTO dto)
+    public async Task<IActionResult> UploadFile([FromForm] CreateFileDTO dto, CancellationToken cancellationToken)
     {
         var inputStream = new MemoryStream();
 
@@ -53,7 +53,7 @@ public class FilesController : ApiControllerBase
             EncryptedProperties = UrlBase64.Decode(dto.EncryptedProperties)
         };
 
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(DownloadFile), new { fileId = response.Id }, response);
     }
 
@@ -61,9 +61,9 @@ public class FilesController : ApiControllerBase
     [Produces(MediaTypeNames.Application.Octet)]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileContentResult>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DownloadFile(FileId fileId)
+    public async Task<IActionResult> DownloadFile(FileId fileId, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetFileContentQuery { Id = fileId });
+        var response = await _mediator.Send(new GetFileContentQuery { Id = fileId }, cancellationToken);
         return File(response.FileContent, MediaTypeNames.Application.Octet);
     }
 
@@ -71,16 +71,16 @@ public class FilesController : ApiControllerBase
     [HttpGet("{fileId}/metadata")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileMetadataDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetFileMetadata(FileId fileId)
+    public async Task<IActionResult> GetFileMetadata(FileId fileId, CancellationToken cancellationToken)
     {
-        var metadata = await _mediator.Send(new GetFileMetadataQuery { Id = fileId });
+        var metadata = await _mediator.Send(new GetFileMetadataQuery { Id = fileId }, cancellationToken);
         return Ok(metadata);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListFileMetadataResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListFileMetadata([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<FileId> ids)
+        [FromQuery] IEnumerable<FileId> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -88,7 +88,7 @@ public class FilesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var fileMetadata = await _mediator.Send(new ListFileMetadataQuery(paginationFilter, ids));
+        var fileMetadata = await _mediator.Send(new ListFileMetadataQuery(paginationFilter, ids), cancellationToken);
         return Paged(fileMetadata);
     }
 }
