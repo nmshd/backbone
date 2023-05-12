@@ -79,20 +79,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             _request.Content);
+        
+        await _relationshipsRepository.Add(_relationship, _cancellationToken);
 
-        await _relationshipsRepository.SaveContentOfChangeRequest(_relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Request);
-
-        try
-        {
-            await _relationshipsRepository.Add(_relationship, _cancellationToken);
-        }
-        catch (DbUpdateException ex)
-        {
-            if (ex.InnerException != null && ex.InnerException.Message.Contains(ConstraintNames.ONLY_ONE_ACTIVE_RELATIONSHIP_BETWEEN_TWO_IDENTITIES))
-                throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(_template.CreatedBy));
-
-            throw;
-        }
     }
 
     private void PublishIntegrationEvent()

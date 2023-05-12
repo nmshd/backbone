@@ -31,16 +31,7 @@ public class Handler : IRequestHandler<RevokeRelationshipChangeRequestCommand, R
         var relationship = await _relationshipsRepository.FindRelationship(changeRequest.Id, _userContext.GetAddress(), cancellationToken, track: true, fillContent: false);
 
         var change = relationship.RevokeChange(changeRequest.ChangeId, _userContext.GetAddress(), _userContext.GetDeviceId(), changeRequest.ResponseContent);
-
-        try
-        {
-            await _relationshipsRepository.SaveContentOfChangeResponse(change.Response);
-        }
-        catch (BlobAlreadyExistsException)
-        {
-            throw new DomainException(DomainErrors.ChangeRequestIsAlreadyCompleted(change.Status));
-        }
-
+        
         await _relationshipsRepository.Update(relationship);
 
         PublishIntegrationEvent(change);
