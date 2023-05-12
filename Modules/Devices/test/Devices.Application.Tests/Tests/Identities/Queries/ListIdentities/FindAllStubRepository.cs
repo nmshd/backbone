@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 public class FindAllStubRepository : IIdentitiesRepository
@@ -16,5 +17,10 @@ public class FindAllStubRepository : IIdentitiesRepository
     public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
     {
         return Task.FromResult(_identities);
+    }
+
+    public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        return Task.FromResult(_identities.ItemsOnPage.Where(it=>it.Address==address).First());
     }
 }

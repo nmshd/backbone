@@ -18,21 +18,21 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 {
     private readonly ApplicationOptions _applicationOptions;
     private readonly ITiersRepository _tiersRepository;
+    private readonly IIdentitiesRepository _identityRepository;
     private readonly ChallengeValidator _challengeValidator;
-    private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository)
+    public Handler(UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identityRepository)
     {
-        _dbContext = dbContext;
         _userManager = userManager;
         _challengeValidator = challengeValidator;
         _logger = logger;
         _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
         _tiersRepository = tiersRepository;
+        _identityRepository = identityRepository;
     }
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.LogTrace($"Address created. Result: {address}");
 
-        var existingIdentity = await _dbContext.Set<Identity>().FirstWithAddressOrDefault(address, cancellationToken);
+        var existingIdentity = _identityRepository.FindByAddress(address, cancellationToken);
 
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());

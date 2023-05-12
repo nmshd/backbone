@@ -1,9 +1,11 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -24,5 +26,10 @@ public class IdentitiesRepository : IIdentitiesRepository
             .Include(i => i.Devices)
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
         return paginationResult;
+    }
+
+    public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        return await _readonlyIdentities.FirstWithAddressOrDefault(address, cancellationToken);
     }
 }

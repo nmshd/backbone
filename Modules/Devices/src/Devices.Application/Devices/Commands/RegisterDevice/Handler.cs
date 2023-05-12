@@ -3,14 +3,12 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
@@ -18,26 +16,23 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResponse>
 {
     private readonly ChallengeValidator _challengeValidator;
-    private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IIdentitiesRepository _identityRepository;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger)
+    public Handler(UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
     {
-        _dbContext = dbContext;
         _userManager = userManager;
         _challengeValidator = challengeValidator;
         _userContext = userContext;
         _logger = logger;
+        _identityRepository = identitiesRepository;
     }
 
     public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
     {
-        var identity = await _dbContext
-            .Set<Identity>()
-            .Include(i => i.Devices)
-            .FirstWithAddress(_userContext.GetAddress(), cancellationToken);
+        var identity = await _identityRepository.FindByAddress(_userContext.GetAddress(), cancellationToken);
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
 
