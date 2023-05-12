@@ -29,10 +29,11 @@ public class MessagesRepository : IMessagesRepository
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
     }
+
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool fillBody = true)
     {
         var message = await (track ? _messages : _readOnlyMessages)
-            .IncludeAllReferences()
+            .IncludeAll(_dbContext)
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
 
@@ -64,7 +65,7 @@ public class MessagesRepository : IMessagesRepository
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
-            .IncludeAllReferences();
+            .IncludeAll(_dbContext);
 
         if (ids.Any())
             query = query.WithIdsIn(ids);

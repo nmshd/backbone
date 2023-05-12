@@ -1,10 +1,8 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Enmeshed.BuildingBlocks.Domain;
+﻿using Enmeshed.BuildingBlocks.Domain;
 
 namespace Enmeshed.BuildingBlocks.API;
 
-[JsonConverter(typeof(HttpErrorConverter))]
+//[JsonConverter(typeof(HttpErrorConverter))]
 public class HttpError
 {
     protected HttpError(string code, string message, string docs)
@@ -54,31 +52,31 @@ public class HttpErrorDev : HttpError
     public string Details { get; }
 }
 
-public class HttpErrorConverter : JsonConverter<HttpError>
-{
-    public override bool CanConvert(Type type)
-    {
-        return typeof(HttpError).IsAssignableFrom(type);
-    }
+//public class HttpErrorConverter : JsonConverter<HttpError>
+//{
+//    public override bool CanConvert(Type type)
+//    {
+//        return typeof(HttpError).IsAssignableFrom(type);
+//    }
 
-    public override HttpError Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
-    }
+//    public override HttpError Read(
+//        ref Utf8JsonReader reader,
+//        Type typeToConvert,
+//        JsonSerializerOptions options)
+//    {
+//        throw new NotImplementedException();
+//    }
 
-    public override void Write(
-        Utf8JsonWriter writer,
-        HttpError value,
-        JsonSerializerOptions options)
-    {
-        if (value is HttpErrorDev devError)
-            JsonSerializer.Serialize(writer, devError, options);
-        else if (value is HttpErrorProd prodError) JsonSerializer.Serialize(writer, prodError, options);
-    }
-}
+//    public override void Write(
+//        Utf8JsonWriter writer,
+//        HttpError value,
+//        JsonSerializerOptions options)
+//    {
+//        if (value is HttpErrorDev devError)
+//            JsonSerializer.Serialize(writer, devError, options);
+//        else if (value is HttpErrorProd prodError) JsonSerializer.Serialize(writer, prodError, options);
+//    }
+//}
 
 [Serializable]
 public struct HttpErrorId

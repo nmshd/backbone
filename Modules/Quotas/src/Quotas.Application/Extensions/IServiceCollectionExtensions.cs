@@ -4,6 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Backbone.Modules.Quotas.Application.Extensions;
 
@@ -13,8 +14,8 @@ public static class IServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         // services.AddMediatR(typeof(...)); // needs to be filled as soon as there is the first command/query
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+        services.TryAddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        services.TryAddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         // services.AddValidatorsFromAssemblyContaining<...>(); // needs to be filled as soon as there is the first validator

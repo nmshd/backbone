@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.DTOs;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Admin.API.Mvc;
@@ -24,14 +23,14 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListIdentitiesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter)
+    public async Task<IActionResult> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter));
+        var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter), cancellationToken);
         return Paged(identities);
     }
 }

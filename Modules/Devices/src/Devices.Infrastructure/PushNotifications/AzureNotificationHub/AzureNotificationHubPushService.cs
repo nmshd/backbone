@@ -3,7 +3,6 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Logging;
