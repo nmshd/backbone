@@ -157,7 +157,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     private async Task SaveContentOfLatestChange(Relationship relationship)
     {
-        var latestChange = relationship.Changes.OrderByDescending(c => c.CreatedAt).First();
+        var latestChange = relationship.Changes.MaxBy(c => c.CreatedAt);
 
         if(relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
             _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Req", latestChange.Request.Content);
