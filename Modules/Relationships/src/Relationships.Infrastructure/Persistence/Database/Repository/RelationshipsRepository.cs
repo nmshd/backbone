@@ -155,7 +155,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
-    public async Task SaveContentOfLatestChange(Relationship relationship)
+    private async Task SaveContentOfLatestChange(Relationship relationship)
     {
         var latestChange = relationship.Changes.OrderByDescending(c => c.CreatedAt).First();
 
