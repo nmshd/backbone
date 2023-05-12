@@ -12,7 +12,9 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Google.Apis.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
@@ -25,10 +27,11 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly IQueryable<RelationshipChange> _readOnlyChanges;
     private readonly RelationshipsDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
+    private readonly ILogger<RelationshipsRepository> _logger;
     private readonly BlobOptions _blobOptions;
 
     public RelationshipsRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage,
-        IOptions<BlobOptions> blobOptions)
+        IOptions<BlobOptions> blobOptions, ILogger<RelationshipsRepository> logger)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
@@ -36,6 +39,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
+        _logger = logger;
         _blobOptions = blobOptions.Value;
     }
 
@@ -164,7 +168,14 @@ public class RelationshipsRepository : IRelationshipsRepository
         else if(latestChange.Response?.Content != null)
             _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Res", latestChange.Response.Content);
 
-        await _blobStorage.SaveAsync();
+        try
+        {
+            await _blobStorage.SaveAsync();
+        }
+        catch (BlobAlreadyExistsException ex)
+        {
+            _logger.LogError(ex, "There was an error while trying to save the content of the RelationshipChange with the id {id}. The name of the blob was {name}.", latestChange.Id, ex.BlobName);
+        }
     }
     
     private async Task FillContentOfChange(RelationshipChange change)
