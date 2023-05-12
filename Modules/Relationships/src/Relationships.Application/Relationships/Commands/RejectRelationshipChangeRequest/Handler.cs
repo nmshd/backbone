@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Extensions;
-using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Entities;
@@ -14,41 +13,35 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Reje
 
 public class Handler : IRequestHandler<RejectRelationshipChangeRequestCommand, RejectRelationshipChangeRequestResponse>
 {
-    private readonly IContentStore _contentStore;
-    private readonly IRelationshipsDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
+    private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus, IContentStore contentStore)
+    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
     {
-        _dbContext = dbContext;
         _userContext = userContext;
+        _relationshipsRepository = relationshipsRepository;
         _mapper = mapper;
         _eventBus = eventBus;
-        _contentStore = contentStore;
     }
 
     public async Task<RejectRelationshipChangeRequestResponse> Handle(RejectRelationshipChangeRequestCommand changeRequest, CancellationToken cancellationToken)
     {
-        var relationship = await _dbContext
-            .Set<Relationship>()
-            .IncludeAll()
-            .FirstWithId(changeRequest.Id, cancellationToken);
+        var relationship = await _relationshipsRepository.FindRelationship(changeRequest.Id, _userContext.GetAddress(), cancellationToken, track: true, fillContent: false);
 
         var change = relationship.RejectChange(changeRequest.ChangeId, _userContext.GetAddress(), _userContext.GetDeviceId(), changeRequest.ResponseContent);
 
         try
         {
-            await _contentStore.SaveContentOfChangeResponse(change.Response);
+            await _relationshipsRepository.SaveContentOfChangeResponse(change.Response);
         }
         catch (BlobAlreadyExistsException)
         {
             throw new DomainException(DomainErrors.ChangeRequestIsAlreadyCompleted(change.Status));
         }
 
-        _dbContext.Set<Relationship>().Update(relationship);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _relationshipsRepository.Update(relationship);
 
         PublishIntegrationEvent(change);
 

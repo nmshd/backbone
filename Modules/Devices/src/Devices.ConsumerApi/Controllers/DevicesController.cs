@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Devices.Application;
+﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
@@ -36,9 +35,9 @@ public class DevicesController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RegisterDeviceResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegisterDevice(RegisterDeviceCommand request)
+    public async Task<IActionResult> RegisterDevice(RegisterDeviceCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
 
         return Created("", response);
     }
@@ -46,23 +45,23 @@ public class DevicesController : ApiControllerBase
     [HttpPut("Self/Password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangePassword(ChangePasswordCommand request)
+    public async Task<IActionResult> ChangePassword(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request);
+        await _mediator.Send(request, cancellationToken);
 
         return NoContent();
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListDevicesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListDevices([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<DeviceId> ids)
+    public async Task<IActionResult> ListDevices([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<DeviceId> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new ListDevicesQuery(paginationFilter, ids));
+        var response = await _mediator.Send(new ListDevicesQuery(paginationFilter, ids), cancellationToken);
 
         return Paged(response);
     }
@@ -80,9 +79,9 @@ public class DevicesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, [FromBody] DeleteDeviceRequest request)
+    public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, [FromBody] DeleteDeviceRequest request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, DeletionCertificate = request.DeletionCertificate, SignedChallenge = request.SignedChallenge });
+        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, DeletionCertificate = request.DeletionCertificate, SignedChallenge = request.SignedChallenge }, cancellationToken);
 
         return NoContent();
     }

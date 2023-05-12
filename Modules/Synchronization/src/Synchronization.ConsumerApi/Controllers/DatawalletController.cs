@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Synchronization.Application;
+﻿using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
@@ -33,9 +32,9 @@ public class DatawalletController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<DatawalletDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDatawalletQuery());
+        var response = await _mediator.Send(new GetDatawalletQuery(), cancellationToken);
         return Ok(response);
     }
 
@@ -43,7 +42,7 @@ public class DatawalletController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetModificationsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetModifications([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] int? localIndex,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
@@ -53,7 +52,7 @@ public class DatawalletController : ApiControllerBase
 
         var request = new GetModificationsQuery(paginationFilter, localIndex, supportedDatawalletVersion);
 
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
         return Paged(response);
     }
 
@@ -62,10 +61,10 @@ public class DatawalletController : ApiControllerBase
         StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PushModifications(PushDatawalletModificationsRequestBody request,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new PushDatawalletModificationsCommand(request.Modifications,
-            request.LocalIndex, supportedDatawalletVersion));
+            request.LocalIndex, supportedDatawalletVersion), cancellationToken);
         return Created(string.Empty, response);
     }
 }

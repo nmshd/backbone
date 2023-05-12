@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Tokens.Application;
+﻿using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
@@ -32,9 +31,9 @@ public class TokensController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateTokenResponse>), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateToken(CreateTokenCommand request)
+    public async Task<IActionResult> CreateToken(CreateTokenCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetToken), new { id = response.Id }, response);
     }
 
@@ -42,16 +41,16 @@ public class TokensController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TokenDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetToken([FromRoute] TokenId id)
+    public async Task<IActionResult> GetToken([FromRoute] TokenId id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetTokenQuery { Id = id });
+        var response = await _mediator.Send(new GetTokenQuery { Id = id }, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<TokenId> ids)
+        [FromQuery] IEnumerable<TokenId> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -59,7 +58,7 @@ public class TokensController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new ListTokensQuery(paginationFilter, ids));
+        var response = await _mediator.Send(new ListTokensQuery(paginationFilter, ids), cancellationToken);
 
         return Paged(response);
     }

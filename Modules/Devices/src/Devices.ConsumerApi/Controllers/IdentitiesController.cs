@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
@@ -32,7 +31,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
-    public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request)
+    public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
     {
         var client = await _applicationManager.FindByClientIdAsync(request.ClientId);
 
@@ -52,7 +51,7 @@ public class IdentitiesController : ApiControllerBase
             }
         };
 
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
 
         return Created("", response);
     }

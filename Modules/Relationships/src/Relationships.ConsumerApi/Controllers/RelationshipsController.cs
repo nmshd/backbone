@@ -1,5 +1,4 @@
-﻿using Backbone.API;
-using Backbone.Modules.Relationships.Application;
+﻿using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
@@ -41,16 +40,16 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetRelationship(RelationshipId id)
+    public async Task<IActionResult> GetRelationship(RelationshipId id, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(new GetRelationshipQuery { Id = id });
+        var relationship = await _mediator.Send(new GetRelationshipQuery { Id = id }, cancellationToken);
         return Ok(relationship);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListRelationships([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<RelationshipId> ids)
+        [FromQuery] IEnumerable<RelationshipId> ids, CancellationToken cancellationToken)
     {
         var request = new ListRelationshipsQuery(paginationFilter, ids);
 
@@ -60,7 +59,7 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var relationships = await _mediator.Send(request);
+        var relationships = await _mediator.Send(request, cancellationToken);
         return Paged(relationships);
     }
 
@@ -76,7 +75,7 @@ public class RelationshipsController : ApiControllerBase
         [FromQuery] IdentityAddress createdBy,
         [FromQuery] IdentityAddress completedBy,
         [FromQuery] string? status,
-        [FromQuery] string? type)
+        [FromQuery] string? type, CancellationToken cancellationToken)
     {
         var request = new ListChangesQuery(
             paginationFilter,
@@ -103,31 +102,31 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet("Changes/{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChangeById(RelationshipChangeId id)
+    public async Task<IActionResult> GetChangeById(RelationshipChangeId id, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(new GetChangeQuery { Id = id });
+        var relationship = await _mediator.Send(new GetChangeQuery { Id = id }, cancellationToken);
         return Ok(relationship);
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request)
+    public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(request);
+        var relationship = await _mediator.Send(request, cancellationToken);
         return Created(relationship);
     }
 
     [HttpPut("{relationshipId}/Changes/{changeId}/Accept")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> AcceptRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request)
+        [FromRoute] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var change = await _mediator.Send(new AcceptRelationshipChangeRequestCommand
         {
             Id = relationshipId,
             ChangeId = changeId,
             ResponseContent = request.Content
-        });
+        }, cancellationToken);
 
         return Ok(change);
     }
@@ -135,14 +134,14 @@ public class RelationshipsController : ApiControllerBase
     [HttpPut("{relationshipId}/Changes/{changeId}/Reject")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> RejectRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request)
+        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var change = await _mediator.Send(new RejectRelationshipChangeRequestCommand
         {
             Id = relationshipId,
             ChangeId = changeId,
             ResponseContent = request.Content
-        });
+        }, cancellationToken);
 
         return Ok(change);
     }
@@ -150,14 +149,14 @@ public class RelationshipsController : ApiControllerBase
     [HttpPut("{relationshipId}/Changes/{changeId}/Revoke")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> RevokeRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request)
+        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var change = await _mediator.Send(new RevokeRelationshipChangeRequestCommand
         {
             Id = relationshipId,
             ChangeId = changeId,
             ResponseContent = request.Content
-        });
+        }, cancellationToken);
 
         return Ok(change);
     }

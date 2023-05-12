@@ -48,8 +48,6 @@ public static class IServiceCollectionExtensions
                 throw new Exception($"Unsupported database provider: {options.Provider}");
 
         }
-
-        services.AddScoped<IRelationshipsDbContext, RelationshipsDbContext>();
     }
 
     public class DbOptions
