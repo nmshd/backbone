@@ -31,7 +31,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
-    public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request)
+    public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
     {
         var client = await _applicationManager.FindByClientIdAsync(request.ClientId);
 
@@ -51,7 +51,7 @@ public class IdentitiesController : ApiControllerBase
             }
         };
 
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
 
         return Created("", response);
     }

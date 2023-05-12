@@ -32,7 +32,7 @@ public class MessagesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListMessagesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListMessages([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<MessageId> ids)
+        [FromQuery] IEnumerable<MessageId> ids, CancellationToken cancellationToken)
     {
         var command = new ListMessagesQuery(paginationFilter, ids);
 
@@ -42,25 +42,25 @@ public class MessagesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var messages = await _mediator.Send(command);
+        var messages = await _mediator.Send(command, cancellationToken);
         return Paged(messages);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<MessageDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetMessage(MessageId id, [FromQuery] bool? noBody)
+    public async Task<IActionResult> GetMessage(MessageId id, [FromQuery] bool? noBody, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetMessageQuery { Id = id, NoBody = noBody == true });
+        var response = await _mediator.Send(new GetMessageQuery { Id = id, NoBody = noBody == true }, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<SendMessageResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> SendMessage(SendMessageCommand request)
+    public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetMessage), new { id = response.Id }, response);
     }
 }

@@ -32,9 +32,9 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipTemplateDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(RelationshipTemplateId id)
+    public async Task<IActionResult> GetById(RelationshipTemplateId id, CancellationToken cancellationToken)
     {
-        var template = await _mediator.Send(new GetRelationshipTemplateQuery { Id = id });
+        var template = await _mediator.Send(new GetRelationshipTemplateQuery { Id = id }, cancellationToken);
         return Ok(template);
     }
 
@@ -42,7 +42,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<RelationshipTemplateId> ids)
+        [FromQuery] IEnumerable<RelationshipTemplateId> ids, CancellationToken cancellationToken)
     {
         var request = new ListRelationshipTemplatesQuery(paginationFilter, ids);
 
@@ -52,7 +52,7 @@ public class RelationshipTemplatesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var template = await _mediator.Send(request);
+        var template = await _mediator.Send(request, cancellationToken);
         return Paged(template);
     }
 
@@ -60,9 +60,9 @@ public class RelationshipTemplatesController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipTemplateResponse>),
         StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(CreateRelationshipTemplateCommand request)
+    public async Task<IActionResult> Create(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 }
