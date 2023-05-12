@@ -20,8 +20,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     private string _peerTokenId;
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<Token> _tokenResponse;
-    private HttpResponse<IEnumerable<Token>> _tokensResponse;
+    private HttpResponse<Token>? _tokenResponse;
+    private HttpResponse<IEnumerable<Token>>? _tokensResponse;
     private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
@@ -32,8 +32,6 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _peerTokenId = string.Empty;
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
-        _tokenResponse = new HttpResponse<Token>();
-        _tokensResponse = new HttpResponse<IEnumerable<Token>>();
     }
 
     [Given(@"an own Token t")]
@@ -113,7 +111,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
-        _tokensResponse.AssertResponseHasValue();
+        _tokensResponse.AssertHasValue();
 
         var tokens = _tokensResponse.Content!.Result!;
         tokens.Should().HaveCount(_givenOwnTokens.Count);
@@ -221,40 +219,30 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
-        _tokenResponse.AssertResponseHasValue();
-        _tokenResponse.AssertStatusCodeIsSuccess();
-        _tokenResponse.AssertResponseContentTypeIs("application/json");
-        _tokenResponse.AssertResponseContentCompliesWithSchema<Token>();
-
-        //if (_tokenResponse.HttpMethod == Method.Get.ToString())
-        //{
-        //_tokenResponse.AssertResponseContentCompliesWithSchema<Token>();
-        //}
-        //else if (_tokenResponse.HttpMethod == Method.Post.ToString())
-        //{
-        //    _tokenResponse.AssertResponseContentCompliesWithSchema<CreateTokenResponse>();
-        //    AssertResponseContentCompliesWithSchema<CreateTokenResponse>();
-        //}
+        _tokenResponse!.AssertHasValue();
+        _tokenResponse!.AssertStatusCodeIsSuccess();
+        _tokenResponse!.AssertContentTypeIs("application/json");
+        _tokenResponse!.AssertContentCompliesWithSchema<Token>();
     }
 
-    [Then(@"the response status code for the token list request is (\d+) \(.+\)")]
+    [Then(@"the response status code for the Token list request is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeForTheTokenListRequestIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_tokensResponse.StatusCode;
+        var actualStatusCode = (int)_tokensResponse!.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_tokenResponse.StatusCode;
+        var actualStatusCode = (int)_tokenResponse!.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tokenResponse.Content!.Error.Should().NotBeNull();
-        _tokenResponse.Content!.Error!.Code.Should().Be(errorCode);
+        _tokenResponse!.Content!.Error.Should().NotBeNull();
+        _tokenResponse!.Content!.Error!.Code.Should().Be(errorCode);
     }
 }
