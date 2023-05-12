@@ -5,7 +5,7 @@ namespace ConsumerApi.Tests.Integration.Extensions;
 
 public static class HttpResponseExtensions
 {
-    public static void AssertResponseHasValue<T>(this HttpResponse<T> response)
+    public static void AssertResponseHasValue<T>(this HttpResponse<T>? response)
     {
         response.Should().NotBeNull();
     }

@@ -20,8 +20,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     private string _peerTokenId;
     private readonly List<Token> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<Token> _tokenResponse;
-    private HttpResponse<IEnumerable<Token>> _tokensResponse;
+    private HttpResponse<Token>? _tokenResponse;
+    private HttpResponse<IEnumerable<Token>>? _tokensResponse;
     private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
@@ -32,8 +32,6 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _peerTokenId = string.Empty;
         _givenOwnTokens = new List<Token>();
         _responseTokens = new List<Token>();
-        _tokenResponse = new HttpResponse<Token>();
-        _tokensResponse = new HttpResponse<IEnumerable<Token>>();
     }
 
     [Given(@"an own Token t")]
@@ -53,7 +51,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
         _tokenResponse.AssertStatusCodeIsSuccess();
 
-        var token = _tokenResponse.Content!.Result!;
+        var token = _tokenResponse.Content.Result!;
         _tokenId = token.Id;
         _tokenId.Should().NotBeNullOrEmpty();
     }
@@ -77,8 +75,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
         _tokenResponse.AssertStatusCodeIsSuccess();
 
-        var token = _tokenResponse.Content!.Result!;
-        _peerTokenId = token.Id!;
+        var token = _tokenResponse.Content.Result!;
+        _peerTokenId = token.Id;
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
 
@@ -103,7 +101,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             response.Should().NotBeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            _givenOwnTokens.Add(response.Content!.Result!);
+            _givenOwnTokens.Add(response.Content.Result!);
         }
     }
 
@@ -115,7 +113,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
         _tokensResponse.AssertResponseHasValue();
 
-        var tokens = _tokensResponse.Content!.Result!;
+        var tokens = _tokensResponse.Content.Result!.ToArray();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
 
         _responseTokens.AddRange(tokens);
@@ -137,8 +135,6 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
                 case var c when c.Contains("<yesterday>"):
                     requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", YesterdayAsString);
                     break;
-                default:
-                    break;
             }
         }
 
@@ -158,10 +154,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         switch (id)
         {
             case "t.Id":
-                id = _tokenId!;
+                id = _tokenId;
                 break;
             case "p.Id":
-                id = _peerTokenId!;
+                id = _peerTokenId;
                 break;
             case "a valid Id":
                 id = "TOKjVPS6h1082AuBVBaR";
@@ -196,7 +192,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var tokenIds = new List<string> { _tokenId, _peerTokenId };
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
 
-        var tokens = _tokensResponse.Content!.Result!;
+        var tokens = _tokensResponse.Content.Result!;
         _responseTokens.AddRange(tokens);
     }
 
@@ -222,31 +218,31 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAToken()
     {
         _tokenResponse.AssertResponseHasValue();
-        _tokenResponse.AssertStatusCodeIsSuccess();
-        _tokenResponse.AssertResponseContentTypeIs("application/json");
-        _tokenResponse.AssertResponseContentCompliesWithSchema();
+        _tokenResponse!.AssertStatusCodeIsSuccess();
+        _tokenResponse!.AssertResponseContentTypeIs("application/json");
+        _tokenResponse!.AssertResponseContentCompliesWithSchema();
     }
-
+    
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         if (_tokensResponse != null)
-    {
-        var actualStatusCode = (int)_tokensResponse.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
-    }
-
+        {
+            var actualStatusCode = (int)_tokensResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+        
         if (_tokenResponse != null)
-    {
-        var actualStatusCode = (int)_tokenResponse.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
-    }
+        {
+            var actualStatusCode = (int)_tokenResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tokenResponse.Content!.Error.Should().NotBeNull();
-        _tokenResponse.Content!.Error!.Code.Should().Be(errorCode);
+        _tokenResponse!.Content.Error.Should().NotBeNull();
+        _tokenResponse.Content.Error!.Code.Should().Be(errorCode);
     }
 }
