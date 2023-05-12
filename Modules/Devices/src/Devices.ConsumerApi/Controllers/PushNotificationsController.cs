@@ -19,17 +19,17 @@ public class PushNotificationsController : ApiControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request)
+    public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request);
+        await _mediator.Send(request, cancellationToken);
         return NoContent();
     }
 
     [HttpPost("SendTestNotification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> SendTestPushNotification([FromBody] dynamic data)
+    public async Task<IActionResult> SendTestPushNotification([FromBody] dynamic data, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendTestNotificationCommand { Data = data });
+        await _mediator.Send(new SendTestNotificationCommand { Data = data }, cancellationToken);
         return NoContent();
     }
 }

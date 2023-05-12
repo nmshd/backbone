@@ -38,11 +38,11 @@ public class SyncRunsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartSyncRun(StartSyncRunRequestBody requestBody,
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
-        ushort supportedDatawalletVersion)
+        ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
-            supportedDatawalletVersion));
+            supportedDatawalletVersion), cancellationToken);
 
         if (response.Status == StartSyncRunStatus.Created)
             return Created(response);
@@ -56,7 +56,7 @@ public class SyncRunsController : ApiControllerBase
         StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Finalize([FromRoute] SyncRunId id,
-        [FromBody] OldFinalizeExternalEventSyncRequest request)
+        [FromBody] OldFinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
     {
         var modificationsWithVersion = request.DatawalletModifications.Select(m => new PushDatawalletModificationItem
         {
@@ -70,7 +70,7 @@ public class SyncRunsController : ApiControllerBase
 
         var response =
             await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id, request.ExternalEventResults,
-                modificationsWithVersion));
+                modificationsWithVersion), cancellationToken);
 
         return Ok(response);
     }
@@ -80,10 +80,10 @@ public class SyncRunsController : ApiControllerBase
         StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> FinalizeExternalEventSync([FromRoute] SyncRunId id,
-        [FromBody] FinalizeExternalEventSyncRequest request)
+        [FromBody] FinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id,
-            request.ExternalEventResults, request.DatawalletModifications));
+            request.ExternalEventResults, request.DatawalletModifications), cancellationToken);
 
         return Ok(response);
     }
@@ -93,10 +93,10 @@ public class SyncRunsController : ApiControllerBase
         StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> FinalizeDatawalletVersionUpgrade([FromRoute] SyncRunId id,
-        [FromBody] FinalizeDatawalletVersionUpgradeRequest request)
+        [FromBody] FinalizeDatawalletVersionUpgradeRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id,
-            request.NewDatawalletVersion, request.DatawalletModifications));
+            request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
 
         return Ok(response!);
     }
@@ -105,7 +105,7 @@ public class SyncRunsController : ApiControllerBase
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetExternalEventsOfSyncRunResponse>),
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetExternalEventsOfSyncRun([FromRoute] SyncRunId id,
-        [FromQuery] PaginationFilter paginationFilter)
+        [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -113,7 +113,7 @@ public class SyncRunsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new GetExternalEventsOfSyncRunQuery(id, paginationFilter));
+        var response = await _mediator.Send(new GetExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
 
         return Paged(response);
     }
@@ -121,9 +121,9 @@ public class SyncRunsController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<SyncRunDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSyncRunById(SyncRunId id)
+    public async Task<IActionResult> GetSyncRunById(SyncRunId id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetSyncRunByIdQuery(id));
+        var response = await _mediator.Send(new GetSyncRunByIdQuery(id), cancellationToken);
         return Ok(response);
     }
 
@@ -132,9 +132,9 @@ public class SyncRunsController : ApiControllerBase
         StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RefreshExpirationTimeOfSyncRun(SyncRunId id)
+    public async Task<IActionResult> RefreshExpirationTimeOfSyncRun(SyncRunId id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id));
+        var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id), cancellationToken);
         return Ok(response);
     }
 }
