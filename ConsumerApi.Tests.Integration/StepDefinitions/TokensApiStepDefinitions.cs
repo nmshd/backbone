@@ -18,8 +18,9 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     private readonly TokensApi _tokensApi;
     private string _tokenId;
     private string _peerTokenId;
-    private readonly List<Token> _givenOwnTokens;
+    private readonly List<CreateTokenResponse> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
+    private HttpResponse<CreateTokenResponse>? _createTokenResponse;
     private HttpResponse<Token>? _tokenResponse;
     private HttpResponse<IEnumerable<Token>>? _tokensResponse;
     private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
@@ -30,7 +31,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
         _peerTokenId = string.Empty;
-        _givenOwnTokens = new List<Token>();
+        _givenOwnTokens = new List<CreateTokenResponse>();
         _responseTokens = new List<Token>();
     }
 
@@ -48,10 +49,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.Authenticate = true;
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
 
-        _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _tokenResponse.AssertStatusCodeIsSuccess();
+        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _createTokenResponse.AssertStatusCodeIsSuccess();
 
-        var token = _tokenResponse.Content.Result!;
+        var token = _createTokenResponse.Content.Result!;
         _tokenId = token.Id;
         _tokenId.Should().NotBeNullOrEmpty();
     }
@@ -72,10 +73,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.AuthenticationParameters.Password = "b";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
 
-        _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _tokenResponse.AssertStatusCodeIsSuccess();
+        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _createTokenResponse.AssertStatusCodeIsSuccess();
 
-        var token = _tokenResponse.Content.Result!;
+        var token = _createTokenResponse.Content.Result!;
         _peerTokenId = token.Id;
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
@@ -111,7 +112,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
-        _tokensResponse.AssertResponseHasValue();
+        _tokensResponse.AssertHasValue();
 
         var tokens = _tokensResponse.Content.Result!.ToArray();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
@@ -138,14 +139,14 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             }
         }
 
-        _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
     }
 
     [When(@"a POST request is sent to the Tokens endpoint with no request content")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
         _requestConfiguration.Content = null;
-        _tokenResponse = await _tokensApi.CreateToken(_requestConfiguration);
+        _createTokenResponse = await _tokensApi.CreateToken(_requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Tokens/{id} endpoint with ""?(.*?)""?")]
@@ -183,7 +184,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
 
         requestConfiguration.SupplementWith(_requestConfiguration);
 
-        _tokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
@@ -214,15 +215,24 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             .And.BeEquivalentTo(_givenOwnTokens.Select(t => t.Id), options => options.WithoutStrictOrdering());
     }
 
+    [Then(@"the response contains a CreateTokenResponse")]
+    public void ThenTheResponseContainsACreateTokenResponse()
+    {
+        _createTokenResponse!.AssertHasValue();
+        _createTokenResponse!.AssertStatusCodeIsSuccess();
+        _createTokenResponse!.AssertContentTypeIs("application/json");
+        _createTokenResponse!.AssertContentCompliesWithSchema();
+    }
+
     [Then(@"the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
-        _tokenResponse.AssertResponseHasValue();
+        _tokenResponse!.AssertHasValue();
         _tokenResponse!.AssertStatusCodeIsSuccess();
-        _tokenResponse!.AssertResponseContentTypeIs("application/json");
-        _tokenResponse!.AssertResponseContentCompliesWithSchema();
+        _tokenResponse!.AssertContentTypeIs("application/json");
+        _tokenResponse!.AssertContentCompliesWithSchema();
     }
-    
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
@@ -231,10 +241,16 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             var actualStatusCode = (int)_tokensResponse.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
-        
+
         if (_tokenResponse != null)
         {
             var actualStatusCode = (int)_tokenResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_createTokenResponse != null)
+        {
+            var actualStatusCode = (int)_createTokenResponse.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
     }

@@ -10,7 +10,7 @@ Scenario: Requesting a list of own Tokens
 	Then the response status code is 200 (OK)
 	And the response contains all Tokens with the given ids
 
-Scenario: Requesting an own and peer tokens
+Scenario: Requesting an own and peer Token
 	Given the user is authenticated
 	And an own Token t
 	And a peer Token p

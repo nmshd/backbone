@@ -65,9 +65,9 @@ public class ChallengesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        _response!.AssertResponseHasValue();
+        _response!.AssertHasValue();
         _response!.AssertStatusCodeIsSuccess();
-        _response!.AssertResponseContentTypeIs("application/json");
+        _response!.AssertContentTypeIs("application/json");
 
         AssertExpirationDateIsInFuture();
     }

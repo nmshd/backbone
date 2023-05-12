@@ -7,9 +7,9 @@ public class TokensApi : BaseApi
 {
     public TokensApi(RestClient client) : base(client) { }
 
-    public async Task<HttpResponse<Token>> CreateToken(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<CreateTokenResponse>> CreateToken(RequestConfiguration requestConfiguration)
     {
-        return await Post<Token>("/Tokens", requestConfiguration);
+        return await Post<CreateTokenResponse>("/Tokens", requestConfiguration);
     }
 
     public async Task<HttpResponse<Token>> GetTokenById(RequestConfiguration requestConfiguration, string id)

@@ -8,12 +8,11 @@ namespace AdminApi.Tests.Integration.StepDefinitions;
 public class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
-    private HttpResponse<List<IdentitySummaryDTO>> _response;
+    private HttpResponse<List<IdentitySummaryDTO>>? _response;
 
     public IdentitiesApiStepDefinitions(IdentitiesApi identitiesApi) : base()
     {
         _identitiesApi = identitiesApi;
-        _response = new HttpResponse<List<IdentitySummaryDTO>>();
     }
 
     [When(@"a GET request is sent to the Identities/ endpoint")]
@@ -21,7 +20,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         _response = await _identitiesApi.GetIdentities(_requestConfiguration);
         _response.Should().NotBeNull();
-        _response!.Content.Should().NotBeNull();
+        _response.Content.Should().NotBeNull();
     }
 
     [Then(@"the response contains a paginated list of Identities")]
@@ -34,7 +33,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response.StatusCode;
+        var actualStatusCode = (int)_response!.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 }
