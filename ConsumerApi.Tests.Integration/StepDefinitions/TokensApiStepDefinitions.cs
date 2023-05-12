@@ -224,31 +224,23 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenResponse.AssertResponseHasValue();
         _tokenResponse.AssertStatusCodeIsSuccess();
         _tokenResponse.AssertResponseContentTypeIs("application/json");
-        _tokenResponse.AssertResponseContentCompliesWithSchema<Token>();
-
-        //if (_tokenResponse.HttpMethod == Method.Get.ToString())
-        //{
-        //_tokenResponse.AssertResponseContentCompliesWithSchema<Token>();
-        //}
-        //else if (_tokenResponse.HttpMethod == Method.Post.ToString())
-        //{
-        //    _tokenResponse.AssertResponseContentCompliesWithSchema<CreateTokenResponse>();
-        //    AssertResponseContentCompliesWithSchema<CreateTokenResponse>();
-        //}
-    }
-
-    [Then(@"the response status code for the token list request is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeForTheTokenListRequestIs(int expectedStatusCode)
-    {
-        var actualStatusCode = (int)_tokensResponse.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        _tokenResponse.AssertResponseContentCompliesWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
+        if (_tokensResponse != null)
+    {
+        var actualStatusCode = (int)_tokensResponse.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode);
+    }
+
+        if (_tokenResponse != null)
+    {
         var actualStatusCode = (int)_tokenResponse.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
+    }
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
