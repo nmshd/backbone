@@ -49,10 +49,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.Authenticate = true;
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
 
-        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _createTokenResponse.AssertStatusCodeIsSuccess();
+        var response = await _tokensApi.CreateToken(requestConfiguration);
+        response.AssertStatusCodeIsSuccess();
 
-        var token = _createTokenResponse.Content.Result!;
+        var token = response.Content.Result!;
         _tokenId = token.Id;
         _tokenId.Should().NotBeNullOrEmpty();
     }
@@ -73,10 +73,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.AuthenticationParameters.Password = "b";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
 
-        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
-        _createTokenResponse.AssertStatusCodeIsSuccess();
+        var response = await _tokensApi.CreateToken(requestConfiguration);
+        response.AssertStatusCodeIsSuccess();
 
-        var token = _createTokenResponse.Content.Result!;
+        var token = response.Content.Result!;
         _peerTokenId = token.Id;
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
