@@ -21,6 +21,6 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_identities.ItemsOnPage.Where(it=>it.Address==address).First());
+        throw new NotImplementedException();
     }
 }

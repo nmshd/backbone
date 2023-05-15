@@ -26,7 +26,7 @@ public class DevicesRepository : IDevicesRepository
     {
         var query = _readonlyDevices
             .NotDeleted()
-            .IncludeUser()
+            .IncludeAll(_dbContext)
             .OfIdentity(identity);
 
         if (ids.Any())
@@ -36,22 +36,12 @@ public class DevicesRepository : IDevicesRepository
 
     }
 
-    public async Task<Device> GetCurrentDevice(DeviceId deviceId, CancellationToken cancellationToken)
+    public async Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
-        return await _readonlyDevices
+        return await (track ? _devices : _readonlyDevices)
             .NotDeleted()
-            .IncludeUser()
+            .IncludeAll(_dbContext)
             .FirstWithId(deviceId, cancellationToken);
-    }
-
-    public async Task<Device> GetDeviceByIdentityAndId(IdentityAddress identityAddress, DeviceId deviceId, CancellationToken cancellationToken)
-    {
-        var device = await _readonlyDevices
-            .OfIdentity(identityAddress)
-            .NotDeleted()
-            .Include(d => d.Identity)
-            .FirstWithId(deviceId, cancellationToken);
-        return device;
     }
 
     public async Task MarkAsDeleted(DeviceId id, byte[] deletionCertificate, DeviceId deletedByDevice, CancellationToken cancellationToken)
@@ -62,5 +52,11 @@ public class DevicesRepository : IDevicesRepository
         _devices.Update(device);
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(Device device, CancellationToken cancellationToken)
+    {
+        _devices.Update(device);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

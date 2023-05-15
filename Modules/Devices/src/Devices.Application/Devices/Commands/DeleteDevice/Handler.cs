@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
-        var device = await _devicesRepository.GetDeviceById(request.DeviceId, cancellationToken);
+        var device = await _devicesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
 
         if(device.Identity.Address != _userContext.GetAddress()) {
             throw new NotFoundException();
@@ -34,7 +34,9 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         _logger.LogTrace("Challenge successfully validated.");
 
-        await _devicesRepository.MarkAsDeleted(device.Id, request.DeletionCertificate, _userContext.GetDeviceId(), cancellationToken);
+        device.MarkAsDeleted(request.DeletionCertificate, _userContext.GetDeviceId());
+
+        await _devicesRepository.Update(device, cancellationToken);
 
         _logger.LogTrace($"Successfully marked device with id '{request.DeviceId}' as deleted.");
     }

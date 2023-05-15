@@ -8,7 +8,7 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IDevicesRepository
 {
     Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter);
-    Task<Device> GetCurrentDevice(DeviceId deviceId, CancellationToken cancellationToken);
-    Task<Device> GetDeviceByIdentityAndId(IdentityAddress identityAddress, DeviceId deviceId, CancellationToken cancellationToken);
+    Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task MarkAsDeleted(DeviceId id, byte[] deletionCertificate, DeviceId deletedByDevice, CancellationToken cancellationToken);
+    Task Update(Device device, CancellationToken cancellationToken);
 }

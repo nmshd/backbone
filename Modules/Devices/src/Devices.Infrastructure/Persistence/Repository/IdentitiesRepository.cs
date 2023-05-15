@@ -13,17 +13,19 @@ public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identities;
     private readonly IQueryable<Identity> _readonlyIdentities;
+    private readonly DevicesDbContext _dbContext;
 
     public IdentitiesRepository(DevicesDbContext dbContext)
     {
         _identities = dbContext.Identities;
         _readonlyIdentities = dbContext.Identities.AsNoTracking();
+        _dbContext = dbContext;
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
     {
         var paginationResult = await _readonlyIdentities
-            .Include(i => i.Devices)
+            .IncludeAll(_dbContext)
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
         return paginationResult;
     }
@@ -31,7 +33,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
     {
         return await _readonlyIdentities
-            .Include(i=>i.Devices)
+            .IncludeAll(_dbContext)
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 }
