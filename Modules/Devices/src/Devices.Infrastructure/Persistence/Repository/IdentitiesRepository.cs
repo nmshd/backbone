@@ -30,6 +30,8 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentities.FirstWithAddressOrDefault(address, cancellationToken);
+        return await _readonlyIdentities
+            .Include(i=>i.Devices)
+            .FirstWithAddressOrDefault(address, cancellationToken);
     }
 }

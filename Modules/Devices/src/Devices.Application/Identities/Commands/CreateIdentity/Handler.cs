@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.LogTrace($"Address created. Result: {address}");
 
-        var existingIdentity = _identityRepository.FindByAddress(address, cancellationToken);
+        var existingIdentity = await _identityRepository.FindByAddress(address, cancellationToken);
 
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());

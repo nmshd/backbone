@@ -8,5 +8,7 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IIdentitiesRepository
 {
     Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter);
+#nullable enable
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken);
+#nullable disable
 }
