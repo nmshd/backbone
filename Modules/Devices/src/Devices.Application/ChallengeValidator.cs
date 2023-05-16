@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.Crypto;
@@ -12,13 +12,13 @@ namespace Backbone.Modules.Devices.Application;
 
 public class ChallengeValidator
 {
-    private readonly IDevicesDbContext _dbContext;
     private readonly ISignatureHelper _signatureHelper;
+    private readonly IChallengesRepository _challengesRepository;
 
-    public ChallengeValidator(IDevicesDbContext dbContext, ISignatureHelper signatureHelper)
+    public ChallengeValidator(ISignatureHelper signatureHelper, IChallengesRepository challengesRepository)
     {
-        _dbContext = dbContext;
         _signatureHelper = signatureHelper;
+        _challengesRepository = challengesRepository;
     }
 
     public async Task Validate(SignedChallengeDTO signedChallenge, PublicKey publicKey)
@@ -45,7 +45,8 @@ public class ChallengeValidator
         if (deserializedChallenge == null)
             throw new NotFoundException(nameof(Challenge));
 
-        var challenge = await _dbContext.SetReadOnly<Challenge>().FirstOrDefaultAsync(c => c.Id == deserializedChallenge.Id);
+        var challenge = await _challengesRepository.FindById(deserializedChallenge.Id, CancellationToken.None);
+                              //_dbContext.SetReadOnly<Challenge>().FirstOrDefaultAsync(c => c.Id == deserializedChallenge.Id);
 
         if (challenge == null)
             throw new NotFoundException(nameof(Challenge));

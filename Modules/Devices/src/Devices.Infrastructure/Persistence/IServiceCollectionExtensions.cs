@@ -57,6 +57,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IDevicesRepository, DevicesRepository>();
+        services.AddTransient<IChallengesRepository, ChallengesRepository>();
     }
 
     public class DbOptions
