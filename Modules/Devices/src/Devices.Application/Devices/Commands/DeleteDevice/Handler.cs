@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         if(device.Identity.Address != _userContext.GetAddress()) {
             throw new NotFoundException();
         }
-
+        
         await _challengeValidator.Validate(request.SignedChallenge, PublicKey.FromBytes(device.Identity.PublicKey));
 
         _logger.LogTrace("Challenge successfully validated.");
