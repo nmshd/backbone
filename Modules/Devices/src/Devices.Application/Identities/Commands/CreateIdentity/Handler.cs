@@ -6,7 +6,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -20,11 +19,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
-    private readonly UserManager<ApplicationUser> _userManager;
 
-    public Handler(UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identityRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identityRepository)
     {
-        _userManager = userManager;
         _challengeValidator = challengeValidator;
         _logger = logger;
         _eventBus = eventBus;
@@ -55,11 +52,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var user = new ApplicationUser(newIdentity);
 
-        var createUserResult = await _userManager.CreateAsync(user, command.DevicePassword);
-
-        if (!createUserResult.Succeeded)
-            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
-
+        await _identityRepository.AddUserForIdentity(user, command.DevicePassword);
+        
         _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
