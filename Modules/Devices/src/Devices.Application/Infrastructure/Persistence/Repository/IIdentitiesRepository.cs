@@ -11,4 +11,5 @@ public interface IIdentitiesRepository
 #nullable enable
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken);
 #nullable disable
+    Task AddUserForIdentity(ApplicationUser user, string password);
 }

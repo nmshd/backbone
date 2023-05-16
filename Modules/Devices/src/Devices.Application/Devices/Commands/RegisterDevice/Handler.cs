@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IIdentitiesRepository _identityRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
     public Handler(UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
     {
@@ -27,23 +27,20 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
         _challengeValidator = challengeValidator;
         _userContext = userContext;
         _logger = logger;
-        _identityRepository = identitiesRepository;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
     {
-        var identity = await _identityRepository.FindByAddress(_userContext.GetAddress(), cancellationToken);
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken);
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
 
         _logger.LogTrace("Successfully validated challenge.");
 
         var user = new ApplicationUser(identity, _userContext.GetDeviceId());
-
-        var createUserResult = await _userManager.CreateAsync(user, command.DevicePassword);
-
-        if (!createUserResult.Succeeded)
-            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+        
+        await _identitiesRepository.AddUserForIdentity(user, command.DevicePassword);
 
         _logger.LogTrace($"Successfully created device. Device ID: {user.DeviceId}, User ID: {user.Id}, Username: {user.UserName}");
 

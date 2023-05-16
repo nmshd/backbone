@@ -14,6 +14,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         _identities = identities;
     }
 
+    public Task AddUserForIdentity(ApplicationUser user, string password)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
     {
         return Task.FromResult(_identities);
