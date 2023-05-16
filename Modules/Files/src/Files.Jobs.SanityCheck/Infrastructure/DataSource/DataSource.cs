@@ -3,6 +3,7 @@ using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Files.Jobs.SanityCheck.Infrastructure.DataSource;
 
@@ -27,6 +28,6 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<FileId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.SetReadOnly<FileMetadata>().Select(u => u.Id).ToListAsync(cancellationToken);
+        return await _dbContext.SetReadOnly<File>().Select(u => u.Id).ToListAsync(cancellationToken);
     }
 }

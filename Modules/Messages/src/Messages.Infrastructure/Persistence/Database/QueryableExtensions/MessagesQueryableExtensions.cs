@@ -5,7 +5,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class MessagesQueryableExtensions
 {
