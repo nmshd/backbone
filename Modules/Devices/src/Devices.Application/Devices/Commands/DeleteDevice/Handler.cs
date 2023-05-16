@@ -12,11 +12,11 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
-    private readonly IDevicesRepository _devicesRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IDevicesRepository devicesRepository, IUserContext userContext, ChallengeValidator challengeValidator, ILogger<Handler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, ChallengeValidator challengeValidator, ILogger<Handler> logger)
     {
-        _devicesRepository = devicesRepository;
+        _identitiesRepository = identitiesRepository;
         _userContext = userContext;
         _challengeValidator = challengeValidator;
         _logger = logger;
@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
-        var device = await _devicesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
+        var device = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
 
         if(device.Identity.Address != _userContext.GetAddress()) {
             throw new NotFoundException();
@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         device.MarkAsDeleted(request.DeletionCertificate, _userContext.GetDeviceId());
 
-        await _devicesRepository.Update(device, cancellationToken);
+        await _identitiesRepository.Update(device, cancellationToken);
 
         _logger.LogTrace($"Successfully marked device with id '{request.DeviceId}' as deleted.");
     }

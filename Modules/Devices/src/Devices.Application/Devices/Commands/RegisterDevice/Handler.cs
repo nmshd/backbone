@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;

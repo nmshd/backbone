@@ -11,19 +11,19 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IMapper _mapper;
-    private readonly IDevicesRepository _devicesRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IMapper mapper, IUserContext userContext, IDevicesRepository devicesRepository)
+    public Handler(IMapper mapper, IUserContext userContext, IIdentitiesRepository devicesRepository)
     {
         _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
-        _devicesRepository = devicesRepository;
+        _identitiesRepository = devicesRepository;
     }
 
     public async Task<ListDevicesResponse> Handle(ListDevicesQuery request, CancellationToken cancellationToken)
     {
 
-        var dbPaginationResult = await _devicesRepository.FindAll(_activeIdentity, request.Ids, request.PaginationFilter);
+        var dbPaginationResult = await _identitiesRepository.FindAll(_activeIdentity, request.Ids, request.PaginationFilter);
 
         var items = _mapper.Map<DeviceDTO[]>(dbPaginationResult.ItemsOnPage);
 

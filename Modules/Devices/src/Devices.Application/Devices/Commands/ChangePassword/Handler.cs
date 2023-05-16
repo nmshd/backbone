@@ -14,19 +14,19 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
     private readonly DeviceId _activeDevice;
     private readonly ILogger<Handler> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IDevicesRepository _devicesRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(UserManager<ApplicationUser> userManager, IUserContext userContext, ILogger<Handler> logger, IDevicesRepository devicesRepository)
+    public Handler(UserManager<ApplicationUser> userManager, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
     {
         _userManager = userManager;
         _logger = logger;
         _activeDevice = userContext.GetDeviceId();
-        _devicesRepository = devicesRepository;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _devicesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true);
+        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true);
 
         var changePasswordResult = await _userManager.ChangePasswordAsync(currentDevice.User, request.OldPassword, request.NewPassword);
 

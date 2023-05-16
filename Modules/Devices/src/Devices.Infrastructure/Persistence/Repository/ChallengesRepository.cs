@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;

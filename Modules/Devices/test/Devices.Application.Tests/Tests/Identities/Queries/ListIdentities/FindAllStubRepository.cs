@@ -24,7 +24,22 @@ public class FindAllStubRepository : IIdentitiesRepository
         return Task.FromResult(_identities);
     }
 
+    public Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Update(Device device, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

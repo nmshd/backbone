@@ -18,6 +18,8 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly DevicesDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<Device> _devices;
+    private readonly IQueryable<Device> _readonlyDevices;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
@@ -25,6 +27,8 @@ public class IdentitiesRepository : IIdentitiesRepository
         _readonlyIdentities = dbContext.Identities.AsNoTracking();
         _dbContext = dbContext;
         _userManager = userManager;
+        _devices = dbContext.Devices;
+        _readonlyDevices = dbContext.Devices.AsNoTracking();
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
@@ -48,5 +52,31 @@ public class IdentitiesRepository : IIdentitiesRepository
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
+    public async Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    {
+        var query = _readonlyDevices
+            .NotDeleted()
+            .IncludeAll(_dbContext)
+            .OfIdentity(identity);
 
+        if (ids.Any())
+            query = query.WithIdIn(ids);
+
+        return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+
+    }
+
+    public async Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _devices : _readonlyDevices)
+            .NotDeleted()
+            .IncludeAll(_dbContext)
+            .FirstWithId(deviceId, cancellationToken);
+    }
+
+    public async Task Update(Device device, CancellationToken cancellationToken)
+    {
+        _devices.Update(device);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }

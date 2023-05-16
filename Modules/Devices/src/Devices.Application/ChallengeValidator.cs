@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.Crypto;
 using Enmeshed.Crypto.Abstractions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Application;
 

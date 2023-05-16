@@ -10,18 +10,18 @@ public class Handler : IRequestHandler<GetActiveDeviceQuery, DeviceDTO>
 {
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
-    private readonly IDevicesRepository _devicesRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IMapper mapper, IUserContext userContext, IDevicesRepository devicesRepository)
+    public Handler(IMapper mapper, IUserContext userContext, IIdentitiesRepository identitiesRepository)
     {
         _mapper = mapper;
         _userContext = userContext;
-        _devicesRepository = devicesRepository;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<DeviceDTO> Handle(GetActiveDeviceQuery request, CancellationToken cancellationToken)
     {
-        var device = await _devicesRepository.GetDeviceById(_userContext.GetDeviceId(), cancellationToken);
+        var device = await _identitiesRepository.GetDeviceById(_userContext.GetDeviceId(), cancellationToken);
         var deviceDTO = _mapper.Map<DeviceDTO>(device);
         return deviceDTO;
     }
