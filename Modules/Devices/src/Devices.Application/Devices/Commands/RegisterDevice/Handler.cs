@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -18,12 +17,10 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
+    public Handler(ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
     {
-        _userManager = userManager;
         _challengeValidator = challengeValidator;
         _userContext = userContext;
         _logger = logger;
