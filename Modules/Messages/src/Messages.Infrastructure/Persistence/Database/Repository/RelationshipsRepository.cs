@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Application.Extensions;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
