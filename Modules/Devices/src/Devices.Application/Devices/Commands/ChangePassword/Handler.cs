@@ -26,12 +26,11 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
 
     public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _devicesRepository.GetDeviceById(_activeDevice, cancellationToken);
+        var currentDevice = await _devicesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true);
 
         var changePasswordResult = await _userManager.ChangePasswordAsync(currentDevice.User, request.OldPassword, request.NewPassword);
 
         if (!changePasswordResult.Succeeded)
-            if (!changePasswordResult.Succeeded)
                 throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
         _logger.LogTrace($"Successfully changed password for device with id '{_activeDevice}'.");
