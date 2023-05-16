@@ -1,29 +1,29 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Files.Application.Extensions;
 using Backbone.Modules.Files.Application.Files.DTOs;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
-using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.Extensions;
+using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 
-public class Handler : RequestHandlerBase<ListFileMetadataQuery, ListFileMetadataResponse>
+public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataResponse>
 {
-    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
+    private readonly IFilesRepository _filesRepository;
+    private readonly IUserContext _userContext;
+    private readonly IMapper _mapper;
 
-    public override async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
+    public Handler(IFilesRepository filesRepository, IUserContext userContext, IMapper mapper)
     {
-        var query = _dbContext
-            .SetReadOnly<FileMetadata>()
-            .CreatedBy(_activeIdentity)
-            .NotExpired()
-            .NotDeleted();
+        _filesRepository = filesRepository;
+        _userContext = userContext;
+        _mapper = mapper;
+    }
 
-        if (request.Ids.Any())
-            query = query.WithIdIn(request.Ids);
 
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
+    public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
+    {
+        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids, _userContext.GetAddress(), request.PaginationFilter);
+        
         var items = _mapper.Map<FileMetadataDTO[]>(dbPaginationResult.ItemsOnPage);
 
         var response = new ListFileMetadataResponse(items, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);

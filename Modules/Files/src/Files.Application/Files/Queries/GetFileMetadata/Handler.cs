@@ -1,26 +1,24 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Backbone.Modules.Files.Application.Extensions;
 using Backbone.Modules.Files.Application.Files.DTOs;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
-using Backbone.Modules.Files.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 
-public class Handler : RequestHandlerBase<GetFileMetadataQuery, FileMetadataDTO>
+public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
 {
-    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper) : base(dbContext, userContext, mapper) { }
+    private readonly IFilesRepository _filesRepository;
+    private readonly IMapper _mapper;
 
-    public override async Task<FileMetadataDTO> Handle(GetFileMetadataQuery request, CancellationToken cancellationToken)
+    public Handler(IFilesRepository filesRepository, IMapper mapper) {
+        _filesRepository = filesRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<FileMetadataDTO> Handle(GetFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var metadata = await _dbContext
-            .SetReadOnly<FileMetadata>()
-            .NotExpired()
-            .NotDeleted()
-            .ProjectTo<FileMetadataDTO>(_mapper.ConfigurationProvider)
-            .FirstWithId(request.Id, cancellationToken);
+        var file = await _filesRepository.Find(request.Id, fillContent: false);
 
-        return metadata;
+        return _mapper.Map<FileMetadataDTO>(file);
     }
 }

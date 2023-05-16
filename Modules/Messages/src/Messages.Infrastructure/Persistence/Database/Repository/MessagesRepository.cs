@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
@@ -10,7 +9,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository

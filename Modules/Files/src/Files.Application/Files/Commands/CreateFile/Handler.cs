@@ -1,58 +1,45 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
-using Backbone.Modules.Files.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 {
-    private readonly IBlobStorage _blobStorage;
-    private readonly IFilesDbContext _dbContext;
-    private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
+    private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
-    private CreateFileCommand _request;
-    private readonly BlobOptions _blobOptions;
 
-    public Handler(IFilesDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions)
+    public Handler(IUserContext userContext, IMapper mapper, IFilesRepository filesRepository)
     {
-        _dbContext = dbContext;
         _userContext = userContext;
         _mapper = mapper;
-        _blobStorage = blobStorage;
-        _logger = logger;
-        _blobOptions = blobOptions.Value;
+        _filesRepository = filesRepository;
     }
 
     public async Task<CreateFileResponse> Handle(CreateFileCommand request, CancellationToken cancellationToken)
     {
-        _request = request;
+        var file = new File(
+            _userContext.GetAddress(),
+            _userContext.GetDeviceId(),
+            request.Owner,
+            request.OwnerSignature ?? Array.Empty<byte>(),
+            request.CipherHash,
+            request.FileContent,
+            request.FileContent.LongLength,
+            request.ExpiresAt,
+            request.EncryptedProperties
+        );
 
-        var fileMetadata = await SaveFile(cancellationToken);
-
-        var response = _mapper.Map<CreateFileResponse>(fileMetadata);
+        await _filesRepository.Add(
+            file,
+            cancellationToken
+        );
+        
+        var response = _mapper.Map<CreateFileResponse>(file);
 
         return response;
-    }
-
-    private async Task<FileMetadata> SaveFile(CancellationToken cancellationToken)
-    {
-        var metadata = new FileMetadata(_userContext.GetAddress(), _userContext.GetDeviceId(), _request.Owner, _request.OwnerSignature ?? Array.Empty<byte>(), _request.CipherHash, _request.FileContent.LongLength, _request.ExpiresAt, _request.EncryptedProperties);
-
-        await _dbContext.Set<FileMetadata>().AddAsync(metadata, cancellationToken);
-        _blobStorage.Add(_blobOptions.RootFolder, metadata.Id, _request.FileContent);
-
-        await _blobStorage.SaveAsync();
-        _logger.LogTrace("Successfully saved metadata.");
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        _logger.LogTrace("Successfully saved content.");
-
-        return metadata;
     }
 }

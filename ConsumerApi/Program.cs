@@ -6,8 +6,6 @@ using ConsumerApi.Extensions;
 using ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
