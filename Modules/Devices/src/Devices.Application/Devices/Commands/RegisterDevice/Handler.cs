@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         var user = new ApplicationUser(identity, _userContext.GetDeviceId());
         
-        await _identitiesRepository.AddUserForIdentity(user, command.DevicePassword);
+        await _identitiesRepository.AddUser(user, command.DevicePassword);
 
         _logger.LogTrace($"Successfully created device. Device ID: {user.DeviceId}, User ID: {user.Id}, Username: {user.UserName}");
 

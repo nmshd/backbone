@@ -14,7 +14,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         _identities = identities;
     }
 
-    public Task AddUserForIdentity(ApplicationUser user, string password)
+    public Task AddUser(ApplicationUser user, string password)
     {
         throw new NotImplementedException();
     }

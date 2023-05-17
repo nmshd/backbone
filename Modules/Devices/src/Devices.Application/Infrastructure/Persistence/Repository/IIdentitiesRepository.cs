@@ -15,7 +15,7 @@ public interface IIdentitiesRepository
     #endregion
 
     #region Users
-    Task AddUserForIdentity(ApplicationUser user, string password);
+    Task AddUser(ApplicationUser user, string password);
     #endregion
 
     #region Devices

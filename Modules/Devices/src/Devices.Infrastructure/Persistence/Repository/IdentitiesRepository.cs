@@ -46,7 +46,7 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
-    public async Task AddUserForIdentity(ApplicationUser user, string password)
+    public async Task AddUser(ApplicationUser user, string password)
     {
         var createUserResult = await _userManager.CreateAsync(user, password);
         if (!createUserResult.Succeeded)

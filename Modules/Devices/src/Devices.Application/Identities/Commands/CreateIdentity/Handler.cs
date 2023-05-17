@@ -52,7 +52,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var user = new ApplicationUser(newIdentity);
 
-        await _identitiesRepository.AddUserForIdentity(user, command.DevicePassword);
+        await _identitiesRepository.AddUser(user, command.DevicePassword);
         
         _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
 
