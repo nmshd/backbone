@@ -45,7 +45,6 @@ public class ChallengeValidator
             throw new NotFoundException(nameof(Challenge));
 
         var challenge = await _challengesRepository.FindById(deserializedChallenge.Id, CancellationToken.None);
-                              //_dbContext.SetReadOnly<Challenge>().FirstOrDefaultAsync(c => c.Id == deserializedChallenge.Id);
 
         if (challenge == null)
             throw new NotFoundException(nameof(Challenge));
