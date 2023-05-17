@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
     public async Task<ListDevicesResponse> Handle(ListDevicesQuery request, CancellationToken cancellationToken)
     {
 
-        var dbPaginationResult = await _identitiesRepository.FindAll(_activeIdentity, request.Ids, request.PaginationFilter);
+        var dbPaginationResult = await _identitiesRepository.FindAllDevicesOfIdentity(_activeIdentity, request.Ids, request.PaginationFilter);
 
         var items = _mapper.Map<DeviceDTO[]>(dbPaginationResult.ItemsOnPage);
 

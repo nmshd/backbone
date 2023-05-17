@@ -52,7 +52,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
-    public async Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
     {
         var query = _readonlyDevices
             .NotDeleted()

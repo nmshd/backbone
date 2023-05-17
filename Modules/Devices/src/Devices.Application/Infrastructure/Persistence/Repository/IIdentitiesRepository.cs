@@ -19,7 +19,7 @@ public interface IIdentitiesRepository
     #endregion
 
     #region Devices
-    Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter);
+    Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter);
     Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
     #endregion

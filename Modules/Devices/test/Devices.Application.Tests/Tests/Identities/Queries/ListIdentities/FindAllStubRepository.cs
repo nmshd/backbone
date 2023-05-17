@@ -24,7 +24,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         return Task.FromResult(_identities);
     }
 
-    public Task<DbPaginationResult<Device>> FindAll(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
     {
         throw new NotImplementedException();
     }
