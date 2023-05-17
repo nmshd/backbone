@@ -3,14 +3,10 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
@@ -18,37 +14,29 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResponse>
 {
     private readonly ChallengeValidator _challengeValidator;
-    private readonly IDevicesDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IDevicesDbContext dbContext, UserManager<ApplicationUser> userManager, ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger)
+    public Handler(ChallengeValidator challengeValidator, IUserContext userContext, ILogger<Handler> logger, IIdentitiesRepository identitiesRepository)
     {
-        _dbContext = dbContext;
-        _userManager = userManager;
         _challengeValidator = challengeValidator;
         _userContext = userContext;
         _logger = logger;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
     {
-        var identity = await _dbContext
-            .Set<Identity>()
-            .Include(i => i.Devices)
-            .FirstWithAddress(_userContext.GetAddress(), cancellationToken);
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken);
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
 
         _logger.LogTrace("Successfully validated challenge.");
 
         var user = new ApplicationUser(identity, _userContext.GetDeviceId());
-
-        var createUserResult = await _userManager.CreateAsync(user, command.DevicePassword);
-
-        if (!createUserResult.Succeeded)
-            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+        
+        await _identitiesRepository.AddUser(user, command.DevicePassword);
 
         _logger.LogTrace($"Successfully created device. Device ID: {user.DeviceId}, User ID: {user.Id}, Username: {user.UserName}");
 
