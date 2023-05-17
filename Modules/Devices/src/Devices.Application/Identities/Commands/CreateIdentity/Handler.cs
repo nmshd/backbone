@@ -15,19 +15,19 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 {
     private readonly ApplicationOptions _applicationOptions;
     private readonly ITiersRepository _tiersRepository;
-    private readonly IIdentitiesRepository _identityRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identityRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identitiesRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
         _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
         _tiersRepository = tiersRepository;
-        _identityRepository = identityRepository;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.LogTrace($"Address created. Result: {address}");
 
-        var existingIdentity = await _identityRepository.FindByAddress(address, cancellationToken);
+        var existingIdentity = await _identitiesRepository.FindByAddress(address, cancellationToken);
 
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
@@ -52,7 +52,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var user = new ApplicationUser(newIdentity);
 
-        await _identityRepository.AddUserForIdentity(user, command.DevicePassword);
+        await _identitiesRepository.AddUserForIdentity(user, command.DevicePassword);
         
         _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
 

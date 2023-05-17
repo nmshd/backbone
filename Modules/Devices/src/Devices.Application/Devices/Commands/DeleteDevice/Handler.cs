@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         var device = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
 
         if(device.Identity.Address != _userContext.GetAddress()) {
-            throw new NotFoundException();
+            throw new NotFoundException(nameof(device));
         }
         
         await _challengeValidator.Validate(request.SignedChallenge, PublicKey.FromBytes(device.Identity.PublicKey));
