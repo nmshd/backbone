@@ -140,16 +140,13 @@ jobs:
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
-      - run: cd cns-transport
-      - run: pwd
-      - run: ls
       - uses: actions/setup-node@v3
         with:
           node-version: 19
-          cache: 'npm'
       - name: Transport Tests
+        working-directory: ./cns-transport
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm run test:local:node:lokijs
+        run: npm install && npm run test:local:node:lokijs
