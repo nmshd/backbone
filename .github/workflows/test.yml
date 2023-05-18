@@ -137,7 +137,10 @@ jobs:
         with:
           repository: nmshd/cns-transport
           path: cns-transport
-      - run: ls
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
+      - uses: akanieski/setup-postgres-cli@v1
+        with:
+          password: admin
+          command: psql -U postgres -h 127.0.0.1 -p 5432 < backbone/setup-postgres.sql
