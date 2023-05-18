@@ -141,11 +141,12 @@ jobs:
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
       - run: cd cns-transport
+      - run: pwd
+      - run: ls
       - uses: actions/setup-node@v3
         with:
           node-version: 19
           cache: 'npm'
-      - run: pwd
       - name: Transport Tests
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
