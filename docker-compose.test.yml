@@ -1,0 +1,61 @@
+services:
+  backbone:
+    image: nmshd-backbone
+    container_name: backbone
+    hostname: backbone
+    build:
+      context: ..
+      dockerfile: ConsumerApi/Dockerfile.debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "127.0.0.10:80:80"
+      - "5000:80"
+    depends_on:
+      - ms-sql-server
+      - rabbitmq
+    volumes:
+      - ../:/app
+
+  ### infrastructure ###
+
+  azure-storage-emulator:
+   container_name: azure-storage-emulator
+   image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
+   command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
+   ports:
+     - "10000:10000"
+   volumes:
+     - azure-storage-emulator-volume:/data
+
+  postgres:
+   container_name: bkb-postgres
+   hostname: postgres
+   image: postgres
+   environment:
+     - POSTGRES_PASSWORD=admin
+   volumes:
+     - postgres-volume:/var/lib/postgresql/data
+   ports:
+     - 5432:5432
+
+  rabbitmq:
+    container_name: bkb-rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672" # mgmt plugin, "guest/guest"
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq # default data dir
+
+networks:
+  default:
+    name: backbone
+
+volumes:
+  rabbitmq-volume:
+  postgres-volume:
+  azure-storage-emulator-volume:
+  elastic_data:

@@ -126,3 +126,11 @@ jobs:
         env:
           TAG: test
           MODULE: Tokens
+  cns-transport-test:
+    name: Runs cns transport tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker-compose handover
+        uses: actions/checkout@v3
+        with:
+          compose-file: './docker-compose.test.yml'
