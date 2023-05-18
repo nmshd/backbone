@@ -145,4 +145,4 @@ jobs:
       - uses: akanieski/setup-postgres-cli@v0.1.2
         with:
           password: admin
-          commands: psql -U postgres -h postgres -p 5432 < backbone/setup-postgres.sql
+          commands: psql -U postgres -h 172.17.0.1 -p 5432 < backbone/setup-postgres.sql
