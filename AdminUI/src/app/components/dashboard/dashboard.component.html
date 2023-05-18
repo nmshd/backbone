@@ -1,0 +1,13 @@
+<h2>{{ header }}</h2>
+<mat-grid-list cols="4" rowHeight="4:3" gutterSize="4">
+  <mat-grid-tile
+    *ngFor="let dashboardPanel of dashboardOverviewPanels"
+    [routerLink]="dashboardPanel.routerLink"
+    class="dashboard-tile"
+  >
+    <mat-icon>{{ dashboardPanel.icon }}</mat-icon>
+    <mat-grid-tile-footer>
+      <span>{{ dashboardPanel.header }}</span>
+    </mat-grid-tile-footer>
+  </mat-grid-tile>
+</mat-grid-list>

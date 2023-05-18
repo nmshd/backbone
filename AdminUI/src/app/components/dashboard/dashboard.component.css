@@ -1,0 +1,8 @@
+.dashboard-tile {
+  color: white;
+  background-color: #673ab7;
+}
+
+.dashboard-tile:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,11 @@
+.sidebar-extended {
+  width: 185px;
+}
+
+.sidebar-contracted {
+  width: 85px;
+}
+
+.active {
+  color: #673ab7 !important;
+}
