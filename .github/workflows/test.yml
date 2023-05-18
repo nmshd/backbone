@@ -140,6 +140,7 @@ jobs:
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
+      - run: cd cns-transport
       - uses: actions/setup-node@v3
         with:
           node-version: 19
