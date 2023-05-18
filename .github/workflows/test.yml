@@ -131,6 +131,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: backbone  
+      - uses: actions/checkout@v3
+        with:
+          repository: nmshd/cns-transport
+          path: cns-transport
+      - run: ls
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './docker-compose/docker-compose.test.yml'
