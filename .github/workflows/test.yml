@@ -140,4 +140,4 @@ jobs:
       - run: ls
       - uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: './docker-compose/docker-compose.test.yml'
+          compose-file: './backbone/docker-compose/docker-compose.test.yml'
