@@ -49,6 +49,14 @@ services:
       - "15672:15672" # mgmt plugin, "guest/guest"
     volumes:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
+  
+  seed-postgres:
+    image: postgres
+    environment:
+      - PGPASSWORD=admin
+    command: psql -U postgres -h 172.17.0.1 -p 5432 < backbone/setup-postgres.sql
+    depends_on:
+      - postgres
 
 networks:
   default:

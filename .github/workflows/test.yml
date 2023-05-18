@@ -140,9 +140,3 @@ jobs:
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
-      - run: sleep 10
-      - run: netstat -lt
-      - uses: akanieski/setup-postgres-cli@v0.1.2
-        with:
-          password: admin
-          commands: psql -U postgres -h 172.17.0.1 -p 5432 < backbone/setup-postgres.sql
