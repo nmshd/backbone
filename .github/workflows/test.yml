@@ -144,6 +144,7 @@ jobs:
         with:
           node-version: 19
           cache: 'npm'
+      - run: pwd
       - name: Transport Tests
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
