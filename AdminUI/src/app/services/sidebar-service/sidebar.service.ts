@@ -8,8 +8,8 @@ export class SidebarService {
   private mobileSize: number;
 
   constructor() {
-    this.extended = true;
     this.mobileSize = 920;
+    this.extended = !this.isMobile();
   }
 
   public isOpen() {
@@ -26,6 +26,10 @@ export class SidebarService {
 
   public toggle() {
     this.extended = !this.extended;
+  }
+
+  public isMobile(): boolean {
+    return window.screen.width <= this.getMobileSize();
   }
 
   public getMobileSize() {

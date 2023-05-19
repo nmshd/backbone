@@ -1,7 +1,11 @@
 <div class="layout-wrapper">
   <app-topbar></app-topbar>
   <mat-sidenav-container>
-    <mat-sidenav #sidebar [opened]="showSidebar()" mode="side">
+    <mat-sidenav
+      #sidebar
+      [opened]="showSidebar()"
+      [mode]="isMobile() ? 'over' : 'side'"
+    >
       <app-sidebar></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content class="layout-main-container">

@@ -14,4 +14,8 @@ export class AppComponent {
   showSidebar() {
     return this.sidebarService.isOpen();
   }
+
+  isMobile(): boolean {
+    return this.sidebarService.isMobile();
+  }
 }
