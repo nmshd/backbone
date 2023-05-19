@@ -1,0 +1,21 @@
+.mat-column-address,
+.mat-column-clientId,
+.mat-column-publicKey {
+  width: 50%;
+  word-break: break-all;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-data {
+  padding: 25px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+}

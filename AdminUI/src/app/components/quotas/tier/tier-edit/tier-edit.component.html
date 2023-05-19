@@ -1,0 +1,53 @@
+<h2>{{ editMode ? headerEdit : headerCreate }}</h2>
+<mat-card *ngIf="!loading">
+  <mat-card-content>
+    <mat-accordion multi>
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Details </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="form-details">
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Id</mat-label>
+            <input matInput [(ngModel)]="tier.id" disabled />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              required
+              [(ngModel)]="tier.name"
+              [disabled]="disabled"
+            />
+            <mat-error>You must enter a value</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="action-buttons">
+      <button
+        *ngIf="editMode"
+        mat-icon-button
+        color="primary"
+        (click)="updateTier()"
+        [disabled]="!validateTier()"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+      <button
+        *ngIf="!editMode"
+        mat-icon-button
+        color="primary"
+        (click)="createTier()"
+        [disabled]="disabled || !validateTier()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
+<div *ngIf="loading" class="loading">
+  <mat-progress-spinner color="primary" mode="indeterminate">
+  </mat-progress-spinner>
+</div>
