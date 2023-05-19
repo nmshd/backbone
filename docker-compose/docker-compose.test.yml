@@ -9,6 +9,40 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
+      
+      - Modules__Challenges__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Challenges__Infrastructure__SqlDatabase__ConnectionString="User ID=challenges;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      
+      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString="User ID=quotas;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      
+      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString="User ID=devices;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      
+      - Modules__Files__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Files__Infrastructure__SqlDatabase__ConnectionString="User ID=files;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      
+      - Modules__Messages__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString="User ID=messages;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      
+      - Modules__Relationships__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString="User ID=relationships;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      
+      - Modules__Synchronization__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString="User ID=synchronization;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      
+      - Modules__Tokens__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString="User ID=tokens;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+      - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
     ports:
       - "127.0.0.10:80:80"
       - "5000:80"
@@ -22,6 +56,7 @@ services:
 
   azure-storage-emulator:
    container_name: azure-storage-emulator
+   hostname: azurite
    image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
    command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
    ports:
