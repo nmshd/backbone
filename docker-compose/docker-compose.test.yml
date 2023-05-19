@@ -89,7 +89,13 @@ services:
     image: postgres
     environment:
       - PGPASSWORD=admin
-    command: psql -U postgres -h 172.17.0.1 -p 5432 < backbone/setup-postgres.sql
+    volumes: 
+      - ../../shared:/app/shared
+    command: >
+      sh -c "
+      sleep 2 &&
+      psql -U postgres -h postgres -p 5432 -c \"CREATE DATABASE enmeshed;\" postgres &&
+      psql -U postgres -h postgres -p 5432 enmeshed < shared/setup-postgres.sql"
     depends_on:
       - postgres
 

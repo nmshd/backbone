@@ -137,6 +137,8 @@ jobs:
         with:
           repository: nmshd/cns-transport
           path: cns-transport
+      - run: mkdir shared
+      - run: cp ./backbone/setup-postgres.sql shared/setup-postgres.sql
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: './backbone/docker-compose/docker-compose.test.yml'
