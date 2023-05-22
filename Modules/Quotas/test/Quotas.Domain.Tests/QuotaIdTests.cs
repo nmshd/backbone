@@ -13,9 +13,8 @@ public class QuotaIdTests
         var validIdValue = validQuotaIdPrefix + TestDataGenerator.GenerateString(validIdLengthWithoutPrefix);
 
         var quotaId = QuotaId.Create(validIdValue);
-        var isQuotaIdValid = quotaId.IsSuccess;
 
-        isQuotaIdValid.Should().BeTrue();
+        quotaId.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
@@ -31,13 +30,9 @@ public class QuotaIdTests
         var invalidQuotaIdPrefix = "QQQ";
         var quotaId = QuotaId.Create(invalidQuotaIdPrefix + TestDataGenerator.GenerateString(17));
 
-        var isQuotaIdValid = quotaId.IsFailure;
-        var errorCode = quotaId.Error.Code;
-        var errorMessage = quotaId.Error.Message;
-
-        isQuotaIdValid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Id starts with");
+        quotaId.IsFailure.Should().BeTrue();
+        quotaId.Error.Code.Should().Be("error.platform.validation.invalidId");
+        quotaId.Error.Message.Should().Contain("Id starts with");
     }
 
     [Fact]
@@ -47,13 +42,9 @@ public class QuotaIdTests
         var quotaIdValue = validQuotaIdPrefix + TestDataGenerator.GenerateString(QuotaId.DEFAULT_MAX_LENGTH);
         var quotaId = QuotaId.Create(quotaIdValue);
 
-        var isQuotaIdValid = quotaId.IsFailure;
-        var errorCode = quotaId.Error.Code;
-        var errorMessage = quotaId.Error.Message;
-
-        isQuotaIdValid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Id has a length of");
+        quotaId.IsFailure.Should().BeTrue();
+        quotaId.Error.Code.Should().Be("error.platform.validation.invalidId");
+        quotaId.Error.Message.Should().Contain("Id has a length of");
     }
 
     [Fact]
@@ -64,12 +55,8 @@ public class QuotaIdTests
         var quotaIdValue = TestDataGenerator.GenerateString(QuotaId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX, invalidCharacters);
         var quotaId = QuotaId.Create(validQuotaIdPrefix + quotaIdValue);
 
-        var isQuotaIdValid = quotaId.IsFailure;
-        var errorCode = quotaId.Error.Code;
-        var errorMessage = quotaId.Error.Message;
-
-        isQuotaIdValid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Valid characters are");
+        quotaId.IsFailure.Should().BeTrue();
+        quotaId.Error.Code.Should().Be("error.platform.validation.invalidId");
+        quotaId.Error.Message.Should().Contain("Valid characters are");
     }
 }

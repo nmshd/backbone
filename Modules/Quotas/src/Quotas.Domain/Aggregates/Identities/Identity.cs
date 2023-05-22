@@ -4,6 +4,8 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
+    private readonly List<TierQuota> _tierQuotas = new();
+
     public Identity(string address, string tierId)
     {
         Address = address;
@@ -12,7 +14,6 @@ public class Identity
 
     public string Address { get; }
     public string TierId { get; }
-    private readonly List<TierQuota> _tierQuotas = new();
 
     public void AssignTierQuotaFromDefinition(TierQuotaDefinition definition)
     {

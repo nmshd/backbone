@@ -12,7 +12,7 @@ public class IdentityTests
     public void Can_create_identity_with_valid_properties()
     {
         var address = TestDataGenerator.CreateRandomBytes().ToString();
-        var tierId = "TIREYSCQI6XaMygco7Bw";
+        var tierId = "TIRsomeTierId1111111";
         var identity = new Identity(address, tierId);
 
         identity.Address.Should().Be(address);
@@ -23,7 +23,7 @@ public class IdentityTests
     public void Can_assign_tier_quota_from_definition_to_identity()
     {
         var address = TestDataGenerator.CreateRandomBytes().ToString();
-        var tierId = "TIREYSCQI6XaMygco7Bw";
+        var tierId = "TIRsomeTierId1111111";
         var identity = new Identity(address, tierId);
 
         var metric = new Metric();
