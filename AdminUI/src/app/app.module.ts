@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -61,6 +62,7 @@ import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.
     MatInputModule,
     MatFormFieldModule,
     MatExpansionModule,
+    MatTooltipModule,
   ],
   providers: [SidebarService],
   bootstrap: [AppComponent],

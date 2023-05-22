@@ -4,6 +4,7 @@
     *ngFor="let dashboardPanel of dashboardOverviewPanels"
     [routerLink]="dashboardPanel.routerLink"
     class="dashboard-tile"
+    matTooltip="Go to {{ dashboardPanel.header }}"
   >
     <mat-icon>{{ dashboardPanel.icon }}</mat-icon>
     <mat-grid-tile-footer>

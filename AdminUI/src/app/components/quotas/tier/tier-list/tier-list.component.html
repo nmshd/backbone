@@ -32,7 +32,12 @@
     >
     </mat-paginator>
     <div class="action-buttons">
-      <button mat-icon-button color="primary" (click)="addTier()">
+      <button
+        mat-icon-button
+        color="primary"
+        matTooltip="Add new tier"
+        (click)="addTier()"
+      >
         <mat-icon>add</mat-icon>
       </button>
     </div>
