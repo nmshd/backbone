@@ -1,4 +1,6 @@
-﻿namespace Admin.API;
+﻿using Enmeshed.BuildingBlocks.API;
+
+namespace Admin.API;
 
 public class HttpResponseEnvelope
 {

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Admin.API.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -54,7 +55,7 @@ public static class IServiceCollectionExtensions
                     var responsePayload = new HttpResponseEnvelopeError(
                         HttpError.ForProduction("error.platform.inputCannotBeParsed", formattedMessage,
                             "", // TODO: add docs
-                            ""));
+                            null));
                     return new BadRequestObjectResult(responsePayload);
                 };
             })

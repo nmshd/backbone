@@ -54,7 +54,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                     ERROR_CODE_REQUEST_BODY_TOO_LARGE,
                     "The request body is too large.",
                     "", // TODO: add documentation link
-                    ""
+                    null
                 );
 
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -84,7 +84,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             applicationException.Code,
             applicationException.Message,
             "", // TODO: add documentation link
-            ""
+            null
         );
 
         return httpError;
@@ -119,7 +119,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
                 "An unexpected error occurred.",
                 "", // TODO: add documentation link
-                "",
+                null,
                 GetFormattedStackTrace(context.Exception),
                 details
             );
@@ -130,7 +130,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
                 "An unexpected error occurred.",
                 "", // TODO: add documentation link
-                ""
+                null
             );
         }
 

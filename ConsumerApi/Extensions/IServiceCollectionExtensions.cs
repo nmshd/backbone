@@ -61,7 +61,7 @@ public static class IServiceCollectionExtensions
                     var responsePayload = new HttpResponseEnvelopeError(
                         HttpError.ForProduction("error.platform.inputCannotBeParsed", formattedMessage,
                             "", // TODO: add docs
-                            ""));
+                            null));
                     return new BadRequestObjectResult(responsePayload);
                 };
             })
