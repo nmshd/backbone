@@ -11,7 +11,7 @@ public class IdentityTests
     [Fact]
     public void Can_create_identity_with_valid_properties()
     {
-        var address = TestDataGenerator.CreateRandomBytes().ToString();
+        var address = "someAddress";
         var tierId = "TIRsomeTierId1111111";
         var identity = new Identity(address, tierId);
 
@@ -22,7 +22,7 @@ public class IdentityTests
     [Fact]
     public void Can_assign_tier_quota_from_definition_to_identity()
     {
-        var address = TestDataGenerator.CreateRandomBytes().ToString();
+        var address = "someAddress";
         var tierId = "TIRsomeTierId1111111";
         var identity = new Identity(address, tierId);
 
