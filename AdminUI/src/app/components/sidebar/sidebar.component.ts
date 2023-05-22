@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,11 +9,8 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
   sidebarOptions: SidebarOption[];
 
-  isMobileLayout: boolean;
-
-  constructor(private router: Router) {
+  constructor(private sidebarService: SidebarService) {
     this.sidebarOptions = [];
-    this.isMobileLayout = false;
   }
 
   ngOnInit() {
@@ -34,6 +31,10 @@ export class SidebarComponent {
         label: 'Tiers',
       },
     ];
+  }
+
+  isMobile(): boolean {
+    return this.sidebarService.isMobile();
   }
 }
 

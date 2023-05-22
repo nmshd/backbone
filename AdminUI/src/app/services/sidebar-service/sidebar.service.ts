@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,10 +6,21 @@ import { Injectable } from '@angular/core';
 })
 export class SidebarService {
   private extended: boolean;
-  private mobileSize: number;
+  private mobile: boolean;
 
-  constructor() {
-    this.mobileSize = 920;
+  constructor(breakpointObserver: BreakpointObserver) {
+    this.mobile = false;
+
+    breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .subscribe((result) => {
+        if (result.matches) {
+          this.mobile = true;
+        } else {
+          this.mobile = false;
+        }
+      });
+
     this.extended = !this.isMobile();
   }
 
@@ -29,10 +41,6 @@ export class SidebarService {
   }
 
   public isMobile(): boolean {
-    return window.screen.width <= this.getMobileSize();
-  }
-
-  public getMobileSize() {
-    return this.mobileSize;
+    return this.mobile;
   }
 }

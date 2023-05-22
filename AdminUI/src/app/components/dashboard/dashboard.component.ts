@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +10,7 @@ export class DashboardComponent {
   header: string;
   dashboardOverviewPanels: DashboardOverviewPanel[];
 
-  constructor() {
+  constructor(private sidebarService: SidebarService) {
     this.header = '';
     this.dashboardOverviewPanels = [];
   }
@@ -30,6 +31,10 @@ export class DashboardComponent {
         header: 'Tiers',
       },
     ];
+  }
+
+  isMobile(): boolean {
+    return this.sidebarService.isMobile();
   }
 }
 

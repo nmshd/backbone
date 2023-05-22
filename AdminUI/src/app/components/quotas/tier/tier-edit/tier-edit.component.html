@@ -31,6 +31,7 @@
         mat-icon-button
         color="primary"
         (click)="updateTier()"
+        matTooltip="Save"
         [disabled]="!validateTier()"
       >
         <mat-icon>save</mat-icon>
@@ -40,6 +41,7 @@
         mat-icon-button
         color="primary"
         (click)="createTier()"
+        matTooltip="Add"
         [disabled]="disabled || !validateTier()"
       >
         <mat-icon>add</mat-icon>

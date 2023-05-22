@@ -1,5 +1,9 @@
 <h2>{{ header }}</h2>
-<mat-grid-list cols="4" rowHeight="4:3" gutterSize="4">
+<mat-grid-list
+  cols="{{ isMobile() ? '2' : '4' }}"
+  rowHeight="4:3"
+  gutterSize="4"
+>
   <mat-grid-tile
     *ngFor="let dashboardPanel of dashboardOverviewPanels"
     [routerLink]="dashboardPanel.routerLink"
