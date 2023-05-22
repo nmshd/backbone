@@ -24,10 +24,6 @@ export class SidebarService {
     this.extended = !this.isMobile();
   }
 
-  public isOpen() {
-    return this.extended;
-  }
-
   public open() {
     this.extended = true;
   }
@@ -38,6 +34,10 @@ export class SidebarService {
 
   public toggle() {
     this.extended = !this.extended;
+  }
+
+  public isOpen(): boolean {
+    return this.extended;
   }
 
   public isMobile(): boolean {

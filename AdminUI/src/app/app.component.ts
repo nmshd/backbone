@@ -11,12 +11,12 @@ export class AppComponent {
 
   constructor(private sidebarService: SidebarService) {}
 
-  showSidebar() {
-    return this.sidebarService.isOpen();
-  }
-
   closeSidebar() {
     this.sidebarService.close();
+  }
+
+  showSidebar(): boolean {
+    return this.sidebarService.isOpen();
   }
 
   isMobile(): boolean {
