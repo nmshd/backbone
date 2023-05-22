@@ -11,7 +11,7 @@ public class TierTests
     [Fact]
     public void Can_create_tier_with_valid_properties()
     {
-        var tierId = "TIREYSCQI6XaMygco7Bw";
+        var tierId = "TIRsomeTierId1111111";
         var tierName = "my-test-tier";
         var tier = new Tier(tierId, tierName);
 
@@ -22,7 +22,7 @@ public class TierTests
     [Fact]
     public void Can_create_quota_on_tier()
     {
-        var tierId = "TIREYSCQI6XaMygco7Bw";
+        var tierId = "TIRsomeTierId1111111";
         var tierName = "my-test-tier";
         var tier = new Tier(tierId, tierName);
 
