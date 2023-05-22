@@ -9,9 +9,7 @@ public class Metric
         Key = key;
         DisplayName = displayName;  
     }
-    public MetricKey Key { get; set; }
+    public MetricKey Key { get; }
 
-    public string DisplayName { get; set; }
-
-    public MetricStatus MetricStatus { get; set; }
+    public string DisplayName { get; }
 }
