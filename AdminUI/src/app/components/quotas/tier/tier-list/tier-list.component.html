@@ -1,15 +1,19 @@
 <h2>{{ header }}</h2>
 <mat-card *ngIf="!loading">
   <mat-card-content>
-    <table mat-table [dataSource]="tiers">
+    <table mat-table class="responsive" [dataSource]="tiers">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell *matCellDef="let tier">{{ tier.id }}</td>
+        <td mat-cell *matCellDef="let tier" data-label="Id">
+          {{ tier.id }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let tier">{{ tier.name }}</td>
+        <td mat-cell *matCellDef="let tier" data-label="Name">
+          {{ tier.name }}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
