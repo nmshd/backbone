@@ -3,6 +3,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
+
 public class TierQuotaDefinitionIdTests
 {
     [Fact]
@@ -47,13 +48,15 @@ public class TierQuotaDefinitionIdTests
         tierQuotaDefinitionId.Error.Message.Should().Contain("Id has a length of");
     }
 
-    [Fact]
-    public void Cannot_create_tier_quota_definition_id_with_invalid_id_characters()
+    [Theory]
+    [InlineData("|")]
+    [InlineData("-")]
+    [InlineData("!")]
+    public void Cannot_create_tier_quota_definition_id_with_invalid_id_characters(string invalidCharacter)
     {
-        char[] invalidCharacters = { '|', '-', '!' };
         var validTierQuotaDefinitionIdPrefix = "TQD";
-        var tierQuotaDefinitionIdValue = TestDataGenerator.GenerateString(TierQuotaDefinitionId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX, invalidCharacters);
-        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(validTierQuotaDefinitionIdPrefix + tierQuotaDefinitionIdValue);
+        var tierQuotaDefinitionIdValue = TestDataGenerator.GenerateString(TierQuotaDefinitionId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX - 1);
+        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(validTierQuotaDefinitionIdPrefix + tierQuotaDefinitionIdValue + invalidCharacter);
 
         tierQuotaDefinitionId.IsFailure.Should().BeTrue();
         tierQuotaDefinitionId.Error.Code.Should().Be("error.platform.validation.invalidId");
