@@ -14,16 +14,16 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities
             // Arrange
             var address = "id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm";
             var tier = "TIRFxoL0U24aUqZDSAWc";
-            var mockIdentityRepository = new AddMockIdentitiesRepository();
-            var handler = CreateHandler(mockIdentityRepository);
+            var mockIdentitiesRepository = new AddMockIdentitiesRepository();
+            var handler = CreateHandler(mockIdentitiesRepository);
 
             // Act
             await handler.Handle(new IdentityCreatedIntegrationEvent(address, tier));
 
             // Assert
-            mockIdentityRepository.WasCalled.Should().BeTrue();
-            mockIdentityRepository.WasCalledWith.Address.Should().Be(address);
-            mockIdentityRepository.WasCalledWith.TierId.Should().Be(tier);
+            mockIdentitiesRepository.WasCalled.Should().BeTrue();
+            mockIdentitiesRepository.WasCalledWith.Address.Should().Be(address);
+            mockIdentitiesRepository.WasCalledWith.TierId.Should().Be(tier);
         }
 
         private IdentityCreatedIntegrationEventHandler CreateHandler(AddMockIdentitiesRepository identities)
