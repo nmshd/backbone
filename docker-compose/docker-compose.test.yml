@@ -9,48 +9,36 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      
-      - Modules__Challenges__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Challenges__Infrastructure__SqlDatabase__ConnectionString="User ID=challenges;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
-      
-      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString="User ID=quotas;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
-      
-      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString="User ID=devices;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
-      
-      - Modules__Files__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Files__Infrastructure__SqlDatabase__ConnectionString="User ID=files;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
+
       - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       
-      - Modules__Messages__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString="User ID=messages;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
       - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       
-      - Modules__Relationships__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString="User ID=relationships;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
       - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       
-      - Modules__Synchronization__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString="User ID=synchronization;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
       - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       
-      - Modules__Tokens__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString="User ID=tokens;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;"
       - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
     ports:
       - "127.0.0.10:80:80"
       - "5000:80"
     depends_on:
-      - postgres
+      - ms-sql-server
       - rabbitmq
     volumes:
       - ../:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 1m
+
 
   ### infrastructure ###
 
@@ -64,16 +52,18 @@ services:
    volumes:
      - azure-storage-emulator-volume:/data
 
-  postgres:
-   container_name: bkb-postgres
-   hostname: postgres
-   image: postgres
-   environment:
-     - POSTGRES_PASSWORD=admin
-   volumes:
-     - postgres-volume:/var/lib/postgresql/data
-   ports:
-     - 5432:5432
+  ms-sql-server:
+    container_name: bkb-mssql_server
+    hostname: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    volumes:
+      - mssql-server-volume:/var/opt/mssql
+    ports:
+      - 1433:1433
 
   rabbitmq:
     container_name: bkb-rabbitmq
@@ -85,26 +75,43 @@ services:
     volumes:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
   
-  seed-postgres:
-    image: postgres
-    environment:
-      - PGPASSWORD=admin
+
+  ### seeds ###
+
+  seed-mssql:
+    image: mcr.microsoft.com/mssql-tools
     volumes: 
       - ../../shared:/app/shared
     command: >
-      sh -c "
-      sleep 2 &&
-      psql -U postgres -h postgres -p 5432 -c \"CREATE DATABASE enmeshed;\" postgres &&
-      psql -U postgres -h postgres -p 5432 enmeshed < /app/shared/setup-postgres.sql"
+      bash -c "
+      sleep 4 &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/shared/setup-sqlserver.sql
+      "
     depends_on:
-      - postgres
+      - ms-sql-server
 
+  client-seed:
+    container_name: client-seed
+    build:
+      context: ..
+      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile.debug
+    volumes:
+      - ..:/app
+    depends_on:
+      backbone:
+        condition: service_healthy
+
+
+  ### tests ###
+  
 networks:
   default:
     name: backbone
 
 volumes:
   rabbitmq-volume:
-  postgres-volume:
+  mssql-server-volume:
   azure-storage-emulator-volume:
   elastic_data:
