@@ -6,7 +6,7 @@ public class MetricsRepository : IMetricsRepository
 {
     public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken)
     {
-        IEnumerable<Metric> listMetrics = new List<Metric>
+        IEnumerable<Metric> metrics = new List<Metric>
         {
             new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"),
             new Metric(MetricKey.NumberOfRelationships, "Number Of Relationships"),
@@ -14,6 +14,6 @@ public class MetricsRepository : IMetricsRepository
             new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity")
         };
 
-        return Task.FromResult(listMetrics);
+        return Task.FromResult(metrics);
     }
 }
