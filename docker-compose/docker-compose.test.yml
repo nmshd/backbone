@@ -36,7 +36,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 5s
       timeout: 5s
-      retries: 20
+      retries: 40
       start_period: 1m
 
 
@@ -105,7 +105,7 @@ services:
 
 
   ### tests ###
-  
+
 networks:
   default:
     name: backbone
