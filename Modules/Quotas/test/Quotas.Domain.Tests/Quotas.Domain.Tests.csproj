@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
       <ProjectReference Include="..\..\src\Quotas.Domain\Quotas.Domain.csproj" />
     </ItemGroup>
 
