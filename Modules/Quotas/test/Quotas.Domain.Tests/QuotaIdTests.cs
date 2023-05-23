@@ -8,9 +8,7 @@ public class QuotaIdTests
     [Fact]
     public void Can_create_quota_id_with_valid_value()
     {
-        var validIdValue = "QUOsomeQuotaId111111";
-        var result = QuotaId.Create(validIdValue);
-
+        var result = QuotaId.Create("QUOsomeQuotaId111111");
         result.IsSuccess.Should().BeTrue();
     }
 
@@ -36,9 +34,7 @@ public class QuotaIdTests
     [Fact]
     public void Cannot_create_quota_id_with_invalid_id_length()
     {
-        var validQuotaIdPrefix = "QUO";
-        var quotaIdValue = validQuotaIdPrefix + TestDataGenerator.GenerateString(QuotaId.DEFAULT_MAX_LENGTH);
-        var result = QuotaId.Create(quotaIdValue);
+        var result = QuotaId.Create("QUOtooManyCharactersOnId");
 
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("error.platform.validation.invalidId");
@@ -51,9 +47,7 @@ public class QuotaIdTests
     [InlineData("!")]
     public void Cannot_create_quota_id_with_invalid_id_characters(string invalidCharacter)
     {
-        var validQuotaIdPrefix = "QUO";
-        var quotaIdValue = TestDataGenerator.GenerateString(QuotaId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX - 1);
-        var result = QuotaId.Create(validQuotaIdPrefix + quotaIdValue + invalidCharacter);
+        var result = QuotaId.Create("QUO1111111111111111" + invalidCharacter);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("error.platform.validation.invalidId");
