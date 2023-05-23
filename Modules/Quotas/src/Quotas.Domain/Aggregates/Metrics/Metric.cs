@@ -4,5 +4,5 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public class Metric
 {
-    public MetricStatus MetricStatus { get; set; }
+    public MetricStatus MetricStatus { get; }
 }
