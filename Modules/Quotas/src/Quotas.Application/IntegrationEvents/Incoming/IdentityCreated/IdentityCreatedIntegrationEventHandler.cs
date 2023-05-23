@@ -7,18 +7,25 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.Identit
 public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<IdentityCreatedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<IdentityCreatedIntegrationEventHandler> _logger;
 
-    public IdentityCreatedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, ILogger<IdentityCreatedIntegrationEventHandler> logger)
+    public IdentityCreatedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, ILogger<IdentityCreatedIntegrationEventHandler> logger, ITiersRepository tiersRepository)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
+        _tiersRepository = tiersRepository;
     }
 
     public async Task Handle(IdentityCreatedIntegrationEvent integrationEvent)
     {
         var identity = new Identity(integrationEvent.Address, integrationEvent.Tier);
         await _identitiesRepository.Add(identity, CancellationToken.None);
+
+        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None);
+        tier.Quotas.ForEach(identity.AssignTierQuotaFromDefinition);
+
+        await _identitiesRepository.Update(identity, CancellationToken.None);
 
         _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
     }
