@@ -152,5 +152,5 @@ jobs:
           NMSHD_TEST_CLIENTSECRET: test
         run: >
           npm install &&
-          curl --connect-timeout 5 --retry 50 --retry-delay 5 'http://localhost/health' &&
+          curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost/health' &&
           npm run test:local:node:lokijs
