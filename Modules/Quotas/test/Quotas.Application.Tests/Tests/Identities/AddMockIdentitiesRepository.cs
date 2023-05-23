@@ -6,11 +6,26 @@ public class AddMockIdentitiesRepository : IIdentitiesRepository
 {
     public bool WasCalled { get; private set; }
     public Identity? WasCalledWith { get; private set; }
- 
+
     public Task Add(Identity identity, CancellationToken cancellationToken)
     {
         WasCalled = true;
         WasCalledWith = identity;
         return Task.CompletedTask;
+    }
+
+    public IEnumerable<Identity> FindWithTier(string tierId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
