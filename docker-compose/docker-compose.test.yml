@@ -97,7 +97,7 @@ services:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     command: >
-      dotnet run --project "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj" -- client create
+      ./backbone client create
       -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
       --clientId test --clientSecret test
     depends_on:
