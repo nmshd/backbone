@@ -137,20 +137,24 @@ jobs:
         with:
           repository: nmshd/cns-transport
           path: cns-transport
-      - run: mkdir shared
-      - run: cp ./backbone/setup-sqlserver.sql shared/setup-sqlserver.sql
-      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml build
-      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up -d
+      - name: Docker Compose build
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml build
+      - name: Docker Compose up
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up -d
       - uses: actions/setup-node@v3
         with:
           node-version: 19
+      - name: NPM install
+        working-directory: ./cns-transport
+        run: npm install
+      - name: Wait for ConsumerAPI to become available
+        run: curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health'
       - name: Transport Tests
         working-directory: ./cns-transport
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm install &&
-          curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health' &&
-          npm run test:local:node:lokijs
-      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
+        run: npm run test:local:node:lokijs
+      - name: Docker Compose down
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down

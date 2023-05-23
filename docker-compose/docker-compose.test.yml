@@ -81,31 +81,28 @@ services:
   seed-mssql:
     image: mcr.microsoft.com/mssql-tools
     volumes: 
-      - ../../shared:/app/shared
+      - ../setup-db:/app/setup-db
     command: >
       bash -c "
       sleep 10 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
       sleep 1 &&
-      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/shared/setup-sqlserver.sql
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql
       "
     depends_on:
       - ms-sql-server
 
-  client-seed:
-    container_name: client-seed
-    build:
-      context: ..
-      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile.debug
-    volumes:
-      - ..:/app
+  seed-client:
+    container_name: seed-client
+    image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
+    command: >
+      dotnet run --project "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj" -- client create
+      -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+      --clientId test --clientSecret test
     depends_on:
       backbone:
         condition: service_healthy
-
-
-  ### tests ###
 
 networks:
   default:

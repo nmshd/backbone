@@ -1,6 +1,3 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0
 EXPOSE 80
-
 WORKDIR /app
-
-ENTRYPOINT dotnet run --project "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj" -- client create -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
