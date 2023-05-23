@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Admin.API.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
