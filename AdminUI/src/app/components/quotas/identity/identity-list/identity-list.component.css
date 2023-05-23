@@ -24,11 +24,12 @@
     display: flex;
     flex-wrap: wrap;
     height: auto;
+    border-bottom: 1px solid #ddd;
   }
 
   .mat-mdc-table .mat-mdc-cell {
     width: 100%;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 0px solid #ddd;
     font-size: 1em;
     min-height: 30px;
     margin-bottom: 4%;
@@ -43,6 +44,10 @@
   }
 
   .mat-mdc-table .mat-mdc-cell:first-child {
-    margin-top: 10%;
+    margin-top: 25px;
+  }
+
+  .mat-mdc-table .mat-mdc-row:last-child {
+    border-bottom: 0px;
   }
 }
