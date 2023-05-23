@@ -74,7 +74,6 @@ export class TierEditComponent {
   }
 
   createTier() {
-    console.log('create');
     this.loading = true;
     this.tierService.createTier(this.tier).subscribe({
       next: (data: HttpResponseEnvelope<Tier>) => {
