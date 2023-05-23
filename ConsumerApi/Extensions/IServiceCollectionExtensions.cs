@@ -60,8 +60,7 @@ public static class IServiceCollectionExtensions
                     context.HttpContext.Response.ContentType = "application/json";
                     var responsePayload = new HttpResponseEnvelopeError(
                         HttpError.ForProduction("error.platform.inputCannotBeParsed", formattedMessage,
-                            "", // TODO: add docs
-                            null));
+                            "")); // TODO: add docs
                     return new BadRequestObjectResult(responsePayload);
                 };
             })
@@ -114,7 +113,7 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-    
+
     public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>

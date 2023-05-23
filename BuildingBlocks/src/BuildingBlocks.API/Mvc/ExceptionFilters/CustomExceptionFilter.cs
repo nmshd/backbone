@@ -82,7 +82,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         var httpError = HttpError.ForProduction(
             applicationException.Code,
             applicationException.Message,
-            "" // TODO: add documentation link            
+            "" // TODO: add documentation link
         );
 
         return httpError;
@@ -116,7 +116,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             httpError = HttpError.ForDev(
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
                 "An unexpected error occurred.",
-                "",// TODO: add documentation link
+                "", // TODO: add documentation link
                 GetFormattedStackTrace(context.Exception),
                 details
             );
