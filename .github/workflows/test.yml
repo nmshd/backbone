@@ -139,11 +139,8 @@ jobs:
           path: cns-transport
       - run: mkdir shared
       - run: cp ./backbone/setup-sqlserver.sql shared/setup-sqlserver.sql
-      - uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: './backbone/docker-compose/docker-compose.test.yml'
-      # - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml build
-      # - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up
+      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml build
+      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up -d
       - uses: actions/setup-node@v3
         with:
           node-version: 19
@@ -153,4 +150,7 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm install && npm run test:local:node:lokijs
+        run: >
+          npm install &&
+          curl --connect-timeout 5 --retry 50 --retry-delay 5 'http://localhost/health' &&
+          npm run test:local:node:lokijs
