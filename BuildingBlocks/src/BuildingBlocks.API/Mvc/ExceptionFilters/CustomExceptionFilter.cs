@@ -53,8 +53,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 httpError = HttpError.ForProduction(
                     ERROR_CODE_REQUEST_BODY_TOO_LARGE,
                     "The request body is too large.",
-                    "", // TODO: add documentation link
-                    null
+                    "" // TODO: add documentation link
                 );
 
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -83,8 +82,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         var httpError = HttpError.ForProduction(
             applicationException.Code,
             applicationException.Message,
-            "", // TODO: add documentation link
-            null
+            "" // TODO: add documentation link            
         );
 
         return httpError;
@@ -118,8 +116,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             httpError = HttpError.ForDev(
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
                 "An unexpected error occurred.",
-                "", // TODO: add documentation link
-                null,
+                "",// TODO: add documentation link
                 GetFormattedStackTrace(context.Exception),
                 details
             );
@@ -129,8 +126,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             httpError = HttpError.ForProduction(
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
                 "An unexpected error occurred.",
-                "", // TODO: add documentation link
-                null
+                "" // TODO: add documentation link
             );
         }
 

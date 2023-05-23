@@ -54,8 +54,7 @@ public static class IServiceCollectionExtensions
                     context.HttpContext.Response.ContentType = "application/json";
                     var responsePayload = new HttpResponseEnvelopeError(
                         HttpError.ForProduction("error.platform.inputCannotBeParsed", formattedMessage,
-                            "", // TODO: add docs
-                            null));
+                            ""));// TODO: add docs
                     return new BadRequestObjectResult(responsePayload);
                 };
             })
