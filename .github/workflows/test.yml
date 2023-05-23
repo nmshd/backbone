@@ -142,8 +142,8 @@ jobs:
       # - uses: isbang/compose-action@v1.4.1
       #   with:
       #     compose-file: './backbone/docker-compose/docker-compose.test.yml'
-      - run: docker-compose -f ./backbone/docker-compose/docker-compose.test.yml build
-      - run: docker-compose -f ./backbone/docker-compose/docker-compose.test.yml --verbose up
+      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml build
+      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up
       - uses: actions/setup-node@v3
         with:
           node-version: 19
