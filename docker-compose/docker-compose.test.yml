@@ -84,9 +84,10 @@ services:
       - ../../shared:/app/shared
     command: >
       bash -c "
-      sleep 4 &&
+      sleep 10 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
+      sleep 1 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/shared/setup-sqlserver.sql
       "
     depends_on:
