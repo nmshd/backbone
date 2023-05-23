@@ -21,13 +21,21 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
         _logger.LogTrace("Handling QuotaCreatedForTierIntegrationEvent ... ");
 
         var identitiesWithTier = _identitiesRepository.FindWithTier(@event.TierId).ToList();
-        identitiesWithTier.ForEach(identity =>
+
+        if (identitiesWithTier.Count > 0)
         {
-            identity.AssignTierQuotaFromDefinition(@event.Quota);
-        });
+            identitiesWithTier.ForEach(identity =>
+            {
+                identity.AssignTierQuotaFromDefinition(@event.Quota);
+            });
 
-        await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
+            await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created quotas for Identities!");
+            _logger.LogTrace("Successfully created quotas for Identities!");
+        }
+        else
+        {
+            _logger.LogTrace($"No identities found with tier ID: {@event.TierId}");
+        }
     }
 }
