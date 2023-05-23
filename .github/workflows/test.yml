@@ -150,8 +150,7 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: >
-          npm install &&
-          curl --connect-timeout 5 --retry 35 --retry-delay 10 --retry-connrefused 'http://localhost:5000/health' &&
+        run: npm install &&
+          curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health' &&
           npm run test:local:node:lokijs
-      - run: docker compose -f ./backbone/docker-compose/docker-compose down
+      - run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
