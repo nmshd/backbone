@@ -9,43 +9,39 @@ public class TierQuotaDefinitionIdTests
     [Fact]
     public void Can_create_tier_quota_definition_id_with_valid_value()
     {
-        var validTierQuotaDefinitionIdPrefix = "TQD";
-        var validIdLengthWithoutPrefix = 17;
-        var validIdValue = validTierQuotaDefinitionIdPrefix + TestDataGenerator.GenerateString(validIdLengthWithoutPrefix);
+        var result = TierQuotaDefinitionId.Create("TQDsomeTierQuotaId11");
 
-        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(validIdValue);
-
-        tierQuotaDefinitionId.IsSuccess.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
     public void Can_generate_tier_quota_definition_id()
     {
         var tierQuotaDefinitionId = TierQuotaDefinitionId.Generate();
+
         tierQuotaDefinitionId.Should().NotBeNull();
+        tierQuotaDefinitionId.Value.Should().HaveLength(20);
+        tierQuotaDefinitionId.Value.Should().StartWith("TQD");
     }
 
     [Fact]
     public void Cannot_create_tier_quota_definition_id_with_invalid_id_prefix()
     {
-        var invalidTierQuotaDefinitionIdPrefix = "TQQ";
-        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(invalidTierQuotaDefinitionIdPrefix + TestDataGenerator.GenerateString(17));
+        var result = TierQuotaDefinitionId.Create("TQQsomeTierQuotaId11");
 
-        tierQuotaDefinitionId.IsFailure.Should().BeTrue();
-        tierQuotaDefinitionId.Error.Code.Should().Be("error.platform.validation.invalidId");
-        tierQuotaDefinitionId.Error.Message.Should().Contain("Id starts with");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.validation.invalidId");
+        result.Error.Message.Should().Contain("Id starts with");
     }
 
     [Fact]
     public void Cannot_create_tier_quota_definition_id_with_invalid_id_length()
     {
-        var validTierQuotaDefinitionIdPrefix = "TQD";
-        var tierQuotaDefinitionIdValue = validTierQuotaDefinitionIdPrefix + TestDataGenerator.GenerateString(TierQuotaDefinitionId.DEFAULT_MAX_LENGTH);
-        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(tierQuotaDefinitionIdValue);
+        var result = TierQuotaDefinitionId.Create("TQDtooManyCharactersOnId");
 
-        tierQuotaDefinitionId.IsFailure.Should().BeTrue();
-        tierQuotaDefinitionId.Error.Code.Should().Be("error.platform.validation.invalidId");
-        tierQuotaDefinitionId.Error.Message.Should().Contain("Id has a length of");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.validation.invalidId");
+        result.Error.Message.Should().Contain("Id has a length of");
     }
 
     [Theory]
@@ -54,12 +50,10 @@ public class TierQuotaDefinitionIdTests
     [InlineData("!")]
     public void Cannot_create_tier_quota_definition_id_with_invalid_id_characters(string invalidCharacter)
     {
-        var validTierQuotaDefinitionIdPrefix = "TQD";
-        var tierQuotaDefinitionIdValue = TestDataGenerator.GenerateString(TierQuotaDefinitionId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX - 1);
-        var tierQuotaDefinitionId = TierQuotaDefinitionId.Create(validTierQuotaDefinitionIdPrefix + tierQuotaDefinitionIdValue + invalidCharacter);
+        var result = TierQuotaDefinitionId.Create("TQD1111111111111111" + invalidCharacter);
 
-        tierQuotaDefinitionId.IsFailure.Should().BeTrue();
-        tierQuotaDefinitionId.Error.Code.Should().Be("error.platform.validation.invalidId");
-        tierQuotaDefinitionId.Error.Message.Should().Contain("Valid characters are");
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.validation.invalidId");
+        result.Error.Message.Should().Contain("Valid characters are");
     }
 }

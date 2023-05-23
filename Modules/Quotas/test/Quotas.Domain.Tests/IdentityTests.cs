@@ -32,5 +32,6 @@ public class IdentityTests
         var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
 
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+        // no exception thrown signifies the test worked
     }
 }
