@@ -229,4 +229,3 @@ ALTER SCHEMA "Tokens" OWNER TO tokens;
 ALTER SCHEMA "Relationships" OWNER TO relationships;
 ALTER SCHEMA "Files" OWNER TO files;
 ALTER SCHEMA "Quotas" OWNER TO quotas;
-
