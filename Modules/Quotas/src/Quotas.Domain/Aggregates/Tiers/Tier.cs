@@ -23,9 +23,11 @@ public class Tier
     public string Name { get; }
     public List<TierQuotaDefinition> Quotas { get; }
 
-    public void CreateQuota(Metric metric, int max, QuotaPeriod period)
+    public TierQuotaDefinition CreateQuota(Metric metric, int max, QuotaPeriod period)
     {
         var quotaDefinition = new TierQuotaDefinition(metric, max, period);
         Quotas.Add(quotaDefinition);
+
+        return quotaDefinition;
     }
 }
