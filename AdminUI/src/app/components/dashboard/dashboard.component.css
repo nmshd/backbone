@@ -6,3 +6,8 @@
 .dashboard-tile:hover {
   cursor: pointer;
 }
+
+.panel-icon {
+  opacity: 20%;
+  transform: scale(5);
+}
