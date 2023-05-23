@@ -51,12 +51,12 @@ public class HandlerTests
     public async Task Throws_not_found_exception_when_no_tier_with_given_id_is_found()
     {
         // Arrange
-        var tierId = "TIRsomeTierId1111111";
+        var tierId = "TIRoneInexistentTier";
         var metric = new Metric();
         var max = 5;
         var period = QuotaPeriod.Month;
         var command = new CreateQuotaForTierCommand(tierId, metric, max, period);
-        var tiers = new List<Tier>();
+        var tiers = new List<Tier> { new Tier("TIRsomeTierId1111111", "some-tier-name") };
         var mockTiersRepository = new MockTiersRepository(tiers);
         var handler = CreateHandler(mockTiersRepository);
 
