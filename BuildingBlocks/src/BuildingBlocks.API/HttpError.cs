@@ -5,13 +5,14 @@ namespace Enmeshed.BuildingBlocks.API;
 //[JsonConverter(typeof(HttpErrorConverter))]
 public class HttpError
 {
-    protected HttpError(string code, string message, string docs)
+    protected HttpError(string code, string message, string docs, dynamic? data = null)
     {
         Id = HttpErrorId.New().ToString();
         Code = code;
         Message = message;
         Docs = docs;
         Time = DateTime.UtcNow;
+        Data = data;
     }
 
     public string Id { get; }
@@ -19,30 +20,31 @@ public class HttpError
     public string Message { get; }
     public string Docs { get; }
     public DateTime Time { get; }
+    public dynamic? Data { get; }
 
-    public static HttpError ForProduction(string code, string message, string docs)
+    public static HttpError ForProduction(string code, string message, string docs, dynamic? data = null)
     {
-        return new HttpErrorProd(code, message, docs);
+        return new HttpErrorProd(code, message, docs, data);
     }
 
     public static HttpError ForDev(string code, string message, string docs, IEnumerable<string> stacktrace,
-        string details)
+        string details, dynamic? data = null)
     {
-        return new HttpErrorDev(code, message, docs, stacktrace, details);
+        return new HttpErrorDev(code, message, docs, stacktrace, details, data);
     }
 }
 
 public class HttpErrorProd : HttpError
 {
-    public HttpErrorProd(string code, string message, string docs) : base(code, message, docs)
+    public HttpErrorProd(string code, string message, string docs, dynamic? data = null) : base(code, message, docs, (object)data)
     {
     }
 }
 
 public class HttpErrorDev : HttpError
 {
-    internal HttpErrorDev(string code, string message, string docs, IEnumerable<string> stacktrace, string details)
-        : base(code, message, docs)
+    internal HttpErrorDev(string code, string message, string docs, IEnumerable<string> stacktrace, string details, dynamic? data = null)
+        : base(code, message, docs, (object)data)
     {
         Stacktrace = stacktrace;
         Details = details;
