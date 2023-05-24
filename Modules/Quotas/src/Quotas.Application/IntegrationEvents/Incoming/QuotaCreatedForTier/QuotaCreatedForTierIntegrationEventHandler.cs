@@ -8,11 +8,14 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCr
 public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandler<QuotaCreatedForTierIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly ITierQuotaDefinitionsRepository _tierQuotaDefinitionsRepository;
     private readonly ILogger<QuotaCreatedForTierIntegrationEventHandler> _logger;
 
-    public QuotaCreatedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger)
+    public QuotaCreatedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
+        ITierQuotaDefinitionsRepository tierQuotaDefinitionsRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger)
     {
         _identitiesRepository = identitiesRepository;
+        _tierQuotaDefinitionsRepository = tierQuotaDefinitionsRepository;
         _logger = logger;
     }
 
@@ -22,20 +25,21 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
 
         var identitiesWithTier = _identitiesRepository.FindWithTier(@event.TierId).ToList();
 
-        if (identitiesWithTier.Count > 0)
-        {
-            identitiesWithTier.ForEach(identity =>
-            {
-                identity.AssignTierQuotaFromDefinition(@event.Quota);
-            });
-
-            await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
-
-            _logger.LogTrace("Successfully created quotas for Identities!");
-        }
-        else
+        if (identitiesWithTier.Count == 0)
         {
             _logger.LogTrace($"No identities found with tier ID: {@event.TierId}");
+            return;
         }
+
+        var tierQuotaDefinition = await _tierQuotaDefinitionsRepository.Find(@event.TierQuotaDefinitionId, CancellationToken.None);
+
+        foreach (var identity in identitiesWithTier)
+        {
+            identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+        }
+
+        await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
+
+        _logger.LogTrace("Successfully created quotas for Identities!");
     }
 }
