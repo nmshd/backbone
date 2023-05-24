@@ -3,13 +3,13 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
-public class FindMockTiersRepository : ITiersRepository
+public class FindTiersStubRepository : ITiersRepository
 {
-    private readonly List<Tier> _tiers;
+    private readonly Tier _tier;
 
-    public FindMockTiersRepository(List<Tier> tiers)
+    public FindTiersStubRepository(Tier tier)
     {
-        _tiers = tiers;
+        _tier = tier;
     }
 
     public Task Add(Tier tier, CancellationToken cancellationToken)
@@ -19,8 +19,7 @@ public class FindMockTiersRepository : ITiersRepository
 
     public Task<Tier> Find(string id, CancellationToken cancellationToken)
     {
-        var tier = _tiers.FirstOrDefault(t => t.Id == id);
-        return Task.FromResult(tier);
+        return Task.FromResult(_tier);
     }
 
     public Task Update(Tier tier, CancellationToken cancellationToken)

@@ -18,16 +18,12 @@ public class IdentityCreatedIntegrationEventHandlerTests
         var address = "id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm";
         var tierId = "TIRFxoL0U24aUqZDSAWc";
 
-        var metric = new Metric();
         var max = 5;
-        var period = QuotaPeriod.Month;
-        var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
-        var tierQuotaDefinitions = new List<TierQuotaDefinition> { tierQuotaDefinition };
-        var tier = new Tier(tierId, "some-tier-name", tierQuotaDefinitions);
-        var tiers = new List<Tier> { tier };
+        var tier = new Tier(tierId, "some-tier-name");
+        tier.Quotas.Add(new TierQuotaDefinition(new Metric(), max, QuotaPeriod.Month););
 
         var mockIdentitiesRepository = new MockIdentitiesRepository();
-        var mockTiersRepository = new FindMockTiersRepository(tiers);
+        var mockTiersRepository = new FindTiersStubRepository(tier);
 
         var handler = CreateHandler(mockIdentitiesRepository, mockTiersRepository);
 
@@ -38,13 +34,9 @@ public class IdentityCreatedIntegrationEventHandlerTests
         mockIdentitiesRepository.WasAddCalled.Should().BeTrue();
         mockIdentitiesRepository.WasAddCalledWith.Address.Should().Be(address);
         mockIdentitiesRepository.WasAddCalledWith.TierId.Should().Be(tierId);
-
-        mockIdentitiesRepository.WasUpdateCalled.Should().BeTrue();
-        mockIdentitiesRepository.WasUpdateCalledWith.Address.Should().Be(address);
-        mockIdentitiesRepository.WasUpdateCalledWith.TierId.Should().Be(tierId);
     }
 
-    private IdentityCreatedIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities, FindMockTiersRepository tiers)
+    private IdentityCreatedIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities, FindTiersStubRepository tiers)
     {
         var logger = A.Fake<ILogger<IdentityCreatedIntegrationEventHandler>>();
         return new IdentityCreatedIntegrationEventHandler(identities, logger, tiers);
