@@ -113,7 +113,7 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-    
+
     public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
