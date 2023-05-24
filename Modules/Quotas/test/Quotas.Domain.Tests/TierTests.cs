@@ -26,7 +26,7 @@ public class TierTests
         var tierName = "my-test-tier";
         var tier = new Tier(tierId, tierName);
 
-        var metric = new Metric();
+        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
         var period = QuotaPeriod.Month;
         tier.CreateQuota(metric, max, period);

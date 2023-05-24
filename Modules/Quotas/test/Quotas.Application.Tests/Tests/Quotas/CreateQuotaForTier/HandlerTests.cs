@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
+﻿using Backbone.Modules.Quotas.Application.AutoMapper;
+using Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -24,14 +25,14 @@ public class HandlerTests
     {
         // Arrange
         var tierId = "TIRsomeTierId1111111";
-        var metric = new Metric();
         var max = 5;
         var period = QuotaPeriod.Month;
-        var command = new CreateQuotaForTierCommand(tierId, metric, max, period);
+        var command = new CreateQuotaForTierCommand(tierId, MetricKey.NumberOfSentMessages, max, period);
         var tier = new Tier(tierId, "some-tier-name");
         var tiers = new List<Tier> { tier };
         var mockTiersRepository = new MockTiersRepository(tiers);
-        var handler = CreateHandler(mockTiersRepository);
+        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+        var handler = CreateHandler(mockTiersRepository, metricsRepository);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -40,7 +41,7 @@ public class HandlerTests
         response.Id.Should().NotBeNullOrEmpty();
         response.Period.Should().Be(period);
         response.Max.Should().Be(max);
-        response.Metric.Should().Be(metric);
+        response.Metric.Key.Should().Be(MetricKey.NumberOfSentMessages);
 
         mockTiersRepository.WasUpdateCalled.Should().BeTrue();
         mockTiersRepository.WasUpdateCalledWith.Quotas.Count.Should().Be(1);
@@ -52,13 +53,13 @@ public class HandlerTests
     {
         // Arrange
         var tierId = "TIRoneInexistentTier";
-        var metric = new Metric();
         var max = 5;
         var period = QuotaPeriod.Month;
-        var command = new CreateQuotaForTierCommand(tierId, metric, max, period);
+        var command = new CreateQuotaForTierCommand(tierId, MetricKey.NumberOfSentMessages, max, period);
         var tiers = new List<Tier> { new Tier("TIRsomeTierId1111111", "some-tier-name") };
         var mockTiersRepository = new MockTiersRepository(tiers);
-        var handler = CreateHandler(mockTiersRepository);
+        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+        var handler = CreateHandler(mockTiersRepository, metricsRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -67,11 +68,12 @@ public class HandlerTests
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private Handler CreateHandler(MockTiersRepository tiersRepository)
+    private Handler CreateHandler(MockTiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
     {
         var logger = A.Fake<ILogger<Handler>>();
         var eventBus = A.Fake<IEventBus>();
+        var mapper = AutoMapperProfile.CreateMapper();
 
-        return new Handler(tiersRepository, logger, eventBus);
+        return new Handler(tiersRepository, logger, eventBus, metricsRepository, mapper);
     }
 }

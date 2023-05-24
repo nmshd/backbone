@@ -19,29 +19,30 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         var tierId = "TIRFxoL0U24aUqZDSAWc";
         var tier = new Tier(tierId, "some-tier-name");
 
-        var metric = new Metric();
+        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
         var period = QuotaPeriod.Month;
         var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
+        var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
 
         var firstIdentity = new Identity("some-identity-address-one", tierId);
         var secondIdentity = new Identity("some-identity-address-two", tierId);
         var identities = new List<Identity> { firstIdentity, secondIdentity };
         var mockIdentitiesRepository = new MockIdentitiesRepository(identities);
 
-        var handler = CreateHandler(mockIdentitiesRepository);
+        var handler = CreateHandler(mockIdentitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier, tierQuotaDefinition));
+        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier, tierQuotaDefinition.Id));
 
         // Assert
         mockIdentitiesRepository.WasUpdateFromRangeCalled.Should().BeTrue();
         mockIdentitiesRepository.WasUpdateFromRangeCalledWith.Count().Should().Be(2);
     }
 
-    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities)
+    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities, FindTierQuotaDefinitionsStubRepository tierQuotaDefinitions)
     {
         var logger = A.Fake<ILogger<QuotaCreatedForTierIntegrationEventHandler>>();
-        return new QuotaCreatedForTierIntegrationEventHandler(identities, logger);
+        return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger);
     }
 }

@@ -20,7 +20,7 @@ public class IdentityCreatedIntegrationEventHandlerTests
 
         var max = 5;
         var tier = new Tier(tierId, "some-tier-name");
-        tier.Quotas.Add(new TierQuotaDefinition(new Metric(), max, QuotaPeriod.Month););
+        tier.Quotas.Add(new TierQuotaDefinition(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"), max, QuotaPeriod.Month));
 
         var mockIdentitiesRepository = new MockIdentitiesRepository();
         var mockTiersRepository = new FindTiersStubRepository(tier);

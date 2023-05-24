@@ -11,7 +11,7 @@ public class TierQuotaTests
     [Fact]
     public void Can_create_tier_quota_with_valid_properties()
     {
-        var metric = new Metric();
+        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
         var period = QuotaPeriod.Month;
         var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);

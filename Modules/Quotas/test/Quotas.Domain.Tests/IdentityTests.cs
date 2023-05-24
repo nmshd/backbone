@@ -26,7 +26,7 @@ public class IdentityTests
         var tierId = "TIRsomeTierId1111111";
         var identity = new Identity(address, tierId);
 
-        var metric = new Metric();
+        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
         var period = QuotaPeriod.Month;
         var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);

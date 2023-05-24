@@ -28,10 +28,10 @@ public class MockIdentitiesRepository : IIdentitiesRepository
         return Task.CompletedTask;
     }
 
-    public IEnumerable<Identity> FindWithTier(string tierId)
+    public Task<IEnumerable<Identity>> FindWithTier(string tierId, CancellationToken cancellationToken)
     {
         var identities = _identities.Where(identity => identity.TierId == tierId);
-        return identities;
+        return Task.FromResult(identities);
     }
 
     public Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)
