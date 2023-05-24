@@ -11,12 +11,14 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, CreateQuotaFor
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
+    private readonly IMetricsRepository _metricsRepository;
 
-    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus)
+    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus, IMetricsRepository metricsRepository)
     {
         _tiersRepository = tierRepository;
         _logger = logger;
         _eventBus = eventBus;
+        _metricsRepository = metricsRepository;
     }
 
     public async Task<CreateQuotaForTierResponse> Handle(CreateQuotaForTierCommand request, CancellationToken cancellationToken)
@@ -24,7 +26,8 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, CreateQuotaFor
         _logger.LogInformation("Handling CreateQuotaForTierCommand ...");
 
         var tier = await _tiersRepository.Find(request.TierId, cancellationToken);
-        var quota = tier.CreateQuota(request.Metric, request.Max, request.Period);
+        var metric = await _metricsRepository.Find(request.MetricKey, cancellationToken);
+        var quota = tier.CreateQuota(metric, request.Max, request.Period);
 
         await _tiersRepository.Update(tier, cancellationToken);
 

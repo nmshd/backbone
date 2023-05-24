@@ -5,4 +5,5 @@ namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Reposit
 public interface IMetricsRepository
 {
     Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken);
+    Task<Metric> Find(MetricKey key, CancellationToken cancellationToken);
 }

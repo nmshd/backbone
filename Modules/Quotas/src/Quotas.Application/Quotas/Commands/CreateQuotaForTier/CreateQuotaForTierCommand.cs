@@ -6,16 +6,16 @@ namespace Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier
 
 public class CreateQuotaForTierCommand : IRequest<CreateQuotaForTierResponse>
 {
-    public CreateQuotaForTierCommand(string tierId, Metric metric, int max, QuotaPeriod period)
+    public CreateQuotaForTierCommand(string tierId, MetricKey metricKey, int max, QuotaPeriod period)
     {
         TierId = tierId;
-        Metric = metric;
+        MetricKey = metricKey;
         Max = max;
         Period = period;
     }
 
     public string TierId { get; set; }
-    public Metric Metric { get; set; }
+    public MetricKey MetricKey { get; set; }
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
 }
