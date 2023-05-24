@@ -126,3 +126,36 @@ jobs:
         env:
           TAG: test
           MODULE: Tokens
+  cns-transport-test:
+    name: Run CNS-Transport Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout backbone repository
+        uses: actions/checkout@v3
+        with:
+          path: backbone
+      - name: Checkout cns-transport repository
+        uses: actions/checkout@v3
+        with:
+          repository: nmshd/cns-transport
+          path: cns-transport
+      - name: Run Consumer API
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up -d
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - name: Install cns-transport dependencies
+        working-directory: ./cns-transport
+        run: npm install
+      - name: Wait for Consumer API to become available
+        run: curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health'
+      - name: Run cns-transport Tests
+        working-directory: ./cns-transport
+        env:
+          NMSHD_TEST_BASEURL: http://localhost:5000
+          NMSHD_TEST_CLIENTID: test
+          NMSHD_TEST_CLIENTSECRET: test
+        run: npm run test:local:node:lokijs
+      - name: Stop Consumer API
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down

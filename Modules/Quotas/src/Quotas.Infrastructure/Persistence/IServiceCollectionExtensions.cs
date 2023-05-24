@@ -47,6 +47,7 @@ public static class IServiceCollectionExtensions
         }
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+        services.AddTransient<IMetricsRepository, MetricsRepository>();
     }
 
     public class DbOptions
