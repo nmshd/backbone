@@ -1,11 +1,10 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Application.Quotas.DTOs;
 
 public class TierQuotaDefinitionDTO
 {
-    public TierQuotaDefinitionDTO(string id, Metric metric, int max, QuotaPeriod period)
+    public TierQuotaDefinitionDTO(string id, MetricDTO metric, int max, QuotaPeriod period)
     {
         Id = id;
         Metric = metric;
@@ -14,7 +13,7 @@ public class TierQuotaDefinitionDTO
     }
 
     public string Id { get; set; }
-    public Metric Metric { get; set; }
+    public MetricDTO Metric { get; set; }
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
 }

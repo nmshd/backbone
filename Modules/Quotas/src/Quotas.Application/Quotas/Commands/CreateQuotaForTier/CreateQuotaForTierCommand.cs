@@ -1,10 +1,11 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Application.Quotas.DTOs;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
 
-public class CreateQuotaForTierCommand : IRequest<CreateQuotaForTierResponse>
+public class CreateQuotaForTierCommand : IRequest<TierQuotaDefinitionDTO>
 {
     public CreateQuotaForTierCommand(string tierId, MetricKey metricKey, int max, QuotaPeriod period)
     {
