@@ -23,18 +23,12 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public IEnumerable<Identity> FindWithTier(string tierId)
+    public async Task<IEnumerable<Identity>> FindWithTier(string tierId, CancellationToken cancellationToken)
     {
-        var identities = _identitiesDbSet
-            .WithTier(tierId);
+        var identities = await _identitiesDbSet
+            .WithTier(tierId, cancellationToken);
 
         return identities;
-    }
-
-    public async Task Update(Identity identity, CancellationToken cancellationToken)
-    {
-        _identitiesDbSet.Update(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)

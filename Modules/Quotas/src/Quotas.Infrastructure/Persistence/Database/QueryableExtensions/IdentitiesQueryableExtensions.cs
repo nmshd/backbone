@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 public static class IdentitiesQueryableExtensions
 {
-    public static IEnumerable<Identity> WithTier(this IQueryable<Identity> query, string tierId)
+    public static async Task<IEnumerable<Identity>> WithTier(this IQueryable<Identity> query, string tierId, CancellationToken cancellationToken)
     {
-        var identities = query.Where(identity => identity.TierId == tierId);
+        var identities = await query.Where(identity => identity.TierId == tierId).ToListAsync(cancellationToken);
         return identities;
     }
 }

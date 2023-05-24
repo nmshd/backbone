@@ -18,8 +18,6 @@ public class MockIdentitiesRepository : IIdentitiesRepository
 
     public bool WasAddCalled { get; private set; }
     public Identity? WasAddCalledWith { get; private set; }
-    public bool WasUpdateCalled { get; private set; }
-    public Identity? WasUpdateCalledWith { get; private set; }
     public bool WasUpdateFromRangeCalled { get; private set; }
     public IEnumerable<Identity>? WasUpdateFromRangeCalledWith { get; private set; }
 
@@ -34,13 +32,6 @@ public class MockIdentitiesRepository : IIdentitiesRepository
     {
         var identities = _identities.Where(identity => identity.TierId == tierId);
         return identities;
-    }
-
-    public Task Update(Identity identity, CancellationToken cancellationToken)
-    {
-        WasUpdateCalled = true;
-        WasUpdateCalledWith = identity;
-        return Task.CompletedTask;
     }
 
     public Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)

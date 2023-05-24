@@ -9,7 +9,6 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 public class TiersRepository : ITiersRepository
 {
     private readonly DbSet<Tier> _tiers;
-    private readonly IQueryable<Tier> _readOnlyTiers;
     private readonly QuotasDbContext _dbContext;
 
     public TiersRepository(QuotasDbContext dbContext)

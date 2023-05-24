@@ -23,14 +23,14 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
         _logger.LogTrace("Handling IdentityCreatedIntegrationEvent ...");
 
         var identity = new Identity(integrationEvent.Address, integrationEvent.Tier);
-        await _identitiesRepository.Add(identity, CancellationToken.None);
-
-        _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
 
         var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None);
 
         tier.Quotas.ForEach(identity.AssignTierQuotaFromDefinition);
-        await _identitiesRepository.Update(identity, CancellationToken.None);
+
+        await _identitiesRepository.Add(identity, CancellationToken.None);
+
+        _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
 
         _logger.LogTrace($"{tier.Quotas.Count} Tier Quotas created for Identity: {identity.Address} ");
     }

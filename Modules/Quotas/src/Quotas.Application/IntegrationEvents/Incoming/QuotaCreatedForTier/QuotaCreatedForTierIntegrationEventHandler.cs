@@ -23,9 +23,9 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
     {
         _logger.LogTrace("Handling QuotaCreatedForTierIntegrationEvent ... ");
 
-        var identitiesWithTier = _identitiesRepository.FindWithTier(@event.TierId).ToList();
+        var identitiesWithTier = await _identitiesRepository.FindWithTier(@event.TierId, CancellationToken.None);
 
-        if (identitiesWithTier.Count == 0)
+        if (!identitiesWithTier.Any())
         {
             _logger.LogTrace($"No identities found with tier ID: {@event.TierId}");
             return;
