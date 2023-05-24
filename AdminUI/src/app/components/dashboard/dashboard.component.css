@@ -1,13 +1,13 @@
 .dashboard-tile {
-  color: white;
-  background-color: #673ab7;
+    color: white;
+    background-color: #673ab7;
 }
 
 .dashboard-tile:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .panel-icon {
-  opacity: 20%;
-  transform: scale(5);
+    opacity: 20%;
+    transform: scale(5);
 }

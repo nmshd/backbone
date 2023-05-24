@@ -1,11 +1,11 @@
 .layout-wrapper {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 .layout-main-container {
-  min-height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px);
 }
 
 .layout-content {
-  padding: 1rem;
+    padding: 1rem;
 }

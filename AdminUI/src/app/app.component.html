@@ -1,17 +1,17 @@
 <div class="layout-wrapper">
-  <app-topbar></app-topbar>
-  <mat-sidenav-container (backdropClick)="closeSidebar()" autosize>
-    <mat-sidenav
-      #sidebar
-      [opened]="showSidebar()"
-      [mode]="isMobile() ? 'over' : 'side'"
-    >
-      <app-sidebar></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content class="layout-main-container">
-      <div class="layout-content">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    <app-topbar></app-topbar>
+    <mat-sidenav-container (backdropClick)="closeSidebar()" autosize>
+        <mat-sidenav
+            #sidebar
+            [opened]="showSidebar()"
+            [mode]="isMobile() ? 'over' : 'side'"
+        >
+            <app-sidebar></app-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content class="layout-main-container">
+            <div class="layout-content">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
 </div>

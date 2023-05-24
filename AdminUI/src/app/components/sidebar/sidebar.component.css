@@ -1,15 +1,15 @@
 .sidebar {
-  user-select: none !important;
+    user-select: none !important;
 }
 
 .sidebar-extended {
-  width: 185px;
+    width: 185px;
 }
 
 .sidebar-contracted {
-  width: 55px;
+    width: 55px;
 }
 
 .active {
-  color: #673ab7 !important;
+    color: #673ab7 !important;
 }

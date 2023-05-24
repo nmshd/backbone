@@ -1,19 +1,19 @@
 <div class="sidebar sidebar-extended">
-  <mat-nav-list>
-    <mat-list-item
-      *ngFor="let option of sidebarOptions"
-      [routerLink]="option.routerLink"
-    >
-      <mat-icon
-        matListItemIcon
-        [routerLink]="option.routerLink"
-        routerLinkActive="active"
-      >
-        {{ option.icon }}
-      </mat-icon>
-      <span [routerLink]="option.routerLink" routerLinkActive="active">
-        {{ option.label }}
-      </span>
-    </mat-list-item>
-  </mat-nav-list>
+    <mat-nav-list>
+        <mat-list-item
+            *ngFor="let option of sidebarOptions"
+            [routerLink]="option.routerLink"
+        >
+            <mat-icon
+                matListItemIcon
+                [routerLink]="option.routerLink"
+                routerLinkActive="active"
+            >
+                {{ option.icon }}
+            </mat-icon>
+            <span [routerLink]="option.routerLink" routerLinkActive="active">
+                {{ option.label }}
+            </span>
+        </mat-list-item>
+    </mat-nav-list>
 </div>

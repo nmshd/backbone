@@ -7,17 +7,17 @@ import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'identities', component: IdentityListComponent },
-  { path: 'tiers', component: TierListComponent },
-  { path: 'tiers/create', component: TierEditComponent },
-  { path: 'tiers/:id', component: TierEditComponent },
-  { path: '**', component: PageNotFoundComponent },
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+    { path: 'dashboard', component: DashboardComponent },
+    { path: 'identities', component: IdentityListComponent },
+    { path: 'tiers', component: TierListComponent },
+    { path: 'tiers/create', component: TierEditComponent },
+    { path: 'tiers/:id', component: TierEditComponent },
+    { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -1,18 +1,18 @@
 <h2>{{ header }}</h2>
 <mat-grid-list
-  cols="{{ isMobile() ? '2' : '4' }}"
-  rowHeight="4:3"
-  gutterSize="4"
+    cols="{{ isMobile() ? '2' : '4' }}"
+    rowHeight="4:3"
+    gutterSize="4"
 >
-  <mat-grid-tile
-    *ngFor="let dashboardPanel of dashboardOverviewPanels"
-    [routerLink]="dashboardPanel.routerLink"
-    class="dashboard-tile"
-    matTooltip="Go to {{ dashboardPanel.header }}"
-  >
-    <mat-icon class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
-    <mat-grid-tile-footer>
-      <span>{{ dashboardPanel.header }}</span>
-    </mat-grid-tile-footer>
-  </mat-grid-tile>
+    <mat-grid-tile
+        *ngFor="let dashboardPanel of dashboardOverviewPanels"
+        [routerLink]="dashboardPanel.routerLink"
+        class="dashboard-tile"
+        matTooltip="Go to {{ dashboardPanel.header }}"
+    >
+        <mat-icon class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
+        <mat-grid-tile-footer>
+            <span>{{ dashboardPanel.header }}</span>
+        </mat-grid-tile-footer>
+    </mat-grid-tile>
 </mat-grid-list>

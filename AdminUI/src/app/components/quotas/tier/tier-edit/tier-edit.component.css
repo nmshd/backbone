@@ -1,17 +1,17 @@
 .action-buttons {
-  margin-top: 25px;
-  display: flex;
-  justify-content: flex-end;
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }

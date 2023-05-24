@@ -6,73 +6,73 @@ import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
 @Component({
-  selector: 'app-tier-list',
-  templateUrl: './tier-list.component.html',
-  styleUrls: ['./tier-list.component.css'],
+    selector: 'app-tier-list',
+    templateUrl: './tier-list.component.html',
+    styleUrls: ['./tier-list.component.css'],
 })
 export class TierListComponent {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  header: string;
+    header: string;
 
-  tiers: Tier[];
+    tiers: Tier[];
 
-  totalRecords: number;
-  pageSize: number;
-  pageIndex: number;
+    totalRecords: number;
+    pageSize: number;
+    pageIndex: number;
 
-  loading = false;
+    loading = false;
 
-  displayedColumns: string[] = ['id', 'name'];
+    displayedColumns: string[] = ['id', 'name'];
 
-  constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private tierService: TierService
-  ) {
-    this.header = 'Tiers';
+    constructor(
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private tierService: TierService
+    ) {
+        this.header = 'Tiers';
 
-    this.tiers = [];
+        this.tiers = [];
 
-    this.totalRecords = 0;
-    this.pageSize = 10;
-    this.pageIndex = 0;
+        this.totalRecords = 0;
+        this.pageSize = 10;
+        this.pageIndex = 0;
 
-    this.loading = true;
-  }
+        this.loading = true;
+    }
 
-  ngOnInit() {
-    this.getPagedData();
-  }
+    ngOnInit() {
+        this.getPagedData();
+    }
 
-  getPagedData() {
-    this.loading = true;
-    this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
-      next: (data: PagedHttpResponseEnvelope<Tier>) => {
-        if (data) {
-          this.tiers = data.result;
-          if (data.pagination) {
-            this.totalRecords = data.pagination.totalRecords!;
-          } else {
-            this.totalRecords = data.result.length;
-          }
-        }
-      },
-      complete: () => (this.loading = false),
-      error: (err: any) => {
-        this.loading = false;
-        this.snackBar.open(err.message, 'Dismiss');
-      },
-    });
-  }
+    getPagedData() {
+        this.loading = true;
+        this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<Tier>) => {
+                if (data) {
+                    this.tiers = data.result;
+                    if (data.pagination) {
+                        this.totalRecords = data.pagination.totalRecords!;
+                    } else {
+                        this.totalRecords = data.result.length;
+                    }
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
+    }
 
-  pageChangeEvent(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.getPagedData();
-  }
+    pageChangeEvent(event: PageEvent) {
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.getPagedData();
+    }
 
-  addTier() {
-    this.router.navigate([`/tiers/create`]);
-  }
+    addTier() {
+        this.router.navigate([`/tiers/create`]);
+    }
 }

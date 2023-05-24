@@ -6,49 +6,52 @@ import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-env
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class TierService {
-  apiUrl: string;
+    apiUrl: string;
 
-  constructor(private http: HttpClient) {
-    this.apiUrl = environment.apiUrl + '/Tiers';
-  }
+    constructor(private http: HttpClient) {
+        this.apiUrl = environment.apiUrl + '/Tiers';
+    }
 
-  getTiers(
-    pageNumber: number,
-    pageSize: number
-  ): Observable<PagedHttpResponseEnvelope<Tier>> {
-    const httpOptions = {
-      params: new HttpParams()
-        .set('PageNumber', pageNumber + 1)
-        .set('PageSize', pageSize),
-    };
+    getTiers(
+        pageNumber: number,
+        pageSize: number
+    ): Observable<PagedHttpResponseEnvelope<Tier>> {
+        const httpOptions = {
+            params: new HttpParams()
+                .set('PageNumber', pageNumber + 1)
+                .set('PageSize', pageSize),
+        };
 
-    return this.http.get<PagedHttpResponseEnvelope<Tier>>(
-      this.apiUrl,
-      httpOptions
-    );
-  }
+        return this.http.get<PagedHttpResponseEnvelope<Tier>>(
+            this.apiUrl,
+            httpOptions
+        );
+    }
 
-  getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-    const httpOptions = {
-      params: new HttpParams().set('id', id),
-    };
+    getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
+        const httpOptions = {
+            params: new HttpParams().set('id', id),
+        };
 
-    return this.http.get<HttpResponseEnvelope<Tier>>(this.apiUrl, httpOptions);
-  }
+        return this.http.get<HttpResponseEnvelope<Tier>>(
+            this.apiUrl,
+            httpOptions
+        );
+    }
 
-  createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
-    return this.http.post<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
-  }
+    createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
+        return this.http.post<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
+    }
 
-  updateTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
-    return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
-  }
+    updateTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
+        return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
+    }
 }
 
 export interface Tier {
-  id?: string;
-  name?: string;
+    id?: string;
+    name?: string;
 }
