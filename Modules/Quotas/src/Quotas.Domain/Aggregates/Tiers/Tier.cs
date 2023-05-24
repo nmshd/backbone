@@ -12,13 +12,6 @@ public class Tier
         Quotas = new();
     }
 
-    public Tier(string id, string name, List<TierQuotaDefinition> quotas)
-    {
-        Id = id;
-        Name = name;
-        Quotas = quotas;
-    }
-
     public string Id { get; }
     public string Name { get; }
     public List<TierQuotaDefinition> Quotas { get; }
