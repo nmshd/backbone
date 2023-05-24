@@ -1,0 +1,115 @@
+services:
+  backbone:
+    image: nmshd-backbone
+    container_name: backbone
+    hostname: backbone
+    build:
+      context: ..
+      dockerfile: ConsumerApi/Dockerfile.debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+
+      - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      
+      - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      
+      - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      
+      - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      
+      - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
+      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+    ports:
+      - "127.0.0.10:80:80"
+      - "5000:80"
+    depends_on:
+      - ms-sql-server
+      - rabbitmq
+    volumes:
+      - ../:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 1m
+
+
+  ### infrastructure ###
+
+  azure-storage-emulator:
+   container_name: azure-storage-emulator
+   hostname: azurite
+   image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
+   command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
+   ports:
+     - "10000:10000"
+   volumes:
+     - azure-storage-emulator-volume:/data
+
+  ms-sql-server:
+    container_name: bkb-mssql_server
+    hostname: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    volumes:
+      - mssql-server-volume:/var/opt/mssql
+    ports:
+      - 1433:1433
+
+  rabbitmq:
+    container_name: bkb-rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672" # mgmt plugin, "guest/guest"
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq # default data dir
+  
+
+  ### seeds ###
+
+  seed-mssql:
+    image: mcr.microsoft.com/mssql-tools
+    volumes: 
+      - ../setup-db:/app/setup-db
+    command: >
+      bash -c "
+      sleep 10 &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
+      sleep 1 &&
+      /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql
+      "
+    depends_on:
+      - ms-sql-server
+
+  seed-client:
+    container_name: seed-client
+    image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
+    command: >
+      ./backbone client create
+      -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+      --clientId test --clientSecret test
+    depends_on:
+      backbone:
+        condition: service_healthy
+
+networks:
+  default:
+    name: backbone
+
+volumes:
+  rabbitmq-volume:
+  mssql-server-volume:
+  azure-storage-emulator-volume:
+  elastic_data:

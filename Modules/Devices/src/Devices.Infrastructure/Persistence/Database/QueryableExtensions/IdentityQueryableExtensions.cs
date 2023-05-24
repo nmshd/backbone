@@ -3,7 +3,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class IdentityQueryableExtensions
 {
