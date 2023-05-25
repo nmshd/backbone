@@ -12,8 +12,8 @@ public class CreateQuotaForTierCommandValidator : AbstractValidator<CreateQuotaF
         RuleFor(c => c.Max)
             .GreaterThan(0);
         RuleFor(c => c.Period)
-            .NotNull();
+            .DetailedNotNull();
         RuleFor(c => c.MetricKey)
-            .NotNull();
+            .DetailedNotNull();
     }
 }

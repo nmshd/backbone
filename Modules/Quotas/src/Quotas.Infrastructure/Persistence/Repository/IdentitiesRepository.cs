@@ -1,7 +1,9 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -9,12 +11,14 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identitiesDbSet;
+    private readonly IQueryable<Identity> _readOnlyIdentities;
     private readonly QuotasDbContext _dbContext;
 
     public IdentitiesRepository(QuotasDbContext dbContext)
     {
         _dbContext = dbContext;
         _identitiesDbSet = dbContext.Set<Identity>();
+        _readOnlyIdentities = dbContext.Identities.AsNoTracking();
     }
 
     public async Task Add(Identity identity, CancellationToken cancellationToken)
@@ -23,9 +27,10 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindWithTier(string tierId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
     {
-        var identities = await _identitiesDbSet
+        var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
+            .IncludeAll(_dbContext)
             .WithTier(tierId, cancellationToken);
 
         return identities;

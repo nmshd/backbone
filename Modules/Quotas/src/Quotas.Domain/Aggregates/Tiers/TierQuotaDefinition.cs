@@ -6,14 +6,14 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 public class TierQuotaDefinition
 {
     public TierQuotaDefinitionId Id { get; }
-    public Metric Metric { get; }
+    public MetricKey MetricKey { get; }
     public int Max { get; }
     public QuotaPeriod Period { get; }
 
-    public TierQuotaDefinition(Metric metric, int max, QuotaPeriod period)
+    public TierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
     {
         Id = TierQuotaDefinitionId.Generate();
-        Metric = metric;
+        MetricKey = metricKey;
         Max = max;
         Period = period;
     }

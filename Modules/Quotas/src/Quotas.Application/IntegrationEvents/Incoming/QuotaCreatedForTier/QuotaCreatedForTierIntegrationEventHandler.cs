@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
@@ -8,14 +9,14 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCr
 public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandler<QuotaCreatedForTierIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly ITierQuotaDefinitionsRepository _tierQuotaDefinitionsRepository;
+    private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<QuotaCreatedForTierIntegrationEventHandler> _logger;
 
     public QuotaCreatedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
-        ITierQuotaDefinitionsRepository tierQuotaDefinitionsRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger)
+        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger)
     {
         _identitiesRepository = identitiesRepository;
-        _tierQuotaDefinitionsRepository = tierQuotaDefinitionsRepository;
+        _tiersRepository = tiersRepository;
         _logger = logger;
     }
 
@@ -23,7 +24,7 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
     {
         _logger.LogTrace("Handling QuotaCreatedForTierIntegrationEvent ... ");
 
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(@event.TierId, CancellationToken.None);
+        var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
@@ -31,7 +32,7 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
             return;
         }
 
-        var tierQuotaDefinition = await _tierQuotaDefinitionsRepository.Find(@event.TierQuotaDefinitionId, CancellationToken.None);
+        var tierQuotaDefinition = await _tiersRepository.FindTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None);
 
         foreach (var identity in identitiesWithTier)
         {

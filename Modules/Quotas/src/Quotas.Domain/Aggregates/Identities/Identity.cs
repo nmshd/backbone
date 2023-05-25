@@ -6,14 +6,15 @@ public class Identity
 {
     private readonly List<TierQuota> _tierQuotas = new();
 
-    public Identity(string address, string tierId)
+    public Identity(string address, TierId tierId)
     {
         Address = address;
         TierId = tierId;
     }
 
+    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas;
     public string Address { get; }
-    public string TierId { get; }
+    public TierId TierId { get; }
 
     public void AssignTierQuotaFromDefinition(TierQuotaDefinition definition)
     {

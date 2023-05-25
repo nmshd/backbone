@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +23,7 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
     {
         _logger.LogTrace("Handling IdentityCreatedIntegrationEvent ...");
 
-        var identity = new Identity(integrationEvent.Address, integrationEvent.Tier);
+        var identity = new Identity(integrationEvent.Address, new TierId(integrationEvent.TierId));
 
         var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None);
 

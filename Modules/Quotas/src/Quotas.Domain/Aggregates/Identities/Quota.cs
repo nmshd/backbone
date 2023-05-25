@@ -14,7 +14,7 @@ public abstract class Quota
     public string ApplyTo { get; }
     public DateTime? IsExhaustedUntil { get; }
     public abstract int Weight { get; }
-    public abstract Metric Metric { get; }
+    public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 }

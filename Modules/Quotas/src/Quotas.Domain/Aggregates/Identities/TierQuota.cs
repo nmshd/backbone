@@ -12,8 +12,8 @@ public class TierQuota : Quota
         _definition = definition;
     }
 
-    public override int Weight => 2;
-    public override Metric Metric => _definition.Metric;
+    public override int Weight => 1;
+    public override MetricKey MetricKey => _definition.MetricKey;
     public override int Max => _definition.Max;
     public override QuotaPeriod Period => _definition.Period;
 }
