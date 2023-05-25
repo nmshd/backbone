@@ -48,6 +48,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddCustomAspNetCore(parsedConfiguration, environment)
     .AddCustomFluentValidation()
+    .AddCustomIdentity(environment)
     .AddCustomSwaggerWithUi()
     .AddDevices(parsedConfiguration.Modules.Devices)
     .AddQuotas(parsedConfiguration.Modules.Quotas)
