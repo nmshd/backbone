@@ -20,7 +20,7 @@ public class MockTiersRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<Tier> Find(string id, CancellationToken cancellationToken)
+    public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tier = _tiers.FirstOrDefault(t => t.Id == id);
 
@@ -35,5 +35,10 @@ public class MockTiersRepository : ITiersRepository
         WasUpdateCalled = true;
         WasUpdateCalledWith = tier;
         return Task.CompletedTask;
+    }
+
+    public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
     }
 }

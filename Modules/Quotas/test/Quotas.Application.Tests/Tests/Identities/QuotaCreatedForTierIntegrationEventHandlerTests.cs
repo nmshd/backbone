@@ -16,13 +16,12 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
     public async void Successfully_creates_tier_quota_after_consuming_integration_event()
     {
         // Arrange
-        var tierId = "TIRFxoL0U24aUqZDSAWc";
+        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
         var tier = new Tier(tierId, "some-tier-name");
 
-        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
         var period = QuotaPeriod.Month;
-        var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, period);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
 
         var firstIdentity = new Identity("some-identity-address-one", tierId);
@@ -33,7 +32,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier, tierQuotaDefinition.Id));
+        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier, tierQuotaDefinition));
 
         // Assert
         mockIdentitiesRepository.WasUpdateFromRangeCalled.Should().BeTrue();

@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 public class MockIdentitiesRepository : IIdentitiesRepository
@@ -28,7 +29,7 @@ public class MockIdentitiesRepository : IIdentitiesRepository
         return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<Identity>> FindWithTier(string tierId, CancellationToken cancellationToken)
+    public Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
     {
         var identities = _identities.Where(identity => identity.TierId == tierId);
         return Task.FromResult(identities);

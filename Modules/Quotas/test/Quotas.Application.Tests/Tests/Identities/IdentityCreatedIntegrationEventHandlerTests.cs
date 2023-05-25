@@ -15,17 +15,15 @@ public class IdentityCreatedIntegrationEventHandlerTests
     public async void Successfully_creates_identity_after_consuming_integration_event()
     {
         // Arrange
-        var address = "id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm";
-        var tierId = "TIRFxoL0U24aUqZDSAWc";
+        var address = "some-dummy-address";
+        var tierId = new TierId("TIRsomeTierId1111111");
 
-        var max = 5;
         var tier = new Tier(tierId, "some-tier-name");
-        tier.Quotas.Add(new TierQuotaDefinition(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"), max, QuotaPeriod.Month));
 
         var mockIdentitiesRepository = new MockIdentitiesRepository();
-        var mockTiersRepository = new FindTiersStubRepository(tier);
+        var stubTiersRepository = new FindTiersStubRepository(tier);
 
-        var handler = CreateHandler(mockIdentitiesRepository, mockTiersRepository);
+        var handler = CreateHandler(mockIdentitiesRepository, stubTiersRepository);
 
         // Act
         await handler.Handle(new IdentityCreatedIntegrationEvent(address, tierId));
@@ -34,6 +32,33 @@ public class IdentityCreatedIntegrationEventHandlerTests
         mockIdentitiesRepository.WasAddCalled.Should().BeTrue();
         mockIdentitiesRepository.WasAddCalledWith.Address.Should().Be(address);
         mockIdentitiesRepository.WasAddCalledWith.TierId.Should().Be(tierId);
+    }
+
+    [Fact]
+    public async void Successfully_creates_identity_and_assigns_tier_quotas_after_consuming_integration_event()
+    {
+        // Arrange
+        var address = "some-dummy-address";
+        var tierId = new TierId("TIRsomeTierId1111111");
+
+        var max = 5;
+        var tier = new Tier(tierId, "some-tier-name");
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month));
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Week));
+
+        var mockIdentitiesRepository = new MockIdentitiesRepository();
+        var stubTiersRepository = new FindTiersStubRepository(tier);
+
+        var handler = CreateHandler(mockIdentitiesRepository, stubTiersRepository);
+
+        // Act
+        await handler.Handle(new IdentityCreatedIntegrationEvent(address, tierId));
+
+        // Assert
+        mockIdentitiesRepository.WasAddCalled.Should().BeTrue();
+        mockIdentitiesRepository.WasAddCalledWith.Address.Should().Be(address);
+        mockIdentitiesRepository.WasAddCalledWith.TierId.Should().Be(tierId);
+        mockIdentitiesRepository.WasAddCalledWith.TierQuotas.Should().HaveCount(2);
     }
 
     private IdentityCreatedIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities, FindTiersStubRepository tiers)

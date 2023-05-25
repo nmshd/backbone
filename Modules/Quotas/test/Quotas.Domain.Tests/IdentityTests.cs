@@ -11,10 +11,14 @@ public class IdentityTests
     [Fact]
     public void Can_create_identity_with_valid_properties()
     {
+        // Arrange
         var address = "someAddress";
-        var tierId = "TIRsomeTierId1111111";
+        var tierId = new TierId("TIRsomeTierId1111111");
+
+        // Act
         var identity = new Identity(address, tierId);
 
+        // Assert
         identity.Address.Should().Be(address);
         identity.TierId.Should().Be(tierId);
     }
@@ -22,16 +26,16 @@ public class IdentityTests
     [Fact]
     public void Can_assign_tier_quota_from_definition_to_identity()
     {
+        // Arrange
         var address = "someAddress";
-        var tierId = "TIRsomeTierId1111111";
+        var tierId = new TierId("TIRsomeTierId1111111");
         var identity = new Identity(address, tierId);
-
-        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 5;
-        var period = QuotaPeriod.Month;
-        var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month);
 
+        // Act
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+
         // no exception thrown signifies the test worked
     }
 }

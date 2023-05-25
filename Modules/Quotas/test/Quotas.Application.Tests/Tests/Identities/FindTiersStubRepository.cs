@@ -17,9 +17,14 @@ public class FindTiersStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<Tier> Find(string id, CancellationToken cancellationToken)
+    public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult(_tier);
+    }
+
+    public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
     }
 
     public Task Update(Tier tier, CancellationToken cancellationToken)
