@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-[NotMapped]
 public class IndividualQuota : Quota
 {
     public IndividualQuota(Metric metric, int max, QuotaPeriod period)

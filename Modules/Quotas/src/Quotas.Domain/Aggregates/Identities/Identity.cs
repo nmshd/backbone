@@ -4,7 +4,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
-    public List<IndividualQuota> IndividualQuotas { get; }
+    private List<IndividualQuota> IndividualQuotas { get; }
 
     public Identity(string address, string tierId)
     {
