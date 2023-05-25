@@ -1,12 +1,17 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Admin.API.AspNetCoreIdentityCustomizations;
 using Admin.API.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.API.Extensions;
@@ -122,6 +127,39 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
+    {
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            if (environment.IsDevelopment() || environment.IsLocal())
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.User.AllowedUserNameCharacters += " ";
+            }
+            else
+            {
+                options.Password.RequiredLength = 10;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+            }
+        })
+        .AddEntityFrameworkStores<DevicesDbContext>()
+        .AddSignInManager<CustomSigninManager>()
+        .AddUserStore<CustomUserStore>();
+
+        services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
+
+        return services;
+    }
+
     private static object GetPropertyValue(object source, string propertyPath)
     {
         foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
