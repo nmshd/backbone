@@ -7,7 +7,7 @@ public static class IServiceCollectionExtension
 {
     public static IServiceCollection AddCommonRepositories<TDbContext>(this IServiceCollection services) where TDbContext : AbstractDbContextBase
     {
-        services.AddTransient<IMetricStatusesRepository, MetricStatusRepository<TDbContext>>();
+        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository<TDbContext>>();
 
         return services;
     }

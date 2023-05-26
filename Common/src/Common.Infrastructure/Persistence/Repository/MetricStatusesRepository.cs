@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
 
-public class MetricStatusRepository<TDbContext> : IMetricStatusesRepository where TDbContext : AbstractDbContextBase
+public class MetricStatusesRepository<TDbContext> : IMetricStatusesRepository where TDbContext : AbstractDbContextBase
 {
     protected readonly DbSet<MetricStatus> _dbSet;
 
-    public MetricStatusRepository(TDbContext dbContext) 
+    public MetricStatusesRepository(TDbContext dbContext) 
     {
         _dbSet = dbContext.Set<MetricStatus>();
     }

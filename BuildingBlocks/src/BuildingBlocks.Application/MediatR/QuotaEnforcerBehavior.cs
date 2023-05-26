@@ -6,16 +6,11 @@ namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly IMetricStatusesRepository? _metricStatusesRepository;
+    private readonly IMetricStatusesRepository _metricStatusesRepository;
 
     public QuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepositories)
     {
         _metricStatusesRepository = metricStatusesRepositories;
-    }
-
-    public QuotaEnforcerBehavior()
-    {
-        _metricStatusesRepository = null;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
