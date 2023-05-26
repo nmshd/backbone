@@ -4,13 +4,12 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
-    private List<IndividualQuota> IndividualQuotas { get; }
+    private readonly List<IndividualQuota> _individualQuotas = new();
 
     public Identity(string address, string tierId)
     {
         Address = address;
         TierId = tierId;
-        IndividualQuotas = new();
     }
 
     public string Address { get; }
@@ -20,7 +19,7 @@ public class Identity
     public IndividualQuota CreateIndividualQuota(Metric metric, int max, QuotaPeriod period)
     {
         var individualQuota = new IndividualQuota(metric, max, period);
-        IndividualQuotas.Add(individualQuota);
+        _individualQuotas.Add(individualQuota);
 
         return individualQuota;
     }
