@@ -1,7 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 
 public class CreateQuotaForTierCommandValidator : AbstractValidator<CreateQuotaForTierCommand>
 {
@@ -10,7 +11,7 @@ public class CreateQuotaForTierCommandValidator : AbstractValidator<CreateQuotaF
         RuleFor(c => c.TierId)
             .DetailedNotEmpty();
         RuleFor(c => c.Max)
-            .GreaterThan(0);
+            .GreaterThan(0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
         RuleFor(c => c.Period)
             .DetailedNotNull();
         RuleFor(c => c.MetricKey)

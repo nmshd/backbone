@@ -8,7 +8,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 
 public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefinitionDTO>
 {

@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
@@ -27,19 +27,22 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         var firstIdentity = new Identity("some-identity-address-one", tierId);
         var secondIdentity = new Identity("some-identity-address-two", tierId);
         var identities = new List<Identity> { firstIdentity, secondIdentity };
-        var mockIdentitiesRepository = new MockIdentitiesRepository(identities);
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.FindWithTier(tierId, CancellationToken.None, true)).Returns(identities);
 
-        var handler = CreateHandler(mockIdentitiesRepository, tierQuotaDefinitionsRepository);
+        var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
         await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier, tierQuotaDefinition));
 
         // Assert
-        mockIdentitiesRepository.WasUpdateFromRangeCalled.Should().BeTrue();
-        mockIdentitiesRepository.WasUpdateFromRangeCalledWith.Count().Should().Be(2);
+        A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(identities =>
+            identities.ElementAt(0).TierQuotas.Count() == 1 && identities.ElementAt(1).TierQuotas.Count() == 1)
+            , CancellationToken.None)
+        ).MustHaveHappened();
     }
 
-    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(MockIdentitiesRepository identities, FindTierQuotaDefinitionsStubRepository tierQuotaDefinitions)
+    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTierQuotaDefinitionsStubRepository tierQuotaDefinitions)
     {
         var logger = A.Fake<ILogger<QuotaCreatedForTierIntegrationEventHandler>>();
         return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger);

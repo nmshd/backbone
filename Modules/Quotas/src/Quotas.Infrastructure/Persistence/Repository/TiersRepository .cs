@@ -21,7 +21,7 @@ public class TiersRepository : ITiersRepository
         _tiers = dbContext.Set<Tier>();
         _readOnlyTiers = dbContext.Tiers.AsNoTracking();
         _tierQuotaDefinitions = dbContext.Set<TierQuotaDefinition>();
-        _readOnlyTierQuotaDefinitions = dbContext.Set<TierQuotaDefinition>();
+        _readOnlyTierQuotaDefinitions = dbContext.Set<TierQuotaDefinition>().AsNoTracking();
     }
 
     public async Task Add(Tier tier, CancellationToken cancellationToken)

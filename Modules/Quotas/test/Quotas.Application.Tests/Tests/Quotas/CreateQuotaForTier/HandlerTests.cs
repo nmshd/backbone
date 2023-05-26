@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.AutoMapper;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Quotas.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -35,9 +36,11 @@ public class HandlerTests
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");
         var tiers = new List<Tier> { tier };
-        var mockTiersRepository = new MockTiersRepository(tiers);
+        var tierRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tierRepository.Find(tierId, CancellationToken.None, false)).Returns(tier);
+
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(mockTiersRepository, metricsRepository);
+        var handler = CreateHandler(tierRepository, metricsRepository);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -48,8 +51,11 @@ public class HandlerTests
         response.Max.Should().Be(max);
         response.MetricKey.ToString().Should().Be(metricKey);
 
-        mockTiersRepository.WasUpdateCalled.Should().BeTrue();
-        mockTiersRepository.WasUpdateCalledWith.Quotas.Count.Should().Be(1);
+        A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
+            t.Id == tierId &&
+            t.Quotas.Count() == 1)
+            , CancellationToken.None)
+        ).MustHaveHappened();
     }
 
     [Fact]
@@ -63,9 +69,12 @@ public class HandlerTests
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");
         var tiers = new List<Tier> { tier };
-        var mockTiersRepository = new MockTiersRepository(tiers);
+        //var mockTiersRepository = new MockTiersRepository(tiers);
+        var tierRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tierRepository.Find(tierId, CancellationToken.None, false)).Returns(tier);
+
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(mockTiersRepository, metricsRepository);
+        var handler = CreateHandler(tierRepository, metricsRepository);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -74,7 +83,7 @@ public class HandlerTests
         A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(QuotaCreatedForTierIntegrationEvent)))).MustHaveHappened();
     }
 
-    private Handler CreateHandler(MockTiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
+    private Handler CreateHandler(ITiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
     {
         var logger = A.Fake<ILogger<Handler>>();
         var mapper = AutoMapperProfile.CreateMapper();
