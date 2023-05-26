@@ -10,12 +10,12 @@ public class IndividualQuotaTests
     [Fact]
     public void Creates_individual_quota_with_valid_properties()
     {
-        var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
+        var metricKey = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var max = 10;
         var period = QuotaPeriod.Month;
-        var individualQuota = new IndividualQuota(metric, max, period);
+        var individualQuota = new IndividualQuota(metricKey, max, period);
 
-        individualQuota.Metric.Should().Be(metric);
+        individualQuota.MetricKey.Should().Be(metricKey);
         individualQuota.Period.Should().Be(period);
         individualQuota.Max.Should().Be(max);
         individualQuota.Weight.Should().Be(2);
