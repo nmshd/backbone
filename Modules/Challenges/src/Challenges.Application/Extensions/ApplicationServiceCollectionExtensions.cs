@@ -5,7 +5,7 @@ using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+
 using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
 namespace Backbone.Modules.Challenges.Application.Extensions;
@@ -14,9 +14,12 @@ public static class ApplicationServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<CreateChallengeCommand>());
-        services.TryAddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-        services.TryAddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+        services.AddMediatR(c => c
+            .RegisterServicesFromAssemblyContaining<CreateChallengeCommand>()
+            .AddOpenBehavior(typeof(LoggingBehavior<,>))
+            .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
+            .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+        );
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(CreateChallengeCommandValidator).Assembly);
     }

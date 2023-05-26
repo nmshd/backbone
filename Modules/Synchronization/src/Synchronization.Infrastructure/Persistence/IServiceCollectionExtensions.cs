@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.Common.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence;
@@ -21,6 +22,7 @@ public static class IServiceCollectionExtensions
         services.Configure<BlobOptions>(blobOptions =>
             blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
+        services.AddCommonRepositories<SynchronizationDbContext>();
     }
 }
 

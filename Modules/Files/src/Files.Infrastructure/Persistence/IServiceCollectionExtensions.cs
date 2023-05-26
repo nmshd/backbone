@@ -3,6 +3,7 @@ using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.Common.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence;
@@ -22,6 +23,7 @@ public static class IServiceCollectionExtensions
         services.Configure<BlobOptions>(blobOptions =>
             blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
+        services.AddCommonRepositories<FilesDbContext>();
 
         services.AddTransient<IFilesRepository, FilesRepository>();
     }

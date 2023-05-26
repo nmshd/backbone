@@ -1,8 +1,10 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Enmeshed.BuildingBlocks.Application.Attributes;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
+[ApplyQuotasForMetrics("NumberOfSentMessages", "AnotherMetricKey")]
 public class SendMessageCommand : IRequest<SendMessageResponse>
 {
     public ICollection<SendMessageCommandRecipientInformation> Recipients { get; set; } = new List<SendMessageCommandRecipientInformation>();

@@ -32,6 +32,7 @@ using Relationships.ConsumerApi;
 using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

@@ -3,6 +3,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.Common.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence;
@@ -24,6 +25,8 @@ public static class IServiceCollectionExtensions
         services.Configure<BlobOptions>(blobOptions =>
             blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
+        services.AddCommonRepositories<RelationshipsDbContext>();
+
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
     }

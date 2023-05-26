@@ -2,6 +2,7 @@
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+using Enmeshed.Common.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,6 +48,7 @@ public static class IServiceCollectionExtensions
 
         }
 
+        services.AddCommonRepositories<ChallengesDbContext>();
         services.AddScoped<IChallengesRepository, ChallengesRepository>();
     }
 
