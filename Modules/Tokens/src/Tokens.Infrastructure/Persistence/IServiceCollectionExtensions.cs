@@ -2,7 +2,6 @@
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
-using Enmeshed.Common.Infrastructure; 
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence;
 
@@ -21,7 +20,6 @@ public static class IServiceCollectionExtensions
         services.AddDatabase(options.DbOptions);
         services.AddBlobStorage(options.BlobStorageOptions);
         services.AddRepositories(options.BlobStorageOptions);
-        services.AddCommonRepositories<TokensDbContext>();
     }
 }
 

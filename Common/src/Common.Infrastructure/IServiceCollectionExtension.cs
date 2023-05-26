@@ -1,13 +1,15 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
+﻿using Enmeshed.Common.Infrastructure.Persistence.Repository;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Enmeshed.Common.Infrastructure.Persistence.Context;
 
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension
 {
-    public static IServiceCollection AddCommonRepositories<TDbContext>(this IServiceCollection services) where TDbContext : AbstractDbContextBase
+    public static IServiceCollection AddCommonRepositories(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository<TDbContext>>();
+        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
+        services.AddSingleton(new DapperContext(configuration));
 
         return services;
     }

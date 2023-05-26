@@ -1,18 +1,17 @@
 ﻿using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.EntityFrameworkCore;
+using Enmeshed.Common.Infrastructure.Persistence.Context;
 
 namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
 
-public class MetricStatusesRepository<TDbContext> : IMetricStatusesRepository where TDbContext : AbstractDbContextBase
+public class MetricStatusesRepository : IMetricStatusesRepository
 {
-    protected readonly DbSet<MetricStatus> _dbSet;
+    private readonly DapperContext _context;
 
-    public MetricStatusesRepository(TDbContext dbContext) 
+    public MetricStatusesRepository(DapperContext context) 
     {
-        _dbSet = dbContext.Set<MetricStatus>();
+        _context = context;
     }
 
     public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
