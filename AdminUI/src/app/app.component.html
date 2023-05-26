@@ -3,7 +3,7 @@
     <mat-sidenav-container (backdropClick)="closeSidebar()" autosize>
         <mat-sidenav
             #sidebar
-            [opened]="showSidebar()"
+            [opened]="isSidebarOpen()"
             [mode]="isMobile() ? 'over' : 'side'"
         >
             <app-sidebar></app-sidebar>

@@ -15,7 +15,7 @@ export class AppComponent {
         this.sidebarService.close();
     }
 
-    showSidebar(): boolean {
+    isSidebarOpen(): boolean {
         return this.sidebarService.isOpen();
     }
 
