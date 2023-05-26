@@ -16,9 +16,9 @@ public class Identity
 
     public string TierId { get; }
 
-    public IndividualQuota CreateIndividualQuota(Metric metric, int max, QuotaPeriod period)
+    public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        var individualQuota = new IndividualQuota(metric, max, period);
+        var individualQuota = new IndividualQuota(metricKey, max, period);
         _individualQuotas.Add(individualQuota);
 
         return individualQuota;
