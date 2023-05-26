@@ -1,43 +1,18 @@
-<div class="col-12 md:px-5">
-    <div class="p-component">
-        <div class="p-3 text-700">
-            <div class="text-2xl font-medium">{{ header }}</div>
-        </div>
-    </div>
-    <div class="col-12 flex flex-wrap">
-        <div
-            *ngFor="let dashboardPanel of dashboardOverviewPanels"
-            class="col-12 lg:col-3 md:col-4 sm:col-6 zoom-animation"
-        >
-            <div
-                class="cursor-pointer select-none"
-                [routerLink]="dashboardPanel.routerLink"
-            >
-                <p-card
-                    styleClass="text-white-animation background-color-{{
-                        dashboardPanel.classLabel
-                    }}"
-                >
-                    <ng-template pTemplate="header">
-                        <div class="p-2">
-                            <span
-                                class="inline-flex border-circle p-3 background-color-{{
-                                    dashboardPanel.classLabel
-                                }}-highlight "
-                            >
-                                <i
-                                    class="pi {{ dashboardPanel.icon }} text-xl"
-                                ></i>
-                            </span>
-                        </div>
-                    </ng-template>
-                    <ng-template pTemplate="content">
-                        <div class="text-2xl font-medium">
-                            {{ dashboardPanel.header }}
-                        </div>
-                    </ng-template>
-                </p-card>
-            </div>
-        </div>
-    </div>
-</div>
+<h2>{{ header }}</h2>
+<mat-grid-list
+    cols="{{ isMobile() ? '2' : '4' }}"
+    rowHeight="4:3"
+    gutterSize="4"
+>
+    <mat-grid-tile
+        *ngFor="let dashboardPanel of dashboardOverviewPanels"
+        [routerLink]="dashboardPanel.routerLink"
+        class="dashboard-tile"
+        matTooltip="Go to {{ dashboardPanel.header }}"
+    >
+        <mat-icon class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
+        <mat-grid-tile-footer>
+            <span>{{ dashboardPanel.header }}</span>
+        </mat-grid-tile-footer>
+    </mat-grid-tile>
+</mat-grid-list>

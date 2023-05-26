@@ -1,25 +1,17 @@
-<div class="col-12 md:px-5">
-    <div class="p-component">
-        <div class="p-3 text-700">
-            <div class="text-2xl font-medium">{{ header }}</div>
-        </div>
+<h2>{{ header }}</h2>
+<div class="error-container">
+    <div class="error-code">
+        {{ error.code }}
     </div>
-    <div class="col-12">
-        <div class="p-component flex flex-wrap text-center">
-            <div class="col-12 text-8xl text-800 font-semibold">
-                {{ error.code }}
-            </div>
-            <div class="col-12 text-2xl text-700">{{ error.title }}</div>
-            <div class="col-12 text-700">
-                {{ error.description }}
-            </div>
-            <div class="col-12">
-                <p-button
-                    label="Go to Dashboard"
-                    styleClass="full-width-button"
-                    routerLink="/dashboard"
-                ></p-button>
-            </div>
-        </div>
+    <div class="error-title">
+        {{ error.title }}
+    </div>
+    <div class="error-description">
+        {{ error.description }}
+    </div>
+    <div class="dashboard-button">
+        <button mat-raised-button color="primary" routerLink="/dashboard">
+            Go to Dashboard
+        </button>
     </div>
 </div>
