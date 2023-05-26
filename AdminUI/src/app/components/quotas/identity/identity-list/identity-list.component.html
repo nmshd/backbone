@@ -1,74 +1,60 @@
-<div class="col-12 md:px-5">
-    <div class="p-component">
-        <div class="p-3 text-700">
-            <div class="text-2xl font-medium">{{ header }}</div>
-        </div>
-    </div>
-    <div class="col-12">
-        <p-card>
-            <p-table
-                #identitiesTable
-                [value]="identities"
-                [lazy]="true"
-                (onLazyLoad)="loadIdentities($event)"
-                dataKey="id"
-                [paginator]="true"
-                [rows]="10"
-                [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[10, 25, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} identities"
-                [totalRecords]="totalRecords"
-                [loading]="loading"
-                responsiveLayout="stack"
-            >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th class="col-3">Address</th>
-                        <th class="col-3">Client Id</th>
-                        <th class="col-3">Public Key</th>
-                        <th class="col-3">Created At</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-identity>
-                    <tr>
-                        <td>
-                            <span class="p-column-title font-semibold">
-                                Address
-                            </span>
-                            {{ identity.address }}
-                        </td>
-                        <td>
-                            <span class="p-column-title font-semibold">
-                                Client Id
-                            </span>
-                            {{ identity.clientId }}
-                        </td>
-                        <td>
-                            <span class="p-column-title font-semibold">
-                                Public Key
-                            </span>
-                            {{ identity.publicKey }}
-                        </td>
-                        <td>
-                            <span class="p-column-title font-semibold">
-                                Created At
-                            </span>
-                            {{ dateConvert(identity.createdAt) }}
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="4">No identities found.</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </p-card>
-    </div>
+<h2>{{ header }}</h2>
+<mat-card *ngIf="!loading">
+    <mat-card-content>
+        <table mat-table class="responsive" [dataSource]="identities">
+            <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef>Address</th>
+                <td mat-cell *matCellDef="let identity" data-label="Address">
+                    {{ identity.address }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef>Client Id</th>
+                <td mat-cell *matCellDef="let identity" data-label="Client Id">
+                    {{ identity.clientId }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="publicKey">
+                <th mat-header-cell *matHeaderCellDef>Public Key</th>
+                <td mat-cell *matCellDef="let identity" data-label="Public Key">
+                    {{ identity.publicKey }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Created At</th>
+                <td mat-cell *matCellDef="let identity" data-label="Created At">
+                    {{ dateConvert(identity.createdAt) }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td
+                    class="mat-cell no-data"
+                    [attr.colspan]="displayedColumns.length"
+                >
+                    No identities found.
+                </td>
+            </tr>
+        </table>
+        <mat-paginator
+            (page)="pageChangeEvent($event)"
+            [length]="totalRecords"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            showFirstLastButtons
+            aria-label="Select page of identities"
+        >
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
 </div>
-<p-toast
-    position="top-center"
-    [breakpoints]="{ '920px': { width: '100%', 'word-break': 'break-word' } }"
-    [preventOpenDuplicates]="true"
-    styleClass="w-6"
-></p-toast>

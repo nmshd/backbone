@@ -1,41 +1,15 @@
-:host ::ng-deep .layout-sidebar {
-    background-color: #495057;
-    transition-property: all;
+.sidebar {
+    user-select: none !important;
 }
 
-:host ::ng-deep .layout-sidebar-extended {
-    max-width: 185px;
+.sidebar-extended {
+    width: 185px;
 }
 
-:host ::ng-deep .layout-sidebar-contracted {
-    max-width: 85px;
+.sidebar-contracted {
+    width: 55px;
 }
 
-:host ::ng-deep .p-sidebar .p-sidebar-header {
-    padding: 0;
-}
-
-.logo-div {
-    height: 65px;
-}
-
-.nav-div {
-    min-height: 50px;
-}
-
-.border-transparent-custom {
-    border-color: transparent;
-}
-
-.zoom {
-    transform: scale(1.5);
-}
-
-.zoom-animation {
-    transition: 0.1s;
-}
-
-.zoom-animation:hover {
-    transform: scale(1.5);
-    transition: 0.1s;
+.active {
+    color: #673ab7 !important;
 }
