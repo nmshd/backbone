@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
@@ -9,76 +9,67 @@ import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-env
     selector: 'app-tier-list',
     templateUrl: './tier-list.component.html',
     styleUrls: ['./tier-list.component.css'],
-    providers: [MessageService],
 })
 export class TierListComponent {
-    @ViewChild('tiersTable') dt!: Table;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+
     header: string;
 
     tiers: Tier[];
 
     totalRecords: number;
+    pageSize: number;
+    pageIndex: number;
 
-    loading: boolean;
+    loading = false;
+
+    displayedColumns: string[] = ['id', 'name'];
 
     constructor(
         private router: Router,
-        private tierService: TierService,
-        private messageService: MessageService
+        private snackBar: MatSnackBar,
+        private tierService: TierService
     ) {
-        this.header = '';
+        this.header = 'Tiers';
 
         this.tiers = [];
 
         this.totalRecords = 0;
+        this.pageSize = 10;
+        this.pageIndex = 0;
+
         this.loading = true;
     }
 
     ngOnInit() {
-        this.header = 'Tiers';
+        this.getPagedData();
     }
 
-    loadTiers(event: LazyLoadEvent) {
+    getPagedData() {
         this.loading = true;
-
-        setTimeout(() => {
-            this.tierService
-                .getTiers(event)
-                .subscribe({
-                    next: (data: PagedHttpResponseEnvelope<Tier>) => {
-                        if (data) {
-                            this.tiers = data.result;
-                            if (data.pagination) {
-                                this.totalRecords =
-                                    data.pagination.totalRecords!;
-                            } else {
-                                this.totalRecords = data.result.length;
-                            }
-                        }
-                    },
-                    error: (err: any) =>
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: err.status,
-                            detail: err.message,
-                            sticky: true,
-                        }),
-                })
-                .add(() => (this.loading = false));
-        }, 1000);
+        this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<Tier>) => {
+                if (data) {
+                    this.tiers = data.result;
+                    if (data.pagination) {
+                        this.totalRecords = data.pagination.totalRecords!;
+                    } else {
+                        this.totalRecords = data.result.length;
+                    }
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
     }
 
-    clear() {
-        this.dt.clear();
-    }
-
-    applyFilter($event: any, matchMode: string) {
-        let value = ($event.target as HTMLInputElement)?.value;
-        this.dt.filterGlobal(value, matchMode);
-    }
-
-    editTier(tier: Tier) {
-        this.router.navigate([`/tiers`, tier.id]);
+    pageChangeEvent(event: PageEvent) {
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.getPagedData();
     }
 
     addTier() {

@@ -1,17 +1,14 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using ConsumerApi.ApplicationInsights.TelemetryInitializers;
-using ConsumerApi.AspNetCoreIdentityCustomizations;
-using ConsumerApi.Configuration;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
-using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using ConsumerApi.ApplicationInsights.TelemetryInitializers;
+using ConsumerApi.Configuration;
 using Enmeshed.BuildingBlocks.API;
+using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -21,14 +18,11 @@ using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
 using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
-using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 
 namespace ConsumerApi.Extensions;
 
@@ -110,38 +104,6 @@ public static class IServiceCollectionExtensions
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
-    {
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                if (environment.IsDevelopment() || environment.IsLocal())
-                {
-                    options.Password.RequiredLength = 1;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireNonAlphanumeric = false;
-
-                    options.User.AllowedUserNameCharacters += " ";
-                }
-                else
-                {
-                    options.Password.RequiredLength = 10;
-                    options.Password.RequireUppercase = true;
-                    options.Password.RequireLowercase = true;
-                    options.Password.RequireDigit = true;
-                    options.Password.RequireNonAlphanumeric = true;
-                }
-            })
-            .AddEntityFrameworkStores<DevicesDbContext>()
-            .AddSignInManager<CustomSigninManager>()
-            .AddUserStore<CustomUserStore>();
-
-        services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
 
         return services;
     }

@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PageNotFoundComponent } from './components/error/page-not-found/page-not-found.component';
 import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
-import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
+import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },

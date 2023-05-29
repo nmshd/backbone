@@ -1,17 +1,25 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { PrimeNGConfig } from 'primeng/api';
+import { SidebarService } from './services/sidebar-service/sidebar.service';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-    title = 'admin-ui-app';
+    title = 'AdminUI';
 
-    constructor(private primengConfig: PrimeNGConfig) {}
+    constructor(private sidebarService: SidebarService) {}
 
-    ngOnInit() {
-        this.primengConfig.ripple = true;
+    closeSidebar() {
+        this.sidebarService.close();
+    }
+
+    isSidebarOpen(): boolean {
+        return this.sidebarService.isOpen();
+    }
+
+    isMobile(): boolean {
+        return this.sidebarService.isMobile();
     }
 }
