@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.AutoMapper;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -49,7 +48,7 @@ public class HandlerTests
         response.Id.Should().NotBeNullOrEmpty();
         response.Period.Should().Be(period);
         response.Max.Should().Be(max);
-        response.MetricKey.ToString().Should().Be(metricKey);
+        response.Metric.Key.ToString().Should().Be(metricKey);
 
         A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
             t.Id == tierId &&
@@ -86,8 +85,7 @@ public class HandlerTests
     private Handler CreateHandler(ITiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
     {
         var logger = A.Fake<ILogger<Handler>>();
-        var mapper = AutoMapperProfile.CreateMapper();
 
-        return new Handler(tiersRepository, logger, _eventBus, metricsRepository, mapper);
+        return new Handler(tiersRepository, logger, _eventBus, metricsRepository);
     }
 }
