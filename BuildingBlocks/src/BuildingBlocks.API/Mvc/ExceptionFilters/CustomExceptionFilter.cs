@@ -82,7 +82,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         var httpError = HttpError.ForProduction(
             applicationException.Code,
             applicationException.Message,
-            "" // TODO: add documentation link
+            "", // TODO: add documentation link
+            data: applicationException.Data            
         );
 
         return httpError;
@@ -94,6 +95,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             NotFoundException _ => HttpStatusCode.NotFound,
             ActionForbiddenException _ => HttpStatusCode.Forbidden,
+            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
     }
