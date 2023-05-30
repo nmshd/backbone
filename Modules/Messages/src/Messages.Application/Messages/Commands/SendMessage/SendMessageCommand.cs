@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
-[ApplyQuotasForMetrics("NumberOfSentMessages", "AnotherMetricKey")]
+[ApplyQuotasForMetrics("NumberOfSentMessages")]
 public class SendMessageCommand : IRequest<SendMessageResponse>
 {
     public ICollection<SendMessageCommandRecipientInformation> Recipients { get; set; } = new List<SendMessageCommandRecipientInformation>();
