@@ -13,9 +13,9 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
         builder.HasKey(x => x.Address);
 
         builder.HasOne<Tier>().WithMany().HasForeignKey(x => x.TierId);
-        
+
         builder.Property(x => x.Address).IsUnicode(false).IsFixedLength().HasMaxLength(IdentityAddress.MAX_LENGTH);
         builder.Property(x => x.TierId).IsUnicode(false).IsFixedLength().HasMaxLength(20);
-        
+
     }
 }

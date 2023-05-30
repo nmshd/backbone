@@ -13,7 +13,7 @@ public record QuotaId : StronglyTypedId
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
 
-    public QuotaId(string value) : base(value)
+    private QuotaId(string value) : base(value)
     {
 
     }

@@ -13,7 +13,7 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
 
-    public TierQuotaDefinitionId(string value) : base(value)
+    private TierQuotaDefinitionId(string value) : base(value)
     {
 
     }
