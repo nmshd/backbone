@@ -25,7 +25,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Successfully_creates_quota_for_tier()
+    public async Task Creates_quota_for_tier()
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");
@@ -58,7 +58,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Successfully_triggers_QuotaCreatedForTierIntegrationEvent()
+    public async Task Triggers_QuotaCreatedForTierIntegrationEvent()
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");

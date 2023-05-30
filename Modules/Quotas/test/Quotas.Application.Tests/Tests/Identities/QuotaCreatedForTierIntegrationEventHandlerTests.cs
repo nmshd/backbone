@@ -13,7 +13,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 public class QuotaCreatedForTierIntegrationEventHandlerTests
 {
     [Fact]
-    public async void Successfully_creates_tier_quota_after_consuming_integration_event()
+    public async void Creates_tier_quota_after_consuming_integration_event()
     {
         // Arrange
         var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
@@ -37,7 +37,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(identities =>
-            identities.ElementAt(0).TierQuotas.Count() == 1 && identities.ElementAt(1).TierQuotas.Count() == 1)
+            identities.All(i => i.TierQuotas.Count == 1))
             , CancellationToken.None)
         ).MustHaveHappened();
     }
