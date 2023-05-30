@@ -41,16 +41,16 @@ public class IdentityCreatedIntegrationEventHandlerTests
         tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month));
         tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Week));
 
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var stubTiersRepository = new FindTiersStubRepository(tier);
 
-        var handler = CreateHandler(identitiesRepository, stubTiersRepository);
+        var handler = CreateHandler(mockIdentitiesRepository, stubTiersRepository);
 
         // Act
         await handler.Handle(new IdentityCreatedIntegrationEvent(address, tierId));
 
         // Assert
-        A.CallTo(() => identitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count() == 2), CancellationToken.None)).MustHaveHappened();
+        A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count() == 2), CancellationToken.None)).MustHaveHappened();
     }
 
     private IdentityCreatedIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
