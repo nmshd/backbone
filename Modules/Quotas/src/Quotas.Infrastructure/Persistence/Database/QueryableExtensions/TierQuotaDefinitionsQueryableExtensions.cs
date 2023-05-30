@@ -1,0 +1,17 @@
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Microsoft.EntityFrameworkCore;
+
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
+public static class TierQuotaDefinitionsQueryableExtensions
+{
+    public static async Task<TierQuotaDefinition> FirstWithId(this IQueryable<TierQuotaDefinition> query, string id, CancellationToken cancellationToken)
+    {
+        var tierQuotaDefinition = await query.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+
+        if (tierQuotaDefinition == null)
+            throw new NotFoundException(nameof(TierQuotaDefinition));
+
+        return tierQuotaDefinition;
+    }
+}

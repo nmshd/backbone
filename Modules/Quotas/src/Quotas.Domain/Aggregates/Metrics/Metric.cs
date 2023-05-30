@@ -5,9 +5,9 @@ public class Metric
     public Metric(MetricKey key, string displayName)
     {
         Key = key;
-        DisplayName = displayName;  
+        DisplayName = displayName;
     }
-    public MetricKey Key { get; }
 
+    public MetricKey Key { get; }
     public string DisplayName { get; }
 }

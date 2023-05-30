@@ -11,10 +11,14 @@ public class TierTests
     [Fact]
     public void Can_create_tier_with_valid_properties()
     {
-        var tierId = "TIRsomeTierId1111111";
+        // Arrange
+        var tierId = new TierId("TIRsomeTierId1111111");
         var tierName = "my-test-tier";
+
+        // Act
         var tier = new Tier(tierId, tierName);
 
+        // Assert
         tier.Id.Should().Be(tierId);
         tier.Name.Should().Be(tierName);
     }
@@ -22,15 +26,16 @@ public class TierTests
     [Fact]
     public void Can_create_quota_on_tier()
     {
-        var tierId = "TIRsomeTierId1111111";
+        // Arrange
+        var tierId = new TierId("TIRsomeTierId1111111");
         var tierName = "my-test-tier";
         var tier = new Tier(tierId, tierName);
-
-        var metric = new Metric();
         var max = 5;
-        var period = QuotaPeriod.Month;
-        tier.CreateQuota(metric, max, period);
 
+        // Act
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month);
+
+        // Assert
         tier.Quotas.Should().HaveCount(1);
     }
 }

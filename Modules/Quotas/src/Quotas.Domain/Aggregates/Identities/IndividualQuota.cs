@@ -11,7 +11,7 @@ public class IndividualQuota : Quota
 
     public override int Weight => throw new NotImplementedException();
 
-    public override Metric Metric => throw new NotImplementedException();
+    public override MetricKey MetricKey => throw new NotImplementedException();
 
     public override int Max => throw new NotImplementedException();
 

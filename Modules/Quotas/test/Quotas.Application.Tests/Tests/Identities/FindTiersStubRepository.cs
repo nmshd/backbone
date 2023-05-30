@@ -1,22 +1,25 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
-public class AddMockTiersRepository : ITiersRepository
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
+
+public class FindTiersStubRepository : ITiersRepository
 {
-    public bool WasCalled { get; private set; }
-    public Tier? WasCalledWith { get; private set; }
+    private readonly Tier _tier;
+
+    public FindTiersStubRepository(Tier tier)
+    {
+        _tier = tier;
+    }
 
     public Task Add(Tier tier, CancellationToken cancellationToken)
     {
-        WasCalled = true;
-        WasCalledWith = tier;
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 
     public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_tier);
     }
 
     public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)

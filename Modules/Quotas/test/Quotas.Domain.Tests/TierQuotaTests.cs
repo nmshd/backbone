@@ -11,20 +11,22 @@ public class TierQuotaTests
     [Fact]
     public void Can_create_tier_quota_with_valid_properties()
     {
-        var metric = new Metric();
+        // Arrange
         var max = 5;
+        var metricKey = MetricKey.NumberOfSentMessages;
         var period = QuotaPeriod.Month;
-        var tierQuotaDefinition = new TierQuotaDefinition(metric, max, period);
-
+        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         var applyTo = TestDataGenerator.CreateRandomIdentityAddress();
 
+        // Act
         var tierQuota = new TierQuota(tierQuotaDefinition, applyTo);
 
+        // Assert
         tierQuota.Id.Should().NotBeNull();
         tierQuota.ApplyTo.Should().Be(applyTo);
-        tierQuota.Metric.Should().Be(metric);
+        tierQuota.MetricKey.Should().Be(metricKey);
         tierQuota.Period.Should().Be(period);
         tierQuota.Max.Should().Be(max);
-        tierQuota.Weight.Should().Be(2);
+        tierQuota.Weight.Should().Be(1);
     }
 }
