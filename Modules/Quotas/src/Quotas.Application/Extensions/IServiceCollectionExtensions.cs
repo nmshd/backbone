@@ -11,12 +11,13 @@ public static class IServiceCollectionExtensions
  
     public static void AddApplication(this IServiceCollection services)
     {
+        /*
         services.AddMediatR(c => c
             //.RegisterServicesFromAssemblyContaining<...>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
-        );
+        );*/
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         // services.AddValidatorsFromAssemblyContaining<...>(); // needs to be filled as soon as there is the first validator

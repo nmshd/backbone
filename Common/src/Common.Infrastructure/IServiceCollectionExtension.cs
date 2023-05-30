@@ -15,6 +15,8 @@ public static class IServiceCollectionExtension
             ?? throw new Exception("Could not parse connection string for MetricStatuses.");
         });
 
+        services.AddTransient<MetricStatusesDapperContext>();
+
         return services;
     }
 }

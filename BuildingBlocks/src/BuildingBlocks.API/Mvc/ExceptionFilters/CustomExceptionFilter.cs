@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using static Azure.Core.HttpHeader;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
@@ -83,10 +86,23 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             applicationException.Code,
             applicationException.Message,
             "", // TODO: add documentation link
-            data: applicationException.Data            
-        );
+            data: LoadCustomData(applicationException)
+            ); ;
 
         return httpError;
+    }
+
+    private dynamic? LoadCustomData(ApplicationException applicationException)
+    {
+        if (applicationException is QuotaExhaustedException)
+        {
+            var ae = (QuotaExhaustedException)applicationException;
+            return new Dictionary<string, dynamic>() {
+                { ae.MetricKey.GetType().Name, ae.MetricKey.Value },
+                { ae.DateTime.GetType().Name, ae.DateTime},
+            };
+        }
+        return null;
     }
 
     private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
@@ -120,7 +136,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 "An unexpected error occurred.",
                 "", // TODO: add documentation link
                 GetFormattedStackTrace(context.Exception),
-                details
+                details,
+                context.Exception
             );
         }
         else
