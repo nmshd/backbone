@@ -6,10 +6,14 @@ using Enmeshed.Common.Infrastructure.Persistence.Context;
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension
 {
-    public static IServiceCollection AddCommonRepositories(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
-        services.AddSingleton(new DapperContext(configuration));
+
+        services.Configure<MetricStatusesDapperContext>(c => {
+            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value 
+            ?? throw new Exception("Could not parse connection string for MetricStatuses.");
+        });
 
         return services;
     }

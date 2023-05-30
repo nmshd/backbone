@@ -20,10 +20,8 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        // Using reflection.
-        var attrs = request.GetType().CustomAttributes;  // Reflection.
+        var attrs = request.GetType().CustomAttributes;
 
-        // Displaying output.
         foreach (var attr in attrs)
         {
             if (attr.AttributeType == typeof(ApplyQuotasForMetricsAttribute))

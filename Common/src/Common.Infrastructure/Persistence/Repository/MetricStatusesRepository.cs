@@ -8,9 +8,9 @@ namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
 
 public class MetricStatusesRepository : IMetricStatusesRepository
 {
-    private readonly DapperContext _context;
+    private readonly MetricStatusesDapperContext _context;
 
-    public MetricStatusesRepository(DapperContext context) 
+    public MetricStatusesRepository(MetricStatusesDapperContext context) 
     {
         _context = context;
     }

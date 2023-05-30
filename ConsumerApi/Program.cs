@@ -87,7 +87,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
         .AddModule<TokensModule>(configuration)
-        .AddCommonRepositories(configuration);
+        .AddMetricStatusesRepository(configuration);
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 

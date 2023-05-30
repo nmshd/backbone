@@ -3,10 +3,10 @@
 namespace Enmeshed.BuildingBlocks.Application.Attributes;
 public class ApplyQuotasForMetricsAttribute : Attribute
 {
-    private MetricKey[] Attributes { get; }
+    private MetricKey[] MetricKeys { get; }
 
-    public ApplyQuotasForMetricsAttribute(params string[] attributes)
+    public ApplyQuotasForMetricsAttribute(params string[] metricKeys)
     {
-        Attributes = attributes.Select(it=> new MetricKey(it)).ToArray();
+        MetricKeys = metricKeys.Select(it=> new MetricKey(it)).ToArray();
     }
 }
