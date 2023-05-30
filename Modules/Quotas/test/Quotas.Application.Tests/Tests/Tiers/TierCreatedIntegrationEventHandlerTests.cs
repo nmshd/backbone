@@ -9,7 +9,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
 public class TierCreatedIntegrationEventHandlerTests
 {
     [Fact]
-    public async void Successfully_creates_tier_after_consuming_integration_event()
+    public async void Creates_tier_after_consuming_integration_event()
     {
         // Arrange
         var id = new TierId("TIRFxoL0U24aUqZDSAWc");
