@@ -12,6 +12,6 @@ public class TierQuotaEntityTypeConfiguration : IEntityTypeConfiguration<TierQuo
         builder.HasKey(x => x.Id);
         builder.Property(x => x.ApplyTo);
         builder.Property(x => x.IsExhaustedUntil);
-        builder.Property("_definition");
+        builder.HasOne("_definition");
     }
 }

@@ -4,12 +4,12 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public abstract class Quota
 {
-    public Quota()
+    protected Quota()
     {
 
     }
 
-    public Quota(string applyTo)
+    protected Quota(string applyTo)
     {
         Id = QuotaId.New();
         ApplyTo = applyTo;

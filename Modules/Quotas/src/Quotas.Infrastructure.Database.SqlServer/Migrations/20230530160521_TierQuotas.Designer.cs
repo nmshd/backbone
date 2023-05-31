@@ -3,37 +3,40 @@ using System;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.Postgres.Migrations
+namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    partial class QuotasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230530160521_TierQuotas")]
+    partial class TierQuotas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
                         .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.HasKey("Address");
@@ -48,19 +51,19 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<string>("ApplyTo")
-                        .HasColumnType("character(36)");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("IsExhaustedUntil")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -79,13 +82,13 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<string>("Name")
                         .HasMaxLength(30)
                         .IsUnicode(true)
-                        .HasColumnType("character varying(30)")
+                        .HasColumnType("nvarchar(30)")
                         .IsFixedLength(false);
 
                     b.HasKey("Id");
@@ -98,21 +101,21 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<int>("Max")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MetricKey")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("Period")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("TierId")
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
