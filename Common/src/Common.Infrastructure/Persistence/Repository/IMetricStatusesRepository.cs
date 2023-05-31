@@ -1,5 +1,4 @@
 ﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Enmeshed.Common.Infrastructure.Persistence.Repository;

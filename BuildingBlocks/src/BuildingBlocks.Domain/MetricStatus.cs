@@ -1,6 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
-
-namespace Enmeshed.BuildingBlocks.Domain;
+﻿namespace Enmeshed.BuildingBlocks.Domain;
 public class MetricStatus
 {
     public MetricStatus(MetricKey metricKey)

@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
+﻿using Enmeshed.BuildingBlocks.Domain;
 
 namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 

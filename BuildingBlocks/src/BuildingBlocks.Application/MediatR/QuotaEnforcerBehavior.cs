@@ -1,9 +1,10 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Attributes;
-using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using MediatR;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.Tooling;
+using Enmeshed.BuildingBlocks.Domain;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
@@ -20,29 +21,27 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var attrs = request.GetType().CustomAttributes;
+        var attributes = request.GetType().CustomAttributes;
 
-        foreach (var attr in attrs)
+        var relevantAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
+        if (relevantAttribute != null)
         {
-            if (attr.AttributeType == typeof(ApplyQuotasForMetricsAttribute))
+            var metricKeys = relevantAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
+
+            var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
+
+            var expiredStatuses = statuses.Where(it=> it.IsExhaustedUntil < SystemTime.UtcNow).ToList();
+            
+            if (expiredStatuses.Any())
             {
-                var args = attr.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
-                var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), args);
-                var expiredStatuses = statuses.Where(it=> it.IsExhaustedUntil < DateTime.Now).ToList();
-                // for each of the arguments, determine if they're exhausted.
-                // if one or more are exhausted, an exception should be thrown.
-                // We're to determine which MetricKey to pass to the expection
-                // DPS: suggestion that we pass the one with the bigger `IsExhaustedUntil` (so that actions submited past that point are more likely to succeed).
-                if (expiredStatuses.Any())
+                var mostInTheFuture = expiredStatuses.MaxBy(it => it.IsExhaustedUntil);
+                if (mostInTheFuture != null)
                 {
-                    var mostInTheFuture = expiredStatuses.MaxBy(it => it.IsExhaustedUntil);
-                    if (mostInTheFuture != null)
-                    {
-                        throw new QuotaExhaustedException(mostInTheFuture.MetricKey, mostInTheFuture.IsExhaustedUntil);
-                    }
+                    throw new QuotaExhaustedException(mostInTheFuture.MetricKey, mostInTheFuture.IsExhaustedUntil);
                 }
             }
         }
+         
         var response = await next();
         return response;
     }

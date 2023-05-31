@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds;
+﻿namespace Enmeshed.BuildingBlocks.Domain;
 public class MetricKey
 {
     public string Value { get; private set; }
