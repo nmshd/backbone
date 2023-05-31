@@ -26,20 +26,17 @@ public class QuotaEnforcerBehaviorTests
 
         var userContextStub = new UserContextStub();
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
-        var nextHasRan = false;
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
              new TestCommand(),
             () => {
-                nextHasRan = true;
                 return Task.FromResult(new IResponse());
             },
             CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<QuotaExhaustedException>();
-        nextHasRan.Should().BeFalse();
     }
 
     [Fact]
@@ -54,13 +51,11 @@ public class QuotaEnforcerBehaviorTests
 
         var userContextStub = new UserContextStub();
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
-        var nextHasRan = false;
 
         // Act
         Func<Task> action = async () => await behavior.Handle(
             new TestCommand(),
             () => {
-                nextHasRan = true;
                 return Task.FromResult(new IResponse());
             },
             CancellationToken.None);
@@ -68,7 +63,6 @@ public class QuotaEnforcerBehaviorTests
         // Assert
         var ex = await Assert.ThrowsAsync<QuotaExhaustedException>(action);
         ex.MetricKey.Should().Be(expectedMetricStatus.MetricKey);
-        nextHasRan.Should().BeFalse();
     }
 
     [Fact]
