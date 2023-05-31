@@ -1,6 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Application.MediatR;
+using Enmeshed.BuildingBlocks.Domain;
 using FluentAssertions;
 using MediatR;
 using Xunit;
@@ -16,21 +17,84 @@ public class QuotaEnforcerBehaviorTests
     private class IResponse { }
 
     [Fact]
-    public async void Returns_()
+    public async void Throws_QuotaExhaustedException_OnExhaustedQuota()
     {
         // Arrange
-        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository();
-        var userContextMock = new UserContextMock();
+        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)) 
+        });
 
+        var userContextMock = new UserContextMock();
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var nextHasRan = false;
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
-            () => { return Task.FromResult(new IResponse()); },
+             new TestCommand(),
+            () => {
+                nextHasRan = true;
+                return Task.FromResult(new IResponse());
+            },
             CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<QuotaExhaustedException>();
+        nextHasRan.Should().BeFalse();
+    }
+
+    [Fact]
+    public async void Throws_QuotaExhaustedException_OnExhaustedQuota_WithFarthestQuotaOnData()
+    {
+        // Arrange
+        var expectedMetricStatus = new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(10));
+        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)),
+            expectedMetricStatus
+        });
+
+        var userContextMock = new UserContextMock();
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var nextHasRan = false;
+
+        // Act
+        Func<Task> action = async () => await behavior.Handle(
+            new TestCommand(),
+            () => {
+                nextHasRan = true;
+                return Task.FromResult(new IResponse());
+            },
+            CancellationToken.None);
+
+        // Assert
+        var ex = await Assert.ThrowsAsync<QuotaExhaustedException>(action);
+        ex.MetricKey.Should().Be(expectedMetricStatus.MetricKey);
+        nextHasRan.Should().BeFalse();
+    }
+
+    [Fact]
+    public async void Runs_WithoutExceptions()
+    {
+        // Arrange
+        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1))
+        });
+        
+        var userContextMock = new UserContextMock();
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var nextHasRan = false;
+
+        // Act
+        Func<Task> action = async () => await behavior.Handle(
+            new TestCommand(),
+            () => { 
+                nextHasRan = true;
+                return Task.FromResult(new IResponse());
+            },
+            CancellationToken.None);
+
+        await Task.Run(action, CancellationToken.None);
+
+        // Assert
+        nextHasRan.Should().BeTrue();
     }
 }
