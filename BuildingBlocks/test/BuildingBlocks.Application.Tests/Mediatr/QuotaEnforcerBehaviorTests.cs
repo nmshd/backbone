@@ -1,4 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using Enmeshed.BuildingBlocks.Domain;
@@ -9,7 +10,11 @@ using Xunit;
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
-    public QuotaEnforcerBehaviorTests() { }
+    private readonly IUserContext _userContextStub;
+
+    public QuotaEnforcerBehaviorTests() {
+        _userContextStub = new UserContextStub();
+    }
 
     [ApplyQuotasForMetrics("KeyOne, KeyTwo")]
     private class TestCommand : IRequest<IResponse> { }
@@ -17,7 +22,7 @@ public class QuotaEnforcerBehaviorTests
     private class IResponse { }
 
     [Fact]
-    public async void Throws_QuotaExhaustedException_OnExhaustedQuota()
+    public async void Throws_QuotaExhaustedException_when_at_least_one_metric_is_exhausted()
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
@@ -25,12 +30,11 @@ public class QuotaEnforcerBehaviorTests
             new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(1))
         });
 
-        var userContextStub = new UserContextStub();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-             new TestCommand(),
+            new TestCommand(),
             () => {
                 return Task.FromResult(new IResponse());
             },
@@ -41,7 +45,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Throws_QuotaExhaustedException_OnExhaustedQuota_WithFarthestQuotaOnData()
+    public async void Throws_QuotaExhaustedException_when_at_least_one_metric_is_exhausted_with_farthest_quota_on_data()
     {
         // Arrange
         var expectedMetricStatus = new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(10));
@@ -50,8 +54,7 @@ public class QuotaEnforcerBehaviorTests
             expectedMetricStatus
         });
 
-        var userContextStub = new UserContextStub();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
 
         // Act
         Func<Task> action = async () => await behavior.Handle(
@@ -67,7 +70,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Runs_WithoutExceptions()
+    public async void Runs_when_no_quotas_have_been_exceeded()
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
@@ -75,8 +78,7 @@ public class QuotaEnforcerBehaviorTests
             new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-1))
         });
         
-        var userContextStub = new UserContextStub();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
         var nextHasRan = false;
 
         // Act
