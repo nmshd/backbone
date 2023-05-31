@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Common.Infrastructure.Persistence.Context;
 using Dapper;
@@ -25,9 +25,9 @@ public class MetricStatusesRepository : IMetricStatusesRepository
 
         return new List<MetricStatus>
         {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)),
-            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(1)),
-            new MetricStatus(new MetricKey("KeyThree"), DateTime.UtcNow.AddDays(1)),
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)),
+            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-1)),
+            new MetricStatus(new MetricKey("KeyThree"), DateTime.UtcNow.AddDays(-1)),
         };
     }
 }

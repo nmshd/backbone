@@ -30,7 +30,7 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
             var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
 
-            var expiredStatuses = statuses.Where(it=> it.IsExhaustedUntil < SystemTime.UtcNow).ToList();
+            var expiredStatuses = statuses.Where(it=> it.IsExhaustedUntil > SystemTime.UtcNow).ToList();
             
             if (expiredStatuses.Any())
             {
