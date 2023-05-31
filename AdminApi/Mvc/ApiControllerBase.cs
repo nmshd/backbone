@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Admin.API.Mvc;
+namespace AdminApi.Mvc;
 
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
