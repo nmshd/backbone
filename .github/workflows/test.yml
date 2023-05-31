@@ -34,6 +34,18 @@ jobs:
         run: ./.ci/capi/buildContainerImage.ts
         env:
           TAG: test
+  build-aapi-container-image:
+    name: Build Admin API Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Build image
+        run: ./.ci/aapi/buildContainerImage.ts
+        env:
+          TAG: test
   build-acli-container-image:
     name: Build Admin CLI Container Image
     runs-on: ubuntu-latest

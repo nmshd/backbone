@@ -1,10 +1,10 @@
-﻿using Admin.API.Mvc;
+﻿using AdminApi.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Admin.API.Controllers;
+namespace AdminApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
