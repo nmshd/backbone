@@ -1,8 +1,7 @@
 services:
-  backbone:
-    image: nmshd-backbone
-    container_name: backbone
-    hostname: backbone
+  consumer-api:
+    container_name: consumer-api
+    hostname: consumer-api
     build:
       context: ..
       dockerfile: ConsumerApi/Dockerfile.debug
@@ -25,7 +24,6 @@ services:
       - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
     ports:
-      - "127.0.0.10:80:80"
       - "5000:80"
     depends_on:
       - ms-sql-server
@@ -101,7 +99,7 @@ services:
       -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
       --clientId test --clientSecret test
     depends_on:
-      backbone:
+      consumer-api:
         condition: service_healthy
 
 networks:
