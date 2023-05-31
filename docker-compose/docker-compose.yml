@@ -54,6 +54,8 @@ services:
     build:
       dockerfile: Dockerfile.debug
       context: "../AdminUI/"
+    environment:
+      - ADMIN_API__BASE_URL=http://localhost:5010/api/v1
     ports:
       - "5020:4200"
     depends_on:
