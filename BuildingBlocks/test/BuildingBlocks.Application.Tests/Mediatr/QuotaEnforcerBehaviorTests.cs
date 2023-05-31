@@ -11,7 +11,7 @@ public class QuotaEnforcerBehaviorTests
 {
     public QuotaEnforcerBehaviorTests() { }
 
-    [ApplyQuotasForMetrics("MetricKey")]
+    [ApplyQuotasForMetrics("KeyOne, KeyTwo")]
     private class TestCommand : IRequest<IResponse> { }
 
     private class IResponse { }
@@ -21,7 +21,8 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)) 
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)) ,
+            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(1))
         });
 
         var userContextStub = new UserContextStub();
@@ -70,7 +71,8 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1))
+            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)) ,
+            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-1))
         });
         
         var userContextStub = new UserContextStub();
