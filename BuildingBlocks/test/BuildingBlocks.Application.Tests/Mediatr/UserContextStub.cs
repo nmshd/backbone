@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-public class UserContextMock : IUserContext
+public class UserContextStub : IUserContext
 {
     public IdentityAddress GetAddress()
     {

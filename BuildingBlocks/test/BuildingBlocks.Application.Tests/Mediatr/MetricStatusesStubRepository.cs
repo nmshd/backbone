@@ -2,7 +2,7 @@
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-public class MockMetricStatusesRepository : IMetricStatusesRepository
+public class MetricStatusesStubRepository : IMetricStatusesRepository
 {
     public List<MetricStatus> MetricStatuses { get; } = new List<MetricStatus> {
                 new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)),
@@ -11,7 +11,7 @@ public class MockMetricStatusesRepository : IMetricStatusesRepository
             };
 
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-    public MockMetricStatusesRepository(List<MetricStatus>? metricStatuses)
+    public MetricStatusesStubRepository(List<MetricStatus>? metricStatuses)
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
     {
         if (metricStatuses != null)

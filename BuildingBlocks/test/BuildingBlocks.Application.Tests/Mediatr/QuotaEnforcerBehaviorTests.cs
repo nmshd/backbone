@@ -20,12 +20,12 @@ public class QuotaEnforcerBehaviorTests
     public async void Throws_QuotaExhaustedException_OnExhaustedQuota()
     {
         // Arrange
-        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
             new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)) 
         });
 
-        var userContextMock = new UserContextMock();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var userContextStub = new UserContextStub();
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
         var nextHasRan = false;
 
         // Act
@@ -47,13 +47,13 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var expectedMetricStatus = new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(10));
-        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
             new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)),
             expectedMetricStatus
         });
 
-        var userContextMock = new UserContextMock();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var userContextStub = new UserContextStub();
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
         var nextHasRan = false;
 
         // Act
@@ -75,12 +75,12 @@ public class QuotaEnforcerBehaviorTests
     public async void Runs_WithoutExceptions()
     {
         // Arrange
-        var metricStatusesRepositoriesMock = new MockMetricStatusesRepository(new() {
+        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
             new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1))
         });
         
-        var userContextMock = new UserContextMock();
-        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepositoriesMock, userContextMock);
+        var userContextStub = new UserContextStub();
+        var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, userContextStub);
         var nextHasRan = false;
 
         // Act
