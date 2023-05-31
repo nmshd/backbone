@@ -1,4 +1,4 @@
-﻿using Admin.API.Mvc;
+﻿using AdminApi.Mvc;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
@@ -10,14 +10,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Admin.API.Controllers;
+namespace AdminApi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class TiersController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
 
-    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator) {
+    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    {
         _options = options.Value;
     }
 

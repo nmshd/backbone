@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
 
-namespace Admin.API.Configuration;
+namespace AdminApi.Configuration;
 
 public class AdminConfiguration
 {
@@ -38,7 +38,7 @@ public class AdminConfiguration
 
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
-        
+
         [Required]
         public QuotasConfiguration Quotas { get; set; } = new();
     }

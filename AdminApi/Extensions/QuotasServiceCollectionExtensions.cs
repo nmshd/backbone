@@ -1,8 +1,8 @@
-﻿using Admin.API.Configuration;
+﻿using AdminApi.Configuration;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence;
 
-namespace Admin.API.Extensions;
+namespace AdminApi.Extensions;
 
 public static class QuotasServiceCollectionExtensions
 {
@@ -16,8 +16,8 @@ public static class QuotasServiceCollectionExtensions
             options.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
         });
-        
-        
+
+
         return services;
     }
 }

@@ -1,10 +1,10 @@
-﻿using Admin.API.Configuration;
+﻿using AdminApi.Configuration;
 using Backbone.Modules.Devices.Application.Extensions;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 
-namespace Admin.API.Extensions;
+namespace AdminApi.Extensions;
 
 public static class DevicesServiceCollectionExtensions
 {

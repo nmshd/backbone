@@ -35,7 +35,7 @@ services:
     hostname: admin-api
     build:
       context: ..
-      dockerfile: Admin.API/Dockerfile.debug
+      dockerfile: AdminApi/Dockerfile.debug
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
