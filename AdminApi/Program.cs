@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using System.Reflection;
-using Admin.API.Configuration;
-using Admin.API.Extensions;
+using AdminApi.Configuration;
+using AdminApi.Extensions;
 using Enmeshed.Tooling.Extensions;
 using Autofac.Extensions.DependencyInjection;
 using Serilog;

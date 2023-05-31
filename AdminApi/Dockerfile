@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Admin.API/Admin.API.csproj", "Admin.API/"]
+COPY ["AdminApi/AdminApi.csproj", "AdminApi/"]
 COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Modules/Devices/src/Devices.Application/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj", "BuildingBlocks/src/DevelopmentKit.Identity/"]
@@ -19,15 +19,15 @@ COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devic
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["Backbone.Infrastructure/Backbone.Infrastructure.csproj", "Backbone.Infrastructure/"]
-RUN dotnet restore "Admin.API/Admin.API.csproj"
+RUN dotnet restore "AdminApi/AdminApi.csproj"
 COPY . .
-WORKDIR "/src/Admin.API"
-RUN dotnet build "Admin.API.csproj" -c Release -o /app/build
+WORKDIR "/src/AdminApi"
+RUN dotnet build "AdminApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Admin.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "AdminApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Admin.API.dll"]
+ENTRYPOINT ["dotnet", "AdminApi.dll"]
