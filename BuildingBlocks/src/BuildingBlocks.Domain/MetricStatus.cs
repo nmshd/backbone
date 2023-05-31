@@ -12,6 +12,6 @@ public class MetricStatus
         IsExhaustedUntil = isExhaustedUntil;
     }
 
-    public MetricKey MetricKey { get; private set; }
-    public DateTime IsExhaustedUntil { get; private set; }
+    public MetricKey MetricKey { get; }
+    public DateTime IsExhaustedUntil { get; }
 }
