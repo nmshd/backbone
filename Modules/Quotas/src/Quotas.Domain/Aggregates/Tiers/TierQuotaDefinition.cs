@@ -5,10 +5,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class TierQuotaDefinition
 {
-    private TierQuotaDefinition()
-    {
-
-    }
+    private TierQuotaDefinition() { }
 
     public TierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
     {
