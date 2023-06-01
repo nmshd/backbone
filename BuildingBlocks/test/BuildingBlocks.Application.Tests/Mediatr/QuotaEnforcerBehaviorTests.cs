@@ -7,6 +7,8 @@ using FluentAssertions;
 using MediatR;
 using Xunit;
 
+using DomainMetricStatus = Enmeshed.BuildingBlocks.Domain.MetricStatus;
+
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
@@ -16,7 +18,7 @@ public class QuotaEnforcerBehaviorTests
         _userContextStub = new UserContextStub();
     }
 
-    [ApplyQuotasForMetrics("KeyOne, KeyTwo")]
+    [ApplyQuotasForMetrics("*")]
     private class TestCommand : IRequest { }
 
     private class IResponse { }
@@ -26,8 +28,7 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)) ,
-            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(1))
+            TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatWasExhaustedUntilYesterday
         });
 
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
@@ -48,10 +49,8 @@ public class QuotaEnforcerBehaviorTests
     public void Throws_QuotaExhaustedException_when_at_least_one_metric_is_exhausted_with_farthest_quota_on_data()
     {
         // Arrange
-        var expectedMetricStatus = new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(10));
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(1)),
-            expectedMetricStatus
+            TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatIsExhaustedFor10Days
         });
 
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
@@ -65,16 +64,15 @@ public class QuotaEnforcerBehaviorTests
             CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.MetricKey.Should().Be(expectedMetricStatus.MetricKey);
+        acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
     }
 
     [Fact]
-    public async void Runs_when_no_quotas_have_been_exceeded()
+    public async void Succeeds_when_no_exhausted_quotas_exist()
     {
         // Arrange
         var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)) ,
-            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-1))
+            TestData.MetricStatus.ThatWasExhaustedUntilYesterday, TestData.MetricStatus.ThatIsNotExhausted
         });
         
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
@@ -93,5 +91,19 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         nextHasRan.Should().BeTrue();
+    }
+}
+
+public static class TestData
+{
+    public static class MetricStatus
+    {
+        public static readonly DomainMetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedUntilTomorrow"), DateTime.Now.AddDays(1));
+
+        public static readonly DomainMetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
+
+        public static readonly DomainMetricStatus ThatWasExhaustedUntilYesterday = new (new MetricKey("ExhaustedUntilYesterday"), DateTime.Now.AddDays(-1));
+
+        public static readonly DomainMetricStatus ThatIsNotExhausted = new (new MetricKey("ExhaustedUntilNull"), null);
     }
 }
