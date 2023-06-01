@@ -7,8 +7,7 @@ using Enmeshed.Tooling;
 using Enmeshed.BuildingBlocks.Domain;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
-public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IMetricStatusesRepository _metricStatusesRepository;
     private readonly IUserContext _userContext;

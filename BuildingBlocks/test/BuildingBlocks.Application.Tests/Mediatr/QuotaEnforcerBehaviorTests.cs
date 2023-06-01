@@ -17,7 +17,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [ApplyQuotasForMetrics("KeyOne, KeyTwo")]
-    private class TestCommand : IRequest<IResponse> { }
+    private class TestCommand : IRequest { }
 
     private class IResponse { }
 
