@@ -3,7 +3,7 @@
     <div class="form-details" *ngIf="!loading">
         <mat-form-field>
             <mat-label>Metric</mat-label>
-            <mat-select [value]="metric" required>
+            <mat-select [(ngModel)]="metric" required>
                 <mat-option *ngFor="let metric of metrics" [value]="metric">
                     {{ metric.displayName }}
                 </mat-option>
@@ -13,13 +13,13 @@
 
         <mat-form-field>
             <mat-label>Max</mat-label>
-            <input [value]="max" matInput required />
+            <input [(ngModel)]="max" matInput required />
             <mat-error>You must enter a value</mat-error>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Period</mat-label>
-            <mat-select [value]="period" required>
+            <mat-select [(ngModel)]="period" required>
                 <mat-option *ngFor="let period of periods" [value]="period">
                     {{ period }}
                 </mat-option>
