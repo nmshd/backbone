@@ -38,7 +38,7 @@ public class QuotasDbContext : AbstractDbContextBase
         configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
             .HaveConversion<TierIdEntityFrameworkValueConverter>();
 
-        configurationBuilder.Properties<MetricKey>().AreUnicode(false).AreFixedLength(false)
+        configurationBuilder.Properties<MetricKey>().AreUnicode(true).AreFixedLength(false)
             .HaveMaxLength(50).HaveConversion<MetricKeyEntityFrameworkValueConverter>();
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
