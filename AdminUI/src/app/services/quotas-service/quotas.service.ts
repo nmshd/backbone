@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 import { environment } from 'src/environments/environment';
 
@@ -28,6 +28,17 @@ export class QuotasService {
             this.apiUrl,
             httpOptions
         );
+    }
+
+    getMetrics(): Observable<Metric[]> {
+        //return this.http.get<Metric[]>(this.apiUrl);
+        //Dummy data
+        let metric: Metric = {
+            id: '1',
+            key: 'A',
+            displayName: 'Sent Messages',
+        };
+        return of([metric]);
     }
 }
 
