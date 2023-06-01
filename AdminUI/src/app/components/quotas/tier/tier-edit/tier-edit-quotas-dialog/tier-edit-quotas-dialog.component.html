@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ header }}</h2>
+<mat-dialog-content>
+    <div class="form-details">
+        <mat-form-field>
+            <mat-label>Metric</mat-label>
+            <mat-select required>
+                <mat-option value="First">First metric</mat-option>
+                <mat-option value="Second">Second metric</mat-option>
+            </mat-select>
+            <mat-error>You must enter a value</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Max</mat-label>
+            <input matInput required />
+            <mat-error>You must enter a value</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Period</mat-label>
+            <mat-select required>
+                <mat-option value="First">First period</mat-option>
+                <mat-option value="Second">Second period</mat-option>
+            </mat-select>
+            <mat-error>You must enter a value</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Valid from" />
+                <input matEndDate placeholder="Valid to" />
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-flat-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" cdkFocusInitial>Confirm</button>
+</mat-dialog-actions>

@@ -20,6 +20,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +35,7 @@ import { TopbarComponent } from './components/topbar/topbar.component';
 import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
+import { TierEditQuotasDialogComponent } from './components/quotas/tier/tier-edit/tier-edit-quotas-dialog/tier-edit-quotas-dialog.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +47,7 @@ import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.
         IdentityListComponent,
         TierListComponent,
         TierEditComponent,
+        TierEditQuotasDialogComponent,
     ],
     imports: [
         FormsModule,
@@ -65,6 +71,10 @@ import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.
         MatExpansionModule,
         MatTooltipModule,
         LayoutModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
     ],
     providers: [SidebarService],
     bootstrap: [AppComponent],
