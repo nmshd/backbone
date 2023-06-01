@@ -7,6 +7,8 @@ public class TierQuota : Quota
 {
     private readonly TierQuotaDefinition _definition;
 
+    private TierQuota() { }
+
     public TierQuota(TierQuotaDefinition definition, string applyTo) : base(applyTo)
     {
         _definition = definition;

@@ -5,10 +5,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class TierQuotaDefinition
 {
-    public TierQuotaDefinitionId Id { get; }
-    public MetricKey MetricKey { get; }
-    public int Max { get; }
-    public QuotaPeriod Period { get; }
+    private TierQuotaDefinition() { }
 
     public TierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
     {
@@ -17,4 +14,9 @@ public class TierQuotaDefinition
         Max = max;
         Period = period;
     }
+
+    public TierQuotaDefinitionId Id { get; }
+    public MetricKey MetricKey { get; }
+    public int Max { get; }
+    public QuotaPeriod Period { get; }
 }
