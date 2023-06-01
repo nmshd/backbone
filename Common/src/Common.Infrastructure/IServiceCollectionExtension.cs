@@ -1,19 +1,14 @@
 ﻿using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Enmeshed.Common.Infrastructure.Persistence.Context;
 
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension
 {
-    public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, Action<MetricStatusesDapperContext> configureOptions)
     {
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
-
-        services.Configure<MetricStatusesDapperContext>(c => {
-            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
-        });
-
+        services.Configure(configureOptions);
         services.AddTransient<MetricStatusesDapperContext>();
 
         return services;

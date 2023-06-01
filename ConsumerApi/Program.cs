@@ -87,7 +87,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
         .AddModule<TokensModule>(configuration)
-        .AddMetricStatusesRepository(configuration);
+        .AddMetricStatusesRepository(c =>
+        {
+            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
+        });
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
