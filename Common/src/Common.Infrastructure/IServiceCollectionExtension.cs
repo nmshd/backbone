@@ -11,8 +11,7 @@ public static class IServiceCollectionExtension
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
 
         services.Configure<MetricStatusesDapperContext>(c => {
-            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value 
-            ?? throw new Exception("Could not parse connection string for MetricStatuses.");
+            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
         });
 
         services.AddTransient<MetricStatusesDapperContext>();
