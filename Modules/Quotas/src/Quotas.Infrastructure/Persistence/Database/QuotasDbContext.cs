@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -37,6 +38,7 @@ public class QuotasDbContext : AbstractDbContextBase
         configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
             .HaveConversion<TierIdEntityFrameworkValueConverter>();
 
+        configurationBuilder.Properties<MetricKey>().HaveConversion<MetricKeyEntityFrameworkValueConverter>();
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
     }
