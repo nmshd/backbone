@@ -10,7 +10,7 @@ public class MetricStatus
         MetricKey = metricKey;
     }
 
-    public MetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
+    internal MetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
     {
         MetricKey = metricKey;
         IsExhaustedUntil = isExhaustedUntil;

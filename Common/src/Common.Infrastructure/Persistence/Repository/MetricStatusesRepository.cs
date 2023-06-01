@@ -25,9 +25,9 @@ public class MetricStatusesRepository : IMetricStatusesRepository
 
         return new List<MetricStatus>
         {
-            new MetricStatus(new MetricKey("KeyOne"), null),
-            new MetricStatus(new MetricKey("KeyTwo"), null),
-            new MetricStatus(new MetricKey("KeyThree"), null),
+            new MetricStatus(new MetricKey("KeyOne")),
+            new MetricStatus(new MetricKey("KeyTwo")),
+            new MetricStatus(new MetricKey("KeyThree")),
         };
     }
 }
