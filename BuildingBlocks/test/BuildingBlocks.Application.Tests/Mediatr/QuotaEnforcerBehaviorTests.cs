@@ -45,7 +45,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Throws_QuotaExhaustedException_when_at_least_one_metric_is_exhausted_with_farthest_quota_on_data()
+    public void Throws_QuotaExhaustedException_when_at_least_one_metric_is_exhausted_with_farthest_quota_on_data()
     {
         // Arrange
         var expectedMetricStatus = new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(10));
@@ -57,7 +57,7 @@ public class QuotaEnforcerBehaviorTests
         var behavior = new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesStubRepository, _userContextStub);
 
         // Act
-        Func<Task> action = async () => await behavior.Handle(
+        Func<Task> acting = async () => await behavior.Handle(
             new TestCommand(),
             () => {
                 return Task.FromResult(new IResponse());
@@ -65,8 +65,7 @@ public class QuotaEnforcerBehaviorTests
             CancellationToken.None);
 
         // Assert
-        var ex = await Assert.ThrowsAsync<QuotaExhaustedException>(action);
-        ex.MetricKey.Should().Be(expectedMetricStatus.MetricKey);
+        acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.MetricKey.Should().Be(expectedMetricStatus.MetricKey);
     }
 
     [Fact]
@@ -82,7 +81,7 @@ public class QuotaEnforcerBehaviorTests
         var nextHasRan = false;
 
         // Act
-        Func<Task> action = async () => await behavior.Handle(
+        Func<Task> acting = async () => await behavior.Handle(
             new TestCommand(),
             () => { 
                 nextHasRan = true;
@@ -90,7 +89,7 @@ public class QuotaEnforcerBehaviorTests
             },
             CancellationToken.None);
 
-        await Task.Run(action, CancellationToken.None);
+        await Task.Run(acting, CancellationToken.None);
 
         // Assert
         nextHasRan.Should().BeTrue();
