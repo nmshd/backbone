@@ -25,9 +25,9 @@ public class MetricStatusesRepository : IMetricStatusesRepository
 
         return new List<MetricStatus>
         {
-            new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)),
-            new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-1)),
-            new MetricStatus(new MetricKey("KeyThree"), DateTime.UtcNow.AddDays(-1)),
+            new MetricStatus(new MetricKey("KeyOne"), null),
+            new MetricStatus(new MetricKey("KeyTwo"), null),
+            new MetricStatus(new MetricKey("KeyThree"), null),
         };
     }
 }

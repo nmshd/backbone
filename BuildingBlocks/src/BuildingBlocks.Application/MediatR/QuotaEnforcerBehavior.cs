@@ -22,21 +22,21 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
     {
         var attributes = request.GetType().CustomAttributes;
 
-        var relevantAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
-        if (relevantAttribute != null)
+        var applyQuotasForMetricsAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
+        if (applyQuotasForMetricsAttribute != null)
         {
-            var metricKeys = relevantAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
+            var metricKeys = applyQuotasForMetricsAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
 
             var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
 
-            var expiredStatuses = statuses.Where(it=> it.IsExhaustedUntil > SystemTime.UtcNow).ToList();
+            var exhaustedStatuses = statuses.Where(m => m.IsExhausted).ToList();
             
-            if (expiredStatuses.Any())
+            if (exhaustedStatuses.Any())
             {
-                var mostInTheFuture = expiredStatuses.MaxBy(it => it.IsExhaustedUntil);
-                if (mostInTheFuture != null)
+                var mostInTheFuture = exhaustedStatuses.MaxBy(it => it.IsExhaustedUntil);
+                if (mostInTheFuture is not null && mostInTheFuture.IsExhaustedUntil.HasValue)
                 {
-                    throw new QuotaExhaustedException(mostInTheFuture.MetricKey, mostInTheFuture.IsExhaustedUntil);
+                    throw new QuotaExhaustedException(mostInTheFuture.MetricKey, mostInTheFuture.IsExhaustedUntil.Value);
                 }
             }
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Reflection;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -11,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using static Azure.Core.HttpHeader;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
@@ -86,20 +83,19 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             applicationException.Code,
             applicationException.Message,
             "", // TODO: add documentation link
-            data: LoadCustomData(applicationException)
-            ); ;
+            data: GetCustomData(applicationException)
+        );
 
         return httpError;
     }
 
-    private dynamic? LoadCustomData(ApplicationException applicationException)
+    private dynamic? GetCustomData(ApplicationException applicationException)
     {
-        if (applicationException is QuotaExhaustedException)
+        if (applicationException is QuotaExhaustedException quotaExhautedException)
         {
-            var ae = (QuotaExhaustedException)applicationException;
             return new Dictionary<string, dynamic>() {
-                { ae.MetricKey.GetType().Name, ae.MetricKey.Value },
-                { ae.DateTime.GetType().Name, ae.DateTime},
+                { quotaExhautedException.MetricKey.GetType().Name, quotaExhautedException.MetricKey.Value },
+                { quotaExhautedException.IsExhaustedUntil.GetType().Name, quotaExhautedException.IsExhaustedUntil},
             };
         }
         return null;
@@ -136,8 +132,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 "An unexpected error occurred.",
                 "", // TODO: add documentation link
                 GetFormattedStackTrace(context.Exception),
-                details,
-                context.Exception
+                details
             );
         }
         else
