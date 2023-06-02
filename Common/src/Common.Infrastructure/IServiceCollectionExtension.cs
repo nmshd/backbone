@@ -5,7 +5,7 @@ using Enmeshed.Common.Infrastructure.Persistence.Context;
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension
 {
-    public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, Action<MetricStatusesDapperContext> configureOptions)
+    public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, Action<MetricStatusesDapperContextOptions> configureOptions)
     {
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.Configure(configureOptions);
