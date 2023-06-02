@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Admin.API.Mvc;
+using AdminApi.Mvc;
 using Microsoft.Extensions.Options;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
@@ -9,7 +9,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 using Enmeshed.BuildingBlocks.API;
 
-namespace Admin.API.Controllers;
+namespace AdminApi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class IdentitiesController : ApiControllerBase
