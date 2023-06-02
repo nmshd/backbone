@@ -11,7 +11,7 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@ngx-env/builder:browser",
                     "options": {
                         "outputPath": "dist/admin-ui",
                         "index": "src/index.html",
@@ -23,7 +23,10 @@
                             "@angular/material/prebuilt-themes/deeppurple-amber.css",
                             "src/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "ngxEnv": {
+                            "prefix": "ADMIN_API__"
+                        }
                     },
                     "configurations": {
                         "production": {
@@ -59,7 +62,7 @@
                     "defaultConfiguration": "production"
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@ngx-env/builder:dev-server",
                     "configurations": {
                         "production": {
                             "browserTarget": "AdminUI:build:production"
@@ -71,13 +74,13 @@
                     "defaultConfiguration": "development"
                 },
                 "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "builder": "@ngx-env/builder:extract-i18n",
                     "options": {
                         "browserTarget": "AdminUI:build"
                     }
                 },
                 "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
+                    "builder": "@ngx-env/builder:karma",
                     "options": {
                         "polyfills": ["zone.js", "zone.js/testing"],
                         "tsConfig": "tsconfig.spec.json",
