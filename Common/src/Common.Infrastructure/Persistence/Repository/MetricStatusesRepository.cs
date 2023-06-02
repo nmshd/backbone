@@ -17,7 +17,7 @@ public class MetricStatusesRepository : IMetricStatusesRepository
     public async Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identityAddress, IEnumerable<MetricKey> keys)
     {
         /*var query = "SELECT * FROM MetricStatuses WHERE identityAddress = @identityAddress";
-        using (var connection = _context.CreateConnection())
+        using (var connection = _context.Connection)
         {
             var metricStatuses = await connection.QueryAsync<MetricStatus>(query, new {identityAddress});
             return metricStatuses.ToList();
