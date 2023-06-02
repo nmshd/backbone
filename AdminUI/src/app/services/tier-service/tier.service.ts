@@ -33,6 +33,7 @@ export class TierService {
     }
 
     getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
+        // There is no getById api endpoint
         const httpOptions = {
             params: new HttpParams().set('id', id),
         };
