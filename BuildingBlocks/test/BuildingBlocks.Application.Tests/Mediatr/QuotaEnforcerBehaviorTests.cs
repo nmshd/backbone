@@ -2,7 +2,6 @@
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
-using DomainMetricStatus = Enmeshed.BuildingBlocks.Domain.MetricStatus;
 
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
@@ -25,12 +24,12 @@ public static class TestData
 {
     public static class MetricStatus
     {
-        public static readonly DomainMetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedUntilTomorrow"), DateTime.Now.AddDays(1));
+        public static readonly Domain.MetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedUntilTomorrow"), DateTime.Now.AddDays(1));
 
-        public static readonly DomainMetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
+        public static readonly Domain.MetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
 
-        public static readonly DomainMetricStatus ThatWasExhaustedUntilYesterday = new(new MetricKey("ExhaustedUntilYesterday"), DateTime.Now.AddDays(-1));
+        public static readonly Domain.MetricStatus ThatWasExhaustedUntilYesterday = new(new MetricKey("ExhaustedUntilYesterday"), DateTime.Now.AddDays(-1));
 
-        public static readonly DomainMetricStatus ThatIsNotExhausted = new(new MetricKey("ExhaustedUntilNull"), null);
+        public static readonly Domain.MetricStatus ThatIsNotExhausted = new(new MetricKey("ExhaustedUntilNull"), null);
     }
 }
