@@ -13,7 +13,12 @@ public class QuotaEnforcerBehaviorTests
         _userContextStub = new UserContextStub();
     }
 
-    [ApplyQuotasForMetrics("*")]
+    /// <summary>
+    /// The Metric key doesn't matter for these tests. The way the Mediatr Behavior is being
+    /// called does not inject the Metrics passed on the Attribute below. Tests will make use of
+    /// all the metrics available in the repository unless where specified.
+    /// </summary>
+    [ApplyQuotasForMetrics("DoesNotApplyToTests")]
     private class TestCommand : IRequest { }
 
     private class IResponse { }
