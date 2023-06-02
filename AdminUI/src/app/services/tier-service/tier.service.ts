@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 import { environment } from 'src/environments/environment';
+import { Quota } from '../quotas-service/quotas.service';
 
 @Injectable({
     providedIn: 'root',
@@ -54,4 +55,5 @@ export class TierService {
 export interface Tier {
     id?: string;
     name?: string;
+    quotas?: Quota[];
 }
