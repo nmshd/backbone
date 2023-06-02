@@ -13,12 +13,7 @@
 
                 <mat-form-field>
                     <mat-label>Name</mat-label>
-                    <input
-                        matInput
-                        required
-                        [(ngModel)]="tier.name"
-                        [disabled]="disabled"
-                    />
+                    <input matInput required [(ngModel)]="tier.name" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
             </div>
@@ -81,6 +76,7 @@
                     color="primary"
                     matTooltip="Assign Quota"
                     (click)="openAssignQuotaDialog()"
+                    [disabled]="!tier.id"
                 >
                     <mat-icon>add</mat-icon>
                     Assign Quota
@@ -105,7 +101,7 @@
             color="primary"
             (click)="createTier()"
             matTooltip="Add"
-            [disabled]="disabled || !validateTier()"
+            [disabled]="!validateTier()"
         >
             <mat-icon>add</mat-icon>
         </button>

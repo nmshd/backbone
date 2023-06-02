@@ -25,7 +25,6 @@ export class TierEditComponent {
     tier: Tier;
 
     loading: boolean;
-    disabled: boolean;
 
     displayedColumnsQuotas: string[] = ['metricName', 'metricMax', 'period'];
 
@@ -40,7 +39,6 @@ export class TierEditComponent {
         this.headerCreate = 'Create Tier';
         this.editMode = false;
         this.loading = true;
-        this.disabled = false;
         this.tier = {};
     }
 
@@ -99,7 +97,6 @@ export class TierEditComponent {
             error: (err: any) => {
                 this.loading = false;
                 this.snackBar.open(err.message, 'Dismiss');
-                this.disabled = true;
             },
         });
     }
@@ -143,8 +140,13 @@ export class TierEditComponent {
         this.quotasService.createTierQuota(quota).subscribe({
             next: (data: Quota) => {
                 if (data) {
-                    this.tier.quotas!.push(data);
-                    this.tier.quotas = [...this.tier.quotas!];
+                    if (this.tier.quotas) {
+                        this.tier.quotas!.push(data);
+                        this.tier.quotas = [...this.tier.quotas!];
+                    } else {
+                        this.tier.quotas = [data];
+                    }
+
                     this.snackBar.open(
                         'Successfully assigned quota.',
                         'Dismiss'
