@@ -29,7 +29,7 @@ export class QuotasService {
         return ['Monthly', 'Yearly'];
     }
 
-    createTierQuota(quota: Quota): Observable<Quota> {
+    createTierQuota(quota: Quota, tierId: string): Observable<Quota> {
         //return this.http.post<Quota>(this.apiUrl, quota);
         //Dummy data
         return of(quota);

@@ -137,7 +137,7 @@ export class TierEditComponent {
 
     createTierQuota(quota: Quota) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota).subscribe({
+        this.quotasService.createTierQuota(quota, this.tier.id!).subscribe({
             next: (data: Quota) => {
                 if (data) {
                     if (this.tier.quotas) {
