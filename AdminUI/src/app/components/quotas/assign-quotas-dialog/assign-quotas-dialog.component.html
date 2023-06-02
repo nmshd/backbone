@@ -29,7 +29,11 @@
 
         <mat-form-field>
             <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <mat-date-range-input
+                [formGroup]="range"
+                [rangePicker]="picker"
+                required
+            >
                 <input
                     matStartDate
                     formControlName="from"
@@ -43,6 +47,7 @@
                 [for]="picker"
             ></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-error>You must choose a value</mat-error>
         </mat-form-field>
     </div>
     <div *ngIf="loading" class="loading">

@@ -16,13 +16,13 @@ import { Metric } from 'src/app/services/quotas-service/quotas.service';
 export class AssignQuotasDialogComponent {
     header: string;
 
-    metric: Metric;
+    metric!: Metric;
     max: number;
     range = new FormGroup({
         from: new FormControl<Date | null>(null),
         to: new FormControl<Date | null>(null),
     });
-    period: string;
+    period!: string;
 
     metrics: Metric[];
     periods: string[];
@@ -36,9 +36,7 @@ export class AssignQuotasDialogComponent {
     ) {
         this.header = 'Assign Quota';
 
-        this.metric = {};
         this.max = 0;
-        this.period = '';
 
         this.metrics = [];
         this.periods = ['Monthly', 'Yearly'];
