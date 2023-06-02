@@ -14,22 +14,6 @@ export class QuotasService {
         this.apiUrl = environment.apiUrl + '/Quotas';
     }
 
-    getQuotas(
-        pageNumber: number,
-        pageSize: number
-    ): Observable<PagedHttpResponseEnvelope<Quota>> {
-        const httpOptions = {
-            params: new HttpParams()
-                .set('PageNumber', pageNumber + 1)
-                .set('PageSize', pageSize),
-        };
-
-        return this.http.get<PagedHttpResponseEnvelope<Quota>>(
-            this.apiUrl,
-            httpOptions
-        );
-    }
-
     getMetrics(): Observable<Metric[]> {
         //return this.http.get<Metric[]>(this.apiUrl);
         //Dummy data
@@ -40,14 +24,22 @@ export class QuotasService {
         };
         return of([metric]);
     }
+
+    getPeriods(): string[] {
+        return ['Monthly', 'Yearly'];
+    }
+
+    createTierQuota(quota: Quota): Observable<Quota> {
+        //return this.http.post<Quota>(this.apiUrl, quota);
+        //Dummy data
+        return of(quota);
+    }
 }
 
 export interface Quota {
     id?: string;
     metric?: Metric;
     max?: number;
-    validFrom?: Date;
-    validTo?: Date;
     period?: string;
 }
 

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -18,10 +17,6 @@ export class AssignQuotasDialogComponent {
 
     metric!: Metric;
     max: number;
-    range = new FormGroup({
-        from: new FormControl<Date | null>(null),
-        to: new FormControl<Date | null>(null),
-    });
     period!: string;
 
     metrics: Metric[];
@@ -39,13 +34,14 @@ export class AssignQuotasDialogComponent {
         this.max = 0;
 
         this.metrics = [];
-        this.periods = ['Monthly', 'Yearly'];
+        this.periods = [];
 
         this.loading = true;
     }
 
     ngOnInit() {
         this.getMetrics();
+        this.getPeriods();
     }
 
     getMetrics() {
@@ -63,12 +59,14 @@ export class AssignQuotasDialogComponent {
         });
     }
 
+    getPeriods() {
+        this.periods = this.quotasService.getPeriods();
+    }
+
     assignQuota() {
         let quota: Quota = {
             metric: this.metric,
             max: this.max,
-            validFrom: this.range.value.from!,
-            validTo: this.range.value.to!,
             period: this.period,
         };
 
@@ -76,11 +74,6 @@ export class AssignQuotasDialogComponent {
     }
 
     isValid(): boolean {
-        return (
-            this.metric != null &&
-            this.period != null &&
-            this.range.value.from != null &&
-            this.range.value.to != null
-        );
+        return this.metric != null && this.period != null && this.max != null;
     }
 }
