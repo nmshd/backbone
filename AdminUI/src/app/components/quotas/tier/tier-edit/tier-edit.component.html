@@ -23,7 +23,7 @@
                 </mat-form-field>
             </div>
         </mat-expansion-panel>
-        <mat-expansion-panel expanded>
+        <mat-expansion-panel *ngIf="editMode" expanded>
             <mat-expansion-panel-header>
                 <mat-panel-title> Quotas </mat-panel-title>
             </mat-expansion-panel-header>
