@@ -23,6 +23,70 @@
                 </mat-form-field>
             </div>
         </mat-expansion-panel>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Quotas </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table class="responsive" [dataSource]="tier.quotas!">
+                <ng-container matColumnDef="metricName">
+                    <th mat-header-cell *matHeaderCellDef>Metric Name</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let quota"
+                        data-label="Metric Name"
+                    >
+                        {{ quota.metric.displayName }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="metricMax">
+                    <th mat-header-cell *matHeaderCellDef>Metric Max</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let quota"
+                        data-label="Metric Max"
+                    >
+                        {{ quota.max }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="period">
+                    <th mat-header-cell *matHeaderCellDef>Period</th>
+                    <td mat-cell *matCellDef="let quota" data-label="Period">
+                        {{ quota.period }}
+                    </td>
+                </ng-container>
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumnsQuotas"
+                ></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumnsQuotas"
+                ></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td
+                        class="mat-cell no-data"
+                        [attr.colspan]="displayedColumnsQuotas.length"
+                    >
+                        No quotas found.
+                    </td>
+                </tr>
+            </table>
+            <div class="action-buttons">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    matTooltip="Assign Quota"
+                    (click)="openAssignQuotaDialog()"
+                >
+                    <mat-icon>add</mat-icon>
+                    Assign Quota
+                </button>
+            </div>
+        </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">
         <button
