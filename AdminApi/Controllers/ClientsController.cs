@@ -1,6 +1,6 @@
 ﻿using AdminApi.Mvc;
 using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Application.Clients.Queries.ListOAuthClients;
+using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
