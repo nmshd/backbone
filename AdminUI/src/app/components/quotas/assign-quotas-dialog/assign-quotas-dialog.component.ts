@@ -9,11 +9,11 @@ import {
 import { Metric } from 'src/app/services/quotas-service/quotas.service';
 
 @Component({
-    selector: 'app-tier-edit-quotas-dialog',
-    templateUrl: './tier-edit-quotas-dialog.component.html',
-    styleUrls: ['./tier-edit-quotas-dialog.component.css'],
+    selector: 'app-assign-quotas-dialog',
+    templateUrl: './assign-quotas-dialog.component.html',
+    styleUrls: ['./assign-quotas-dialog.component.css'],
 })
-export class TierEditQuotasDialogComponent {
+export class AssignQuotasDialogComponent {
     header: string;
 
     metric: Metric;
@@ -32,7 +32,7 @@ export class TierEditQuotasDialogComponent {
     constructor(
         private _snackBar: MatSnackBar,
         private quotasService: QuotasService,
-        public dialogRef: MatDialogRef<TierEditQuotasDialogComponent>
+        public dialogRef: MatDialogRef<AssignQuotasDialogComponent>
     ) {
         this.header = 'Assign Quota';
 

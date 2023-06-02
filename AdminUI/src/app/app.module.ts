@@ -24,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,7 +36,7 @@ import { TopbarComponent } from './components/topbar/topbar.component';
 import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
-import { TierEditQuotasDialogComponent } from './components/quotas/tier/tier-edit/tier-edit-quotas-dialog/tier-edit-quotas-dialog.component';
+import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,7 @@ import { TierEditQuotasDialogComponent } from './components/quotas/tier/tier-edi
         IdentityListComponent,
         TierListComponent,
         TierEditComponent,
-        TierEditQuotasDialogComponent,
+        AssignQuotasDialogComponent,
     ],
     imports: [
         FormsModule,
@@ -76,6 +77,7 @@ import { TierEditQuotasDialogComponent } from './components/quotas/tier/tier-edi
         MatSelectModule,
         MatDatepickerModule,
         MatNativeDateModule,
+        MatChipsModule,
     ],
     providers: [SidebarService],
     bootstrap: [AppComponent],
