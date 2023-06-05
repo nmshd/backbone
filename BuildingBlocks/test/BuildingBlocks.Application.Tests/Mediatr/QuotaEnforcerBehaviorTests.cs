@@ -87,7 +87,8 @@ public class QuotaEnforcerBehaviorTests
             CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses.First().Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
+        acting.Should().AwaitThrowAsync<QuotaExhaustedException>()
+            .Which.ExhaustedMetricStatuses.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
     }
 
     /// <summary>
@@ -143,7 +144,7 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         acting.Should().AwaitThrowAsync<QuotaExhaustedException>()
-            .Which.ExhaustedMetricStatuses.First().Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+            .Which.ExhaustedMetricStatuses.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
     }
 
     [Fact]
@@ -214,7 +215,7 @@ internal static class TestData
 
     internal static class MetricStatus
     {
-        public static readonly Domain.MetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedUntilTomorrow"), DateTime.Now.AddDays(1));
+        public static readonly Domain.MetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedFor1Day"), DateTime.Now.AddDays(1));
 
         public static readonly Domain.MetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
 
