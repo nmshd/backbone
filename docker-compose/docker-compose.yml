@@ -35,7 +35,7 @@ services:
     hostname: admin-api
     build:
       context: ..
-      dockerfile: Admin.API/Dockerfile.debug
+      dockerfile: AdminApi/Dockerfile.debug
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -54,6 +54,8 @@ services:
     build:
       dockerfile: Dockerfile.debug
       context: "../AdminUI/"
+    environment:
+      - ADMIN_API__BASE_URL=http://localhost:5010/api/v1
     ports:
       - "5020:4200"
     depends_on:

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
@@ -8,12 +8,10 @@ import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
     selector: 'app-tier-edit',
     templateUrl: './tier-edit.component.html',
     styleUrls: ['./tier-edit.component.css'],
-    providers: [MessageService],
 })
 export class TierEditComponent {
-    header: string;
-    titleEdit: string;
-    titleCreate: string;
+    headerEdit: string;
+    headerCreate: string;
 
     tierId?: string;
     editMode: boolean;
@@ -25,13 +23,11 @@ export class TierEditComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private tierService: TierService,
-        private messageService: MessageService
+        private snackBar: MatSnackBar,
+        private tierService: TierService
     ) {
-        this.header = '';
-        this.titleEdit = '';
-        this.titleCreate = '';
-
+        this.headerEdit = 'Edit Tier';
+        this.headerCreate = 'Create Tier';
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
@@ -39,10 +35,6 @@ export class TierEditComponent {
     }
 
     ngOnInit() {
-        this.header = 'Tiers';
-        this.titleEdit = 'Edit Tier';
-        this.titleCreate = 'Create Tier';
-
         this.route.params.subscribe((params) => {
             if (params['id']) {
                 this.tierId = params['id'];
@@ -57,89 +49,65 @@ export class TierEditComponent {
         }
     }
 
+    initTier() {
+        this.tier = {
+            name: '',
+        } as Tier;
+
+        this.loading = false;
+    }
+
     getTier() {
         this.loading = true;
-        setTimeout(() => {
-            this.tierService
-                .getTierById(this.tierId!)
-                .subscribe({
-                    next: (data: HttpResponseEnvelope<Tier>) => {
-                        if (data && data.result) {
-                            this.tier = data.result;
-                        }
-                    },
-                    error: (err: any) => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: err.status,
-                            detail: err.message,
-                            sticky: true,
-                        });
-                        this.disabled = true;
-                    },
-                })
-                .add(() => (this.loading = false));
-        }, 1000);
+        this.tierService.getTierById(this.tierId!).subscribe({
+            next: (data: HttpResponseEnvelope<Tier>) => {
+                if (data && data.result) {
+                    this.tier = data.result;
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
     }
 
     createTier() {
         this.loading = true;
-        setTimeout(() => {
-            this.tierService
-                .createTier(this.tier)
-                .subscribe({
-                    next: (data: HttpResponseEnvelope<Tier>) => {
-                        if (data && data.result) {
-                            this.tier = data.result;
-                        }
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Success',
-                            detail: 'Successfully added tier.',
-                            sticky: true,
-                        });
-                        this.tierId = data.result.id;
-                        this.editMode = true;
-                    },
-                    error: (err: any) =>
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: err.status,
-                            detail: err.message,
-                            sticky: true,
-                        }),
-                })
-                .add(() => (this.loading = false));
-        }, 1000);
+        this.tierService.createTier(this.tier).subscribe({
+            next: (data: HttpResponseEnvelope<Tier>) => {
+                if (data && data.result) {
+                    this.tier = data.result;
+                }
+                this.snackBar.open('Successfully added tier.', 'Dismiss');
+                this.tierId = data.result.id;
+                this.editMode = true;
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+                this.disabled = true;
+            },
+        });
     }
 
     updateTier() {
         this.loading = true;
-        setTimeout(() => {
-            this.tierService
-                .updateTier(this.tier)
-                .subscribe({
-                    next: (data: HttpResponseEnvelope<Tier>) => {
-                        if (data && data.result) {
-                            this.tier = data.result;
-                            this.messageService.add({
-                                severity: 'success',
-                                summary: 'Success',
-                                detail: 'Successfully updated tier.',
-                                sticky: true,
-                            });
-                        }
-                    },
-                    error: (err: any) =>
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: err.status,
-                            detail: err.message,
-                            sticky: true,
-                        }),
-                })
-                .add(() => (this.loading = false));
-        }, 1000);
+        this.tierService.updateTier(this.tier).subscribe({
+            next: (data: HttpResponseEnvelope<Tier>) => {
+                if (data && data.result) {
+                    this.tier = data.result;
+                    this.snackBar.open('Successfully updated tier.', 'Dismiss');
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
     }
 
     validateTier(): boolean {
@@ -147,13 +115,5 @@ export class TierEditComponent {
             return true;
         }
         return false;
-    }
-
-    initTier() {
-        this.tier = {
-            name: '',
-        } as Tier;
-
-        this.loading = false;
     }
 }

@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "admin-ui-app": {
+        "AdminUI": {
             "projectType": "application",
             "schematics": {},
             "root": "",
@@ -11,22 +11,22 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@ngx-env/builder:browser",
                     "options": {
-                        "outputPath": "dist/admin-ui-app",
+                        "outputPath": "dist/admin-ui",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": ["zone.js"],
                         "tsConfig": "tsconfig.app.json",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": [
-                            "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/lara-light-indigo/theme.css",
-                            "node_modules/primeng/resources/primeng.min.css",
-                            "node_modules/primeflex/primeflex.css",
+                            "@angular/material/prebuilt-themes/deeppurple-amber.css",
                             "src/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "ngxEnv": {
+                            "prefix": "ADMIN_API__"
+                        }
                     },
                     "configurations": {
                         "production": {
@@ -34,7 +34,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "500kb",
-                                    "maximumError": "2mb"
+                                    "maximumError": "1mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -52,47 +52,47 @@
                             "sourceMap": true,
                             "namedChunks": true,
                             "fileReplacements": [
-                              {
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.development.ts"
-                              }
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.development.ts"
+                                }
                             ]
                         }
                     },
                     "defaultConfiguration": "production"
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@ngx-env/builder:dev-server",
                     "configurations": {
                         "production": {
-                            "browserTarget": "admin-ui-app:build:production"
+                            "browserTarget": "AdminUI:build:production"
                         },
                         "development": {
-                            "browserTarget": "admin-ui-app:build:development"
+                            "browserTarget": "AdminUI:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
                 },
                 "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "builder": "@ngx-env/builder:extract-i18n",
                     "options": {
-                        "browserTarget": "admin-ui-app:build"
+                        "browserTarget": "AdminUI:build"
                     }
                 },
                 "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
+                    "builder": "@ngx-env/builder:karma",
                     "options": {
                         "polyfills": ["zone.js", "zone.js/testing"],
                         "tsConfig": "tsconfig.spec.json",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": ["src/styles.css"],
+                        "styles": [
+                            "@angular/material/prebuilt-themes/deeppurple-amber.css",
+                            "src/styles.css"
+                        ],
                         "scripts": []
                     }
                 }
             }
         }
-    },
-    "cli": {
-      "analytics": false
     }
 }

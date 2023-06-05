@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
+﻿using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Enmeshed.BuildingBlocks.API.Extensions;
 
@@ -41,6 +46,38 @@ public static class ServiceCollectionExtensions
         module.ConfigureServices(services, moduleConfiguration);
 
         services.AddSingleton<IModule>(module);
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
+    {
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            if (environment.IsDevelopment() || environment.IsLocal())
+            {
+                options.Password.RequiredLength = 1;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.User.AllowedUserNameCharacters += " ";
+            }
+            else
+            {
+                options.Password.RequiredLength = 10;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+            }
+        })
+        .AddEntityFrameworkStores<DevicesDbContext>()
+        .AddSignInManager<CustomSigninManager>()
+        .AddUserStore<CustomUserStore>();
+
+        services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
 
         return services;
     }

@@ -1,57 +1,70 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { RippleModule } from 'primeng/ripple';
-import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { ImageModule } from 'primeng/image';
-import { FormsModule } from '@angular/forms';
-import { AccordionModule } from 'primeng/accordion';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { SidebarModule } from 'primeng/sidebar';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LayoutModule } from '@angular/cdk/layout';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
+import { SidebarService } from './services/sidebar-service/sidebar.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { PageNotFoundComponent } from './components/error/page-not-found/page-not-found.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TopbarComponent } from './components/topbar/topbar.component';
+import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
-import { TopbarComponent } from './components/topbar/topbar.component';
-import { SidebarService } from './services/sidebar-service/sidebar.service';
 
 @NgModule({
     declarations: [
         AppComponent,
-        IdentityListComponent,
         DashboardComponent,
-        SidebarComponent,
         PageNotFoundComponent,
+        SidebarComponent,
+        TopbarComponent,
+        IdentityListComponent,
         TierListComponent,
         TierEditComponent,
-        TopbarComponent,
     ],
     imports: [
+        FormsModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        RippleModule,
-        CardModule,
-        TableModule,
-        ButtonModule,
-        InputTextModule,
-        ImageModule,
-        FormsModule,
-        AccordionModule,
-        ToastModule,
-        ProgressSpinnerModule,
-        SidebarModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatListModule,
+        MatGridListModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatExpansionModule,
+        MatTooltipModule,
+        LayoutModule,
     ],
     providers: [SidebarService],
     bootstrap: [AppComponent],

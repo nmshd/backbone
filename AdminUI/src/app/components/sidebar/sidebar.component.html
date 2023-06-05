@@ -1,70 +1,19 @@
-<p-sidebar
-    [visible]="showSidebar()"
-    styleClass="layout-sidebar {{ isMobileLayout ? 'max-w-full' : 'static' }}
-    {{
-        extendedSidebar()
-            ? 'layout-sidebar-extended'
-            : 'layout-sidebar-contracted'
-    }}"
-    [modal]="isMobileLayout"
-    [showCloseIcon]="isMobileLayout"
-    [fullScreen]="isMobileLayout"
-    (onHide)="closeSidebar()"
->
-    <div class="layout-sidebar flex flex-column h-full select-none">
-        <!--Logo-->
-        <div class="px-3 flex logo-div align-items-end align-self-center">
-            <p-image
-                width="50px"
-                alt="logo"
-                src="../../../assets/logo.png"
-                styleClass="cursor-pointer"
-                imageClass="border-circle"
-                routerLink="/dashboard"
-            ></p-image>
-        </div>
-        <ng-container
-            *ngIf="extendedSidebar(); then extendedMenu; else miniMenu"
+<div class="sidebar sidebar-extended">
+    <mat-nav-list>
+        <mat-list-item
+            *ngFor="let option of sidebarOptions"
+            [routerLink]="option.routerLink"
         >
-        </ng-container>
-        <!--Menu Extended-->
-        <ng-template #extendedMenu>
-            <div class="mt-3 flex flex-row flex-wrap">
-                <div
-                    *ngFor="let option of sidebarOptions"
-                    class="w-full flex nav-div text-400 align-items-center"
-                >
-                    <div
-                        class="cursor-pointer flex overflow-x-hidden hover:text-white"
-                        [routerLink]="option.routerLink"
-                        [routerLinkActive]="['text-white']"
-                    >
-                        <i
-                            class="pi {{
-                                option.icon
-                            }} text-xl vertical-align-bottom"
-                        ></i>
-                        <span class="p-component pl-3">{{ option.label }}</span>
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-        <!--Menu Mini-->
-        <ng-template #miniMenu>
-            <div class="mt-3 flex flex-row flex-wrap">
-                <div
-                    *ngFor="let option of sidebarOptions"
-                    class="w-full flex nav-div text-400 justify-content-center align-items-center"
-                >
-                    <i
-                        class="pi {{
-                            option.icon
-                        }} text-xl zoom-animation cursor-pointer"
-                        [routerLink]="option.routerLink"
-                        [routerLinkActive]="['text-white', 'zoom']"
-                    ></i>
-                </div>
-            </div>
-        </ng-template>
-    </div>
-</p-sidebar>
+            <mat-icon
+                matListItemIcon
+                [routerLink]="option.routerLink"
+                routerLinkActive="active"
+            >
+                {{ option.icon }}
+            </mat-icon>
+            <span [routerLink]="option.routerLink" routerLinkActive="active">
+                {{ option.label }}
+            </span>
+        </mat-list-item>
+    </mat-nav-list>
+</div>
