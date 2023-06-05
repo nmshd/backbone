@@ -4,11 +4,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 public class MetricStatusesStubRepository : IMetricStatusesRepository
 {
-    public List<MetricStatus> MetricStatuses { get; } = new List<MetricStatus> {
-                new MetricStatus(new MetricKey("KeyOne"), DateTime.UtcNow.AddDays(-1)),
-                new MetricStatus(new MetricKey("KeyTwo"), DateTime.UtcNow.AddDays(-2)),
-                new MetricStatus(new MetricKey("KeyThree"), DateTime.UtcNow.AddDays(-3)),
-            };
+    public List<MetricStatus> MetricStatuses { get; } = new();
 
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
     public MetricStatusesStubRepository(List<MetricStatus>? metricStatuses)
@@ -20,8 +16,18 @@ public class MetricStatusesStubRepository : IMetricStatusesRepository
         }
     }
 
-    public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
+    public virtual Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
     {
         return Task.FromResult(MetricStatuses.AsEnumerable());
+    }
+}
+
+public class MetricStatusesNoMatchStubRepository : MetricStatusesStubRepository
+{
+    public MetricStatusesNoMatchStubRepository(List<MetricStatus> metricStatuses) : base(metricStatuses) { }
+
+    public override Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
+    {
+        return Task.FromResult(Enumerable.Empty<MetricStatus>());
     }
 }
