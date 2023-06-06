@@ -1,6 +1,7 @@
 ﻿using AdminApi.Tests.Integration.API;
 using AdminApi.Tests.Integration.Extensions;
 using AdminApi.Tests.Integration.Models;
+using Backbone.Modules.Quotas.Domain.Tests;
 using Newtonsoft.Json;
 
 namespace AdminApi.Tests.Integration.StepDefinitions;
@@ -19,9 +20,28 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     }
 
     [Given(@"a valid Tier")]
-    public void GivenAValidTier()
+    public async Task GivenAValidTierAsync()
     {
-        _tierId = "TIR9xK9NLCTvGDx6zlfR";
+        var createTierQuotaRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = new RequestConfiguration();
+        requestConfiguration.SupplementWith(_requestConfiguration);
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
+        
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int) response!.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tierId = response.Content.Result.Id;
+
+        // allow the EventQueue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
+
+        return;
     }
 
     [Given(@"an invalid Tier")]

@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\TierQuota\" />
+    <Folder Include="Features\TierQuotas\" />
   </ItemGroup>
 
 </Project>
