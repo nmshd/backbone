@@ -27,8 +27,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
             Name = "TestTier_" + TestDataGenerator.GenerateString(12)
         };
 
-        var requestConfiguration = new RequestConfiguration();
-        requestConfiguration.SupplementWith(_requestConfiguration);
+        var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
         
@@ -60,8 +59,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
             Period = "Week"
         };
 
-        var requestConfiguration = new RequestConfiguration();
-        requestConfiguration.SupplementWith(_requestConfiguration);
+        var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
 
