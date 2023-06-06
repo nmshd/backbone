@@ -49,7 +49,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierId = "some-inexistent-tier-id";
     }
 
-    [When(@"a POST request is sent to the Create Tier Quota endpoint")]
+    [When(@"a POST request is sent to the /Tier/{id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTiersQuotaEndpoint()
     {
         var createTierQuotaRequest = new CreateTierQuotaRequest
