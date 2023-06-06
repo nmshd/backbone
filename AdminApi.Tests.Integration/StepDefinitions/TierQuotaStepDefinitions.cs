@@ -30,10 +30,10 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
-        
+
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
-        var actualStatusCode = (int) response!.StatusCode;
+        var actualStatusCode = (int)response!.StatusCode;
         actualStatusCode.Should().Be(201);
         _tierId = response.Content.Result.Id;
 
