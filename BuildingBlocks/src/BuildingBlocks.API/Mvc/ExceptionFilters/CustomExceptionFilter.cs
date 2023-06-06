@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Domain;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -93,7 +94,13 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         if (applicationException is QuotaExhaustedException quotaExhautedException)
         {
-            return quotaExhautedException.ExhaustedMetricStatuses;
+            return quotaExhautedException.ExhaustedMetricStatuses.Select(it => 
+                new Dictionary<string, object>
+                {
+                    { "MetricKey", it.MetricKey },
+                    { "IsExhaustedUntil", it.IsExhaustedUntil }
+                }
+            );
         }
         return null;
     }
