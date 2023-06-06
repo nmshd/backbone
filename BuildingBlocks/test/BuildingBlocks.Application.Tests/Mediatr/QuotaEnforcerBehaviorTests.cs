@@ -6,7 +6,6 @@ using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using FluentAssertions;
 using MediatR;
 using Xunit;
-using static Enmeshed.BuildingBlocks.Application.Tests.Mediatr.TestData;
 using Enmeshed.UnitTestTools.Extensions;
 using Enmeshed.UnitTestTools.Behaviors;
 
@@ -18,11 +17,11 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsNotExhausted);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -37,11 +36,11 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatWasExhaustedUntilYesterday);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -56,11 +55,11 @@ public class QuotaEnforcerBehaviorTests
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsExhaustedFor10Days);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -81,11 +80,11 @@ public class QuotaEnforcerBehaviorTests
         var metricStatusesStubRepository = new MetricStatusesNoMatchStubRepository();
 
         var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -103,11 +102,11 @@ public class QuotaEnforcerBehaviorTests
             TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatWasExhaustedUntilYesterday
         });
         var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -124,11 +123,11 @@ public class QuotaEnforcerBehaviorTests
             TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatIsExhaustedFor10Days
         });
         var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -148,11 +147,11 @@ public class QuotaEnforcerBehaviorTests
         });
 
         var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<IResponse>();
+        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestCommand(),
+            new TestData.TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -162,17 +161,17 @@ public class QuotaEnforcerBehaviorTests
         nextMock.WasCalled.Should().BeTrue();
     }
 
-    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepository)
+    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepository)
     {
         var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
     }
 
-    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(Domain.MetricStatus metricStatus)
+    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(MetricStatus metricStatus)
     {
         var metricStatusesRepository = new MetricStatusesStubRepository(new() { metricStatus });
         var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
     }
 }
 
