@@ -1,10 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface IOAuthClientsRepository
 {
-    Task<DbPaginationResult<ClientDTO>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken);
 }

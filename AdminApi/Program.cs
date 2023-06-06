@@ -57,16 +57,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     .AddHealthChecks();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-    services
-            .AddOpenIddict()
-            .AddCore(options =>
-            {
-                options
-                    .UseEntityFrameworkCore()
-                    .UseDbContext<DevicesDbContext>();
-            });
-
-    services.AddTransient<ListClientsQuery>();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

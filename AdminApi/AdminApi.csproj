@@ -11,8 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="OpenIddict" Version="4.4.0" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />

@@ -1,7 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -16,11 +14,10 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         _applicationManager = applicationManager;
     }
 
-    public async Task<DbPaginationResult<ClientDTO>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken)
     {
-        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new ClientDTO(c.ClientId, c.DisplayName)), cancellationToken).ToListAsync();
-        var paginationResult = new DbPaginationResult<ClientDTO>(clients, clients.Count);
+        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new OAuthClient(c.ClientId, c.DisplayName)), cancellationToken).ToListAsync(cancellationToken);
 
-        return paginationResult;
+        return clients;
     }
 }
