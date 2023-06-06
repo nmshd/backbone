@@ -2,7 +2,6 @@
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using FluentAssertions;
 using MediatR;
 using Xunit;
@@ -13,7 +12,7 @@ namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
     [Fact]
-    public async void Succeeds_when_the_passed_quota_is_not_exhausted()
+    public async void Succeeds_when_the_passed_metric_is_not_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsNotExhausted);
@@ -32,7 +31,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Succeeds_when_the_passed_quota_was_exhausted()
+    public async void Succeeds_when_the_passed_metric_was_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatWasExhaustedUntilYesterday);
@@ -50,8 +49,54 @@ public class QuotaEnforcerBehaviorTests
         nextMock.WasCalled.Should().BeTrue();
     }
 
+    /// <summary>
+    /// This test uses a special implementation of the IMetricStatusesRepository which <strong>
+    /// returns zero results</strong> on the `GetMetricStatuses` Method.
+    /// For this reason, the MetricStatuses passed to the constructor have zero relevance for the test.
+    /// </summary>
     [Fact]
-    public void Throws_QuotaExhaustedException_when_the_passed_quota_is_still_exhausted()
+    public async void Succeeds_when_none_of_the_metrics_exist_in_the_repository()
+    {
+        // Arrange
+        var behavior = CreateQuotaEnforcerBehavior();
+        var nextMock = new NextMock<TestData.IResponse>();
+
+        // Act
+        Func<Task> acting = async () => await behavior.Handle(
+            new TestData.TestCommand(),
+            nextMock.Value,
+            CancellationToken.None);
+
+        await Task.Run(acting, CancellationToken.None);
+
+        // Assert
+        nextMock.WasCalled.Should().BeTrue();
+    }
+
+    [Fact]
+    public async void Succeeds_when_none_of_the_passed_metrics_are_exhausted()
+    {
+        // Arrange
+        var behavior = CreateQuotaEnforcerBehavior(
+            TestData.MetricStatus.ThatWasExhaustedUntil2DaysAgo,
+            TestData.MetricStatus.ThatWasExhaustedUntilYesterday
+            );
+        var nextMock = new NextMock<TestData.IResponse>();
+
+        // Act
+        Func<Task> acting = async () => await behavior.Handle(
+            new TestData.TestCommand(),
+            nextMock.Value,
+            CancellationToken.None);
+
+        await Task.Run(acting, CancellationToken.None);
+
+        // Assert
+        nextMock.WasCalled.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void Throws_QuotaExhaustedException_when_the_passed_metric_is_still_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsExhaustedFor10Days);
@@ -68,40 +113,14 @@ public class QuotaEnforcerBehaviorTests
             .Which.ExhaustedMetricStatuses.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
     }
 
-    /// <summary>
-    /// This test uses a special implementation of the IMetricStatusesRepository which <strong>
-    /// returns zero results</strong> on the `GetMetricStatuses` Method.
-    /// For this reason, the MetricStatuses passed to the constructor have zero relevance for the test.
-    /// </summary>
-    [Fact]
-    public async void Succeeds_when_none_of_the_metrics_exist_in_the_repository()
-    {
-        // Arrange
-        var metricStatusesStubRepository = new MetricStatusesNoMatchStubRepository();
-
-        var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        await Task.Run(acting, CancellationToken.None);
-
-        // Assert
-        nextMock.WasCalled.Should().BeTrue();
-    }
-
     [Fact]
     public void Throws_QuotaExhaustedException_when_exactly_one_metric_is_exhausted()
     {
         // Arrange
-        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-        });
-        var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
+        var behavior = CreateQuotaEnforcerBehavior(
+            TestData.MetricStatus.ThatIsExhaustedFor1Day,
+            TestData.MetricStatus.ThatWasExhaustedUntilYesterday
+            );
         var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
@@ -119,10 +138,10 @@ public class QuotaEnforcerBehaviorTests
     public void Throws_QuotaExhaustedException_when_more_than_one_metric_is_exhausted()
     {
         // Arrange
-        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            TestData.MetricStatus.ThatIsExhaustedFor1Day, TestData.MetricStatus.ThatIsExhaustedFor10Days
-        });
-        var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
+        var behavior = CreateQuotaEnforcerBehavior(
+            TestData.MetricStatus.ThatIsExhaustedFor1Day,
+            TestData.MetricStatus.ThatIsExhaustedFor10Days
+            );
         var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
@@ -138,38 +157,9 @@ public class QuotaEnforcerBehaviorTests
             ).Should().BeTrue();
     }
 
-    [Fact]
-    public async void Succeeds_when_none_of_the_passed_quotas_are_exhausted()
+    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
     {
-        // Arrange
-        var metricStatusesStubRepository = new MetricStatusesStubRepository(new() {
-            TestData.MetricStatus.ThatWasExhaustedUntil2DaysAgo, TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-        });
-
-        var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        await Task.Run(acting, CancellationToken.None);
-
-        // Assert
-        nextMock.WasCalled.Should().BeTrue();
-    }
-
-    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepository)
-    {
-        var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
-    }
-
-    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(MetricStatus metricStatus)
-    {
-        var metricStatusesRepository = new MetricStatusesStubRepository(new() { metricStatus });
+        var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
         var userContextStub = new UserContextStub();
         return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
     }
