@@ -78,9 +78,7 @@ public class QuotaEnforcerBehaviorTests
     public async void Succeeds_when_none_of_the_metrics_exist_in_the_repository()
     {
         // Arrange
-        var metricStatusesStubRepository = new MetricStatusesNoMatchStubRepository(new() {
-            TestData.MetricStatus.ThatWasExhaustedUntilYesterday, TestData.MetricStatus.ThatIsNotExhausted
-        });
+        var metricStatusesStubRepository = new MetricStatusesNoMatchStubRepository();
 
         var behavior = CreateQuotaEnforcerBehavior(metricStatusesStubRepository);
         var nextMock = new NextMock<IResponse>();
