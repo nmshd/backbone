@@ -32,7 +32,7 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
             return;
         }
 
-        var tierQuotaDefinition = await _tiersRepository.FindTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None);
+        var tierQuotaDefinition = await _tiersRepository.FindTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None, true);
 
         foreach (var identity in identitiesWithTier)
         {
