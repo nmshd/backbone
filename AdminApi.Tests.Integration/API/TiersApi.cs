@@ -11,4 +11,14 @@ public class TiersApi : BaseApi
     {
         return await Get<List<TierDTO>>("/Tiers", requestConfiguration);
     }
+
+    public async Task<HttpResponse<TierQuotaDefinitionDTO>> CreateTierQuota(RequestConfiguration requestConfiguration, string tierId)
+    {
+        return await Post<TierQuotaDefinitionDTO>($"/Tiers/{tierId}/Quotas", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<TierDTO>> CreateTier(RequestConfiguration requestConfiguration)
+    {
+        return await Post<TierDTO>($"/Tiers", requestConfiguration);
+    }
 }

@@ -1,0 +1,9 @@
+﻿namespace AdminApi.Tests.Integration.Models;
+
+public class TierQuotaDefinitionDTO
+{
+    public string Id { get; set; }
+    public MetricDTO Metric { get; set; }
+    public int Max { get; set; }
+    public string Period { get; set; }
+}

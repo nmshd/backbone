@@ -23,6 +23,11 @@ public class BaseApi
         return await ExecuteRequest<T>(Method.Get, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
+    }
+
     private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);
