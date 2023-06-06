@@ -7,12 +7,12 @@ namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
 
 public class MetricStatusesRepository : IMetricStatusesRepository
 {
-    private readonly MetricStatusesDapperContext _context;
-
     public MetricStatusesRepository(MetricStatusesDapperContext context) 
     {
         _context = context;
     }
+
+    private readonly MetricStatusesDapperContext _context;
 
     public async Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identityAddress, IEnumerable<MetricKey> keys)
     {
