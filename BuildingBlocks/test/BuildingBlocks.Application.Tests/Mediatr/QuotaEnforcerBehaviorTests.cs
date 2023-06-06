@@ -12,19 +12,6 @@ using Enmeshed.UnitTestTools.Extensions;
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
-    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepository)
-    {
-        var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
-    }
-
-    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(Domain.MetricStatus metricStatus)
-    {
-        var metricStatusesRepository = new MetricStatusesStubRepository(new() { metricStatus });
-        var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
-    }
-
     [Fact]
     public async void Succeeds_when_the_passed_quota_is_not_exhausted()
     {
@@ -198,6 +185,19 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         nextHasRan.Should().BeTrue();
+    }
+
+    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepository)
+    {
+        var userContextStub = new UserContextStub();
+        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
+    }
+
+    private static QuotaEnforcerBehavior<TestCommand, IResponse> CreateQuotaEnforcerBehavior(Domain.MetricStatus metricStatus)
+    {
+        var metricStatusesRepository = new MetricStatusesStubRepository(new() { metricStatus });
+        var userContextStub = new UserContextStub();
+        return new QuotaEnforcerBehavior<TestCommand, IResponse>(metricStatusesRepository, userContextStub);
     }
 }
 
