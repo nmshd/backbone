@@ -43,8 +43,8 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         return;
     }
 
-    [Given(@"an invalid Tier")]
-    public void GivenAnInvalidTier()
+    [Given(@"an inexistent Tier")]
+    public void GivenAnInexistentTier()
     {
         _tierId = "some-inexistent-tier-id";
     }

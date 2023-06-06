@@ -48,14 +48,14 @@ public class TiersController : ApiControllerBase
 
     [HttpPost("{tierId}/Quotas")]
     [ProducesResponseType(typeof(TierQuotaDefinitionDTO), StatusCodes.Status201Created)]
-    public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateTierQuotaRequest request, CancellationToken cancellationToken)
+    public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateQuotaForTierRequest request, CancellationToken cancellationToken)
     {
         var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand(tierId, request.MetricKey, request.Max, request.Period), cancellationToken);
         return Created(createdTierQuotaDefinition);
     }
 }
 
-public class CreateTierQuotaRequest
+public class CreateQuotaForTierRequest
 {
     public string MetricKey { get; set; }
     public int Max { get; set; }
