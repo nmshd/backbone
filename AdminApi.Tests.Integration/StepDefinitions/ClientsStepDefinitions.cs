@@ -1,4 +1,5 @@
 using AdminApi.Tests.Integration.API;
+using AdminApi.Tests.Integration.Extensions;
 using AdminApi.Tests.Integration.Models;
 
 namespace AdminApi.Tests.Integration.StepDefinitions;
@@ -24,10 +25,11 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the response contains a paginated list of Clients")]
-    public void ThenTheResponseContainsAList()
+    public void ThenTheResponseContainsAListOfClients()
     {
         _response!.Content!.Result.Should().NotBeNull();
         _response!.Content!.Result.Should().NotBeEmpty();
+        _response.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
