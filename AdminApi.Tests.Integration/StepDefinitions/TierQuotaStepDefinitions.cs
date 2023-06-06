@@ -19,7 +19,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierId = string.Empty;
     }
 
-    [Given(@"a valid Tier")]
+    [Given(@"a Tier")]
     public async Task GivenAValidTierAsync()
     {
         var createTierQuotaRequest = new CreateTierRequest
