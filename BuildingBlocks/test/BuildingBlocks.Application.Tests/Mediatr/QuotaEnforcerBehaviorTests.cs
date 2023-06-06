@@ -12,7 +12,7 @@ namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
     [Fact]
-    public async void Succeeds_when_the_passed_metric_is_not_exhausted()
+    public async void Succeeds_when_the_metric_is_not_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsNotExhausted);
@@ -31,7 +31,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Succeeds_when_the_passed_metric_was_exhausted()
+    public async void Succeeds_when_the_metric_was_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatWasExhaustedUntilYesterday);
@@ -74,7 +74,7 @@ public class QuotaEnforcerBehaviorTests
     }
 
     [Fact]
-    public async void Succeeds_when_none_of_the_passed_metrics_are_exhausted()
+    public async void Succeeds_when_none_of_the_metrics_are_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(
@@ -96,7 +96,7 @@ public class QuotaEnforcerBehaviorTests
     }
     
     [Fact]
-    public void Throws_QuotaExhaustedException_when_the_passed_metric_is_still_exhausted()
+    public void Throws_QuotaExhaustedException_when_the_metric_is_still_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsExhaustedFor10Days);
