@@ -37,7 +37,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         actualStatusCode.Should().Be(201);
         _tierId = response.Content.Result.Id;
 
-        // allow the EventQueue to trigger the creation of this tier on the Quotas module
+        // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
 
         return;
