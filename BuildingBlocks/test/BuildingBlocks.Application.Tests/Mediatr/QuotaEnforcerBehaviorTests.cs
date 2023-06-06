@@ -80,7 +80,7 @@ public class QuotaEnforcerBehaviorTests
         var behavior = CreateQuotaEnforcerBehavior(
             TestData.MetricStatus.ThatWasExhaustedUntil2DaysAgo,
             TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-            );
+        );
         var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
@@ -94,7 +94,7 @@ public class QuotaEnforcerBehaviorTests
         // Assert
         nextMock.WasCalled.Should().BeTrue();
     }
-    
+
     [Fact]
     public void Throws_QuotaExhaustedException_when_the_metric_is_still_exhausted()
     {
@@ -109,8 +109,9 @@ public class QuotaEnforcerBehaviorTests
             CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<QuotaExhaustedException>()
-            .Which.ExhaustedMetricStatuses.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
+        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
+        exceptionExhaustedMetrics.Should().HaveCount(1);
     }
 
     [Fact]
@@ -120,18 +121,20 @@ public class QuotaEnforcerBehaviorTests
         var behavior = CreateQuotaEnforcerBehavior(
             TestData.MetricStatus.ThatIsExhaustedFor1Day,
             TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-            );
+        );
         var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
             new TestData.TestCommand(),
             nextMock.Value,
-            CancellationToken.None);
+            CancellationToken.None
+        );
 
         // Assert
-        acting.Should().AwaitThrowAsync<QuotaExhaustedException>()
-            .Which.ExhaustedMetricStatuses.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+        exceptionExhaustedMetrics.Should().HaveCount(1);
     }
 
     [Fact]
@@ -141,7 +144,7 @@ public class QuotaEnforcerBehaviorTests
         var behavior = CreateQuotaEnforcerBehavior(
             TestData.MetricStatus.ThatIsExhaustedFor1Day,
             TestData.MetricStatus.ThatIsExhaustedFor10Days
-            );
+        );
         var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
@@ -151,10 +154,9 @@ public class QuotaEnforcerBehaviorTests
             CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<QuotaExhaustedException>()
-            .Which.ExhaustedMetricStatuses.All(it =>
-                it.IsExhaustedUntil > DateTime.Now
-            ).Should().BeTrue();
+        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
+        exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
+        exceptionExhaustedMetrics.Should().HaveCount(2);
     }
 
     private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
@@ -184,7 +186,7 @@ internal static class TestData
         public static readonly Domain.MetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
 
         public static readonly Domain.MetricStatus ThatWasExhaustedUntilYesterday = new(new MetricKey("ExhaustedUntilYesterday"), DateTime.Now.AddDays(-1));
-        
+
         public static readonly Domain.MetricStatus ThatWasExhaustedUntil2DaysAgo = new(new MetricKey("ThatWasExhaustedUntil2DaysAgo"), DateTime.Now.AddDays(-2));
 
         public static readonly Domain.MetricStatus ThatIsNotExhausted = new(new MetricKey("ExhaustedUntilNull"), null);
