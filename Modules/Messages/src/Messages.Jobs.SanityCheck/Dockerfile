@@ -16,6 +16,7 @@ COPY ["Modules/Messages/src/Messages.Common/Messages.Common.csproj", "Modules/Me
 COPY ["Modules/Messages/src/Messages.Domain/Messages.Domain.csproj", "Modules/Messages/src/Messages.Domain/"]
 COPY ["Modules/Messages/src/Messages.Infrastructure/Messages.Infrastructure.csproj", "Modules/Messages/src/Messages.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
+COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
 RUN dotnet restore "Modules/Messages/src/Messages.Jobs.SanityCheck/Messages.Jobs.SanityCheck.csproj"
 

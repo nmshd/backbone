@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Domain;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -82,10 +83,23 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         var httpError = HttpError.ForProduction(
             applicationException.Code,
             applicationException.Message,
-            "" // TODO: add documentation link
+            "", // TODO: add documentation link
+            data: GetCustomData(applicationException)
         );
 
         return httpError;
+    }
+
+    private dynamic? GetCustomData(ApplicationException applicationException)
+    {
+        if (applicationException is QuotaExhaustedException quotaExhautedException)
+        {
+            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new {
+                MetricKey = m.MetricKey,
+                IsExhaustedUntil = m.IsExhaustedUntil
+            });
+        }
+        return null;
     }
 
     private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
@@ -94,6 +108,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             NotFoundException _ => HttpStatusCode.NotFound,
             ActionForbiddenException _ => HttpStatusCode.Forbidden,
+            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
     }
