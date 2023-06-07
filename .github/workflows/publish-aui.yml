@@ -28,11 +28,11 @@ jobs:
         run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
         env:
           GIT_TAG: ${{ github.ref_name }}
-      - name: Build Container Image
+      - name: Build Image
         run: ./.ci/aui/buildContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
-      - name: Push Container Image
+      - name: Push Image
         run: ./.ci/aui/pushContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
