@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Logging;
 using Backbone.Modules.Devices.Application;
 using Backbone.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
