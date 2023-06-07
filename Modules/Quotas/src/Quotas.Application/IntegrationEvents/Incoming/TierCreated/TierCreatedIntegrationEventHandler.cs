@@ -17,7 +17,7 @@ public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierC
 
     public async Task Handle(TierCreatedIntegrationEvent integrationEvent)
     {
-        var tier = new Tier(integrationEvent.Id, integrationEvent.Name);
+        var tier = new Tier(new TierId(integrationEvent.Id), integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
         _logger.LogTrace($"Successfully created tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");

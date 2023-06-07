@@ -1,4 +1,21 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-public class TierQuota
-{ }
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+
+public class TierQuota : Quota
+{
+    private readonly TierQuotaDefinition _definition;
+
+    private TierQuota() { }
+
+    public TierQuota(TierQuotaDefinition definition, string applyTo) : base(applyTo)
+    {
+        _definition = definition;
+    }
+
+    public override int Weight => 1;
+    public override MetricKey MetricKey => _definition.MetricKey;
+    public override int Max => _definition.Max;
+    public override QuotaPeriod Period => _definition.Period;
+}
