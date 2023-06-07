@@ -1,9 +1,5 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using ConsumerApi;
-using ConsumerApi.Configuration;
-using ConsumerApi.Extensions;
-using ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -14,6 +10,10 @@ using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Challenges.ConsumerApi;
+using ConsumerApi;
+using ConsumerApi.Configuration;
+using ConsumerApi.Extensions;
+using ConsumerApi.Mvc.Middleware;
 using Devices.ConsumerApi;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
@@ -72,7 +72,8 @@ app
     })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
-    .MigrateDbContext<TokensDbContext>();
+    .MigrateDbContext<TokensDbContext>()
+    .MigrateDbContext<QuotasDbContext>();
 
 app.Run();
 

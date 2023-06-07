@@ -30,6 +30,12 @@ export class DashboardComponent {
                 icon: 'clear_all',
                 header: 'Tiers',
             },
+            {
+                routerLink: '/clients',
+                classLabel: 'identities',
+                icon: 'person',
+                header: 'Clients',
+            },
         ];
     }
 

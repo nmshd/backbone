@@ -15,7 +15,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identitiesApi = identitiesApi;
     }
 
-    [When(@"a GET request is sent to the Identities/ endpoint")]
+    [When(@"a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesEndpointAsync()
     {
         _response = await _identitiesApi.GetIdentities(_requestConfiguration);
