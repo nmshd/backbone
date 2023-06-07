@@ -16,7 +16,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _clientsApi = clientsApi;
     }
 
-    [When(@"a GET request is sent to the Clients/ endpoint")]
+    [When(@"a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGETRequestIsSentToTheClientsEndpointAsync()
     {
         _response = await _clientsApi.GetAllClients(_requestConfiguration);
