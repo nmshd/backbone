@@ -13,4 +13,19 @@ public class AddMockTiersRepository : ITiersRepository
         WasCalledWith = tier;
         return Task.CompletedTask;
     }
+
+    public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Update(Tier tier, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
