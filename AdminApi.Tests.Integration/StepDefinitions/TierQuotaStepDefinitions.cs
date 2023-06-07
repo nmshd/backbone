@@ -11,7 +11,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private string _tierId;
-    private HttpResponse<TierQuotaDefinitionDTO>? _response;
+    private HttpResponse<TierQuotaDTO>? _response;
 
     public TierQuotaStepDefinitions(TiersApi tiersApi) : base()
     {
@@ -19,7 +19,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierId = string.Empty;
     }
 
-    [Given(@"a Tier")]
+    [Given(@"a Tier t")]
     public async Task GivenAValidTierAsync()
     {
         var createTierQuotaRequest = new CreateTierRequest
@@ -43,13 +43,13 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         return;
     }
 
-    [Given(@"an inexistent Tier")]
+    [Given(@"an inexistent Tier t")]
     public void GivenAnInexistentTier()
     {
         _tierId = "some-inexistent-tier-id";
     }
 
-    [When(@"a POST request is sent to the /Tier/{id}/Quotas endpoint")]
+    [When(@"a POST request is sent to the /Tier/{t.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTiersQuotaEndpoint()
     {
         var createTierQuotaRequest = new CreateTierQuotaRequest
@@ -73,7 +73,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response contains a TierQuotaDefinition")]
+    [Then(@"the response contains a TierQuota")]
     public void ThenTheResponseContainsATierQuotaDefinition()
     {
         _response!.AssertHasValue();

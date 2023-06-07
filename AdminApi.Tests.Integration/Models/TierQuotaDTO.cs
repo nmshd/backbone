@@ -1,6 +1,6 @@
 ﻿namespace AdminApi.Tests.Integration.Models;
 
-public class TierQuotaDefinitionDTO
+public class TierQuotaDTO
 {
     public string Id { get; set; }
     public MetricDTO Metric { get; set; }
