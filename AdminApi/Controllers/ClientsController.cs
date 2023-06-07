@@ -1,11 +1,9 @@
 ﻿using AdminApi.Mvc;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace AdminApi.Controllers;
 
@@ -13,12 +11,7 @@ namespace AdminApi.Controllers;
 
 public class ClientsController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
-
-    public ClientsController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
-    {
-        _options = options.Value;
-    }
+    public ClientsController(IMediator mediator) : base(mediator) { }
 
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClientDTO>), StatusCodes.Status200OK)]
