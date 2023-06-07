@@ -94,13 +94,10 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         if (applicationException is QuotaExhaustedException quotaExhautedException)
         {
-            return quotaExhautedException.ExhaustedMetricStatuses.Select(it => 
-                new Dictionary<string, object>
-                {
-                    { "MetricKey", it.MetricKey },
-                    { "IsExhaustedUntil", it.IsExhaustedUntil }
-                }
-            );
+            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new {
+                m.MetricKey,
+                m.IsExhaustedUntil
+            });
         }
         return null;
     }
