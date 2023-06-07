@@ -14,4 +14,11 @@ public class RequestConfiguration
         ContentType ??= other.ContentType;
         Content ??= other.Content;
     }
+
+    public RequestConfiguration Clone()
+    {
+        var requestConfiguration = new RequestConfiguration();
+        requestConfiguration.SupplementWith(this);
+        return requestConfiguration;
+    }
 }
