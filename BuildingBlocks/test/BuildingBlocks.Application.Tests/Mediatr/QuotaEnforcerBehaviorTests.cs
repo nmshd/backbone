@@ -110,8 +110,8 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
         exceptionExhaustedMetrics.Should().HaveCount(1);
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
     }
 
     [Fact]
@@ -133,8 +133,8 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
         exceptionExhaustedMetrics.Should().HaveCount(1);
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
     }
 
     [Fact]
@@ -155,8 +155,8 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
         exceptionExhaustedMetrics.Should().HaveCount(2);
+        exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
     }
 
     private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
