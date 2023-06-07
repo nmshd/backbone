@@ -30,6 +30,11 @@ export class SidebarComponent {
                 icon: 'clear_all',
                 label: 'Tiers',
             },
+            {
+                routerLink: '/clients',
+                icon: 'person',
+                label: 'Clients',
+            },
         ];
     }
 

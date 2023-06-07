@@ -31,6 +31,7 @@ import { TopbarComponent } from './components/topbar/topbar.component';
 import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
+import { ClientListComponent } from './components/client/client-list/client-list.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.
         IdentityListComponent,
         TierListComponent,
         TierEditComponent,
+        ClientListComponent,
     ],
     imports: [
         FormsModule,
