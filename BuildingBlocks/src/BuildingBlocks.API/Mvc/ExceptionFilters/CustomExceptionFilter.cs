@@ -95,8 +95,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         if (applicationException is QuotaExhaustedException quotaExhautedException)
         {
             return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new {
-                m.MetricKey,
-                m.IsExhaustedUntil
+                MetricKey = m.MetricKey,
+                IsExhaustedUntil = m.IsExhaustedUntil
             });
         }
         return null;
