@@ -1,0 +1,53 @@
+.mat-column-address,
+.mat-column-clientId,
+.mat-column-publicKey {
+    width: 25%;
+    word-break: break-all;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-data {
+    padding: 25px;
+}
+
+@media screen and (max-width: 960px) {
+    .mat-mdc-table .mat-mdc-header-row {
+        display: none;
+    }
+
+    .mat-mdc-table .mat-mdc-row {
+        display: flex;
+        flex-wrap: wrap;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mat-mdc-table .mat-mdc-cell {
+        width: 100%;
+        border-bottom: 0px solid #ddd;
+        font-size: 1em;
+        min-height: 30px;
+        margin-bottom: 4%;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:before {
+        content: attr(data-label) ":";
+        float: left;
+        font-weight: 500;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:first-child {
+        margin-top: 25px;
+    }
+
+    .mat-mdc-table .mat-mdc-row:last-child {
+        border-bottom: 0px;
+    }
+}
