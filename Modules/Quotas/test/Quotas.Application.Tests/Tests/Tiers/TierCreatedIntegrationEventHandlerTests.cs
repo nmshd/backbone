@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -8,10 +9,10 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
 public class TierCreatedIntegrationEventHandlerTests
 {
     [Fact]
-    public async void Successfully_creates_tier_after_consuming_integration_event()
+    public async void Creates_tier_after_consuming_integration_event()
     {
         // Arrange
-        var id = "TIRFxoL0U24aUqZDSAWc";
+        var id = new TierId("TIRFxoL0U24aUqZDSAWc");
         var name = "Basic";
         var mockTierRepository = new AddMockTiersRepository();
         var handler = CreateHandler(mockTierRepository);

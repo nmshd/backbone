@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
 		<ProjectReference Include="..\Tooling\Tooling.csproj" />
 	</ItemGroup>
 

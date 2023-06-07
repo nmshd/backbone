@@ -1,17 +1,15 @@
-using Microsoft.Extensions.Options;
 using System.Reflection;
 using AdminApi.Configuration;
 using AdminApi.Extensions;
-using Enmeshed.Tooling.Extensions;
 using Autofac.Extensions.DependencyInjection;
-using Serilog;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.Logging;
-using Backbone.Modules.Devices.Application;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Application;
 using Enmeshed.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+using Enmeshed.Tooling.Extensions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
+using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
