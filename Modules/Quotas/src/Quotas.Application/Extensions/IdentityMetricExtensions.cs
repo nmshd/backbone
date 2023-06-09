@@ -9,7 +9,8 @@ public static class IdentityMetricExtensions
 {
     public static async Task UpdateMetrics(this Identity identity, IEnumerable<string> metrics, IMetricCalculatorFactory factory, IQuotasRepository quotasRepository, CancellationToken cancellationToken)
     {
-        foreach (var metric in metrics) {
+        foreach (var metric in metrics)
+        {
             var metricCalculator = factory.CreateFor(metric);
             await identity.UpdateMetricAsync(metric, metricCalculator, quotasRepository, cancellationToken);
         }
@@ -35,15 +36,15 @@ public static class IdentityMetricExtensions
     {
         var allQuotasOfMetric = await quotasRepository.FindQuotasByMetricKey(metric, cancellationToken);
         var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
-        var appliedQuotas = allQuotasOfMetric.Where(q=>q.Weight == highestWeight && q.isCurrentlyValid()).ToList();
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight && q.isCurrentlyValid()).ToList();
         return appliedQuotas;
     }
 
     private static void Update(this Quota quota, uint newValue)
     {
-        if(newValue >= quota.Max)
+        if (newValue >= quota.Max)
         {
-           
+
         }
     }
 }
