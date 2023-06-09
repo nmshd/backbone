@@ -19,4 +19,9 @@ public abstract class Quota
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
+
+    public bool isCurrentlyValid()
+    {
+        throw new NotImplementedException();
+    }
 }

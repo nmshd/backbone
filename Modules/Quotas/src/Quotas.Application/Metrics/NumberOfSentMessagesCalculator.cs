@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
 public class NumberOfSentMessagesCalculator : IMetricCalculator
@@ -12,8 +11,9 @@ public class NumberOfSentMessagesCalculator : IMetricCalculator
         _messagesRepository = messagesRepository;
     }
 
-    public void CalculateUsage(DateTime from, DateTime to, IdentityAddress identityAddress)
+    public uint CalculateUsage(DateTime from, DateTime to, string identityAddress)
     {
         var numberOfMessages = _messagesRepository.Count(identityAddress, from, to);
+        return 0u;
     }
 }

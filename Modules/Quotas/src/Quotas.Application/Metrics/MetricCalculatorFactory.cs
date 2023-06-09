@@ -1,10 +1,8 @@
 ﻿using Backbone.Modules.Quotas.Domain;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
-public class MetricCalculatorFactory
+public class MetricCalculatorFactory : IMetricCalculatorFactory
 {
     private readonly IServiceProvider _services;
 
@@ -13,11 +11,11 @@ public class MetricCalculatorFactory
         _services = serviceScopeFactory.CreateScope().ServiceProvider;
     }
 
-    public IMetricCalculator CreateFor(MetricKey metricKey)
+    public IMetricCalculator CreateFor(string metricKey)
     {
         switch (metricKey)
         {
-            case MetricKey.NumberOfSentMessages:
+            case "NumberOfSentMessages":
                 return _services.GetRequiredService<NumberOfSentMessagesCalculator>();
 
             default:

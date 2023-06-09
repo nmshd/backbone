@@ -27,6 +27,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Identity> FindById(string identityId, CancellationToken cancellationToken)
+    {
+        return await _identitiesDbSet.FindAsync(identityId, cancellationToken);
+    }
+
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
     {
         var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
