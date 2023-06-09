@@ -1,0 +1,26 @@
+﻿using AutoMapper;
+using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using MediatR;
+
+namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
+public class Handler : IRequestHandler<ListMetricsQuery, IEnumerable<MetricDTO>>
+{
+    private readonly IMapper _mapper;
+    private readonly IMetricsRepository _metricsRepository;
+
+    public Handler(IMapper mapper, IMetricsRepository metricsRepository)
+    {
+        _mapper = mapper;
+        _metricsRepository = metricsRepository;
+    }
+
+    public async Task<IEnumerable<MetricDTO>> Handle(ListMetricsQuery request, CancellationToken cancellationToken)
+    {
+        var metric = await _metricsRepository.FindAll(cancellationToken);
+
+        var metricDTOs = _mapper.Map<IEnumerable<MetricDTO>>(metric);
+
+        return metricDTOs;
+    }
+}
