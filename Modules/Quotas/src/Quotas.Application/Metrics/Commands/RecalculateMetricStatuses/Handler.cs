@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain;
 using MediatR;
 
@@ -7,6 +8,7 @@ public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
 {
     private readonly IMetricCalculatorFactory _metricCalculatorFactory;
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly IQuotasRepository _quotasRepository;
 
     public Handler(IMetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository, IQuotasRepository quotasRepository)
     {
