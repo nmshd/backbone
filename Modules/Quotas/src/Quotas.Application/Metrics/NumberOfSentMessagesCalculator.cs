@@ -11,9 +11,9 @@ public class NumberOfSentMessagesCalculator : IMetricCalculator
         _messagesRepository = messagesRepository;
     }
 
-    public uint CalculateUsage(DateTime from, DateTime to, string identityAddress)
+    public async Task<uint> CalculateUsageAsync(DateTime from, DateTime to, string identityAddress)
     {
-        var numberOfMessages = _messagesRepository.Count(identityAddress, from, to);
-        return 0u;
+        var numberOfMessages = await _messagesRepository.Count(identityAddress, from, to);
+        return numberOfMessages;
     }
 }

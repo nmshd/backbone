@@ -21,7 +21,8 @@ public abstract class Quota
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
-    public DateTime? PeriodEndTime => Period.CalculateEnd();
+    public DateTime PeriodEndTime => Period.CalculateEnd();
+    public DateTime PeriodBeginTime => Period.CalculateBegin();
 
     // TODO: What is the definition of a Valid quota?
     public bool IsCurrentlyValid()
@@ -29,7 +30,7 @@ public abstract class Quota
         throw new NotImplementedException();
     }
 
-    public void UpdateExhaustion(uint newValue)
+    public void UpdateExhaustion(uint newValue) 
     {
         if (newValue >= Max)
         {

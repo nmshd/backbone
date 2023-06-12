@@ -234,5 +234,6 @@ DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchroniza
 
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
+GRANT SELECT, REFERENCES ON SCHEMA::Messages TO quotas
 PRINT 'Finished changing authorizations' ;
 GO
