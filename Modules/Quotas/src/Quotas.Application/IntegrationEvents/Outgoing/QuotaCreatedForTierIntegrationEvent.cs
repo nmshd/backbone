@@ -5,10 +5,10 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 
 public class QuotaCreatedForTierIntegrationEvent : IntegrationEvent
 {
-    public QuotaCreatedForTierIntegrationEvent(Tier tier, TierQuotaDefinition tierQuotaDefinition) : base($"{tier.Id}/Created")
+    public QuotaCreatedForTierIntegrationEvent(string tierId, string tierQuotaDefinitionId) : base($"{tierQuotaDefinitionId}/Created")
     {
-        TierId = tier.Id;
-        TierQuotaDefinitionId = tierQuotaDefinition.Id;
+        TierId = tierId;
+        TierQuotaDefinitionId = tierQuotaDefinitionId;
     }
 
     public string TierId { get; }

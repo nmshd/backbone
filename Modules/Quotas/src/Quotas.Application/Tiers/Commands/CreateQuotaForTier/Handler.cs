@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
     {
         _logger.LogInformation("Handling CreateQuotaForTierCommand ...");
 
-        var tier = await _tiersRepository.Find(request.TierId, cancellationToken);
+        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true);
 
         var metricKey = (MetricKey)Enum.Parse(typeof(MetricKey), request.MetricKey);
         var metric = await _metricsRepository.Find(metricKey, cancellationToken); // ensure metric exists
@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         _logger.LogTrace($"Successfully created assigned Quota to Tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
 
-        _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier, result.Value));
+        _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
 
         _logger.LogTrace($"Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
 

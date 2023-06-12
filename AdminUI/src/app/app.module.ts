@@ -36,7 +36,6 @@ import { TopbarComponent } from './components/topbar/topbar.component';
 import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
-import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +47,6 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         IdentityListComponent,
         TierListComponent,
         TierEditComponent,
-        AssignQuotasDialogComponent,
     ],
     imports: [
         FormsModule,

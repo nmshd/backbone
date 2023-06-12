@@ -36,7 +36,7 @@ public class HandlerTests
         var tier = new Tier(tierId, "some-tier-name");
         var tiers = new List<Tier> { tier };
         var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, CancellationToken.None, false)).Returns(tier);
+        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var handler = CreateHandler(tierRepository, metricsRepository);
@@ -70,7 +70,7 @@ public class HandlerTests
         var tiers = new List<Tier> { tier };
         //var mockTiersRepository = new MockTiersRepository(tiers);
         var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, CancellationToken.None, false)).Returns(tier);
+        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var handler = CreateHandler(tierRepository, metricsRepository);
