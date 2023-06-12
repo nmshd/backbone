@@ -16,18 +16,20 @@ public static class QuotaPeriodExtensions
 {
     public static DateTime CalculateEnd(this QuotaPeriod period)
     {
+        var utcNow = SystemTime.UtcNow;
+
         switch (period)
         {
             case QuotaPeriod.Hour:
-                return SystemTime.UtcNow.AddHours(1);
+                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 59, 59, 999, DateTimeKind.Utc);
             case QuotaPeriod.Day:
-                return SystemTime.UtcNow.AddDays(1);
+                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
             case QuotaPeriod.Week:
-                return SystemTime.UtcNow.AddDays(7);
+                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day + 6, 23, 59, 59, 999, DateTimeKind.Utc);
             case QuotaPeriod.Month:
-                return SystemTime.UtcNow.AddMonths(1);
+                return new DateTime(utcNow.Year, utcNow.Month, DateTime.DaysInMonth(utcNow.Year, utcNow.Month), 23, 59, 59, 999, DateTimeKind.Utc);
             case QuotaPeriod.Year:
-                return SystemTime.UtcNow.AddYears(1);
+                return new DateTime(utcNow.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
             case QuotaPeriod.Total:
             default:
                 return SystemTime.UtcNow.AddYears(200);
