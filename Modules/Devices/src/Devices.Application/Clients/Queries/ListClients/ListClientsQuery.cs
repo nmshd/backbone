@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
-public class ListClientsQuery : IRequest<IEnumerable<ClientDTO>> { }
+public class ListClientsQuery : IRequest<ListClientsResponse> { }
