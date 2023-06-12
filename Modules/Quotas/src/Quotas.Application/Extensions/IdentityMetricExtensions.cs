@@ -28,7 +28,7 @@ public static class IdentityMetricExtensions
                 SystemTime.UtcNow,
                 identity.Address);
 
-            quota.Update(newValue);
+            quota.UpdateExhaustion(newValue);
         }
     }
 
@@ -36,25 +36,7 @@ public static class IdentityMetricExtensions
     {
         var allQuotasOfMetric = await quotasRepository.FindQuotasByMetricKey(metric, cancellationToken);
         var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight && q.isCurrentlyValid()).ToList();
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight && q.IsCurrentlyValid()).ToList();
         return appliedQuotas;
-    }
-
-    private static void Update(this Quota quota, uint newValue)
-    {
-        var periodEndTime = SystemTime.UtcNow; // where should this come from?
-        var newIsExhaustedUntil = SystemTime.UtcNow; // where should this come from?
-        DateTime? IsExhaustedUntil = SystemTime.UtcNow;
-        if (newValue >= quota.Max)
-        {
-            if(newIsExhaustedUntil == null || periodEndTime > newIsExhaustedUntil)
-            {
-                IsExhaustedUntil = periodEndTime; // where to set this?
-            }
-        }
-        else
-        {
-            IsExhaustedUntil = null;
-        }
     }
 }
