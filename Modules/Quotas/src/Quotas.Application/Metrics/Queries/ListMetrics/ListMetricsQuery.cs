@@ -1,7 +1,6 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
-public class ListMetricsQuery : IRequest<IEnumerable<MetricDTO>>
+public class ListMetricsQuery : IRequest<ListMetricsResponse>
 {
 }

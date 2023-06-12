@@ -4,7 +4,7 @@ using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
-public class Handler : IRequestHandler<ListMetricsQuery, IEnumerable<MetricDTO>>
+public class Handler : IRequestHandler<ListMetricsQuery, ListMetricsResponse>
 {
     private readonly IMapper _mapper;
     private readonly IMetricsRepository _metricsRepository;
@@ -15,12 +15,14 @@ public class Handler : IRequestHandler<ListMetricsQuery, IEnumerable<MetricDTO>>
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<IEnumerable<MetricDTO>> Handle(ListMetricsQuery request, CancellationToken cancellationToken)
+    public async Task<ListMetricsResponse> Handle(ListMetricsQuery request, CancellationToken cancellationToken)
     {
-        var metric = await _metricsRepository.FindAll(cancellationToken);
+        var metrics = await _metricsRepository.FindAll(cancellationToken);
+        var metricDTOs = _mapper.Map<IEnumerable<MetricDTO>>(metrics);
 
-        var metricDTOs = _mapper.Map<IEnumerable<MetricDTO>>(metric);
-
-        return metricDTOs;
+        return new ListMetricsResponse()
+        {
+            Items = metricDTOs
+        };
     }
 }
