@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,9 +28,9 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Identity> FindById(string identityId, CancellationToken cancellationToken)
+    public async Task<Identity> FindById(string identityAddress, CancellationToken cancellationToken)
     {
-        return await _identitiesDbSet.FindAsync(identityId, cancellationToken);
+        return await _identitiesDbSet.FirstOrDefaultAsync(id => id.Address == identityAddress, cancellationToken) ?? throw new NotFoundException(identityAddress);
     }
 
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)

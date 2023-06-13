@@ -13,6 +13,7 @@ public class MessagesRepository : IMessagesRepository
     {
         _readOnlyMessages = dbContext.Messages.AsNoTracking();
     }
+
     public async Task<uint> Count(IdentityAddress sender, DateTime createdAtFrom, DateTime createdAtTo)
     {
         var count = await _readOnlyMessages.CountAsync(message => message.CreatedBy == sender.StringValue);
