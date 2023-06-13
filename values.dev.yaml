@@ -5,6 +5,9 @@ global:
     name: "bucket-service-account"
 
   configuration:
+    # TODO: move to dedicated Admin API settings
+    cors:
+      allowedOrigins: "http://localhost:8081"
     swaggerUi:
       tokenUrl: "https://bkb-nmshd-dev.nbpdev.de/connect/token"
     infrastructure:
