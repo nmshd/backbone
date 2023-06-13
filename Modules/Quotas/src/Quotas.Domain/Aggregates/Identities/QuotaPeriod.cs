@@ -32,6 +32,7 @@ public static class QuotaPeriodExtensions
             case QuotaPeriod.Year:
                 return utcNow.StartOfYear();
             case QuotaPeriod.Total:
+                return DateTime.MinValue;
             default:
                 throw new NotImplementedException();
         }
@@ -54,6 +55,7 @@ public static class QuotaPeriodExtensions
             case QuotaPeriod.Year:
                 return utcNow.EndOfYear();
             case QuotaPeriod.Total:
+                return DateTime.MaxValue;
             default:
                 throw new NotImplementedException();
         }
