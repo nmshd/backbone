@@ -20,9 +20,9 @@ public abstract class Quota
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 
-    public void UpdateExhaustion(uint newValue) 
+    public void UpdateExhaustion(uint newUsage) 
     {
-        if (newValue >= Max)
+        if (newUsage >= Max)
         {
             IsExhaustedUntil = Period.CalculateEnd();
         }

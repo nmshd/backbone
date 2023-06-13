@@ -23,12 +23,12 @@ public static class IdentityMetricExtensions
         var unExhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
         foreach (var quota in unExhaustedQuotas)
         {
-            var newValue = await metricCalculator.CalculateUsageAsync(
+            var newUsage = await metricCalculator.CalculateUsageAsync(
                 quota.Period.CalculateBegin(),
                 quota.Period.CalculateEnd(),
                 identity.Address);
 
-            quota.UpdateExhaustion(newValue);
+            quota.UpdateExhaustion(newUsage);
         }
     }
 

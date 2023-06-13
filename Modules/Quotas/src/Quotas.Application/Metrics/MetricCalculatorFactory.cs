@@ -16,7 +16,7 @@ public class MetricCalculatorFactory : IMetricCalculatorFactory
         switch (metricKey)
         {
             case "NumberOfSentMessages":
-                return _services.GetRequiredService<NumberOfSentMessagesCalculator>();
+                return _services.GetRequiredService<NumberOfSentMessagesMetricCalculator>();
 
             default:
                 throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");

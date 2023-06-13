@@ -2,11 +2,11 @@
 using Backbone.Modules.Quotas.Domain;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
-public class NumberOfSentMessagesCalculator : IMetricCalculator
+public class NumberOfSentMessagesMetricCalculator : IMetricCalculator
 {
     private readonly IMessagesRepository _messagesRepository;
 
-    public NumberOfSentMessagesCalculator(IMessagesRepository messagesRepository)
+    public NumberOfSentMessagesMetricCalculator(IMessagesRepository messagesRepository)
     {
         _messagesRepository = messagesRepository;
     }
