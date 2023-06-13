@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -9,7 +10,7 @@ export class DashboardComponent {
     header: string;
     dashboardOverviewPanels: DashboardOverviewPanel[];
 
-    constructor() {
+    constructor(private sidebarService: SidebarService) {
         this.header = '';
         this.dashboardOverviewPanels = [];
     }
@@ -20,16 +21,26 @@ export class DashboardComponent {
             {
                 routerLink: '/identities',
                 classLabel: 'identities',
-                icon: 'pi-eye',
+                icon: 'badge',
                 header: 'Identities',
             },
             {
                 routerLink: '/tiers',
                 classLabel: 'identities',
-                icon: 'pi-sort-amount-up-alt',
+                icon: 'clear_all',
                 header: 'Tiers',
             },
+            {
+                routerLink: '/clients',
+                classLabel: 'identities',
+                icon: 'person',
+                header: 'Clients',
+            },
         ];
+    }
+
+    isMobile(): boolean {
+        return this.sidebarService.isMobile();
     }
 }
 

@@ -2,6 +2,7 @@
 using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.DTOs;
 
@@ -34,7 +35,7 @@ public class FileMetadataDTO : IHaveCustomMapping
     public void CreateMappings(Profile configuration)
     {
         configuration
-            .CreateMap<FileMetadata, FileMetadataDTO>()
+            .CreateMap<File, FileMetadataDTO>()
             .ForMember(dto => dto.OwnerSignature, c => c.MapFrom(f => f.OwnerSignature.Length == 0 ? null : f.OwnerSignature));
     }
 }

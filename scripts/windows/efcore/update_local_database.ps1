@@ -4,10 +4,9 @@ Param(
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
-$env:ASPNETCORE_ENVIRONMENT = 'Local'
-
+$environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
-$startupProject = "$repoRoot\Backbone.API"
+$startupProject = "$repoRoot\ConsumerApi"
 $dbContextName = "${moduleName}DbContext"
 
 function UpdateLocalDatabase {    
@@ -25,7 +24,7 @@ function UpdateLocalDatabase {
         "Postgres" { $connectionString = """Server=localhost;Database=enmeshed;User ID=$moduleNameLowercase;Password=Passw0rd""" }
     }
 
-    $cmd = "dotnet ef database update $migrationName --startup-project $startupProject --project $migrationProject --verbose --context $dbContextName --connection $connectionString"
+    $cmd = "dotnet ef database update $migrationName --startup-project $startupProject --project $migrationProject --verbose --context $dbContextName --connection $connectionString -- --environment $environment"
 
     Write-Host "Executing '$cmd' ..."
     Invoke-Expression $cmd

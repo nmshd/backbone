@@ -1,10 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
-using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 

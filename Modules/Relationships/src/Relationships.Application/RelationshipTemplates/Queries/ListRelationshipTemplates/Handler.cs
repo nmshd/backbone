@@ -1,34 +1,27 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Extensions;
-using Backbone.Modules.Relationships.Application.Infrastructure;
-using Backbone.Modules.Relationships.Application.Relationships;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.Extensions;
+using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
-public class Handler : RequestHandlerBase<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
+public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
 {
-    private readonly IContentStore _contentStore;
+    private readonly IMapper _mapper;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
+    private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipsDbContext dbContext, IUserContext userContext, IMapper mapper, IContentStore contentStore) : base(dbContext, userContext, mapper)
+    public Handler(IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        _contentStore = contentStore;
+        _mapper= mapper;
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
+        _userContext = userContext;
     }
 
-    public override async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
+    public async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
     {
-        var query = _dbContext
-            .SetReadOnly<RelationshipTemplate>()
-            .NotExpiredFor(_activeIdentity)
-            .NotDeleted()
-            .WithIdIn(request.Ids);
-
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, request.PaginationFilter);
-
-        await _contentStore.FillContentOfTemplates(dbPaginationResult.ItemsOnPage);
+        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, track: false);
 
         return new ListRelationshipTemplatesResponse(_mapper.Map<RelationshipTemplateDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }

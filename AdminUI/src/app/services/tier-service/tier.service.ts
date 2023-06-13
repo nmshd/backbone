@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
@@ -17,12 +16,13 @@ export class TierService {
     }
 
     getTiers(
-        event: LazyLoadEvent
+        pageNumber: number,
+        pageSize: number
     ): Observable<PagedHttpResponseEnvelope<Tier>> {
         const httpOptions = {
             params: new HttpParams()
-                .set('PageNumber', event.first! / event.rows! + 1)
-                .set('PageSize', event.rows!),
+                .set('PageNumber', pageNumber + 1)
+                .set('PageSize', pageSize),
         };
 
         return this.http.get<PagedHttpResponseEnvelope<Tier>>(

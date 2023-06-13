@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Messages.Application.Extensions;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -17,30 +14,35 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
-    private readonly IBlobStorage _blobStorage;
-    private readonly IMessagesDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
-    private readonly BlobOptions _blobOptions;
+    private readonly IMessagesRepository _messagesRepository;
+    private readonly IRelationshipsRepository _relationshipsRepository;
 
-    public Handler(IMessagesDbContext dbContext, IBlobStorage blobStorage, IUserContext userContext, IMapper mapper, IEventBus eventBus, IOptionsSnapshot<ApplicationOptions> options, ILogger<Handler> logger, IOptions<BlobOptions> blobOptions)
+    public Handler(
+        IUserContext userContext,
+        IMapper mapper,
+        IEventBus eventBus,
+        IOptionsSnapshot<ApplicationOptions> options,
+        ILogger<Handler> logger,
+        IMessagesRepository messagesRepository,
+        IRelationshipsRepository relationshipsRepository)
     {
-        _dbContext = dbContext;
-        _blobStorage = blobStorage;
         _userContext = userContext;
         _mapper = mapper;
         _eventBus = eventBus;
         _logger = logger;
         _options = options.Value;
-        _blobOptions = blobOptions.Value;
+        _messagesRepository = messagesRepository;
+        _relationshipsRepository = relationshipsRepository;
     }
 
     public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var recipients = await ValidateRecipients(request);
+        var recipients = await ValidateRecipients(request, cancellationToken);
 
         var message = new Message(
             _userContext.GetAddress(),
@@ -50,23 +52,14 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
             recipients);
 
-        await SaveMessage(message, cancellationToken);
+        await _messagesRepository.Add(message, cancellationToken);
 
         _eventBus.Publish(new MessageCreatedIntegrationEvent(message));
 
         return _mapper.Map<SendMessageResponse>(message);
     }
 
-    private async Task SaveMessage(Message message, CancellationToken cancellationToken)
-    {
-        await _dbContext.Set<Message>().AddAsync(message, cancellationToken);
-        _blobStorage.Add(_blobOptions.RootFolder, message.Id, message.Body);
-
-        await _blobStorage.SaveAsync();
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request)
+    private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Validating recipients...");
 
@@ -75,11 +68,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _dbContext
-                .SetReadOnly<Relationship>()
-                .WithParticipants(sender, recipientDto.Address)
-                .Select(r => r.Id)
-                .FirstOrDefaultAsync();
+            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationshipBetweenSenderAndRecipient(sender, recipientDto.Address);
 
             if (idOfRelationshipBetweenSenderAndRecipient == null)
             {
@@ -87,11 +76,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
-            var numberOfUnreceivedMessagesFromActiveIdentity = await _dbContext
-                .SetReadOnly<Message>()
-                .FromASpecificSender(sender)
-                .WithASpecificRecipientWhoDidNotReceiveTheMessage(recipientDto.Address)
-                .CountAsync();
+            var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {

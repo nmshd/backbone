@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -48,8 +47,6 @@ public static class IServiceCollectionExtensions
                 throw new Exception($"Unsupported database provider: {options.Provider}");
 
         }
-
-        services.AddScoped<IMessagesDbContext, MessagesDbContext>();
     }
 }
 

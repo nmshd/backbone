@@ -27,8 +27,10 @@ public class Challenge
     public static Expression<Func<Challenge, bool>> CanBeCleanedUp =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
 
-    public static Expression<Func<Challenge, bool>> IsExpired =>
-        challenge => challenge.ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
+    public bool IsExpired()
+    {
+        return ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
+    }
 
     public static Expression<Func<Challenge, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow.AddHours(-1);

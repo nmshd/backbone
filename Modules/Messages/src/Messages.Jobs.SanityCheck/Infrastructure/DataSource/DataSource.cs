@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -11,9 +12,9 @@ public class DataSource : IDataSource
 {
     private readonly IBlobStorage _blobStorage;
     private readonly BlobOptions _blobOptions;
-    private readonly IMessagesDbContext _dbContext;
+    private readonly MessagesDbContext _dbContext;
 
-    public DataSource(IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IMessagesDbContext dbContext)
+    public DataSource(IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, MessagesDbContext dbContext)
     {
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;

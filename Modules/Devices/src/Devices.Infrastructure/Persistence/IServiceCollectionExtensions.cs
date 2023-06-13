@@ -50,12 +50,23 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
 
         services.AddRepositories();
+
+        services
+            .AddOpenIddict()
+            .AddCore(options =>
+            {
+                options
+                    .UseEntityFrameworkCore()
+                    .UseDbContext<DevicesDbContext>();
+            });
     }
 
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
+        services.AddTransient<IChallengesRepository, ChallengesRepository>();
+        services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
     }
 
     public class DbOptions

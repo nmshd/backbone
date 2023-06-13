@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
-using Backbone.Modules.Messages.Domain.Entities;
+﻿using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
-public class MessagesDbContext : AbstractDbContextBase, IMessagesDbContext
+public class MessagesDbContext : AbstractDbContextBase
 {
     public MessagesDbContext() { }
 

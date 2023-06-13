@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Tokens.Jobs.SanityCheck;
+namespace Tokens.Jobs.SanityCheck.Extensions;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions

@@ -1,6 +1,8 @@
 # Build stage
 FROM node:18.16-alpine as build-stage
 WORKDIR /app
+EXPOSE 80
+
 COPY package*.json /app/
 RUN npm install
 COPY ./ /app/

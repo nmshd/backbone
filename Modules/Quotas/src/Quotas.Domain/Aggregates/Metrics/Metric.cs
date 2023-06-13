@@ -1,8 +1,13 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Entities;
-
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public class Metric
 {
-    public MetricStatus MetricStatus { get; set; }
+    public Metric(MetricKey key, string displayName)
+    {
+        Key = key;
+        DisplayName = displayName;
+    }
+
+    public MetricKey Key { get; }
+    public string DisplayName { get; }
 }
