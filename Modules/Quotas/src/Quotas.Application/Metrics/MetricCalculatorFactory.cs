@@ -19,7 +19,7 @@ public class MetricCalculatorFactory : IMetricCalculatorFactory
                 return _services.GetRequiredService<NumberOfSentMessagesCalculator>();
 
             default:
-                throw new Exception();
+                throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.Tooling;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -21,20 +19,12 @@ public abstract class Quota
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
-    public DateTime PeriodEndTime => Period.CalculateEnd();
-    public DateTime PeriodBeginTime => Period.CalculateBegin();
-
-    // TODO: What is the definition of a Valid quota?
-    public bool IsCurrentlyValid()
-    {
-        throw new NotImplementedException();
-    }
 
     public void UpdateExhaustion(uint newValue) 
     {
         if (newValue >= Max)
         {
-            IsExhaustedUntil = PeriodEndTime;
+            IsExhaustedUntil = Period.CalculateEnd();
         }
         else
         {

@@ -24,8 +24,8 @@ public static class IdentityMetricExtensions
         foreach (var quota in unExhaustedQuotas)
         {
             var newValue = await metricCalculator.CalculateUsageAsync(
-                quota.PeriodBeginTime,
-                quota.PeriodEndTime,
+                quota.Period.CalculateBegin(),
+                quota.Period.CalculateEnd(),
                 identity.Address);
 
             quota.UpdateExhaustion(newValue);
@@ -36,7 +36,7 @@ public static class IdentityMetricExtensions
     {
         var allQuotasOfMetric = await quotasRepository.FindQuotasByMetricKey(metric, cancellationToken);
         var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight && q.IsCurrentlyValid()).ToList();
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
         return appliedQuotas;
     }
 }
