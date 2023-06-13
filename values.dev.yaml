@@ -121,11 +121,6 @@ consumerapi:
           key: "VALUE"
 
 adminapi:
-  # httpRoute - see https://bildungsraum.de/display/DEV/Google+Kubernetes+Engine#GoogleKubernetesEngine-3.2HowmakeyourServiceaccessible
-  httpRoute:
-    parentRefName: "public-gateway"
-    parentRefNamespace: "default"
-    hostnames: ["bkb-nmshd-dev.nbpdev.de"]
   env:
     - name: modules__Devices__infrastructure__sqlDatabase__connectionString
       valueFrom:
@@ -137,6 +132,11 @@ adminapi:
         secretKeyRef:
           name: "quotas-sql-connectionstring"
           key: "VALUE"
+
+adminui:
+  env:
+    - name: ADMIN_API__BASE_URL
+      value: "http://localhost:8080"
 
 admincli:
   env:
