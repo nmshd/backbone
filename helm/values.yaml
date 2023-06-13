@@ -16,7 +16,7 @@ global:
       jwtLifetimeInSeconds: 300
       # JwtSigningCertificateSource - possible values: "config"/"file"
       jwtSigningCertificateSource: "config"
-      # JwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via Kubernetes secret
+      # JwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
       jwtSigningCertificate: ""
     cors:
       # AllowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
@@ -33,9 +33,9 @@ global:
         # ConnectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
         connectionInfo: ""
         subscriptionClientName: "Backbone"
-        # RabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
+        # RabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQUsername: ""
-        # RabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via Kubernetes secret
+        # RabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQPassword: ""
         # ConnectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the consumer API should retry to connect to the RabbitMQ service
         connectionRetryCount: 5
@@ -49,7 +49,7 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
       devices:
         application:
@@ -63,7 +63,7 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           pushNotifications:
             # Provider - possible values: "AzureNotificationHub"/"Dummy"
@@ -81,12 +81,12 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
             # CloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via Kubernetes secret
+            # ConnectionInfo - should be set via environment variable
             connectionInfo: ""
             # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
@@ -102,15 +102,27 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
             # CloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via Kubernetes secret
+            # ConnectionInfo - should be set via environment variable
             connectionInfo: ""
             # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
+      quotas:
+        application:
+          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          pagination:
+            defaultPageSize: 50
+            maxPageSize: 200
+        infrastructure:
+          sqlDatabase:
+            # Provider - possible values: "Postgres"/"SqlServer"
+            provider: ""
+            # ConnectionString - should be set via environment variable
+            connectionString: ""
       relationships:
         application:
           # Pagination - the following options describe the default and maximum page size for the different endpoints
@@ -121,12 +133,12 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
             # CloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via Kubernetes secret
+            # ConnectionInfo - should be set via environment variable
             connectionInfo: ""
             # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
@@ -140,12 +152,12 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
             # CloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via Kubernetes secret
+            # ConnectionInfo - should be set via environment variable
             connectionInfo: ""
             # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
@@ -159,12 +171,12 @@ global:
           sqlDatabase:
             # Provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via Kubernetes secret
+            # ConnectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
             # CloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via Kubernetes secret
+            # ConnectionInfo - should be set via environment variable
             connectionInfo: ""
             # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
@@ -225,9 +237,85 @@ consumerapi:
   # - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString
   # - Modules__Files__Infrastructure__SqlDatabase__ConnectionString
   # - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString
   # - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString
   # - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString
   # - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString
+  #############################################################################
+  env: []
+
+  service:
+    type: "ClusterIP"
+    port: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ""
+
+  # httpRoute - the configuration of the HttpRoute for the consumer API
+  httpRoute:
+    # parentRefName - the name of the gateway this Route wants to be attached to
+    parentRefName: ""
+    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
+    parentRefNamespace: ""
+    hostnames: []
+
+  # httpRoute - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  backendConfig:
+    healthCheck:
+      # checkIntervalSec - time from the start of one prober's check to the start of its next check
+      checkIntervalSec: 15
+      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
+      timeoutSec: 15
+      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
+      healthyThreshold: 1
+      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
+      unhealthyThreshold: 2
+
+adminapi:
+  nameOverride: ""
+  replicas: 1
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-admin-api"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+
+  # securityContext:
+  # capabilities:
+  #   drop:
+  #     - "ALL"
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+  # podSecurityContext:
+  # fsGroup: 2000
+
+  podAnnotations: {}
+
+  # env - environment variables for the consumer API container
+  #############################################################################
+  # IMPORTANT
+  # The following environment variables are required:
+  # - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString
+  # - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString
   #############################################################################
   env: []
 
