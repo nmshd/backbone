@@ -1,4 +1,5 @@
 ﻿using Enmeshed.Tooling;
+using Enmeshed.Tooling.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -21,20 +22,18 @@ public static class QuotaPeriodExtensions
         switch (period)
         {
             case QuotaPeriod.Hour:
-                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 0, 0, 0, DateTimeKind.Utc);
+                return utcNow.StartOfHour();
             case QuotaPeriod.Day:
-                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+                return utcNow.StartOfDay();
             case QuotaPeriod.Week:
-                var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0, 0, DateTimeKind.Utc);
-                do result = result.AddDays(-1); while (result.DayOfWeek != DayOfWeek.Sunday);
-                return result;
+                return utcNow.StartOfWeek();
             case QuotaPeriod.Month:
-                return new DateTime(utcNow.Year, utcNow.Month, DateTime.DaysInMonth(utcNow.Year, utcNow.Month), 23, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.StartOfMonth();
             case QuotaPeriod.Year:
-                return new DateTime(utcNow.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.StartOfYear();
             case QuotaPeriod.Total:
             default:
-                return SystemTime.UtcNow.AddYears(200);
+                throw new NotImplementedException();
         }
     }
 
@@ -45,20 +44,18 @@ public static class QuotaPeriodExtensions
         switch (period)
         {
             case QuotaPeriod.Hour:
-                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.EndOfHour();
             case QuotaPeriod.Day:
-                return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.EndOfDay();
             case QuotaPeriod.Week:
-                var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
-                while (result.DayOfWeek != DayOfWeek.Sunday) result = result.AddDays(1);
-                return result.AddDays(-1);
+                return utcNow.EndOfWeek();
             case QuotaPeriod.Month:
-                return new DateTime(utcNow.Year, utcNow.Month, DateTime.DaysInMonth(utcNow.Year, utcNow.Month), 23, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.EndOfMonth();
             case QuotaPeriod.Year:
-                return new DateTime(utcNow.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
+                return utcNow.EndOfYear();
             case QuotaPeriod.Total:
             default:
-                return SystemTime.UtcNow.AddYears(200);
+                throw new NotImplementedException();
         }
     }
 }

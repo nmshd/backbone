@@ -63,11 +63,11 @@ public class QuotaPeriodTests
         start.Year.Should().Be(2023);
     }
 
-[Fact]
+    [Fact]
     public void Begin_Week_quota_at_jan_3rd_2020()
     {
         // Arrange
-        var currentDate = new DateTime(2020, 01, 01, 12, 00, 00, 000, DateTimeKind.Utc);
+        var currentDate = new DateTime(2020, 01, 03, 12, 00, 00, 000, DateTimeKind.Utc);
         SystemTime.Set(currentDate);
         var quotaPeriod = QuotaPeriod.Week;
 
@@ -83,6 +83,45 @@ public class QuotaPeriodTests
         start.Year.Should().Be(2019);
     }
 
+    [Fact]
+    public void Begin_Month_quota_at_feb_3rd_2020()
+    {
+        // Arrange
+        var currentDate = new DateTime(2020, 02, 03, 12, 00, 00, 000, DateTimeKind.Utc);
+        SystemTime.Set(currentDate);
+        var quotaPeriod = QuotaPeriod.Month;
+
+        // Act
+        var start = quotaPeriod.CalculateBegin();
+
+        // Assert
+        start.Second.Should().Be(0);
+        start.Minute.Should().Be(0);
+        start.Hour.Should().Be(0);
+        start.Day.Should().Be(1);
+        start.Month.Should().Be(2);
+        start.Year.Should().Be(2020);
+    }
+
+    [Fact]
+    public void Begin_Year_quota_at_jan_3rd_2020()
+    {
+        // Arrange
+        var currentDate = new DateTime(2020, 01, 03, 12, 00, 00, 000, DateTimeKind.Utc);
+        SystemTime.Set(currentDate);
+        var quotaPeriod = QuotaPeriod.Year;
+
+        // Act
+        var start = quotaPeriod.CalculateBegin();
+
+        // Assert
+        start.Second.Should().Be(0);
+        start.Minute.Should().Be(0);
+        start.Hour.Should().Be(0);
+        start.Day.Should().Be(1);
+        start.Month.Should().Be(1);
+        start.Year.Should().Be(2020);
+    }
 
     [Fact]
     public void End_hour_quota_at_13_45()
@@ -102,7 +141,6 @@ public class QuotaPeriodTests
         end.Hour.Should().Be(13);
         end.Day.Should().Be(01);
     }
-
 
     [Fact]
     public void End_day_quota_at_jan_1st()
@@ -142,4 +180,43 @@ public class QuotaPeriodTests
         start.Year.Should().Be(2020);
     }
 
+    [Fact]
+    public void End_Week_quota_at_jan_3rd_2024()
+    {
+        // Arrange
+        var currentDate = new DateTime(2024, 01, 03, 12, 00, 00, 000, DateTimeKind.Utc);
+        SystemTime.Set(currentDate);
+        var quotaPeriod = QuotaPeriod.Week;
+
+        // Act
+        var start = quotaPeriod.CalculateEnd();
+
+        // Assert
+        start.Second.Should().Be(59);
+        start.Minute.Should().Be(59);
+        start.Hour.Should().Be(23);
+        start.Day.Should().Be(6);
+        start.Month.Should().Be(1);
+        start.Year.Should().Be(2024);
+    }
+
+    [Fact]
+    public void End_Month_quota_at_feb_3rd_2024()
+    {
+        // Arrange
+        var currentDate = new DateTime(2024, 02, 03, 12, 00, 00, 000, DateTimeKind.Utc);
+        SystemTime.Set(currentDate);
+        var quotaPeriod = QuotaPeriod.Month;
+
+        // Act
+        var start = quotaPeriod.CalculateEnd();
+
+        // Assert
+        start.Second.Should().Be(59);
+        start.Minute.Should().Be(59);
+        start.Hour.Should().Be(23);
+        start.Day.Should().Be(29);
+        start.Month.Should().Be(2);
+        start.Year.Should().Be(2024);
+    }
 }
