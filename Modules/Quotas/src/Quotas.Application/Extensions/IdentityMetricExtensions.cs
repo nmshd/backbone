@@ -1,40 +1,39 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain;
+﻿using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Quotas.Application.Extensions;
 public static class IdentityMetricExtensions
 {
-    public static async Task UpdateMetrics(this Identity identity, IEnumerable<string> metrics, IMetricCalculatorFactory factory, IQuotasRepository quotasRepository, CancellationToken cancellationToken)
+    public static async Task UpdateMetrics(this Identity identity, IEnumerable<string> metrics, IMetricCalculatorFactory factory, CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
         {
             var metricCalculator = factory.CreateFor(metric);
-            await identity.UpdateMetricAsync(metric, metricCalculator, quotasRepository, cancellationToken);
+            await identity.UpdateMetricAsync(metric, metricCalculator, cancellationToken);
         }
         return;
     }
 
-    private static async Task UpdateMetricAsync(this Identity identity, string metric, IMetricCalculator metricCalculator, IQuotasRepository quotasRepository, CancellationToken cancellationToken)
+    private static async Task UpdateMetricAsync(this Identity identity, string metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        var quotas = await GetAppliedQuotasForMetricAsync(metric, quotasRepository, cancellationToken);
+        var quotas = GetAppliedQuotasForMetricAsync(metric, identity.TierQuotas);
         var unExhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
         foreach (var quota in unExhaustedQuotas)
         {
             var newUsage = await metricCalculator.CalculateUsageAsync(
                 quota.Period.CalculateBegin(),
                 quota.Period.CalculateEnd(),
-                identity.Address);
+                identity.Address,
+                cancellationToken);
 
             quota.UpdateExhaustion(newUsage);
         }
     }
 
-    private static async Task<IEnumerable<Quota>> GetAppliedQuotasForMetricAsync(string metric, IQuotasRepository quotasRepository, CancellationToken cancellationToken)
+    private static IEnumerable<Quota> GetAppliedQuotasForMetricAsync(string metric, IReadOnlyCollection<Quota> quotas)
     {
-        var allQuotasOfMetric = await quotasRepository.FindQuotasByMetricKey(metric, cancellationToken);
+        var allQuotasOfMetric = quotas.Where(q=>q.MetricKey.ToString() == metric);
         var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
         var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
         return appliedQuotas;
