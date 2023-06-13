@@ -22,13 +22,6 @@ public abstract class Quota
 
     public void UpdateExhaustion(uint newUsage) 
     {
-        if (newUsage >= Max)
-        {
-            IsExhaustedUntil = Period.CalculateEnd();
-        }
-        else
-        {
-            IsExhaustedUntil = null;
-        }
+        IsExhaustedUntil = newUsage >= Max ? Period.CalculateEnd() : null;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Tests.Extensions;
 using Enmeshed.Tooling;
 using FluentAssertions;
-using FluentAssertions.Primitives;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
@@ -20,10 +20,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(13);
-        start.Day.Should().Be(01);
+        start.Should().Be("2023-01-01T13:00:00.000");
     }
 
     [Fact]
@@ -174,13 +171,5 @@ public class QuotaPeriodTests
 
         // Assert
         end.Should().Be("2024-02-29T23:59:59.999");
-    }
-}
-
-public static class DateTimeAssertionsExtensions
-{
-    public static AndConstraint<DateTimeAssertions> Be(this DateTimeAssertions it, string dateTimeString)
-    {
-        return it.Be(DateTime.Parse(dateTimeString));
     }
 }
