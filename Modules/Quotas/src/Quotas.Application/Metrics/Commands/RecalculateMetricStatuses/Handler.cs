@@ -6,26 +6,24 @@ using MediatR;
 namespace Backbone.Modules.Quotas.Application.Metrics.Commands.RecalculateMetricStatuses;
 public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
 {
-    private readonly IMetricCalculatorFactory _metricCalculatorFactory;
-    private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly IQuotasRepository _quotasRepository;
-
-    public Handler(IMetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository, IQuotasRepository quotasRepository)
+    public Handler(IMetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository)
     {
         _metricCalculatorFactory = metricCalculatorFactory;
         _identitiesRepository = identitiesRepository;
-        _quotasRepository = quotasRepository;
     }
+
+    private readonly IMetricCalculatorFactory _metricCalculatorFactory;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
     public async Task Handle(RecalculateMetricStatusesCommand command, CancellationToken cancellationToken)
     {
-        foreach (var identityAddress in command.Identities)
+        var identities = await _identitiesRepository.FindByIds(command.Identities, cancellationToken);
+        
+        foreach (var identity in identities)
         {
-            var identity = await _identitiesRepository.FindById(identityAddress, cancellationToken); 
-            await identity.UpdateMetrics(command.Metrics, _metricCalculatorFactory, _quotasRepository, cancellationToken);
+            await identity.UpdateMetrics(command.Metrics, _metricCalculatorFactory, cancellationToken);
         }
 
-        //var metricCalculator = _metricCalculatorFactory.CreateFor()
-            throw new NotImplementedException();
+        await _identitiesRepository.Update(identities, cancellationToken);
     }
 }

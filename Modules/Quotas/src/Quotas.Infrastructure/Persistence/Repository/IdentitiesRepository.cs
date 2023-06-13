@@ -33,6 +33,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await _identitiesDbSet.FirstOrDefaultAsync(id => id.Address == identityAddress, cancellationToken) ?? throw new NotFoundException(identityAddress);
     }
 
+    public async Task<IEnumerable<Identity>> FindByIds(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken)
+    {
+        return await _identitiesDbSet.Where(id => identityAddresses.Contains(id.Address)).ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
     {
         var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
