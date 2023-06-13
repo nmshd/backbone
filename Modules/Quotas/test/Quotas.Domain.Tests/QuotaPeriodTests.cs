@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.Tooling;
 using FluentAssertions;
+using FluentAssertions.Primitives;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
@@ -37,10 +38,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(0);
-        start.Day.Should().Be(01);
+        start.Should().Be("2023-01-01T00:00:00.000");
     }
 
     [Fact]
@@ -55,12 +53,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(0);
-        start.Day.Should().Be(28);
-        start.Month.Should().Be(5);
-        start.Year.Should().Be(2023);
+        start.Should().Be("2023-05-28T00:00:00.000");
     }
 
     [Fact]
@@ -75,12 +68,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(0);
-        start.Day.Should().Be(29);
-        start.Month.Should().Be(12);
-        start.Year.Should().Be(2019);
+        start.Should().Be("2019-12-29T00:00:00.000");
     }
 
     [Fact]
@@ -95,12 +83,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(0);
-        start.Day.Should().Be(1);
-        start.Month.Should().Be(2);
-        start.Year.Should().Be(2020);
+        start.Should().Be("2020-02-01T00:00:00.000");
     }
 
     [Fact]
@@ -115,12 +98,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Second.Should().Be(0);
-        start.Minute.Should().Be(0);
-        start.Hour.Should().Be(0);
-        start.Day.Should().Be(1);
-        start.Month.Should().Be(1);
-        start.Year.Should().Be(2020);
+        start.Should().Be("2020-01-01T00:00:00.000");
     }
 
     [Fact]
@@ -135,11 +113,7 @@ public class QuotaPeriodTests
         var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        end.Millisecond.Should().Be(999);
-        end.Second.Should().Be(59);
-        end.Minute.Should().Be(59);
-        end.Hour.Should().Be(13);
-        end.Day.Should().Be(01);
+        end.Should().Be("2023-01-01T13:59:59.999");
     }
 
     [Fact]
@@ -154,10 +128,7 @@ public class QuotaPeriodTests
         var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        end.Second.Should().Be(59);
-        end.Minute.Should().Be(59);
-        end.Hour.Should().Be(23);
-        end.Day.Should().Be(01);
+        end.Should().Be("2023-01-01T23:59:59.999");
     }
 
     [Fact]
@@ -169,15 +140,10 @@ public class QuotaPeriodTests
         var quotaPeriod = QuotaPeriod.Week;
 
         // Act
-        var start = quotaPeriod.CalculateEnd();
+        var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        start.Second.Should().Be(59);
-        start.Minute.Should().Be(59);
-        start.Hour.Should().Be(23);
-        start.Day.Should().Be(4);
-        start.Month.Should().Be(1);
-        start.Year.Should().Be(2020);
+        end.Should().Be("2020-01-04T23:59:59.999");
     }
 
     [Fact]
@@ -189,15 +155,10 @@ public class QuotaPeriodTests
         var quotaPeriod = QuotaPeriod.Week;
 
         // Act
-        var start = quotaPeriod.CalculateEnd();
+        var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        start.Second.Should().Be(59);
-        start.Minute.Should().Be(59);
-        start.Hour.Should().Be(23);
-        start.Day.Should().Be(6);
-        start.Month.Should().Be(1);
-        start.Year.Should().Be(2024);
+        end.Should().Be("2024-01-06T23:59:59.999");
     }
 
     [Fact]
@@ -209,14 +170,17 @@ public class QuotaPeriodTests
         var quotaPeriod = QuotaPeriod.Month;
 
         // Act
-        var start = quotaPeriod.CalculateEnd();
+        var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        start.Second.Should().Be(59);
-        start.Minute.Should().Be(59);
-        start.Hour.Should().Be(23);
-        start.Day.Should().Be(29);
-        start.Month.Should().Be(2);
-        start.Year.Should().Be(2024);
+        end.Should().Be("2024-02-29T23:59:59.999");
+    }
+}
+
+public static class DateTimeAssertionsExtensions
+{
+    public static AndConstraint<DateTimeAssertions> Be(this DateTimeAssertions it, string dateTimeString)
+    {
+        return it.Be(DateTime.Parse(dateTimeString));
     }
 }
