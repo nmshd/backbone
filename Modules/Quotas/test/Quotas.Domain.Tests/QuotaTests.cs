@@ -58,6 +58,4 @@ public class QuotaTests
         quota.IsExhaustedUntil.Should().NotBeNull();
         quota.IsExhaustedUntil!.Should().Be("2023-01-01T13:59:59.999");
     }
-
-
 }
