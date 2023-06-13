@@ -8,9 +8,5 @@ public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<Message>
     public void Configure(EntityTypeBuilder<Message> builder)
     {
         builder.Metadata.SetIsTableExcludedFromMigrations(true);
-        /*
-        builder.Property(x => x.CreatedBy);
-        builder.HasKey(m => m.Id);
-        */
     }
 }
