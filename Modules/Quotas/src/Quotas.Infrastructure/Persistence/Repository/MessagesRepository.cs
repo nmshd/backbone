@@ -16,7 +16,7 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task<uint> Count(IdentityAddress sender, DateTime createdAtFrom, DateTime createdAtTo)
     {
-        var count = await _readOnlyMessages.CountAsync(message => message.CreatedBy == sender.StringValue);
+        var count = await _readOnlyMessages.CountAsync(m => m.CreatedBy == sender.StringValue);
         return (uint)count;
     }
 }
