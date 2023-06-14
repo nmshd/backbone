@@ -33,8 +33,13 @@ public class Identity
         return;
     }
 
-    private async Task UpdateMetricAsync( string metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
+    private async Task UpdateMetricAsync(string metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
+        if (TierQuotas.Count == 0)
+        {
+            return;
+        }
+
         var quotas = GetAppliedQuotasForMetricAsync(metric, TierQuotas);
         var unExhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
         foreach (var quota in unExhaustedQuotas)

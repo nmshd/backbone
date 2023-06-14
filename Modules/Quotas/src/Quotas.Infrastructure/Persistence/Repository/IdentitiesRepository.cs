@@ -35,7 +35,10 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<IEnumerable<Identity>> FindByIds(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken)
     {
-        return await _identitiesDbSet.Where(id => identityAddresses.Contains(id.Address)).ToListAsync(cancellationToken);
+        return await _identitiesDbSet
+            .Where(i => identityAddresses.Contains(i.Address))
+            .Include(i => i.TierQuotas)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)

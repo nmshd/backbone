@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -45,9 +47,14 @@ public static class IServiceCollectionExtensions
                 throw new Exception($"Unsupported database provider: {options.Provider}");
 
         }
-        services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+        services.AddTransient<IMessagesRepository, MessagesRepository>();
         services.AddTransient<IMetricsRepository, MetricsRepository>();
+        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
+        services.AddTransient<ITiersRepository, TiersRepository>();
+
+        services.AddTransient<IMetricCalculatorFactory, MetricCalculatorFactory>();
+        services.AddTransient<NumberOfSentMessagesMetricCalculator>();
     }
 
     public class DbOptions

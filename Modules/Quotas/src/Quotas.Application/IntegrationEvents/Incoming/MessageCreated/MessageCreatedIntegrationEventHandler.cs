@@ -1,11 +1,23 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.Modules.Quotas.Application.Metrics.Commands.RecalculateMetricStatuses;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<MessageCreatedIntegrationEvent>
 {
-    public Task Handle(MessageCreatedIntegrationEvent integrationEvent)
+    private readonly IMediator _mediator;
+
+    public MessageCreatedIntegrationEventHandler(IMediator mediator)
     {
-        Console.WriteLine(integrationEvent.ToString());
-        return Task.CompletedTask;
+        _mediator = mediator;
+    }
+
+    public async Task Handle(MessageCreatedIntegrationEvent integrationEvent)
+    {
+        var identities = new List<string>() { integrationEvent.CreatedBy};
+        var metrics = new List<string>() { MetricKey.NumberOfSentMessages.ToString()};
+
+        await _mediator.Send(new RecalculateMetricStatusesCommand(identities, metrics));
     }
 }

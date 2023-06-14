@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Extensions;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain;
 using MediatR;
 

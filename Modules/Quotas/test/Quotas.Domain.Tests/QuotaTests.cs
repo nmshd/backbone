@@ -33,7 +33,7 @@ public class QuotaTests
         var quota = new TierQuota(definition, "applyTo");
 
         // Act
-        quota.UpdateExhaustion(51);
+        quota.UpdateExhaustion(50);
 
         // Assert
         quota.IsExhaustedUntil.Should().NotBeNull();
@@ -51,7 +51,7 @@ public class QuotaTests
         var quota = new TierQuota(definition, "applyTo");
 
         // Act
-        quota.UpdateExhaustion(51);
+        quota.UpdateExhaustion(60);
         quota.UpdateExhaustion(30);
 
         // Assert

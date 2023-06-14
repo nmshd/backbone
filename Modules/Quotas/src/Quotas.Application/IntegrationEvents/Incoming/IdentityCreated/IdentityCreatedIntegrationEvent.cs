@@ -7,10 +7,10 @@ public class IdentityCreatedIntegrationEvent : IntegrationEvent
     public IdentityCreatedIntegrationEvent(string address, string tierId)
     {
         Address = address;
-        TierId = tierId;
+        Tier = tierId;
     }
 
     public string Address { get; private set; }
 
-    public string TierId { get; private set; }
+    public string Tier { get; private set; }
 }
