@@ -144,7 +144,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         {
             var handler = scope.ResolveOptional(subscription.HandlerType);
             if (handler == null) continue;
-            var eventType = _subscriptionManager.GetEventTypeByName(eventName);
+            var eventType = subscription.EventType;
             var integrationEvent = (IntegrationEvent)JsonConvert.DeserializeObject(message, eventType,
                 new JsonSerializerSettings
                 {

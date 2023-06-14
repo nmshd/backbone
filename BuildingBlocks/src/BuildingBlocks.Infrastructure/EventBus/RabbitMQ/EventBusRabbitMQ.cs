@@ -185,7 +185,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {
-                var eventType = _subsManager.GetEventTypeByName(eventName);
+                var eventType = subscription.EventType;
 
                 if (eventType == null) throw new Exception($"Unsupported event type '${eventType}' received.");
 
