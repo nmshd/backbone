@@ -5,14 +5,14 @@ using MediatR;
 namespace Backbone.Modules.Quotas.Application.Metrics.Commands.RecalculateMetricStatuses;
 public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
 {
+    private readonly IMetricCalculatorFactory _metricCalculatorFactory;
+    private readonly IIdentitiesRepository _identitiesRepository;
+
     public Handler(IMetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository)
     {
         _metricCalculatorFactory = metricCalculatorFactory;
         _identitiesRepository = identitiesRepository;
     }
-
-    private readonly IMetricCalculatorFactory _metricCalculatorFactory;
-    private readonly IIdentitiesRepository _identitiesRepository;
 
     public async Task Handle(RecalculateMetricStatusesCommand command, CancellationToken cancellationToken)
     {

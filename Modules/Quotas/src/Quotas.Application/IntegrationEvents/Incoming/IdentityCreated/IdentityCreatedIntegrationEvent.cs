@@ -4,10 +4,10 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.Identit
 
 public class IdentityCreatedIntegrationEvent : IntegrationEvent
 {
-    public IdentityCreatedIntegrationEvent(string address, string tierId)
+    public IdentityCreatedIntegrationEvent(string address, string tier)
     {
         Address = address;
-        Tier = tierId;
+        Tier = tier;
     }
 
     public string Address { get; private set; }

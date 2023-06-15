@@ -28,23 +28,18 @@ public class Identity
         foreach (var metric in metrics)
         {
             var metricCalculator = factory.CreateFor(metric);
-            await UpdateMetricAsync(metric, metricCalculator, cancellationToken);
+            await UpdateMetric(metric, metricCalculator, cancellationToken);
         }
         return;
     }
 
-    private async Task UpdateMetricAsync(string metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
+    private async Task UpdateMetric(string metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        if (TierQuotas.Count == 0)
+        var quotas = GetAppliedQuotasForMetric(metric);
+        var unexhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
+        foreach (var quota in unexhaustedQuotas)
         {
-            return;
-        }
-
-        var quotas = GetAppliedQuotasForMetricAsync(metric, TierQuotas);
-        var unExhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
-        foreach (var quota in unExhaustedQuotas)
-        {
-            var newUsage = await metricCalculator.CalculateUsageAsync(
+            var newUsage = await metricCalculator.CalculateUsage(
                 quota.Period.CalculateBegin(),
                 quota.Period.CalculateEnd(),
                 Address,
@@ -54,11 +49,17 @@ public class Identity
         }
     }
 
-    private IEnumerable<Quota> GetAppliedQuotasForMetricAsync(string metric, IReadOnlyCollection<Quota> quotas)
+    private IEnumerable<Quota> GetAppliedQuotasForMetric(string metric)
     {
-        var allQuotasOfMetric = quotas.Where(q => q.MetricKey.ToString() == metric);
-        var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
+        var allQuotasOfMetric = TierQuotas.Where(q => q.MetricKey.ToString() == metric);
+        
+        if (!allQuotasOfMetric.Any())
+        {
+            return allQuotasOfMetric;
+        }
+
+        var highestWeight = allQuotasOfMetric.Select(m => m.Weight).Max();
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight);
         return appliedQuotas;
     }
 }
