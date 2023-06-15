@@ -28,11 +28,6 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Identity> FindById(string identityAddress, CancellationToken cancellationToken)
-    {
-        return await _identitiesDbSet.FirstOrDefaultAsync(id => id.Address == identityAddress, cancellationToken) ?? throw new NotFoundException(identityAddress);
-    }
-
     public async Task<IEnumerable<Identity>> FindByIds(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken)
     {
         return await _identitiesDbSet
