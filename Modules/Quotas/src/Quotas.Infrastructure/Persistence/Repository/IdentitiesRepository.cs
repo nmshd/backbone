@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +31,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await _identitiesDbSet
             .Where(i => identityAddresses.Contains(i.Address))
-            .Include(i => i.TierQuotas)
+            .IncludeAll(_dbContext)
             .ToListAsync(cancellationToken);
     }
 
