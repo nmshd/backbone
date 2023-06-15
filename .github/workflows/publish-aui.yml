@@ -1,13 +1,13 @@
-name: Publish Files Sanity Check Container Image
+name: Publish Admin UI Container Image
 
 on:
   push:
     tags:
-      - "fsc/*"
+      - "aui/*"
 
 jobs:
-  publish-fsc-container-image:
-    name: Publish Files Sanity Check Container Image
+  publish-aui-container-image:
+    name: Publish Admin UI Container Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -18,7 +18,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v2.2.0
+        uses: docker/login-action@v2.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -28,13 +28,11 @@ jobs:
         run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
         env:
           GIT_TAG: ${{ github.ref_name }}
-      - name: Build Container Image
-        run: ./.ci/sc/buildContainerImage.ts
+      - name: Build Image
+        run: ./.ci/aui/buildContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
-          MODULE: Files
-      - name: Push Container Image
-        run: ./.ci/sc/pushContainerImage.ts
+      - name: Push Image
+        run: ./.ci/aui/pushContainerImage.ts
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
-          MODULE: Files
