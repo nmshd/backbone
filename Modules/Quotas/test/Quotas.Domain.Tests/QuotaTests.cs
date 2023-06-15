@@ -39,4 +39,23 @@ public class QuotaTests
         quota.IsExhaustedUntil.Should().NotBeNull();
         quota.IsExhaustedUntil!.Should().Be("2023-01-01T13:59:59.999");
     }
+
+    [Fact (Skip = "Not implemented.")]
+    public void UpdateExhaustion_on_exhausted_with_newUsage_under_max_quota_keeps_IsExhaustedUntil_null()
+    {
+        // Arrange
+        var currentDate = new DateTime(2023, 01, 01, 13, 45, 00, 000, DateTimeKind.Utc);
+        SystemTime.Set(currentDate);
+
+        var definition = new TierQuotaDefinition(Aggregates.Metrics.MetricKey.NumberOfFiles, 50, QuotaPeriod.Hour);
+        var quota = new TierQuota(definition, "applyTo");
+
+        // Act
+        quota.UpdateExhaustion(60);
+        quota.UpdateExhaustion(30);
+
+        // Assert
+        quota.IsExhaustedUntil.Should().NotBeNull();
+        quota.IsExhaustedUntil!.Should().Be("2023-01-01T13:59:59.999");
+    }
 }
