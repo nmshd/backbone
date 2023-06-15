@@ -31,10 +31,12 @@ public static class Dependencies
         var identitiesApi = new IdentitiesApi(restClient);
         var tiersApi = new TiersApi(restClient);
         var clientsApi = new ClientsApi(restClient);
+        var metricsApi = new MetricsApi(restClient);
 
         services.AddSingleton(identitiesApi);
         services.AddSingleton(tiersApi);
         services.AddSingleton(clientsApi);
+        services.AddSingleton(metricsApi);
 
         return services;
     }

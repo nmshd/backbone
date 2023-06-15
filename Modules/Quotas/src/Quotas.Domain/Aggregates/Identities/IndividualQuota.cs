@@ -11,8 +11,8 @@ public class IndividualQuota : Quota
         Period = period;
     }
 
-    public int Weight => 2;
-    public MetricKey MetricKey { get; }
-    public int Max { get; }
-    public QuotaPeriod Period { get; }
+    public override int Weight => 2;
+    public override MetricKey MetricKey { get; }
+    public override int Max { get; }
+    public override QuotaPeriod Period { get; }
 }
