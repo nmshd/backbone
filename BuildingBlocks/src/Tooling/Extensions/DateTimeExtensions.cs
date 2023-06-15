@@ -9,57 +9,57 @@ public static class DateTimeExtensions
         return dateTime.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
     }
 
-    public static DateTime StartOfHour(this DateTime utcNow)
+    public static DateTime StartOfHour(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 0, 0, 0, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, pivot.Day, pivot.Hour, 0, 0, 0, DateTimeKind.Utc);
     }
 
-    public static DateTime StartOfDay(this DateTime utcNow)
+    public static DateTime StartOfDay(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, pivot.Day, 0, 0, 0, 0, DateTimeKind.Utc);
     }
 
-    public static DateTime StartOfWeek(this DateTime utcNow)
+    public static DateTime StartOfWeek(this DateTime pivot)
     {
-        var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+        var result = new DateTime(pivot.Year, pivot.Month, pivot.Day, 0, 0, 0, 0, DateTimeKind.Utc);
         do result = result.AddDays(-1); while (result.DayOfWeek != FIRST_DAY_OF_WEEK);
         return result;
     }
 
-    public static DateTime StartOfMonth(this DateTime utcNow)
+    public static DateTime StartOfMonth(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, 1, 0, 0, 0, 0, DateTimeKind.Utc);
     }
 
-    public static DateTime StartOfYear(this DateTime utcNow)
+    public static DateTime StartOfYear(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
     }
 
-    public static DateTime EndOfHour(this DateTime utcNow)
+    public static DateTime EndOfHour(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 59, 59, 999, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, pivot.Day, pivot.Hour, 59, 59, 999, DateTimeKind.Utc);
     }
 
-    public static DateTime EndOfDay(this DateTime utcNow)
+    public static DateTime EndOfDay(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, pivot.Day, 23, 59, 59, 999, DateTimeKind.Utc);
     }
 
-    public static DateTime EndOfWeek(this DateTime utcNow)
+    public static DateTime EndOfWeek(this DateTime pivot)
     {
-        var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
+        var result = new DateTime(pivot.Year, pivot.Month, pivot.Day, 23, 59, 59, 999, DateTimeKind.Utc);
         while (result.DayOfWeek != FIRST_DAY_OF_WEEK) result = result.AddDays(1);
         return result.AddDays(-1);
     }
 
-    public static DateTime EndOfMonth(this DateTime utcNow)
+    public static DateTime EndOfMonth(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, utcNow.Month, DateTime.DaysInMonth(utcNow.Year, utcNow.Month), 23, 59, 59, 999, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, pivot.Month, DateTime.DaysInMonth(pivot.Year, pivot.Month), 23, 59, 59, 999, DateTimeKind.Utc);
     }
 
-    public static DateTime EndOfYear(this DateTime utcNow)
+    public static DateTime EndOfYear(this DateTime pivot)
     {
-        return new DateTime(utcNow.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
+        return new DateTime(pivot.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
     }
 }
