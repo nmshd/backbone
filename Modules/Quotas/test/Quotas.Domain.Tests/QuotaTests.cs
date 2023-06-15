@@ -36,12 +36,11 @@ public class QuotaTests
         quota.UpdateExhaustion(50);
 
         // Assert
-        quota.IsExhaustedUntil.Should().NotBeNull();
-        quota.IsExhaustedUntil!.Should().Be("2023-01-01T13:59:59.999");
+        quota.IsExhaustedUntil.Should().Be("2023-01-01T13:59:59.999");
     }
 
-    [Fact (Skip = "Not implemented.")]
-    public void UpdateExhaustion_on_exhausted_with_newUsage_under_max_quota_keeps_IsExhaustedUntil_null()
+    [Fact]
+    public void UpdateExhaustion_on_exhausted_with_newUsage_under_max_quota_updates_IsExhaustedUntil_to_null()
     {
         // Arrange
         var currentDate = new DateTime(2023, 01, 01, 13, 45, 00, 000, DateTimeKind.Utc);
@@ -55,7 +54,6 @@ public class QuotaTests
         quota.UpdateExhaustion(30);
 
         // Assert
-        quota.IsExhaustedUntil.Should().NotBeNull();
-        quota.IsExhaustedUntil!.Should().Be("2023-01-01T13:59:59.999");
+        quota.IsExhaustedUntil.Should().BeNull();
     }
 }
