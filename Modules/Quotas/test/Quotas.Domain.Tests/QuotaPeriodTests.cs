@@ -50,7 +50,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Should().Be("2023-05-28T00:00:00.000");
+        start.Should().Be("2023-05-29T00:00:00.000");
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class QuotaPeriodTests
         var start = quotaPeriod.CalculateBegin();
 
         // Assert
-        start.Should().Be("2019-12-29T00:00:00.000");
+        start.Should().Be("2019-12-30T00:00:00.000");
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public class QuotaPeriodTests
         var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        end.Should().Be("2020-01-04T23:59:59.999");
+        end.Should().Be("2020-01-05T23:59:59.999");
     }
 
     [Fact]
@@ -155,7 +155,7 @@ public class QuotaPeriodTests
         var end = quotaPeriod.CalculateEnd();
 
         // Assert
-        end.Should().Be("2024-01-06T23:59:59.999");
+        end.Should().Be("2024-01-07T23:59:59.999");
     }
 
     [Fact]

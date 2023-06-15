@@ -2,6 +2,8 @@
 
 public static class DateTimeExtensions
 {
+    private const DayOfWeek FIRST_DAY_OF_WEEK = DayOfWeek.Monday;
+
     public static string ToUniversalString(this DateTime dateTime)
     {
         return dateTime.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
@@ -20,7 +22,7 @@ public static class DateTimeExtensions
     public static DateTime StartOfWeek(this DateTime utcNow)
     {
         var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0, 0, DateTimeKind.Utc);
-        do result = result.AddDays(-1); while (result.DayOfWeek != DayOfWeek.Sunday);
+        do result = result.AddDays(-1); while (result.DayOfWeek != FIRST_DAY_OF_WEEK);
         return result;
     }
 
@@ -47,7 +49,7 @@ public static class DateTimeExtensions
     public static DateTime EndOfWeek(this DateTime utcNow)
     {
         var result = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 23, 59, 59, 999, DateTimeKind.Utc);
-        while (result.DayOfWeek != DayOfWeek.Sunday) result = result.AddDays(1);
+        while (result.DayOfWeek != FIRST_DAY_OF_WEEK) result = result.AddDays(1);
         return result.AddDays(-1);
     }
 
