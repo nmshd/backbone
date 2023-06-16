@@ -11,7 +11,7 @@ public record QuotaId : StronglyTypedId
 
     private const string PREFIX = "QUO";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
 
     private QuotaId(string value) : base(value)
     {
@@ -26,7 +26,7 @@ public record QuotaId : StronglyTypedId
 
     public static Result<QuotaId, DomainError> Create(string value)
     {
-        var validationResult = UTILS.Validate(value);
+        var validationResult = Utils.Validate(value);
         if (validationResult != null)
             return Result.Failure<QuotaId, DomainError>(validationResult);
         return Result.Success<QuotaId, DomainError>(new QuotaId(value));

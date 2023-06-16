@@ -15,8 +15,8 @@ public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<Me
 
     public async Task Handle(MessageCreatedIntegrationEvent integrationEvent)
     {
-        var identities = new List<string>() { integrationEvent.CreatedBy};
-        var metrics = new List<string>() { MetricKey.NumberOfSentMessages.ToString()};
+        var identities = new List<string> { integrationEvent.CreatedBy};
+        var metrics = new List<string> { MetricKey.NumberOfSentMessages.Value };
 
         await _mediator.Send(new RecalculateMetricStatusesCommand(identities, metrics));
     }

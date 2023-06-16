@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
@@ -20,7 +22,7 @@ public class RelationshipChangeLog : IRelationshipChangeLog, ICollection<Relatio
         var change = _changes.Values.LastOrDefault(c => c.Type == type);
 
         if (change == null)
-            throw new DomainException(DomainErrors.NotFound(nameof(RelationshipChange)));
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(RelationshipChange)));
 
         return change;
     }
@@ -37,7 +39,7 @@ public class RelationshipChangeLog : IRelationshipChangeLog, ICollection<Relatio
         var change = _changes.Values.FirstOrDefault(c => c.Id == id);
 
         if (change == null)
-            throw new DomainException(DomainErrors.NotFound(nameof(RelationshipChange)));
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(RelationshipChange)));
 
         return change;
     }

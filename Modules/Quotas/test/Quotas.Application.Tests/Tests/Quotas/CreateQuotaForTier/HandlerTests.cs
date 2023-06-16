@@ -31,10 +31,10 @@ public class HandlerTests
         var tierId = new TierId("TIRsomeTierId1111111");
         var max = 5;
         var period = QuotaPeriod.Month;
-        var metricKey = MetricKey.NumberOfSentMessages.ToString();
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");
-        var tiers = new List<Tier> { tier };
+        
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
@@ -62,12 +62,10 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");
-        var max = 5;
-        var period = QuotaPeriod.Month;
-        var metricKey = MetricKey.NumberOfSentMessages.ToString();
-        var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
+        var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
         var tier = new Tier(tierId, "some-tier-name");
-        var tiers = new List<Tier> { tier };
+        
         //var mockTiersRepository = new MockTiersRepository(tiers);
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
@@ -76,7 +74,7 @@ public class HandlerTests
         var handler = CreateHandler(tierRepository, metricsRepository);
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        await handler.Handle(command, CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(QuotaCreatedForTierIntegrationEvent)))).MustHaveHappened();
