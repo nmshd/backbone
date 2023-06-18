@@ -32,7 +32,7 @@ public static class IServiceCollectionExtensions
         AdminConfiguration configuration)
     {
         services
-            .AddControllersWithViews(options => options.Filters.Add(typeof(CustomExceptionFilter)))
+            .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>

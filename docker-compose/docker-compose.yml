@@ -1,8 +1,8 @@
 services:
-  backbone:
-    image: nmshd-backbone
-    container_name: backbone
-    hostname: backbone
+  consumerApi:
+    image: nmshd-consumerApi
+    container_name: consumerApi
+    hostname: consumerApi
     build:
       context: ..
       dockerfile: ConsumerApi/Dockerfile.debug
@@ -28,40 +28,20 @@ services:
       - rabbitmq
     volumes:
       - ../:/app
-
-  adminAPI:
-    image: nmshd-admin-api
-    container_name: admin-api
-    hostname: admin-api
-    build:
-      context: ..
-      dockerfile: AdminApi/Dockerfile.debug
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Local
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-    ports:
-      - "5010:80"
-    depends_on:
-      - ms-sql-server
-      - rabbitmq
-    volumes:
-      - ../:/app
     
   adminUI:
     image: nmshd-admin-ui
     container_name: admin-ui
     hostname: admin-ui
     build:
-      dockerfile: Dockerfile.debug
-      context: "../AdminUI/"
+      dockerfile: Dockerfile
+      context: "../AdminUI/AdminUi"
     environment:
       - ADMIN_API__BASE_URL=http://localhost:5010/api/v1
     ports:
-      - "5020:4200"
-    depends_on:
-      - "adminAPI"
+      - "5020:44480"
     volumes:
-      - ../AdminUI/src:/app/src/:ro
+      - ../:/app
 
   ### infrastructure ###
 

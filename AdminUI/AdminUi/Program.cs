@@ -26,8 +26,8 @@ builder.WebHost
 LoadConfiguration(builder, args);
 
 builder.Host
-    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+    // .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
@@ -44,7 +44,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 #pragma warning disable ASP0000 We retrieve the Configuration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
+
 #pragma warning restore ASP0000
+
+    services.AddLogging();
 
     services.AddCustomAspNetCore(parsedConfiguration)
     .AddCustomFluentValidation()
@@ -106,3 +109,29 @@ static void Configure(WebApplication app)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 }
+
+
+// var builder = WebApplication.CreateBuilder(args);
+//
+// // Add services to the container.
+//
+// builder.Services.AddControllersWithViews();
+//
+// var app = builder.Build();
+//
+// // Configure the HTTP request pipeline.
+// if (!app.Environment.IsDevelopment())
+// {
+// }
+//
+// app.UseStaticFiles();
+// app.UseRouting();
+//
+//
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller}/{action=Index}/{id?}");
+//
+// app.MapFallbackToFile("index.html");
+//
+// app.Run();
