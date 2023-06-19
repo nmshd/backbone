@@ -1,12 +1,15 @@
 ﻿using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
+    // To: The dev who implements individualQuotas
+    // Ensure that all palces where *all* quotas are to be used reference
+    // both _tierQuotas and _individualQuotas (to be created).
+    // e.g. the UpdateMetric method
     private readonly List<TierQuota> _tierQuotas = new();
 
     public Identity(string address, TierId tierId)
@@ -38,8 +41,8 @@ public class Identity
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
         var quotas = GetAppliedQuotasForMetric(metric, TierQuotas);
-        var unexhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
-        foreach (var quota in unexhaustedQuotas)
+        // https://github.com/nmshd/backbone/pull/160/files/eb01b70cb351054d62e769f28fbee11c1cc8e080..c33630ef83807c85927091c17cefe27bd52083e2#r1230794032
+        foreach (var quota in quotas)
         {
             var newUsage = await metricCalculator.CalculateUsage(
                 quota.Period.CalculateBegin(),
@@ -53,9 +56,16 @@ public class Identity
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric, IEnumerable<Quota> quotas)
     {
-        var allQuotasOfMetric = quotas.Where(q => q.MetricKey == metric);
-        var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
-        return appliedQuotas;
+        try
+        {
+            var allQuotasOfMetric = quotas.Where(q => q.MetricKey == metric);
+            var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).Max(q=>q.Weight);
+            var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
+            return appliedQuotas;
+        }
+        catch (InvalidOperationException _)
+        {
+            return Enumerable.Empty<Quota>();
+        }
     }
 }
