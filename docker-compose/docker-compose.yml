@@ -37,9 +37,11 @@ services:
       dockerfile: Dockerfile
       context: "../AdminUI/AdminUi"
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
       - ADMIN_API__BASE_URL=http://localhost:5010/api/v1
+      - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES="Microsoft.AspNetCore.SpaProxy"
     ports:
-      - "5020:44480"
+      - "5020:80"
     volumes:
       - ../:/app
 
