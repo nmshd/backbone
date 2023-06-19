@@ -34,7 +34,7 @@ public static class QuotaPeriodExtensions
             case QuotaPeriod.Total:
                 return DateTime.MinValue;
             default:
-                throw new NotImplementedException();
+                throw new NotImplementedException("Cannot calculate begin of a QuotaPeriod of type Total.");
         }
     }
 
@@ -57,7 +57,7 @@ public static class QuotaPeriodExtensions
             case QuotaPeriod.Total:
                 return DateTime.MaxValue;
             default:
-                throw new NotImplementedException();
+                throw new NotImplementedException("Cannot calculate end of a QuotaPeriod of type Total.");
         }
     }
 }
