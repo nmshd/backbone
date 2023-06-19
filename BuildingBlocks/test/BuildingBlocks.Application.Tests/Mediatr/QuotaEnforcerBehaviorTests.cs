@@ -7,6 +7,7 @@ using MediatR;
 using Xunit;
 using Enmeshed.UnitTestTools.Extensions;
 using Enmeshed.UnitTestTools.Behaviors;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
@@ -163,7 +164,7 @@ public class QuotaEnforcerBehaviorTests
     {
         var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
         var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, new List<IUserContext>() { userContextStub });
     }
 }
 
