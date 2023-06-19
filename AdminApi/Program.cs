@@ -5,6 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -52,6 +53,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     .AddCustomSwaggerWithUi()
     .AddDevices(parsedConfiguration.Modules.Devices)
     .AddQuotas(parsedConfiguration.Modules.Quotas)
+    .AddMetricStatusesRepository(c =>
+    {
+        c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
+    })
     .AddHealthChecks();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);

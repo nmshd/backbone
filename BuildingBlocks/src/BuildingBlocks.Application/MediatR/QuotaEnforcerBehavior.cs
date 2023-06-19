@@ -9,16 +9,21 @@ namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IMetricStatusesRepository _metricStatusesRepository;
-    private readonly IUserContext _userContext;
+    private readonly IUserContext? _userContext;
 
-    public QuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepositories, IUserContext userContext)
+    public QuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepositories, IEnumerable<IUserContext> userContexts)
     {
         _metricStatusesRepository = metricStatusesRepositories;
-        _userContext = userContext;
+        _userContext = userContexts.FirstOrDefault();
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        if(_userContext == null)
+        {
+            return await next();
+        }
+        
         var attributes = request.GetType().CustomAttributes;
 
         var applyQuotasForMetricsAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
