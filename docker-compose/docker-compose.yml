@@ -1,6 +1,6 @@
 services:
   consumerApi:
-    image: nmshd-consumerApi
+    image: nmshd-consumerapi
     container_name: consumerApi
     hostname: consumerApi
     build:
