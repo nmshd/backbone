@@ -1,6 +1,4 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -8,13 +6,13 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 namespace Backbone.Modules.Quotas.Application.Metrics.Commands.RecalculateMetricStatuses;
 public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
 {
-    private readonly IMetricCalculatorFactory _metricCalculatorFactory;
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
-    public Handler(IMetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository)
+    public Handler(MetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository)
     {
-        _metricCalculatorFactory = metricCalculatorFactory;
         _identitiesRepository = identitiesRepository;
+        _metricCalculatorFactory = metricCalculatorFactory; 
     }
 
     public async Task Handle(RecalculateMetricStatusesCommand command, CancellationToken cancellationToken)

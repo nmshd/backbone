@@ -53,7 +53,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
 
-        services.AddTransient<IMetricCalculatorFactory, MetricCalculatorFactory>();
+        services.AddTransient<MetricCalculatorFactory, ServiceCollectionMetricCalculatorFactory>();
         services.AddTransient<NumberOfSentMessagesMetricCalculator>();
     }
 

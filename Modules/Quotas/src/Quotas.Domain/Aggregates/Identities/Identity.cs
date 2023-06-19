@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.Tooling;
 
@@ -24,7 +25,7 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, IMetricCalculatorFactory factory, CancellationToken cancellationToken)
+    public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
         {
@@ -34,9 +35,9 @@ public class Identity
         return;
     }
 
-    private async Task UpdateMetricAsync(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
+    private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        var quotas = GetAppliedQuotasForMetric(metric);
+        var quotas = GetAppliedQuotasForMetric(metric, TierQuotas);
         var unexhaustedQuotas = quotas.Where(q => q.IsExhaustedUntil is null || q.IsExhaustedUntil > SystemTime.UtcNow);
         foreach (var quota in unexhaustedQuotas)
         {
@@ -50,7 +51,7 @@ public class Identity
         }
     }
 
-    private IEnumerable<Quota> GetAppliedQuotasForMetricAsync(MetricKey metric, IEnumerable<Quota> quotas)
+    private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric, IEnumerable<Quota> quotas)
     {
         var allQuotasOfMetric = quotas.Where(q => q.MetricKey == metric);
         var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).FirstOrDefault().Weight;
