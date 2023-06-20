@@ -98,7 +98,7 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseStaticFiles();
-    app.UseRouting();
+    // app.UseRouting(); // TODO: try to uncomment this if there are any problems regarding routing
 
     app.MapControllers();
 
