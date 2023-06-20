@@ -26,8 +26,8 @@ builder.WebHost
 LoadConfiguration(builder, args);
 
 builder.Host
-    // .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
-     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
