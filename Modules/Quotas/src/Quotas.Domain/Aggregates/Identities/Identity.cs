@@ -12,6 +12,8 @@ public class Identity
     // e.g. the UpdateMetric method
     private readonly List<TierQuota> _tierQuotas = new();
 
+    private readonly List<MetricStatus> _metricStatuses = new();
+
     public Identity(string address, TierId tierId)
     {
         Address = address;
@@ -26,6 +28,11 @@ public class Identity
     {
         var tierQuota = new TierQuota(definition, Address);
         _tierQuotas.Add(tierQuota);
+    }
+
+    public async void UpdateMetricStatus(MetricKey metricKey, IMetricCalculator metricCalculator)
+    {
+        await UpdateMetric(metricKey, metricCalculator, CancellationToken.None);
     }
 
     public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, CancellationToken cancellationToken)
