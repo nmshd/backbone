@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Application;
 
-namespace AdminApi.Configuration;
+namespace AdminUi.Configuration;
 
 public class DevicesConfiguration
 {

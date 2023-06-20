@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using AdminApi.Configuration;
+using AdminUi.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Enmeshed.BuildingBlocks.API;
@@ -9,7 +9,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AdminApi.Extensions;
+namespace AdminUi.Extensions;
 
 public static class IServiceCollectionExtensions
 {

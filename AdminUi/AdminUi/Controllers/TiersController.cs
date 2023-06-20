@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace AdminApi.Controllers;
+namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class TiersController : ApiControllerBase

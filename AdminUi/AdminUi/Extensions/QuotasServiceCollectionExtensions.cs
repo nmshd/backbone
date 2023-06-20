@@ -1,8 +1,8 @@
-﻿using AdminApi.Configuration;
+﻿using AdminUi.Configuration;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence;
 
-namespace AdminApi.Extensions;
+namespace AdminUi.Extensions;
 
 public static class QuotasServiceCollectionExtensions
 {

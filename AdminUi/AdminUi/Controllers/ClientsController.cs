@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AdminApi.Controllers;
+namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 

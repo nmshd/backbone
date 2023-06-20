@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
 
-namespace AdminApi.Configuration;
+namespace AdminUi.Configuration;
 
 public class AdminConfiguration
 {

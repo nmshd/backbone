@@ -1,6 +1,6 @@
 using System.Reflection;
-using AdminApi.Configuration;
-using AdminApi.Extensions;
+using AdminUi.Configuration;
+using AdminUi.Extensions;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;

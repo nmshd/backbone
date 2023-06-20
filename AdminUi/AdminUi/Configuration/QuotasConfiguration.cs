@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Quotas.Application;
 
-namespace AdminApi.Configuration;
+namespace AdminUi.Configuration;
 
 public class QuotasConfiguration
 {

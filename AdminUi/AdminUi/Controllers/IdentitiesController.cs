@@ -1,15 +1,15 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using Microsoft.Extensions.Options;
-using Backbone.Modules.Devices.Application;
+﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Pagination;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace AdminApi.Controllers;
+namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class IdentitiesController : ApiControllerBase
