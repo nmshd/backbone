@@ -48,7 +48,6 @@ public class Identity
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
         var quotas = GetAppliedQuotasForMetric(metric, TierQuotas);
-        // https://github.com/nmshd/backbone/pull/160/files/eb01b70cb351054d62e769f28fbee11c1cc8e080..c33630ef83807c85927091c17cefe27bd52083e2#r1230794032
         foreach (var quota in quotas)
         {
             var newUsage = await metricCalculator.CalculateUsage(
