@@ -30,9 +30,27 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public async void UpdateMetricStatus(MetricKey metricKey, IMetricCalculator metricCalculator)
+    public void UpdateMetricStatus(MetricKey metricKey, IMetricCalculator metricCalculator)
     {
-        await UpdateMetric(metricKey, metricCalculator, CancellationToken.None);
+        var metricStatus = _metricStatuses.Where(m => m.MetricKey == metricKey).FirstOrDefault();
+        if(metricStatus != null)
+        {
+            _metricStatuses.Remove(metricStatus);
+            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
+            _metricStatuses.Add(new(metricKey, quotasOfMetric.Max(q => q.IsExhaustedUntil)));
+        }
+    }
+
+    public void UpdateAllMetricStatuses()
+    {
+        var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
+        var allMetricKeys = allQuotas.Select(q=>q.MetricKey).ToList();
+        _metricStatuses.Clear();
+        foreach (var metricKey in allMetricKeys)
+        {
+            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
+            _metricStatuses.Add(new(metricKey, quotasOfMetric.Max(q => q.IsExhaustedUntil)));
+        } 
     }
 
     public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, CancellationToken cancellationToken)
@@ -47,7 +65,7 @@ public class Identity
 
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        var quotas = GetAppliedQuotasForMetric(metric, TierQuotas);
+        var quotas = GetAppliedQuotasForMetric(metric);
         foreach (var quota in quotas)
         {
             var newUsage = await metricCalculator.CalculateUsage(
@@ -60,11 +78,12 @@ public class Identity
         }
     }
 
-    private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric, IEnumerable<Quota> quotas)
+    private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
         try
         {
-            var allQuotasOfMetric = quotas.Where(q => q.MetricKey == metric);
+            var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
+            var allQuotasOfMetric = allQuotas.Where(q => q.MetricKey == metric);
             var highestWeight = allQuotasOfMetric.OrderByDescending(q => q.Weight).Max(q=>q.Weight);
             var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
             return appliedQuotas;
