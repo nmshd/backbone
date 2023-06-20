@@ -21,6 +21,7 @@ public class Identity
     }
 
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas;
+    public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses;
     public string Address { get; }
     public TierId TierId { get; }
 
@@ -43,7 +44,7 @@ public class Identity
     public void UpdateAllMetricStatuses()
     {
         var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
-        var allMetricKeys = allQuotas.Select(q=>q.MetricKey).ToList();
+        var allMetricKeys = allQuotas.Select(q=>q.MetricKey).Distinct().ToList();
         _metricStatuses.Clear();
         foreach (var metricKey in allMetricKeys)
         {
