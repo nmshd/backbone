@@ -59,7 +59,6 @@ public class Identity
             var metricCalculator = factory.CreateFor(metric);
             await UpdateMetric(metric, metricCalculator, cancellationToken);
         }
-        return;
     }
 
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
@@ -89,7 +88,7 @@ public class Identity
             var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
             return appliedQuotas;
         }
-        catch (InvalidOperationException _)
+        catch (InvalidOperationException)
         {
             return Enumerable.Empty<Quota>();
         }
