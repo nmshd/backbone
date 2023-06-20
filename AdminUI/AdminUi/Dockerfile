@@ -5,6 +5,7 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
 WORKDIR /src
 COPY ["AdminUi/AdminUi/AdminUi.csproj", "AdminUi/AdminUi/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
@@ -34,6 +35,12 @@ WORKDIR "/src/AdminUi/AdminUi"
 RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
 
 FROM build AS publish
+
+RUN apt update && apt upgrade 
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt install -y nodejs
+RUN npm i -g @angular/cli
+
 RUN dotnet publish "AdminUi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
