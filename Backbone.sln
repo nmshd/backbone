@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
@@ -223,8 +223,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Relationships.Jobs.SanityCheck.Tests", "Modules\Relationships\test\Relationships.Jobs.SanityCheck.Tests\Relationships.Jobs.SanityCheck.Tests.csproj", "{26CB93EC-6F31-48DB-A61A-5FE67E2ABF73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Domain", "BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{360430CE-6850-4A67-88ED-E9508B7D2658}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi", "AdminApi\AdminApi.csproj", "{AF931FFB-55C6-41A7-B07B-26FFA0C1A6C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quotas", "Quotas", "{78F88787-78AB-41E5-9A64-6B77B6CCFBCD}"
 EndProject
