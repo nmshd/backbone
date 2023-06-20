@@ -47,8 +47,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 #pragma warning restore ASP0000
 
-    services.AddLogging();
-
     services.AddCustomAspNetCore(parsedConfiguration)
     .AddCustomFluentValidation()
     .AddCustomIdentity(environment)
