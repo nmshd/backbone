@@ -214,16 +214,9 @@ consumerapi:
       cpu: "400m"
       memory: "1Gi"
 
-  # securityContext:
-  # capabilities:
-  #   drop:
-  #     - "ALL"
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  securityContext: {}
 
-  # podSecurityContext:
-  # fsGroup: 2000
+  podSecurityContext: {}
 
   podAnnotations: {}
 
@@ -303,13 +296,7 @@ admincli:
       cpu: "400m"
       memory: "1Gi"
 
-  # securityContext:
-  #   capabilities:
-  #     drop:
-  #       - ALL
-  #   readOnlyRootFilesystem: true
-  #   runAsNonRoot: true
-  #   runAsUser: 1000
+  securityContext: {}
 
   # env - environment variables for the admin CLI container
   #############################################################################
@@ -319,8 +306,7 @@ admincli:
   #############################################################################
   env: []
 
-  # podSecurityContext:
-  #   fsGroup: 2000
+  podSecurityContext: {}
 
   podAnnotations: {}
 
