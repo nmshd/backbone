@@ -1,275 +1,226 @@
-#!/usr/bin/env -S npx ts-node --esm -T
-import { $, ProcessOutput, echo, chalk } from "zx";
-import { generate as generatePassword } from "randomstring";
+/********************************************** Database Configuration **********************************************/
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++ Schemas +++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*
+DROP SCHEMA "Challenges" cascade;
+DROP SCHEMA "Devices" cascade;
+DROP SCHEMA "Files" cascade;
+DROP SCHEMA "Messages" cascade;
+DROP SCHEMA "Relationships" cascade;
+DROP SCHEMA "Synchronization" cascade;
+DROP SCHEMA "Tokens" cascade;
+DROP SCHEMA "Quotas" cascade;
+*/
 
-$.verbose = false;
+CREATE SCHEMA IF NOT EXISTS "Challenges";
+CREATE SCHEMA IF NOT EXISTS "Devices";
+CREATE SCHEMA IF NOT EXISTS "Files";
+CREATE SCHEMA IF NOT EXISTS "Messages";
+CREATE SCHEMA IF NOT EXISTS "Relationships";
+CREATE SCHEMA IF NOT EXISTS "Synchronization";
+CREATE SCHEMA IF NOT EXISTS "Tokens";
+CREATE SCHEMA IF NOT EXISTS "Quotas";
 
-interface Module {
-  username: Username;
-  schemaName: SchemaName;
-  additionalPermissions: SchemaPermission[];
-}
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-// TODO:
-// - refactor to have a single "setupModule", followed by some stuff that needs to be done after all modules are set up
+/* DROP USER challenges, devices, messages, files, relationships, synchronization, tokens, quotas */ 
 
-type SchemaOperation = "USAGE";
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'nmshdAdmin') THEN
+      CREATE USER "nmshdAdmin" WITH password 'Passw0rd';
+      RAISE NOTICE 'User "nmshdAdmin" created';
+   END IF;
+END
+$$;
 
-type TableOperation = "SELECT" | "REFERENCES" | "TRIGGER" | "TRUNCATE";
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'challenges') THEN
+      CREATE USER challenges WITH password 'Passw0rd';
+      RAISE NOTICE 'User "challenges" created';
+   END IF;
+END
+$$;
 
-type SchemaName =
-  | "Challenges"
-  | "Devices"
-  | "Files"
-  | "Messages"
-  | "Quotas"
-  | "Relationships"
-  | "Synchronization"
-  | "Tokens";
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'devices') THEN
+      CREATE USER devices WITH password 'Passw0rd';
+      RAISE NOTICE 'User "devices" created';
+   END IF;
+END
+$$;
 
-type Username =
-  | "challenges"
-  | "devices"
-  | "files"
-  | "messages"
-  | "quotas"
-  | "relationships"
-  | "synchronization"
-  | "tokens";
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'messages') THEN
+      CREATE USER messages WITH password 'Passw0rd';
+      RAISE NOTICE 'User "messages" created';
+   END IF;
+END
+$$;
 
-interface SchemaPermission {
-  schemaName: SchemaName;
-  schemaOperations: SchemaOperation[];
-  allTablesOperations: TableOperation[];
-}
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'synchronization') THEN
+      CREATE USER synchronization WITH password 'Passw0rd';
+      RAISE NOTICE 'User "synchronization" created';
+   END IF;
+END
+$$;
 
-const createdUsers: { username: string; password: string }[] = [];
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'tokens') THEN
+      CREATE USER tokens WITH password 'Passw0rd';
+      RAISE NOTICE 'User "tokens" created';
+   END IF;
+END
+$$;
 
-const host = "localhost";
-const port = "5432";
-const adminUsername = "postgres";
-const adminPassword = "admin";
-const database = "enmeshed";
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'files') THEN
+      CREATE USER files WITH password 'Passw0rd';
+      RAISE NOTICE 'User "files" created';
+   END IF;
+END
+$$;
 
-const modules: Module[] = [
-  {
-    username: "challenges",
-    schemaName: "Challenges",
-    additionalPermissions: [],
-  },
-  {
-    username: "devices",
-    schemaName: "Devices",
-    additionalPermissions: [
-      {
-        schemaName: "Challenges",
-        schemaOperations: ["USAGE"],
-        allTablesOperations: ["SELECT"],
-      },
-    ],
-  },
-  {
-    username: "files",
-    schemaName: "Files",
-    additionalPermissions: [],
-  },
-  {
-    username: "messages",
-    schemaName: "Messages",
-    additionalPermissions: [
-      {
-        schemaName: "Relationships",
-        schemaOperations: ["USAGE"],
-        allTablesOperations: ["SELECT", "REFERENCES", "TRIGGER", "TRUNCATE"],
-      },
-    ],
-  },
-  {
-    username: "quotas",
-    schemaName: "Quotas",
-    additionalPermissions: [],
-  },
-  {
-    username: "relationships",
-    schemaName: "Relationships",
-    additionalPermissions: [],
-  },
-  {
-    username: "synchronization",
-    schemaName: "Synchronization",
-    additionalPermissions: [],
-  },
-  {
-    username: "tokens",
-    schemaName: "Tokens",
-    additionalPermissions: [],
-  },
-];
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'relationships') THEN
+      CREATE USER relationships WITH password 'Passw0rd';
+      RAISE NOTICE 'User "relationships" created';
+   END IF;
+END
+$$;
 
-await createDatabaseIfNotExists();
-await createSchemas();
-await createUsers();
-await setDefaultSchemasForUsers();
-await grantAdditionalPermissions();
-await createMigrationTables();
-await setSchemaOwners();
-printCreatedUsers();
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'quotas') THEN
+      CREATE USER quotas WITH password 'Passw0rd';
+      RAISE NOTICE 'User "quotas" created';
+   END IF;
+END
+$$;
 
-async function createUsers(): Promise<void> {
-  const indexOfHeading = createdUsers.length - 1;
+ALTER USER challenges SET search_path TO "Challenges";
+ALTER USER devices SET search_path TO "Devices";
+ALTER USER files SET search_path TO "Files";
+ALTER USER messages SET search_path TO "Messages";
+ALTER USER relationships SET search_path TO "Relationships";
+ALTER USER synchronization SET search_path TO "Synchronization";
+ALTER USER tokens SET search_path TO "Tokens";
+ALTER USER quotas SET search_path TO "Quotas";
 
-  for (const module of modules) {
-    await createUser(module.username);
-  }
+/*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  if (indexOfHeading === createdUsers.length - 1) {
-    createdUsers.pop();
-  }
-}
+/*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files, Quotas;
+GRANT CREATE ON SCHEMA Relationships TO relationships;*/
 
-async function createUser(username: string): Promise<void> {
-  const password = generatePassword(20);
+REVOKE USAGE, CREATE ON SCHEMA "Challenges" FROM synchronization, devices, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Synchronization" FROM challenges, devices, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Messages" FROM challenges, synchronization, devices, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Devices" FROM challenges, synchronization, messages, tokens, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Tokens" FROM challenges, synchronization, devices, messages, relationships, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Relationships" FROM challenges, synchronization, devices, messages, tokens, files, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices, messages, tokens, relationships, quotas;
+REVOKE USAGE, CREATE ON SCHEMA "Quotas" FROM challenges, synchronization, devices, messages, tokens, relationships, files;
 
-  const sqlCommand = `CREATE USER "${username}" WITH password '${password}'`;
+GRANT USAGE ON SCHEMA "Relationships" TO messages;
+GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationships" TO messages;
 
-  const response = await runSqlCommand(sqlCommand);
+GRANT USAGE ON SCHEMA "Challenges" TO devices;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
 
-  if (response.exitCode === 0) {
-    createdUsers.push({ username, password });
-    return;
-  } else {
-    if (response.stderr.includes("already exists")) {
-      echo(chalk.gray(`User '${username}' already exists.`));
-      return;
-    }
-    exitWithError(response.stderr);
-  }
-}
-
-async function createSchemas(): Promise<void> {
-  for (const module of modules) {
-    await createSchema(module.schemaName);
-  }
-}
-
-async function createSchema(schemaName: string): Promise<void> {
-  const sqlCommand = `CREATE SCHEMA "${schemaName}"`;
-
-  const response = await runSqlCommand(sqlCommand);
-
-  if (response.exitCode !== 0) {
-    if (response.stderr.includes("already exists")) {
-      echo(chalk.gray(`Schema '${schemaName}' already exists.`));
-      return;
-    }
-    exitWithError(response.stderr);
-  }
-}
-
-async function setDefaultSchemasForUsers() {
-  for (const module of modules) {
-    await setDefaultSchemaForUser(module.username, module.schemaName);
-  }
-}
-
-async function setDefaultSchemaForUser(username: string, schemaName: string) {
-  const sqlCommand = `ALTER USER "${username}" SET search_path TO "${schemaName}"`;
-
-  const response = await runSqlCommandUnsafe(sqlCommand);
-}
-
-async function runSqlCommand(sqlCommand: string, onDatabase = true) {
-  try {
-    return await runSqlCommandUnsafe(sqlCommand, onDatabase);
-  } catch (error) {
-    return error as ProcessOutput;
-  }
-}
-
-async function runSqlCommandUnsafe(sqlCommand: string, onDatabase = true) {
-  const databasePart = onDatabase ? `/${database}` : "";
-  return await $`psql postgresql://${adminUsername}:${adminPassword}@${host}:${port}${databasePart} -c ${sqlCommand}`;
-}
-
-function printCreatedUsers() {
-  if (createdUsers.length > 0) {
-    echo("\n################ Created users ################");
-    echo(createdUsers.map((u) => `${u.username}: ${u.password}`).join("\n"));
-  }
-}
-
-async function grantAdditionalPermissions() {
-  for (const module of modules) {
-    await grantAdditionalPermissionsToUser(
-      module.username,
-      module.additionalPermissions
-    );
-  }
-}
-
-async function grantAdditionalPermissionsToUser(
-  username: string,
-  additionalPermissions: SchemaPermission[]
-) {
-  for (const permissions of additionalPermissions) {
-    const schemaOperations = permissions.schemaOperations.join(", ");
-    await runSqlCommandUnsafe(
-      `GRANT ${schemaOperations} ON SCHEMA "${permissions.schemaName}" TO "${username}"`
-    );
-
-    const allTablesOperations = permissions.allTablesOperations.join(", ");
-    await runSqlCommandUnsafe(
-      `GRANT ${allTablesOperations} ON ALL TABLES IN SCHEMA "${permissions.schemaName}" TO "${username}"`
-    );
-  }
-}
-async function createMigrationTables() {
-  for (const module of modules) {
-    await createMigrationTableForModule(module);
-  }
-}
-
-async function createMigrationTableForModule(module: Module) {
-  const migrationsTableName = `"${module.schemaName}"."__EFMigrationsHistory"`;
-
-  await runSqlCommandUnsafe(`CREATE TABLE IF NOT EXISTS ${migrationsTableName} (
+CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
+(
     "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
     "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
-  )`);
+);
+ALTER TABLE IF EXISTS "Challenges"."__EFMigrationsHistory" OWNER to challenges;
 
-  await runSqlCommandUnsafe(
-    `ALTER TABLE IF EXISTS ${migrationsTableName} OWNER to ${module.username};`
-  );
-}
-async function setSchemaOwners() {
-  for (const module of modules) {
-    await setSchemaOwner(module.schemaName, module.username);
-  }
-}
+CREATE TABLE IF NOT EXISTS "Devices"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Devices"."__EFMigrationsHistory" OWNER to devices;
 
-async function setSchemaOwner(schemaName: string, username: string) {
-  await runSqlCommandUnsafe(
-    `ALTER SCHEMA "${schemaName}" OWNER TO "${username}"`
-  );
-}
-async function createDatabaseIfNotExists() {
-  if (!(await databaseExists())) {
-    await runSqlCommandUnsafe(`CREATE DATABASE "${database}"`, false);
-  }
-}
+CREATE TABLE IF NOT EXISTS "Files"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Files"."__EFMigrationsHistory" OWNER to files;
 
-async function databaseExists() {
-  const sqlCommand = `SELECT datname FROM pg_database WHERE datname = '${database}'`;
-  const response = await runSqlCommand(sqlCommand, false);
-  if (response.exitCode === 0) {
-    return response.stdout.includes(database);
-  } else {
-    exitWithError(response.stderr);
-  }
-}
+CREATE TABLE IF NOT EXISTS "Messages"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Messages"."__EFMigrationsHistory" OWNER to messages;
 
-function exitWithError(response: string) {
-  echo(response);
-  process.exit(1);
-}
+CREATE TABLE IF NOT EXISTS "Relationships"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Relationships"."__EFMigrationsHistory" OWNER to relationships;
+
+CREATE TABLE IF NOT EXISTS "Synchronization"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Synchronization"."__EFMigrationsHistory" OWNER to synchronization;
+
+CREATE TABLE IF NOT EXISTS "Tokens"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Tokens"."__EFMigrationsHistory" OWNER to tokens;
+
+CREATE TABLE IF NOT EXISTS "Quotas"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Quotas"."__EFMigrationsHistory" OWNER to quotas;
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+Expand All
+	@@ -219,7 +285,6 @@ GRANT synchronization TO "nmshdAdmin";
+GRANT tokens TO "nmshdAdmin";
+GRANT relationships TO "nmshdAdmin";
+GRANT files TO "nmshdAdmin";
+GRANT quotas TO "nmshdAdmin";
+
+ALTER SCHEMA "Challenges" OWNER TO challenges;
+ALTER SCHEMA "Devices" OWNER TO devices;
+Expand All
+	@@ -228,5 +293,4 @@ ALTER SCHEMA "Synchronization" OWNER TO synchronization;
+ALTER SCHEMA "Tokens" OWNER TO tokens;
+ALTER SCHEMA "Relationships" OWNER TO relationships;
+ALTER SCHEMA "Files" OWNER TO files;
+ALTER SCHEMA "Quotas" OWNER TO quotas;
