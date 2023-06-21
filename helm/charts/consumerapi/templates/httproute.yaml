@@ -1,3 +1,4 @@
+{{- if .Values.httpRoute.enabled }}
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -20,3 +21,4 @@ spec:
       backendRefs:
         - name: {{ include "global.name" . }}
           port: 80
+{{- end }}

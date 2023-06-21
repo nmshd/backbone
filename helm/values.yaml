@@ -261,6 +261,8 @@ consumerapi:
 
   # httpRoute - the configuration of the HttpRoute for the consumer API
   httpRoute:
+    # enabled - whether to enable the HttpRoute for the consumer API
+    enabled: false
     # parentRefName - the name of the gateway this Route wants to be attached to
     parentRefName: ""
     # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
