@@ -4,7 +4,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IndividualQuota : Quota
 {
-    public IndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
+    public IndividualQuota(MetricKey metricKey, int max, QuotaPeriod period, string applyTo) : base(applyTo)
     {
         MetricKey = metricKey;
         Max = max;
