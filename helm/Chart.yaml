@@ -17,4 +17,4 @@ dependencies:
 icon: https://raw.githubusercontent.com/nmshd/nmshd.github.io/main/assets/images/Logo.svg
 home: https://enmeshed.eu
 sources:
-  - "https://github.com/nmshd/backbone"
+  - "https://github.com/nmshd/backbone/tree/main/helm"
