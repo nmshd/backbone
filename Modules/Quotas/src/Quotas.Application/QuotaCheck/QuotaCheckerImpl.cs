@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Common.Infrastructure.Persistence.Repository;

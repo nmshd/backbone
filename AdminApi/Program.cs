@@ -4,7 +4,9 @@ using AdminApi.Extensions;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -58,6 +60,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
     })
     .AddHealthChecks();
+
+    services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
