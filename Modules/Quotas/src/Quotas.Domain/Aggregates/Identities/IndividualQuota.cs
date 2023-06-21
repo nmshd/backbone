@@ -1,19 +1,18 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IndividualQuota : Quota
 {
-    public IndividualQuota(IdentityAddress applyTo) : base(applyTo)
+    public IndividualQuota(MetricKey metricKey, int max, QuotaPeriod period, string applyTo) : base(applyTo)
     {
+        MetricKey = metricKey;
+        Max = max;
+        Period = period;
     }
 
-    public override int Weight => throw new NotImplementedException();
-
-    public override MetricKey MetricKey => throw new NotImplementedException();
-
-    public override int Max => throw new NotImplementedException();
-
-    public override QuotaPeriod Period => throw new NotImplementedException();
+    public override int Weight => 2;
+    public override MetricKey MetricKey { get; }
+    public override int Max { get; }
+    public override QuotaPeriod Period { get; }
 }

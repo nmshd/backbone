@@ -95,6 +95,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.API.Tests", "BuildingBlocks\test\BuildingBlocks.API.Tests\BuildingBlocks.API.Tests.csproj", "{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application.Tests", "BuildingBlocks\test\BuildingBlocks.Application.Tests\BuildingBlocks.Application.Tests.csproj", "{6E326CDD-7992-487E-A840-987929DC79EF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {A5BC6269-E1FC-4F91-B1D2-5B4F90571531}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure.Tests", "BuildingBlocks\test\BuildingBlocks.Infrastructure.Tests\BuildingBlocks.Infrastructure.Tests.csproj", "{35B85FC1-3134-4FE5-815E-F7C4282C6991}"
 EndProject
@@ -105,6 +108,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds.Tests", "BuildingBlocks\test\StronglyTypedIds.Tests\StronglyTypedIds.Tests.csproj", "{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling.Tests", "BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj", "{33AF4A60-5E10-4F84-93A5-E724D013CFC3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {A5BC6269-E1FC-4F91-B1D2-5B4F90571531}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestTools.Tests", "BuildingBlocks\test\UnitTestTools.Tests\UnitTestTools.Tests.csproj", "{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}"
 EndProject
