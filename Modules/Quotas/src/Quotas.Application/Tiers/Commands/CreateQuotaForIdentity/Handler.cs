@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -40,10 +39,6 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _logger.LogTrace($"Successfully created assigned Quota to Identity. Identity Address: {identity.Address}");
-
-        _eventBus.Publish(new QuotaCreatedForIdentityIntegrationEvent(identity.Address, result.Value.Id));
-
-        _logger.LogTrace($"Successfully published QuotaCreatedForIdentityIntegrationEvent. Identity Address: {identity.Address}");
 
         var response = new IdentityQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric.Key, metric.DisplayName), result.Value.Max, result.Value.Period);
         return response;
