@@ -1,5 +1,8 @@
+
 /********************************************** Database Configuration **********************************************/
+
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++ Schemas +++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 /*
 DROP SCHEMA "Challenges" cascade;
 DROP SCHEMA "Devices" cascade;
@@ -23,7 +26,7 @@ CREATE SCHEMA IF NOT EXISTS "Quotas";
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /* DROP USER challenges, devices, messages, files, relationships, synchronization, tokens, quotas */ 
-
+ 
 DO
 $$
 BEGIN
@@ -209,8 +212,10 @@ ALTER TABLE IF EXISTS "Quotas"."__EFMigrationsHistory" OWNER to quotas;
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-Expand All
-	@@ -219,7 +285,6 @@ GRANT synchronization TO "nmshdAdmin";
+GRANT challenges TO "nmshdAdmin";;
+GRANT devices TO "nmshdAdmin";
+GRANT messages TO "nmshdAdmin";
+GRANT synchronization TO "nmshdAdmin";
 GRANT tokens TO "nmshdAdmin";
 GRANT relationships TO "nmshdAdmin";
 GRANT files TO "nmshdAdmin";
@@ -218,8 +223,8 @@ GRANT quotas TO "nmshdAdmin";
 
 ALTER SCHEMA "Challenges" OWNER TO challenges;
 ALTER SCHEMA "Devices" OWNER TO devices;
-Expand All
-	@@ -228,5 +293,4 @@ ALTER SCHEMA "Synchronization" OWNER TO synchronization;
+ALTER SCHEMA "Messages" OWNER TO messages;
+ALTER SCHEMA "Synchronization" OWNER TO synchronization;
 ALTER SCHEMA "Tokens" OWNER TO tokens;
 ALTER SCHEMA "Relationships" OWNER TO relationships;
 ALTER SCHEMA "Files" OWNER TO files;
