@@ -33,7 +33,7 @@ public class Identity
 
     private void UpdateMetricStatus(MetricKey metricKey, IMetricCalculator metricCalculator)
     {
-        var metricStatus = _metricStatuses.Where(m => m.MetricKey == metricKey).FirstOrDefault();
+        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
         if(metricStatus != null)
         {
             var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
