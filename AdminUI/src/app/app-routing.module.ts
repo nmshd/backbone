@@ -13,7 +13,7 @@ const routes: Routes = [
     { path: 'identities', component: IdentityListComponent },
     { path: 'tiers', component: TierListComponent },
     { path: 'tiers/create', component: TierEditComponent },
-    { path: 'tiers/:id', component: TierEditComponent },
+    { path: 'tiers/:id/:name', component: TierEditComponent },
     { path: 'clients', component: ClientListComponent },
     { path: '**', component: PageNotFoundComponent },
 ];

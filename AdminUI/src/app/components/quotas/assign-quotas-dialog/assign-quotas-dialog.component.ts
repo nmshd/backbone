@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
     Quota,
     QuotasService,
 } from 'src/app/services/quotas-service/quotas.service';
 import { Metric } from 'src/app/services/quotas-service/quotas.service';
+import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
 @Component({
     selector: 'app-assign-quotas-dialog',
@@ -15,11 +16,11 @@ import { Metric } from 'src/app/services/quotas-service/quotas.service';
 export class AssignQuotasDialogComponent {
     header: string;
 
-    metric!: Metric;
+    metric!: any;
     max: number;
     period!: string;
 
-    metrics: Metric[];
+    metrics: any;
     periods: string[];
 
     loading: boolean;
@@ -27,7 +28,8 @@ export class AssignQuotasDialogComponent {
     constructor(
         private _snackBar: MatSnackBar,
         private quotasService: QuotasService,
-        public dialogRef: MatDialogRef<AssignQuotasDialogComponent>
+        public dialogRef: MatDialogRef<AssignQuotasDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         this.header = 'Assign Quota';
 
@@ -45,10 +47,11 @@ export class AssignQuotasDialogComponent {
     }
 
     getMetrics() {
+        this.loading = true;
         this.quotasService.getMetrics().subscribe({
-            next: (data: Metric[]) => {
-                if (data) {
-                    this.metrics = data;
+            next: (data: HttpResponseEnvelope<Metric>) => {
+                if (data && data.result) {
+                    this.metrics = data.result;
                 }
             },
             complete: () => (this.loading = false),
@@ -62,10 +65,27 @@ export class AssignQuotasDialogComponent {
     getPeriods() {
         this.periods = this.quotasService.getPeriods();
     }
-
+    
     assignQuota() {
+        switch (this.period) {
+            case 'Hourly':
+                this.period = 'Hour';
+                break;
+            case 'Daily':
+                this.period = 'Day';
+                break;
+            case 'Weekly':
+                this.period = 'Week';
+                break;
+            case 'Monthly':
+                this.period = 'Month';
+                break;
+            case 'Yearly':
+                this.period = 'Year';
+                break;
+        }
         let quota: Quota = {
-            metric: this.metric,
+            metricKey: this.metric.key,
             max: this.max,
             period: this.period,
         };

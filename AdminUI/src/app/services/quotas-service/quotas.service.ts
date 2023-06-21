@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,34 +11,29 @@ export class QuotasService {
     apiUrl: string;
 
     constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + '/Quotas';
+        this.apiUrl = environment.apiUrl;
     }
 
-    getMetrics(): Observable<Metric[]> {
-        //return this.http.get<Metric[]>(this.apiUrl);
-        //Dummy data
-        let metric: Metric = {
-            id: '1',
-            key: 'A',
-            displayName: 'Sent Messages',
-        };
-        return of([metric]);
+    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
+        return this.http.get<HttpResponseEnvelope<Metric>>( this.apiUrl + "/Metrics");
     }
 
     getPeriods(): string[] {
-        return ['Monthly', 'Yearly'];
+        return ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Yearly'];
     }
 
-    createTierQuota(quota: Quota, tierId: string): Observable<Quota> {
-        //return this.http.post<Quota>(this.apiUrl, quota);
-        //Dummy data
-        return of(quota);
+    createTierQuota(quota: Quota, tierId: string): Observable<HttpResponseEnvelope<Quota>> {
+        return this.http.post<HttpResponseEnvelope<Quota>>(this.apiUrl + "/Tiers/" + tierId + "/Quotas", quota);
+    }
+
+    quotaForTier(tierId : string){
+        return this.http.get<HttpResponseEnvelope<Quota>>(this.apiUrl + "/Tiers/" + tierId + "/QuotasForTier");
     }
 }
 
 export interface Quota {
-    id?: string;
-    metric?: Metric;
+    tierId?: string;
+    metricKey?: string;
     max?: number;
     period?: string;
 }

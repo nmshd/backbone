@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
     Quota,
     QuotasService,
@@ -22,6 +22,8 @@ export class TierEditComponent {
     tierId?: string;
     editMode: boolean;
 
+    tierName?: string;
+    tierQuotas : any;
     tier: Tier;
 
     loading: boolean;
@@ -40,12 +42,14 @@ export class TierEditComponent {
         this.editMode = false;
         this.loading = true;
         this.tier = {};
+        this.tierQuotas = [];
     }
 
     ngOnInit() {
         this.route.params.subscribe((params) => {
             if (params['id']) {
                 this.tierId = params['id'];
+                this.tierName = params['name'];
                 this.editMode = true;
             }
         });
@@ -68,11 +72,13 @@ export class TierEditComponent {
 
     getTier() {
         this.loading = true;
-        this.tierService.getTierById(this.tierId!).subscribe({
-            next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                }
+        this.tier.id = this.tierId;
+        this.tier.name = this.tierName;
+        this.quotasService.quotaForTier(this.tierId!)
+        .subscribe({
+            next: (data: HttpResponseEnvelope<Quota>) => {
+                this.tierQuotas = data.result;
+                this.validateQuotaPeriod();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -137,14 +143,17 @@ export class TierEditComponent {
 
     createTierQuota(quota: Quota) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota, this.tier.id!).subscribe({
-            next: (data: Quota) => {
-                if (data) {
-                    if (this.tier.quotas) {
-                        this.tier.quotas!.push(data);
-                        this.tier.quotas = [...this.tier.quotas!];
+        this.quotasService.createTierQuota(quota, this.tierId!)
+            .subscribe({
+            next: (data: HttpResponseEnvelope<Quota>) => {
+                if (data && data.result) {
+                    if (this.tierQuotas) {
+                        this.tierQuotas.push(data.result);
+                        this.validateQuotaPeriod();
+                        this.tierQuotas = [...this.tierQuotas];
                     } else {
-                        this.tier.quotas = [data];
+                        this.tierQuotas = [data.result];
+                        this.validateQuotaPeriod();
                     }
 
                     this.snackBar.open(
@@ -159,5 +168,27 @@ export class TierEditComponent {
                 this.snackBar.open(err.message, 'Dismiss');
             },
         });
+    }
+
+    validateQuotaPeriod(){
+        for(let qTier of this.tierQuotas){
+            switch (qTier.period) {
+                case 'Hour':
+                    qTier.period = 'Hourly';
+                    break;
+                case 'Day':
+                    qTier.period = 'Daily';
+                    break;
+                case 'Week':
+                    qTier.period = 'Weekly';
+                    break;
+                case 'Month':
+                    qTier.period = 'Monthly';
+                    break;
+                case 'Year':
+                    qTier.period = 'Yearly';
+                    break;
+            }
+        }
     }
 }

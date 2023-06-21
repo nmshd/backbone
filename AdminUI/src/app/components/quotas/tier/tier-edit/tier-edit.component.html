@@ -6,6 +6,7 @@
                 <mat-panel-title> Details </mat-panel-title>
             </mat-expansion-panel-header>
             <div class="form-details">
+                
                 <mat-form-field *ngIf="editMode">
                     <mat-label>Id</mat-label>
                     <input matInput [(ngModel)]="tier.id" disabled />
@@ -22,7 +23,7 @@
             <mat-expansion-panel-header>
                 <mat-panel-title> Quotas </mat-panel-title>
             </mat-expansion-panel-header>
-            <table mat-table class="responsive" [dataSource]="tier.quotas!">
+            <table mat-table class="responsive" [dataSource]="tierQuotas">
                 <ng-container matColumnDef="metricName">
                     <th mat-header-cell *matHeaderCellDef>Metric Name</th>
                     <td
