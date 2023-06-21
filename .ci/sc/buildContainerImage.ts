@@ -1,4 +1,5 @@
 #!/usr/bin/env -S npx ts-node --esm -T
+
 import { $ } from "zx";
 import { getRequiredEnvVar, toCamelCase } from "../lib.js";
 
