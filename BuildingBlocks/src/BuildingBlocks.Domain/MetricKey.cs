@@ -7,4 +7,9 @@ public class MetricKey
     {
         Value = value;
     }
+
+    public static implicit operator string(MetricKey id)
+    {
+        return id.Value;
+    }
 }

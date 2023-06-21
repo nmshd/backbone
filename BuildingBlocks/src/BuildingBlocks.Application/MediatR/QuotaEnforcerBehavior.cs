@@ -1,28 +1,21 @@
-﻿using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using MediatR;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using MediatR;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
-    private readonly IMetricStatusesRepository _metricStatusesRepository;
-    private readonly IUserContext? _userContext;
+    private readonly IQuotaChecker _quotaChecker;
 
-    public QuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepositories, IEnumerable<IUserContext> userContexts)
+    public QuotaEnforcerBehavior(IQuotaChecker quotaChecker)
     {
-        _metricStatusesRepository = metricStatusesRepositories;
-        _userContext = userContexts.FirstOrDefault();
+        _quotaChecker = quotaChecker;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if(_userContext == null)
-        {
-            return await next();
-        }
         
         var attributes = request.GetType().CustomAttributes;
 
@@ -31,13 +24,11 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         {
             var metricKeys = applyQuotasForMetricsAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
 
-            var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
+            var result = await _quotaChecker.CheckQuotaExhaustion(metricKeys);
 
-            var exhaustedStatuses = statuses.Where(m => m.IsExhausted).ToList();
-
-            if (exhaustedStatuses.Any())
+            if (!result.IsSuccess)
             {
-                throw new QuotaExhaustedException(exhaustedStatuses.ToArray());
+                throw new QuotaExhaustedException(result.ExhaustedStatuses.ToArray());
             }
         }
 

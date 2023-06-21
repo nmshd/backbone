@@ -164,7 +164,7 @@ public class QuotaEnforcerBehaviorTests
     {
         var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
         var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, new List<IUserContext>() { userContextStub });
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(null);
     }
 }
 

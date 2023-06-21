@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,7 +51,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<IMessagesRepository, MessagesRepository>();
         services.AddTransient<IMetricsRepository, MetricsRepository>();
-        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
+        services.AddTransient<Application.Infrastructure.Persistence.Repository.IMetricStatusesRepository, Repository.MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
     }

@@ -37,7 +37,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
         if (parseMetricKeyResult.IsFailure)
             throw new DomainException(parseMetricKeyResult.Error);
 
-        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken); // ensure metric exists
+        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
 
         var result = tier.CreateQuota(parseMetricKeyResult.Value, request.Max, request.Period);
         if (result.IsFailure)
