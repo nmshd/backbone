@@ -2,11 +2,11 @@
 using Backbone.Modules.Quotas.Domain;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
-public class ServiceCollectionMetricCalculatorFactory : MetricCalculatorFactory
+public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
 {
     private readonly IMessagesRepository _messagesRepository;
 
-    public ServiceCollectionMetricCalculatorFactory(IMessagesRepository messagesRepository)
+    public ServiceProviderMetricCalculatorFactory(IMessagesRepository messagesRepository)
     {
         _messagesRepository = messagesRepository;
     }

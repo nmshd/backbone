@@ -52,7 +52,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IMetricsRepository, MetricsRepository>();
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
-        services.AddTransient<MetricCalculatorFactory, ServiceCollectionMetricCalculatorFactory>();
+        services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
     }
 
     public class DbOptions
