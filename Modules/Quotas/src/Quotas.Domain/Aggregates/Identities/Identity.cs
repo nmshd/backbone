@@ -1,5 +1,8 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Errors;
+using CSharpFunctionalExtensions;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -19,8 +22,11 @@ public class Identity
     public string Address { get; }
     public string TierId { get; }
 
-    public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
+    public Result<IndividualQuota, DomainError> CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
+        if (max <= 0)
+            return Result.Failure<IndividualQuota, DomainError>(DomainErrors.TierQuotaMaxValueCannotBeLowerOrEqualToZero());
+
         var individualQuota = new IndividualQuota(metricKey, max, period, Address);
         _individualQuotas.Add(individualQuota);
 

@@ -9,4 +9,9 @@ public static class IdentitiesQueryableExtensions
         var identities = await query.Where(identity => identity.TierId == tierId).ToListAsync(cancellationToken);
         return identities;
     }
+
+    public static Task<Identity> WithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
+    {
+        return query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
+    }
 }
