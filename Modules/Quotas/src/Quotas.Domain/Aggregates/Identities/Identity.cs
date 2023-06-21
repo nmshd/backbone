@@ -20,8 +20,8 @@ public class Identity
         TierId = tierId;
     }
 
-    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas;
-    public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses;
+    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
+    public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
     public string Address { get; }
     public TierId TierId { get; }
 
