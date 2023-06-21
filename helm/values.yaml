@@ -206,6 +206,8 @@ consumerapi:
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
+  # the resources for the Consumer API container
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources
   resources:
     requests:
       cpu: "200m"
@@ -214,13 +216,17 @@ consumerapi:
       cpu: "400m"
       memory: "1Gi"
 
+  # securityContext for the Consumer API container
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1
   securityContext: {}
 
+  # securityContext for the pod deployed by the Deployment
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context
   podSecurityContext: {}
 
   podAnnotations: {}
 
-  # env - environment variables for the consumer API container
+  # env - environment variables for the Consumer API container
   #############################################################################
   # IMPORTANT
   # The following environment variables are required:
@@ -241,8 +247,16 @@ consumerapi:
     type: "ClusterIP"
     port: 80
 
+  # the nodeSelector for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
   tolerations: []
+
+  # the affinity for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity
   affinity: {}
 
   autoscaling:
@@ -288,6 +302,8 @@ admincli:
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
+  # the resources for the Admin CLI container
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources
   resources:
     requests:
       cpu: "200m"
@@ -296,27 +312,45 @@ admincli:
       cpu: "400m"
       memory: "1Gi"
 
+  # securityContext for the Admin CLI container
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1
   securityContext: {}
 
-  # env - environment variables for the admin CLI container
+  # securityContext for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Admin CLI container
   #############################################################################
   # IMPORTANT
   # The following environment variables are required:
   # - Database__ConnectionString
   #############################################################################
+
+  # a list of environment variables
+  # see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables
   env: []
 
-  podSecurityContext: {}
-
-  podAnnotations: {}
-
+  # the nodeSelector for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
   tolerations: []
+
+  # the affinity for the pods deployed by the Deployment
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity
   affinity: {}
 
 rabbitmq:
   # create - if a RabbitMQ service should be created, set this to true; if you want to use an existing one, set it to false
   create: false
+
+  # the resources for the RabbitMQ container
+  # https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources
   resources:
     requests:
       cpu: "100m"
