@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
-using Backbone.Modules.Quotas.Application.Tiers.Queries.ListQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -53,14 +52,6 @@ public class TiersController : ApiControllerBase
     {
         var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand(tierId, request.MetricKey, request.Max, request.Period), cancellationToken);
         return Created(createdTierQuotaDefinition);
-    }
-
-    [HttpGet("{tierId}/QuotasForTier")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListQuotasForTierResponse>), StatusCodes.Status201Created)]
-    public async Task<IActionResult> GetQuotasForTier(string tierId, CancellationToken cancellationToken)
-    {
-        var quotasForTier = await _mediator.Send(new ListQuotasForTierQuery(tierId), cancellationToken);
-        return Ok(quotasForTier);
     }
 }
 

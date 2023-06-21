@@ -25,10 +25,6 @@ export class QuotasService {
     createTierQuota(quota: Quota, tierId: string): Observable<HttpResponseEnvelope<Quota>> {
         return this.http.post<HttpResponseEnvelope<Quota>>(this.apiUrl + "/Tiers/" + tierId + "/Quotas", quota);
     }
-
-    quotaForTier(tierId : string){
-        return this.http.get<HttpResponseEnvelope<Quota>>(this.apiUrl + "/Tiers/" + tierId + "/QuotasForTier");
-    }
 }
 
 export interface Quota {

@@ -74,18 +74,7 @@ export class TierEditComponent {
         this.loading = true;
         this.tier.id = this.tierId;
         this.tier.name = this.tierName;
-        this.quotasService.quotaForTier(this.tierId!)
-        .subscribe({
-            next: (data: HttpResponseEnvelope<Quota>) => {
-                this.tierQuotas = data.result;
-                this.validateQuotaPeriod();
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
-            },
-        });
+        this.loading = false;
     }
 
     createTier() {
