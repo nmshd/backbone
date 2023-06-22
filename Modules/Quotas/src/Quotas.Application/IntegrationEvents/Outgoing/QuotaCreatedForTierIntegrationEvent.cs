@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 
