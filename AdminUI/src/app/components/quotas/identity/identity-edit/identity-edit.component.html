@@ -1,0 +1,51 @@
+<h2>{{ header }}</h2>
+<div *ngIf="!loading">
+    <mat-accordion multi>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Details </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form-details">
+                <mat-form-field>
+                    <mat-label>Address</mat-label>
+                    <input matInput [(ngModel)]="identity.address" disabled />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Client Id</mat-label>
+                    <input matInput [(ngModel)]="identity.clientId" disabled />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Public Key</mat-label>
+                    <input matInput [(ngModel)]="identity.publicKey" disabled />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Created At</mat-label>
+                    <input matInput [(ngModel)]="identity.createdAt" disabled />
+                </mat-form-field>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Quotas </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="action-buttons">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    matTooltip="Assign Quota"
+                    (click)="openAssignQuotaDialog()"
+                >
+                    <mat-icon>add</mat-icon>
+                    Assign Quota
+                </button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+</div>
