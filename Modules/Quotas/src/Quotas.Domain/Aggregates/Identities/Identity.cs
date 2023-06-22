@@ -11,6 +11,7 @@ public class Identity
     // Ensure that all palces where *all* quotas are to be used reference
     // both _tierQuotas and _individualQuotas (to be created).
     // - GetAppliedQuotasForMetric
+    // Tests must also be updated.
     private readonly List<TierQuota> _tierQuotas;
 
     private readonly List<MetricStatus> _metricStatuses;
