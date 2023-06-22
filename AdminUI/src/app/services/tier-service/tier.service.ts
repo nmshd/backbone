@@ -33,7 +33,7 @@ export class TierService {
     }
 
     getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-        // There is no getById api endpoint
+        // TODO: Missing an API endpoint to get a tier by ID
         const httpOptions = {
             params: new HttpParams().set('id', id),
         };
@@ -56,5 +56,4 @@ export class TierService {
 export interface Tier {
     id?: string;
     name?: string;
-    quotas?: Quota[];
 }

@@ -20,15 +20,13 @@ export class TierEditComponent {
     headerCreate: string;
 
     tierId?: string;
+    tierName?: string;
+
     editMode: boolean;
 
-    tierName?: string;
-    tierQuotas : any;
     tier: Tier;
 
     loading: boolean;
-
-    displayedColumnsQuotas: string[] = ['metricName', 'metricMax', 'period'];
 
     constructor(
         private route: ActivatedRoute,
@@ -42,7 +40,6 @@ export class TierEditComponent {
         this.editMode = false;
         this.loading = true;
         this.tier = {};
-        this.tierQuotas = [];
     }
 
     ngOnInit() {
@@ -64,7 +61,6 @@ export class TierEditComponent {
     initTier() {
         this.tier = {
             name: '',
-            quotas: [],
         } as Tier;
 
         this.loading = false;
@@ -72,8 +68,14 @@ export class TierEditComponent {
 
     getTier() {
         this.loading = true;
-        this.tier.id = this.tierId;
-        this.tier.name = this.tierName;
+
+        // TODO: Missing an API endpoint to get a tier by ID
+        // Building tier using routing parameters
+        this.tier = {
+            id: this.tierId,
+            name: this.tierName,
+        } as Tier;
+
         this.loading = false;
     }
 
@@ -132,19 +134,9 @@ export class TierEditComponent {
 
     createTierQuota(quota: Quota) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota, this.tierId!)
-            .subscribe({
+        this.quotasService.createTierQuota(quota, this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Quota>) => {
                 if (data && data.result) {
-                    if (this.tierQuotas) {
-                        this.tierQuotas.push(data.result);
-                        this.validateQuotaPeriod();
-                        this.tierQuotas = [...this.tierQuotas];
-                    } else {
-                        this.tierQuotas = [data.result];
-                        this.validateQuotaPeriod();
-                    }
-
                     this.snackBar.open(
                         'Successfully assigned quota.',
                         'Dismiss'
@@ -157,27 +149,5 @@ export class TierEditComponent {
                 this.snackBar.open(err.message, 'Dismiss');
             },
         });
-    }
-
-    validateQuotaPeriod(){
-        for(let qTier of this.tierQuotas){
-            switch (qTier.period) {
-                case 'Hour':
-                    qTier.period = 'Hourly';
-                    break;
-                case 'Day':
-                    qTier.period = 'Daily';
-                    break;
-                case 'Week':
-                    qTier.period = 'Weekly';
-                    break;
-                case 'Month':
-                    qTier.period = 'Monthly';
-                    break;
-                case 'Year':
-                    qTier.period = 'Yearly';
-                    break;
-            }
-        }
     }
 }

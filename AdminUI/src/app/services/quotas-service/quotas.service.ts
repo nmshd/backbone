@@ -15,15 +15,23 @@ export class QuotasService {
     }
 
     getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>( this.apiUrl + "/Metrics");
+        return this.http.get<HttpResponseEnvelope<Metric>>(
+            this.apiUrl + '/Metrics'
+        );
     }
 
     getPeriods(): string[] {
-        return ['Hourly', 'Daily', 'Weekly', 'Monthly', 'Yearly'];
+        return ['Hour', 'Day', 'Week', 'Month', 'Year'];
     }
 
-    createTierQuota(quota: Quota, tierId: string): Observable<HttpResponseEnvelope<Quota>> {
-        return this.http.post<HttpResponseEnvelope<Quota>>(this.apiUrl + "/Tiers/" + tierId + "/Quotas", quota);
+    createTierQuota(
+        quota: Quota,
+        tierId: string
+    ): Observable<HttpResponseEnvelope<Quota>> {
+        return this.http.post<HttpResponseEnvelope<Quota>>(
+            this.apiUrl + '/Tiers/' + tierId + '/Quotas',
+            quota
+        );
     }
 }
 
