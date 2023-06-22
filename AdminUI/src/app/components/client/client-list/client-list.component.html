@@ -28,16 +28,16 @@
                 </td>
             </tr>
         </table>
-        <mat-paginator
-            (page)="pageChangeEvent($event)"
-            [length]="totalRecords"
-            [pageSize]="pageSize"
-            [pageIndex]="pageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of identities"
-        >
-        </mat-paginator>
+        <div class="action-buttons">
+            <button
+                mat-icon-button
+                color="primary"
+                matTooltip="Add new client"
+                (click)="addClient()"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
     </mat-card-content>
 </mat-card>
 <div *ngIf="loading" class="loading">

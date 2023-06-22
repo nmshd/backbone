@@ -1,0 +1,63 @@
+<h2>{{ headerCreate }}</h2>
+<div *ngIf="!loading">
+    <mat-accordion multi>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Details </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form-details">
+                <mat-form-field>
+                    <mat-label>Client Id</mat-label>
+                    <input
+                        matInput
+                        required
+                        [(ngModel)]="client.clientId"
+                        [disabled]="disabled"
+                    />
+                    <mat-error>You must enter a value</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Display Name</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="client.displayName"
+                        [disabled]="disabled"
+                    />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input type="password"
+                        matInput
+                        [(ngModel)]="client.clientSecret"
+                        [disabled]="disabled"
+                    />
+                </mat-form-field>                
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <div class="action-buttons">
+        <button
+            *ngIf="editMode"
+            mat-icon-button
+            color="primary"
+            (click)="createClient()"
+            matTooltip="Save"
+            [disabled]="!validateClient() || true"
+        >
+            <mat-icon>save</mat-icon>
+        </button>
+        <button
+            mat-icon-button
+            color="primary"
+            (click)="createClient()"
+            matTooltip="Add"
+            [disabled]="!validateClient() || true"
+        >
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+</div>
