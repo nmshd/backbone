@@ -39,7 +39,10 @@ export class TierEditComponent {
         this.headerCreate = 'Create Tier';
         this.editMode = false;
         this.loading = true;
-        this.tier = {};
+        this.tier = {
+            id: '',
+            name: '',
+        } as Tier;
     }
 
     ngOnInit() {
@@ -54,16 +57,8 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         } else {
-            this.initTier();
+            this.loading = false;
         }
-    }
-
-    initTier() {
-        this.tier = {
-            name: '',
-        } as Tier;
-
-        this.loading = false;
     }
 
     getTier() {

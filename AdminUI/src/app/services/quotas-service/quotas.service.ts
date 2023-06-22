@@ -37,13 +37,13 @@ export class QuotasService {
 
 export interface Quota {
     tierId?: string;
-    metricKey?: string;
-    max?: number;
-    period?: string;
+    metricKey: string;
+    max: number;
+    period: string;
 }
 
 export interface Metric {
-    id?: string;
-    key?: string;
-    displayName?: string;
+    id: string;
+    key: string;
+    displayName: string;
 }

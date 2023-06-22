@@ -53,6 +53,6 @@ export class TierService {
 }
 
 export interface Tier {
-    id?: string;
-    name?: string;
+    id: string;
+    name: string;
 }
