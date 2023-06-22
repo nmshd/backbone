@@ -27,9 +27,9 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
     {
-        return await _identitiesDbSet
+        return await (track ? _identitiesDbSet : _readOnlyIdentities)
             .Where(i => identityAddresses.Contains(i.Address))
             .IncludeAll(_dbContext)
             .ToListAsync(cancellationToken);
