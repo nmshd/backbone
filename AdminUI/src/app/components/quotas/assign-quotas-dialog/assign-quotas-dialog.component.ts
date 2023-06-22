@@ -65,25 +65,8 @@ export class AssignQuotasDialogComponent {
     getPeriods() {
         this.periods = this.quotasService.getPeriods();
     }
-    
+
     assignQuota() {
-        switch (this.period) {
-            case 'Hourly':
-                this.period = 'Hour';
-                break;
-            case 'Daily':
-                this.period = 'Day';
-                break;
-            case 'Weekly':
-                this.period = 'Week';
-                break;
-            case 'Monthly':
-                this.period = 'Month';
-                break;
-            case 'Yearly':
-                this.period = 'Year';
-                break;
-        }
         let quota: Quota = {
             metricKey: this.metric.key,
             max: this.max,
