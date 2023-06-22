@@ -41,10 +41,10 @@ public class Identity
         }
     }
 
-    private void UpdateMetricStatus(MetricKey metricKey)
+    private void UpdateMetricStatus(MetricKey metricKey, IEnumerable<Quota> quotasFromMetric)
     {
         var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
-        var maxExhaustionDate = GetAppliedQuotasForMetric(metricKey).Max(q => q.IsExhaustedUntil);
+        var maxExhaustionDate = quotasFromMetric.Max(q => q.IsExhaustedUntil);
         if (metricStatus != null)
         {
             metricStatus.Update(maxExhaustionDate);
@@ -57,8 +57,8 @@ public class Identity
 
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        var quotas = GetAppliedQuotasForMetric(metric);
-        foreach (var quota in quotas)
+        var quotasFromMetric = GetAppliedQuotasForMetric(metric);
+        foreach (var quota in quotasFromMetric)
         {
             var newUsage = await metricCalculator.CalculateUsage(
                 quota.Period.CalculateBegin(),
@@ -69,7 +69,7 @@ public class Identity
             quota.UpdateExhaustion(newUsage);
         }
 
-        UpdateMetricStatus(metric);
+        UpdateMetricStatus(metric, quotasFromMetric);
     }
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
@@ -87,7 +87,7 @@ public class Identity
             return Enumerable.Empty<Quota>();
         }
 
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
         return appliedQuotas;
     }
 }
