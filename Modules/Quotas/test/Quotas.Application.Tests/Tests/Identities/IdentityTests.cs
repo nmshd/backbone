@@ -12,7 +12,7 @@ public class IdentityTests
     public void Identity_with_unexhausted_tier_quota_has_valid_tier_quota()
     {
         // Arrange
-        var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
         var metricKey = Domain.Aggregates.Metrics.MetricKey.FileStorageCapacity;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour);
 
@@ -29,7 +29,7 @@ public class IdentityTests
     public void Identity_with_exhausted_tier_quota_has_non_null_IsExhaustedUntil()
     {
         // Arrange
-        var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
         var metricKey = MetricKey.FileStorageCapacity;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour);
 
@@ -49,19 +49,24 @@ public class IdentityTests
     public void Identity_with_more_than_one_exhausted_tier_quota_has_correct_metric_status_IsExhaustedUntil()
     {
         // Arrange
-        var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
         var metricKey = MetricKey.FileStorageCapacity;
         var tierQuotaDefinitions = new List<TierQuotaDefinition>() {
             new (metricKey, 1, QuotaPeriod.Hour),
             new (metricKey, 10, QuotaPeriod.Year)
         };
 
-        // Act
-        tierQuotaDefinitions.ForEach(identity.AssignTierQuotaFromDefinition);
+        foreach (var definition in tierQuotaDefinitions)
+        {
+            identity.AssignTierQuotaFromDefinition(definition);
+        }
+
         foreach (var quota in identity.TierQuotas)
         {
             quota.UpdateExhaustion(5);
         }
+
+        // Act
         identity.UpdateAllMetricStatuses();
 
         // Assert
@@ -76,7 +81,7 @@ public class IdentityTests
     public void Identity_with_more_than_one_tier_quota_with_different_metricKeys_has_correct_metric_status_count()
     {
         // Arrange
-        var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
         var tierQuotaDefinitions = new List<TierQuotaDefinition>() {
             new (MetricKey.NumberOfRelationships, 1, QuotaPeriod.Hour),
             new (MetricKey.NumberOfFiles, 2, QuotaPeriod.Hour),
@@ -89,7 +94,44 @@ public class IdentityTests
         identity.UpdateAllMetricStatuses();
 
         // Assert
-        identity.MetricStatuses.Should().HaveCount(tierQuotaDefinitions.Select(t=>t.MetricKey).Distinct().Count());
+        identity.MetricStatuses.Should().HaveCount(tierQuotaDefinitions.Select(t => t.MetricKey).Distinct().Count());
+        foreach (var metricStatus in identity.MetricStatuses)
+        {
+            metricStatus.IsExhaustedUntil.Should().BeNull();
+        }
+    }
+
+    [Fact]
+    public void Identity_with_more_than_one_tier_quota_exhausted_in_the_past_has_null_MetricStatuses()
+    {
+        // Arrange
+        SystemTime.Set(DateTime.UtcNow.AddHours(-5));
+
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
+        var tierQuotaDefinitions = new List<TierQuotaDefinition>() {
+            new (MetricKey.NumberOfRelationships, 1, QuotaPeriod.Hour),
+            new (MetricKey.NumberOfFiles, 2, QuotaPeriod.Hour),
+            new (MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Hour)
+        };
+
+
+        foreach (var definition in tierQuotaDefinitions)
+        {
+            identity.AssignTierQuotaFromDefinition(definition);
+        }
+
+        foreach (var quota in identity.TierQuotas)
+        {
+            quota.UpdateExhaustion(5);
+        }
+
+        SystemTime.Set(DateTime.UtcNow.AddHours(10));
+
+        // Act
+        identity.UpdateAllMetricStatuses();
+
+        // Assert
+        identity.MetricStatuses.Should().HaveCount(tierQuotaDefinitions.Select(t => t.MetricKey).Distinct().Count());
         foreach (var metricStatus in identity.MetricStatuses)
         {
             metricStatus.IsExhaustedUntil.Should().BeNull();
