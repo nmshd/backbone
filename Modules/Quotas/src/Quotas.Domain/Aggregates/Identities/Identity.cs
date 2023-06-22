@@ -10,15 +10,17 @@ public class Identity
     // To: The dev who implements individualQuotas
     // Ensure that all palces where *all* quotas are to be used reference
     // both _tierQuotas and _individualQuotas (to be created).
-    // e.g. the UpdateMetric method
-    private readonly List<TierQuota> _tierQuotas = new();
+    // - GetAppliedQuotasForMetric
+    private readonly List<TierQuota> _tierQuotas;
 
-    private readonly List<MetricStatus> _metricStatuses = new();
+    private readonly List<MetricStatus> _metricStatuses;
 
     public Identity(string address, TierId tierId)
     {
         Address = address;
         TierId = tierId;
+        _tierQuotas = new List<TierQuota>();
+        _metricStatuses = new List<MetricStatus>();
     }
 
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
