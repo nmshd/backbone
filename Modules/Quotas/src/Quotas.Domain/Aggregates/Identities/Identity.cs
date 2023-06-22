@@ -31,16 +31,6 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    private void UpdateMetricStatus(MetricKey metricKey, IMetricCalculator metricCalculator)
-    {
-        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
-        if(metricStatus != null)
-        {
-            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
-            metricStatus.Update(quotasOfMetric.Max(q => q.IsExhaustedUntil));
-        }
-    }
-
     public void UpdateAllMetricStatuses()
     {
         var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
@@ -62,6 +52,20 @@ public class Identity
         }
     }
 
+    private void UpdateMetricStatus(MetricKey metricKey)
+    {
+        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
+        if (metricStatus != null)
+        {
+            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
+            metricStatus.Update(quotasOfMetric.Max(q => q.IsExhaustedUntil));
+        }
+        else
+        {
+            _metricStatuses.Add(new(metricKey, null));
+        }
+    }
+
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
         var quotas = GetAppliedQuotasForMetric(metric);
@@ -76,7 +80,7 @@ public class Identity
             quota.UpdateExhaustion(newUsage);
         }
 
-        UpdateMetricStatus(metric, metricCalculator);
+        UpdateMetricStatus(metric);
     }
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
