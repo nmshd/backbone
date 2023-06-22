@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import {
     Identity,
     IdentityService,
@@ -34,6 +35,7 @@ export class IdentityListComponent {
     ];
 
     constructor(
+        private router: Router,
         private _snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
@@ -79,6 +81,10 @@ export class IdentityListComponent {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
         this.getPagedData();
+    }
+
+    editIdentity(identity: Identity) {
+        this.router.navigate([`/identities/` + identity.address]);
     }
 
     dateConvert(date: any) {
