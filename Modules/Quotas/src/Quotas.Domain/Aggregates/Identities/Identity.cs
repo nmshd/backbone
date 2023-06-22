@@ -32,19 +32,6 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public void UpdateAllMetricStatuses()
-    {
-        var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
-        var allMetricKeys = allQuotas.Select(q => q.MetricKey).Distinct().ToList();
-        _metricStatuses.Clear();
-        foreach (var metricKey in allMetricKeys)
-        {
-            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
-            var max = quotasOfMetric.Max(q => q.IsExhaustedUntil);
-            _metricStatuses.Add(new(metricKey, SystemTime.UtcNow > max ? null : max));
-        }
-    }
-
     public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
@@ -57,14 +44,14 @@ public class Identity
     private void UpdateMetricStatus(MetricKey metricKey)
     {
         var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
+        var maxExhaustionDate = GetAppliedQuotasForMetric(metricKey).Max(q => q.IsExhaustedUntil);
         if (metricStatus != null)
         {
-            var quotasOfMetric = GetAppliedQuotasForMetric(metricKey);
-            metricStatus.Update(quotasOfMetric.Max(q => q.IsExhaustedUntil));
+            metricStatus.Update(maxExhaustionDate);
         }
         else
         {
-            _metricStatuses.Add(new(metricKey, null));
+            _metricStatuses.Add(new(metricKey, maxExhaustionDate));
         }
     }
 
