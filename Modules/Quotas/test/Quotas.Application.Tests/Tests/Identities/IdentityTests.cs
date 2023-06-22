@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.Tooling;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
-public class IdentityQuotas
+public class IdentityTests
 {
     [Fact]
     public void Identity_with_unexhausted_tier_quota_has_valid_tier_quota()
@@ -29,7 +30,7 @@ public class IdentityQuotas
     {
         // Arrange
         var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
-        var metricKey = Domain.Aggregates.Metrics.MetricKey.FileStorageCapacity;
+        var metricKey = MetricKey.FileStorageCapacity;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour);
 
         // Act
@@ -49,7 +50,7 @@ public class IdentityQuotas
     {
         // Arrange
         var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
-        var metricKey = Domain.Aggregates.Metrics.MetricKey.FileStorageCapacity;
+        var metricKey = MetricKey.FileStorageCapacity;
         var tierQuotaDefinitions = new List<TierQuotaDefinition>() {
             new (metricKey, 1, QuotaPeriod.Hour),
             new (metricKey, 10, QuotaPeriod.Year)
@@ -77,10 +78,10 @@ public class IdentityQuotas
         // Arrange
         var identity = new Identity("some-dummy-address", new TierId("basicTierId"));
         var tierQuotaDefinitions = new List<TierQuotaDefinition>() {
-            new (Domain.Aggregates.Metrics.MetricKey.FileStorageCapacity, 1, QuotaPeriod.Hour),
-            new (Domain.Aggregates.Metrics.MetricKey.NumberOfFiles, 2, QuotaPeriod.Hour),
-            new (Domain.Aggregates.Metrics.MetricKey.NumberOfFiles, 15000, QuotaPeriod.Year),
-            new (Domain.Aggregates.Metrics.MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Hour)
+            new (MetricKey.NumberOfRelationships, 1, QuotaPeriod.Hour),
+            new (MetricKey.NumberOfFiles, 2, QuotaPeriod.Hour),
+            new (MetricKey.NumberOfFiles, 15000, QuotaPeriod.Year),
+            new (MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Hour)
         };
 
         // Act
