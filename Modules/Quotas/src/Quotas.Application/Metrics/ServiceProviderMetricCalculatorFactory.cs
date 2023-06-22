@@ -1,18 +1,20 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
 public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
 {
-    private readonly IMessagesRepository _messagesRepository;
+    private readonly IServiceProvider _serviceProvider;
 
-    public ServiceProviderMetricCalculatorFactory(IMessagesRepository messagesRepository)
+    public ServiceProviderMetricCalculatorFactory(IServiceProvider serviceProvider)
     {
-        _messagesRepository = messagesRepository;
+        _serviceProvider = serviceProvider;
     }
 
     public override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
     {
-        return new NumberOfSentMessagesMetricCalculator(_messagesRepository);
+        var messagesRepository = _serviceProvider.GetService<IMessagesRepository>();
+        return new NumberOfSentMessagesMetricCalculator(messagesRepository);
     }
 }
