@@ -87,17 +87,20 @@ public class Identity
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
+        var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
+        var allQuotasOfMetric = allQuotas.Where(q => q.MetricKey == metric);
+        var highestWeight = -1;
+
         try
         {
-            var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
-            var allQuotasOfMetric = allQuotas.Where(q => q.MetricKey == metric);
-            var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
-            var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
-            return appliedQuotas;
+            highestWeight = allQuotasOfMetric.Max(q => q.Weight);
         }
         catch (InvalidOperationException)
         {
             return Enumerable.Empty<Quota>();
         }
+
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToList();
+        return appliedQuotas;
     }
 }
