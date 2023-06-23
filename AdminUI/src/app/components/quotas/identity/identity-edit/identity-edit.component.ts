@@ -6,6 +6,12 @@ import {
     IdentityService,
 } from 'src/app/services/identity-service/identity.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
+import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
+import {
+    Quota,
+    QuotasService,
+} from 'src/app/services/quotas-service/quotas.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-identity-edit',
@@ -24,11 +30,13 @@ export class IdentityEditComponent {
     constructor(
         private route: ActivatedRoute,
         private snackBar: MatSnackBar,
-        private identityService: IdentityService
+        private dialog: MatDialog,
+        private identityService: IdentityService,
+        private quotasService: QuotasService
     ) {
         this.header = 'Edit Identity';
         this.loading = true;
-        this.identity = {};
+        this.identity = {} as Identity;
     }
 
     ngOnInit() {
@@ -43,6 +51,7 @@ export class IdentityEditComponent {
 
     getIdentity() {
         this.loading = true;
+
         this.identityService
             .getIdentityByAddress(this.identityAddress!)
             .subscribe({
@@ -60,49 +69,33 @@ export class IdentityEditComponent {
     }
 
     openAssignQuotaDialog() {
-        /*
         let dialogRef = this.dialog.open(AssignQuotasDialogComponent);
 
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
-                this.createTierQuota(result);
+                this.createIdentityQuota(result);
             }
         });
-        */
     }
 
     createIdentityQuota(quota: Quota) {
-        /*
         this.loading = true;
-        this.quotasService.createIdentityQuota(quota, this.identityAddress).subscribe({
-            next: (data: HttpResponseEnvelope<Quota>) => {
-                if (data && data.result) {
-                    this.snackBar.open(
-                        'Successfully assigned quota.',
-                        'Dismiss'
-                    );
-                }
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
-            },
-        });
-        */
+        this.quotasService
+            .createIdentityQuota(quota, this.identityAddress!)
+            .subscribe({
+                next: (data: HttpResponseEnvelope<Quota>) => {
+                    if (data && data.result) {
+                        this.snackBar.open(
+                            'Successfully assigned quota.',
+                            'Dismiss'
+                        );
+                    }
+                },
+                complete: () => (this.loading = false),
+                error: (err: any) => {
+                    this.loading = false;
+                    this.snackBar.open(err.message, 'Dismiss');
+                },
+            });
     }
-}
-
-//Placeholder
-export interface Quota {
-    id?: string;
-    metric?: Metric;
-    max?: number;
-    period?: string;
-}
-
-export interface Metric {
-    id?: string;
-    key?: string;
-    displayName?: string;
 }
