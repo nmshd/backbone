@@ -63,7 +63,9 @@ export class IdentityEditComponent {
                 complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
-                    this.snackBar.open(err.message, 'Dismiss');
+                    this.snackBar.open(err.message, 'Dismiss', {
+                        panelClass: ['snack-bar'],
+                    });
                 },
             });
     }
@@ -87,14 +89,19 @@ export class IdentityEditComponent {
                     if (data && data.result) {
                         this.snackBar.open(
                             'Successfully assigned quota.',
-                            'Dismiss'
+                            'Dismiss',
+                            {
+                                panelClass: ['snack-bar'],
+                            }
                         );
                     }
                 },
                 complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
-                    this.snackBar.open(err.message, 'Dismiss');
+                    this.snackBar.open(err.message, 'Dismiss', {
+                        panelClass: ['snack-bar'],
+                    });
                 },
             });
     }

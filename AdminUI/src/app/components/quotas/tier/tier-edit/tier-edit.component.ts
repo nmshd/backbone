@@ -76,7 +76,9 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -88,14 +90,18 @@ export class TierEditComponent {
                 if (data && data.result) {
                     this.tier = data.result;
                 }
-                this.snackBar.open('Successfully added tier.', 'Dismiss');
+                this.snackBar.open('Successfully added tier.', 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
                 this.tierId = data.result.id;
                 this.editMode = true;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -106,13 +112,21 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.snackBar.open('Successfully updated tier.', 'Dismiss');
+                    this.snackBar.open(
+                        'Successfully updated tier.',
+                        'Dismiss',
+                        {
+                            panelClass: ['snack-bar'],
+                        }
+                    );
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -141,14 +155,19 @@ export class TierEditComponent {
                 if (data && data.result) {
                     this.snackBar.open(
                         'Successfully assigned quota.',
-                        'Dismiss'
+                        'Dismiss',
+                        {
+                            panelClass: ['snack-bar'],
+                        }
                     );
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }

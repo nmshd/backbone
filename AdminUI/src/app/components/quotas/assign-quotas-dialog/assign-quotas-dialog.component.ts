@@ -57,7 +57,9 @@ export class AssignQuotasDialogComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this._snackBar.open(err.message, 'Close');
+                this._snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
