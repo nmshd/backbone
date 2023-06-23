@@ -23,7 +23,17 @@
 
                 <mat-form-field>
                     <mat-label>Created At</mat-label>
-                    <input matInput [(ngModel)]="identity.createdAt" disabled />
+                    <input
+                        matInput
+                        [matDatepicker]="picker"
+                        [(ngModel)]="identity.createdAt"
+                        disabled
+                    />
+                    <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
             </div>
         </mat-expansion-panel>

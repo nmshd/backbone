@@ -23,7 +23,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -83,7 +83,13 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         MatNativeDateModule,
         MatChipsModule,
     ],
-    providers: [SidebarService],
+    providers: [
+        SidebarService,
+        {
+            provide: MAT_DATE_LOCALE,
+            useValue: 'en-GB',
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
