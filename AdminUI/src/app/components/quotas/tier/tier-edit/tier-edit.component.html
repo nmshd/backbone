@@ -17,10 +17,27 @@
                         matInput
                         required
                         [(ngModel)]="tier.name"
-                        [disabled]="disabled"
+                        [disabled]="editMode && !tier.id"
                     />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="editMode" expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Quotas </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="action-buttons">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    matTooltip="Assign Quota"
+                    (click)="openAssignQuotaDialog()"
+                    [disabled]="!tier.id"
+                >
+                    <mat-icon>add</mat-icon>
+                    Assign Quota
+                </button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>
@@ -41,7 +58,7 @@
             color="primary"
             (click)="createTier()"
             matTooltip="Add"
-            [disabled]="disabled || !validateTier()"
+            [disabled]="!validateTier()"
         >
             <mat-icon>add</mat-icon>
         </button>
