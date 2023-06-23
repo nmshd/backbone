@@ -33,10 +33,21 @@ export class QuotasService {
             quota
         );
     }
+
+    createIdentityQuota(
+        quota: Quota,
+        identityAddress: string
+    ): Observable<HttpResponseEnvelope<Quota>> {
+        return this.http.post<HttpResponseEnvelope<Quota>>(
+            this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
+            quota
+        );
+    }
 }
 
 export interface Quota {
     tierId?: string;
+    identityAddress?: string;
     metricKey: string;
     max: number;
     period: string;
