@@ -32,9 +32,9 @@ export class IdentityService {
 }
 
 export interface Identity {
-    address?: string;
-    clientId?: string;
-    publicKey?: string;
-    createdAt?: Date;
-    identityVersion?: string;
+    address: string;
+    clientId: string;
+    publicKey: string;
+    createdAt: Date;
+    identityVersion: string;
 }

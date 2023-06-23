@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import {
+    Quota,
+    QuotasService,
+} from 'src/app/services/quotas-service/quotas.service';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
+import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
 
 @Component({
     selector: 'app-tier-edit',
@@ -14,24 +20,28 @@ export class TierEditComponent {
     headerCreate: string;
 
     tierId?: string;
+
     editMode: boolean;
 
     tier: Tier;
 
     loading: boolean;
-    disabled: boolean;
 
     constructor(
         private route: ActivatedRoute,
         private snackBar: MatSnackBar,
-        private tierService: TierService
+        private dialog: MatDialog,
+        private tierService: TierService,
+        private quotasService: QuotasService
     ) {
         this.headerEdit = 'Edit Tier';
         this.headerCreate = 'Create Tier';
         this.editMode = false;
         this.loading = true;
-        this.disabled = false;
-        this.tier = {};
+        this.tier = {
+            id: '',
+            name: '',
+        } as Tier;
     }
 
     ngOnInit() {
@@ -45,20 +55,13 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         } else {
-            this.initTier();
+            this.loading = false;
         }
-    }
-
-    initTier() {
-        this.tier = {
-            name: '',
-        } as Tier;
-
-        this.loading = false;
     }
 
     getTier() {
         this.loading = true;
+
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
@@ -88,7 +91,6 @@ export class TierEditComponent {
             error: (err: any) => {
                 this.loading = false;
                 this.snackBar.open(err.message, 'Dismiss');
-                this.disabled = true;
             },
         });
     }
@@ -115,5 +117,34 @@ export class TierEditComponent {
             return true;
         }
         return false;
+    }
+
+    openAssignQuotaDialog() {
+        let dialogRef = this.dialog.open(AssignQuotasDialogComponent);
+
+        dialogRef.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.createTierQuota(result);
+            }
+        });
+    }
+
+    createTierQuota(quota: Quota) {
+        this.loading = true;
+        this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
+            next: (data: HttpResponseEnvelope<Quota>) => {
+                if (data && data.result) {
+                    this.snackBar.open(
+                        'Successfully assigned quota.',
+                        'Dismiss'
+                    );
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
     }
 }
