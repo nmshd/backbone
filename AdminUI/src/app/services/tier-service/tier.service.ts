@@ -38,9 +38,7 @@ export class TierService {
         return new Observable<HttpResponseEnvelope<Tier>>((subscriber) => {
             this.getTiers(0, maxPageSize).subscribe({
                 next: (data: PagedHttpResponseEnvelope<Tier>) => {
-                    const tier = data.result.find((tier) => {
-                        return tier.id == id;
-                    });
+                    const tier = data.result.find((t) => t.id == id);
 
                     if (tier) {
                         subscriber.next({
