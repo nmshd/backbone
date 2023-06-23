@@ -34,15 +34,32 @@ export class IdentityService {
     getIdentityByAddress(
         address: string
     ): Observable<HttpResponseEnvelope<Identity>> {
-        // There is no getByAddress api endpoint
-        const httpOptions = {
-            params: new HttpParams().set('address', address),
-        };
+        // Missing an API endpoint to get an identity by Address
+        const maxPageSize = 200;
 
-        return this.http.get<HttpResponseEnvelope<Identity>>(
-            this.apiUrl,
-            httpOptions
-        );
+        return new Observable<HttpResponseEnvelope<Identity>>((subscriber) => {
+            this.getIdentities(0, maxPageSize).subscribe({
+                next: (data: PagedHttpResponseEnvelope<Identity>) => {
+                    const identity = data.result.find(
+                        (t) => t.address == address
+                    );
+
+                    if (identity) {
+                        subscriber.next({
+                            result: identity,
+                        } as HttpResponseEnvelope<Identity>);
+                    } else {
+                        subscriber.error({
+                            message: `Identity with ID: ${address} could not be found.`,
+                        });
+                    }
+                },
+                complete: () => subscriber.complete(),
+                error: (err: any) => {
+                    subscriber.error(err);
+                },
+            });
+        });
     }
 }
 
