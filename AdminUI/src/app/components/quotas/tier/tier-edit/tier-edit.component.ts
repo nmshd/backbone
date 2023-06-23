@@ -20,7 +20,6 @@ export class TierEditComponent {
     headerCreate: string;
 
     tierId?: string;
-    tierName?: string;
 
     editMode: boolean;
 
@@ -49,7 +48,6 @@ export class TierEditComponent {
         this.route.params.subscribe((params) => {
             if (params['id']) {
                 this.tierId = params['id'];
-                this.tierName = params['name'];
                 this.editMode = true;
             }
         });
@@ -64,14 +62,18 @@ export class TierEditComponent {
     getTier() {
         this.loading = true;
 
-        // TODO: Missing an API endpoint to get a tier by ID
-        // Building tier using routing parameters
-        this.tier = {
-            id: this.tierId,
-            name: this.tierName,
-        } as Tier;
-
-        this.loading = false;
+        this.tierService.getTierById(this.tierId!).subscribe({
+            next: (data: HttpResponseEnvelope<Tier>) => {
+                if (data && data.result) {
+                    this.tier = data.result;
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss');
+            },
+        });
     }
 
     createTier() {
@@ -129,7 +131,7 @@ export class TierEditComponent {
 
     createTierQuota(quota: Quota) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota, this.tierId!).subscribe({
+        this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
             next: (data: HttpResponseEnvelope<Quota>) => {
                 if (data && data.result) {
                     this.snackBar.open(

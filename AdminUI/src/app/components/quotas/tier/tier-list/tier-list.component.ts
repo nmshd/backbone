@@ -77,6 +77,6 @@ export class TierListComponent {
     }
 
     editTier(tier: Tier) {
-        this.router.navigate([`/tiers/` + tier.id, tier.name]);
+        this.router.navigate([`/tiers/` + tier.id]);
     }
 }
