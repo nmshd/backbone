@@ -37,6 +37,7 @@
                     color="primary"
                     matTooltip="Assign Quota"
                     (click)="openAssignQuotaDialog()"
+                    [disabled]="!identity.address"
                 >
                     <mat-icon>add</mat-icon>
                     Assign Quota
