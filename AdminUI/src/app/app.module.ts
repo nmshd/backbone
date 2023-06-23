@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,6 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,6 +38,7 @@ import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { ClientListComponent } from './components/client/client-list/client-list.component';
 import { IdentityEditComponent } from './components/quotas/identity/identity-edit/identity-edit.component';
+import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 
 @NgModule({
     declarations: [
@@ -46,9 +52,11 @@ import { IdentityEditComponent } from './components/quotas/identity/identity-edi
         TierEditComponent,
         ClientListComponent,
         IdentityEditComponent,
+        AssignQuotasDialogComponent,
     ],
     imports: [
         FormsModule,
+        ReactiveFormsModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -69,6 +77,11 @@ import { IdentityEditComponent } from './components/quotas/identity/identity-edi
         MatExpansionModule,
         MatTooltipModule,
         LayoutModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatChipsModule,
     ],
     providers: [SidebarService],
     bootstrap: [AppComponent],
