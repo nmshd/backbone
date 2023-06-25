@@ -10,6 +10,12 @@ dependencies:
   - name: admincli
     version: "1.0.0"
     repository: file://charts/admincli
+  - name: adminapi
+    version: "1.0.0"
+    repository: file://charts/adminapi
+  - name: adminui
+    version: "1.0.0"
+    repository: file://charts/adminui
   - name: consumerapi
     version: "1.0.0"
     repository: file://charts/consumerapi

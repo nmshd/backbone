@@ -1,0 +1,156 @@
+global:
+  provider: "GoogleCloud"
+
+  serviceAccount:
+    name: "bucket-service-account"
+
+  configuration:
+    # TODO: move to dedicated Admin API settings
+    cors:
+      allowedOrigins: "http://localhost:8081"
+    swaggerUi:
+      tokenUrl: "https://bkb-nmshd-dev.nbpdev.de/connect/token"
+    infrastructure:
+      eventBus:
+        vendor: RabbitMQ
+        connectionInfo: "rabbitmq"
+        rabbitMQUsername: "admin"
+    modules:
+      challenges:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+      devices:
+        application:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          pushNotifications:
+            provider: "Dummy"
+            azureNotificationHub:
+              hubName: "a"
+              connectionString: "a"
+      files:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          blobStorage:
+            cloudProvider: "GoogleCloud"
+            # ContainerName - see https://bildungsraum.de/display/DEV/Google+Cloud+Storage
+            containerName: "bkt-prj-nbp-dev-infra-f4cf-nmshd-bkb-files"
+      messages:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          blobStorage:
+            cloudProvider: "GoogleCloud"
+            # ContainerName - see https://bildungsraum.de/display/DEV/Google+Cloud+Storage
+            containerName: "bkt-prj-nbp-dev-infra-f4cf-nmshd-bkb-messages"
+      quotas:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+      relationships:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          blobStorage:
+            cloudProvider: "GoogleCloud"
+            # ContainerName - see https://bildungsraum.de/display/DEV/Google+Cloud+Storage
+            containerName: "bkt-prj-nbp-dev-infra-f4cf-nmshd-bkb-relationships"
+      synchronization:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          blobStorage:
+            cloudProvider: "GoogleCloud"
+            # ContainerName - see https://bildungsraum.de/display/DEV/Google+Cloud+Storage
+            containerName: "bkt-prj-nbp-dev-infra-f4cf-nmshd-bkb-synchronization"
+      tokens:
+        infrastructure:
+          sqlDatabase:
+            provider: "Postgres"
+          blobStorage:
+            cloudProvider: "GoogleCloud"
+            # ContainerName - see https://bildungsraum.de/display/DEV/Google+Cloud+Storage
+            containerName: "bkt-prj-nbp-dev-infra-f4cf-nmshd-bkb-tokens"
+
+consumerapi:
+  # httpRoute - see https://bildungsraum.de/display/DEV/Google+Kubernetes+Engine#GoogleKubernetesEngine-3.2HowmakeyourServiceaccessible
+  httpRoute:
+    enabled: true
+    parentRefName: "public-gateway"
+    parentRefNamespace: "default"
+    hostnames: ["bkb-nmshd-dev.nbpdev.de"]
+  env:
+    - name: authentication__jwtSigningCertificate
+      valueFrom:
+        secretKeyRef:
+          name: "jwt-signing-certificate"
+          key: "VALUE"
+    - name: modules__challenges__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "challenges-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Devices__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "devices-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Files__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "files-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Messages__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "messages-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Relationships__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "relationships-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Synchronization__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "synchronization-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__Tokens__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "tokens-sql-connectionstring"
+          key: "VALUE"
+
+adminapi:
+  env:
+    - name: modules__Devices__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "devices-sql-connectionstring"
+          key: "VALUE"
+    - name: modules__quotas__infrastructure__sqlDatabase__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "quotas-sql-connectionstring"
+          key: "VALUE"
+
+adminui:
+  env:
+    - name: ADMIN_API__BASE_URL
+      value: "http://localhost:8080"
+
+admincli:
+  env:
+    - name: database__connectionString
+      valueFrom:
+        secretKeyRef:
+          name: "devices-sql-connectionstring"
+          key: "VALUE"
+
+ephemeral: true # TODO: use it to deploy ephemeral postgres
+
+rabbitmq:
+  create: true
