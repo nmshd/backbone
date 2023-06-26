@@ -52,16 +52,8 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         } else {
-            this.initTier();
+            this.loading = false;
         }
-    }
-
-    initTier() {
-        this.tier = {
-            name: '',
-        } as Tier;
-
-        this.loading = false;
     }
 
     getTier() {
