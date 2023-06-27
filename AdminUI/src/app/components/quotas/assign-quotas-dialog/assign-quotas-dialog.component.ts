@@ -2,10 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-    Quota,
+    MetricDTO,
     QuotasService,
 } from 'src/app/services/quotas-service/quotas.service';
-import { Metric } from 'src/app/services/quotas-service/quotas.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
 @Component({
@@ -49,7 +48,7 @@ export class AssignQuotasDialogComponent {
     getMetrics() {
         this.loading = true;
         this.quotasService.getMetrics().subscribe({
-            next: (data: HttpResponseEnvelope<Metric>) => {
+            next: (data: HttpResponseEnvelope<MetricDTO>) => {
                 if (data && data.result) {
                     this.metrics = data.result;
                 }
@@ -69,7 +68,7 @@ export class AssignQuotasDialogComponent {
     }
 
     assignQuota() {
-        let quota: Quota = {
+        let quota: AssignQuotaData = {
             metricKey: this.metric.key,
             max: this.max,
             period: this.period,
@@ -81,4 +80,10 @@ export class AssignQuotasDialogComponent {
     isValid(): boolean {
         return this.metric != null && this.period != null && this.max != null;
     }
+}
+
+export interface AssignQuotaData {
+    metricKey: string;
+    max: number;
+    period: string;
 }
