@@ -10,11 +10,6 @@
     align-items: center;
 }
 
-.form-details {
-    display: flex;
-    flex-direction: column;
-}
-
 .status-button {
     pointer-events: none !important;
 }

@@ -5,37 +5,26 @@
             <mat-expansion-panel-header>
                 <mat-panel-title> Details </mat-panel-title>
             </mat-expansion-panel-header>
-            <div class="form-details">
-                <mat-form-field>
-                    <mat-label>Address</mat-label>
-                    <input matInput [(ngModel)]="identity.address" disabled />
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Client Id</mat-label>
-                    <input matInput [(ngModel)]="identity.clientId" disabled />
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Public Key</mat-label>
-                    <input matInput [(ngModel)]="identity.publicKey" disabled />
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Created At</mat-label>
-                    <input
-                        matInput
-                        [matDatepicker]="picker"
-                        [(ngModel)]="identity.createdAt"
-                        disabled
-                    />
-                    <mat-datepicker-toggle
-                        matIconSuffix
-                        [for]="picker"
-                    ></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle>Address</span>
+                    <span matListItemLine>{{ identity.address }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Client Id</span>
+                    <span matListItemLine>{{ identity.clientId }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Public Key</span>
+                    <span matListItemLine>{{ identity.publicKey }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Created At</span>
+                    <span matListItemLine>{{
+                        dateConvert(identity.createdAt)
+                    }}</span>
+                </mat-list-item>
+            </mat-list>
         </mat-expansion-panel>
         <mat-expansion-panel expanded>
             <mat-expansion-panel-header>

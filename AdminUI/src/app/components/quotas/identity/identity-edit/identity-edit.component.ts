@@ -118,4 +118,8 @@ export class IdentityEditComponent {
                 },
             });
     }
+
+    dateConvert(date: any) {
+        return new Date(date).toLocaleDateString();
+    }
 }
