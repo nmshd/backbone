@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.Tooling;
+using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -15,7 +16,7 @@ public class IdentityTests
     {
         // Arrange
         var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
-        var metricKey = Domain.Aggregates.Metrics.MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NumberOfSentMessages;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour);
         var metricCalculatorFactoryReturning0 = new MetricCalculatorFactoryStub(0);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
@@ -30,6 +31,22 @@ public class IdentityTests
     }
 
     [Fact]
+    public async Task Identity_without_quotas_has_all_MetricStatuses_IsExhaustedUntil_set_to_null()
+    {
+        // Arrange
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
+
+        var metricCalculatorFactoryReturning1 = new MetricCalculatorFactoryStub(1);
+
+        // Act
+        await identity.UpdateMetrics(new List<MetricKey>() { MetricKey.NumberOfSentMessages }, metricCalculatorFactoryReturning1, CancellationToken.None);
+
+        // Assert
+        identity.AllQuotas.Should().HaveCount(0);
+        identity.MetricStatuses.Select(m => m.IsExhaustedUntil).Should().AllBeEquivalentTo<DateTime?>(null);
+    }
+
+    [Fact]
     public async Task Identity_with_exhausted_quota_has_non_null_IsExhaustedUntil()
     {
         // Arrange
@@ -40,7 +57,7 @@ public class IdentityTests
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
 
         // Act
-        await identity.UpdateMetrics(new List<MetricKey>(){ metricKey}, metricCalculatorFactoryReturning5, CancellationToken.None);
+        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
 
         // Assert
         identity.AllQuotas.First().MetricKey.Should().Be(metricKey);
@@ -48,6 +65,30 @@ public class IdentityTests
         identity.AllQuotas.First().IsExhaustedUntil.Value.Hour.Should().Be(SystemTime.UtcNow.Hour);
         identity.AllQuotas.First().IsExhaustedUntil.Value.Minute.Should().Be(59);
         identity.AllQuotas.First().IsExhaustedUntil.Value.Second.Should().Be(59);
+    }
+
+    [Fact]
+    public async Task Identity_with_pre_existing_MetricStatuses_updates_MetricStatuses_on_UpdateMetrics()
+    {
+        // Arrange
+        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricCalculatorFactoryReturning5 = new MetricCalculatorFactoryStub(5);
+
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour));
+        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
+
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metricKey, 3, QuotaPeriod.Day));
+
+        // Act
+        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
+
+        // Assert
+        identity.MetricStatuses.Should().HaveCount(1);
+        var metricStatus = identity.MetricStatuses.First();
+        metricStatus.MetricKey.Should().Be(metricKey);
+        metricStatus.IsExhaustedUntil.Value.Hour.Should().Be(23);
+        metricStatus.IsExhaustedUntil.Value.Minute.Should().Be(59);
     }
 
     private class MetricCalculatorFactoryStub : MetricCalculatorFactory
