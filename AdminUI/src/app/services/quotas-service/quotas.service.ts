@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { environment } from 'src/environments/environment';
 
@@ -14,8 +14,8 @@ export class QuotasService {
         this.apiUrl = environment.apiUrl;
     }
 
-    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(
+    getMetrics(): Observable<HttpResponseEnvelope<MetricDTO>> {
+        return this.http.get<HttpResponseEnvelope<MetricDTO>>(
             this.apiUrl + '/Metrics'
         );
     }
@@ -25,36 +25,52 @@ export class QuotasService {
     }
 
     createTierQuota(
-        quota: Quota,
+        request: CreateQuotaForTierRequest,
         tierId: string
-    ): Observable<HttpResponseEnvelope<Quota>> {
-        return this.http.post<HttpResponseEnvelope<Quota>>(
+    ): Observable<HttpResponseEnvelope<TierQuotaDefinitionDTO>> {
+        return this.http.post<HttpResponseEnvelope<TierQuotaDefinitionDTO>>(
             this.apiUrl + '/Tiers/' + tierId + '/Quotas',
-            quota
+            request
         );
     }
 
     createIdentityQuota(
-        quota: Quota,
+        request: IdentityQuotaDefinitionDTO,
         identityAddress: string
-    ): Observable<HttpResponseEnvelope<Quota>> {
-        return this.http.post<HttpResponseEnvelope<Quota>>(
-            this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
-            quota
-        );
+    ): Observable<HttpResponseEnvelope<CreateQuotaForIdentityRequest>> {
+        return this.http.post<
+            HttpResponseEnvelope<CreateQuotaForIdentityRequest>
+        >(this.apiUrl + '/Identity/' + identityAddress + '/Quotas', request);
     }
 }
 
-export interface Quota {
-    tierId?: string;
-    identityAddress?: string;
+export interface MetricDTO {
+    key: string;
+    displayName: string;
+}
+
+export interface TierQuotaDefinitionDTO {
+    id: string;
+    metric: MetricDTO;
+    max: number;
+    period: string;
+}
+
+export interface IdentityQuotaDefinitionDTO {
+    id: string;
+    metric: MetricDTO;
+    max: number;
+    period: string;
+}
+
+export interface CreateQuotaForTierRequest {
     metricKey: string;
     max: number;
     period: string;
 }
 
-export interface Metric {
-    id: string;
-    key: string;
-    displayName: string;
+export interface CreateQuotaForIdentityRequest {
+    metricKey: string;
+    max: number;
+    period: string;
 }
