@@ -35,12 +35,13 @@ export class QuotasService {
     }
 
     createIdentityQuota(
-        request: IdentityQuotaDefinitionDTO,
+        request: CreateQuotaForIdentityRequest,
         identityAddress: string
-    ): Observable<HttpResponseEnvelope<CreateQuotaForIdentityRequest>> {
-        return this.http.post<
-            HttpResponseEnvelope<CreateQuotaForIdentityRequest>
-        >(this.apiUrl + '/Identity/' + identityAddress + '/Quotas', request);
+    ): Observable<HttpResponseEnvelope<IdentityQuotaDefinitionDTO>> {
+        return this.http.post<HttpResponseEnvelope<IdentityQuotaDefinitionDTO>>(
+            this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
+            request
+        );
     }
 }
 

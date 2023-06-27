@@ -6,9 +6,13 @@ import {
     IdentityService,
 } from 'src/app/services/identity-service/identity.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
-import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
 import {
-    Quota,
+    AssignQuotaData,
+    AssignQuotasDialogComponent,
+} from '../../assign-quotas-dialog/assign-quotas-dialog.component';
+import {
+    CreateQuotaForIdentityRequest,
+    IdentityQuotaDefinitionDTO,
     QuotasService,
 } from 'src/app/services/quotas-service/quotas.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -80,12 +84,21 @@ export class IdentityEditComponent {
         });
     }
 
-    createIdentityQuota(quota: Quota) {
+    createIdentityQuota(quotaData: AssignQuotaData) {
         this.loading = true;
+
+        const createQuotaRequest = {
+            metricKey: quotaData.metricKey,
+            max: quotaData.max,
+            period: quotaData.period,
+        } as CreateQuotaForIdentityRequest;
+
         this.quotasService
-            .createIdentityQuota(quota, this.identityAddress!)
+            .createIdentityQuota(createQuotaRequest, this.identity.address)
             .subscribe({
-                next: (data: HttpResponseEnvelope<Quota>) => {
+                next: (
+                    data: HttpResponseEnvelope<IdentityQuotaDefinitionDTO>
+                ) => {
                     if (data && data.result) {
                         this.snackBar.open(
                             'Successfully assigned quota.',

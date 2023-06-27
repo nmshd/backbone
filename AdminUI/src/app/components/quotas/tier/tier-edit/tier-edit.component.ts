@@ -3,12 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import {
-    Quota,
+    CreateQuotaForTierRequest,
     QuotasService,
+    TierQuotaDefinitionDTO,
 } from 'src/app/services/quotas-service/quotas.service';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
-import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
+import {
+    AssignQuotaData,
+    AssignQuotasDialogComponent,
+} from '../../assign-quotas-dialog/assign-quotas-dialog.component';
 
 @Component({
     selector: 'app-tier-edit',
@@ -148,27 +152,36 @@ export class TierEditComponent {
         });
     }
 
-    createTierQuota(quota: Quota) {
+    createTierQuota(quotaData: AssignQuotaData) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
-            next: (data: HttpResponseEnvelope<Quota>) => {
-                if (data && data.result) {
-                    this.snackBar.open(
-                        'Successfully assigned quota.',
-                        'Dismiss',
-                        {
-                            panelClass: ['snack-bar'],
-                        }
-                    );
-                }
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss', {
-                    panelClass: ['snack-bar'],
-                });
-            },
-        });
+
+        const createQuotaRequest = {
+            metricKey: quotaData.metricKey,
+            max: quotaData.max,
+            period: quotaData.period,
+        } as CreateQuotaForTierRequest;
+
+        this.quotasService
+            .createTierQuota(createQuotaRequest, this.tier.id)
+            .subscribe({
+                next: (data: HttpResponseEnvelope<TierQuotaDefinitionDTO>) => {
+                    if (data && data.result) {
+                        this.snackBar.open(
+                            'Successfully assigned quota.',
+                            'Dismiss',
+                            {
+                                panelClass: ['snack-bar'],
+                            }
+                        );
+                    }
+                },
+                complete: () => (this.loading = false),
+                error: (err: any) => {
+                    this.loading = false;
+                    this.snackBar.open(err.message, 'Dismiss', {
+                        panelClass: ['snack-bar'],
+                    });
+                },
+            });
     }
 }
