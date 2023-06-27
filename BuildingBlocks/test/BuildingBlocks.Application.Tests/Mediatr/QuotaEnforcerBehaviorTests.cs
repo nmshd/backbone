@@ -164,15 +164,15 @@ public class QuotaEnforcerBehaviorTests
     private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
     {
         var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(new QuotaCheckerImplMock(metricStatusesRepository));
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(new QuotaCheckerMock(metricStatusesRepository));
     }
 }
 
-internal class QuotaCheckerImplMock : IQuotaChecker
+internal class QuotaCheckerMock : IQuotaChecker
 {
     private readonly MetricStatusesStubRepository _metricStatusesRepository;
 
-    public QuotaCheckerImplMock(MetricStatusesStubRepository metricStatusesRepository)
+    public QuotaCheckerMock(MetricStatusesStubRepository metricStatusesRepository)
     {
         _metricStatusesRepository = metricStatusesRepository;
     }

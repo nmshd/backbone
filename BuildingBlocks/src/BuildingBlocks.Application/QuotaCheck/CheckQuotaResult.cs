@@ -11,4 +11,6 @@ public class CheckQuotaResult
 
     public IEnumerable<MetricStatus> ExhaustedStatuses { get; }
     public bool IsSuccess { get; internal set; }
+
+    public static CheckQuotaResult Success() => new(Enumerable.Empty<MetricStatus>());
 }

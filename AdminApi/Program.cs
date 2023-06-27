@@ -55,10 +55,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     .AddCustomSwaggerWithUi()
     .AddDevices(parsedConfiguration.Modules.Devices)
     .AddQuotas(parsedConfiguration.Modules.Quotas)
-    .AddMetricStatusesRepository(c =>
-    {
-        c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
-    })
     .AddHealthChecks();
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();

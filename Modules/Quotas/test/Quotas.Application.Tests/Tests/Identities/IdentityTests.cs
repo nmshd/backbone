@@ -4,7 +4,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.Tooling;
-using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -22,7 +21,7 @@ public class IdentityTests
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
 
         // Act
-        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning0, CancellationToken.None);
+        await identity.UpdateMetrics(new[] { metricKey }, metricCalculatorFactoryReturning0, CancellationToken.None);
 
         // Assert
         identity.AllQuotas.Should().HaveCount(1);
@@ -39,7 +38,7 @@ public class IdentityTests
         var metricCalculatorFactoryReturning1 = new MetricCalculatorFactoryStub(1);
 
         // Act
-        await identity.UpdateMetrics(new List<MetricKey>() { MetricKey.NumberOfSentMessages }, metricCalculatorFactoryReturning1, CancellationToken.None);
+        await identity.UpdateMetrics(new[] { MetricKey.NumberOfSentMessages }, metricCalculatorFactoryReturning1, CancellationToken.None);
 
         // Assert
         identity.AllQuotas.Should().HaveCount(0);
@@ -57,7 +56,7 @@ public class IdentityTests
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
 
         // Act
-        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
+        await identity.UpdateMetrics(new[] { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
 
         // Assert
         identity.AllQuotas.First().MetricKey.Should().Be(metricKey);
@@ -76,12 +75,12 @@ public class IdentityTests
         var metricCalculatorFactoryReturning5 = new MetricCalculatorFactoryStub(5);
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour));
-        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
+        await identity.UpdateMetrics(new[] { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metricKey, 3, QuotaPeriod.Day));
 
         // Act
-        await identity.UpdateMetrics(new List<MetricKey>() { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
+        await identity.UpdateMetrics(new[] { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
 
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);

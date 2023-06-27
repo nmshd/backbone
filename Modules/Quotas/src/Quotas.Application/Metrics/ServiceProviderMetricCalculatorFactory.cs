@@ -14,7 +14,7 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
 
     public override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
     {
-        var messagesRepository = _serviceProvider.GetService<IMessagesRepository>();
+        var messagesRepository = _serviceProvider.GetRequiredService<IMessagesRepository>();
         return new NumberOfSentMessagesMetricCalculator(messagesRepository);
     }
 }

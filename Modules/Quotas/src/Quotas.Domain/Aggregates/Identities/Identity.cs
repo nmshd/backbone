@@ -45,24 +45,10 @@ public class Identity
         }
     }
 
-    private void UpdateMetricStatus(MetricKey metricKey, IEnumerable<Quota> quotasFromMetric)
-    {
-        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
-        var maxExhaustionDate = quotasFromMetric.Max(q => q.IsExhaustedUntil);
-        if (metricStatus != null)
-        {
-            metricStatus.Update(maxExhaustionDate);
-        }
-        else
-        {
-            _metricStatuses.Add(new(metricKey, maxExhaustionDate));
-        }
-    }
-
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
-        var quotasFromMetric = GetAppliedQuotasForMetric(metric);
-        foreach (var quota in quotasFromMetric)
+        var quotasForMetric = GetAppliedQuotasForMetric(metric);
+        foreach (var quota in quotasForMetric)
         {
             var newUsage = await metricCalculator.CalculateUsage(
                 quota.Period.CalculateBegin(),
@@ -73,24 +59,33 @@ public class Identity
             quota.UpdateExhaustion(newUsage);
         }
 
-        UpdateMetricStatus(metric, quotasFromMetric);
+        UpdateMetricStatus(metric, quotasForMetric);
     }
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
         var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric);
-        var highestWeight = -1;
-
-        try
+        if (allQuotasOfMetric.Any())
         {
-            highestWeight = allQuotasOfMetric.Max(q => q.Weight);
-        }
-        catch (InvalidOperationException)
-        {
-            return Enumerable.Empty<Quota>();
+            var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
+            var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
+            return appliedQuotas;
         }
 
-        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
-        return appliedQuotas;
+        return Enumerable.Empty<Quota>();
+    }
+
+    private void UpdateMetricStatus(MetricKey metricKey, IEnumerable<Quota> quotasForMetric)
+    {
+        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
+        var maxExhaustionDate = quotasForMetric.Max(q => q.IsExhaustedUntil);
+        if (metricStatus != null)
+        {
+            metricStatus.Update(maxExhaustionDate);
+        }
+        else
+        {
+            _metricStatuses.Add(new(metricKey, maxExhaustionDate));
+        }
     }
 }

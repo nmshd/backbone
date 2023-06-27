@@ -5,6 +5,6 @@ public class AlwaysSuccessQuotaChecker : IQuotaChecker
 {
     public Task<CheckQuotaResult> CheckQuotaExhaustion(IEnumerable<MetricKey> metricKeys)
     {
-        return Task.FromResult(new CheckQuotaResult(Enumerable.Empty<MetricStatus>()));
+        return Task.FromResult(CheckQuotaResult.Success());
     }
 }
