@@ -1,17 +1,11 @@
 ﻿using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.Tooling;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
-    // To: The dev who implements individualQuotas
-    // Ensure that all palces where *all* quotas are to be used reference
-    // both _tierQuotas and _individualQuotas (to be created).
-    // - GetAppliedQuotasForMetric
-    // Tests must also be updated.
     private readonly List<TierQuota> _tierQuotas;
 
     private readonly List<MetricStatus> _metricStatuses;
@@ -24,8 +18,13 @@ public class Identity
         _metricStatuses = new List<MetricStatus>();
     }
 
-    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
+    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
+    
+    // To: The dev who implements individualQuotas
+    // uncomment the line below
+    internal IReadOnlyCollection<Quota> AllQuotas => _tierQuotas; //.Concat(_identityQuotas);
+
     public string Address { get; }
     public TierId TierId { get; }
 
@@ -77,8 +76,7 @@ public class Identity
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
-        var allQuotas = _tierQuotas;// .Concat(_identityQuotas)
-        var allQuotasOfMetric = allQuotas.Where(q => q.MetricKey == metric);
+        var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric);
         var highestWeight = -1;
 
         try
