@@ -7,7 +7,8 @@ using MediatR;
 using Xunit;
 using Enmeshed.UnitTestTools.Extensions;
 using Enmeshed.UnitTestTools.Behaviors;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
@@ -163,8 +164,27 @@ public class QuotaEnforcerBehaviorTests
     private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
     {
         var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
-        var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(null);
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(new QuotaCheckerImplMock(metricStatusesRepository));
+    }
+}
+
+internal class QuotaCheckerImplMock : IQuotaChecker
+{
+    private readonly MetricStatusesStubRepository _metricStatusesRepository;
+
+    public QuotaCheckerImplMock(MetricStatusesStubRepository metricStatusesRepository)
+    {
+        _metricStatusesRepository = metricStatusesRepository;
+    }
+
+    public async Task<CheckQuotaResult> CheckQuotaExhaustion(IEnumerable<MetricKey> metricKeys)
+    {
+        var anIdentity = IdentityAddress.Create(Convert.FromBase64String("mJGmNbxiVZAPToRuk9O3NvdfsWl6V+7wzIc+/57bU08="), "id1");
+        var statuses = await _metricStatusesRepository.GetMetricStatuses(anIdentity, metricKeys);
+
+        var exhaustedStatuses = statuses.Where(m => m.IsExhausted);
+
+        return new CheckQuotaResult(exhaustedStatuses);
     }
 }
 
