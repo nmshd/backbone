@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 
 public interface IPushService
 {
-    Task SendNotificationAsync(IdentityAddress recipient, object notification);
-    Task RegisterDeviceAsync(IdentityAddress identity, DeviceRegistration registration);
+    Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle);
+    Task SendNotification(IdentityAddress recipient, object notification);
 }
