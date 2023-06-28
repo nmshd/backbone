@@ -98,9 +98,10 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseStaticFiles();
-    // app.UseRouting(); // TODO: try to uncomment this if there are any problems regarding routing
+    app.UseRouting();
 
     app.MapControllers();
+    app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
     app.MapHealthChecks("/health", new HealthCheckOptions
     {
