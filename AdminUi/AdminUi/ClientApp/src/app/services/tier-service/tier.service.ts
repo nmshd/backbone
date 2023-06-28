@@ -32,14 +32,32 @@ export class TierService {
     }
 
     getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-        const httpOptions = {
-            params: new HttpParams().set('id', id),
-        };
+        // Missing an API endpoint to get a tier by ID
+        const maxPageSize = 200;
 
-        return this.http.get<HttpResponseEnvelope<Tier>>(
-            this.apiUrl,
-            httpOptions
-        );
+        return new Observable<HttpResponseEnvelope<Tier>>((subscriber) => {
+            this.getTiers(0, maxPageSize).subscribe({
+                next: (data: PagedHttpResponseEnvelope<Tier>) => {
+                    const tier = data.result.find((tier) => {
+                        return tier.id == id;
+                    });
+
+                    if (tier) {
+                        subscriber.next({
+                            result: tier,
+                        } as HttpResponseEnvelope<Tier>);
+                    } else {
+                        subscriber.error({
+                            message: `Tier with ID: ${id} could not be found.`,
+                        });
+                    }
+                },
+                complete: () => subscriber.complete(),
+                error: (err: any) => {
+                    subscriber.error(err);
+                },
+            });
+        });
     }
 
     createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
@@ -52,6 +70,6 @@ export class TierService {
 }
 
 export interface Tier {
-    id?: string;
-    name?: string;
+    id: string;
+    name: string;
 }
