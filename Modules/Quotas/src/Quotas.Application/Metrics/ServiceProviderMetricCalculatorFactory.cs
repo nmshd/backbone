@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain;
+﻿using Backbone.Modules.Quotas.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
@@ -14,7 +13,7 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
 
     public override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
     {
-        var messagesRepository = _serviceProvider.GetRequiredService<IMessagesRepository>();
-        return new NumberOfSentMessagesMetricCalculator(messagesRepository);
+        var messagesRepository = _serviceProvider.GetRequiredService<NumberOfSentMessagesMetricCalculator>();
+        return messagesRepository;
     }
 }
