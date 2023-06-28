@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -32,6 +33,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DbSet<Challenge> Challenges { get; set; }
 
     public DbSet<Tier> Tiers { get; set; }
+
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
