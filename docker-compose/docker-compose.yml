@@ -29,20 +29,6 @@ services:
     volumes:
       - ../:/app
     
-  #adminUI:
-  #  image: nmshd-admin-ui
-  #  container_name: admin-ui
-  #  hostname: admin-ui
-  #  build:
-  #    context: ..
-  #    dockerfile: AdminUi/AdminUi/Dockerfile
-  #  environment:
-  #    - ASPNETCORE_ENVIRONMENT=Development
-  #  ports:
-  #    - "5020:80"
-  #  volumes:
-  #    - ../:/app
-
   ### infrastructure ###
 
   #azure-storage-emulator:

@@ -1,0 +1,50 @@
+@startuml Send a push notification
+!pragma teoz true
+autonumber
+hide footbox
+autoactivate on
+
+participant ExternalEventCreatedIntegrationEventHandler as eventHandler
+participant "IPushService\n(DirectPushService)" as pushService
+participant "IPnsRegistrationRepository\n(PnsRegistrationRepository)" as repo
+participant "DevicesDbContext" as dbContext
+participant "AbstractPnsConnectorFactory\n(PnsConnectorFactoryImpl)" as connectorFactory
+participant "IPnsConnector\n(FirebaseCloudMessagingConnector)" as connector
+participant "FirebaseCloudMessagingNotificationBuilder" as notificationBuilder
+participant "Firebase Cloud Messaging" as fcm
+
+activate eventHandler
+eventHandler -> pushService : SendNotification(event.CreatedBy, new ExternalEventCreatedPushNotification())
+    pushService -> repo : FindWithAddress(recipient)
+        repo -> dbContext : PnsRegistrations.Where(recipient)
+        return registrations
+    return registrations
+    pushService -> pushService: groupRegistrationsByPlatform
+    return groups
+    loop for each group in groups
+        pushService -> connectorFactory : CreateFor(group.platform)
+        create connector
+        connectorFactory -> connector : new
+        return fcmConnector
+        return fcmConnector
+        pushService -> connector : Send(group.registrations, notification)
+            create notificationBuilder
+            connector -> notificationBuilder : new
+            {start} notificationBuilder --> connector : notificationBuilder
+
+            ||50||
+
+            {end} connector -> notificationBuilder : Build()
+            {start} <-> {end} : configuration of the builder
+
+            return pushNotification
+
+            loop for each registration in registrations
+                connector -> fcm : Send(registration.Handle.Value, pushNotification)
+                return
+            end
+        return
+    end
+return
+deactivate eventHandler
+@enduml
