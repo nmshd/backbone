@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Domain.Errors;
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 public record class ApnsHandle : PnsHandle
 {
-    public ApnsHandle(PushNotificationPlatform platform, string value) : base(platform, value)
+    private ApnsHandle(PushNotificationPlatform platform, string value) : base(platform, value)
     {
     }
 
