@@ -7,6 +7,7 @@ public class MetricStatusEntityTypeConfiguration : IEntityTypeConfiguration<Metr
 {
     public void Configure(EntityTypeBuilder<MetricStatus> builder)
     {
-        builder.HasAlternateKey(x => new { x.IdentityAddress, x.MetricKey });
+        builder.HasKey(x => new { x.Owner, x.MetricKey });
+        builder.HasOne<Identity>().WithMany().HasForeignKey(x => x.Owner);
     }
 }
