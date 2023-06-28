@@ -46,7 +46,7 @@
                     data-label="Created At"
                     (click)="editIdentity(identity)"
                 >
-                    {{ dateConvert(identity.createdAt) }}
+                    {{ identity.createdAt | date }}
                 </td>
             </ng-container>
 

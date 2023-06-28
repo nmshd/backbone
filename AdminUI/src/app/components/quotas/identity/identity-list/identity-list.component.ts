@@ -88,8 +88,4 @@ export class IdentityListComponent {
     editIdentity(identity: Identity) {
         this.router.navigate([`/identities/` + identity.address]);
     }
-
-    dateConvert(date: any) {
-        return new Date(date).toLocaleDateString();
-    }
 }

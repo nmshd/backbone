@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -79,7 +80,13 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         MatSelectModule,
         MatChipsModule,
     ],
-    providers: [SidebarService],
+    providers: [
+        SidebarService,
+        {
+            provide: DATE_PIPE_DEFAULT_OPTIONS,
+            useValue: { dateFormat: 'd/M/yyyy' },
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

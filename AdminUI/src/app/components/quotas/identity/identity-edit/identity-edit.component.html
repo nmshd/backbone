@@ -20,9 +20,7 @@
                 </mat-list-item>
                 <mat-list-item>
                     <span matListItemTitle>Created At</span>
-                    <span matListItemLine>{{
-                        dateConvert(identity.createdAt)
-                    }}</span>
+                    <span matListItemLine>{{ identity.createdAt | date }}</span>
                 </mat-list-item>
             </mat-list>
         </mat-expansion-panel>

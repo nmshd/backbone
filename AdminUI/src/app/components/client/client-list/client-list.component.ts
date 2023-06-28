@@ -74,8 +74,4 @@ export class ClientListComponent {
         this.pageSize = event.pageSize;
         this.getPagedData();
     }
-
-    dateConvert(date: any) {
-        return new Date(date).toLocaleDateString();
-    }
 }
