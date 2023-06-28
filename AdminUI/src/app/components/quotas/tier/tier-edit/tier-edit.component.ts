@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
     CreateQuotaForTierRequest,
     QuotasService,
-    TierQuotaDefinitionDTO,
+    TierQuota,
 } from 'src/app/services/quotas-service/quotas.service';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
@@ -164,7 +164,7 @@ export class TierEditComponent {
         this.quotasService
             .createTierQuota(createQuotaRequest, this.tier.id)
             .subscribe({
-                next: (data: HttpResponseEnvelope<TierQuotaDefinitionDTO>) => {
+                next: (data: HttpResponseEnvelope<TierQuota>) => {
                     if (data && data.result) {
                         this.snackBar.open(
                             'Successfully assigned quota.',

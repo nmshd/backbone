@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-    MetricDTO,
+    Metric,
     QuotasService,
 } from 'src/app/services/quotas-service/quotas.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
@@ -48,7 +48,7 @@ export class AssignQuotasDialogComponent {
     getMetrics() {
         this.loading = true;
         this.quotasService.getMetrics().subscribe({
-            next: (data: HttpResponseEnvelope<MetricDTO>) => {
+            next: (data: HttpResponseEnvelope<Metric>) => {
                 if (data && data.result) {
                     this.metrics = data.result;
                 }

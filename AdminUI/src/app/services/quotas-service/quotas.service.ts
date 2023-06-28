@@ -14,8 +14,8 @@ export class QuotasService {
         this.apiUrl = environment.apiUrl;
     }
 
-    getMetrics(): Observable<HttpResponseEnvelope<MetricDTO>> {
-        return this.http.get<HttpResponseEnvelope<MetricDTO>>(
+    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
+        return this.http.get<HttpResponseEnvelope<Metric>>(
             this.apiUrl + '/Metrics'
         );
     }
@@ -27,8 +27,8 @@ export class QuotasService {
     createTierQuota(
         request: CreateQuotaForTierRequest,
         tierId: string
-    ): Observable<HttpResponseEnvelope<TierQuotaDefinitionDTO>> {
-        return this.http.post<HttpResponseEnvelope<TierQuotaDefinitionDTO>>(
+    ): Observable<HttpResponseEnvelope<TierQuota>> {
+        return this.http.post<HttpResponseEnvelope<TierQuota>>(
             this.apiUrl + '/Tiers/' + tierId + '/Quotas',
             request
         );
@@ -37,29 +37,29 @@ export class QuotasService {
     createIdentityQuota(
         request: CreateQuotaForIdentityRequest,
         identityAddress: string
-    ): Observable<HttpResponseEnvelope<IdentityQuotaDefinitionDTO>> {
-        return this.http.post<HttpResponseEnvelope<IdentityQuotaDefinitionDTO>>(
+    ): Observable<HttpResponseEnvelope<IdentityQuota>> {
+        return this.http.post<HttpResponseEnvelope<IdentityQuota>>(
             this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
             request
         );
     }
 }
 
-export interface MetricDTO {
+export interface Metric {
     key: string;
     displayName: string;
 }
 
-export interface TierQuotaDefinitionDTO {
+export interface TierQuota {
     id: string;
-    metric: MetricDTO;
+    metric: Metric;
     max: number;
     period: string;
 }
 
-export interface IdentityQuotaDefinitionDTO {
+export interface IdentityQuota {
     id: string;
-    metric: MetricDTO;
+    metric: Metric;
     max: number;
     period: string;
 }

@@ -12,7 +12,7 @@ import {
 } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
 import {
     CreateQuotaForIdentityRequest,
-    IdentityQuotaDefinitionDTO,
+    IdentityQuota,
     QuotasService,
 } from 'src/app/services/quotas-service/quotas.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -96,9 +96,7 @@ export class IdentityEditComponent {
         this.quotasService
             .createIdentityQuota(createQuotaRequest, this.identity.address)
             .subscribe({
-                next: (
-                    data: HttpResponseEnvelope<IdentityQuotaDefinitionDTO>
-                ) => {
+                next: (data: HttpResponseEnvelope<IdentityQuota>) => {
                     if (data && data.result) {
                         this.snackBar.open(
                             'Successfully assigned quota.',
