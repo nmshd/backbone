@@ -78,7 +78,7 @@ public class Identity
 
     private void UpdateMetricStatus(MetricKey metricKey, Dictionary<Quota, DateTime?> quotasExhaustion)
     {
-        var metricStatus = _metricStatuses.FirstOrDefault(m => m.MetricKey == metricKey);
+        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metricKey);
         var maxExhaustionDate = quotasExhaustion.Values.Max();
         if (metricStatus != null)
         {
