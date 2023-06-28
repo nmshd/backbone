@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -67,8 +68,7 @@ public class IdentityTests
         identity.MetricStatuses.Should().HaveCount(1);
         var metricStatus = identity.MetricStatuses.First();
         metricStatus.MetricKey.Should().Be(metricKey);
-        metricStatus.IsExhaustedUntil.Value.Hour.Should().Be(23);
-        metricStatus.IsExhaustedUntil.Value.Minute.Should().Be(59);
+        metricStatus.IsExhaustedUntil.Should().BeEndOfDay();
     }
 
     private class MetricCalculatorFactoryStub : MetricCalculatorFactory
