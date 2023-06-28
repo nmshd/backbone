@@ -14,14 +14,13 @@ public abstract class Quota
 
     public QuotaId Id { get; }
     public string ApplyTo { get; }
-    public DateTime? IsExhaustedUntil { get; private set; }
     public abstract int Weight { get; }
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 
-    public void UpdateExhaustion(uint newUsage) 
+    internal DateTime? CalculateExhaustion(uint newUsage)
     {
-        IsExhaustedUntil = newUsage >= Max ? Period.CalculateEnd() : null;
+        return newUsage >= Max ? Period.CalculateEnd() : null;
     }
 }

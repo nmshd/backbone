@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -26,7 +25,6 @@ public class IdentityTests
         // Assert
         identity.AllQuotas.Should().HaveCount(1);
         identity.AllQuotas.First().MetricKey.Should().Be(metricKey);
-        identity.AllQuotas.First().IsExhaustedUntil.Should().BeNull();
     }
 
     [Fact]
@@ -45,26 +43,6 @@ public class IdentityTests
         identity.MetricStatuses.Select(m => m.IsExhaustedUntil).Should().AllBeEquivalentTo<DateTime?>(null);
     }
 
-    [Fact]
-    public async Task Identity_with_exhausted_quota_has_non_null_IsExhaustedUntil()
-    {
-        // Arrange
-        var identity = new Identity("some-dummy-address", new TierId("some-tier-id"));
-        var metricKey = MetricKey.NumberOfSentMessages;
-        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, 1, QuotaPeriod.Hour);
-        var metricCalculatorFactoryReturning5 = new MetricCalculatorFactoryStub(5);
-        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
-
-        // Act
-        await identity.UpdateMetrics(new[] { metricKey }, metricCalculatorFactoryReturning5, CancellationToken.None);
-
-        // Assert
-        identity.AllQuotas.First().MetricKey.Should().Be(metricKey);
-        identity.AllQuotas.First().IsExhaustedUntil.Should().NotBeNull();
-        identity.AllQuotas.First().IsExhaustedUntil.Value.Hour.Should().Be(SystemTime.UtcNow.Hour);
-        identity.AllQuotas.First().IsExhaustedUntil.Value.Minute.Should().Be(59);
-        identity.AllQuotas.First().IsExhaustedUntil.Value.Second.Should().Be(59);
-    }
 
     [Fact]
     public async Task Identity_with_pre_existing_MetricStatuses_updates_MetricStatuses_on_UpdateMetrics()
