@@ -25,6 +25,10 @@ public class IdentityTests
         // Assert
         identity.AllQuotas.Should().HaveCount(1);
         identity.AllQuotas.First().MetricKey.Should().Be(metricKey);
+        identity.MetricStatuses.Should().HaveCount(1);
+        identity.MetricStatuses.First().MetricKey.Should().Be(metricKey);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeNull();
+
     }
 
     [Fact]
