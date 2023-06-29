@@ -72,14 +72,14 @@ public class Identity
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
         var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric);
-        if (allQuotasOfMetric.Any())
+        if (!allQuotasOfMetric.Any())
         {
-            var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
-            var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
-            return appliedQuotas;
+            return Enumerable.Empty<Quota>();
         }
 
-        return Enumerable.Empty<Quota>();
+        var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
+        var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
+        return appliedQuotas;
     }
 
     private void UpdateMetricStatus(MetricKey metricKey, DateTime? maxExhaustionDate)
