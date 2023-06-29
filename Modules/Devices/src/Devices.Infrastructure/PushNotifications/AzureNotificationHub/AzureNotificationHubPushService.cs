@@ -2,7 +2,8 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Logging;
@@ -21,18 +22,18 @@ public class AzureNotificationHubPushService : IPushService
         _logger = logger;
     }
 
-    public async Task RegisterDeviceAsync(IdentityAddress identity, DeviceRegistration registration)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle)
     {
         var installation = new Installation
         {
-            InstallationId = registration.InstallationId,
-            PushChannel = registration.Handle,
-            Tags = GetNotificationTags(identity),
-            Platform = registration.Platform switch
+            InstallationId = deviceId,
+            PushChannel = handle.Value,
+            Tags = GetNotificationTags(address),
+            Platform = handle.Platform switch
             {
-                "apns" => NotificationPlatform.Apns,
-                "fcm" => NotificationPlatform.Fcm,
-                _ => throw new ArgumentException($"There is no corresponding platform for {registration.Platform}.", nameof(registration.Platform))
+                PushNotificationPlatform.Apns => NotificationPlatform.Apns,
+                PushNotificationPlatform.Fcm => NotificationPlatform.Fcm,
+                _ => throw new ArgumentException($"There is no corresponding platform for {handle.Platform}.", nameof(handle.Platform))
             }
         };
 
@@ -41,7 +42,7 @@ public class AzureNotificationHubPushService : IPushService
         _logger.LogTrace("New device successfully registered.");
     }
 
-    public async Task SendNotificationAsync(IdentityAddress recipient, object pushNotification)
+    public async Task SendNotification(IdentityAddress recipient, object pushNotification)
     {
         var notificationContent = new NotificationContent(recipient, pushNotification);
         var notificationId = GetNotificationId(pushNotification);
