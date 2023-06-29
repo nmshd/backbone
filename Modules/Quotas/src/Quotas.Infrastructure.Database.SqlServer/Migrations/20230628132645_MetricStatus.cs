@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -14,16 +13,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.DropColumn(
                 name: "IsExhaustedUntil",
                 table: "TierQuotas");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "MetricKey",
-                table: "TierQuotaDefinitions",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(50)",
-                oldMaxLength: 50);
 
             migrationBuilder.CreateTable(
                 name: "MetricStatus",
@@ -56,18 +45,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "TierQuotas",
                 type: "datetime2",
                 nullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "MetricKey",
-                table: "TierQuotaDefinitions",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(50)",
-                oldMaxLength: 50,
-                oldNullable: true);
         }
     }
 }

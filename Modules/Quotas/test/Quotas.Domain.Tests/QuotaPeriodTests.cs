@@ -15,7 +15,7 @@ public class QuotaPeriodTests
     [InlineData("2020-01-03T12:00:00.000", QuotaPeriod.Week, "2019-12-30T00:00:00.000")]
     [InlineData("2020-02-03T12:00:00.000", QuotaPeriod.Month, "2020-02-01T00:00:00.000")]
     [InlineData("2020-01-03T12:00:00.000", QuotaPeriod.Year, "2020-01-01T00:00:00.000")]
-    public void Begin(string currentDateString,  QuotaPeriod quotaPeriod, string targetDate)
+    public void Begin(string currentDateString, QuotaPeriod quotaPeriod, string targetDate)
     {
         // Arrange
         var currentDate = DateTime.Parse(currentDateString);
