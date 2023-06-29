@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import {
     Identity,
     IdentityService,
@@ -34,6 +35,7 @@ export class IdentityListComponent {
     ];
 
     constructor(
+        private router: Router,
         private _snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
@@ -70,7 +72,9 @@ export class IdentityListComponent {
                 complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
-                    this._snackBar.open(err.message, 'Close');
+                    this._snackBar.open(err.message, 'Dismiss', {
+                        panelClass: ['snack-bar'],
+                    });
                 },
             });
     }
@@ -81,7 +85,7 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    dateConvert(date: any) {
-        return new Date(date).toLocaleDateString();
+    editIdentity(identity: Identity) {
+        this.router.navigate([`/identities/` + identity.address]);
     }
 }

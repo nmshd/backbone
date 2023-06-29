@@ -3,12 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import {
-    Quota,
+    CreateQuotaForTierRequest,
     QuotasService,
+    TierQuota,
 } from 'src/app/services/quotas-service/quotas.service';
 import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
-import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-quotas-dialog.component';
+import {
+    AssignQuotaData,
+    AssignQuotasDialogComponent,
+} from '../../assign-quotas-dialog/assign-quotas-dialog.component';
 
 @Component({
     selector: 'app-tier-edit',
@@ -38,10 +42,7 @@ export class TierEditComponent {
         this.headerCreate = 'Create Tier';
         this.editMode = false;
         this.loading = true;
-        this.tier = {
-            id: '',
-            name: '',
-        } as Tier;
+        this.tier = {} as Tier;
     }
 
     ngOnInit() {
@@ -55,8 +56,16 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         } else {
-            this.loading = false;
+            this.initTier();
         }
+    }
+
+    initTier() {
+        this.tier = {
+            name: '',
+        } as Tier;
+
+        this.loading = false;
     }
 
     getTier() {
@@ -71,7 +80,9 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -83,14 +94,18 @@ export class TierEditComponent {
                 if (data && data.result) {
                     this.tier = data.result;
                 }
-                this.snackBar.open('Successfully added tier.', 'Dismiss');
+                this.snackBar.open('Successfully added tier.', 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
                 this.tierId = data.result.id;
                 this.editMode = true;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -101,13 +116,21 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.snackBar.open('Successfully updated tier.', 'Dismiss');
+                    this.snackBar.open(
+                        'Successfully updated tier.',
+                        'Dismiss',
+                        {
+                            panelClass: ['snack-bar'],
+                        }
+                    );
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    panelClass: ['snack-bar'],
+                });
             },
         });
     }
@@ -129,22 +152,36 @@ export class TierEditComponent {
         });
     }
 
-    createTierQuota(quota: Quota) {
+    createTierQuota(quotaData: AssignQuotaData) {
         this.loading = true;
-        this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
-            next: (data: HttpResponseEnvelope<Quota>) => {
-                if (data && data.result) {
-                    this.snackBar.open(
-                        'Successfully assigned quota.',
-                        'Dismiss'
-                    );
-                }
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
-            },
-        });
+
+        const createQuotaRequest = {
+            metricKey: quotaData.metricKey,
+            max: quotaData.max,
+            period: quotaData.period,
+        } as CreateQuotaForTierRequest;
+
+        this.quotasService
+            .createTierQuota(createQuotaRequest, this.tier.id)
+            .subscribe({
+                next: (data: HttpResponseEnvelope<TierQuota>) => {
+                    if (data && data.result) {
+                        this.snackBar.open(
+                            'Successfully assigned quota.',
+                            'Dismiss',
+                            {
+                                panelClass: ['snack-bar'],
+                            }
+                        );
+                    }
+                },
+                complete: () => (this.loading = false),
+                error: (err: any) => {
+                    this.loading = false;
+                    this.snackBar.open(err.message, 'Dismiss', {
+                        panelClass: ['snack-bar'],
+                    });
+                },
+            });
     }
 }

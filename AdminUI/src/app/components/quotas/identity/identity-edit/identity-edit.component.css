@@ -1,8 +1,7 @@
-.mat-column-address,
-.mat-column-clientId,
-.mat-column-publicKey {
-    width: 25%;
-    word-break: break-all;
+.action-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .loading {
@@ -11,13 +10,19 @@
     align-items: center;
 }
 
-.no-data {
-    padding: 25px;
+.status-button {
+    pointer-events: none !important;
 }
 
-.mat-mdc-row:hover {
-    background-color: #ddd !important;
-    cursor: pointer;
+.mat-column-metricName,
+.mat-column-metricMax,
+.mat-column-period {
+    width: 33%;
+    word-break: break-all;
+}
+
+.no-data {
+    padding: 25px;
 }
 
 @media screen and (max-width: 960px) {

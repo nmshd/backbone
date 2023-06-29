@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { environment } from 'src/environments/environment';
 
@@ -25,25 +25,53 @@ export class QuotasService {
     }
 
     createTierQuota(
-        quota: Quota,
+        request: CreateQuotaForTierRequest,
         tierId: string
-    ): Observable<HttpResponseEnvelope<Quota>> {
-        return this.http.post<HttpResponseEnvelope<Quota>>(
+    ): Observable<HttpResponseEnvelope<TierQuota>> {
+        return this.http.post<HttpResponseEnvelope<TierQuota>>(
             this.apiUrl + '/Tiers/' + tierId + '/Quotas',
-            quota
+            request
+        );
+    }
+
+    createIdentityQuota(
+        request: CreateQuotaForIdentityRequest,
+        identityAddress: string
+    ): Observable<HttpResponseEnvelope<IdentityQuota>> {
+        return this.http.post<HttpResponseEnvelope<IdentityQuota>>(
+            this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
+            request
         );
     }
 }
 
-export interface Quota {
-    tierId?: string;
+export interface Metric {
+    key: string;
+    displayName: string;
+}
+
+export interface TierQuota {
+    id: string;
+    metric: Metric;
+    max: number;
+    period: string;
+}
+
+export interface IdentityQuota {
+    id: string;
+    metric: Metric;
+    max: number;
+    period: string;
+}
+
+export interface CreateQuotaForTierRequest {
     metricKey: string;
     max: number;
     period: string;
 }
 
-export interface Metric {
-    id: string;
-    key: string;
-    displayName: string;
+export interface CreateQuotaForIdentityRequest {
+    metricKey: string;
+    max: number;
+    period: string;
 }

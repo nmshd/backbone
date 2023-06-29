@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -22,8 +23,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +36,7 @@ import { IdentityListComponent } from './components/quotas/identity/identity-lis
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { ClientListComponent } from './components/client/client-list/client-list.component';
+import { IdentityEditComponent } from './components/quotas/identity/identity-edit/identity-edit.component';
 import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 
 @NgModule({
@@ -50,6 +50,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         TierListComponent,
         TierEditComponent,
         ClientListComponent,
+        IdentityEditComponent,
         AssignQuotasDialogComponent,
     ],
     imports: [
@@ -77,11 +78,15 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         LayoutModule,
         MatDialogModule,
         MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
         MatChipsModule,
     ],
-    providers: [SidebarService],
+    providers: [
+        SidebarService,
+        {
+            provide: DATE_PIPE_DEFAULT_OPTIONS,
+            useValue: { dateFormat: 'dd.MM.yyyy HH:mm:ss' },
+        },
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,29 +4,49 @@
         <table mat-table class="responsive" [dataSource]="identities">
             <ng-container matColumnDef="address">
                 <th mat-header-cell *matHeaderCellDef>Address</th>
-                <td mat-cell *matCellDef="let identity" data-label="Address">
+                <td
+                    mat-cell
+                    *matCellDef="let identity"
+                    data-label="Address"
+                    (click)="editIdentity(identity)"
+                >
                     {{ identity.address }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="clientId">
                 <th mat-header-cell *matHeaderCellDef>Client Id</th>
-                <td mat-cell *matCellDef="let identity" data-label="Client Id">
+                <td
+                    mat-cell
+                    *matCellDef="let identity"
+                    data-label="Client Id"
+                    (click)="editIdentity(identity)"
+                >
                     {{ identity.clientId }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="publicKey">
                 <th mat-header-cell *matHeaderCellDef>Public Key</th>
-                <td mat-cell *matCellDef="let identity" data-label="Public Key">
+                <td
+                    mat-cell
+                    *matCellDef="let identity"
+                    data-label="Public Key"
+                    (click)="editIdentity(identity)"
+                >
                     {{ identity.publicKey }}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="createdAt">
                 <th mat-header-cell *matHeaderCellDef>Created At</th>
-                <td mat-cell *matCellDef="let identity" data-label="Created At">
-                    {{ dateConvert(identity.createdAt) }}
+                <td
+                    mat-cell
+                    *matCellDef="let identity"
+                    data-label="Created At"
+                    (click)="editIdentity(identity)"
+                >
+                    {{ identity.createdAt | date }}
                 </td>
             </ng-container>
 
