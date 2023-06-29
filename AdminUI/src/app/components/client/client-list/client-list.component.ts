@@ -8,12 +8,11 @@ import {
 } from 'src/app/services/client-service/client-service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 @Component({
-  selector: 'app-client-list',
-  templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.css']
+    selector: 'app-client-list',
+    templateUrl: './client-list.component.html',
+    styleUrls: ['./client-list.component.css'],
 })
 export class ClientListComponent {
-
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     header = 'Clients';
@@ -26,10 +25,7 @@ export class ClientListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = [
-        'clientId',
-        'displayName'
-    ];
+    displayedColumns: string[] = ['clientId', 'displayName'];
 
     constructor(
         private _snackBar: MatSnackBar,
@@ -52,25 +48,23 @@ export class ClientListComponent {
 
     getPagedData() {
         this.loading = true;
-        this.clientService
-            .getClients(this.pageIndex, this.pageSize)
-            .subscribe({
-                next: (data: PagedHttpResponseEnvelope<Client>) => {
-                    if (data) {
-                        this.clients = data.result;
-                        if (data.pagination) {
-                            this.totalRecords = data.pagination.totalRecords!;
-                        } else {
-                            this.totalRecords = data.result.length;
-                        }
+        this.clientService.getClients(this.pageIndex, this.pageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<Client>) => {
+                if (data) {
+                    this.clients = data.result;
+                    if (data.pagination) {
+                        this.totalRecords = data.pagination.totalRecords!;
+                    } else {
+                        this.totalRecords = data.result.length;
                     }
-                },
-                complete: () => (this.loading = false),
-                error: (err: any) => {
-                    this.loading = false;
-                    this._snackBar.open(err.message, 'Close');
-                },
-            });
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this._snackBar.open(err.message, 'Close');
+            },
+        });
     }
 
     pageChangeEvent(event: PageEvent) {

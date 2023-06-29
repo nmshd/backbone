@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - "main"
     tags-ignore:
-      - "*"
+      - "**"
 
 jobs:
   test:
@@ -22,6 +22,20 @@ jobs:
           dotnet-version: "7.0.x"
       - name: Run tests
         run: ./.ci/test.ts
+
+  build-helm-chart:
+    name: Build Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Build Helm Chart
+        run: ./.ci/helm/buildChart.ts
+        env:
+          VERSION: 0.0.0
+
   build-capi-container-image:
     name: Build Consumer API Container Image
     runs-on: ubuntu-latest
@@ -34,30 +48,7 @@ jobs:
         run: ./.ci/capi/buildContainerImage.ts
         env:
           TAG: test
-  build-aapi-container-image:
-    name: Build Admin API Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/aapi/buildContainerImage.ts
-        env:
-          TAG: test
-  build-aui-container-image:
-    name: Build Admin UI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/aui/buildContainerImage.ts
-        env:
-          TAG: test
+
   build-acli-container-image:
     name: Build Admin CLI Container Image
     runs-on: ubuntu-latest
@@ -70,6 +61,7 @@ jobs:
         run: ./.ci/acli/buildContainerImage.ts
         env:
           TAG: test
+
   build-fsc-container-image:
     name: Build Files Sanity Check Container Image
     runs-on: ubuntu-latest
@@ -83,6 +75,7 @@ jobs:
         env:
           TAG: test
           MODULE: Files
+
   build-msc-container-image:
     name: Build Messages Sanity Check Container Image
     runs-on: ubuntu-latest
@@ -96,6 +89,7 @@ jobs:
         env:
           TAG: test
           MODULE: Messages
+
   build-rtsc-container-image:
     name: Build Relationship Templates Sanity Check Container Image
     runs-on: ubuntu-latest
@@ -110,6 +104,7 @@ jobs:
           TAG: test
           MODULE: Relationships
           PROJECT_SUFFIX: RelationshipTemplate
+
   build-rcsc-container-image:
     name: Build Relationship Changes Sanity Check Container Image
     runs-on: ubuntu-latest
@@ -124,6 +119,7 @@ jobs:
           TAG: test
           MODULE: Relationships
           PROJECT_SUFFIX: RelationshipChange
+
   build-ssc-container-image:
     name: Build Synchronization Sanity Check Container Image
     runs-on: ubuntu-latest
@@ -137,6 +133,7 @@ jobs:
         env:
           TAG: test
           MODULE: Synchronization
+
   build-tsc-container-image:
     name: Build Tokens Sanity Check Container Image
     runs-on: ubuntu-latest
