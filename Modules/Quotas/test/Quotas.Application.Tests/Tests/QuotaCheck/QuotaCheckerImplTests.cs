@@ -70,7 +70,7 @@ internal class UserContextStub : IUserContext
 
     public IdentityAddress GetAddress()
     {
-        return IdentityAddress.Create(Convert.FromBase64String("mJGmNbxiVZAPToRuk9O3NvdfsWl6V+7wzIc+/57bU08="), "id1");
+        return IdentityAddress.Create(Convert.FromBase64String(new byte[]{0}), "id1");
     }
 
     public IdentityAddress GetAddressOrNull()
