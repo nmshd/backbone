@@ -37,8 +37,7 @@ RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
 FROM build AS publish
 
 RUN apt update && apt upgrade 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt install -y nodejs
 RUN npm i -g @angular/cli
 
 RUN dotnet publish "AdminUi.csproj" -c Release -o /app/publish /p:UseAppHost=false
