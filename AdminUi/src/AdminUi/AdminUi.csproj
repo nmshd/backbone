@@ -9,7 +9,7 @@
         <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerfileContext>..\..</DockerfileContext>
+        <DockerfileContext>..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,13 +32,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
-        <ProjectReference Include="..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
-        <ProjectReference Include="..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
-        <ProjectReference Include="..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
-        <ProjectReference Include="..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

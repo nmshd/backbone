@@ -7,7 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src
-COPY ["AdminUi/AdminUi/AdminUi.csproj", "AdminUi/AdminUi/"]
+COPY ["AdminUi/src/AdminUi/AdminUi.csproj", "AdminUi/src/AdminUi/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -29,9 +29,9 @@ COPY ["Modules/Quotas/src/Quotas.ConsumerApi/Quotas.ConsumerApi.csproj", "Module
 COPY ["Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/Quotas.Infrastructure.Database.Postgres.csproj", "Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "Modules/Quotas/src/Quotas.Infrastructure/"]
 COPY ["Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/Quotas.Infrastructure.Database.SqlServer.csproj", "Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/"]
-RUN dotnet restore "AdminUi/AdminUi/AdminUi.csproj"
+RUN dotnet restore "AdminUi/src/AdminUi/AdminUi.csproj"
 COPY . .
-WORKDIR "/src/AdminUi/AdminUi"
+WORKDIR "/src/AdminUi/src/AdminUi"
 RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
 
 FROM build AS publish

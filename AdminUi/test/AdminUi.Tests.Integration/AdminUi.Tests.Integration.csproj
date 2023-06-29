@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
-    <ProjectReference Include="..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
   </ItemGroup>
 
   <ItemGroup>
