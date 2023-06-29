@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
@@ -21,8 +22,18 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 
     public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var deviceRegistration = new DeviceRegistration(request.Platform, request.Handle, _activeDevice);
-        await _pushService.RegisterDeviceAsync(_activeIdentity, deviceRegistration);
+        var handle = PnsHandle.Parse(request.Handle, PlatformParser(request.Platform)).Value;
+        await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, handle);
         return Unit.Value;
+    }
+
+    private PushNotificationPlatform PlatformParser(string platform)
+    {
+        return platform switch
+        {
+            "fcm" => PushNotificationPlatform.Fcm,
+            "apns" => PushNotificationPlatform.Apns,
+            _ => throw new ArgumentException(),
+        };
     }
 }
