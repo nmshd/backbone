@@ -84,7 +84,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         SidebarService,
         {
             provide: DATE_PIPE_DEFAULT_OPTIONS,
-            useValue: { dateFormat: 'd/M/yyyy' },
+            useValue: { dateFormat: 'dd.MM.yyyy HH:mm:ss' },
         },
     ],
     bootstrap: [AppComponent],
