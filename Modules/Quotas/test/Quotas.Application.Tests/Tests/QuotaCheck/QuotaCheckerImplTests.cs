@@ -18,6 +18,7 @@ public class QuotaCheckerImplTests
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(0);
+        result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
@@ -31,6 +32,7 @@ public class QuotaCheckerImplTests
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(1);
+        result.IsSuccess.Should().BeFalse();
     }
 
     [Fact]
@@ -47,6 +49,25 @@ public class QuotaCheckerImplTests
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(2);
+        result.IsSuccess.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ExhaustedStatuses_has_values_when_one_metric_is_exhausted()
+    {
+        // Arrange
+        var quotaChecker = CreateQuotaCheckerImplementation(
+            new MetricStatus(TestMetricKey, SystemTime.UtcNow.AddMinutes(-10)),
+            new MetricStatus(AnotherTestMetricKey, SystemTime.UtcNow.AddMinutes(10))
+            );
+
+        // Act
+        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TestMetricKey, AnotherTestMetricKey });
+
+        // Assert
+        result.ExhaustedStatuses.Should().HaveCount(1);
+        result.ExhaustedStatuses.Single().MetricKey.Should().Be(AnotherTestMetricKey);
+        result.IsSuccess.Should().BeFalse();
     }
 
     private static QuotaCheckerImpl CreateQuotaCheckerImplementation(params MetricStatus[] metricStatuses)
