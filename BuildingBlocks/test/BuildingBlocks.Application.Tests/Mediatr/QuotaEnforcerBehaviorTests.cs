@@ -13,7 +13,7 @@ namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
     [Fact]
-    public async void Succeeds_when_the_metric_is_not_exhausted()
+    public async void Calls_next_when_no_metric_is_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior();
@@ -35,36 +35,36 @@ public class QuotaEnforcerBehaviorTests
     public void Throws_QuotaExhaustedException_when_exactly_one_metric_is_exhausted()
     {
         // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsExhaustedFor1Day);
-        var nextMock = new NextMock<TestData.IResponse>();
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: TestData.MetricStatus.ThatIsExhaustedFor1Day);
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
             new TestData.TestCommand(),
-            nextMock.Value,
+            new NextMock<TestData.IResponse>().Value,
             CancellationToken.None
         );
 
         // Assert
         var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
         exceptionExhaustedMetrics.Should().HaveCount(1);
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+        exceptionExhaustedMetrics.Single().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+        exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
     }
 
     [Fact]
     public void Throws_QuotaExhaustedException_when_more_than_one_metric_is_exhausted()
     {
         // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(
-            TestData.MetricStatus.ThatIsExhaustedFor1Day,
-            TestData.MetricStatus.ThatIsExhaustedFor10Days
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: new[] {
+                TestData.MetricStatus.ThatIsExhaustedFor1Day,
+                TestData.MetricStatus.ThatIsExhaustedFor10Days
+            }
         );
-        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
             new TestData.TestCommand(),
-            nextMock.Value,
+            new NextMock<TestData.IResponse>().Value,
             CancellationToken.None);
 
         // Assert
@@ -73,17 +73,17 @@ public class QuotaEnforcerBehaviorTests
         exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
     }
 
-    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
+    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] exhaustedMetricStatuses)
     {
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(new QuotaCheckerMock(new(metricStatuses)));
+        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(new QuotaCheckerStub(new(exhaustedMetricStatuses)));
     }
 }
 
-internal class QuotaCheckerMock : IQuotaChecker
+internal class QuotaCheckerStub : IQuotaChecker
 {
     private readonly CheckQuotaResult _expectedResult;
 
-    public QuotaCheckerMock(CheckQuotaResult expectedResult)
+    public QuotaCheckerStub(CheckQuotaResult expectedResult)
     {
         _expectedResult = expectedResult;
     }
