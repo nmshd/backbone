@@ -48,7 +48,8 @@ public class Identity
     private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
-        var quotasExhaustion = new Dictionary<Quota, DateTime?>();
+        DateTime? globalQuotasExhaustion = null;
+
         foreach (var quota in quotasForMetric)
         {
             var newUsage = await metricCalculator.CalculateUsage(
@@ -57,10 +58,15 @@ public class Identity
                 Address,
                 cancellationToken);
 
-            quotasExhaustion.Add(quota, quota.CalculateExhaustion(newUsage));
+            var quotaExhaustion = quota.CalculateExhaustion(newUsage);
+
+            if(quotaExhaustion is not null && (globalQuotasExhaustion is null || quotaExhaustion > globalQuotasExhaustion))
+            {
+                globalQuotasExhaustion = quotaExhaustion.Value;
+            }
         }
 
-        UpdateMetricStatus(metric, quotasExhaustion);
+        UpdateMetricStatus(metric, globalQuotasExhaustion);
     }
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
@@ -76,10 +82,9 @@ public class Identity
         return Enumerable.Empty<Quota>();
     }
 
-    private void UpdateMetricStatus(MetricKey metricKey, Dictionary<Quota, DateTime?> quotasExhaustion)
+    private void UpdateMetricStatus(MetricKey metricKey, DateTime? maxExhaustionDate)
     {
         var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metricKey);
-        var maxExhaustionDate = quotasExhaustion.Values.Max();
         if (metricStatus != null)
         {
             metricStatus.Update(maxExhaustionDate);
