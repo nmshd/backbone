@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
+namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 
 public class FindMetricsStubRepository : IMetricsRepository
 {

@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
+namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 
 internal class UserContextStub : IUserContext
 {
@@ -11,7 +11,7 @@ internal class UserContextStub : IUserContext
 
     public IdentityAddress GetAddress()
     {
-        return IdentityAddress.Create(new byte[]{0}, "id1");
+        return IdentityAddress.Create(new byte[] { 0 }, "id1");
     }
 
     public IdentityAddress GetAddressOrNull()
