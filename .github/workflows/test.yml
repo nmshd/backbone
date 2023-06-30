@@ -49,6 +49,19 @@ jobs:
         env:
           TAG: test
 
+  build-aui-container-image:
+    name: Build Admin UI Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Build image
+        run: ./.ci/aui/buildContainerImage.ts
+        env:
+          TAG: test
+
   build-acli-container-image:
     name: Build Admin CLI Container Image
     runs-on: ubuntu-latest
