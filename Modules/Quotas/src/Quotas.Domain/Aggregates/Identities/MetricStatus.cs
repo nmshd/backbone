@@ -10,11 +10,12 @@ public class MetricStatus
     /// <summary>
     /// An IdentityAddress
     /// </summary>
-    public string Owner { get; set; }
+    public string Owner { get; private set; }
 
-    public MetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
+    public MetricStatus(MetricKey metricKey, string owner, DateTime? isExhaustedUntil)
     {
         MetricKey = metricKey;
+        Owner = owner;
         IsExhaustedUntil = isExhaustedUntil;
     }
 

@@ -91,7 +91,7 @@ public class Identity
         }
         else
         {
-            _metricStatuses.Add(new(metricKey, maxExhaustionDate));
+            _metricStatuses.Add(new(metricKey, Address, maxExhaustionDate));
         }
     }
 }

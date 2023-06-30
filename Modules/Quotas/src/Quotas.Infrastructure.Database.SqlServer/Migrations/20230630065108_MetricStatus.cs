@@ -21,17 +21,11 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 {
                     MetricKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Owner = table.Column<string>(type: "char(36)", nullable: false),
-                    IsExhaustedUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdentityAddress = table.Column<string>(type: "char(36)", nullable: true)
+                    IsExhaustedUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MetricStatus", x => new { x.Owner, x.MetricKey });
-                    table.ForeignKey(
-                        name: "FK_MetricStatus_Identities_IdentityAddress",
-                        column: x => x.IdentityAddress,
-                        principalTable: "Identities",
-                        principalColumn: "Address");
                     table.ForeignKey(
                         name: "FK_MetricStatus_Identities_Owner",
                         column: x => x.Owner,
@@ -39,11 +33,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MetricStatus_IdentityAddress",
-                table: "MetricStatus",
-                column: "IdentityAddress");
         }
 
         /// <inheritdoc />

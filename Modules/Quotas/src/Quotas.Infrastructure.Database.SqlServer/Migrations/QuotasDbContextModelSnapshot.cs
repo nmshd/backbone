@@ -54,15 +54,10 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(50)")
                         .IsFixedLength(false);
 
-                    b.Property<string>("IdentityAddress")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime?>("IsExhaustedUntil")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Owner", "MetricKey");
-
-                    b.HasIndex("IdentityAddress");
 
                     b.ToTable("MetricStatus");
                 });
@@ -178,10 +173,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
                         .WithMany("MetricStatuses")
-                        .HasForeignKey("IdentityAddress");
-
-                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
-                        .WithMany()
                         .HasForeignKey("Owner")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

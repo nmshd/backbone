@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20230629141159_MetricStatus")]
+    [Migration("20230630065108_MetricStatus")]
     partial class MetricStatus
     {
         /// <inheritdoc />
@@ -57,15 +57,10 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(50)")
                         .IsFixedLength(false);
 
-                    b.Property<string>("IdentityAddress")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime?>("IsExhaustedUntil")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Owner", "MetricKey");
-
-                    b.HasIndex("IdentityAddress");
 
                     b.ToTable("MetricStatus");
                 });
@@ -181,10 +176,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
                         .WithMany("MetricStatuses")
-                        .HasForeignKey("IdentityAddress");
-
-                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
-                        .WithMany()
                         .HasForeignKey("Owner")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
