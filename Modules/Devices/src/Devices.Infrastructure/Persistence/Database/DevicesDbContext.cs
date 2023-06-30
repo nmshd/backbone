@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
@@ -100,6 +101,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<TierName>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
+            .HaveConversion<PnsHandleEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
