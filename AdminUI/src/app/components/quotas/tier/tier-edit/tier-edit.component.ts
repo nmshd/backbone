@@ -10,14 +10,14 @@ import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
     styleUrls: ['./tier-edit.component.css'],
 })
 export class TierEditComponent {
+
     headerEdit: string;
     headerCreate: string;
-
+    headerDescriptionEdit: string;
+    headerDescriptionCreate: string;
     tierId?: string;
     editMode: boolean;
-
     tier: Tier;
-
     loading: boolean;
     disabled: boolean;
 
@@ -28,6 +28,8 @@ export class TierEditComponent {
     ) {
         this.headerEdit = 'Edit Tier';
         this.headerCreate = 'Create Tier';
+        this.headerDescriptionCreate = 'Please fill the form below to create your Tier';
+        this.headerDescriptionEdit = 'Perform your desired changes and save to edit your Tier';
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
@@ -68,7 +70,10 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }
@@ -80,7 +85,11 @@ export class TierEditComponent {
                 if (data && data.result) {
                     this.tier = data.result;
                 }
-                this.snackBar.open('Successfully added tier.', 'Dismiss');
+                this.snackBar.open('Successfully added tier.', 'Dismiss', {
+                    duration: 4000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
                 this.tierId = data.result.id;
                 this.editMode = true;
             },
@@ -99,13 +108,20 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.snackBar.open('Successfully updated tier.', 'Dismiss');
+                    this.snackBar.open('Successfully updated tier.', 'Dismiss', {
+                        duration: 4000,
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }

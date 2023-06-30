@@ -16,7 +16,8 @@ import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-env
 export class IdentityListComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    header = 'Identities';
+    header: string;
+    headerDescription: string;
 
     identities: Identity[];
 
@@ -38,6 +39,7 @@ export class IdentityListComponent {
         private identityService: IdentityService
     ) {
         this.header = 'Identities';
+        this.headerDescription = 'A list of existing Identities';
 
         this.identities = [];
 

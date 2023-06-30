@@ -17,14 +17,14 @@ export class ClientServiceService {
   getClients(
       pageNumber: number,
       pageSize: number
-  ): Observable<PagedHttpResponseEnvelope<Client>> {
+  ): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
       const httpOptions = {
         params: new HttpParams()
           .set('PageNumber', pageNumber + 1)
           .set('PageSize', pageSize),
     };
 
-    return this.http.get<PagedHttpResponseEnvelope<Client>>(
+    return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(
       this.apiUrl,
       httpOptions
     );
@@ -35,9 +35,13 @@ export class ClientServiceService {
   }
 }
      
-export interface Client {
+export interface ClientDTO {
   clientId: string;
   displayName?: string;
+}
+
+export interface Client {
+  clientId?: string;
+  displayName: string;
   clientSecret?: string;
 }
-        

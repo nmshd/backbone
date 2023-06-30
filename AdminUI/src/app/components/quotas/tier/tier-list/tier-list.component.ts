@@ -14,6 +14,7 @@ export class TierListComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     header: string;
+    headerDescription: string;
 
     tiers: Tier[];
 
@@ -31,6 +32,7 @@ export class TierListComponent {
         private tierService: TierService
     ) {
         this.header = 'Tiers';
+        this.headerDescription = "A list of existing Tiers";
 
         this.tiers = [];
 
@@ -61,7 +63,10 @@ export class TierListComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                this.snackBar.open(err.message, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }

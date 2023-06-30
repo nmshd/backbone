@@ -1,63 +1,43 @@
-<h2>{{ headerCreate }}</h2>
-<div *ngIf="!loading">
-    <mat-accordion multi>
-        <mat-expansion-panel expanded>
-            <mat-expansion-panel-header>
-                <mat-panel-title> Details </mat-panel-title>
-            </mat-expansion-panel-header>
+<div class="card-header">
+    <h2 class="header-title ">{{ headerCreate }}</h2>
+    <p class="header-description">{{ headerDescription }}</p>
+</div>
+<div [ngClass]="{'disabled-container': loading}">
+    <mat-card>
+        <mat-card-content class="form-card">
+            <div *ngIf="loading" class="loading">
+                <mat-progress-spinner color="primary" mode="indeterminate">
+                </mat-progress-spinner>
+            </div>
             <div class="form-details">
-                <mat-form-field>
+                <mat-form-field class="form-field">
                     <mat-label>Client Id</mat-label>
-                    <input
-                        matInput
-                        required
-                        [(ngModel)]="client.clientId"
-                        [disabled]="disabled"
-                    />
+                    <input matInput [(ngModel)]="client.clientId" [disabled]="disabled" />
+                    <mat-hint>A Client ID will be generated if this field is left blank.</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="form-field">
+                    <mat-label>Display Name</mat-label>
+                    <input matInput required [(ngModel)]="client.displayName" [disabled]="disabled" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Display Name</mat-label>
-                    <input
-                        matInput
-                        [(ngModel)]="client.displayName"
-                        [disabled]="disabled"
-                    />
+                <mat-form-field class="form-field">
+                    <mat-label>Client Secret</mat-label>
+                    <input [type]="showPassword ? 'text' : 'password'" matInput [(ngModel)]="client.clientSecret"
+                        [disabled]="disabled" />
+                    <mat-icon matSuffix (click)="togglePasswordVisibility()"
+                        style="cursor: pointer;">visibility</mat-icon>
+                    <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input type="password"
-                        matInput
-                        [(ngModel)]="client.clientSecret"
-                        [disabled]="disabled"
-                    />
-                </mat-form-field>                
+                <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
+                    <span class="client-secret-warning">Please save the ClientSecret since it will be unaccessible after
+                        exiting.</span>
+                </div>
             </div>
-        </mat-expansion-panel>
-    </mat-accordion>
+        </mat-card-content>
+    </mat-card>
     <div class="action-buttons">
-        <button
-            *ngIf="editMode"
-            mat-icon-button
-            color="primary"
-            (click)="createClient()"
-            matTooltip="Save"
-            [disabled]="!validateClient() || true"
-        >
-            <mat-icon>save</mat-icon>
-        </button>
-        <button
-            mat-icon-button
-            color="primary"
-            (click)="createClient()"
-            matTooltip="Add"
-            [disabled]="!validateClient() || true"
-        >
-            <mat-icon>add</mat-icon>
-        </button>
+        <button mat-raised-button color="primary" (click)="createClient()"
+            [disabled]="disabled || !validateClient()">Save</button>
+        <button mat-raised-button routerLink="/clients">Cancel</button>
     </div>
-</div>
-<div *ngIf="loading" class="loading">
-    <mat-progress-spinner color="primary" mode="indeterminate">
-    </mat-progress-spinner>
 </div>

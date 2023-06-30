@@ -6,20 +6,20 @@ import { ClientServiceService } from 'src/app/services/client-service/client-ser
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 
 @Component({
-  selector: 'app-client-edit',
-  templateUrl: './client-edit.component.html',
-  styleUrls: ['./client-edit.component.css']
+    selector: 'app-client-edit',
+    templateUrl: './client-edit.component.html',
+    styleUrls: ['./client-edit.component.css']
 })
 export class ClientEditComponent {
+    showPassword: boolean;
     headerCreate: string;
-
+    headerDescription: string;
     clientId?: string;
     editMode: boolean;
-
     client: Client;
-
     loading: boolean;
     disabled: boolean;
+    displayClientSecretWarning: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -27,18 +27,20 @@ export class ClientEditComponent {
         private clientService: ClientServiceService
     ) {
         this.headerCreate = 'Create Client';
+        this.headerDescription = 'Please fill the form below to create your Client';
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
-        this.client = 
-        {
-          clientId: '',
-          displayName: '',
-          clientSecret:'',
+        this.displayClientSecretWarning = false;
+        this.showPassword = false;
+        this.client = {
+            clientId: '',
+            displayName: '',
+            clientSecret: '',
         } as Client;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params['id']) {
                 this.clientId = params['id'];
@@ -47,39 +49,50 @@ export class ClientEditComponent {
         this.initClient();
     }
 
-    initClient() {
+    initClient(): void {
         this.client = {
             clientId: '',
             displayName: '',
-            clientSecret:'',
+            clientSecret: '',
         } as Client;
 
         this.loading = false;
     }
 
-    createClient() {
-      this.loading = true;
-      this.clientService.createClient(this.client).subscribe({
-          next: (data: HttpResponseEnvelope<Client>) => {
-              if (data && data.result) {
-                  this.client = data.result;
-              }
-              this.snackBar.open('Successfully added client.', 'Dismiss');
-          },
-          complete: () => (this.loading = false),
-          error: (err: any) => {
-              this.loading = false;
-              this.snackBar.open(err.message, 'Dismiss');
-              this.disabled = true;
-          },
-      });
-  }
+    createClient(): void {
+        this.loading = true;
+        this.clientService.createClient(this.client).subscribe({
+            next: (data: HttpResponseEnvelope<Client>) => {
+                if (data && data.result) {
+                    this.client = data.result;
+                }
+                this.displayClientSecretWarning = true;
+                this.snackBar.open('Successfully added client.', 'Dismiss', {
+                    duration: 4000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                this.snackBar.open(err.message, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
+                this.disabled = true;
+            },
+        });
+    }
 
     validateClient(): boolean {
-        if (this.client && this.client.clientId && this.client.clientId.length > 0) {
+        if (this.client && this.client.displayName && this.client.displayName.length > 0) {
             return true;
         }
         return false;
     }
-    
+
+    togglePasswordVisibility(): void {
+        this.showPassword = !this.showPassword;
+    }
 }

@@ -5,22 +5,54 @@
     word-break: break-all;
 }
 
+.disabled-container {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
 .loading {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 999;
+    position: absolute;
+    margin-top: -60px;
+    width: 100%;
+    height: 100%;
 }
 
 .no-data {
     padding: 25px;
 }
 
+.card-header {
+    border-radius: 3px;
+    padding: 15px;
+    background-color: #673ab7;
+    position: relative;
+    z-index: 1;
+    margin: 15px 15px -50px 15px;
+}
+
+.header-description {
+    color: #fff;
+}
+
+.header-title {
+    color: #fff;
+}
+
 .action-buttons {
+    margin-top: 50px;
     display: flex;
     justify-content: flex-end;
 }
 
 @media screen and (max-width: 960px) {
+    .card-header {
+        margin: 15px 15px -20px 15px;
+    }
+    
     .mat-mdc-table .mat-mdc-header-row {
         display: none;
     }

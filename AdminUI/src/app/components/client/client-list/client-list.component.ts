@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
     Client,
+    ClientDTO,
     ClientServiceService,
 } from 'src/app/services/client-service/client-service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
@@ -16,17 +17,13 @@ import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-env
 export class ClientListComponent {
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-    header = 'Clients';
-
-    clients: Client[];
-
+    header: string;
+    headerDescription: string;
+    clients: ClientDTO[];
     totalRecords: number;
     pageSize: number;
     pageIndex: number;
-
     loading = false;
-
     displayedColumns: string[] = [
         'clientId',
         'displayName'
@@ -38,13 +35,11 @@ export class ClientListComponent {
         private clientService: ClientServiceService
     ) {
         this.header = 'Clients';
-
+        this.headerDescription = 'A list of existing Clients';
         this.clients = [];
-
         this.totalRecords = 0;
         this.pageSize = 10;
         this.pageIndex = 0;
-
         this.loading = true;
     }
 
@@ -57,7 +52,7 @@ export class ClientListComponent {
         this.clientService
             .getClients(this.pageIndex, this.pageSize)
             .subscribe({
-                next: (data: PagedHttpResponseEnvelope<Client>) => {
+                next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
                     if (data) {
                         this.clients = data.result;
                         if (data.pagination) {
