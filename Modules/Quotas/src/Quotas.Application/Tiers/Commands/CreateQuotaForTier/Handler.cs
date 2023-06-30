@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Backbone.Modules.Quotas.Application.DTOs;
+﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
