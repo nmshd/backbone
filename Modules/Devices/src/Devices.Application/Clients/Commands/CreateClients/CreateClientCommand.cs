@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+
 public class CreateClientCommand : IRequest<CreateClientResponse>
 {
     public CreateClientCommand(string clientId, string displayName, string clientSecret)

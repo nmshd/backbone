@@ -1,10 +1,15 @@
-﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
-using Enmeshed.BuildingBlocks.Application.CQRS.BaseClasses;
+﻿namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
-public class CreateClientResponse : ClientDTO
+public class CreateClientResponse
 {
-    public CreateClientResponse(string clientId, string displayName) : base(clientId, displayName)
+    public CreateClientResponse(string clientId, string displayName, string clientSecret)
     {
+        ClientId = clientId;
+        DisplayName = displayName;
+        ClientSecret = clientSecret;
     }
+
+    public string ClientId { get; set; }
+    public string DisplayName { get; set; }
+    public string ClientSecret { get; set; }
 }
