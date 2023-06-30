@@ -37,8 +37,8 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier.Id, tierQuotaDefinition.Id));
 
         // Assert
-        A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(identities =>
-            identities.All(i => i.TierQuotas.Count == 1))
+        A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>
+            ids.All(i => i.TierQuotas.Count == 1))
             , CancellationToken.None)
         ).MustHaveHappened();
     }

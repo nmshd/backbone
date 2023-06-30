@@ -51,7 +51,7 @@ public class IdentityCreatedIntegrationEventHandlerTests
         await handler.Handle(new IdentityCreatedIntegrationEvent(address, tierId));
 
         // Assert
-        A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count() == 2), CancellationToken.None)).MustHaveHappened();
+        A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();
     }
 
     private IdentityCreatedIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)

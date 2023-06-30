@@ -49,11 +49,11 @@ public class HandlerTests
         response.Id.Should().NotBeNullOrEmpty();
         response.Period.Should().Be(period);
         response.Max.Should().Be(max);
-        response.Metric.Key.ToString().Should().Be(metricKey);
+        response.Metric.Key.Should().Be(metricKey);
 
         A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
             t.Id == tierId &&
-            t.Quotas.Count() == 1)
+            t.Quotas.Count == 1)
             , CancellationToken.None)
         ).MustHaveHappened();
     }

@@ -5,10 +5,6 @@ namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 
 internal class UserContextStub : IUserContext
 {
-    public UserContextStub()
-    {
-    }
-
     public IdentityAddress GetAddress()
     {
         return IdentityAddress.Create(new byte[] { 0 }, "id1");
