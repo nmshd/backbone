@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
 
     public async Task Handle(RecalculateMetricStatusesCommand command, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindByAddresses(command.Identities, cancellationToken);
+        var identities = await _identitiesRepository.FindByAddresses(command.Identities, cancellationToken, track: true);
         
         foreach (var identity in identities)
         {
