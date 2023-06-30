@@ -25,8 +25,7 @@ public class DirectPushService : IPushService
         {
             var platform = group.Key;
 
-            // TODO: Missing Factory for connector
-            IPnsConnector pnsConnector = null;
+            var pnsConnector = PnsConnectorFactory.CreateFor(platform);
 
             await pnsConnector.Send(group, notification);
         }
