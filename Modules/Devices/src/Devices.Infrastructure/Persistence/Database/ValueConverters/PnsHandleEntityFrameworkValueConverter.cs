@@ -11,18 +11,36 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
 
     public PnsHandleEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            pnsHandle => $"{Enum.GetName(typeof(PushNotificationPlatform),pnsHandle.Platform)}|{pnsHandle.Value}",
-            value => PnsHandleStringParse(value),
+            pnsHandle => SerializeHandle(pnsHandle),
+            value => DeserializeHandle(value),
             mappingHints
         )
     {
     }
 
-    private static PnsHandle PnsHandleStringParse(string pnsHandle)
+    private static string SerializeHandle(PnsHandle pnsHandle)
+    {
+        var platformAsString = pnsHandle.Platform switch
+        {
+            PushNotificationPlatform.Apns => "apns",
+            PushNotificationPlatform.Fcm => "fcm",
+            _ => throw new NotImplementedException($"The platform {pnsHandle.Platform} is invalid.")
+        };
+
+        return $"{platformAsString}|{pnsHandle.Value}";
+    }
+
+    private static PnsHandle DeserializeHandle(string pnsHandle)
     {
         var tokens = pnsHandle.Split('|');
-        var platform = (PushNotificationPlatform)Enum.Parse(typeof(PushNotificationPlatform), tokens[0]);
+        var platform = tokens[0] switch
+        {
+            "fcm" => PushNotificationPlatform.Fcm,
+            "apns" => PushNotificationPlatform.Apns,
+            _ => throw new NotImplementedException($"The platform {tokens[0]} is invalid.")
+        };
         var value = tokens[1];
+
         return PnsHandle.Parse(value, platform).Value;
     }
 }

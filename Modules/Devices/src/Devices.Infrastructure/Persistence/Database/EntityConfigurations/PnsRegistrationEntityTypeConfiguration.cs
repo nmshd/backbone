@@ -10,9 +10,5 @@ public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<P
         builder.ToTable("PnsRegistration");
 
         builder.HasKey(x => x.Handle);
-        builder.Property(x => x.Handle).HasMaxLength(200);
-        builder.Property(x => x.IdentityAddress);
-        builder.Property(x => x.DeviceId);
-        builder.Property(x => x.UpdatedAt);
     }
 }

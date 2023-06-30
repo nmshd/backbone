@@ -102,7 +102,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         configurationBuilder.Properties<TierName>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
         configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
-            .HaveConversion<PnsHandleEntityFrameworkValueConverter>();
+            .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
