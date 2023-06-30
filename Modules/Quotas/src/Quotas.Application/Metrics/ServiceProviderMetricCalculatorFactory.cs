@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Domain;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;

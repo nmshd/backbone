@@ -1,7 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Metrics;
+namespace Backbone.Modules.Quotas.Domain.Metrics;
 public abstract class MetricCalculatorFactory
 {
     public IMetricCalculator CreateFor(MetricKey metricKey)

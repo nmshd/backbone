@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
