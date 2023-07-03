@@ -19,8 +19,11 @@ public abstract class Quota
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 
-    internal DateTime? CalculateExhaustion(uint newUsage)
+    internal ExhaustionDate CalculateExhaustion(uint newUsage)
     {
-        return newUsage >= Max ? Period.CalculateEnd() : null;
+        if (newUsage >= Max)
+            return new ExhaustionDate(Period.CalculateEnd());
+
+        return ExhaustionDate.Unexhausted;
     }
 }

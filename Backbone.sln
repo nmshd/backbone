@@ -2,11 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\ConsumerApi.csproj", "{1236D230-99E8-4352-9D93-94EEDCC0E064}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A326741C-C030-4535-BA73-2B508E337CF0} = {A326741C-C030-4535-BA73-2B508E337CF0}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Challenges", "Challenges", "{DF1C4335-5043-4365-B753-6A8698528E4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{13BA71F8-58D7-45F6-997D-4DE87E7B41F3}"
@@ -94,9 +89,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.API.Tests", "BuildingBlocks\test\BuildingBlocks.API.Tests\BuildingBlocks.API.Tests.csproj", "{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application.Tests", "BuildingBlocks\test\BuildingBlocks.Application.Tests\BuildingBlocks.Application.Tests.csproj", "{6E326CDD-7992-487E-A840-987929DC79EF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {A5BC6269-E1FC-4F91-B1D2-5B4F90571531}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure.Tests", "BuildingBlocks\test\BuildingBlocks.Infrastructure.Tests\BuildingBlocks.Infrastructure.Tests.csproj", "{35B85FC1-3134-4FE5-815E-F7C4282C6991}"
 EndProject
@@ -107,9 +99,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds.Tests", "BuildingBlocks\test\StronglyTypedIds.Tests\StronglyTypedIds.Tests.csproj", "{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling.Tests", "BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj", "{33AF4A60-5E10-4F84-93A5-E724D013CFC3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {A5BC6269-E1FC-4F91-B1D2-5B4F90571531}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestTools.Tests", "BuildingBlocks\test\UnitTestTools.Tests\UnitTestTools.Tests.csproj", "{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}"
 EndProject
@@ -293,10 +282,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1236D230-99E8-4352-9D93-94EEDCC0E064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1236D230-99E8-4352-9D93-94EEDCC0E064}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1236D230-99E8-4352-9D93-94EEDCC0E064}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1236D230-99E8-4352-9D93-94EEDCC0E064}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9616684-0252-428D-8D64-CAFC8708F7D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9616684-0252-428D-8D64-CAFC8708F7D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9616684-0252-428D-8D64-CAFC8708F7D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -702,7 +687,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1236D230-99E8-4352-9D93-94EEDCC0E064} = {E6BFD37D-335D-4975-B661-BC67FB82F5AA}
 		{DF1C4335-5043-4365-B753-6A8698528E4B} = {0EAF57B8-E97C-469E-A74B-596D78C978B2}
 		{C16FE68A-6CDC-4074-A8E7-8CD16EBDDFAA} = {DF1C4335-5043-4365-B753-6A8698528E4B}
 		{06D714AE-EDF4-421C-9340-EDA6FCDF491F} = {13BA71F8-58D7-45F6-997D-4DE87E7B41F3}

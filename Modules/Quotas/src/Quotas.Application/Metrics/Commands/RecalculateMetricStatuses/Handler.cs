@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
         
         foreach (var identity in identities)
         {
-            await identity.UpdateMetrics(ParseMetricKeys(command.Metrics), _metricCalculatorFactory, cancellationToken);
+            await identity.UpdateMetricStatuses(ParseMetricKeys(command.Metrics), _metricCalculatorFactory, cancellationToken);
         }
 
         await _identitiesRepository.Update(identities, cancellationToken);

@@ -20,7 +20,7 @@ public class Identity
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
-    
+
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // To: The dev who implements individualQuotas
     // uncomment the line below
@@ -36,21 +36,24 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public async Task UpdateMetrics(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, CancellationToken cancellationToken)
+    public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory,
+        CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
         {
             var metricCalculator = factory.CreateFor(metric);
-            await UpdateMetric(metric, metricCalculator, cancellationToken);
+            await UpdateMetricStatus(metric, metricCalculator, cancellationToken);
         }
     }
 
-    private async Task UpdateMetric(MetricKey metric, IMetricCalculator metricCalculator, CancellationToken cancellationToken)
+    private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator,
+        CancellationToken cancellationToken)
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
-        DateTime? globalQuotasExhaustion = null;
+        
+        var latestExhaustionDate = ExhaustionDate.Unexhausted;
 
-        foreach (var quota in quotasForMetric)
+        await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>
         {
             var newUsage = await metricCalculator.CalculateUsage(
                 quota.Period.CalculateBegin(),
@@ -60,13 +63,18 @@ public class Identity
 
             var quotaExhaustion = quota.CalculateExhaustion(newUsage);
 
-            if(quotaExhaustion is not null && (globalQuotasExhaustion is null || quotaExhaustion > globalQuotasExhaustion))
+            lock (latestExhaustionDate)
             {
-                globalQuotasExhaustion = quotaExhaustion.Value;
+                if (quotaExhaustion > latestExhaustionDate)
+                    latestExhaustionDate = quotaExhaustion;
             }
-        }
+        });
 
-        UpdateMetricStatus(metric, globalQuotasExhaustion);
+        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metric);
+        if (metricStatus != null)
+            metricStatus.Update(latestExhaustionDate);
+        else
+            _metricStatuses.Add(new MetricStatus(metric, Address, latestExhaustionDate));
     }
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
@@ -80,18 +88,5 @@ public class Identity
         var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
         var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
         return appliedQuotas;
-    }
-
-    private void UpdateMetricStatus(MetricKey metricKey, DateTime? maxExhaustionDate)
-    {
-        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metricKey);
-        if (metricStatus != null)
-        {
-            metricStatus.Update(maxExhaustionDate);
-        }
-        else
-        {
-            _metricStatuses.Add(new(metricKey, Address, maxExhaustionDate));
-        }
     }
 }
