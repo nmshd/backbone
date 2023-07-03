@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         {
             var clientExists = await _oAuthClientsRepository.Exists(request.ClientId, cancellationToken);
             if (clientExists)
-                throw new OperationFailedException(ApplicationErrors.Devices.ClientAlreadyExists());
+                throw new OperationFailedException(ApplicationErrors.Devices.ClientIdAlreadyExists());
         }
 
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
