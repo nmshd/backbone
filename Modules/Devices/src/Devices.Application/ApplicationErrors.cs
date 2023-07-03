@@ -48,7 +48,7 @@ public static class ApplicationErrors
 
         public static ApplicationError ClientAlreadyExists()
         {
-            return new ApplicationError("error.platform.validation.device.clientAlreadyExists", "The client already exists. Try a different client");
+            return new ApplicationError("error.platform.validation.device.clientIdAlreadyExists", "A client with the given client id already exists. Try a different client id");
         }
     }
 }
