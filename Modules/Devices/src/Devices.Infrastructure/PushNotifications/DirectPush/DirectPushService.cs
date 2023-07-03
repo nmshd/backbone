@@ -8,16 +8,18 @@ public class DirectPushService : IPushService
 {
     private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;
+    private readonly CancellationToken _cancellationToken;
 
-    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, ILogger<DirectPushService> logger)
+    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, ILogger<DirectPushService> logger, CancellationToken cancellationToken)
     {
         _pnsRegistrationRepository = pnsRegistrationRepository;
         _logger = logger;
+        _cancellationToken = cancellationToken;
     }
 
     public async Task SendNotification(IdentityAddress recipient, object notification)
     {
-        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, CancellationToken.None);
+        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, _cancellationToken);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
@@ -28,23 +30,25 @@ public class DirectPushService : IPushService
             var pnsConnector = PnsConnectorFactory.CreateFor(platform);
 
             await pnsConnector.Send(group, notification);
+
+            _logger.LogTrace($"Successfully sent push notifications to identity '{recipient}' on platform '{Enum.GetName(platform)}'");
         }
     }
 
     public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle)
     {
-        var registration = await _pnsRegistrationRepository.GetByDeviceId(deviceId, CancellationToken.None);
+        var registration = await _pnsRegistrationRepository.GetByDeviceId(deviceId, _cancellationToken);
 
         if (registration != null)
         {
             registration.Update(handle);
 
-            await _pnsRegistrationRepository.Update(registration, CancellationToken.None);
+            await _pnsRegistrationRepository.Update(registration, _cancellationToken);
 
             _logger.LogTrace("Device successfully updated.");
         } else
         {
-            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle), CancellationToken.None);
+            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle), _cancellationToken);
 
             _logger.LogTrace("New device successfully registered.");
         }

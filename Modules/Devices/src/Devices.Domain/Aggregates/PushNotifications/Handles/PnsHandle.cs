@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-public record class PnsHandle
+public record PnsHandle
 {
     public PushNotificationPlatform Platform { get; }
     public string Value { get; }

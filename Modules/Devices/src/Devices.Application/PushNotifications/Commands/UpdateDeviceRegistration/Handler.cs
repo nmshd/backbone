@@ -22,18 +22,18 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 
     public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var handle = PnsHandle.Parse(request.Handle, PlatformParser(request.Platform)).Value;
+        var handle = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform)).Value;
         await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, handle);
         return Unit.Value;
     }
 
-    private PushNotificationPlatform PlatformParser(string platform)
+    private static PushNotificationPlatform DeserializePlatform(string platform)
     {
         return platform switch
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new ArgumentException(),
+            _ => throw new NotImplementedException($"The platform {platform} is invalid.")
         };
     }
 }

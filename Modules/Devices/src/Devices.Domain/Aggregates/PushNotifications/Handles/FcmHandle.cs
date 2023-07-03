@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-public record class FcmHandle : PnsHandle
+public record FcmHandle : PnsHandle
 {
     private FcmHandle(PushNotificationPlatform platform, string value) : base(platform, value)
     {

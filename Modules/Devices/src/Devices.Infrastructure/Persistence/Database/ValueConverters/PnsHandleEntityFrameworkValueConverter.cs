@@ -22,8 +22,8 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
     {
         var platformAsString = pnsHandle.Platform switch
         {
-            PushNotificationPlatform.Apns => "apns",
             PushNotificationPlatform.Fcm => "fcm",
+            PushNotificationPlatform.Apns => "apns",
             _ => throw new NotImplementedException($"The platform {pnsHandle.Platform} is invalid.")
         };
 
