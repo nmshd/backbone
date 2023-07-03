@@ -2,10 +2,9 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Enmeshed.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -150,7 +149,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         HttpError httpError;
 
-        if (_env.IsDevelopment())
+        if (_env.IsDevelopment() || _env.IsLocal())
         {
             var details = context.Exception.Message;
             var innerException = context.Exception.InnerException;

@@ -1,0 +1,17 @@
+{{- if .Values.rabbitmq.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: rabbitmq
+spec:
+  ports:
+    - name: amqp
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
+  selector:
+    app: rabbitmq
+{{- end }}
