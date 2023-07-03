@@ -33,7 +33,6 @@ RUN dotnet restore "AdminUi/src/AdminUi/AdminUi.csproj"
 COPY . .
 WORKDIR "/src/AdminUi/src/AdminUi"
 RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/build --no-restore "AdminUi.csproj" 
-RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
 
 FROM build AS publish
 
