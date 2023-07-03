@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
 
-internal class TierQuotaDefinitionEntityTypeConfiguration : IEntityTypeConfiguration<TierQuotaDefinition>
+public class TierQuotaDefinitionEntityTypeConfiguration : IEntityTypeConfiguration<TierQuotaDefinition>
 {
     public void Configure(EntityTypeBuilder<TierQuotaDefinition> builder)
     {
