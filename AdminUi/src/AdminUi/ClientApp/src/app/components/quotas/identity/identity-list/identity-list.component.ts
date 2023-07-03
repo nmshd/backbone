@@ -35,7 +35,7 @@ export class IdentityListComponent {
     ];
 
     constructor(
-        private _snackBar: MatSnackBar,
+        private snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
         this.header = 'Identities';
@@ -72,7 +72,11 @@ export class IdentityListComponent {
                 complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
-                    this._snackBar.open(err.message, 'Close');
+                    let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                    this.snackBar.open(errorMessage, 'Dismiss', {
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
                 },
             });
     }

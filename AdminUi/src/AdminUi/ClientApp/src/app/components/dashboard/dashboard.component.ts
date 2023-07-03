@@ -8,10 +8,12 @@ import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service
 })
 export class DashboardComponent {
     header: string;
+    breakpoint: number;
     dashboardOverviewPanels: DashboardOverviewPanel[];
 
     constructor(private sidebarService: SidebarService) {
         this.header = '';
+        this.breakpoint = (window.innerWidth <= 1150) ? 1 : (window.innerWidth <= 1700) ? 2 : 3;
         this.dashboardOverviewPanels = [];
     }
 
@@ -40,6 +42,10 @@ export class DashboardComponent {
                 description: 'List all of the application\'s clients and create new ones.'
             },
         ];
+    }
+
+    onResize(event: any): void {
+        this.breakpoint = (window.innerWidth <= 1150) ? 1 : (window.innerWidth <= 1700) ? 2 : 3;
     }
 
     isMobile(): boolean {

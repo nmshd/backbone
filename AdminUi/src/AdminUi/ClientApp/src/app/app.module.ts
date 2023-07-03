@@ -37,6 +37,7 @@ import { IdentityListComponent } from './components/quotas/identity/identity-lis
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { ClientListComponent } from './components/client/client-list/client-list.component';
+import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
 import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 
 @NgModule({
@@ -50,6 +51,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         TierListComponent,
         TierEditComponent,
         ClientListComponent,
+        ClientEditComponent,
         AssignQuotasDialogComponent,
     ],
     imports: [
