@@ -118,7 +118,8 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss', {
+                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                this.snackBar.open(errorMessage, 'Dismiss', {
                     verticalPosition: 'top',
                     horizontalPosition: 'center'
                 });
