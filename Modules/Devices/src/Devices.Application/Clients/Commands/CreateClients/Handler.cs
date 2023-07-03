@@ -15,11 +15,14 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
 
     public async Task<CreateClientResponse> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
-        if (!string.IsNullOrEmpty(request.ClientId)
-            && await _oAuthClientsRepository.Find(request.ClientId, cancellationToken) != null)
-            throw new OperationFailedException(ApplicationErrors.Devices.ClientAlreadyExists());
+        if (!string.IsNullOrEmpty(request.ClientId))
+        {
+            var clientExists = await _oAuthClientsRepository.Exists(request.ClientId, cancellationToken);
+            if (clientExists)
+                throw new OperationFailedException(ApplicationErrors.Devices.ClientAlreadyExists());
+        }
 
-        var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? Password.Generate(30) : request.ClientSecret;
+        var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? request.ClientId : request.DisplayName;
 

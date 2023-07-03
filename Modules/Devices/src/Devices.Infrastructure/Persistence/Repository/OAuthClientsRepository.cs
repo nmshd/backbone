@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -23,15 +22,15 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return clients;
     }
 
-    public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken)
+    public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
     {
         var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
-        return client != null ? new OAuthClient(client.ClientId, client.DisplayName) : null;
+        return client != null;
     }
 
     public async Task Add(string clientId, string displayName, string clientSecret, CancellationToken cancellationToken)
     {
-        var managerResult = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        var client = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = clientId,
             ClientSecret = clientSecret,
@@ -43,7 +42,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             }
         }, cancellationToken);
 
-        if (managerResult == null)
-            throw new Exception($"Failed to create the client: '{displayName}'");
+        if (client == null)
+            throw new Exception($"Failed to create client '{displayName}' with id '{clientId}'");
     }
 }
