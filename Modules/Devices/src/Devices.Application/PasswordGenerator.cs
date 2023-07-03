@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Backbone.Modules.Devices.Application;
 
-public static class Password
+public static class PasswordGenerator
 {
     public static string Generate(int length)
     {

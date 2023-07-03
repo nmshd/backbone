@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Application;
 
-public class ClientIdGenerator
+public static class ClientIdGenerator
 {
     public const int MAX_LENGTH = 20;
     public const int PREFIX_LENGTH = 3;

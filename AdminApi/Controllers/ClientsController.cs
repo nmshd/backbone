@@ -23,7 +23,6 @@ public class ClientsController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateClientResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<CreatedResult> CreateOAuthClients(CreateClientCommand command, CancellationToken cancellationToken)
     {
         var createdClient = await _mediator.Send(command, cancellationToken);
