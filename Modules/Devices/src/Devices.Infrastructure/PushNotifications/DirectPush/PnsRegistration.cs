@@ -10,6 +10,8 @@ public class PnsRegistration
     public PnsHandle Handle { get; private set; }
     public DateTime UpdatedAt { get; private set;}
 
+    private PnsRegistration() {}
+
     public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle)
     {
         IdentityAddress = identityAddress;
