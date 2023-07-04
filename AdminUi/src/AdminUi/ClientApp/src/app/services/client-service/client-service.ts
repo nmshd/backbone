@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 import { environment } from 'src/environments/environment';
 
@@ -16,21 +17,31 @@ export class ClientServiceService {
     getClients(
         pageNumber: number,
         pageSize: number
-    ): Observable<PagedHttpResponseEnvelope<Client>> {
+    ): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
         const httpOptions = {
             params: new HttpParams()
                 .set('PageNumber', pageNumber + 1)
                 .set('PageSize', pageSize),
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<Client>>(
+        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(
             this.apiUrl,
             httpOptions
         );
     }
+
+    createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.post<HttpResponseEnvelope<Client>>(this.apiUrl, client);
+    }
+}
+
+export interface ClientDTO {
+    clientId: string;
+    displayName?: string;
 }
 
 export interface Client {
-    clientId: string;
+    clientId?: string;
     displayName: string;
+    clientSecret?: string;
 }
