@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "AdminUi"
+  "defaultProject": "AdminUi",
+  "cli": {
+    "analytics": false
+  }
 }
