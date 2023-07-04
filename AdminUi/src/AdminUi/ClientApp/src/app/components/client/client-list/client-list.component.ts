@@ -26,7 +26,8 @@ export class ClientListComponent {
     loading = false;
     displayedColumns: string[] = [
         'clientId',
-        'displayName'
+        'displayName',
+        'actions'
     ];
 
     constructor(
@@ -74,17 +75,40 @@ export class ClientListComponent {
             });
     }
 
-    pageChangeEvent(event: PageEvent) {
+    pageChangeEvent(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
         this.getPagedData();
     }
 
-    dateConvert(date: any) {
+    dateConvert(date: any): string {
         return new Date(date).toLocaleDateString();
     }
 
-    addClient() {
+    addClient(): void {
         this.router.navigate([`/clients/create`]);
+    }
+
+    deleteClient(clientId: string): void {
+        this.loading = true;
+        this.clientService.deleteClient(clientId)
+            .subscribe({
+                next: (data: any) => {
+                    this.snackBar.open('Successfully deleted client.', 'Dismiss', {
+                        duration: 4000,
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
+                },
+                complete: () => (this.loading = false),
+                error: (err: any) => {
+                    this.loading = false;
+                    let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                    this.snackBar.open(errorMessage, 'Dismiss', {
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
+                },
+            });
     }
 }

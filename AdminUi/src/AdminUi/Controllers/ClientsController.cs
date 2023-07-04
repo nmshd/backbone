@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
@@ -27,6 +28,16 @@ public class ClientsController : ApiControllerBase
     {
         var createdClient = await _mediator.Send(command, cancellationToken);
         return Created(createdClient);
+    }
+
+    [HttpDelete("{clientId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteClient([FromRoute] string clientId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteClientCommand(clientId), cancellationToken);
+        return NoContent();
     }
 }
 

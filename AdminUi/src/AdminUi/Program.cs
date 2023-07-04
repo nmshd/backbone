@@ -4,6 +4,7 @@ using AdminUi.Extensions;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -48,12 +49,21 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
-    .AddCustomFluentValidation()
-    .AddCustomIdentity(environment)
-    .AddCustomSwaggerWithUi()
-    .AddDevices(parsedConfiguration.Modules.Devices)
-    .AddQuotas(parsedConfiguration.Modules.Quotas)
-    .AddHealthChecks();
+        .AddCustomFluentValidation()
+        .AddCustomIdentity(environment)
+        .AddCustomSwaggerWithUi()
+        .AddDevices(parsedConfiguration.Modules.Devices)
+        .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddHealthChecks();
+
+    services
+        .AddOpenIddict()
+        .AddCore(options =>
+        {
+            options
+                .UseEntityFrameworkCore()
+                .UseDbContext<DevicesDbContext>();
+        });
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
