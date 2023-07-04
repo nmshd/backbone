@@ -19,4 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConsumerApi\ConsumerApi.csproj" />
+  </ItemGroup>
+
 </Project>
