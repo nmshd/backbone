@@ -2,6 +2,7 @@
 using FluentAssertions;
 
 namespace Enmeshed.UnitTestTools.Extensions;
+
 public static class DateTimeAssertionsExtensions
 {
     public static AndConstraint<DateTimeAssertions> Be(this DateTimeAssertions it, string dateTimeString)
@@ -11,20 +12,28 @@ public static class DateTimeAssertionsExtensions
 
     public static AndConstraint<NullableDateTimeAssertions> BeEndOfHour(this NullableDateTimeAssertions it)
     {
-        return it.NotBeNull().
-            And.HaveMinute(59).
-            And.HaveSecond(59);
+        return it.NotBeNull()
+            .And.HaveYear(it.Subject!.Value.Year)
+            .And.HaveMonth(it.Subject!.Value.Year)
+            .And.HaveDay(it.Subject!.Value.Year)
+            .And.HaveHour(it.Subject!.Value.Hour)
+            .And.HaveMinute(59)
+            .And.HaveSecond(59);
     }
 
     public static AndConstraint<NullableDateTimeAssertions> BeEndOfDay(this NullableDateTimeAssertions it)
     {
-        return it.NotBeNull().
-            And.HaveHour(23).
-            And.HaveMinute(59).
-            And.HaveSecond(59);
+        return it.NotBeNull()
+            .And.HaveYear(it.Subject!.Value.Year)
+            .And.HaveMonth(it.Subject!.Value.Year)
+            .And.HaveDay(it.Subject!.Value.Year)
+            .And.HaveHour(23)
+            .And.HaveMinute(59)
+            .And.HaveSecond(59);
     }
 
-    public static AndConstraint<NullableDateTimeAssertions> Be(this NullableDateTimeAssertions it, string dateTimeString)
+    public static AndConstraint<NullableDateTimeAssertions> Be(this NullableDateTimeAssertions it,
+        string dateTimeString)
     {
         return it.NotBeNull().And.Be(DateTime.Parse(dateTimeString));
     }
