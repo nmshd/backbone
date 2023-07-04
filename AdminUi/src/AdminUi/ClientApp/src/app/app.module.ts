@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -66,6 +67,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         MatButtonModule,
         MatIconModule,
         MatSidenavModule,
+        MatCheckboxModule,
         MatListModule,
         MatGridListModule,
         MatTableModule,

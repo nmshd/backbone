@@ -39,7 +39,7 @@ export class ClientServiceService {
             params: new HttpParams()
                 .set('clientId', clientId)
         };
-        return this.http.post<HttpResponseEnvelope<any>>(this.apiUrl, httpOptions);
+        return this.http.delete<HttpResponseEnvelope<any>>(this.apiUrl, httpOptions);
     }
 }
 
