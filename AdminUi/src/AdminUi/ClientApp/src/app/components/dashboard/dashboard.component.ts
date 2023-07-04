@@ -8,10 +8,12 @@ import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service
 })
 export class DashboardComponent {
     header: string;
+    breakpoint: number;
     dashboardOverviewPanels: DashboardOverviewPanel[];
 
     constructor(private sidebarService: SidebarService) {
         this.header = '';
+        this.breakpoint = (window.innerWidth <= 1150) ? 1 : (window.innerWidth <= 1700) ? 2 : 3;
         this.dashboardOverviewPanels = [];
     }
 
@@ -23,20 +25,27 @@ export class DashboardComponent {
                 classLabel: 'identities',
                 icon: 'badge',
                 header: 'Identities',
+                description: 'View a list of all existing Identities.'
             },
             {
                 routerLink: '/tiers',
                 classLabel: 'identities',
                 icon: 'clear_all',
                 header: 'Tiers',
+                description: 'List all of the application\'s existing Tiers and create new ones.'
             },
             {
                 routerLink: '/clients',
                 classLabel: 'identities',
                 icon: 'person',
                 header: 'Clients',
+                description: 'List all of the application\'s clients and create new ones.'
             },
         ];
+    }
+
+    onResize(event: any): void {
+        this.breakpoint = (window.innerWidth <= 1150) ? 1 : (window.innerWidth <= 1700) ? 2 : 3;
     }
 
     isMobile(): boolean {
@@ -49,4 +58,5 @@ interface DashboardOverviewPanel {
     classLabel: string;
     icon: string;
     header: string;
+    description: string;
 }

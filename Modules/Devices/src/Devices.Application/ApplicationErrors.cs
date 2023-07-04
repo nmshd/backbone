@@ -45,5 +45,10 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.changePasswordFailed", string.IsNullOrEmpty(message) ? "Changing the password of the device failed." : message);
         }
+
+        public static ApplicationError ClientIdAlreadyExists()
+        {
+            return new ApplicationError("error.platform.validation.device.clientIdAlreadyExists", "A client with the given client id already exists. Try a different client id");
+        }
     }
 }
