@@ -16,7 +16,8 @@ import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-env
 export class IdentityListComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    header = 'Identities';
+    header: string;
+    headerDescription: string;
 
     identities: Identity[];
 
@@ -34,10 +35,11 @@ export class IdentityListComponent {
     ];
 
     constructor(
-        private _snackBar: MatSnackBar,
+        private snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
         this.header = 'Identities';
+        this.headerDescription = 'A list of existing Identities';
 
         this.identities = [];
 
@@ -70,7 +72,11 @@ export class IdentityListComponent {
                 complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
-                    this._snackBar.open(err.message, 'Close');
+                    let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                    this.snackBar.open(errorMessage, 'Dismiss', {
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
                 },
             });
     }
