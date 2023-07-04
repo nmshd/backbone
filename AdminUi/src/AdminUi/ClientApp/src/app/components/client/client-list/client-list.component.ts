@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import {
     Client,
@@ -9,6 +11,7 @@ import {
     ClientServiceService,
 } from 'src/app/services/client-service/client-service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { forkJoin, Observable } from 'rxjs';
 @Component({
     selector: 'app-client-list',
     templateUrl: './client-list.component.html',
@@ -24,10 +27,11 @@ export class ClientListComponent {
     pageSize: number;
     pageIndex: number;
     loading = false;
+    selection = new SelectionModel<ClientDTO>(true, []);
     displayedColumns: string[] = [
+        'select',
         'clientId',
-        'displayName',
-        'actions'
+        'displayName'
     ];
 
     constructor(
@@ -89,9 +93,14 @@ export class ClientListComponent {
         this.router.navigate([`/clients/create`]);
     }
 
-    deleteClient(clientId: string): void {
+    deleteClient(): void {
         this.loading = true;
-        this.clientService.deleteClient(clientId)
+        let observableBatch: Observable<any>[] = [];
+        this.selection.selected.forEach(item => {
+            observableBatch.push(this.clientService.deleteClient(item.clientId));
+        });
+
+        forkJoin(observableBatch)
             .subscribe({
                 next: (data: any) => {
                     this.snackBar.open('Successfully deleted client.', 'Dismiss', {
@@ -110,5 +119,27 @@ export class ClientListComponent {
                     });
                 },
             });
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.clients.length;
+        return numSelected === numRows;
+    }
+
+    toggleAllRows() {
+        if (this.isAllSelected()) {
+            this.selection.clear();
+            return;
+        }
+
+        this.selection.select(...this.clients);
+    }
+
+    checkboxLabel(index?: number, row?: ClientDTO): string {
+        if (!row || !index) {
+            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${index + 1}`;
     }
 }
