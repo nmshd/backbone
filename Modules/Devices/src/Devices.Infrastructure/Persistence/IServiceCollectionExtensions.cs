@@ -27,7 +27,7 @@ public static class IServiceCollectionExtensions
                     {
                         sqlOptions.CommandTimeout(20);
                         sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                        //sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                     }).UseOpenIddict()
                 );
                 break;
@@ -50,15 +50,6 @@ public static class IServiceCollectionExtensions
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
 
         services.AddRepositories();
-
-        //services
-        //    .AddOpenIddict()
-        //    .AddCore(options =>   
-        //    {
-        //        options
-        //            .UseEntityFrameworkCore()
-        //            .UseDbContext<DevicesDbContext>();
-        //    });
     }
 
     public static void AddRepositories(this IServiceCollection services)
