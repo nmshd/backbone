@@ -31,8 +31,8 @@ COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "
 COPY ["Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/Quotas.Infrastructure.Database.SqlServer.csproj", "Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/"]
 RUN dotnet restore "AdminUi/src/AdminUi/AdminUi.csproj"
 COPY . .
-WORKDIR "/src/AdminUi/src/AdminUi"
-RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
+WORKDIR /src/AdminUi/src/AdminUi
+RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/build --no-restore "AdminUi.csproj" 
 
 FROM build AS publish
 
@@ -40,7 +40,7 @@ RUN apt update && apt upgrade
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt install -y nodejs
 RUN npm i -g @angular/cli
 
-RUN dotnet publish "AdminUi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "AdminUi.csproj"
 
 FROM base AS final
 WORKDIR /app

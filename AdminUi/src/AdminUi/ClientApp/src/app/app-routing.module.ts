@@ -6,6 +6,7 @@ import { IdentityListComponent } from './components/quotas/identity/identity-lis
 import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { ClientListComponent } from './components/client/client-list/client-list.component';
+import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
     { path: 'tiers/create', component: TierEditComponent },
     { path: 'tiers/:id', component: TierEditComponent },
     { path: 'clients', component: ClientListComponent },
+    { path: 'clients/create', component: ClientEditComponent },
     { path: '**', component: PageNotFoundComponent },
 ];
 
