@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -44,5 +45,15 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
         if (client == null)
             throw new Exception($"Failed to create client '{displayName}' with id '{clientId}'");
+    }
+
+    public async Task Delete(string clientId, CancellationToken cancellationToken)
+    {
+        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
+
+        if (client == null)
+            throw new NotFoundException(nameof(OAuthClient));
+
+        await _applicationManager.DeleteAsync(client, cancellationToken);
     }
 }
