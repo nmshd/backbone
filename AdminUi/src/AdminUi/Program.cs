@@ -6,7 +6,10 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -66,6 +69,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
                 .UseDbContext<DevicesDbContext>();
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
+
+    services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }

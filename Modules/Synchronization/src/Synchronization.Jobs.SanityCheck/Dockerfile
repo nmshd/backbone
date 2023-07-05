@@ -15,6 +15,7 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.
 COPY ["Modules/Synchronization/src/Synchronization.Domain/Synchronization.Domain.csproj", "Modules/Synchronization/src/Synchronization.Domain/"]
 COPY ["Modules/Synchronization/src/Synchronization.Infrastructure/Synchronization.Infrastructure.csproj", "Modules/Synchronization/src/Synchronization.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
+COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
 RUN dotnet restore "Modules/Synchronization/src/Synchronization.Jobs.SanityCheck/Synchronization.Jobs.SanityCheck.csproj"
 

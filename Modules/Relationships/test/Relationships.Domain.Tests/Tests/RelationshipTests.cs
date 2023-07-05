@@ -2,6 +2,8 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using FluentAssertions;
@@ -213,7 +215,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
 
         Action acting = () => relationship.AcceptChange(RelationshipChangeId.New(), ToIdentity, ToDevice, ResponseContent);
-        acting.Should().Throw<DomainException>().WithError(DomainErrors.NotFound());
+        acting.Should().Throw<DomainException>().WithError(GenericDomainErrors.NotFound());
     }
 
     [Fact]
@@ -222,7 +224,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
 
         Action acting = () => relationship.RejectChange(RelationshipChangeId.New(), ToIdentity, ToDevice, ResponseContent);
-        acting.Should().Throw<DomainException>().WithError(DomainErrors.NotFound());
+        acting.Should().Throw<DomainException>().WithError(GenericDomainErrors.NotFound());
     }
 
     [Fact]
@@ -231,7 +233,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
 
         Action acting = () => relationship.RevokeChange(RelationshipChangeId.New(), ToIdentity, ToDevice, ResponseContent);
-        acting.Should().Throw<DomainException>().WithError(DomainErrors.NotFound());
+        acting.Should().Throw<DomainException>().WithError(GenericDomainErrors.NotFound());
     }
 
     #endregion

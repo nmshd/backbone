@@ -1,4 +1,6 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
@@ -25,18 +27,18 @@ public class Datawallet
     public void Upgrade(DatawalletVersion targetVersion)
     {
         if (targetVersion < Version)
-            throw new DomainException($"You cannot upgrade from version '{Version}' to '{targetVersion}', because it is not possible to upgrade to lower versions.");
+            throw new DomainException(DomainErrors.Datawallet.CannotDowngrade(Version.Value, targetVersion.Value));
 
         Version = targetVersion;
     }
 
-    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersion, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice)
+    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice)
     {
-        if (datawalletVersion > Version)
-            throw new DomainException($"Cannot add modifications with DatawalletVersion '{datawalletVersion}', because the datawallet only has version '{Version}'.");
+        if (datawalletVersionOfModification > Version)
+            throw new DomainException(DomainErrors.Datawallet.DatawalletVersionOfModificationTooHigh(Version, datawalletVersionOfModification));
 
         var indexOfNewModification = Modifications.Count > 0 ? Modifications.Max(m => m.Index) + 1 : 0;
-        var newModification = new DatawalletModification(this, datawalletVersion, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload, createdByDevice);
+        var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload, createdByDevice);
         Modifications.Add(newModification);
         return newModification;
     }

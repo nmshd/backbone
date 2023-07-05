@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens", "Quotas")] $moduleName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
