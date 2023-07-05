@@ -1,7 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
@@ -40,7 +39,8 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         var result = tier.CreateQuota(parseMetricKeyResult.Value, request.Max, request.Period);
         if (result.IsFailure)
-            throw new OperationFailedException(GenericApplicationErrors.Validation.InvalidPropertyValue());
+            throw new DomainException(result.Error);
+
         await _tiersRepository.Update(tier, cancellationToken);
 
         _logger.LogTrace("Successfully created assigned Quota to Tier. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
