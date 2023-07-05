@@ -21,18 +21,6 @@ public class ExhaustionDateAssertions :
     public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject) { }
 
     protected override string Identifier => "ExhaustionDate";
-
-    //public AndConstraint<ExhaustionDateAssertions> Be(ExhaustionDate expected, string because = "", params object[] becauseArgs)
-    //{
-    //    Execute.Assertion
-    //        .BecauseOf(because, becauseArgs)
-    //        .Given(() => Subject)
-    //        .ForCondition(exhaustionDate => exhaustionDate == expected)
-    //        .FailWith("Expected {context:ExhaustionDate} to be {0}{reason}, but found {1}.",
-    //            _ => expected, actual => actual);
-
-    //    return new AndConstraint<ExhaustionDateAssertions>(this);
-    //}
     
     public AndConstraint<ExhaustionDateAssertions> BeEndOfHour(string because = "", params object[] becauseArgs)
     {

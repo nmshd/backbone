@@ -35,7 +35,7 @@ public class HandlerTests
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");
-        
+
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
@@ -52,8 +52,8 @@ public class HandlerTests
         response.Metric.Key.Should().Be(metricKey);
 
         A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
-            t.Id == tierId &&
-            t.Quotas.Count == 1)
+                t.Id == tierId &&
+                t.Quotas.Count == 1)
             , CancellationToken.None)
         ).MustHaveHappened();
     }
@@ -67,7 +67,6 @@ public class HandlerTests
         var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
         var tier = new Tier(tierId, "some-tier-name");
         
-        //var mockTiersRepository = new MockTiersRepository(tiers);
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
