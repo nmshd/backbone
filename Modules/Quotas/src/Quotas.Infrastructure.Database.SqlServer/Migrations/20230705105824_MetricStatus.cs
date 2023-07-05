@@ -21,7 +21,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                 {
                     MetricKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Owner = table.Column<string>(type: "char(36)", nullable: false),
-                    IsExhaustedUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    IsExhaustedUntil = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

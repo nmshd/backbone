@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20230630065108_MetricStatus")]
+    [Migration("20230705105824_MetricStatus")]
     partial class MetricStatus
     {
         /// <inheritdoc />
