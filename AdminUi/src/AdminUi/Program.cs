@@ -12,12 +12,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using OpenIddict.Abstractions;
+using OpenIddict.EntityFrameworkCore;
+using OpenIddict.EntityFrameworkCore.Models;
 using Serilog;
 using static OpenIddict.Abstractions.OpenIddictExceptions;
 using EntityState = Microsoft.EntityFrameworkCore.EntityState;
-using OpenIddict.Abstractions;
-using OpenIddict.EntityFrameworkCore.Models;
-using OpenIddict.EntityFrameworkCore;
 
 Log.Logger = new LoggerConfiguration()
 .WriteTo.Console()
@@ -208,9 +208,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
                     Context.Entry(token).State = EntityState.Unchanged;
                 }
 
-                throw
-                    new ConcurrencyException("ERROR",
-                        exception); //throw new ConcurrencyException(SR.GetResourceString(SR.ID0239), exception); //TODO: replace
+                throw new ConcurrencyException("The application was concurrently updated and cannot be persisted in its current state.\r\nReload the application from the database and retry the operation.", exception);
             }
         }, new List<int>());
     }
