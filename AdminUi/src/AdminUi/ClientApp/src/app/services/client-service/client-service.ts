@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 import { environment } from 'src/environments/environment';
@@ -35,11 +35,7 @@ export class ClientServiceService {
     }
 
     deleteClient(clientId: string): Observable<any> {
-        const httpOptions = {
-            params: new HttpParams()
-                .set('clientId', clientId)
-        };
-        return this.http.delete<HttpResponseEnvelope<any>>(this.apiUrl, httpOptions);
+        return this.http.delete<HttpResponseEnvelope<any>>(this.apiUrl + '/' + clientId);
     }
 }
 

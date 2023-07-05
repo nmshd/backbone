@@ -103,13 +103,13 @@ export class ClientListComponent {
         forkJoin(observableBatch)
             .subscribe({
                 next: (data: any) => {
-                    this.snackBar.open('Successfully deleted client.', 'Dismiss', {
+                    this.getPagedData();
+                    this.snackBar.open('Successfully deleted clients.', 'Dismiss', {
                         duration: 4000,
                         verticalPosition: 'top',
                         horizontalPosition: 'center'
                     });
                 },
-                complete: () => (this.loading = false),
                 error: (err: any) => {
                     this.loading = false;
                     let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
