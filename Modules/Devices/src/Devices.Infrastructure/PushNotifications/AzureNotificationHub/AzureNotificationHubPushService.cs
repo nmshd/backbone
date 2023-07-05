@@ -22,7 +22,7 @@ public class AzureNotificationHubPushService : IPushService
         _logger = logger;
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
     {
         var installation = new Installation
         {
@@ -37,12 +37,12 @@ public class AzureNotificationHubPushService : IPushService
             }
         };
 
-        await _notificationHubClient.CreateOrUpdateInstallationAsync(installation);
+        await _notificationHubClient.CreateOrUpdateInstallationAsync(installation, cancellationToken);
 
         _logger.LogTrace("New device successfully registered.");
     }
 
-    public async Task SendNotification(IdentityAddress recipient, object pushNotification)
+    public async Task SendNotification(IdentityAddress recipient, object pushNotification, CancellationToken cancellationToken)
     {
         var notificationContent = new NotificationContent(recipient, pushNotification);
         var notificationId = GetNotificationId(pushNotification);
@@ -57,7 +57,7 @@ public class AzureNotificationHubPushService : IPushService
                 .AddContent(notificationContent)
                 .Build();
 
-            await _notificationHubClient.SendNotificationAsync(notification, GetNotificationTags(recipient));
+            await _notificationHubClient.SendNotificationAsync(notification, GetNotificationTags(recipient), cancellationToken);
 
             _logger.LogTrace($"Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification.ToJson()}");
         }

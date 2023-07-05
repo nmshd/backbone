@@ -5,6 +5,6 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 
 public interface IPushService
 {
-    Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle);
-    Task SendNotification(IdentityAddress recipient, object notification);
+    Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken);
+    Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken);
 }
