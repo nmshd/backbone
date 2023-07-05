@@ -5,11 +5,8 @@ public class MetricStatus
 {
     public bool IsExhausted => IsExhaustedUntil.HasValue && IsExhaustedUntil > SystemTime.UtcNow;
 
-    public MetricStatus(string metricKey, string owner, DateTime isExhaustedUntil)
+    private MetricStatus()
     {
-        MetricKey = new MetricKey(metricKey);
-        Owner = owner;
-        IsExhaustedUntil = isExhaustedUntil;
     }
 
     internal MetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
