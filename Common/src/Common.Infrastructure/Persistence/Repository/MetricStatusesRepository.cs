@@ -23,6 +23,6 @@ public class MetricStatusesRepository : IMetricStatusesRepository
             identityAddress = identityAddress.ToString(),
             keys = keys.Select(x => x.Value)
         });
-        return metricStatuses.ToList();
+        return metricStatuses;
     }
 }
