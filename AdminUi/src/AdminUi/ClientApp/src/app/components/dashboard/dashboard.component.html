@@ -1,0 +1,13 @@
+<mat-grid-list [cols]="breakpoint" rowHeight="3:2" gutterSize="10" (window:resize)="onResize($event)">
+    <mat-grid-tile *ngFor="let dashboardPanel of dashboardOverviewPanels" [routerLink]="dashboardPanel.routerLink"
+        class="dashboard-tile" matTooltip="Go to {{ dashboardPanel.header }}">
+        <div class="container">
+            <mat-icon *ngIf="!isMobile()" class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
+            <h4 class="panel-title">{{ dashboardPanel.header }}</h4>
+            <p class="panel-description">{{ dashboardPanel.description }}
+            </p>
+            <button mat-raised-button routerLink="/clients" color="primary"
+                class="more-button">More</button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
