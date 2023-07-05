@@ -1,12 +1,7 @@
 ﻿namespace Enmeshed.BuildingBlocks.Domain;
-public class MetricKey
+public record MetricKey(string Value)
 {
-    public string Value { get; private set; }
-
-    public MetricKey(string value)
-    {
-        Value = value;
-    }
+    public string Value { get; } = Value;
 
     public static implicit operator string(MetricKey id)
     {
