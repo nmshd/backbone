@@ -25,7 +25,9 @@ public class DirectPushService : IPushService
         {
             var platform = group.Key;
 
-            var pnsConnector = PnsConnectorFactory.CreateFor(platform);
+            var pnsConnectorFactory = new PnsConnectorFactoryImpl();
+
+            var pnsConnector = pnsConnectorFactory.CreateFor(platform);
 
             await pnsConnector.Send(group, notification);
 
