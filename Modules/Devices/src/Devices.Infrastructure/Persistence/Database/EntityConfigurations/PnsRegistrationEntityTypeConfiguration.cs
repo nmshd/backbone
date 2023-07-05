@@ -7,9 +7,8 @@ public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<P
 {
     public void Configure(EntityTypeBuilder<PnsRegistration> builder)
     {
-        builder.HasKey(x => x.Handle);
-        builder.Property(x => x.IdentityAddress);
-        builder.Property(x => x.DeviceId);
+        builder.HasKey(x => x.DeviceId);
+        builder.Property(x => x.IdentityAddress).IsRequired();
         builder.Property(x => x.UpdatedAt);
     }
 }
