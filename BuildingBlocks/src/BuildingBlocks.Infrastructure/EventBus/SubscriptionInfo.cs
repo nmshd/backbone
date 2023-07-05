@@ -4,16 +4,19 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
 {
     public class SubscriptionInfo
     {
-        private SubscriptionInfo(Type handlerType)
+        private SubscriptionInfo(Type handlerType, Type eventType)
         {
             HandlerType = handlerType;
+            EventType = eventType;
         }
 
         public Type HandlerType { get; }
 
-        public static SubscriptionInfo Typed(Type handlerType)
+        public Type EventType { get; }
+
+        public static SubscriptionInfo Typed(Type handlerType, Type eventType)
         {
-            return new SubscriptionInfo(handlerType);
+            return new SubscriptionInfo(handlerType, eventType);
         }
     }
 }

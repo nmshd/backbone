@@ -1,15 +1,11 @@
 ﻿using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Relationships.Domain.Errors;
 
 public static class DomainErrors
 {
-    public static DomainError NotFound(string? recordName = null)
-    {
-        return new DomainError("error.platform.recordNotFound", $"{recordName} not found");
-    }
-
     public static DomainError ChangeRequestCannotBeAcceptedByCreator()
     {
         return new DomainError("error.platform.relationships.changeRequestCannotBeAcceptedByCreator", "A change request cannot be accepted by its creator.");

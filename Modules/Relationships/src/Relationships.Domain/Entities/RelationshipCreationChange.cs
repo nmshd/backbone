@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Domain.Errors;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
