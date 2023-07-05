@@ -25,10 +25,10 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         if (applyQuotasForMetricsAttribute != null)
         {
             var metricKeys = new List<MetricKey>();
-            foreach ( var customAttributeTypedArgument in applyQuotasForMetricsAttribute.ConstructorArguments) {
-                foreach (var element in (ReadOnlyCollection<CustomAttributeTypedArgument>) customAttributeTypedArgument.Value)
+            foreach (var customAttributeTypedArgument in applyQuotasForMetricsAttribute.ConstructorArguments) {
+                foreach (var element in (ReadOnlyCollection<CustomAttributeTypedArgument>) customAttributeTypedArgument.Value!)
                 {
-                    metricKeys.Add(new MetricKey(element.Value as string));
+                    metricKeys.Add(new MetricKey((element.Value as string)!));
                 }
             }
 
