@@ -19,6 +19,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Tooling\Tooling.csproj" />
+		<ProjectReference Include="..\..\src\UnitTestTools\UnitTestTools.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -7,63 +7,22 @@ using MediatR;
 using Xunit;
 using Enmeshed.UnitTestTools.Extensions;
 using Enmeshed.UnitTestTools.Behaviors;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
+
 public class QuotaEnforcerBehaviorTests
 {
     [Fact]
-    public async void Succeeds_when_the_metric_is_not_exhausted()
-    {
-        // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsNotExhausted);
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        await Task.Run(acting, CancellationToken.None);
-
-        // Assert
-        nextMock.WasCalled.Should().BeTrue();
-    }
-
-    [Fact]
-    public async void Succeeds_when_the_metric_was_exhausted()
-    {
-        // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatWasExhaustedUntilYesterday);
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        await Task.Run(acting, CancellationToken.None);
-
-        // Assert
-        nextMock.WasCalled.Should().BeTrue();
-    }
-
-    /// <summary>
-    /// This test uses a special implementation of the IMetricStatusesRepository which <strong>
-    /// returns zero results</strong> on the `GetMetricStatuses` Method.
-    /// For this reason, the MetricStatuses passed to the constructor have zero relevance for the test.
-    /// </summary>
-    [Fact]
-    public async void Succeeds_when_none_of_the_metrics_exist_in_the_repository()
+    public async void Calls_next_when_no_metric_is_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior();
-        var nextMock = new NextMock<TestData.IResponse>();
+        var nextMock = new NextMock<Unit>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
+            new TestCommand(),
             nextMock.Value,
             CancellationToken.None);
 
@@ -71,124 +30,89 @@ public class QuotaEnforcerBehaviorTests
 
         // Assert
         nextMock.WasCalled.Should().BeTrue();
-    }
-
-    [Fact]
-    public async void Succeeds_when_none_of_the_metrics_are_exhausted()
-    {
-        // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(
-            TestData.MetricStatus.ThatWasExhaustedUntil2DaysAgo,
-            TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-        );
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        await Task.Run(acting, CancellationToken.None);
-
-        // Assert
-        nextMock.WasCalled.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Throws_QuotaExhaustedException_when_the_metric_is_still_exhausted()
-    {
-        // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(TestData.MetricStatus.ThatIsExhaustedFor10Days);
-        var nextMock = new NextMock<TestData.IResponse>();
-
-        // Act
-        Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
-            CancellationToken.None);
-
-        // Assert
-        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.Should().HaveCount(1);
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor10Days.MetricKey);
     }
 
     [Fact]
     public void Throws_QuotaExhaustedException_when_exactly_one_metric_is_exhausted()
     {
+        var exhaustionDate = DateTime.UtcNow.AddDays(1);
+        var exhaustedMetricStatus = new MetricStatus(new MetricKey("exhausted"), exhaustionDate);
+
         // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(
-            TestData.MetricStatus.ThatIsExhaustedFor1Day,
-            TestData.MetricStatus.ThatWasExhaustedUntilYesterday
-        );
-        var nextMock = new NextMock<TestData.IResponse>();
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: exhaustedMetricStatus);
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
+            new TestCommand(),
+            new NextMock<Unit>().Value,
             CancellationToken.None
         );
 
         // Assert
-        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
+        var exceptionExhaustedMetrics =
+            acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
         exceptionExhaustedMetrics.Should().HaveCount(1);
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(TestData.MetricStatus.ThatIsExhaustedFor1Day.MetricKey);
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(new MetricKey("exhausted"));
+        exceptionExhaustedMetrics.First().IsExhaustedUntil.Should().Be(exhaustionDate);
     }
 
     [Fact]
-    public void Throws_QuotaExhaustedException_when_more_than_one_metric_is_exhausted()
+    public void Thrown_QuotaExhaustedException_contains_information_about_each_exhausted_MetricStatus()
     {
         // Arrange
-        var behavior = CreateQuotaEnforcerBehavior(
-            TestData.MetricStatus.ThatIsExhaustedFor1Day,
-            TestData.MetricStatus.ThatIsExhaustedFor10Days
+        var exhaustionDate1 = DateTime.UtcNow.AddDays(1);
+        var exhaustionDate2 = DateTime.UtcNow.AddDays(10);
+        var exhaustedMetricStatus1 = new MetricStatus(new MetricKey("exhausted1"), exhaustionDate1);
+        var exhaustedMetricStatus2 = new MetricStatus(new MetricKey("exhausted2"), exhaustionDate2);
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: new[]
+            { exhaustedMetricStatus1, exhaustedMetricStatus2 }
         );
-        var nextMock = new NextMock<TestData.IResponse>();
 
         // Act
         Func<Task> acting = async () => await behavior.Handle(
-            new TestData.TestCommand(),
-            nextMock.Value,
+            new TestCommand(),
+            new NextMock<Unit>().Value,
             CancellationToken.None);
 
         // Assert
-        var exceptionExhaustedMetrics = acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
+        var exceptionExhaustedMetrics =
+            acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
         exceptionExhaustedMetrics.Should().HaveCount(2);
-        exceptionExhaustedMetrics.All(it => it.IsExhaustedUntil > DateTime.Now).Should().BeTrue();
+        exceptionExhaustedMetrics.First().MetricKey.Should().Be(new MetricKey("exhausted1"));
+        exceptionExhaustedMetrics.First().IsExhaustedUntil.Should().Be(exhaustionDate1);
+
+        exceptionExhaustedMetrics.Second().MetricKey.Should().Be(new MetricKey("exhausted2"));
+        exceptionExhaustedMetrics.Second().IsExhaustedUntil.Should().Be(exhaustionDate2);
     }
 
-    private static QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse> CreateQuotaEnforcerBehavior(params MetricStatus[] metricStatuses)
+    private static QuotaEnforcerBehavior<TestCommand, Unit> CreateQuotaEnforcerBehavior(
+        params MetricStatus[] exhaustedMetricStatuses)
     {
-        var metricStatusesRepository = new MetricStatusesStubRepository(metricStatuses.ToList());
-        var userContextStub = new UserContextStub();
-        return new QuotaEnforcerBehavior<TestData.TestCommand, TestData.IResponse>(metricStatusesRepository, userContextStub);
+        return new QuotaEnforcerBehavior<TestCommand, Unit>(new QuotaCheckerStub(new(exhaustedMetricStatuses)));
     }
 }
 
-internal static class TestData
+internal class QuotaCheckerStub : IQuotaChecker
 {
-    /// <summary>
-    /// The Metric key doesn't matter for these tests. The way the Mediatr Behavior is being
-    /// called does not inject the Metrics passed on the Attribute below. Tests will make use of
-    /// all the metrics available in the repository unless where specified.
-    /// </summary>
-    [ApplyQuotasForMetrics("DoesNotApplyToTests")]
-    internal class TestCommand : IRequest { }
+    private readonly CheckQuotaResult _expectedResult;
 
-    internal class IResponse { }
-
-    internal static class MetricStatus
+    public QuotaCheckerStub(CheckQuotaResult expectedResult)
     {
-        public static readonly Domain.MetricStatus ThatIsExhaustedFor1Day = new(new MetricKey("ExhaustedFor1Day"), DateTime.Now.AddDays(1));
-
-        public static readonly Domain.MetricStatus ThatIsExhaustedFor10Days = new(new MetricKey("ExhaustedFor10Days"), DateTime.Now.AddDays(10));
-
-        public static readonly Domain.MetricStatus ThatWasExhaustedUntilYesterday = new(new MetricKey("ExhaustedUntilYesterday"), DateTime.Now.AddDays(-1));
-
-        public static readonly Domain.MetricStatus ThatWasExhaustedUntil2DaysAgo = new(new MetricKey("ThatWasExhaustedUntil2DaysAgo"), DateTime.Now.AddDays(-2));
-
-        public static readonly Domain.MetricStatus ThatIsNotExhausted = new(new MetricKey("ExhaustedUntilNull"), null);
+        _expectedResult = expectedResult;
     }
+
+    public Task<CheckQuotaResult> CheckQuotaExhaustion(IEnumerable<MetricKey> metricKeys)
+    {
+        return Task.FromResult(_expectedResult);
+    }
+}
+
+/// <summary>
+/// The Metric key doesn't matter for these tests. The way the Mediatr Behavior is being
+/// called does not inject the Metrics passed on the Attribute below. Tests will make use of
+/// all the metrics available in the repository unless where specified.
+/// </summary>
+[ApplyQuotasForMetrics("DoesNotApplyToTests")]
+internal class TestCommand : IRequest
+{
 }

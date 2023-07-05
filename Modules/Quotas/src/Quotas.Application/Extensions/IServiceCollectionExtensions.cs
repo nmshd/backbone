@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Application.AutoMapper;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Application.Extensions;

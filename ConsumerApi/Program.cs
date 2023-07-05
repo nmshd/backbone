@@ -33,6 +33,9 @@ using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
 using Enmeshed.Common.Infrastructure;
+using Backbone.Modules.Quotas.Domain;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -91,7 +94,9 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMetricStatusesRepository(c =>
         {
             c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
+            c.Provider = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:Provider").Value;
         });
+    services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 

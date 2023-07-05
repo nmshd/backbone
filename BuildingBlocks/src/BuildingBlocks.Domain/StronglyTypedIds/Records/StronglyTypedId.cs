@@ -1,6 +1,6 @@
 ﻿namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
-public abstract record StronglyTypedId
+public abstract record StronglyTypedId(string Value)
 {
     public const int DEFAULT_MAX_LENGTH = 20;
 
@@ -16,13 +16,6 @@ public abstract record StronglyTypedId
         'v', 'w', 'x', 'y', 'z',
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
     };
-
-    public string Value { get; }
-
-    protected StronglyTypedId(string value)
-    {
-        Value = value;
-    }
 
     public static implicit operator string(StronglyTypedId id)
     {

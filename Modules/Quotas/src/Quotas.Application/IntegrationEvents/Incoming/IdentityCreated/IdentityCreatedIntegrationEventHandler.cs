@@ -23,7 +23,7 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
     {
         _logger.LogTrace("Handling IdentityCreatedIntegrationEvent ...");
 
-        var identity = new Identity(integrationEvent.Address, new TierId(integrationEvent.TierId));
+        var identity = new Identity(integrationEvent.Address, new TierId(integrationEvent.Tier));
 
         var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None);
 

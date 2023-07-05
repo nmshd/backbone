@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -50,7 +51,7 @@ public class IdentityCreatedIntegrationEventHandlerTests
         await handler.Handle(new IdentityCreatedIntegrationEvent(address, tierId));
 
         // Assert
-        A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count() == 2), CancellationToken.None)).MustHaveHappened();
+        A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();
     }
 
     private IdentityCreatedIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)

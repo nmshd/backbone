@@ -1,38 +1,42 @@
-﻿using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using MediatR;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using MediatR;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
-    private readonly IMetricStatusesRepository _metricStatusesRepository;
-    private readonly IUserContext _userContext;
+    private readonly IQuotaChecker _quotaChecker;
 
-    public QuotaEnforcerBehavior(IMetricStatusesRepository metricStatusesRepositories, IUserContext userContext)
+    public QuotaEnforcerBehavior(IQuotaChecker quotaChecker)
     {
-        _metricStatusesRepository = metricStatusesRepositories;
-        _userContext = userContext;
+        _quotaChecker = quotaChecker;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        
         var attributes = request.GetType().CustomAttributes;
 
         var applyQuotasForMetricsAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
         if (applyQuotasForMetricsAttribute != null)
         {
-            var metricKeys = applyQuotasForMetricsAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
+            var metricKeys = new List<MetricKey>();
+            foreach (var customAttributeTypedArgument in applyQuotasForMetricsAttribute.ConstructorArguments) {
+                foreach (var element in (ReadOnlyCollection<CustomAttributeTypedArgument>) customAttributeTypedArgument.Value!)
+                {
+                    metricKeys.Add(new MetricKey((element.Value as string)!));
+                }
+            }
 
-            var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
+            var result = await _quotaChecker.CheckQuotaExhaustion(metricKeys.AsEnumerable());
 
-            var exhaustedStatuses = statuses.Where(m => m.IsExhausted).ToList();
-
-            if (exhaustedStatuses.Any())
+            if (!result.IsSuccess)
             {
-                throw new QuotaExhaustedException(exhaustedStatuses.ToArray());
+                throw new QuotaExhaustedException(result.ExhaustedStatuses.ToArray());
             }
         }
 
