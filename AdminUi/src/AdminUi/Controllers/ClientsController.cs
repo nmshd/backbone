@@ -31,8 +31,7 @@ public class ClientsController : ApiControllerBase
     }
 
     [HttpDelete("{clientId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteClient([FromRoute] string clientId, CancellationToken cancellationToken)
     {
