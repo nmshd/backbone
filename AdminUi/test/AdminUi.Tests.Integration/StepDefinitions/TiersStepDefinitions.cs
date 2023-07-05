@@ -1,7 +1,7 @@
-using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Models;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tiers")]

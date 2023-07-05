@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AdminApi.Tests.Integration.Models;
+namespace AdminUi.Tests.Integration.Models;
 
 public class ResponseContent<T>
 {

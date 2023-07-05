@@ -1,7 +1,7 @@
 ﻿@Integration
 Feature: GET Clients
 
-User requests an Client List
+User requests a Client List
 
 Scenario: Requesting an Client List
 	When a GET request is sent to the /Clients endpoint

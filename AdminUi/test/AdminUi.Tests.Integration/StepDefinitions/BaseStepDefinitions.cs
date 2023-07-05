@@ -1,6 +1,6 @@
-﻿using AdminApi.Tests.Integration.Models;
+﻿using AdminUi.Tests.Integration.Models;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 public class BaseStepDefinitions

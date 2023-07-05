@@ -1,4 +1,4 @@
-﻿namespace AdminApi.Tests.Integration.Models;
+﻿namespace AdminUi.Tests.Integration.Models;
 
 public class MetricDTO
 {
