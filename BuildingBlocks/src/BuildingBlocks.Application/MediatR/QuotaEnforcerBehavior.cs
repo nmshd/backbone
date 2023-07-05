@@ -3,6 +3,8 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Attributes;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
@@ -22,9 +24,15 @@ public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         var applyQuotasForMetricsAttribute = attributes.FirstOrDefault(attribute => attribute.AttributeType == typeof(ApplyQuotasForMetricsAttribute));
         if (applyQuotasForMetricsAttribute != null)
         {
-            var metricKeys = applyQuotasForMetricsAttribute.ConstructorArguments.Select(it => new MetricKey(it.Value as string)).ToList();
+            var metricKeys = new List<MetricKey>();
+            foreach ( var customAttributeTypedArgument in applyQuotasForMetricsAttribute.ConstructorArguments) {
+                foreach (var element in (ReadOnlyCollection<CustomAttributeTypedArgument>) customAttributeTypedArgument.Value)
+                {
+                    metricKeys.Add(new MetricKey(element.Value as string));
+                }
+            }
 
-            var result = await _quotaChecker.CheckQuotaExhaustion(metricKeys);
+            var result = await _quotaChecker.CheckQuotaExhaustion(metricKeys.AsEnumerable());
 
             if (!result.IsSuccess)
             {

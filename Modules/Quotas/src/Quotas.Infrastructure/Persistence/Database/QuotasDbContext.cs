@@ -45,5 +45,6 @@ public class QuotasDbContext : AbstractDbContextBase
             .HaveMaxLength(50).HaveConversion<MetricKeyEntityFrameworkValueConverter>();
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
+        configurationBuilder.Properties<ExhaustionDate>().HaveConversion<ExhaustionDateValueConverter>();
     }
 }
