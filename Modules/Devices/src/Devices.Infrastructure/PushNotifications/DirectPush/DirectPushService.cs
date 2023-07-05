@@ -19,7 +19,7 @@ public class DirectPushService : IPushService
 
     public async Task SendNotification(IdentityAddress recipient, object notification)
     {
-        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, _cancellationToken);
+        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, _cancellationToken, track: true);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
@@ -37,7 +37,7 @@ public class DirectPushService : IPushService
 
     public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle)
     {
-        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, _cancellationToken);
+        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, _cancellationToken, track: true);
 
         if (registration != null)
         {

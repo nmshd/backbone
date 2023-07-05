@@ -23,14 +23,16 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken)
+    public async Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return await _readonlyRegistrations.Where(registration => registration.IdentityAddress == address).ToListAsync(cancellationToken);
+        return await (track ? _registrations : _readonlyRegistrations)
+            .Where(registration => registration.IdentityAddress == address).ToListAsync(cancellationToken);
     }
 
-    public async Task<PnsRegistration> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken)
+    public async Task<PnsRegistration> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
-        return await _readonlyRegistrations.FirstOrDefaultAsync(registration =>  registration.DeviceId == deviceId, cancellationToken);
+        return await (track ? _registrations : _readonlyRegistrations)
+            .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
     }
 
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)
