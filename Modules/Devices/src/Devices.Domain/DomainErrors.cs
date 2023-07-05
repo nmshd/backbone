@@ -18,4 +18,10 @@ public static class DomainErrors
             string.IsNullOrEmpty(reason) ? $"The Push Notification Service Platform is invalid {formattedReason}." : reason);
     }
 
+    public static DomainError InvalidPnsHandleParse(string reason = "")
+    {
+        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
+        return new DomainError("error.platform.validation.invalidPnsHandleParse",
+            string.IsNullOrEmpty(reason) ? $"The parsing of the Push Notification Service Platform handle is invalid {formattedReason}." : reason);
+    }
 }
