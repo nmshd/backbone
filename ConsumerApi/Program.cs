@@ -94,6 +94,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddMetricStatusesRepository(c =>
         {
             c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
+            c.Provider = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:Provider").Value;
         });
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
