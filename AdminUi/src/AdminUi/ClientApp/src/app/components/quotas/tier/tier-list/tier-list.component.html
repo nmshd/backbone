@@ -1,7 +1,19 @@
-<h2>{{ header }}</h2>
-<mat-card *ngIf="!loading">
-    <mat-card-content>
-        <table mat-table class="responsive" [dataSource]="tiers">
+<div class="card-header">
+    <h2 class="header-title ">{{ header }}</h2>
+    <p class="header-description">{{ headerDescription }}</p>
+</div>
+<mat-card [ngClass]="{'disabled-container': loading}">
+    <mat-card-content style="min-height: 400px;">
+        <div *ngIf="loading" class="loading">
+            <mat-progress-spinner color="primary" mode="indeterminate">
+            </mat-progress-spinner>
+        </div>
+        <div class="action-buttons">
+            <button mat-mini-fab color="primary" (click)="addTier()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+        <table *ngIf="!loading" mat-table class="responsive" [dataSource]="tiers">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef>Id</th>
                 <td
@@ -30,37 +42,14 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                <td
-                    class="mat-cell no-data"
-                    [attr.colspan]="displayedColumns.length"
-                >
+                <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
                     No tiers found.
                 </td>
             </tr>
         </table>
-        <mat-paginator
-            (page)="pageChangeEvent($event)"
-            [length]="totalRecords"
-            [pageSize]="pageSize"
-            [pageIndex]="pageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of tiers"
-        >
+        <mat-paginator *ngIf="!loading" (page)="pageChangeEvent($event)" [length]="totalRecords" [pageSize]="pageSize"
+            [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+            aria-label="Select page of tiers">
         </mat-paginator>
-        <div class="action-buttons">
-            <button
-                mat-icon-button
-                color="primary"
-                matTooltip="Add new tier"
-                (click)="addTier()"
-            >
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
     </mat-card-content>
 </mat-card>
-<div *ngIf="loading" class="loading">
-    <mat-progress-spinner color="primary" mode="indeterminate">
-    </mat-progress-spinner>
-</div>

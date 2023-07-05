@@ -16,15 +16,15 @@ import { AssignQuotasDialogComponent } from '../../assign-quotas-dialog/assign-q
     styleUrls: ['./tier-edit.component.css'],
 })
 export class TierEditComponent {
+
     headerEdit: string;
     headerCreate: string;
-
+    headerDescriptionEdit: string;
+    headerDescriptionCreate: string;
     tierId?: string;
-
+    disabled: boolean;
     editMode: boolean;
-
     tier: Tier;
-
     loading: boolean;
 
     constructor(
@@ -36,8 +36,11 @@ export class TierEditComponent {
     ) {
         this.headerEdit = 'Edit Tier';
         this.headerCreate = 'Create Tier';
+        this.headerDescriptionCreate = 'Please fill the form below to create your Tier';
+        this.headerDescriptionEdit = 'Perform your desired changes and save to edit your Tier';
         this.editMode = false;
         this.loading = true;
+        this.disabled = false;
         this.tier = {
             id: '',
             name: '',
@@ -71,7 +74,11 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                this.snackBar.open(errorMessage, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }
@@ -83,14 +90,23 @@ export class TierEditComponent {
                 if (data && data.result) {
                     this.tier = data.result;
                 }
-                this.snackBar.open('Successfully added tier.', 'Dismiss');
+                this.snackBar.open('Successfully added tier.', 'Dismiss', {
+                    duration: 4000,
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
                 this.tierId = data.result.id;
                 this.editMode = true;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                this.snackBar.open(errorMessage, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
+                this.disabled = true;
             },
         });
     }
@@ -101,13 +117,21 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.snackBar.open('Successfully updated tier.', 'Dismiss');
+                    this.snackBar.open('Successfully updated tier.', 'Dismiss', {
+                        duration: 4000,
+                        verticalPosition: 'top',
+                        horizontalPosition: 'center'
+                    });
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                this.snackBar.open(errorMessage, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }
@@ -120,7 +144,9 @@ export class TierEditComponent {
     }
 
     openAssignQuotaDialog() {
-        let dialogRef = this.dialog.open(AssignQuotasDialogComponent);
+        let dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: '50%'
+        });
 
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {
@@ -143,7 +169,11 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, 'Dismiss');
+                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
+                this.snackBar.open(errorMessage, 'Dismiss', {
+                    verticalPosition: 'top',
+                    horizontalPosition: 'center'
+                });
             },
         });
     }
