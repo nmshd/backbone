@@ -8,6 +8,10 @@ using Xunit;
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 public class QuotaCheckerImplTests
 {
+
+    private static readonly MetricKey TestMetricKey = new("a-metric-key");
+    private static readonly MetricKey AnotherTestMetricKey = new("another-metric-key");
+
     [Fact]
     public async Task ExhaustedStatuses_is_empty_when_the_metric_is_not_exhausted()
     {
@@ -75,7 +79,4 @@ public class QuotaCheckerImplTests
     {
         return new QuotaCheckerImpl(new UserContextStub(), new MetricStatusesStubRepository(metricStatuses.ToList()));
     }
-
-    private static readonly MetricKey TestMetricKey = new("a-metric-key");
-    private static readonly MetricKey AnotherTestMetricKey = new("another-metric-key");
 }
