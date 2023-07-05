@@ -5,13 +5,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import {
-    Client,
     ClientDTO,
     ClientServiceService,
 } from 'src/app/services/client-service/client-service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 import { forkJoin, Observable } from 'rxjs';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 @Component({
     selector: 'app-client-list',
     templateUrl: './client-list.component.html',
@@ -36,6 +37,7 @@ export class ClientListComponent {
 
     constructor(
         private router: Router,
+        private dialog: MatDialog,
         private snackBar: MatSnackBar,
         private clientService: ClientServiceService
     ) {
@@ -54,6 +56,7 @@ export class ClientListComponent {
 
     getPagedData() {
         this.loading = true;
+        this.selection = new SelectionModel<ClientDTO>(true, []);
         this.clientService
             .getClients(this.pageIndex, this.pageSize)
             .subscribe({
@@ -93,6 +96,22 @@ export class ClientListComponent {
         this.router.navigate([`/clients/create`]);
     }
 
+    openConfirmationDialog() {
+        let confirmDialogHeader = this.selection.selected.length > 1 ? 'Delete Clients' : 'Delete Client';
+        let confirmDialogMessage = this.selection.selected.length > 1 ? `Are you sure you want to delete the ${this.selection.selected.length} selected clients?` : 'Are you sure you want to delete the selected client?';
+        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            minWidth: '40%',
+            disableClose: true,
+            data: { header: confirmDialogHeader, message: confirmDialogMessage },
+        });
+
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+            if (result) {
+                this.deleteClient();
+            }
+        });
+    }
+
     deleteClient(): void {
         this.loading = true;
         let observableBatch: Observable<any>[] = [];
@@ -102,9 +121,10 @@ export class ClientListComponent {
 
         forkJoin(observableBatch)
             .subscribe({
-                next: (data: any) => {
+                next: (_: any) => {
+                    let successMessage: string = this.selection.selected.length > 1 ? `Successfully deleted ${this.selection.selected.length} clients.` : 'Successfully deleted 1 client.';
                     this.getPagedData();
-                    this.snackBar.open('Successfully deleted clients.', 'Dismiss', {
+                    this.snackBar.open(successMessage, 'Dismiss', {
                         duration: 4000,
                         verticalPosition: 'top',
                         horizontalPosition: 'center'

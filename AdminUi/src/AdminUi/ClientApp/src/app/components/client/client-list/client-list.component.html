@@ -9,7 +9,7 @@
             </mat-progress-spinner>
         </div>
         <div class="action-buttons">
-            <button mat-mini-fab color="warn" (click)="deleteClient()" [disabled]="selection.selected.length === 0" style="margin-right: 10px;">
+            <button mat-mini-fab color="warn" (click)="openConfirmationDialog()" [disabled]="selection.selected.length === 0" style="margin-right: 10px;">
                 <mat-icon >delete</mat-icon>
             </button>
             <button mat-mini-fab color="primary" (click)="addClient()">

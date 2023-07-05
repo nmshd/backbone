@@ -40,6 +40,7 @@ import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.
 import { ClientListComponent } from './components/client/client-list/client-list.component';
 import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
 import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
+import { ConfirmationDialogComponent } from './components/shared/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +55,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         ClientListComponent,
         ClientEditComponent,
         AssignQuotasDialogComponent,
+        ConfirmationDialogComponent,
     ],
     imports: [
         FormsModule,
