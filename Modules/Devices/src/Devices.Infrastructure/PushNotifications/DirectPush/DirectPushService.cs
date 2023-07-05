@@ -37,7 +37,7 @@ public class DirectPushService : IPushService
 
     public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle)
     {
-        var registration = await _pnsRegistrationRepository.GetByDeviceId(deviceId, _cancellationToken);
+        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, _cancellationToken);
 
         if (registration != null)
         {

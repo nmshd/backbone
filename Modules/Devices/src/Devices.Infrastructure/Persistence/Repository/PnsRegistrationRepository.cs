@@ -28,7 +28,7 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
         return await _readonlyRegistrations.Where(registration => registration.IdentityAddress == address).ToListAsync(cancellationToken);
     }
 
-    public async Task<PnsRegistration> GetByDeviceId(DeviceId deviceId, CancellationToken cancellationToken)
+    public async Task<PnsRegistration> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken)
     {
         return await _readonlyRegistrations.FirstOrDefaultAsync(registration =>  registration.DeviceId == deviceId, cancellationToken);
     }
