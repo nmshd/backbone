@@ -5,11 +5,6 @@ using Enmeshed.Tooling;
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public class PnsRegistration
 {
-    public IdentityAddress IdentityAddress { get; }
-    public DeviceId DeviceId { get; }
-    public PnsHandle Handle { get; private set; }
-    public DateTime UpdatedAt { get; private set;}
-
     private PnsRegistration() {}
 
     public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle)
@@ -19,6 +14,11 @@ public class PnsRegistration
         Handle = handle;
         UpdatedAt = SystemTime.UtcNow;
     }
+
+    public IdentityAddress IdentityAddress { get; }
+    public DeviceId DeviceId { get; }
+    public PnsHandle Handle { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
 
     public void Update(PnsHandle newHandle)
     {
