@@ -15,18 +15,18 @@ public class IdentityTests
     public void Can_create_identity_with_valid_properties()
     {
         // Act
-        var identity = new Identity("someAddress", new TierId("TIRsomeTierId1111111"));
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
 
         // Assert
-        identity.Address.Should().Be("someAddress");
-        identity.TierId.Should().Be(new TierId("TIRsomeTierId1111111"));
+        identity.Address.Should().Be("some-address");
+        identity.TierId.Should().Be(new TierId("some-tier-id"));
     }
 
     [Fact]
     public void Can_assign_tier_quota_from_definition_to_identity()
     {
         // Arrange
-        var identity = new Identity("someAddress", new TierId("TIRsomeTierId1111111"));
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
         var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.FileStorageCapacity, 2, QuotaPeriod.Hour);
 
