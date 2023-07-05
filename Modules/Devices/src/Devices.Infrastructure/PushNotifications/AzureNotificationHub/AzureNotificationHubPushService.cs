@@ -33,7 +33,7 @@ public class AzureNotificationHubPushService : IPushService
             {
                 PushNotificationPlatform.Apns => NotificationPlatform.Apns,
                 PushNotificationPlatform.Fcm => NotificationPlatform.Fcm,
-                _ => throw new ArgumentException($"There is no corresponding platform for {handle.Platform}.", nameof(handle.Platform))
+                _ => throw new ArgumentException($"There is no corresponding platform for '{handle.Platform}'.", nameof(handle.Platform))
             }
         };
 

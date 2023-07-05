@@ -22,18 +22,18 @@ public record PnsHandle
                 var handle = FcmHandle.Parse(value);
                 return handle.IsSuccess
                     ? Result.Success<PnsHandle, DomainError>(handle.Value)
-                    : Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsHandleParse($"Value {value} could not be parsed for platform {platform}"));
+                    : Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsHandleParse($"Value '{value}' could not be parsed for platform '{platform}'"));
                 }
             case PushNotificationPlatform.Apns:
             {
                 var handle = ApnsHandle.Parse(value);
                 return handle.IsSuccess
                     ? Result.Success<PnsHandle, DomainError>(handle.Value)
-                    : Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsHandleParse($"Value {value} could not be parsed for platform {platform}"));
+                    : Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsHandleParse($"Value '{value}' could not be parsed for platform '{platform}'"));
                 }
             default:
                 return Result.Failure<PnsHandle, DomainError>(
-                    DomainErrors.InvalidPnsPlatform($"Platform {platform} does not exist"));
+                    DomainErrors.InvalidPnsPlatform($"Platform '{platform}' does not exist"));
         }
     }
 

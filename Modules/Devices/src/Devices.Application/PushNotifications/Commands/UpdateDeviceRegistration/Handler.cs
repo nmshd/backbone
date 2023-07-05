@@ -37,7 +37,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new NotImplementedException($"The platform {platform} is invalid.")
+            _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
         };
     }
 }
