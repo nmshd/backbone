@@ -5,6 +5,6 @@ public abstract class PnsConnectorFactory
 {
     public IPnsConnector CreateFor(PushNotificationPlatform platform)
     {
-        throw new NotImplementedException("PnsConnectorFactory and PnsConnectorFactoryImpl are not yet implemented.");
+        throw new NotImplementedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
     }
 }
