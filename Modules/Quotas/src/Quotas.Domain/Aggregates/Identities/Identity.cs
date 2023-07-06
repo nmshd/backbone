@@ -1,9 +1,8 @@
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.Errors;
-using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using CSharpFunctionalExtensions;
+using Enmeshed.BuildingBlocks.Domain;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -34,10 +33,10 @@ public class Identity
     public string Address { get; }
     public string TierId { get; }
 
-    public Result<IndividualQuota, DomainError> CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
+    public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (max <= 0)
-            return Result.Failure<IndividualQuota, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
+            throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         var individualQuota = new IndividualQuota(metricKey, max, period, Address);
         //_individualQuotas.Add(individualQuota);
@@ -65,7 +64,7 @@ public class Identity
         CancellationToken cancellationToken)
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
-        
+
         var latestExhaustionDate = ExhaustionDate.Unexhausted;
 
         await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>
