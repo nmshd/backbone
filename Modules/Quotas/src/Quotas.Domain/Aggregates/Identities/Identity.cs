@@ -25,7 +25,7 @@ public class Identity
     public Result<IndividualQuota, DomainError> CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (max <= 0)
-            return Result.Failure<IndividualQuota, DomainError>(DomainErrors.TierQuotaMaxValueCannotBeLowerOrEqualToZero());
+            return Result.Failure<IndividualQuota, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         var individualQuota = new IndividualQuota(metricKey, max, period, Address);
         _individualQuotas.Add(individualQuota);

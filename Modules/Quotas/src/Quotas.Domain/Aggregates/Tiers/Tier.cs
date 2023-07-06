@@ -22,7 +22,7 @@ public class Tier
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (max <= 0)
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.TierQuotaMaxValueCannotBeLowerOrEqualToZero());
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         Quotas.Add(quotaDefinition);
