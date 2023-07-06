@@ -4,11 +4,13 @@ using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
+[Authorize("ApiKey")]
 public class ClientsController : ApiControllerBase
 {
     public ClientsController(IMediator mediator) : base(mediator) { }

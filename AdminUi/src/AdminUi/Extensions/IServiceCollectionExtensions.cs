@@ -89,6 +89,21 @@ public static class IServiceCollectionExtensions
             });
         });
 
+        services.AddAuthentication("ApiKey")
+            .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
+                "ApiKey",
+                opts => opts.ApiKey = configuration.Authentication.ApiKey
+            );
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("ApiKey", policy =>
+            {
+                policy.AddAuthenticationSchemes("ApiKey");
+                policy.RequireAuthenticatedUser();
+            });
+        });
+
         var modules = configuration.Modules.GetType().GetProperties();
         foreach (var moduleProperty in modules)
         {

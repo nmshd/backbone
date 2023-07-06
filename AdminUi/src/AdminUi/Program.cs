@@ -117,6 +117,9 @@ static void Configure(WebApplication app)
     app.UseStaticFiles();
     app.UseRouting();
 
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
