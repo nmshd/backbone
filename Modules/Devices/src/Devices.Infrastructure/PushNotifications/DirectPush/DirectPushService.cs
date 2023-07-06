@@ -8,10 +8,12 @@ public class DirectPushService : IPushService
 {
     private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;
+    private readonly PnsConnectorFactory _pnsConnectorFactory;
 
-    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, ILogger<DirectPushService> logger)
+    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger)
     {
         _pnsRegistrationRepository = pnsRegistrationRepository;
+        _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
     }
 
@@ -25,9 +27,7 @@ public class DirectPushService : IPushService
         {
             var platform = group.Key;
 
-            var pnsConnectorFactory = new PnsConnectorFactoryImpl();
-
-            var pnsConnector = pnsConnectorFactory.CreateFor(platform);
+            var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
             await pnsConnector.Send(group, notification);
 

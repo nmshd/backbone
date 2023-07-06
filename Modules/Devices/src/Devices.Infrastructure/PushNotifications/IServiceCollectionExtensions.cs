@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,8 @@ public static class IServiceCollectionExtensions
             default:
                 throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
         }
+
+        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
     }
 }
 
