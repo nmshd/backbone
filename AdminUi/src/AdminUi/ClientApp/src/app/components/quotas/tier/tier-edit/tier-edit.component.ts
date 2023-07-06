@@ -45,6 +45,7 @@ export class TierEditComponent {
         this.editMode = false;
         this.loading = true;
         this.tier = {} as Tier;
+        this.disabled = false;
     }
 
     ngOnInit() {
