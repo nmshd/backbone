@@ -34,6 +34,12 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddress(address, cancellationToken);
 
         return identity;
+    public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identitiesDbSet : _readOnlyIdentities)
+            .Where(i => identityAddresses.Contains(i.Address))
+            .IncludeAll(_dbContext)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)

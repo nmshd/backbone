@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
@@ -31,10 +32,10 @@ public class HandlerTests
         var tierId = new TierId("TIRsomeTierId1111111");
         var max = 5;
         var period = QuotaPeriod.Month;
-        var metricKey = MetricKey.NumberOfSentMessages.ToString();
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");
-        var tiers = new List<Tier> { tier };
+
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
@@ -48,11 +49,11 @@ public class HandlerTests
         response.Id.Should().NotBeNullOrEmpty();
         response.Period.Should().Be(period);
         response.Max.Should().Be(max);
-        response.Metric.Key.ToString().Should().Be(metricKey);
+        response.Metric.Key.Should().Be(metricKey);
 
         A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
-            t.Id == tierId &&
-            t.Quotas.Count() == 1)
+                t.Id == tierId &&
+                t.Quotas.Count == 1)
             , CancellationToken.None)
         ).MustHaveHappened();
     }
@@ -62,13 +63,10 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");
-        var max = 5;
-        var period = QuotaPeriod.Month;
-        var metricKey = MetricKey.NumberOfSentMessages.ToString();
-        var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
+        var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
         var tier = new Tier(tierId, "some-tier-name");
-        var tiers = new List<Tier> { tier };
-        //var mockTiersRepository = new MockTiersRepository(tiers);
+        
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
@@ -76,7 +74,7 @@ public class HandlerTests
         var handler = CreateHandler(tierRepository, metricsRepository);
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        await handler.Handle(command, CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(QuotaCreatedForTierIntegrationEvent)))).MustHaveHappened();

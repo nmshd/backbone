@@ -2,6 +2,11 @@
 
 public static class GenericDomainErrors
 {
+    public static DomainError NotFound(string? recordName = null)
+    {
+        return new DomainError("error.platform.recordNotFound", $"{recordName} not found");
+    }
+
     public static DomainError InvalidIdPrefix(string reason = "")
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";

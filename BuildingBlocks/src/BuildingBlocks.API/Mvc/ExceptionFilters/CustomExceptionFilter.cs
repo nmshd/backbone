@@ -1,6 +1,9 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Enmeshed.BuildingBlocks.API.Extensions;
+using Backbone.Modules.Devices.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 
@@ -40,10 +45,19 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 _logger.LogInformation(
                     $"An {nameof(ApplicationException)} occurred. Error Code: {applicationException.Code}. Error message: {applicationException.Message}");
 
-                httpError = CreateHttpErrorApplicationException(applicationException);
+                httpError = CreateHttpErrorForApplicationException(applicationException);
 
                 context.HttpContext.Response.StatusCode =
                     (int)GetStatusCodeForApplicationException(applicationException);
+
+                break;
+            case DomainException domainException:
+                _logger.LogInformation(
+                    $"A {nameof(DomainException)} occurred. Error Code: {domainException.Code}. Error message: {domainException.Message}");
+
+                httpError = CreateHttpErrorForDomainException(domainException);
+
+                context.HttpContext.Response.StatusCode = (int)GetStatusCodeForDomainException(domainException);
 
                 break;
             case BadHttpRequestException _:
@@ -77,15 +91,41 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             });
     }
 
-    private HttpError CreateHttpErrorApplicationException(ApplicationException applicationException)
+    private HttpError CreateHttpErrorForApplicationException(ApplicationException applicationException)
     {
         var httpError = HttpError.ForProduction(
             applicationException.Code,
             applicationException.Message,
+            "", // TODO: add documentation link
+            data: GetCustomData(applicationException)
+        );
+
+        return httpError;
+    }
+
+    private HttpError CreateHttpErrorForDomainException(DomainException domainException)
+    {
+        var httpError = HttpError.ForProduction(
+            domainException.Code,
+            domainException.Message,
             "" // TODO: add documentation link
         );
 
         return httpError;
+    }
+
+    private dynamic? GetCustomData(ApplicationException applicationException)
+    {
+        if (applicationException is QuotaExhaustedException quotaExhautedException)
+        {
+            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
+            {
+                MetricKey = m.MetricKey,
+                IsExhaustedUntil = m.IsExhaustedUntil
+            });
+        }
+
+        return null;
     }
 
     private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
@@ -94,15 +134,24 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             NotFoundException _ => HttpStatusCode.NotFound,
             ActionForbiddenException _ => HttpStatusCode.Forbidden,
+            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
+    }
+
+    private HttpStatusCode GetStatusCodeForDomainException(DomainException exception)
+    {
+        if (exception.Code == GenericDomainErrors.NotFound().Code)
+            return HttpStatusCode.NotFound;
+
+        return HttpStatusCode.BadRequest;
     }
 
     private HttpError CreateHttpErrorForUnexpectedException(ExceptionContext context)
     {
         HttpError httpError;
 
-        if (_env.IsDevelopment())
+        if (_env.IsDevelopment() || _env.IsLocal())
         {
             var details = context.Exception.Message;
             var innerException = context.Exception.InnerException;

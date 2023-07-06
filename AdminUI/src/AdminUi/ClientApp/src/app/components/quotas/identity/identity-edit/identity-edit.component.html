@@ -1,0 +1,49 @@
+<h2>{{ header }}</h2>
+<div *ngIf="!loading">
+    <mat-accordion multi>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Details </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle>Address</span>
+                    <span matListItemLine>{{ identity.address }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Client Id</span>
+                    <span matListItemLine>{{ identity.clientId }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Public Key</span>
+                    <span matListItemLine>{{ identity.publicKey }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Created At</span>
+                    <span matListItemLine>{{ identity.createdAt | date }}</span>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Quotas </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="action-buttons">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    matTooltip="Assign Quota"
+                    (click)="openAssignQuotaDialog()"
+                    [disabled]="!identity.address"
+                >
+                    <mat-icon>add</mat-icon>
+                    Assign Quota
+                </button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

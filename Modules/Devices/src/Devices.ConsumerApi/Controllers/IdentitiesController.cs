@@ -26,16 +26,16 @@ public class IdentitiesController : ApiControllerBase
     {
         _applicationManager = applicationManager;
     }
-
+    
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
     public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
     {
-        var client = await _applicationManager.FindByClientIdAsync(request.ClientId);
+        var client = await _applicationManager.FindByClientIdAsync(request.ClientId, cancellationToken);
 
-        if (client == null || !await _applicationManager.ValidateClientSecretAsync(client, request.ClientSecret))
+        if (client == null || !await _applicationManager.ValidateClientSecretAsync(client, request.ClientSecret, cancellationToken))
             throw new OperationFailedException(GenericApplicationErrors.Unauthorized());
 
         var command = new CreateIdentityCommand

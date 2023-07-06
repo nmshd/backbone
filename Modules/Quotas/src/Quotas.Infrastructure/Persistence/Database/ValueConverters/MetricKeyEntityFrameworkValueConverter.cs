@@ -11,8 +11,8 @@ public class MetricKeyEntityFrameworkValueConverter : ValueConverter<MetricKey, 
 
     public MetricKeyEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            metricKey => metricKey.ToString(),
-            value => (MetricKey)Enum.Parse(typeof(MetricKey), value),
+            metricKey => metricKey.Value,
+            value => MetricKey.Parse(value).Value,
             mappingHints
         )
     {
@@ -27,8 +27,8 @@ public class NullableMetricKeyValueConverter : ValueConverter<MetricKey?, string
 
     public NullableMetricKeyValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            metricKey => metricKey == null ? null : metricKey.ToString(),
-            value => value == null ? null : (MetricKey)Enum.Parse(typeof(MetricKey), value),
+            metricKey => metricKey == null ? null : metricKey.Value,
+            value => value == null ? null : MetricKey.Parse(value).Value,
             mappingHints
         )
     {

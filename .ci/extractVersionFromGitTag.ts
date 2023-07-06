@@ -1,4 +1,5 @@
 #!/usr/bin/env -S npx ts-node --esm -T
+
 import { echo } from "zx";
 import { getRequiredEnvVar } from "./lib.js";
 

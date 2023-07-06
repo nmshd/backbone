@@ -11,12 +11,13 @@
 		<PackageReference Include="ByteSize" Version="2.1.1" />
 		<PackageReference Include="FluentValidation" Version="11.5.2" />
 		<PackageReference Include="MediatR" Version="12.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Common\src\Common.Infrastructure\Common.Infrastructure.csproj" />
 		<ProjectReference Include="..\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
 		<ProjectReference Include="..\Tooling\Tooling.csproj" />
 	</ItemGroup>

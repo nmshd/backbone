@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Domain.Errors;
+﻿using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using FluentAssertions;
 using FluentAssertions.Specialized;
 
@@ -8,6 +9,6 @@ public static class ExceptionAssertionsExtensions
 {
     public static void WithError<T>(this ExceptionAssertions<T> exceptionAssertions, DomainError error) where T : DomainException
     {
-        exceptionAssertions.Which.Error.Code.Should().Be(error.Code);
+        exceptionAssertions.Which.Code.Should().Be(error.Code);
     }
 }

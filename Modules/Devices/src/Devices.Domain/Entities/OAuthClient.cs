@@ -6,7 +6,7 @@ public class OAuthClient
         ClientId = clientId;
         DisplayName = displayName;
     }
-    public string ClientId { get; }
 
+    public string ClientId { get; }
     public string DisplayName { get; }
 }
