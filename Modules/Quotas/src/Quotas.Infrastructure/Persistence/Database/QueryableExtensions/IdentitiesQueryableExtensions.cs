@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
@@ -10,8 +11,13 @@ public static class IdentitiesQueryableExtensions
         return identities;
     }
 
-    public static Task<Identity> WithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
+    public static Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
     {
-        return query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
+        var identity = query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
+
+        if (identity == null)
+            throw new NotFoundException(nameof(Identity));
+
+        return identity;
     }
 }

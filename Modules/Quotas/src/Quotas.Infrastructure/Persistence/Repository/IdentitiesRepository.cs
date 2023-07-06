@@ -29,11 +29,11 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<Identity> FindByAddress(string address, CancellationToken cancellationToken, bool track = false)
     {
-        var identitiy = await (track ? _identitiesDbSet : _readOnlyIdentities)
+        var identity = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
-            .WithAddress(address, cancellationToken);
+            .FirstWithAddress(address, cancellationToken);
 
-        return identitiy;
+        return identity;
     }
 
     public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
@@ -48,11 +48,12 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)
     {
         _dbContext.UpdateRange(identities);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
         _dbContext.Update(identity);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
