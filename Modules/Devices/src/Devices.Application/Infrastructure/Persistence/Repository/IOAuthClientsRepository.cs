@@ -7,4 +7,5 @@ public interface IOAuthClientsRepository
     Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken);
     Task<bool> Exists(string clientId, CancellationToken cancellationToken);
     Task Add(string clientId, string displayName, string clientSecret, CancellationToken cancellationToken);
+    Task Delete(string clientId, CancellationToken cancellationToken);
 }

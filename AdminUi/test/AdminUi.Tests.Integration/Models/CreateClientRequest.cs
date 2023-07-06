@@ -1,7 +1,8 @@
 ﻿namespace AdminUi.Tests.Integration.Models;
 
-public class ClientDTO
+public class CreateClientRequest
 {
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
+    public string ClientSecret { get; set; }
 }

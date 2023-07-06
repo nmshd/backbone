@@ -1,9 +1,11 @@
-using System.Reflection;
+﻿using System.Reflection;
 using AdminUi.Configuration;
 using AdminUi.Extensions;
+using AdminUi.OpenIddict;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
@@ -51,12 +53,22 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
-    .AddCustomFluentValidation()
-    .AddCustomIdentity(environment)
-    .AddCustomSwaggerWithUi()
-    .AddDevices(parsedConfiguration.Modules.Devices)
-    .AddQuotas(parsedConfiguration.Modules.Quotas)
-    .AddHealthChecks();
+        .AddCustomFluentValidation()
+        .AddCustomIdentity(environment)
+        .AddCustomSwaggerWithUi()
+        .AddDevices(parsedConfiguration.Modules.Devices)
+        .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddHealthChecks();
+
+    services
+        .AddOpenIddict()
+        .AddCore(options =>
+        {
+            options
+                .UseEntityFrameworkCore()
+                .UseDbContext<DevicesDbContext>();
+            options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
+        });
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 

@@ -24,6 +24,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { ClientListComponent } from './components/client/client-list/client-list
 import { IdentityEditComponent } from './components/quotas/identity/identity-edit/identity-edit.component';
 import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
 import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
+import { ConfirmationDialogComponent } from './components/shared/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     declarations: [
@@ -54,6 +56,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         IdentityEditComponent,
         ClientEditComponent,
         AssignQuotasDialogComponent,
+        ConfirmationDialogComponent,
     ],
     imports: [
         FormsModule,
@@ -67,6 +70,7 @@ import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-d
         MatButtonModule,
         MatIconModule,
         MatSidenavModule,
+        MatCheckboxModule,
         MatListModule,
         MatGridListModule,
         MatTableModule,
