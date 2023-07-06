@@ -1,9 +1,11 @@
 ﻿using System.Data;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -32,6 +34,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DbSet<Challenge> Challenges { get; set; }
 
     public DbSet<Tier> Tiers { get; set; }
+
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
@@ -97,6 +101,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<TierName>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
+            .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();

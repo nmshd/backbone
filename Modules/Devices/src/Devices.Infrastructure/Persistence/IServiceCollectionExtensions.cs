@@ -2,6 +2,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,6 +68,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
+        services.AddTransient<IPnsRegistrationRepository, PnsRegistrationRepository>();
     }
 
     public class DbOptions
