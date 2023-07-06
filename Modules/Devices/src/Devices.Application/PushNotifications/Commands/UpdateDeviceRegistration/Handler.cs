@@ -27,6 +27,10 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         {
             await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, handle.Value, cancellationToken);
         }
+        else
+        {
+            throw new ArgumentException(handle.Error.Message);
+        }
 
         return Unit.Value;
     }
