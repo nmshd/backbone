@@ -32,7 +32,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createClientRequest);
+        requestConfiguration.SetContent(createClientRequest);
 
         var response = await _clientsApi.CreateClient(requestConfiguration);
 

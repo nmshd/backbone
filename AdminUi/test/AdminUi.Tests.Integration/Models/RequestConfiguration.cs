@@ -1,4 +1,6 @@
-﻿namespace AdminUi.Tests.Integration.Models;
+﻿using Newtonsoft.Json;
+
+namespace AdminUi.Tests.Integration.Models;
 
 public class RequestConfiguration
 {
@@ -6,6 +8,11 @@ public class RequestConfiguration
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }
     public string? Content { get; set; }
+
+    public void SetContent(object obj)
+    {
+        Content = JsonConvert.SerializeObject(obj);
+    }
 
     public void SupplementWith(RequestConfiguration other)
     {

@@ -29,7 +29,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierQuotaRequest);
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
