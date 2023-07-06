@@ -17,7 +17,7 @@ public class DirectPushService : IPushService
 
     public async Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
     {
-        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, cancellationToken, track: true);
+        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, cancellationToken);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
