@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Enmeshed.BuildingBlocks.API.Mvc;
 
 [Produces(MediaTypeNames.Application.Json)]
-[Consumes(MediaTypeNames.Application.Json)]
 [ApiController]
 public abstract class ApiControllerBase : ControllerBase
 {
