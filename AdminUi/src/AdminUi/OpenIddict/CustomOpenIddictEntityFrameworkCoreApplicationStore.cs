@@ -27,15 +27,16 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
         }
 
         Task<List<OpenIddictEntityFrameworkCoreAuthorization>> ListAuthorizationsAsync()
-            => (from authorization in Context.Set<OpenIddictEntityFrameworkCoreAuthorization>().Include(authorization => authorization.Tokens)
-                where authorization.Application!.Id!.Equals(application.Id)
-                select authorization).ToListAsync(cancellationToken);
+            => Context.Set<OpenIddictEntityFrameworkCoreAuthorization>()
+                .Include(a => a.Tokens)
+                .Where(a => a.Application!.Id == application.Id)
+                .ToListAsync(cancellationToken);
 
         Task<List<OpenIddictEntityFrameworkCoreToken>> ListTokensAsync()
-            => (from token in Context.Set<OpenIddictEntityFrameworkCoreToken>()
-                where token.Authorization == null
-                where token.Application!.Id!.Equals(application.Id)
-                select token).ToListAsync(cancellationToken);
+            => Context.Set<OpenIddictEntityFrameworkCoreToken>()
+                .Where(t => t.Authorization == null)
+                .Where(t => t.Application!.Id == application.Id)
+                .ToListAsync(cancellationToken);
 
         await Context.RunInTransaction(async () =>
         {
@@ -65,7 +66,6 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
             {
                 await Context.SaveChangesAsync(cancellationToken);
             }
-
             catch (DbUpdateConcurrencyException exception)
             {
                 // Reset the state of the entity to prevents future calls to SaveChangesAsync() from failing.
@@ -81,7 +81,9 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
                     Context.Entry(token).State = EntityState.Unchanged;
                 }
 
-                throw new OpenIddictExceptions.ConcurrencyException("The application was concurrently updated and cannot be persisted in its current state.\r\nReload the application from the database and retry the operation.", exception);
+                throw new OpenIddictExceptions.ConcurrencyException(
+                    "The application was concurrently updated and cannot be persisted in its current state.\r\nReload the application from the database and retry the operation.",
+                    exception);
             }
         }, new List<int>());
     }
