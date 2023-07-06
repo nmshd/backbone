@@ -1,7 +1,6 @@
 using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
-using Newtonsoft.Json;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
 
@@ -14,7 +13,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private string _clientId;
     private HttpResponse<List<ClientDTO>>? _response;
 
-    public ClientsStepDefinitions(ClientsApi clientsApi) : base()
+    public ClientsStepDefinitions(ClientsApi clientsApi)
     {
         _clientsApi = clientsApi;
         _clientId = string.Empty;
@@ -36,9 +35,9 @@ public class ClientsStepDefinitions : BaseStepDefinitions
 
         var response = await _clientsApi.CreateClient(requestConfiguration);
 
-        var actualStatusCode = (int)response!.StatusCode;
+        var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _clientId = response.Content!.Result!.ClientId;
+        _clientId = response.Content.Result!.ClientId;
     }
 
     [Given(@"a non-existent Client c")]
@@ -65,8 +64,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
-        _response!.Content!.Result.Should().NotBeNull();
-        _response!.Content!.Result.Should().NotBeEmpty();
+        _response!.Content.Result.Should().NotBeNull();
+        _response!.Content.Result.Should().NotBeEmpty();
         _response.AssertContentCompliesWithSchema();
     }
 

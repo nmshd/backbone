@@ -2,7 +2,6 @@
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
 using Backbone.Modules.Quotas.Domain.Tests;
-using Newtonsoft.Json;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
 
@@ -13,7 +12,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private HttpResponse<TierQuotaDTO>? _response;
 
-    public TierQuotaStepDefinitions(TiersApi tiersApi) : base()
+    public TierQuotaStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
         _tierId = string.Empty;
@@ -33,14 +32,12 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
-        var actualStatusCode = (int)response!.StatusCode;
+        var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _tierId = response.Content.Result.Id;
+        _tierId = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
-
-        return;
     }
 
     [Given(@"an inexistent Tier t")]
@@ -61,7 +58,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierQuotaRequest);
 
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
     }

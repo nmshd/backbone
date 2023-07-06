@@ -8,7 +8,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     private readonly MetricsApi _metricsApi;
     private HttpResponse<List<MetricDTO>>? _response;
 
-    public MetricsStepDefinitions(MetricsApi metricsApi) : base()
+    public MetricsStepDefinitions(MetricsApi metricsApi)
     {
         _metricsApi = metricsApi;
     }
@@ -24,7 +24,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a list of Metrics")]
     public void ThenTheResponseContainsAListOfMetrics()
     {
-        _response!.Content!.Result.Should().NotBeNullOrEmpty();
+        _response!.Content.Result.Should().NotBeNullOrEmpty();
         _response.AssertContentCompliesWithSchema();
     }
 

@@ -4,7 +4,7 @@ namespace AdminUi.Tests.Integration.Models;
 
 public class RequestConfiguration
 {
-    public bool Authenticate { get; set; } = false;
+    public bool Authenticate { get; set; }
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }
     public string? Content { get; set; }
