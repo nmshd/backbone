@@ -1,7 +1,7 @@
-using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Models;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Identities")]
@@ -10,7 +10,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     private readonly IdentitiesApi _identitiesApi;
     private HttpResponse<List<IdentitySummaryDTO>>? _response;
 
-    public IdentitiesApiStepDefinitions(IdentitiesApi identitiesApi) : base()
+    public IdentitiesApiStepDefinitions(IdentitiesApi identitiesApi)
     {
         _identitiesApi = identitiesApi;
     }
@@ -26,8 +26,8 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a paginated list of Identities")]
     public void ThenTheResponseContainsAList()
     {
-        _response!.Content!.Result.Should().NotBeNull();
-        _response!.Content!.Result.Should().NotBeEmpty();
+        _response!.Content.Result.Should().NotBeNull();
+        _response!.Content.Result.Should().NotBeEmpty();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

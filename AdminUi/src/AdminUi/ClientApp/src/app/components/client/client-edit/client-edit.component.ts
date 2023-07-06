@@ -67,6 +67,7 @@ export class ClientEditComponent {
                     this.client = data.result;
                 }
                 this.displayClientSecretWarning = true;
+                this.disabled = true;
                 this.snackBar.open('Successfully added client.', 'Dismiss', {
                     duration: 4000,
                     verticalPosition: 'top',

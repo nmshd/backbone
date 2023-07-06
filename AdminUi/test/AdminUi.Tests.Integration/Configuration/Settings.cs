@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AdminApi.Tests.Integration.Configuration;
+namespace AdminUi.Tests.Integration.Configuration;
 
 public class HttpConfiguration
 {

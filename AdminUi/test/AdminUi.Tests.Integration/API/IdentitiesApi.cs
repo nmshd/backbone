@@ -1,7 +1,7 @@
-﻿using AdminApi.Tests.Integration.Models;
+﻿using AdminUi.Tests.Integration.Models;
 using RestSharp;
 
-namespace AdminApi.Tests.Integration.API;
+namespace AdminUi.Tests.Integration.API;
 
 public class IdentitiesApi : BaseApi
 {

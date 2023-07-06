@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using AdminApi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
-namespace AdminApi.Tests.Integration.API;
+namespace AdminUi.Tests.Integration.API;
 
 public class BaseApi
 {
@@ -26,6 +26,11 @@ public class BaseApi
     protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
         return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
+    }
+
+    protected async Task<HttpResponse<T>> Delete<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest<T>(Method.Delete, endpoint, requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)

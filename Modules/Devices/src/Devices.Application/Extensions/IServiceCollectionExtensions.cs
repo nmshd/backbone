@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Backbone.Modules.Devices.Application.AutoMapper;
+using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
@@ -19,7 +20,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-        services.AddValidatorsFromAssembly(typeof(RegisterDeviceCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(DeleteClientCommandValidator).Assembly);
         services.AddScoped<ChallengeValidator>();
         AddEventHandlers(services);
     }
