@@ -7,7 +7,6 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 public class Identity
 {
     private readonly List<TierQuota> _tierQuotas;
-    private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
     public Identity(string address, TierId tierId)
@@ -17,13 +16,17 @@ public class Identity
         _tierQuotas = new List<TierQuota>();
         _metricStatuses = new List<MetricStatus>();
     }
+    private Identity() { }
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
 
-    public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
-    
-    internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // To: The dev who implements individualQuotas
+    // uncomment the line below
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
+    internal IReadOnlyCollection<Quota> AllQuotas => _tierQuotas;
 
     public string Address { get; }
     public string TierId { get; }
@@ -31,7 +34,7 @@ public class Identity
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         var individualQuota = new IndividualQuota(metricKey, max, period, Address);
-        _individualQuotas.Add(individualQuota);
+        //_individualQuotas.Add(individualQuota);
 
         return individualQuota;
     }
