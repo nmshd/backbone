@@ -1,4 +1,5 @@
-﻿Feature: DELETE Clients
+﻿@Integration
+Feature: DELETE Clients
 
 User deletes a Client
 
