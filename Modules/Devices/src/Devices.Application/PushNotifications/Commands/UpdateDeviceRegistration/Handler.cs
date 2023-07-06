@@ -22,14 +22,14 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 
     public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var handle = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
-        if (handle.IsSuccess)
+        var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
+        if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, handle.Value, cancellationToken);
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, cancellationToken);
         }
         else
         {
-            throw new ArgumentException(handle.Error.Message);
+            throw new ArgumentException(parseHandleResult.Error.Message);
         }
 
         return Unit.Value;
