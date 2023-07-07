@@ -2,7 +2,7 @@
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCouldMessaging;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -32,7 +32,7 @@ public static class IServiceCollectionExtensions
         {
             c.APIKey = options.FCM_API_Key;
         });
-        services.AddTransient<IPnsConnector, FireCouldMessagingConnector>();
+        services.AddTransient<IPnsConnector, FirebaseCloudMessagingConnector>();
     }
 }
 

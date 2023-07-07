@@ -4,13 +4,13 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCouldMessaging;
-public class FireCouldMessagingConnector : IPnsConnector
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
+public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly string _apiKey;
     private readonly HttpClient _client;
 
-    public FireCouldMessagingConnector(IOptions<FireCouldMessagingConnectorContextOptions> options)
+    public FirebaseCloudMessagingConnector(IOptions<FireCouldMessagingConnectorContextOptions> options)
     {
         _apiKey = options.Value.APIKey;
         _client = new HttpClient();
@@ -22,7 +22,7 @@ public class FireCouldMessagingConnector : IPnsConnector
 
         while (recipients.Any())
         {
-            var iterationRecipients = recipients.Take(1000);
+            var iterationRecipients = recipients.Take(1000).ToList();
             recipients.RemoveRange(0, iterationRecipients.Count());
 
             var values = new FCMMessage
