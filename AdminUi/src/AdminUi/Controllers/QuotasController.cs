@@ -7,7 +7,7 @@ using OpenIddict.Validation.AspNetCore;
 namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
-[Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+[Authorize("ApiKey")]
 public class QuotasController : ApiControllerBase
 {
     public QuotasController(IMediator mediator) : base(mediator)

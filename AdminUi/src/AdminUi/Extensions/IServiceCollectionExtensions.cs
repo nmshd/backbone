@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using AdminUi.AspNet;
 using AdminUi.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
@@ -86,6 +87,21 @@ public static class IServiceCollectionExtensions
                     .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
                     .AllowAnyHeader()
                     .AllowAnyMethod();
+            });
+        });
+
+        services.AddAuthentication("ApiKey")
+            .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
+                "ApiKey",
+                opts => opts.ApiKey = configuration.Authentication.ApiKey
+            );
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("ApiKey", policy =>
+            {
+                policy.AddAuthenticationSchemes("ApiKey");
+                policy.RequireAuthenticatedUser();
             });
         });
 

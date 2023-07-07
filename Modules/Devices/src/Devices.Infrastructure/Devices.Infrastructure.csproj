@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,8 +22,8 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-		<PackageReference Include="OpenIddict.AspNetCore" Version="4.3.0" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.3.0" />
+		<PackageReference Include="OpenIddict.AspNetCore" Version="[4.3.0]" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="[4.3.0]" />
 		<PackageReference Include="Polly" Version="7.2.4" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />

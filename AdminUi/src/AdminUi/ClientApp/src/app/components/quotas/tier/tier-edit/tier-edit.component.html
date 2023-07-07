@@ -21,11 +21,8 @@
                 </mat-form-field>
             </div>
             <div *ngIf="editMode" class="action-buttons">
-                <button mat-flat-button
-                        color="primary"
-                        matTooltip="Assign Quota"
-                        (click)="openAssignQuotaDialog()"
-                        [disabled]="!tier.id">
+                <button mat-flat-button color="primary" matTooltip="Assign Quota" (click)="openAssignQuotaDialog()"
+                    [disabled]="!tier.id">
                     <mat-icon>add</mat-icon>
                     Assign Quota
                 </button>
@@ -34,11 +31,11 @@
     </mat-card>
     <div class="action-buttons">
         <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateTier()"
-                [disabled]="!validateTier() || true">
+            [disabled]="!validateTier() || true">
             Save
         </button>
         <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createTier()"
-                [disabled]="disabled || !validateTier()">
+            [disabled]="disabled || !validateTier()">
             Save
         </button>
         <button mat-raised-button routerLink="/tiers">Cancel</button>

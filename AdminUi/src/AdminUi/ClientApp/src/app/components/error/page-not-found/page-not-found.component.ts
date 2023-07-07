@@ -6,11 +6,9 @@ import { Component } from '@angular/core';
     styleUrls: ['./page-not-found.component.css'],
 })
 export class PageNotFoundComponent {
-    header: string;
     error: ErrorInfo;
 
     constructor() {
-        this.header = '';
         this.error = {
             code: 0,
             title: '',
@@ -19,7 +17,6 @@ export class PageNotFoundComponent {
     }
 
     ngOnInit() {
-        this.header = 'Oops!';
         this.error = {
             code: 404,
             title: 'Page not found',
