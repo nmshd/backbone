@@ -12,17 +12,19 @@ public class ApiKeyAuthenticationSchemeOptions : AuthenticationSchemeOptions
 
 public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAuthenticationSchemeOptions>
 {
+    private readonly ApiKeyValidator _apiKeyValidator;
     private const string API_KEY_HEADER_NAME = "X-API-KEY";
 
-    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, ApiKeyValidator apiKeyValidator) : base(options, logger, encoder, clock)
     {
+        _apiKeyValidator = apiKeyValidator;
     }
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var apiKey = Context.Request.Headers[API_KEY_HEADER_NAME];
 
-        if (!string.IsNullOrEmpty(Options.ApiKey) && apiKey != Options.ApiKey)
+        if (!_apiKeyValidator.IsApiKeyValid(apiKey))
         {
             return Task.FromResult(AuthenticateResult.Fail($"Invalid {API_KEY_HEADER_NAME}"));
         }
