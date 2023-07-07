@@ -1,9 +1,9 @@
-<div class="logo-container">
+<div class="logo-container" [ngClass]="{'disabled-container': loading}">
     <div class="logo-layout">
         <img src="../../../../assets/logo.svg" style="width: 30px;">
     </div>
 </div>
-<mat-card>
+<mat-card [ngClass]="{'disabled-container': loading}">
     <mat-card-content class="card-layout">
         <div *ngIf="loading" class="loading">
             <mat-progress-spinner color="primary" mode="indeterminate">

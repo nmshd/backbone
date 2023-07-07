@@ -13,14 +13,19 @@ export class ApiKeyInterceptor implements HttpInterceptor {
 
   isLoggedIn$: Observable<boolean> | undefined;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     this.isLoggedIn$ = this.authService.isLoggedIn;
-    if (this.isLoggedIn$) {
+    const skipIntercept = request.headers.has('skip');
+    if (skipIntercept) {
+      request = request.clone({
+        headers: request.headers.delete('skip')
+      });
+    } else if (this.isLoggedIn$) {
       request = request.clone({
         setHeaders: {
           'X-API-KEY': this.authService.getApiKey()!,
