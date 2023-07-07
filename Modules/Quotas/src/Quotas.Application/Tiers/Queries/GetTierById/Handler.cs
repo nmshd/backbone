@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
@@ -7,11 +6,13 @@ namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
 {
     private readonly ITiersRepository _tiersRepository;
+    private readonly IMetricsRepository _metricsRepository;
     private readonly IMapper _mapper;
 
-    public Handler(ITiersRepository tiersRepository, IMapper mapper)
+    public Handler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository, IMapper mapper)
     {
         _tiersRepository = tiersRepository;
+        _metricsRepository = metricsRepository;
         _mapper = mapper;
     }
 
@@ -19,8 +20,9 @@ public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
     {
         var tier = await _tiersRepository.Find(request.Id, cancellationToken);
 
-        var response = _mapper.Map<TierDTO>(tier);
+        var metricsKeys = tier.Quotas.DistinctBy(quota => quota.MetricKey).Select(quota => quota.MetricKey);
+        var metrics = metricsKeys.Select(metricKey => _metricsRepository.Find(metricKey, cancellationToken).Result);
 
-        return new GetTierByIdResponse(response.Id, response.Name, response.Quotas);
+        return new GetTierByIdResponse(tier, metrics);
     }
 }

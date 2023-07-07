@@ -1,13 +1,9 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
 
-public class TierQuotaDefinitionDTO : IMapTo<TierQuotaDefinition>
+public class TierQuotaDefinitionDTO
 {
-    private TierQuotaDefinitionDTO() { }
-
     public TierQuotaDefinitionDTO(string id, MetricDTO metric, int max, QuotaPeriod period)
     {
         Id = id;
