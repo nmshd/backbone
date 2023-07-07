@@ -3,8 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import {
-  Metric,
-  Quota,
   QuotasService,
   TierQuota,
 } from 'src/app/services/quotas-service/quotas.service';
@@ -29,7 +27,6 @@ export class TierEditComponent {
   disabled: boolean;
   editMode: boolean;
   tier: Tier;
-  quotas: TierQuota[];
   loading: boolean;
 
   constructor(
@@ -55,13 +52,6 @@ export class TierEditComponent {
       id: '',
       name: '',
     } as Tier;
-    this.quotas = [
-      {
-        max: 10,
-        period: 'Month',
-        metric: { displayName: 'Sent Messages' } as Metric,
-      } as TierQuota,
-    ];
   }
 
   ngOnInit() {
@@ -181,12 +171,14 @@ export class TierEditComponent {
     });
   }
 
-  createTierQuota(quota: Quota) {
+  createTierQuota(quota: TierQuota) {
     this.loading = true;
     this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
-      next: (data: HttpResponseEnvelope<Quota>) => {
+      next: (data: HttpResponseEnvelope<TierQuota>) => {
         if (data && data.result) {
           this.snackBar.open('Successfully assigned quota.', 'Dismiss');
+          this.tier.quotas.push(data.result);
+          this.tier.quotas = [...this.tier.quotas];
         }
       },
       complete: () => (this.loading = false),

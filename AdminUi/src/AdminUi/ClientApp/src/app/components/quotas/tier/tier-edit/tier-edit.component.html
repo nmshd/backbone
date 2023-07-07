@@ -49,7 +49,7 @@
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
-            <table mat-table class="responsive" [dataSource]="quotas">
+            <table mat-table class="responsive" [dataSource]="tier.quotas">
                 <ng-container matColumnDef="metricName">
                     <th mat-header-cell *matHeaderCellDef>Metric Name</th>
                     <td

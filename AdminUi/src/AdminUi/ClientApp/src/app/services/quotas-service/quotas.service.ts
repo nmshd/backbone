@@ -25,14 +25,27 @@ export class QuotasService {
   }
 
   createTierQuota(
-    quota: Quota,
+    quota: TierQuota,
     tierId: string
-  ): Observable<HttpResponseEnvelope<Quota>> {
-    return this.http.post<HttpResponseEnvelope<Quota>>(
+  ): Observable<HttpResponseEnvelope<TierQuota>> {
+    return this.http.post<HttpResponseEnvelope<TierQuota>>(
       this.apiUrl + '/Tiers/' + tierId + '/Quotas',
       quota
     );
   }
+}
+
+export interface Metric {
+  id: string;
+  key: string;
+  displayName: string;
+}
+
+export interface TierQuota {
+  id: string;
+  metric: Metric;
+  max: number;
+  period: string;
 }
 
 export interface Quota {
@@ -40,17 +53,4 @@ export interface Quota {
   metricKey: string;
   max: number;
   period: string;
-}
-
-export interface TierQuota {
-  id?: string;
-  metric: Metric;
-  max: number;
-  period: string;
-}
-
-export interface Metric {
-  id: string;
-  key: string;
-  displayName: string;
 }

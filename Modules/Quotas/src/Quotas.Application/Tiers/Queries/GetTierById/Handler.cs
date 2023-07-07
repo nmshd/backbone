@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
@@ -7,13 +6,11 @@ public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly IMetricsRepository _metricsRepository;
-    private readonly IMapper _mapper;
 
-    public Handler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository, IMapper mapper)
+    public Handler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)
     {
         _tiersRepository = tiersRepository;
         _metricsRepository = metricsRepository;
-        _mapper = mapper;
     }
 
     public async Task<GetTierByIdResponse> Handle(GetTierByIdQuery request, CancellationToken cancellationToken)
