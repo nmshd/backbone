@@ -26,7 +26,7 @@
 
 .form-card {
     margin-top: 60px;
-    min-height: 250px;
+    min-height: 150px;
 }
 
 .card-header {
@@ -64,8 +64,38 @@
     pointer-events: none !important;
 }
 
+.tier-accordion {
+    margin: 0px 0px 0px 5px !important;
+}
+
+.quotas-expansion-panel-header {
+    background: #673ab7 !important;
+}
+
+.quotas-expansion-panel-header:hover {
+    background: #58319c !important;
+}
+.quotas-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
+    border-radius: 4px 4px 0px 0px;
+}
+
+.quotas-panel-header-title {
+    color: white !important;
+}
+
+.quotas-panel-header-desc {
+    color: rgba(255, 255, 255, 0.54) !important;
+}
+
+:host
+    ::ng-deep
+    .quotas-expansion-panel-header
+    > .mat-expansion-indicator::after {
+    color: white !important;
+}
+
 .mat-column-metricName,
-.mat-column-metricMax,
+.mat-column-max,
 .mat-column-period {
     width: 33%;
     word-break: break-all;
@@ -97,15 +127,15 @@
         white-space: pre-wrap;
     }
 
-        .mat-mdc-table .mat-mdc-cell:before {
-            content: attr(data-label) ":";
-            float: left;
-            font-weight: 500;
-        }
+    .mat-mdc-table .mat-mdc-cell:before {
+        content: attr(data-label) ":";
+        float: left;
+        font-weight: 500;
+    }
 
-        .mat-mdc-table .mat-mdc-cell:first-child {
-            margin-top: 25px;
-        }
+    .mat-mdc-table .mat-mdc-cell:first-child {
+        margin-top: 25px;
+    }
 
     .mat-mdc-table .mat-mdc-row:last-child {
         border-bottom: 0px;
