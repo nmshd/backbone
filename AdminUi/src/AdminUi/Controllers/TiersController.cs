@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
@@ -36,6 +37,14 @@ public class TiersController : ApiControllerBase
 
         var tiers = await _mediator.Send(new ListTiersQuery(paginationFilter), cancellationToken);
         return Paged(tiers);
+    }
+
+    [HttpGet("{tierId}")]
+    [ProducesResponseType(typeof(GetTierByIdResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
+    {
+        var tier = await _mediator.Send(new GetTierByIdQuery(tierId), cancellationToken);
+        return Ok(tier);
     }
 
     [HttpPost]
