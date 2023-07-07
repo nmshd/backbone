@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutModule } from '@angular/cdk/layout';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -41,6 +42,8 @@ import { ClientListComponent } from './components/client/client-list/client-list
 import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
 import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
 import { ConfirmationDialogComponent } from './components/shared/confirmation-dialog/confirmation-dialog.component';
+import { LoginComponent } from './components/shared/login/login.component';
+import { ApiKeyInterceptor } from './shared/interceptors/api-key.interceptor';
 
 @NgModule({
     declarations: [
@@ -56,6 +59,7 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         ClientEditComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
+        LoginComponent,
     ],
     imports: [
         FormsModule,
@@ -63,6 +67,7 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ClipboardModule,
         HttpClientModule,
         MatCardModule,
         MatToolbarModule,
@@ -87,7 +92,10 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         MatNativeDateModule,
         MatChipsModule,
     ],
-    providers: [SidebarService],
+    providers: [
+        SidebarService,
+        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true }
+    ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

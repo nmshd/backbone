@@ -7,16 +7,19 @@ import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.
 import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
 import { ClientListComponent } from './components/client/client-list/client-list.component';
 import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
+import { AuthGuard } from './shared/auth-guard/auth-guard.guard';
+import { LoginComponent } from './components/shared/login/login.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent },
-    { path: 'identities', component: IdentityListComponent },
-    { path: 'tiers', component: TierListComponent },
-    { path: 'tiers/create', component: TierEditComponent },
-    { path: 'tiers/:id', component: TierEditComponent },
-    { path: 'clients', component: ClientListComponent },
-    { path: 'clients/create', component: ClientEditComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'identities', component: IdentityListComponent, canActivate: [AuthGuard] },
+    { path: 'tiers', component: TierListComponent, canActivate: [AuthGuard] },
+    { path: 'tiers/create', component: TierEditComponent, canActivate: [AuthGuard] },
+    { path: 'tiers/:id', component: TierEditComponent, canActivate: [AuthGuard] },
+    { path: 'clients', component: ClientListComponent, canActivate: [AuthGuard] },
+    { path: 'clients/create', component: ClientEditComponent, canActivate: [AuthGuard] },
     { path: '**', component: PageNotFoundComponent },
 ];
 
