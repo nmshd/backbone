@@ -18,9 +18,16 @@ public class FireCouldMessagingConnector : IPnsConnector
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, object notification)
     {
-        var values = new FCMMessage
+        var recipients = registrations.Select(r => r.Handle.Value).ToList();
+
+        while (recipients.Any())
         {
-            Data =
+            var iterationRecipients = recipients.Take(1000);
+            recipients.RemoveRange(0, iterationRecipients.Count());
+
+            var values = new FCMMessage
+            {
+                Data =
             {
                 AndroidChannelId = "Enmeshed",
                 ContentAvailable = "1",
@@ -30,14 +37,15 @@ public class FireCouldMessagingConnector : IPnsConnector
                     { "eventName", "dynamic"}
                 }
             },
-            Notification = notification,
-            Recipients = registrations.Select(r=>r.Handle.Value)
-         };
+                Notification = notification,
+                Recipients = iterationRecipients
+            };
 
-        var httpContent = new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json");
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_apiKey);
+            var httpContent = new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_apiKey);
 
-        await _client.PostAsync("https://fcm.googleapis.com/fcm/send", httpContent);
+            await _client.PostAsync("https://fcm.googleapis.com/fcm/send", httpContent);
+        }
     }
 }
 
