@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCouldMessaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -26,6 +27,12 @@ public static class IServiceCollectionExtensions
         }
 
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
+
+        services.Configure<FireCouldMessagingConnectorContextOptions>(c =>
+        {
+            c.APIKey = options.FCM_API_Key;
+        });
+        services.AddTransient<IPnsConnector, FireCouldMessagingConnector>();
     }
 }
 
@@ -37,4 +44,6 @@ public class PushNotificationOptions
     public string Provider { get; set; } = IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB;
 
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
+
+    public string FCM_API_Key { get; set; }
 }
