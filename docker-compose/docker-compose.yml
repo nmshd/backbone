@@ -22,6 +22,8 @@ services:
 
       - Modules__Devices__Infrastructure__PushNotifications__FCM_API_Key=${ENMESHED_FCM_API_KEY} # set this environment variable on your local system to an appropriate value (FCM API KEY)
 
+      - Modules__Devices__Infrastructure__PushNotifications__Provider=PNSConnector
+
     ports:
       - "127.0.0.10:80:80"
       - "5000:80"

@@ -27,22 +27,22 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
             var values = new FCMMessage
             {
-                Data =
-            {
-                AndroidChannelId = "Enmeshed",
-                ContentAvailable = "1",
-                Content = new()
+                Data = new ()
                 {
-                    { "accRef", "id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"},
-                    { "eventName", "dynamic"}
-                }
-            },
+                    AndroidChannelId = "Enmeshed",
+                    ContentAvailable = "1",
+                    Content = new()
+                    {
+                        { "accRef", "id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"},
+                        { "eventName", "dynamic"}
+                    }
+                },
                 Notification = notification,
                 Recipients = iterationRecipients
             };
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_apiKey);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 
             await _client.PostAsync("https://fcm.googleapis.com/fcm/send", httpContent);
         }
