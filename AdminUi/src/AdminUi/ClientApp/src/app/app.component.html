@@ -6,7 +6,7 @@
         </mat-sidenav>
         <mat-sidenav-content class="layout-main-container">
             <div class="layout-content">
-                <router-outlet></router-outlet>
+                <router-outlet (activate)="changeOfRoute()"></router-outlet>
             </div>
         </mat-sidenav-content>
     </mat-sidenav-container>
