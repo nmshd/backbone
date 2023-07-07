@@ -1,0 +1,9 @@
+.confirmation-title {
+    background-color: #673ab7;
+    color: #ffffff;
+}
+
+.confirmation-message {
+    color: #808080;
+    font-weight: 300;
+}

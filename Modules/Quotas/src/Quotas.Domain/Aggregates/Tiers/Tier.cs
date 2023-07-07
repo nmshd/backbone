@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.Errors;
 using CSharpFunctionalExtensions;
 using Enmeshed.BuildingBlocks.Domain.Errors;
 

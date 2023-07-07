@@ -1,0 +1,40 @@
+﻿using System.Globalization;
+
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+
+public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
+{
+    public static ExhaustionDate Unexhausted = new(DateTime.MinValue);
+
+    public readonly DateTime Value = Value;
+
+    public override string ToString()
+    {
+        return Value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    public static bool operator <=(ExhaustionDate left, ExhaustionDate right)
+    {
+        return left < right || left == right;
+    }
+
+    public static bool operator <(ExhaustionDate left, ExhaustionDate right)
+    {
+        return left.Value < right.Value;
+    }
+
+    public static bool operator >=(ExhaustionDate left, ExhaustionDate right)
+    {
+        return left > right || left == right;
+    }
+
+    public static bool operator >(ExhaustionDate left, ExhaustionDate right)
+    {
+        return left.Value > right.Value;
+    }
+
+    public int CompareTo(ExhaustionDate other)
+    {
+        return Value.CompareTo(other.Value);
+    }
+}

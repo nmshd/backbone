@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service';
 
 @Component({
@@ -7,9 +8,14 @@ import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service
     styleUrls: ['./topbar.component.css'],
 })
 export class TopbarComponent {
-    constructor(private sidebarService: SidebarService) {}
+    constructor(private sidebarService: SidebarService,
+        private authService: AuthService) { }
 
-    toggleSidebar() {
+    toggleSidebar(): void {
         this.sidebarService.toggle();
+    }
+
+    logout(): void {
+        this.authService.logout();
     }
 }

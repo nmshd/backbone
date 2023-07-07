@@ -3,6 +3,7 @@ changelog:
     labels:
       - ci
       - chore
+      - dependencies
       - refactor
       - test
   categories:

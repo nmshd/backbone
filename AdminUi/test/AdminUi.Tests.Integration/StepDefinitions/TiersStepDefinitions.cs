@@ -1,7 +1,7 @@
-using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Models;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tiers")]
@@ -10,7 +10,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private HttpResponse<List<TierDTO>>? _response;
 
-    public TiersStepDefinitions(TiersApi tiersApi) : base()
+    public TiersStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
     }
@@ -26,8 +26,8 @@ public class TiersStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a paginated list of Tiers")]
     public void ThenTheResponseContainsAList()
     {
-        _response!.Content!.Result.Should().NotBeNull();
-        _response!.Content!.Result.Should().NotBeEmpty();
+        _response!.Content.Result.Should().NotBeNull();
+        _response!.Content.Result.Should().NotBeEmpty();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

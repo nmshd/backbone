@@ -1,4 +1,5 @@
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Enmeshed.BuildingBlocks.Domain;
 using FluentAssertions;
 using Xunit;
 
