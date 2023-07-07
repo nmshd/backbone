@@ -27,18 +27,6 @@
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
             </div>
-            <div *ngIf="editMode" class="action-buttons">
-                <button
-                    mat-flat-button
-                    color="primary"
-                    matTooltip="Assign Quota"
-                    (click)="openAssignQuotaDialog()"
-                    [disabled]="!tier.id"
-                >
-                    <mat-icon>add</mat-icon>
-                    Assign Quota
-                </button>
-            </div>
         </mat-card-content>
     </mat-card>
     <mat-accordion *ngIf="editMode" class="tier-accordion">
