@@ -9,8 +9,9 @@
             </mat-progress-spinner>
         </div>
         <div class="action-buttons">
-            <button mat-mini-fab color="warn" (click)="openConfirmationDialog()" [disabled]="selection.selected.length === 0" style="margin-right: 10px;">
-                <mat-icon >delete</mat-icon>
+            <button mat-mini-fab color="warn" (click)="openConfirmationDialog()"
+                [disabled]="selection.selected.length === 0" style="margin-right: 10px;">
+                <mat-icon>delete</mat-icon>
             </button>
             <button mat-mini-fab color="primary" (click)="addClient()">
                 <mat-icon>add</mat-icon>
@@ -20,18 +21,13 @@
             <ng-container matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
                     <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                                  [checked]="selection.hasValue() && isAllSelected()"
-                                  color="primary"
-                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                  [aria-label]="checkboxLabel()">
+                        [checked]="selection.hasValue() && isAllSelected()" color="primary"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                     </mat-checkbox>
                 </th>
                 <td mat-cell *matCellDef="let row; let i = index;">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                                  (change)="$event ? selection.toggle(row) : null"
-                                  [checked]="selection.isSelected(row)"
-                                  color="primary"
-                                  [aria-label]="checkboxLabel(i, row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)" color="primary" [aria-label]="checkboxLabel(i, row)">
                     </mat-checkbox>
                 </td>
             </ng-container>
