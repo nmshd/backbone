@@ -98,7 +98,12 @@ adminui:
   podAnnotations: {}
 
   # env - environment variables for the Admin UI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
-  env: []
+  env:
+    - name: Database__ConnectionString
+      valueFrom:
+        secretKeyRef:
+          name: "devices-sql-connectionstring"
+          key: VALUE
 
   service:
     type: "ClusterIP"
@@ -185,20 +190,10 @@ admincli:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
-rabbitmq:
-  # create - if a RabbitMQ service should be created, set this to true; if you want to use an existing one, set it to false
-  create: false
-
-  # resources - the resources for the RabbitMQ container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
-
 global:
+  # useDevEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
+  useDevEventbus: false
+
   # environment - possible values: "Development"/"Production"
   environment: ""
 
