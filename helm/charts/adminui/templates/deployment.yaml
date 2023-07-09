@@ -57,6 +57,8 @@ spec:
             failureThreshold: 5
           {{- with .Values.env }}
           env:
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:80
             {{- toYaml . | nindent 12 }}
           {{- end }}
       {{- with .Values.nodeSelector }}
