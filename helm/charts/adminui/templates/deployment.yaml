@@ -33,6 +33,10 @@ spec:
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
       containers:
         - name: {{ include "global.name" . }}
           {{- with .Values.securityContext }}
@@ -55,12 +59,30 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 15
             failureThreshold: 5
-          {{- with .Values.env }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
           env:
             - name: ASPNETCORE_URLS
               value: http://0.0.0.0:80
+            {{- if .Values.global.useDevEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
+            {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
