@@ -23,10 +23,7 @@ public class MetricsRepository : IMetricsRepository
     {
         var metric = _metrics.FirstOrDefault(metric => metric.Key == key);
 
-        if (metric == null)
-            throw new NotFoundException(nameof(Metric));
-
-        return Task.FromResult(metric);
+        return metric == null ? throw new NotFoundException(nameof(Metric)) : Task.FromResult(metric);
     }
 
     public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken, bool track = false)

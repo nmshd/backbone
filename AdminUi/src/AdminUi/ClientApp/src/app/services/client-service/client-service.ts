@@ -33,6 +33,10 @@ export class ClientServiceService {
     createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
         return this.http.post<HttpResponseEnvelope<Client>>(this.apiUrl, client);
     }
+
+    deleteClient(clientId: string): Observable<any> {
+        return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/${clientId}`);
+    }
 }
 
 export interface ClientDTO {

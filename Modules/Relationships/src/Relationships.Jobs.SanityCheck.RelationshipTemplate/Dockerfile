@@ -16,6 +16,7 @@ COPY ["Modules/Relationships/src/Relationships.Common/Relationships.Common.cspro
 COPY ["Modules/Relationships/src/Relationships.Domain/Relationships.Domain.csproj", "Modules/Relationships/src/Relationships.Domain/"]
 COPY ["Modules/Relationships/src/Relationships.Infrastructure/Relationships.Infrastructure.csproj", "Modules/Relationships/src/Relationships.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
+COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
 RUN dotnet restore "Modules/Relationships/src/Relationships.Jobs.SanityCheck.RelationshipTemplate/Relationships.Jobs.SanityCheck.RelationshipTemplate.csproj"
 

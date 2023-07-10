@@ -32,6 +32,10 @@ using Relationships.ConsumerApi;
 using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
+using Enmeshed.Common.Infrastructure;
+using Backbone.Modules.Quotas.Domain;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -86,7 +90,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule>(configuration)
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
-        .AddModule<TokensModule>(configuration);
+        .AddModule<TokensModule>(configuration)
+        .AddMetricStatusesRepository(c =>
+        {
+            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
+            c.Provider = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:Provider").Value;
+        });
+    services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
@@ -94,7 +104,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedConfiguration =
         services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
-
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
         .AddCustomApplicationInsights()

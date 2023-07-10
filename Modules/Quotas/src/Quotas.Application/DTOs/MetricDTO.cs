@@ -7,10 +7,10 @@ public class MetricDTO : IMapTo<Metric>
 {
     public MetricDTO(MetricKey key, string displayName)
     {
-        Key = key;
+        Key = key.Value;
         DisplayName = displayName;
     }
 
-    public MetricKey Key { get; set; }
+    public string Key { get; set; }
     public string DisplayName { get; set; }
 }

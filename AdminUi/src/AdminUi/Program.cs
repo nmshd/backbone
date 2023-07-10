@@ -1,10 +1,14 @@
-using System.Reflection;
+﻿using System.Reflection;
+using AdminUi.AspNet;
 using AdminUi.Configuration;
 using AdminUi.Extensions;
+using AdminUi.OpenIddict;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -38,6 +42,8 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddSingleton<ApiKeyValidator>();
+
     services
         .ConfigureAndValidate<AdminConfiguration>(configuration.Bind)
         .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options));
@@ -48,12 +54,24 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
-    .AddCustomFluentValidation()
-    .AddCustomIdentity(environment)
-    .AddCustomSwaggerWithUi()
-    .AddDevices(parsedConfiguration.Modules.Devices)
-    .AddQuotas(parsedConfiguration.Modules.Quotas)
-    .AddHealthChecks();
+        .AddCustomFluentValidation()
+        .AddCustomIdentity(environment)
+        .AddCustomSwaggerWithUi()
+        .AddDevices(parsedConfiguration.Modules.Devices)
+        .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddHealthChecks();
+
+    services
+        .AddOpenIddict()
+        .AddCore(options =>
+        {
+            options
+                .UseEntityFrameworkCore()
+                .UseDbContext<DevicesDbContext>();
+            options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
+        });
+
+    services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 }
@@ -99,6 +117,9 @@ static void Configure(WebApplication app)
 
     app.UseStaticFiles();
     app.UseRouting();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
 
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"

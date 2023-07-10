@@ -1,7 +1,7 @@
-﻿using AdminApi.Tests.Integration.Models;
+﻿using AdminUi.Tests.Integration.Models;
 using RestSharp;
 
-namespace AdminApi.Tests.Integration.API;
+namespace AdminUi.Tests.Integration.API;
 public class ClientsApi : BaseApi
 {
     public ClientsApi(RestClient client) : base(client) { }
@@ -9,5 +9,15 @@ public class ClientsApi : BaseApi
     public async Task<HttpResponse<List<ClientDTO>>> GetAllClients(RequestConfiguration requestConfiguration)
     {
         return await Get<List<ClientDTO>>("/Clients", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<List<ClientDTO>>> DeleteClient(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Delete<List<ClientDTO>>($"/Clients/{clientId}", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<ClientDTO>> CreateClient(RequestConfiguration requestConfiguration)
+    {
+        return await Post<ClientDTO>($"/Clients", requestConfiguration);
     }
 }

@@ -1,12 +1,12 @@
-﻿using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Configuration;
+﻿using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
 
-namespace AdminApi.Tests.Integration.Support;
+namespace AdminUi.Tests.Integration.Support;
 
 public static class Dependencies
 {

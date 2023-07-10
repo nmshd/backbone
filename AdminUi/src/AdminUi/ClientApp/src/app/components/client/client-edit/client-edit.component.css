@@ -29,11 +29,13 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    background-color: #c1c10f;
 }
 
 .client-secret-warning {
-    color: red;
+    color: #ffffff;
     font-weight: 500;
+    padding: 10px;
 }
 
 .form-details {

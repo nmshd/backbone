@@ -1,11 +1,11 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 
@@ -30,20 +30,24 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true);
 
-        var metricKey = (MetricKey)Enum.Parse(typeof(MetricKey), request.MetricKey);
-        var metric = await _metricsRepository.Find(metricKey, cancellationToken); // ensure metric exists
+        var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
-        var result = tier.CreateQuota(metricKey, request.Max, request.Period);
+        if (parseMetricKeyResult.IsFailure)
+            throw new DomainException(parseMetricKeyResult.Error);
+
+        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+
+        var result = tier.CreateQuota(parseMetricKeyResult.Value, request.Max, request.Period);
         if (result.IsFailure)
-            throw new OperationFailedException(GenericApplicationErrors.Validation.InvalidPropertyValue());
+            throw new DomainException(result.Error);
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.LogTrace($"Successfully created assigned Quota to Tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
+        _logger.LogTrace("Successfully created assigned Quota to Tier. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
 
         _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
 
-        _logger.LogTrace($"Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
+        _logger.LogTrace("Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
 
         var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric.Key, metric.DisplayName), result.Value.Max, result.Value.Period);
         return response;

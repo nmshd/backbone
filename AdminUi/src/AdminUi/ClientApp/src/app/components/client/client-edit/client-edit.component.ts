@@ -67,6 +67,7 @@ export class ClientEditComponent {
                     this.client = data.result;
                 }
                 this.displayClientSecretWarning = true;
+                this.disabled = true;
                 this.snackBar.open('Successfully added client.', 'Dismiss', {
                     duration: 4000,
                     verticalPosition: 'top',
@@ -84,13 +85,6 @@ export class ClientEditComponent {
                 this.disabled = true;
             },
         });
-    }
-
-    validateClient(): boolean {
-        if (this.client && this.client.displayName && this.client.displayName.length > 0) {
-            return true;
-        }
-        return false;
     }
 
     togglePasswordVisibility(): void {

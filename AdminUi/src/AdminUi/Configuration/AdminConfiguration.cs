@@ -5,6 +5,8 @@ namespace AdminUi.Configuration;
 
 public class AdminConfiguration
 {
+    public AuthenticationConfiguration Authentication { get; set; }
+
     public CorsConfiguration Cors { get; set; } = new();
 
     public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
@@ -14,6 +16,11 @@ public class AdminConfiguration
 
     [Required]
     public ModulesConfiguration Modules { get; set; } = new();
+
+    public class AuthenticationConfiguration
+    {
+        public string ApiKey{ get; set; } = "";
+    }
 
     public class CorsConfiguration
     {

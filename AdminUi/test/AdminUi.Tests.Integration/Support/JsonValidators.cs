@@ -3,7 +3,7 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
 
-namespace AdminApi.Tests.Integration.Support;
+namespace AdminUi.Tests.Integration.Support;
 
 public class JsonValidators
 {

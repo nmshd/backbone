@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
@@ -18,5 +19,6 @@ public static class IEventBusExtensions
         eventBus.Subscribe<IdentityCreatedIntegrationEvent, IdentityCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierCreatedIntegrationEvent, TierCreatedIntegrationEventHandler>();
         eventBus.Subscribe<QuotaCreatedForTierIntegrationEvent, QuotaCreatedForTierIntegrationEventHandler>();
+        eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
     }
 }
