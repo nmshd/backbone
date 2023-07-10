@@ -1,4 +1,4 @@
-{{- if .Values.rabbitmq.create }}
+{{- if .Values.global.useBuiltInEventbus }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +25,12 @@ spec:
               containerPort: 5672
               protocol: TCP
           resources: 
-            {{- toYaml .Values.rabbitmq.resources | nindent 12 }}
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
           env:
             - name: RABBITMQ_DEFAULT_USER
               value: admin
