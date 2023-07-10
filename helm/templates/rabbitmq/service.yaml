@@ -1,4 +1,4 @@
-{{- if .Values.rabbitmq.create }}
+{{- if .Values.global.useBuiltInEventbus }}
 apiVersion: v1
 kind: Service
 metadata:
