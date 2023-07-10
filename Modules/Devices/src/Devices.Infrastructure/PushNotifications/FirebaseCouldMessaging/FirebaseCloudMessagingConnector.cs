@@ -1,51 +1,49 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Reflection;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-using Microsoft.Extensions.Options;
+using FirebaseAdmin.Messaging;
 using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
-    private readonly string _apiKey;
-    private readonly HttpClient _client;
-
-    public FirebaseCloudMessagingConnector(IOptions<FireCouldMessagingConnectorContextOptions> options)
-    {
-        _apiKey = options.Value.APIKey;
-        _client = new HttpClient();
-    }
+    public FirebaseCloudMessagingConnector()
+    { }
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, object notification)
     {
         var recipients = registrations.Select(r => r.Handle.Value).ToList();
+        var recipientsLists = recipients.Split(500);
+        var data = new Dictionary<string, string>();
+        var (notificationTitle, notificationBody) = GetNotificationText(notification);
 
-        while (recipients.Any())
-        {
-            var iterationRecipients = recipients.Take(1000).ToList();
-            recipients.RemoveRange(0, iterationRecipients.Count());
-
-            var values = new FCMMessage
-            {
-                Data = new ()
-                {
-                    AndroidChannelId = "Enmeshed",
-                    ContentAvailable = "1",
-                    Content = new()
-                    {
-                        { "accRef", "id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"},
-                        { "eventName", "dynamic"}
-                    }
+        foreach ( var list in recipientsLists ) {
+            var message = new MulticastMessage() { 
+                Tokens = list.ToList(),
+                Notification = new() { 
+                    Title = notificationTitle,
+                    Body = notificationBody
                 },
-                Notification = notification,
-                Recipients = iterationRecipients
+                Data = data.AsReadOnly()
             };
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(values), Encoding.UTF8, "application/json");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
-
-            await _client.PostAsync("https://fcm.googleapis.com/fcm/send", httpContent);
+            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
         }
+    }
+
+    private static (string Title, string Body) GetNotificationText(object pushNotification)
+    {
+        var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
+        return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
+    }
+}
+
+public static class TypeExtensions
+{
+    public static T GetCustomAttribute<T>(this Type type) where T : Attribute
+    {
+        return (T)type.GetCustomAttribute(typeof(T));
     }
 }
 
@@ -71,9 +69,4 @@ public sealed class FCMData
 
     [JsonProperty("content")]
     public Dictionary<string, dynamic> Content;
-}
-
-public sealed class FireCouldMessagingConnectorContextOptions
-{
-    public string APIKey { get; set; }
 }
