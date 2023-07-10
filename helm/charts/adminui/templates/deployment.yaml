@@ -67,7 +67,7 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: http://0.0.0.0:80
-            {{- if .Values.global.useDevEventbus }}
+            {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__vendor
               value: RabbitMQ
             - name: infrastructure__eventBus__connectionInfo

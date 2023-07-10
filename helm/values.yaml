@@ -191,8 +191,8 @@ admincli:
   affinity: {}
 
 global:
-  # useDevEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
-  useDevEventbus: false
+  # useBuiltInEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
+  useBuiltInEventbus: false
 
   # environment - possible values: "Development"/"Production"
   environment: ""

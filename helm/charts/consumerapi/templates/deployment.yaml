@@ -57,7 +57,7 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            {{- if .Values.global.useDevEventbus }}
+            {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__vendor
               value: RabbitMQ
             - name: infrastructure__eventBus__connectionInfo
