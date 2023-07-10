@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using FirebaseAdmin.Messaging;
-using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
 public class FirebaseCloudMessagingConnector : IPnsConnector
@@ -18,10 +19,13 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         var data = new Dictionary<string, string>();
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
 
-        foreach ( var list in recipientsLists ) {
-            var message = new MulticastMessage() { 
+        foreach (var list in recipientsLists)
+        {
+            var message = new MulticastMessage()
+            {
                 Tokens = list.ToList(),
-                Notification = new() { 
+                Notification = new()
+                {
                     Title = notificationTitle,
                     Body = notificationBody
                 },
@@ -34,39 +38,9 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)
     {
-        var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-        return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
+        if (pushNotification == null)
+            return ("", "");
+        var notification = JsonSerializer.Deserialize<NotificationTextAttribute>((JsonElement)pushNotification);
+        return notification == null ? ("", "") : (notification.Title, notification.Body);
     }
-}
-
-public static class TypeExtensions
-{
-    public static T GetCustomAttribute<T>(this Type type) where T : Attribute
-    {
-        return (T)type.GetCustomAttribute(typeof(T));
-    }
-}
-
-public sealed class FCMMessage
-{
-    [JsonProperty("data")]
-    public FCMData Data { get; set; }
-
-    [JsonProperty("notification")]
-    public object Notification { get; set; }
-
-    [JsonProperty("registration_ids")]
-    public IEnumerable<string> Recipients { get; set; }
-}
-
-public sealed class FCMData
-{
-    [JsonProperty("android_channel_id")]
-    public string AndroidChannelId;
-
-    [JsonProperty("content_available")]
-    public string ContentAvailable;
-
-    [JsonProperty("content")]
-    public Dictionary<string, dynamic> Content;
 }
