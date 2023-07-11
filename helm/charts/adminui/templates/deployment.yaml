@@ -51,12 +51,22 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+            failureThreshold: 5
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
               subPath: appsettings.override.json
               readOnly: true
           env:
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:80
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__vendor
               value: RabbitMQ
@@ -73,14 +83,6 @@ spec:
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 15
-            failureThreshold: 5
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

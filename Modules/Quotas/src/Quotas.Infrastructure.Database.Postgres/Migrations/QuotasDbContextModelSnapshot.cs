@@ -17,7 +17,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -59,7 +59,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Owner", "MetricKey");
 
-                    b.ToTable("MetricStatus");
+                    b.ToTable("MetricStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.TierQuota", b =>
