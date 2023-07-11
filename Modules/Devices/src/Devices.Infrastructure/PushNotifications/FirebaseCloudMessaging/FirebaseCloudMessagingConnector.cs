@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using FirebaseAdmin.Messaging;
 
@@ -38,7 +39,13 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     {
         if (pushNotification == null)
             return ("", "");
-        var notification = ((JsonElement)pushNotification).Deserialize<NotificationTextAttribute>();
-        return notification == null ? ("", "") : (notification.Title, notification.Body);
+        if (pushNotification is JsonElement)
+        {
+            var notification = ((JsonElement)pushNotification).Deserialize<NotificationTextAttribute>();
+            return notification == null ? ("", "") : (notification.Title, notification.Body);
+        }
+
+        var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
+        return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
     }
 }
