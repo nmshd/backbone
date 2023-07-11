@@ -14,7 +14,6 @@ public abstract class NotificationBuilder
     {
         NotificationBuilder builder = platform switch
         {
-            NotificationPlatform.Fcm => new FcmNotificationBuilder(),
             NotificationPlatform.Apns => new ApnsNotificationBuilder(),
             _ => throw new ArgumentException($"The platform {platform} is not supported.")
         };
