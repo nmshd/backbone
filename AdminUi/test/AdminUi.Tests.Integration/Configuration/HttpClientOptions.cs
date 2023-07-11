@@ -2,7 +2,7 @@
 
 namespace AdminUi.Tests.Integration.Configuration;
 
-public class HttpConfiguration
+public class HttpClientOptions
 {
     [Required]
     public string BaseUrl { get; set; } = "";

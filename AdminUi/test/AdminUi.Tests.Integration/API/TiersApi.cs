@@ -1,11 +1,12 @@
-﻿using AdminUi.Tests.Integration.Models;
-using RestSharp;
+﻿using AdminUi.Tests.Integration.Configuration;
+using AdminUi.Tests.Integration.Models;
+using Microsoft.Extensions.Options;
 
 namespace AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {
-    public TiersApi(RestClient client, string apiKey) : base(client, apiKey) { }
+    public TiersApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
 
     public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {

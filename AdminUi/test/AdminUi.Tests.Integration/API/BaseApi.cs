@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using RestSharp;
 
 namespace AdminUi.Tests.Integration.API;
@@ -9,15 +11,13 @@ public class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
-    private readonly string _apiKey;
 
-    protected BaseApi(RestClient client, string apiKey)
+    protected BaseApi(IOptions<HttpClientOptions> httpConfiguration)
     {
-        _client = client;
-        _apiKey = apiKey;
+        _client = new RestClient(httpConfiguration.Value.BaseUrl);
+        _client.AddDefaultHeader("X-API-KEY", httpConfiguration.Value.ApiKey);
 
-        ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
+        ServicePointManager.ServerCertificateValidationCallback += (_, _, _, _) => true;
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -47,8 +47,6 @@ public class BaseApi
 
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
-
-        request.AddHeader("X-Api-Key", _apiKey);
 
         var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
