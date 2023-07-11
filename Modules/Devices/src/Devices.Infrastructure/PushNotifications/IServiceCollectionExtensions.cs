@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMes
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
@@ -27,10 +26,11 @@ public static class IServiceCollectionExtensions
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:
-
-                FirebaseApp.Create(new AppOptions()
+                FirebaseApp.Create(new AppOptions
                 {
-                    Credential = GoogleCredential.FromJson(options.FcmServiceAccount),
+                    Credential = options.DirectPnsCommunication is null
+                        ? GoogleCredential.GetApplicationDefault()
+                        : GoogleCredential.FromJson(options.DirectPnsCommunication.Fcm.ServiceAccountJson)
                 });
 
                 services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
@@ -52,5 +52,5 @@ public class PushNotificationOptions
 
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
-    public string FcmServiceAccount { get; set; }
+    public AzureNotificationHub.IServiceCollectionExtensions.DirectPnsCommunicationOptions DirectPnsCommunication { get; set; }
 }
