@@ -8,10 +8,14 @@ public class TierDetailsDTO
     {
         Id = tier.Id;
         Name = tier.Name;
-        Quotas = tier.Quotas.Select(quota => new TierQuotaDefinitionDTO(quota.Id,
-            new MetricDTO(quota.MetricKey, metrics.First(metric => metric.Key == quota.MetricKey).DisplayName),
-            quota.Max, quota.Period));
-
+        Quotas = tier.Quotas.Select(quota =>
+            new TierQuotaDefinitionDTO(
+                quota.Id,
+                new MetricDTO(metrics.First(metric => metric.Key == quota.MetricKey)),
+                quota.Max,
+                quota.Period
+            )
+        );
     }
 
     public string Id { get; set; }
