@@ -19,7 +19,7 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [Given(@"a Tier t")]
-    public async Task GivenAValidTierAsync()
+    public async Task GivenATierAsync()
     {
         var createTierQuotaRequest = new CreateTierRequest
         {
