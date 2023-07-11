@@ -14,7 +14,7 @@ public class HandlerTests
     public async void Gets_tier_by_id()
     {
         // Arrange
-        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var tierId = new TierId("SomeTierId");
         var tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
