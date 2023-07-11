@@ -38,7 +38,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     {
         if (pushNotification == null)
             return ("", "");
-        var notification = JsonSerializer.Deserialize<NotificationTextAttribute>((JsonElement)pushNotification);
+        var notification = ((JsonElement)pushNotification).Deserialize<NotificationTextAttribute>();
         return notification == null ? ("", "") : (notification.Title, notification.Body);
     }
 }
