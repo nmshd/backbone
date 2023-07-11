@@ -189,3 +189,24 @@ jobs:
         run: npm run test:local:node:lokijs
       - name: Stop Consumer API
         run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
+  integration-test:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout backbone repository
+        uses: actions/checkout@v3
+        with:
+          path: backbone
+      - name: Run Consumer API
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up -d
+      - name: Wait for Consumer API to become available
+        run: curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health'
+      # - name: Run integration Tests
+      #   working-directory: ./cns-transport
+      #   env:
+      #     NMSHD_TEST_BASEURL: http://localhost:5000
+      #     NMSHD_TEST_CLIENTID: test
+      #     NMSHD_TEST_CLIENTSECRET: test
+      #   run: npm run test:local:node:lokijs
+      - name: Stop Consumer API
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
