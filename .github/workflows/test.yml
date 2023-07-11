@@ -205,7 +205,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
       - name: Run tests
-        run: ./.ci/test.ts
+        run: ./.ci/integration-test.ts
       - name: Stop Consumer API
         run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
