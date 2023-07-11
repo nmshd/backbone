@@ -1,14 +1,14 @@
 ﻿namespace Backbone.Modules.Devices.Application.Extensions;
 public static class IEnumerableExtensions
 {
-    public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> ienum, int batchSize = 100)
+    public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> items, int batchSize)
     {
-        if (ienum == null)
+        if (items == null)
         {
-            throw new ArgumentNullException(nameof(ienum));
+            throw new ArgumentNullException(nameof(items));
         }
 
-        var list = ienum.ToList();
+        var list = items.ToList();
 
         if (!list.Any())
         {
@@ -20,16 +20,16 @@ public static class IEnumerableExtensions
             return new List<IEnumerable<T>>(new[] { list });
         }
 
-        var response = new List<IEnumerable<T>>();
+        var batches = new List<IEnumerable<T>>();
 
         for (var i = 0; i < list.Count; i += batchSize)
         {
-            response.Add(
+            batches.Add(
                 new List<T>(
                     list.GetRange(i, Math.Min(batchSize, list.Count - i))
                 )
             );
         }
-        return response;
+        return batches;
     }
 }

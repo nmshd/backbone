@@ -9,8 +9,6 @@ public abstract class PnsConnectorFactory
         {
             case PushNotificationPlatform.Fcm:
                 return CreateForFirebaseCloudMessaging();
-            case PushNotificationPlatform.Apns:
-                break;
         }
         throw new NotImplementedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
     }

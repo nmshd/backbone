@@ -29,7 +29,7 @@ public class DirectPushService : IPushService
 
             var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
-            await pnsConnector.Send(group, notification);
+            await pnsConnector.Send(group, recipient, notification);
 
             _logger.LogTrace($"Successfully sent push notifications to identity '{recipient}' on platform '{Enum.GetName(platform)}'");
         }
