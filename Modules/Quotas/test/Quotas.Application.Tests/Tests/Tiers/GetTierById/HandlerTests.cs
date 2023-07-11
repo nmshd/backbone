@@ -39,8 +39,8 @@ public class HandlerTests
         result.Quotas.First().Period.Should().Be(period);
     }
 
-    private Handler CreateHandler(ITiersRepository tiers, IMetricsRepository metrics)
+    private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)
     {
-        return new Handler(tiers, metrics);
+        return new Handler(tiersRepository, metricsRepository);
     }
 }
