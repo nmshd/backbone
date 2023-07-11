@@ -69,10 +69,7 @@ app
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) =>
-    {
-        new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait();
-    })
+    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
     .MigrateDbContext<TokensDbContext>()
@@ -90,12 +87,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule>(configuration)
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
-        .AddModule<TokensModule>(configuration)
-        .AddMetricStatusesRepository(c =>
-        {
-            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
-            c.Provider = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:Provider").Value;
-        });
+        .AddModule<TokensModule>(configuration);
+
+    var quotasSqlDatabaseConfiguration = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase");
+    var quotasDbProvider = quotasSqlDatabaseConfiguration.GetValue<string>("Provider") ?? throw new ArgumentException("Quotas database connection string is not configured");
+    var quotasDbConnectionString = quotasSqlDatabaseConfiguration.GetValue<string>("ConnectionString") ?? throw new ArgumentException("Quotas database connection string is not configured");
+    services.AddMetricStatusesRepository(quotasDbProvider, quotasDbConnectionString);
+
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);

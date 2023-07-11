@@ -129,8 +129,8 @@ volumes:
   rabbitmq-volume:
   mssql-server-volume:
     external: true
-  #postgres-volume:
-    #external: true
+  postgres-volume:
+    external: true
   #azure-storage-emulator-volume:
   #  external: true
   elastic_data:
