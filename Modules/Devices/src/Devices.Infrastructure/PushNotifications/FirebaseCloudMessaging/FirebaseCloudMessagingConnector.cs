@@ -10,6 +10,13 @@ using FirebaseAdmin.Messaging;
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
+    private readonly FirebaseMessaging _firebaseMessaging;
+
+    public FirebaseCloudMessagingConnector(FirebaseMessaging firebaseMessaging)
+    {
+        _firebaseMessaging = firebaseMessaging;
+    }
+
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient,
         object notification)
     {
@@ -29,30 +36,8 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 .SetTokens(batch.ToImmutableList())
                 .Build();
 
-            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+            await _firebaseMessaging.SendMulticastAsync(message);
         }
-    }
-
-    private static MulticastMessage CreateMulticastMessage(IEnumerable<string> tokens, string notificationTitle, string notificationBody)
-    {
-        var data = new Dictionary<string, string>
-        {
-            {"android_channel_id", "ENMESHED"},
-            {"content-available", "1"},
-            {"tag", "1"}
-        };
-
-        var message = new MulticastMessage
-        {
-            Tokens = tokens.ToList(),
-            Notification = new()
-            {
-                Title = notificationTitle,
-                Body = notificationBody
-            },
-            Data = data.AsReadOnly()
-        };
-        return message;
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

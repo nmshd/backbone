@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
 using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -36,6 +37,7 @@ public static class IServiceCollectionExtensions
                 services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
                 services.AddTransient<FirebaseCloudMessagingConnector>();
                 services.AddTransient<IPushService, DirectPushService>();
+                services.AddSingleton(FirebaseMessaging.DefaultInstance);
                 break;
             default:
                 throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
@@ -52,5 +54,6 @@ public class PushNotificationOptions
 
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
-    public AzureNotificationHub.IServiceCollectionExtensions.DirectPnsCommunicationOptions DirectPnsCommunication { get; set; }
+#nullable enable
+    public AzureNotificationHub.IServiceCollectionExtensions.DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }

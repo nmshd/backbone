@@ -46,7 +46,7 @@ public static class IServiceCollectionExtensions
 
         public class FcmOptions
         {
-            public string? ServiceAccountJson { get; set; } = string.Empty;
+            public string ServiceAccountJson { get; set; } = string.Empty;
         }
     }
 }
