@@ -20,19 +20,25 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
         foreach (var list in recipientsLists)
         {
-            var message = new MulticastMessage()
-            {
-                Tokens = list.ToList(),
-                Notification = new()
-                {
-                    Title = notificationTitle,
-                    Body = notificationBody
-                },
-                Data = data.AsReadOnly()
-            };
-
+            var message = CreateMulticastMessage(list, notificationTitle, notificationBody, data);
             await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
         }
+    }
+
+    private static MulticastMessage CreateMulticastMessage(IEnumerable<string> tokens, string notificationTitle,
+        string notificationBody, Dictionary<string, string> data)
+    {
+        var message = new MulticastMessage()
+        {
+            Tokens = tokens.ToList(),
+            Notification = new()
+            {
+                Title = notificationTitle,
+                Body = notificationBody
+            },
+            Data = data.AsReadOnly()
+        };
+        return message;
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)
