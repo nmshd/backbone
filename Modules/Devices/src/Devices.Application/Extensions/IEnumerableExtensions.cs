@@ -8,18 +8,20 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(ienum));
         }
 
-        if (!ienum.Any())
+        var list = ienum.ToList();
+
+        if (!list.Any())
         {
             return new List<IEnumerable<T>>();
         }
 
-        if (ienum.Count() <= batchSize)
+        if (list.Count <= batchSize)
         {
-            return new List<IEnumerable<T>>(new[] { ienum });
+            return new List<IEnumerable<T>>(new[] { list });
         }
 
         var response = new List<IEnumerable<T>>();
-        var list = ienum.ToList();
+
         for (var i = 0; i < list.Count; i += batchSize)
         {
             response.Add(
