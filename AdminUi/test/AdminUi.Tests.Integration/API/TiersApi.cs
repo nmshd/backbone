@@ -5,7 +5,7 @@ namespace AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {
-    public TiersApi(RestClient client) : base(client) { }
+    public TiersApi(RestClient client, string apiKey) : base(client, apiKey) { }
 
     public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {

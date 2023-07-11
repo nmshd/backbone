@@ -5,7 +5,7 @@ namespace AdminUi.Tests.Integration.API;
 
 public class IdentitiesApi : BaseApi
 {
-    public IdentitiesApi(RestClient client) : base(client) { }
+    public IdentitiesApi(RestClient client, string apiKey) : base(client, apiKey) { }
 
     public async Task<HttpResponse<List<IdentitySummaryDTO>>> GetIdentities(RequestConfiguration requestConfiguration)
     {

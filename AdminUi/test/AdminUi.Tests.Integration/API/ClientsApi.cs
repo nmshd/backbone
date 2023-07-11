@@ -4,7 +4,7 @@ using RestSharp;
 namespace AdminUi.Tests.Integration.API;
 public class ClientsApi : BaseApi
 {
-    public ClientsApi(RestClient client) : base(client) { }
+    public ClientsApi(RestClient client, string apiKey) : base(client, apiKey) { }
 
     public async Task<HttpResponse<List<ClientDTO>>> GetAllClients(RequestConfiguration requestConfiguration)
     {

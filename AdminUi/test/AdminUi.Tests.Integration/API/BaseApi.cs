@@ -9,10 +9,12 @@ public class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
+    private readonly string _apiKey;
 
-    protected BaseApi(RestClient client)
+    protected BaseApi(RestClient client, string apiKey)
     {
         _client = client;
+        _apiKey = apiKey;
 
         ServicePointManager.ServerCertificateValidationCallback +=
                 (sender, cert, chain, sslPolicyErrors) => true;
@@ -45,6 +47,8 @@ public class BaseApi
 
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
+
+        request.AddHeader("X-Api-Key", _apiKey);
 
         var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
