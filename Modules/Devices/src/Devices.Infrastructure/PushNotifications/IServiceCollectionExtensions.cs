@@ -30,7 +30,7 @@ public static class IServiceCollectionExtensions
 
                 FirebaseApp.Create(new AppOptions()
                 {
-                    Credential = GoogleCredential.FromJson(options.FCM_Service_Account),
+                    Credential = GoogleCredential.FromJson(options.FcmServiceAccount),
                 });
 
                 services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
@@ -52,5 +52,5 @@ public class PushNotificationOptions
 
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
-    public string FCM_Service_Account { get; set; }
+    public string FcmServiceAccount { get; set; }
 }
