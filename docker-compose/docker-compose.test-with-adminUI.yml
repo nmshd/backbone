@@ -35,7 +35,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 40
-      start_period: 1m
+      start_period: 10s
 
 
   ### infrastructure ###
