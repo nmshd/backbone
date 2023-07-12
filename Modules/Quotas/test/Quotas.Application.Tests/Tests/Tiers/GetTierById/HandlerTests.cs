@@ -52,9 +52,9 @@ public class HandlerTests
         var metricWithOneQuota = new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity");
         var metrics = new List<Metric> { metricWithTwoQuotas, metricWithOneQuota };
 
-        tier.CreateQuota(metricWithTwoQuotas.Key, 5, QuotaPeriod.Month);
-        tier.CreateQuota(metricWithOneQuota.Key, 10, QuotaPeriod.Day);
-        tier.CreateQuota(metricWithTwoQuotas.Key, 3, QuotaPeriod.Year);
+        tier.CreateQuota(metricWithTwoQuotas.Key, 1, QuotaPeriod.Day);
+        tier.CreateQuota(metricWithOneQuota.Key, 1, QuotaPeriod.Day);
+        tier.CreateQuota(metricWithTwoQuotas.Key, 1, QuotaPeriod.Day);
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(metrics);
@@ -71,18 +71,18 @@ public class HandlerTests
 
         result.Quotas.ElementAt(0).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
         result.Quotas.ElementAt(0).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
-        result.Quotas.ElementAt(0).Max.Should().Be(5);
-        result.Quotas.ElementAt(0).Period.Should().Be(QuotaPeriod.Month);
+        result.Quotas.ElementAt(0).Max.Should().Be(1);
+        result.Quotas.ElementAt(0).Period.Should().Be(QuotaPeriod.Day);
 
         result.Quotas.ElementAt(1).Metric.Key.Should().Be(metricWithOneQuota.Key.Value);
         result.Quotas.ElementAt(1).Metric.DisplayName.Should().Be(metricWithOneQuota.DisplayName);
-        result.Quotas.ElementAt(1).Max.Should().Be(10);
+        result.Quotas.ElementAt(1).Max.Should().Be(1);
         result.Quotas.ElementAt(1).Period.Should().Be(QuotaPeriod.Day);
 
         result.Quotas.ElementAt(2).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
         result.Quotas.ElementAt(2).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
-        result.Quotas.ElementAt(2).Max.Should().Be(3);
-        result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Year);
+        result.Quotas.ElementAt(2).Max.Should().Be(1);
+        result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Day);
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)
