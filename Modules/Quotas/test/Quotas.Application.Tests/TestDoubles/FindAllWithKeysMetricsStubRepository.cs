@@ -4,9 +4,9 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 public class FindAllWithKeysMetricsStubRepository : IMetricsRepository
 {
-    private readonly List<Metric> _metrics;
+    private readonly IEnumerable<Metric> _metrics;
 
-    public FindAllWithKeysMetricsStubRepository(List<Metric> metrics)
+    public FindAllWithKeysMetricsStubRepository(IEnumerable<Metric> metrics)
     {
         _metrics = metrics;
     }
@@ -23,6 +23,6 @@ public class FindAllWithKeysMetricsStubRepository : IMetricsRepository
 
     public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
     {
-        return Task.FromResult(_metrics.AsEnumerable());
+        return Task.FromResult(_metrics);
     }
 }
