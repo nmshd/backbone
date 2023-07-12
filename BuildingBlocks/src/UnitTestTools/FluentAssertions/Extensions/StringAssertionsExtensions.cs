@@ -16,7 +16,7 @@ public static class StringAssertionsExtensions
         try
         {
             JsonDocument.Parse(it.Subject);
-            Execute.Assertion.Given(()=>it);
+            Execute.Assertion.Given(() => it);
         }
         catch (Exception _)
         {
