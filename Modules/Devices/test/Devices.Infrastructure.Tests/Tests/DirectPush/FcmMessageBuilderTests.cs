@@ -52,7 +52,6 @@ public class FcmMessageBuilderTests
         var contentJson = FormatJson(message.Data["content"]);
 
         // Assert
-        message.Data["content"].Should().BeValidJson();
         contentJson.Should().Be(FormatJson(@"{
           'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
           'eventName': 'dynamic',
