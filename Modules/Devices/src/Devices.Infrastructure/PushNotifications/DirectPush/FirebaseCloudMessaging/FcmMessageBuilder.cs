@@ -2,7 +2,7 @@
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using FirebaseAdmin.Messaging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
 /// <summary>
 ///     See corresponding Unit Tests for an example of a built notification.

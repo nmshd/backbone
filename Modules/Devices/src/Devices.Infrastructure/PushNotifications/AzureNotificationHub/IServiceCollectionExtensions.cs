@@ -39,16 +39,6 @@ public static class IServiceCollectionExtensions
         [MinLength(1)]
         public string HubName { get; set; }
     }
-
-    public class DirectPnsCommunicationOptions
-    {
-        public FcmOptions Fcm { get; set; }
-
-        public class FcmOptions
-        {
-            public string ServiceAccountJson { get; set; } = string.Empty;
-        }
-    }
 }
 
 public static class NotificationHubClientExtensions

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
+﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;

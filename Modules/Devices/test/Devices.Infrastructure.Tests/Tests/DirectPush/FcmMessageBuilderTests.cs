@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -8,7 +7,7 @@ using Enmeshed.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
 public class FcmMessageBuilderTests
 {
@@ -25,12 +24,12 @@ public class FcmMessageBuilderTests
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
             .Build();
 
-       message.Notification.Title.Should().Be(notificationTitle);
-       message.Notification.Body.Should().Be(notificationText);
-       message.Data.Should().ContainKey("_content");
-       message.Data.Should().ContainKey("tag");
-       message.Data.Should().ContainKey("android_channel_id");
-       message.Data["_content"].Should().BeValidJson();
+        message.Notification.Title.Should().Be(notificationTitle);
+        message.Notification.Body.Should().Be(notificationText);
+        message.Data.Should().ContainKey("_content");
+        message.Data.Should().ContainKey("tag");
+        message.Data.Should().ContainKey("android_channel_id");
+        message.Data["_content"].Should().BeValidJson();
 
     }
 }

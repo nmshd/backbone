@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseCloudMessaging;
-using FirebaseAdmin;
-using FirebaseAdmin.Messaging;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
+
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
@@ -27,17 +23,7 @@ public static class IServiceCollectionExtensions
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:
-                FirebaseApp.Create(new AppOptions
-                {
-                    Credential = options.DirectPnsCommunication is null
-                        ? GoogleCredential.GetApplicationDefault()
-                        : GoogleCredential.FromJson(options.DirectPnsCommunication.Fcm.ServiceAccountJson)
-                });
-
-                services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
-                services.AddTransient<FirebaseCloudMessagingConnector>();
-                services.AddTransient<IPushService, DirectPushService>();
-                services.AddSingleton(FirebaseMessaging.DefaultInstance);
+                services.AddDirectPushNotifications(options.DirectPnsCommunication);
                 break;
             default:
                 throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
@@ -55,5 +41,5 @@ public class PushNotificationOptions
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
 #nullable enable
-    public AzureNotificationHub.IServiceCollectionExtensions.DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
+    public DirectPush.IServiceCollectionExtensions.DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }

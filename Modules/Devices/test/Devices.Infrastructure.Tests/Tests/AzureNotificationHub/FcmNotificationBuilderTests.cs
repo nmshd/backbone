@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text.Json;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
@@ -8,9 +7,9 @@ using FluentAssertions;
 using Microsoft.Azure.NotificationHubs;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.AzureNotificationHub;
 
-public class ApnsNotificationBuilderTests
+public class FcmNotificationBuilderTests
 {
     [Fact]
     public void Test1()
@@ -18,7 +17,7 @@ public class ApnsNotificationBuilderTests
         SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
 
         var builtNotification = NotificationBuilder
-            .Create(NotificationPlatform.Apns)
+            .Create(NotificationPlatform.Fcm)
             .SetTag(1)
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
@@ -27,29 +26,28 @@ public class ApnsNotificationBuilderTests
         var formattedBuiltNotification = FormatJson(builtNotification.Body);
 
         var expectedNotification = FormatJson(@"{
-                'notId': 1,
-                'content': {
-                    'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-                    'eventName': 'dynamic',
-                    'sentAt': '2021-01-01T00:00:00.000Z',
-                    'payload': {
-                        'someProperty': 'someValue'
+                'data': {
+                    'android_channel_id': 'ENMESHED',
+                    'content-available': '1',
+                    'content': {
+                        'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                        'eventName': 'dynamic',
+                        'sentAt': '2021-01-01T00:00:00.000Z',
+                        'payload': {
+                            'someProperty': 'someValue'
+                        }
                     }
                 },
-                'aps': {
-                    'content-available': '1',
-                    'alert': {
-                        'title': 'someNotificationTextTitle',
-                        'body': 'someNotificationTextBody'
-                    }
+                'notification': {
+                    'tag': '1',
+                    'title': 'someNotificationTextTitle',
+                    'body': 'someNotificationTextBody'
                 }
             }");
 
         formattedBuiltNotification.Should().Be(expectedNotification);
 
-        builtNotification.Headers.Should().HaveCount(1);
-        builtNotification.Headers.Should().Contain(new KeyValuePair<string, string>("apns-priority", "5"));
-
+        builtNotification.Headers.Should().BeEmpty();
         builtNotification.ContentType.Should().Be("application/json;charset=utf-8");
     }
 
