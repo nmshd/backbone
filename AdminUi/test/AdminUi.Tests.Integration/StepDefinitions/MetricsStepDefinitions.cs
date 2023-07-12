@@ -14,7 +14,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a GET request is sent to the /Metrics endpoint")]
-    public async Task WhenAGETRequestIsSentToTheMetricsEndpointAsync()
+    public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
         _response = await _metricsApi.GetAllMetrics(_requestConfiguration);
         _response.Should().NotBeNull();
