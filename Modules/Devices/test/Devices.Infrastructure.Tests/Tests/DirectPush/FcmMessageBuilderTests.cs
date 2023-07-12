@@ -15,7 +15,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class FcmMessageBuilderTests
 {
     [Fact]
-    public void Message_Without_Content_Matches_Expected_Json()
+    public void Built_message_has_all_properties_set()
     {
         // Act
         var message = new FcmMessageBuilder()
