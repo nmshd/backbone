@@ -35,6 +35,7 @@ public class HandlerTests
         result.Id.Should().Be(tierId);
         result.Name.Should().Be(tierName);
         result.Quotas.Should().HaveCount(1);
+
         result.Quotas.First().Max.Should().Be(max);
         result.Quotas.First().Period.Should().Be(period);
     }
@@ -47,15 +48,13 @@ public class HandlerTests
         var tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
-        var metric1 = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
-        var metric2 = new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity");
-        var metric3 = new Metric(MetricKey.NumberOfRelationships, "Number Of Relationships");
-        var metrics = new List<Metric> { metric1, metric2, metric3 };
+        var metricWithTwoQuotas = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
+        var metricWithOneQuota = new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity");
+        var metrics = new List<Metric> { metricWithTwoQuotas, metricWithOneQuota };
 
-        tier.CreateQuota(metric1.Key, 5, QuotaPeriod.Month);
-        tier.CreateQuota(metric2.Key, 10, QuotaPeriod.Day);
-        tier.CreateQuota(metric3.Key, 12, QuotaPeriod.Week);
-        tier.CreateQuota(metric1.Key, 3, QuotaPeriod.Year);
+        tier.CreateQuota(metricWithTwoQuotas.Key, 5, QuotaPeriod.Month);
+        tier.CreateQuota(metricWithOneQuota.Key, 10, QuotaPeriod.Day);
+        tier.CreateQuota(metricWithTwoQuotas.Key, 3, QuotaPeriod.Year);
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(metrics);
@@ -68,31 +67,22 @@ public class HandlerTests
         // Assert
         result.Id.Should().Be(tierId);
         result.Name.Should().Be(tierName);
-        result.Quotas.Should().HaveCount(4);
+        result.Quotas.Should().HaveCount(3);
 
-        foreach (var quota in result.Quotas)
-        {
-            if (quota.Metric.Key == metric1.Key.Value)
-            {
-                quota.Metric.DisplayName.Should().Be(metric1.DisplayName);
-                quota.Max.Should().BeOneOf(5,3);
-                quota.Period.Should().BeOneOf(QuotaPeriod.Month, QuotaPeriod.Year);
-            }
+        result.Quotas.ElementAt(0).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
+        result.Quotas.ElementAt(0).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
+        result.Quotas.ElementAt(0).Max.Should().Be(5);
+        result.Quotas.ElementAt(0).Period.Should().Be(QuotaPeriod.Month);
 
-            if (quota.Metric.Key == metric2.Key.Value)
-            {
-                quota.Metric.DisplayName.Should().Be(metric2.DisplayName);
-                quota.Max.Should().Be(10);
-                quota.Period.Should().Be(QuotaPeriod.Day);
-            }
+        result.Quotas.ElementAt(1).Metric.Key.Should().Be(metricWithOneQuota.Key.Value);
+        result.Quotas.ElementAt(1).Metric.DisplayName.Should().Be(metricWithOneQuota.DisplayName);
+        result.Quotas.ElementAt(1).Max.Should().Be(10);
+        result.Quotas.ElementAt(1).Period.Should().Be(QuotaPeriod.Day);
 
-            if (quota.Metric.Key == metric3.Key.Value)
-            {
-                quota.Metric.DisplayName.Should().Be(metric3.DisplayName);
-                quota.Max.Should().Be(12);
-                quota.Period.Should().Be(QuotaPeriod.Week);
-            }
-        }
+        result.Quotas.ElementAt(2).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
+        result.Quotas.ElementAt(2).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
+        result.Quotas.ElementAt(2).Max.Should().Be(3);
+        result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Year);
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)
