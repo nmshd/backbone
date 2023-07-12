@@ -1,6 +1,6 @@
 using System;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.FluentAssertions.Extensions;
