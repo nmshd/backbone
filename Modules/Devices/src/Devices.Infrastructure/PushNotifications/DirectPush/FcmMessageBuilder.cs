@@ -9,9 +9,12 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 /// </summary>
 public class FcmMessageBuilder
 {
-    private readonly MulticastMessage _message = new();
+    private readonly MulticastMessage _message = new()
+    {
+        Notification = new Notification()
+    };
+
     private readonly Dictionary<string, string> _data = new();
-    private readonly Notification _notification = new();
 
     public FcmMessageBuilder()
     {
@@ -34,10 +37,10 @@ public class FcmMessageBuilder
     public FcmMessageBuilder SetNotificationText(string title, string body)
     {
         if (!string.IsNullOrWhiteSpace(title))
-            _notification.Title = title;
+            _message.Notification.Title = title;
 
         if (!string.IsNullOrWhiteSpace(body))
-            _notification.Body = body;
+            _message.Notification.Body = body;
 
         return this;
     }
@@ -66,7 +69,6 @@ public class FcmMessageBuilder
     public MulticastMessage Build()
     {
         _message.Data = _data.AsReadOnly();
-        _message.Notification = _notification;
         return _message;
     }
 }
