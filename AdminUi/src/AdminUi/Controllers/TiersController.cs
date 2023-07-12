@@ -7,6 +7,7 @@ using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
@@ -43,7 +44,7 @@ public class TiersController : ApiControllerBase
 
     [HttpGet("{tierId}")]
     [ProducesResponseType(typeof(GetTierByIdResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
     {
         var tier = await _mediator.Send(new GetTierByIdQuery(tierId), cancellationToken);
@@ -52,7 +53,7 @@ public class TiersController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(CreateTierResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> PostTiers([FromBody] CreateTierCommand command, CancellationToken cancellationToken)
     {
         var createdTier = await _mediator.Send(command, cancellationToken);
