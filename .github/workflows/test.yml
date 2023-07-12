@@ -201,5 +201,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
+      - name: Run Consumer API
+        run: docker compose -f ./docker-compose/docker-compose.test.yml up -d
+      - name: Wait for Consumer API to become available
+        run: curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health'
+      
       - name: Run tests
-        run: ./.ci/test.ts
+        run: ./.ci/integration-test.ts
+      - name: Stop Consumer API
+        run: docker compose -f ./docker-compose/docker-compose.test.yml down
