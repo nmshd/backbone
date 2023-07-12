@@ -12,21 +12,15 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.FirebaseClou
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessaging _firebaseMessaging;
-    private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
 
-    public FirebaseCloudMessagingConnector(ILogger<FirebaseCloudMessagingConnector> logger, FirebaseMessaging firebaseMessaging)
+    public FirebaseCloudMessagingConnector(FirebaseMessaging firebaseMessaging)
     {
         _firebaseMessaging = firebaseMessaging;
-        _logger = logger;
     }
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var recipients = registrations.Select(r => r.Handle.Value).ToList();
-        if (recipients.Count > 500)
-        {
-            _logger.LogWarning($"There was an attempt to send an FCM MulticastMessage to more than 500 devices ({recipients.Count}) for the recipient with address '{recipient}'.");
-        }
 
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);

@@ -11,7 +11,11 @@ public class FcmMessageBuilder
 {
     private readonly MulticastMessage _message = new()
     {
-        Notification = new Notification()
+        Notification = new Notification(),
+        Android = new()
+        {
+            Notification = new()
+        }
     };
 
     private readonly Dictionary<string, string> _data = new();
@@ -24,11 +28,12 @@ public class FcmMessageBuilder
     private void SetAndroidChannelId(string channelId)
     {
         _data["android_channel_id"] = channelId;
+        _message.Android.Notification.ChannelId = channelId;
     }
 
     public FcmMessageBuilder AddContent(NotificationContent content)
     {
-        _data["_content"] = JsonSerializer.Serialize(content);
+        _data["content"] = JsonSerializer.Serialize(content);
         SetContentAvailable(true);
 
         return this;
@@ -53,16 +58,20 @@ public class FcmMessageBuilder
     public FcmMessageBuilder SetTag(int notificationId)
     {
         _data["tag"] = notificationId.ToString();
+        _message.Android.CollapseKey = notificationId.ToString();
         return this;
     }
 
-    public FcmMessageBuilder SetTokens(IReadOnlyList<string> tokens)
+    public FcmMessageBuilder SetTokens(IEnumerable<string> tokens)
     {
-        if (tokens.Count > 500)
+        var tokenList = tokens.ToList();
+
+        if (tokenList.Count > 500)
         {
             throw new ArgumentOutOfRangeException(nameof(tokens), "FCM Messages cannot have more than 500 tokens.");
         }
-        _message.Tokens = tokens;
+
+        _message.Tokens = tokenList.ToList();
         return this;
     }
 
