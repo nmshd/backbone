@@ -107,7 +107,7 @@ services:
     hostname: admin-ui
     build:
       context: ..
-      dockerfile: AdminUi/src/Dockerfile
+      dockerfile: AdminUi/src/AdminUi/Dockerfile
     # environment:
     ports:
       - "5173:80"
