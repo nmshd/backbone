@@ -20,7 +20,7 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [Given(@"a Tier t")]
-    public async Task GivenATierAsync()
+    public async Task GivenATier()
     {
         var createTierQuotaRequest = new CreateTierRequest
         {
@@ -42,7 +42,7 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a GET request is sent to the /Tiers/{t.id} endpoint")]
-    public async Task WhenAGETRequestIsSentToTheTiersIdEndpointAsync()
+    public async Task WhenAGETRequestIsSentToTheTiersIdEndpoint()
     {
         _response = await _tiersApi.GetTierById(_requestConfiguration, _tierId);
         _response.Should().NotBeNull();

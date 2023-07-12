@@ -54,7 +54,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a GET request is sent to the /Clients endpoint")]
-    public async Task WhenAGetRequestIsSentToTheClientsEndpointAsync()
+    public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
         _response = await _clientsApi.GetAllClients(_requestConfiguration);
         _response.Should().NotBeNull();
