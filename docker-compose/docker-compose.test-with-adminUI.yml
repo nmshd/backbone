@@ -30,6 +30,13 @@ services:
       - rabbitmq
     volumes:
       - ../:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 10s
+
 
   ### infrastructure ###
 
@@ -92,7 +99,8 @@ services:
       -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
       --clientId test --clientSecret test
     depends_on:
-      - consumer-api
+      consumer-api:
+        condition: service_healthy
 
   admin-ui:
     container_name: admin-ui
