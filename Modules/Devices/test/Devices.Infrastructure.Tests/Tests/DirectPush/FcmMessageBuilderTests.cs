@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -18,6 +20,7 @@ public class FcmMessageBuilderTests
         // Act
         var message = new FcmMessageBuilder()
             .SetTag(1)
+            .SetTokens(new[] { "token1", "token2" })
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
             .Build();
@@ -26,6 +29,10 @@ public class FcmMessageBuilderTests
         message.Notification.Title.Should().Be("someNotificationTextTitle");
         message.Notification.Body.Should().Be("someNotificationTextBody");
 
+        message.Tokens.Should().HaveCount(2);
+        message.Tokens.Should().Contain("token1");
+        message.Tokens.Should().Contain("token2");
+
         message.Android.Notification.ChannelId.Should().Be("ENMESHED");
         message.Data.Should().Contain("android_channel_id", "ENMESHED");
 
@@ -33,7 +40,6 @@ public class FcmMessageBuilderTests
 
         message.Android.CollapseKey.Should().Be("1");
         message.Data.Should().Contain("tag", "1");
-
     }
 
     [Fact]
@@ -65,7 +71,7 @@ public class FcmMessageBuilderTests
         jsonString = jsonString.Replace("'", "\"");
 
         var deserialized = JsonSerializer.Deserialize<JsonElement>(jsonString);
-        
+
         return JsonSerializer.Serialize(deserialized, new JsonSerializerOptions
         {
             WriteIndented = true,
