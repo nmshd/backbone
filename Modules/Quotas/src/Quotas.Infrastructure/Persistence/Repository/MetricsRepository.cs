@@ -35,6 +35,6 @@ public class MetricsRepository : IMetricsRepository
     {
         var metrics = _metrics.Where(m => keys.Contains(m.Key));
 
-        return Task.FromResult(metrics.AsEnumerable());
+        return Task.FromResult(metrics);
     }
 }
