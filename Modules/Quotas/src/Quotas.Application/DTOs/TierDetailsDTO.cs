@@ -8,12 +8,12 @@ public class TierDetailsDTO
     {
         Id = tier.Id;
         Name = tier.Name;
-        Quotas = tier.Quotas.Select(quota =>
+        Quotas = tier.Quotas.Select(q =>
             new TierQuotaDefinitionDTO(
-                quota.Id,
-                new MetricDTO(metrics.First(metric => metric.Key == quota.MetricKey)),
-                quota.Max,
-                quota.Period
+                q.Id,
+                new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
+                q.Max,
+                q.Period
             )
         );
     }
