@@ -102,6 +102,21 @@ services:
       consumer-api:
         condition: service_healthy
 
+  admin-ui:
+    container_name: admin-ui
+    hostname: admin-ui
+    build:
+      context: ..
+      dockerfile: AdminUi/src/Dockerfile
+    # environment:
+    ports:
+      - "5173:80"
+    depends_on:
+      - ms-sql-server
+      - rabbitmq
+    volumes:
+      - ../:/app
+
 networks:
   default:
     name: backbone
