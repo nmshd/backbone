@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
 

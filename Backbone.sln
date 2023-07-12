@@ -195,6 +195,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Application.Tests", "Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj", "{40F14114-44B0-4EE0-A653-6C8205F6F28C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Tests", "Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj", "{19BE44FE-8852-40DD-AE70-EFA8B1E28730}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {A5BC6269-E1FC-4F91-B1D2-5B4F90571531}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.AdminCli", "Modules\Devices\src\Devices.AdminCli\Devices.AdminCli.csproj", "{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F}"
 EndProject
