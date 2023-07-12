@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -9,19 +8,23 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.F
 /// </summary>
 public class FcmMessageBuilder
 {
-    private readonly MulticastMessage _message = new()
-    {
-        Notification = new Notification(),
-        Android = new()
-        {
-            Notification = new()
-        }
-    };
+    private readonly MulticastMessage _message;
 
-    private readonly Dictionary<string, string> _data = new();
+    private readonly Dictionary<string, string> _data;
 
     public FcmMessageBuilder()
     {
+        _message = new MulticastMessage
+        {
+            Notification = new Notification(),
+            Android = new AndroidConfig
+            {
+                Notification = new AndroidNotification()
+            }
+        };
+
+        _data = new Dictionary<string, string>();
+
         SetAndroidChannelId("ENMESHED");
     }
 
