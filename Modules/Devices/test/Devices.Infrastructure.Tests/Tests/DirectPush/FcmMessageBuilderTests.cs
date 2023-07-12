@@ -28,15 +28,13 @@ public class FcmMessageBuilderTests
         // Assert
         message.Notification.Title.Should().Be(notificationTitle);
         message.Notification.Body.Should().Be(notificationText);
-
-        // Tag
-        message.Android.CollapseKey.Should().Be("1");
-        message.Data.Should().ContainKey("tag");
-        message.Data["tag"].Should().Be("1");
-
         message.Android.Notification.ChannelId.Should().Be("ENMESHED");
-        message.Data.Should().ContainKey("android_channel_id");
-        message.Data["android_channel_id"].Should().Be("ENMESHED");
+
+        message.Data.Should().Contain("android_channel_id", "ENMESHED");
+        
+        message.Android.CollapseKey.Should().Be("1");
+        message.Data.Should().Contain("tag", "1");
+
     }
 
     [Fact]
