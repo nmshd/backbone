@@ -1,3 +1,4 @@
+version: "3.3"
 services:
   consumer-api:
     container_name: consumer-api
@@ -114,8 +115,16 @@ services:
     depends_on:
       - ms-sql-server
       - rabbitmq
-    volumes:
-      - ../:/app
+    configs:
+      - source: AdminUiOverrideConfig
+        target: app/appsettings.override.json
+
+    # volumes:
+    #   - ../AdminUi/src/AdminUi:/app
+
+configs:
+  AdminUiOverrideConfig:
+    file: ../AdminUi/src/AdminUi/appsettings.override.json
 
 networks:
   default:
