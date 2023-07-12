@@ -193,18 +193,18 @@ jobs:
     name: Run Integration Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout backbone repository
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Run Consumer API
         run: docker compose -f ./docker-compose/docker-compose.test.yml up -d
       - name: Wait for Consumer API to become available
         run: curl --connect-timeout 5 --retry 50 --retry-delay 5 --retry-connrefused 'http://localhost:5000/health'
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Run tests
         run: ./.ci/integration-test.ts
       - name: Stop Consumer API
