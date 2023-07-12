@@ -21,4 +21,9 @@ public class FindMetricsStubRepository : IMetricsRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
 }

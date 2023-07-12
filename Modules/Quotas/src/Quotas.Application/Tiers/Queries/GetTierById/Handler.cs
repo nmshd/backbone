@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
         var tier = await _tiersRepository.Find(request.Id, cancellationToken);
 
         var metricsKeys = tier.Quotas.Select(q => q.MetricKey).Distinct();
-        var metrics = metricsKeys.Select(metricKey => _metricsRepository.Find(metricKey, cancellationToken).Result);
+        var metrics = await _metricsRepository.FindAllWithKeys(metricsKeys, cancellationToken);
 
         return new GetTierByIdResponse(tier, metrics);
     }
