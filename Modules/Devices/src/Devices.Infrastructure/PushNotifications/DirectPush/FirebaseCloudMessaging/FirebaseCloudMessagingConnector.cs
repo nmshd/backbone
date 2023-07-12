@@ -1,12 +1,9 @@
 ﻿using System.Collections.Immutable;
+using System.Reflection;
 using System.Text.Json;
-using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FirebaseAdmin.Messaging;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 public class FirebaseCloudMessagingConnector : IPnsConnector
@@ -59,5 +56,13 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
         return attribute?.Value ?? 0;
+    }
+}
+
+public static class TypeExtensions
+{
+    public static T GetCustomAttribute<T>(this Type type) where T : Attribute
+    {
+        return (T)type.GetCustomAttribute(typeof(T));
     }
 }
