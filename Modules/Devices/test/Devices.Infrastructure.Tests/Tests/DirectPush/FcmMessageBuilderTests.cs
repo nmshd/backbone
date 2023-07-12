@@ -40,7 +40,7 @@ public class FcmMessageBuilderTests
     }
 
     [Fact]
-    public void Message_Data_Content_Is_Valid_Json()
+    public void Content_is_valid_json()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
