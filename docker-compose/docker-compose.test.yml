@@ -29,7 +29,7 @@ services:
       - ms-sql-server
       - rabbitmq
     volumes:
-      - ../:/app
+      - ../:/app:z
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 5s
