@@ -1,4 +1,5 @@
-﻿using AdminUi.Tests.Integration.API;
+﻿using System.Net.Http.Headers;
+using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,10 @@ public static class Dependencies
         var serviceProvider = services.BuildServiceProvider();
         var httpConfig = serviceProvider.GetRequiredService<IOptions<HttpConfiguration>>().Value;
 
-        var restClient = new RestClient(httpConfig.BaseUrl);
+        var restClient = new RestClient(httpConfig.BaseUrl, configureDefaultHeaders: c =>
+        {
+            c.Add("X-Api-Key", httpConfig.ApiKey);
+        });
 
         var identitiesApi = new IdentitiesApi(restClient);
         var tiersApi = new TiersApi(restClient);
