@@ -34,7 +34,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 5s
       timeout: 5s
-      retries: 40
+      retries: 200
       start_period: 10s
 
 
