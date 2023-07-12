@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
