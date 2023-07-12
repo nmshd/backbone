@@ -1,4 +1,5 @@
 ﻿using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
 using Backbone.Modules.Quotas.Domain.Tests;
 
@@ -54,6 +55,7 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
         _response!.Content.Result.Should().NotBeNull();
         _response!.Content.Result!.Id.Should().NotBeNull();
         _response!.Content.Result!.Id.Should().Be(_tierId);
+        _response!.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
