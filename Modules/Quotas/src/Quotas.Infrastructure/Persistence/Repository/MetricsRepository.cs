@@ -33,7 +33,7 @@ public class MetricsRepository : IMetricsRepository
 
     public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
     {
-        var metrics = _metrics.Where(metric => keys.Contains(metric.Key));
+        var metrics = _metrics.Where(m => keys.Contains(m.Key));
 
         return Task.FromResult(metrics.AsEnumerable());
     }
