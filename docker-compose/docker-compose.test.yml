@@ -30,6 +30,7 @@ services:
       - ms-sql-server
       - rabbitmq
       - seed-mssql
+      - azure-storage-emulator
     volumes:
       - ../:/app
     healthcheck:
