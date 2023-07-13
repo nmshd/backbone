@@ -39,6 +39,26 @@ services:
       retries: 200
       start_period: 10s
 
+  admin-ui:
+    container_name: admin-ui
+    hostname: admin-ui
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - ms-sql-server
+      - rabbitmq
+      - consumer-api
+    configs:
+      - source: AdminUiOverrideConfig
+        target: app/appsettings.override.json
+    environment:
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True
+      - Infrastructure__EventBus__ConnectionInfo=rabbitmq
+
 
   ### infrastructure ###
 
@@ -103,31 +123,6 @@ services:
     depends_on:
       consumer-api:
         condition: service_healthy
-
-  admin-ui:
-    container_name: admin-ui
-    hostname: admin-ui
-    build:
-      context: ..
-      dockerfile: AdminUi/src/AdminUi/Dockerfile
-    # environment:
-    ports:
-      - "5173:80"
-    depends_on:
-      - ms-sql-server
-      - rabbitmq
-      - consumer-api
-    configs:
-      - source: AdminUiOverrideConfig
-        target: app/appsettings.override.json
-    environment:
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True
-      - Infrastructure__EventBus__ConnectionInfo=rabbitmq
-
-
-    # volumes:
-    #   - ../AdminUi/src/AdminUi:/app
 
 configs:
   AdminUiOverrideConfig:
