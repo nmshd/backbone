@@ -36,6 +36,12 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
+    public void DeleteTierQuotaFromDefinitionId(string tierQuotaDefinitionId)
+    {
+        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.Id == tierQuotaDefinitionId);
+        _tierQuotas.Remove(tierQuota);
+    }
+
     public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory,
         CancellationToken cancellationToken)
     {
