@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Backbone.Modules.Quotas.Application.AutoMapper;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForTier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddMediatR(c => c
             .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommandValidator>()
+            .RegisterServicesFromAssemblyContaining<DeleteQuotaForTierCommandValidator>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
