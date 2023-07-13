@@ -5,7 +5,7 @@ services:
     hostname: consumer-api
     build:
       context: ..
-      dockerfile: ConsumerApi/Dockerfile.debug
+      dockerfile: ConsumerApi/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -31,8 +31,11 @@ services:
       - rabbitmq
       - seed-mssql
       - azure-storage-emulator
-    volumes:
-      - ../:/app
+    configs:
+      - source: ConsumerApiConfig
+        target: app/appsettings.json
+      - source: ConsumerApiOverrideConfig
+        target: app/appsettings.override.json
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 5s
@@ -128,6 +131,10 @@ services:
 configs:
   AdminUiOverrideConfig:
     file: ../AdminUi/src/AdminUi/appsettings.override.json
+  ConsumerApiConfig:
+    file: ../ConsumerApi/appsettings.json
+  ConsumerApiOverrideConfig:
+    file: ../ConsumerApi/appsettings.override.json
 
 networks:
   default:
