@@ -27,10 +27,14 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      - ms-sql-server
-      - rabbitmq
-      - seed-mssql
-      - azure-storage-emulator
+      ms-sql-server:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      seed-mssql:
+        condition: service_completed_successfully
+      azure-storage-emulator:
+        condition: service_started
     configs:
       - source: ConsumerApiConfig
         target: app/appsettings.json
@@ -51,9 +55,12 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      - ms-sql-server
-      - rabbitmq
-      - consumer-api
+      ms-sql-server:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      consumer-api:
+        condition: service_started
     configs:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
