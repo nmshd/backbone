@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
@@ -20,6 +21,7 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
+        services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IPushService, DirectPushService>();
         services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
@@ -31,6 +33,29 @@ public static class IServiceCollectionExtensions
         public class FcmOptions
         {
             public string ServiceAccountJson { get; set; } = string.Empty;
+        }
+
+        public ApnsOptions Apns { get; set; }
+
+        public class ApnsOptions
+        {
+            public string TeamId { get; set; } = string.Empty;
+            public string KeyId { get; set; } = string.Empty;
+            public string PrivateKey { get; set; } = string.Empty;
+            public string AppBundleIdentifier { get; set; } = string.Empty;
+            public ApnsServerType ServerType { get; set; }
+            public string Server => ServerType switch
+            {
+                ApnsServerType.Development => "https://api.development.push.apple.com:443/3/device/",
+                ApnsServerType.Production => "https://api.push.apple.com:443/3/device/",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        public enum ApnsServerType
+        {
+            Development,
+            Production
         }
     }
 }

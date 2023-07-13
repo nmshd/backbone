@@ -14,4 +14,6 @@ public abstract class PnsConnectorFactory
     }
 
     protected abstract IPnsConnector CreateForFirebaseCloudMessaging();
+
+    protected abstract IPnsConnector CreateForApplePushNotificationService();
 }
