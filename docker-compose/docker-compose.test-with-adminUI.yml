@@ -83,7 +83,7 @@ services:
       - ../setup-db:/app/setup-db
     command: >
       bash -c "
-      sleep 10 &&
+      sleep 20 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
       sleep 1 &&
