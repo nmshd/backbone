@@ -29,6 +29,7 @@ services:
     depends_on:
       - ms-sql-server
       - rabbitmq
+      - seed-mssql
     volumes:
       - ../:/app
     healthcheck:
@@ -115,6 +116,7 @@ services:
     depends_on:
       - ms-sql-server
       - rabbitmq
+      - consumer-api
     configs:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
