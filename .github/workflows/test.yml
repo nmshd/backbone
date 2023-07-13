@@ -201,11 +201,5 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
-      - name: Build project
-        run: dotnet restore "Backbone.sln" && dotnet build  /property:WarningLevel=0 --no-restore "Backbone.sln"
-      - name: Run Consumer API and Admin Ui/API
-        run: docker compose -f ./docker-compose/docker-compose.test.yml up consumer-api admin-ui seed-mssql seed-client -d
-      - name: Run tests
-        run: dotnet test --no-restore --no-build "Backbone.sln" --filter "Category=Integration&TestCategory!~ignore"
-      - name: Stop Consumer API
-        run: docker compose -f ./docker-compose/docker-compose.test.yml down
+      - name: Run integration tests
+        run: ./.ci/integration-test.ts
