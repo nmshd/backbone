@@ -174,7 +174,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up consumer-api -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up consumer-api seed-mssql seed-client -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -204,7 +204,7 @@ jobs:
       - name: Build project
         run: dotnet restore "Backbone.sln" && dotnet build  /property:WarningLevel=0 --no-restore "Backbone.sln"
       - name: Run Consumer API and Admin Ui/API
-        run: docker compose -f ./docker-compose/docker-compose.test.yml up consumer-api admin-ui -d
+        run: docker compose -f ./docker-compose/docker-compose.test.yml up consumer-api admin-ui seed-mssql seed-clien -d
       - name: Run tests
         run: dotnet test --no-restore --no-build "Backbone.sln" --filter "Category=Integration&TestCategory!~ignore"
       - name: Stop Consumer API
