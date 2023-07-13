@@ -37,7 +37,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 40
-      start_period: 1min
+      start_period: 1m
 
   admin-ui:
     container_name: admin-ui
