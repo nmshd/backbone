@@ -35,7 +35,7 @@ jobs:
         run: ./.ci/integration-test.ts
 
   cns-transport-test:
-    name: Run CNS-Transport Tests
+    name: Run cns-transport Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
