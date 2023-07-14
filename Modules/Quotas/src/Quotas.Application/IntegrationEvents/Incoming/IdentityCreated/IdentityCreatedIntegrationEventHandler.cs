@@ -25,7 +25,7 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 
         var identity = new Identity(integrationEvent.Address, new TierId(integrationEvent.Tier));
 
-        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None);
+        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None, track: true);
 
         tier.Quotas.ForEach(identity.AssignTierQuotaFromDefinition);
 
