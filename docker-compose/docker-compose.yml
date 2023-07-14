@@ -35,8 +35,8 @@ services:
   azure-storage-emulator:
    container_name: azure-storage-emulator
    hostname: azurite
-   image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
-   command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
+   image: mcr.microsoft.com/azure-storage/azurite
+   command: azurite-blob
    ports:
      - "10000:10000"
    volumes:
