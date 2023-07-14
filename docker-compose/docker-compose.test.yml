@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  consumer-api:
+  test-consumer-api:
     container_name: consumer-api
     hostname: consumer-api
     build:
@@ -27,13 +27,13 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      ms-sql-server:
+      test-ms-sql-server:
         condition: service_started
-      rabbitmq:
+      test-rabbitmq:
         condition: service_started
-      seed-mssql:
+      test-seed-mssql:
         condition: service_completed_successfully
-      azure-storage-emulator:
+      test-azure-storage-emulator:
         condition: service_started
     configs:
       - source: ConsumerApiOverrideConfig
@@ -44,7 +44,7 @@ services:
       timeout: 2s
       retries: 40
 
-  admin-ui:
+  test-admin-ui:
     container_name: admin-ui
     hostname: admin-ui
     build:
@@ -53,11 +53,11 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      ms-sql-server:
+      test-ms-sql-server:
         condition: service_started
-      rabbitmq:
+      test-rabbitmq:
         condition: service_started
-      consumer-api:
+      test-consumer-api:
         condition: service_started
     configs:
       - source: AdminUiOverrideConfig
@@ -70,7 +70,7 @@ services:
 
   ### infrastructure ###
 
-  azure-storage-emulator:
+  test-azure-storage-emulator:
    container_name: azure-storage-emulator
    hostname: azurite
    image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
@@ -80,7 +80,7 @@ services:
    volumes:
      - azure-storage-emulator-volume:/data
 
-  ms-sql-server:
+  test-ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -93,7 +93,7 @@ services:
     ports:
       - 1433:1433
 
-  rabbitmq:
+  test-rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
     image: rabbitmq:3.7-management-alpine
@@ -106,7 +106,7 @@ services:
 
   ### seeds ###
 
-  seed-mssql:
+  test-seed-mssql:
     image: mcr.microsoft.com/mssql-tools
     volumes: 
       - ../setup-db:/app/setup-db
@@ -119,9 +119,9 @@ services:
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql
       "
     depends_on:
-      - ms-sql-server
+      - test-ms-sql-server
 
-  seed-client:
+  test-seed-client:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     command: >
@@ -129,7 +129,7 @@ services:
       -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
       --clientId test --clientSecret test
     depends_on:
-      consumer-api:
+      test-consumer-api:
         condition: service_healthy
 
 configs:
