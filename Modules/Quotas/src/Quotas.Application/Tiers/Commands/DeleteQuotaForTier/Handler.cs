@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<DeleteQuotaForTierCommand>
     {
         _logger.LogTrace($"Deleting tier quota definition with id: '{request.TierQuotaDefinitionId}'.");
 
-        var tier = await _tiersRepository.Find(request.TierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 
         var result = tier.DeleteQuota(request.TierQuotaDefinitionId);
         if (result.IsFailure)
