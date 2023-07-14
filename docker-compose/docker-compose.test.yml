@@ -35,6 +35,9 @@ services:
         condition: service_completed_successfully
       azure-storage-emulator:
         condition: service_started
+    configs:
+      - source: ConsumerApiOverrideConfig
+        target: app/appsettings.override.json
     healthcheck:
       test: ["CMD", "wget", "http://localhost/health"]
       interval: 5s
@@ -132,8 +135,6 @@ services:
 configs:
   AdminUiOverrideConfig:
     file: ../AdminUi/src/AdminUi/appsettings.override.json
-  ConsumerApiConfig:
-    file: ../ConsumerApi/appsettings.json
   ConsumerApiOverrideConfig:
     file: ../ConsumerApi/appsettings.override.json
 
