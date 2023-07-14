@@ -34,10 +34,8 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
-                <button mat-mini-fab color="warn">
-                    <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
+                    <mat-icon>delete</mat-icon>
                 </button>
                 <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!tier.id">
                     <mat-icon>add</mat-icon>
