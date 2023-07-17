@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Attributes;
-using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using System.Reflection;
-using System.Collections.ObjectModel;
+using Enmeshed.BuildingBlocks.Domain;
+using MediatR;
 
 namespace Enmeshed.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull

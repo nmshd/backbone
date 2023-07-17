@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
 

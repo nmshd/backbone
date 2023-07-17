@@ -1,7 +1,7 @@
-﻿using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Dapper;
 using Enmeshed.Common.Infrastructure.Persistence.Context;
-using Dapper;
+using Enmeshed.Common.Infrastructure.Persistence.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension

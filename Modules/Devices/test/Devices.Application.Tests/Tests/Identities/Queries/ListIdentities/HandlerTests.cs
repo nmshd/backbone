@@ -5,7 +5,6 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
-using Handler = Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities.Handler;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 

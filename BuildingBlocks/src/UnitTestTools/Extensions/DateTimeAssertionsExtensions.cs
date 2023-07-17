@@ -1,5 +1,5 @@
-﻿using FluentAssertions.Primitives;
-using FluentAssertions;
+﻿using FluentAssertions;
+using FluentAssertions.Primitives;
 
 namespace Enmeshed.UnitTestTools.Extensions;
 

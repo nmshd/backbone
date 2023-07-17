@@ -1,7 +1,5 @@
 ﻿using SpecFlowCucumberResultsExporter.Extensions;
 using SpecFlowCucumberResultsExporter.Model;
-using TechTalk.SpecFlow.Bindings;
-using TechTalk.SpecFlow.Bindings.Reflection;
 
 namespace SpecFlowCucumberResultsExporter.Reporting;
 
