@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverter
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
+using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
@@ -22,6 +23,8 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<TierQuotaDefinition> TierQuotaDefinitions { get; set; }
 
     public DbSet<Message> Messages { get; set; }
+
+    public DbSet<FileMetadata> Files { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

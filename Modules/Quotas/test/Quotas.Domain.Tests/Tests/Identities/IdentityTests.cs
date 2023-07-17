@@ -229,6 +229,11 @@ public class IdentityTests
             _calculator = calculator;
         }
 
+        public override IMetricCalculator CreateNumberOfFilesMetricCalculator()
+        {
+            return _calculator;
+        }
+
         public override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
         {
             return _calculator;

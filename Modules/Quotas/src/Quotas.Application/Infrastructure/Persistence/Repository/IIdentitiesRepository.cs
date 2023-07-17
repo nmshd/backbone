@@ -8,4 +8,5 @@ public interface IIdentitiesRepository
     Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false);
     Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false);
+    Task<Identity> FindByAddress(string identityAddress, CancellationToken cancellationToken, bool track = false);
 }
