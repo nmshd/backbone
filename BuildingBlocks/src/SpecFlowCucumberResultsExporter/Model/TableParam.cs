@@ -11,10 +11,10 @@ public class TableParam
 
     public int GetMaxColumnCharacters(int columnIndex)
     {
-        int result = 0;
-        foreach (Dictionary<string, string> row in Rows)
+        var result = 0;
+        foreach (var row in Rows)
         {
-            foreach (string value in row.Values)
+            foreach (var value in row.Values)
             {
                 if (value.Length > result)
                 {
