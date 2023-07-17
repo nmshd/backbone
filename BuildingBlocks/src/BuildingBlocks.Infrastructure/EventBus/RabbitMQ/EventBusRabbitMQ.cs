@@ -13,22 +13,22 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public class EventBusRabbitMQ : IEventBus, IDisposable
+public class EventBusRabbitMq : IEventBus, IDisposable
 {
     private const string BROKER_NAME = "event_bus";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
-    private readonly ILogger<EventBusRabbitMQ> _logger;
+    private readonly ILogger<EventBusRabbitMq> _logger;
 
-    private readonly IRabbitMQPersistentConnection _persistentConnection;
+    private readonly IRabbitMqPersistentConnection _persistentConnection;
     private readonly int _retryCount;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
     private IModel _consumerChannel;
     private readonly string? _queueName;
 
-    public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQ> logger,
+    public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, string? queueName = null,
         int retryCount = 5)
     {

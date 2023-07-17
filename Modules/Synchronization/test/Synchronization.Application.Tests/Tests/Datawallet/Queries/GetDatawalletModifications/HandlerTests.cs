@@ -20,7 +20,7 @@ public class HandlerTests
 {
     private const ushort DATAWALLET_VERSION = 1;
 
-    private static readonly IdentityAddress ActiveIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ACTIVE_IDENTITY = TestDataGenerator.CreateRandomIdentityAddress();
 
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _actContext;
@@ -350,7 +350,7 @@ public class HandlerTests
 
     private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
     {
-        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(version), ActiveIdentity);
+        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
     }
 
     private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
@@ -362,7 +362,7 @@ public class HandlerTests
     private Handler CreateHandler()
     {
         var userContext = A.Fake<IUserContext>();
-        A.CallTo(() => userContext.GetAddress()).Returns(ActiveIdentity);
+        A.CallTo(() => userContext.GetAddress()).Returns(ACTIVE_IDENTITY);
 
         var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 

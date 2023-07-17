@@ -14,8 +14,8 @@ public class EventBusConfiguration
     [Required]
     public string SubscriptionClientName { get; set; }
 
-    public string RabbitMQUsername { get; set; }
-    public string RabbitMQPassword { get; set; }
+    public string RabbitMqUsername { get; set; }
+    public string RabbitMqPassword { get; set; }
     public int ConnectionRetryCount { get; set; }
 
     public string GcpPubSubProjectId { get; set; }

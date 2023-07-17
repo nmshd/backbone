@@ -7,19 +7,19 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public class DefaultRabbitMQPersistentConnection
-    : IRabbitMQPersistentConnection
+public class DefaultRabbitMqPersistentConnection
+    : IRabbitMqPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
-    private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
+    private readonly ILogger<DefaultRabbitMqPersistentConnection> _logger;
     private readonly int _retryCount;
 
     private readonly object _syncRoot = new();
     private IConnection? _connection;
     private bool _disposed;
 
-    public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory,
-        ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
+    public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory,
+        ILogger<DefaultRabbitMqPersistentConnection> logger, int retryCount = 5)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

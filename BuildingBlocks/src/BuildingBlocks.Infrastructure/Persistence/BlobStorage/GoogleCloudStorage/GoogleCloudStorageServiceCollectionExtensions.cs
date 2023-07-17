@@ -24,9 +24,9 @@ public static class GoogleCloudStorageServiceCollectionExtensions
     {
         services.AddSingleton(_ =>
         {
-            var storageClient = options.GCPAuthJson.IsNullOrEmpty()
+            var storageClient = options.GcpAuthJson.IsNullOrEmpty()
                 ? StorageClient.Create()
-                : StorageClient.Create(GoogleCredential.FromJson(options.GCPAuthJson));
+                : StorageClient.Create(GoogleCredential.FromJson(options.GcpAuthJson));
             return storageClient;
         });
 
@@ -52,6 +52,6 @@ public static class GoogleCloudStorageServiceCollectionExtensions
 
 public class GoogleCloudStorageOptions
 {
-    public string? GCPAuthJson { get; set; }
+    public string? GcpAuthJson { get; set; }
     public string BucketName { get; set; } = string.Empty;
 }

@@ -36,7 +36,7 @@ public abstract class StronglyTypedId : IFormattable, IEquatable<StronglyTypedId
 
     public const int DEFAULT_MAX_LENGTH_WITHOUT_PREFIX = DEFAULT_MAX_LENGTH - DEFAULT_PREFIX_LENGTH;
 
-    protected static readonly char[] DefaultValidChars =
+    protected static readonly char[] DEFAULT_VALID_CHARS =
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
         'V', 'W', 'X', 'Y', 'Z',

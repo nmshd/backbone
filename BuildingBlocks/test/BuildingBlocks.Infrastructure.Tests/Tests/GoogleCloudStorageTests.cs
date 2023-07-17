@@ -17,9 +17,9 @@ public class GoogleCloudStorageTests : IAsyncLifetime
 
     public GoogleCloudStorageTests(ITestOutputHelper output)
     {
-        const string AUTH_JSON = "";
+        const string authJson = "";
 
-        _storageClient = StorageClient.Create(GoogleCredential.FromJson(AUTH_JSON));
+        _storageClient = StorageClient.Create(GoogleCredential.FromJson(authJson));
 
         var logger = output.BuildLoggerFor<GoogleCloudStorage>();
         _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, logger);
@@ -43,13 +43,13 @@ public class GoogleCloudStorageTests : IAsyncLifetime
     [Fact(Skip = "No valid emulator for GCP")]
     public async Task SaveAndFindSingleBlob()
     {
-        const string BLOB_NAME = "BlobName";
+        const string blobName = "BlobName";
         var blobContent = "BlobContent".GetBytes();
 
-        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, BLOB_NAME);
+        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, blobName);
         retrievedBlobContent.Should().Equal(blobContent);
     }
 
@@ -74,13 +74,13 @@ public class GoogleCloudStorageTests : IAsyncLifetime
     [Fact(Skip = "No valid emulator for GCP")]
     public async Task AddBlobWithSameName()
     {
-        const string BLOB_NAME = "AddBlobWithSameName";
+        const string blobName = "AddBlobWithSameName";
 
         var blobContent = "BlobContent1"u8.ToArray();
-        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
 
         blobContent = "BlobContent2"u8.ToArray();
-        _blobStorageUnderTest.Add(BUCKET_NAME, BLOB_NAME, blobContent);
+        _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
 
         var acting = () => _blobStorageUnderTest.SaveAsync();
         await acting.Should().ThrowAsync<BlobAlreadyExistsException>();

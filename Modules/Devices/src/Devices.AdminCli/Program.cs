@@ -15,35 +15,35 @@ public class Program
     private const string POSTGRES = "Postgres";
     private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
 
-    private static readonly JsonSerializerOptions JsonSerializerOptions =
+    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS =
         new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-    private static readonly Option<string> DbConnectionStringOption =
+    private static readonly Option<string> DB_CONNECTION_STRING_OPTION =
         new("-c", "The connection string to the database.");
 
-    private static readonly Option<string> DbProviderOption =
+    private static readonly Option<string> DB_PROVIDER_OPTION =
         new("-p", "The database provider. Possible values: Postgres, SqlServer");
 
     private static async Task Main(string[] args)
     {
         var rootCommand = new RootCommand();
 
-        DbProviderOption.AddAlias("--dbProvider");
-        DbProviderOption.SetDefaultValueFactory(GetDbProviderFromEnvVar);
-        DbProviderOption.AddValidator(result =>
+        DB_PROVIDER_OPTION.AddAlias("--dbProvider");
+        DB_PROVIDER_OPTION.SetDefaultValueFactory(GetDbProviderFromEnvVar);
+        DB_PROVIDER_OPTION.AddValidator(result =>
         {
             result.ErrorMessage = ValidateProvider(result.GetValueOrDefault<string>());
         });
 
-        DbConnectionStringOption.AddAlias("--dbConnectionString");
-        DbConnectionStringOption.SetDefaultValueFactory(GetDbConnectionStringFromEnvVar);
-        DbConnectionStringOption.AddValidator(result =>
+        DB_CONNECTION_STRING_OPTION.AddAlias("--dbConnectionString");
+        DB_CONNECTION_STRING_OPTION.SetDefaultValueFactory(GetDbConnectionStringFromEnvVar);
+        DB_CONNECTION_STRING_OPTION.AddValidator(result =>
         {
             result.ErrorMessage = ValidateDbConnectionString(result.GetValueOrDefault<string>());
         });
 
-        rootCommand.AddOption(DbConnectionStringOption);
-        rootCommand.AddOption(DbProviderOption);
+        rootCommand.AddOption(DB_CONNECTION_STRING_OPTION);
+        rootCommand.AddOption(DB_PROVIDER_OPTION);
 
         rootCommand.AddCommand(ClientCommand);
         await rootCommand.InvokeAsync(args);
@@ -88,13 +88,13 @@ public class Program
                 Description = "The clientSecret of the OAuth client. Default: a randomly generated string."
             };
 
-            command.AddOption(DbProviderOption);
-            command.AddOption(DbConnectionStringOption);
+            command.AddOption(DB_PROVIDER_OPTION);
+            command.AddOption(DB_CONNECTION_STRING_OPTION);
             command.AddOption(clientId);
             command.AddOption(displayName);
             command.AddOption(clientSecret);
 
-            command.SetHandler(CreateClient, DbProviderOption, DbConnectionStringOption, clientId, displayName,
+            command.SetHandler(CreateClient, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientId, displayName,
                 clientSecret);
 
             return command;
@@ -110,10 +110,10 @@ public class Program
                 Description = "List all existing OAuth clients"
             };
 
-            command.AddOption(DbProviderOption);
-            command.AddOption(DbConnectionStringOption);
+            command.AddOption(DB_PROVIDER_OPTION);
+            command.AddOption(DB_CONNECTION_STRING_OPTION);
 
-            command.SetHandler(ListClients, DbProviderOption, DbConnectionStringOption);
+            command.SetHandler(ListClients, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION);
             return command;
         }
     }
@@ -133,11 +133,11 @@ public class Program
                 Description = "The clientId's that should be deleted."
             };
 
-            command.AddOption(DbProviderOption);
-            command.AddOption(DbConnectionStringOption);
+            command.AddOption(DB_PROVIDER_OPTION);
+            command.AddOption(DB_CONNECTION_STRING_OPTION);
             command.AddArgument(clientIds);
 
-            command.SetHandler(DeleteClients, DbProviderOption, DbConnectionStringOption, clientIds);
+            command.SetHandler(DeleteClients, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientIds);
 
             return command;
         }
@@ -150,7 +150,7 @@ public class Program
 
         var createdClient = await oAuthClientManager.Create(clientId, displayName, clientSecret);
 
-        Console.WriteLine(JsonSerializer.Serialize(createdClient, JsonSerializerOptions));
+        Console.WriteLine(JsonSerializer.Serialize(createdClient, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");
     }
 
@@ -163,7 +163,7 @@ public class Program
 
         await foreach (var client in clients)
         {
-            Console.WriteLine(JsonSerializer.Serialize(client, JsonSerializerOptions));
+            Console.WriteLine(JsonSerializer.Serialize(client, JSON_SERIALIZER_OPTIONS));
         }
     }
     

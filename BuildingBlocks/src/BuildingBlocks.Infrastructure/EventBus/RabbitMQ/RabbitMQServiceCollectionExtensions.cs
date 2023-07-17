@@ -6,18 +6,18 @@ using RabbitMQ.Client;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public static class RabbitMQServiceCollectionExtensions
+public static class RabbitMqServiceCollectionExtensions
 {
-    public static void AddRabbitMQ(this IServiceCollection services, Action<RabbitMQOptions> setupOptions)
+    public static void AddRabbitMq(this IServiceCollection services, Action<RabbitMqOptions> setupOptions)
     {
-        var options = new RabbitMQOptions();
+        var options = new RabbitMqOptions();
         setupOptions.Invoke(options);
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-        services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+        services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
 
             var factory = new ConnectionFactory
@@ -29,25 +29,25 @@ public static class RabbitMQServiceCollectionExtensions
 
             if (!string.IsNullOrEmpty(options.Password)) factory.Password = options.Password;
 
-            return new DefaultRabbitMQPersistentConnection(factory, logger, options.RetryCount);
+            return new DefaultRabbitMqPersistentConnection(factory, logger, options.RetryCount);
         });
 
-        services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+        services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
         {
             var subscriptionClientName = options.SubscriptionClientName;
 
-            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-            return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope,
+            return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope,
                 eventBusSubscriptionsManager, subscriptionClientName, options.RetryCount);
         });
     }
 }
 
-public class RabbitMQOptions
+public class RabbitMqOptions
 {
 #pragma warning disable CS8618
     public string HostName { get; set; }

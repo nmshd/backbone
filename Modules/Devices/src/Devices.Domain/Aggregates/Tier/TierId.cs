@@ -11,13 +11,13 @@ public record TierId : StronglyTypedId
 
     private const string PREFIX = "TIR";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private TierId(string value) : base(value) { }
 
     public static TierId Generate()
     {
-        var value = PREFIX + StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var value = PREFIX + StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new TierId(value);
     }
 
@@ -31,7 +31,7 @@ public record TierId : StronglyTypedId
 
     public static TierId New()
     {
-        var randomPart = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new TierId(PREFIX + randomPart);   
     }
 }

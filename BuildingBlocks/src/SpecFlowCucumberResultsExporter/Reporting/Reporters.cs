@@ -10,7 +10,7 @@ public partial class Reporters
 {
     #region Private/Internal
 
-    private static readonly List<Reporter> reporters = new List<Reporter>();
+    private static readonly List<Reporter> REPORTERS = new List<Reporter>();
 
     /// <summary>
     ///     Returns the current date/time which is used during the test run. It can set to a fixed
@@ -28,7 +28,7 @@ public partial class Reporters
         }
     }
 
-    private static void addStepRows(ref Step step, Table table)
+    private static void AddStepRows(ref Step step, Table table)
     {
         step.Rows = new List<Row> { new Row() { Cells = table.Header.ToList() } };
         foreach (var tableRow in table.Rows)
@@ -63,7 +63,7 @@ public partial class Reporters
                     var table = arg as Table;
                     if (table != null)
                     {
-                        addStepRows(ref step, table);
+                        AddStepRows(ref step, table);
                     }
                     else
                     {
@@ -96,7 +96,7 @@ public partial class Reporters
                         var table = arg as Table;
                         if (table != null)
                         {
-                            addStepRows(ref step, table);
+                            AddStepRows(ref step, table);
                         }
                         else
                         {
@@ -125,7 +125,7 @@ public partial class Reporters
             var table = stepInfo.Table;
             if (table != null)
             {
-                addStepRows(ref step, table);
+                AddStepRows(ref step, table);
             }
             step.MultiLineParameter = stepInfo.MultilineText;
         }
@@ -234,13 +234,13 @@ public partial class Reporters
 
     public static Reporter Add(Reporter reporter)
     {
-        reporters.Add(reporter);
+        REPORTERS.Add(reporter);
         return reporter;
     }
 
     public static IEnumerable<Reporter> GetAll()
     {
-        return reporters;
+        return REPORTERS;
     }
 
     #endregion Public

@@ -22,7 +22,7 @@ public class HandlerTests
         // Arrange
         var identitiesList = new List<Identity>();
         var request = new PaginationFilter() { PageSize = 5 };
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
@@ -50,7 +50,7 @@ public class HandlerTests
             1)
         };
 
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
@@ -72,7 +72,7 @@ public class HandlerTests
             new(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1)
         };
 
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(identitiesList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
@@ -91,7 +91,7 @@ public class HandlerTests
         return new Handler(findAllStubRepository);
     }
 
-    private DbPaginationResult<Identity> MakeDBPaginationResult(List<Identity> identities)
+    private DbPaginationResult<Identity> MakeDbPaginationResult(List<Identity> identities)
     {
         return new DbPaginationResult<Identity>(identities, identities.Count);
     }
