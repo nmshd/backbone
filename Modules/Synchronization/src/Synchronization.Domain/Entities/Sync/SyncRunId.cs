@@ -11,7 +11,7 @@ public class SyncRunId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "SYR";
-    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private SyncRunId(string stringValue) : base(stringValue) { }
 
@@ -25,12 +25,12 @@ public class SyncRunId : StronglyTypedId
 
     public static bool IsValid(string stringValue)
     {
-        return Utils.IsValid(stringValue);
+        return UTILS.IsValid(stringValue);
     }
 
     public static SyncRunId New()
     {
-        var challengeIdAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var challengeIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new SyncRunId(PREFIX + challengeIdAsString);
     }
 

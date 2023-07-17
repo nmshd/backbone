@@ -96,11 +96,11 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        const string ADD_BLOB_NAME = "AzureDeleteBlobThatExists";
+        const string addBlobName = "AzureDeleteBlobThatExists";
         var addBlobContent = "AzureDeleteBlobThatExists"u8.ToArray();
 
-        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, addBlobContent);
-        azureBlobStorage.Remove(CONTAINER_NAME, ADD_BLOB_NAME);
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);
+        azureBlobStorage.Remove(CONTAINER_NAME, addBlobName);
         await azureBlobStorage.SaveAsync();
 
         CloseAzuriteContainer();
@@ -123,10 +123,10 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        const string ADD_BLOB_NAME = "AzureAddBlobWithSameName";
+        const string addBlobName = "AzureAddBlobWithSameName";
 
-        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, "AddBlobWithSameName Before"u8.ToArray());
-        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME, "AddBlobWithSameName After"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName, "AddBlobWithSameName Before"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName, "AddBlobWithSameName After"u8.ToArray());
 
         await Assert.ThrowsAsync<BlobAlreadyExistsException>(azureBlobStorage.SaveAsync);
 
@@ -138,20 +138,20 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        const string ADD_BLOB_NAME1 = "AzureAddMultipleBlobsAndFindAllBlobs1";
-        const string ADD_BLOB_NAME2 = "AzureAddMultipleBlobsAndFindAllBlobs2";
+        const string addBlobName1 = "AzureAddMultipleBlobsAndFindAllBlobs1";
+        const string addBlobName2 = "AzureAddMultipleBlobsAndFindAllBlobs2";
 
         var addBlobContent1 = "AzureAddMultipleBlobsAndFindAllBlobs1"u8.ToArray();
         var addBlobContent2 = "AzureAddMultipleBlobsAndFindAllBlobs2"u8.ToArray();
 
-        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME1, addBlobContent1);
-        azureBlobStorage.Add(CONTAINER_NAME, ADD_BLOB_NAME2, addBlobContent2);
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName1, addBlobContent1);
+        azureBlobStorage.Add(CONTAINER_NAME, addBlobName2, addBlobContent2);
         await azureBlobStorage.SaveAsync();
 
         var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync(CONTAINER_NAME)).ToListAsync();
 
-        retrievedBlobContent.Should().Contain(ADD_BLOB_NAME1);
-        retrievedBlobContent.Should().Contain(ADD_BLOB_NAME2);
+        retrievedBlobContent.Should().Contain(addBlobName1);
+        retrievedBlobContent.Should().Contain(addBlobName2);
 
         CloseAzuriteContainer();
     }

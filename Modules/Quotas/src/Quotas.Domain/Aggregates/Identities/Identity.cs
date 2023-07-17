@@ -50,7 +50,7 @@ public class Identity
         CancellationToken cancellationToken)
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
-        
+
         var latestExhaustionDate = ExhaustionDate.Unexhausted;
 
         await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>

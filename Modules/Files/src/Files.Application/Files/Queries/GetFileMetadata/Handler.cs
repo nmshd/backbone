@@ -10,7 +10,8 @@ public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
     private readonly IFilesRepository _filesRepository;
     private readonly IMapper _mapper;
 
-    public Handler(IFilesRepository filesRepository, IMapper mapper) {
+    public Handler(IFilesRepository filesRepository, IMapper mapper)
+    {
         _filesRepository = filesRepository;
         _mapper = mapper;
     }

@@ -15,7 +15,7 @@
     <ProjectReference Include="..\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
   </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
+  </ItemGroup>
 </Project>

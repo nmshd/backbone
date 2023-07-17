@@ -23,8 +23,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     private HttpResponse<CreateTokenResponse>? _createTokenResponse;
     private HttpResponse<Token>? _tokenResponse;
     private HttpResponse<IEnumerable<Token>>? _tokensResponse;
-    private static readonly string TomorrowAsString = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-    private static readonly string YesterdayAsString = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+    private static readonly string TOMORROW_AS_STRING = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+    private static readonly string YESTERDAY_AS_STRING = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
     public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi) : base(httpConfiguration)
     {
@@ -41,7 +41,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = TomorrowAsString
+            ExpiresAt = TOMORROW_AS_STRING
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -63,7 +63,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         var createTokenRequest = new CreateTokenRequest
         {
             Content = "QQ==",
-            ExpiresAt = TomorrowAsString
+            ExpiresAt = TOMORROW_AS_STRING
         };
 
         var requestConfiguration = new RequestConfiguration();
@@ -89,7 +89,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             var createTokenRequest = new CreateTokenRequest
             {
                 Content = "QQ==",
-                ExpiresAt = TomorrowAsString
+                ExpiresAt = TOMORROW_AS_STRING
             };
 
             var requestConfiguration = new RequestConfiguration
@@ -131,10 +131,10 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             switch (requestConfiguration.Content)
             {
                 case var c when c.Contains("<tomorrow>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", TomorrowAsString);
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", TOMORROW_AS_STRING);
                     break;
                 case var c when c.Contains("<yesterday>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", YesterdayAsString);
+                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", YESTERDAY_AS_STRING);
                     break;
             }
         }

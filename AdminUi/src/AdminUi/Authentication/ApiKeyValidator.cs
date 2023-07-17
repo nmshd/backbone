@@ -14,7 +14,7 @@ public class ApiKeyValidator
     public bool IsApiKeyValid(string? apiKey)
     {
         var apiKeyIsConfigured = !string.IsNullOrEmpty(_options.ApiKey);
-        
+
         if (!apiKeyIsConfigured) return true;
 
         return apiKey == _options.ApiKey;

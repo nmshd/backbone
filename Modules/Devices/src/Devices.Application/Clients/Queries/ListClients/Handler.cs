@@ -18,8 +18,8 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
     public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
     {
         var clients = await _oAuthClientsRepository.FindAll(cancellationToken);
-        var clientDTOs = _mapper.Map<IEnumerable<ClientDTO>>(clients);
+        var clientDtos = _mapper.Map<IEnumerable<ClientDTO>>(clients);
 
-        return new ListClientsResponse(clientDTOs);
+        return new ListClientsResponse(clientDtos);
     }
 }
