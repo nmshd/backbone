@@ -217,7 +217,7 @@ dotnet_style_qualification_for_property = false:warning
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 file_header_template = 
 
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = disabled
 dotnet_diagnostic.bc40000.severity = warning
 dotnet_diagnostic.bc400005.severity = warning
 dotnet_diagnostic.bc40008.severity = warning
@@ -414,7 +414,7 @@ dotnet_diagnostic.cs9097.severity = warning
 dotnet_diagnostic.wme006.severity = warning
 
 # Standard properties
-end_of_line = lf
+#end_of_line = lf
 dotnet_style_coalesce_expression = true:warning
 dotnet_style_null_propagation = true:warning
 dotnet_style_prefer_is_null_check_over_reference_equality_method = false:warning
