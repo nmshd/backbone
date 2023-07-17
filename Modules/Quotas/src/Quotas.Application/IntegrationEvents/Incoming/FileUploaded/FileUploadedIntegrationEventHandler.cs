@@ -14,7 +14,6 @@ public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<File
         _mediator = mediator;
     }
 
-
     public async Task Handle(FileUploadedIntegrationEvent @event)
     {
         var identities = new List<string> { @event.SenderIdentityAddress };

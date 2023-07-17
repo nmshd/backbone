@@ -27,14 +27,6 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Identity> FindByAddress(string identityAddress, CancellationToken cancellationToken, bool track = false)
-    {
-        return await (track ? _identitiesDbSet : _readOnlyIdentities)
-            .Where(i => i.Address == identityAddress)
-            .IncludeAll(_dbContext)
-            .SingleAsync(cancellationToken);
-    }
-
     public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identitiesDbSet : _readOnlyIdentities)
