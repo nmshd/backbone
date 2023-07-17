@@ -32,7 +32,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integration-test.ts
+        run: ./.ci/integrationTest.ts
 
   cns-transport-test:
     name: Run cns-transport Tests
