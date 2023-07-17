@@ -5,8 +5,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>Enable</Nullable>
-        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,9 +15,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
 	</ItemGroup>
 
 </Project>
