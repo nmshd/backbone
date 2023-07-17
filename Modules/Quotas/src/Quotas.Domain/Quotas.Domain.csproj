@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.39.2" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
   </ItemGroup>
 
   <ItemGroup>
