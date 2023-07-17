@@ -1,9 +1,10 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using AutoMapper;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
 
-public class MetricDTO : IMapTo<Metric>
+public class MetricDTO : IHaveCustomMapping
 {
     public MetricDTO() {}
 
@@ -15,4 +16,10 @@ public class MetricDTO : IMapTo<Metric>
 
     public string Key { get; set; }
     public string DisplayName { get; set; }
+
+    public void CreateMappings(Profile configuration)
+    {
+        configuration.CreateMap<Metric, MetricDTO>()
+            .ForMember(dto => dto.Key, expression => expression.MapFrom(m => m.Key.Value));
+    }
 }
