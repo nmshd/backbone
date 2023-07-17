@@ -31,7 +31,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Add(string clientId, string displayName, string clientSecret, CancellationToken cancellationToken)
     {
-        var client = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = clientId,
             ClientSecret = clientSecret,
@@ -41,10 +41,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
                 Permissions.Endpoints.Token,
                 Permissions.GrantTypes.Password
             }
-        }, cancellationToken;
-
-        if (client == null)
-            throw new Exception($"Failed to create client '{displayName}' with id '{clientId}'");
+        }, cancellationToken);
     }
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)

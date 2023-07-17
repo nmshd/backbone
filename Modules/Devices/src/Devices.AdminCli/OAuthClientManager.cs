@@ -53,7 +53,7 @@ public class OAuthClientManager
             throw new Exception($"A client with the id '{clientId}' already exists.");
         }
 
-        var managerResult = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = clientId,
             ClientSecret = clientSecret, // Note: the default implementation automatically hashes the client secret before storing it in the database, for security reasons.
@@ -64,9 +64,6 @@ public class OAuthClientManager
                 Permissions.GrantTypes.Password
             }
         });
-
-        if (managerResult == null)
-            throw new Exception($"Failed to create the client: '{name}'");
 
         return new CreatedClientDTO(clientId, name, clientSecret);
     }
