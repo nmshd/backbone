@@ -10,6 +10,6 @@ public class FileUploadedIntegrationEvent : IntegrationEvent
         FileId = file.Id.ToString();
     }
 
-    public string FileId{ get; private set; }
+    public string FileId { get; private set; }
     public string SenderIdentityAddress { get; private set; }
 }

@@ -10,7 +10,7 @@ public abstract class MetricCalculatorFactory
             return CreateNumberOfSentMessagesMetricCalculator();
         }
 
-        if(metricKey == MetricKey.NumberOfFiles)
+        if (metricKey == MetricKey.NumberOfFiles)
         {
             return CreateNumberOfFilesMetricCalculator();
         }
