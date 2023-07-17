@@ -8,6 +8,8 @@ updates:
       update-nuget-dependencies:
         patterns:
           - "*"
+        exclude-patterns:
+          - "OpenIddict.*"
     reviewers:
       - "tnotheis"
     labels:
