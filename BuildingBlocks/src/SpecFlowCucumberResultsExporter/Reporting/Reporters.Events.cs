@@ -69,10 +69,7 @@ public partial class Reporters
     private static void RaiseEvent<T>(EventHandler<T> handler, T args)
         where T : ReportEventArgs
     {
-        if (handler != null)
-        {
-            handler(null, args);
-        }
+        handler?.Invoke(null, args);
     }
 
     #endregion Event Raising
