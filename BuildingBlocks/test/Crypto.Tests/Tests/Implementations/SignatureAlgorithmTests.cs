@@ -136,10 +136,9 @@ public class SignatureHelperTests : IDisposable
     [Fact]
     public void IsValidPublicKey_ReturnsTrue_WhenPublicKeyIsValid()
     {
-        var result = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
+        var _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
             ConvertibleString.FromBase64(""),
             ConvertibleString.FromBase64("Y8ZG4ikthK/Tvql7MwM9blvifnneN0nw5qQTVI7gvEw="));
-
 
         // Act
         var isValid = _signatureHelper.IsValidPublicKey(_validPublicKey);
@@ -170,13 +169,13 @@ public class SignatureHelperTests : IDisposable
     {
         var key = Key.Create(new Ed25519(),
             new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
-        var publicKey = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
+        var _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
         var privateKey = ConvertibleString.FromByteArray(key.Export(KeyBlobFormat.RawPrivateKey));
 
         _signatureHelper.GetSignature(privateKey, ConvertibleString.FromUtf8("Test"));
         try
         {
-            var key1 = Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
+            Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
                 KeyBlobFormat.RawPrivateKey);
         }
         catch (Exception)
@@ -185,7 +184,7 @@ public class SignatureHelperTests : IDisposable
 
         try
         {
-            var key2 = Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
+            Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
                 KeyBlobFormat.PkixPrivateKey);
         }
         catch (Exception)
@@ -194,7 +193,7 @@ public class SignatureHelperTests : IDisposable
 
         try
         {
-            var key3 = Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
+            Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
                 KeyBlobFormat.NSecPrivateKey);
         }
         catch (Exception)
@@ -203,7 +202,7 @@ public class SignatureHelperTests : IDisposable
 
         try
         {
-            var key4 = Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
+            Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
                 KeyBlobFormat.PkixPrivateKeyText);
         }
         catch (Exception)
@@ -220,16 +219,16 @@ public class SignatureHelperTests : IDisposable
         });
 
         var publicKeyBytes = privateKey.Export(KeyBlobFormat.NSecPublicKey);
-        var base64PublicKey = ConvertibleString.FromByteArray(publicKeyBytes).Base64Representation;
+        _ = ConvertibleString.FromByteArray(publicKeyBytes).Base64Representation;
 
         var privateKeyBytes = privateKey.Export(KeyBlobFormat.NSecPrivateKey);
-        var base64PrivateKey = ConvertibleString.FromByteArray(privateKeyBytes).Base64Representation;
+        _ = ConvertibleString.FromByteArray(privateKeyBytes).Base64Representation;
     }
 
     [Fact]
     public void CreateSignature()
     {
-        var signature = _signatureHelper.GetSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
+        _signatureHelper.GetSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
     }
 
     #endregion

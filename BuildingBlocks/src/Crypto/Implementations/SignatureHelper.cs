@@ -64,11 +64,6 @@ public class SignatureHelper : ISignatureHelper
     {
         try
         {
-            var k = Key.Create(_signatureAlgorithm,
-                new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
-            var pk = ConvertibleString.FromByteArray(k.Export(KeyBlobFormat.RawPrivateKey)).Base64Representation;
-            var pubk = ConvertibleString.FromByteArray(k.PublicKey.Export(KeyBlobFormat.RawPublicKey))
-                .Base64Representation;
 
             var key = Key.Import(_signatureAlgorithm, privateKey.BytesRepresentation, _privateKeyFormat);
             return key;
@@ -86,7 +81,7 @@ public class SignatureHelper : ISignatureHelper
 
     public static SignatureHelper CreateEd25519WithRawKeyFormat()
     {
-        Algorithm x = new X25519();
+        new X25519();
         return new SignatureHelper(SignatureAlgorithm.Ed25519, KeyBlobFormat.RawPrivateKey,
             KeyBlobFormat.RawPublicKey);
     }

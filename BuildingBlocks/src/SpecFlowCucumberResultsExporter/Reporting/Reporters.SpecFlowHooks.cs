@@ -164,14 +164,11 @@ public partial class Reporters
     [BeforeStep]
     internal static void BeforeStep(ScenarioContext scenarioContext)
     {
-        var starttime = CurrentRunTime;
-        var stepInfo = ScenarioStepContext.Current.StepInfo;
-        var binding = stepInfo.BindingMatch.StepBinding as StepDefinitionBinding;
-        var method = binding?.Method as RuntimeBindingMethod;
+        var startTime = CurrentRunTime;
 
         foreach (var reporter in reporters)
         {
-            var step = CreateStep(scenarioContext, starttime);
+            var step = CreateStep(scenarioContext, startTime);
 
             reporter.CurrentScenario.Steps.Add(step);
             reporter.CurrentStep = step;
