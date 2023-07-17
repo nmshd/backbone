@@ -1,15 +1,15 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Microsoft.EntityFrameworkCore;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
-using Microsoft.Extensions.Options;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Application.Pagination;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository

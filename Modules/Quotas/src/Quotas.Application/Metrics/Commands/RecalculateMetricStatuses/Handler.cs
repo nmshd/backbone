@@ -13,13 +13,13 @@ public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
     public Handler(MetricCalculatorFactory metricCalculatorFactory, IIdentitiesRepository identitiesRepository)
     {
         _identitiesRepository = identitiesRepository;
-        _metricCalculatorFactory = metricCalculatorFactory; 
+        _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task Handle(RecalculateMetricStatusesCommand command, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.FindByAddresses(command.Identities, cancellationToken, track: true);
-        
+
         foreach (var identity in identities)
         {
             await identity.UpdateMetricStatuses(ParseMetricKeys(command.Metrics), _metricCalculatorFactory, cancellationToken);
@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<RecalculateMetricStatusesCommand>
         {
             var parseResult = MetricKey.Parse(metricKey);
 
-            if(parseResult.IsFailure)
+            if (parseResult.IsFailure)
                 throw new DomainException(parseResult.Error);
 
             parsedMetricKeys.Add(parseResult.Value);

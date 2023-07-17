@@ -12,10 +12,10 @@ public class MetricsRepository : IMetricsRepository
     {
         _metrics = new List<Metric>
         {
-            new Metric(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
-            new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"),
-            new Metric(MetricKey.NumberOfFiles, "Number of Files"),
-            new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity")
+            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
+            new(MetricKey.NumberOfRelationships, "Number of Relationships"),
+            new(MetricKey.NumberOfFiles, "Number of Files"),
+            new(MetricKey.FileStorageCapacity, "File Storage Capacity")
         };
     }
 

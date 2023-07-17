@@ -28,11 +28,7 @@ public static class IQueryableExtensions
         if (maxDepth < 0)
             throw new ArgumentOutOfRangeException(nameof(maxDepth));
 
-        var entityType = context.Model.FindEntityType(typeof(T));
-
-        if (entityType == null)
-            throw new Exception("Entity type not found in model");
-
+        var entityType = context.Model.FindEntityType(typeof(T)) ?? throw new Exception("Entity type not found in model");
         var includedNavigations = new HashSet<INavigation>();
         var stack = new Stack<IEnumerator<INavigation>>();
 

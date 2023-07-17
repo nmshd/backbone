@@ -5,7 +5,6 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
-using Handler = Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers.Handler;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Queries.ListTiers;
 
@@ -22,7 +21,7 @@ public class HandlerTests
         // Arrange
         var tiersList = new List<Tier>();
         var request = new PaginationFilter() { PageSize = 5 };
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(tiersList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(tiersList)));
 
         // Act
         var result = await handler.Handle(new ListTiersQuery(request), CancellationToken.None);
@@ -42,7 +41,7 @@ public class HandlerTests
             new(TierName.Create("my-tier-name-2").Value)
         };
 
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(tiersList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(tiersList)));
 
         // Act
         var result = await handler.Handle(new ListTiersQuery(request), CancellationToken.None);
@@ -62,7 +61,7 @@ public class HandlerTests
             new(expectedName)
         };
 
-        var handler = CreateHandler(new FindAllStubRepository(MakeDBPaginationResult(tiersList)));
+        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(tiersList)));
 
         // Act
         var result = await handler.Handle(new ListTiersQuery(request), CancellationToken.None);
@@ -78,7 +77,7 @@ public class HandlerTests
         return new Handler(findAllStubRepository);
     }
 
-    private DbPaginationResult<Tier> MakeDBPaginationResult(List<Tier> tiers)
+    private DbPaginationResult<Tier> MakeDbPaginationResult(List<Tier> tiers)
     {
         return new DbPaginationResult<Tier>(tiers, tiers.Count);
     }

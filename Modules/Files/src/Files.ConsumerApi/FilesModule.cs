@@ -39,7 +39,7 @@ public class FilesModule : IModule
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
-    
+
     public void ConfigureEventBus(IEventBus eventBus)
     {
     }

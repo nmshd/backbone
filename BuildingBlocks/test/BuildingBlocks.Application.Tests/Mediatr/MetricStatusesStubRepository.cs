@@ -24,7 +24,7 @@ public class MetricStatusesStubRepository : IMetricStatusesRepository
 public class MetricStatusesNoMatchStubRepository : IMetricStatusesRepository
 {
     public MetricStatusesNoMatchStubRepository()
-    {}
+    { }
 
     public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
     {

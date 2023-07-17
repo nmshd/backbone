@@ -2,7 +2,7 @@
 
 public class RequestConfiguration
 {
-    public AuthenticationParameters AuthenticationParameters { get; set; } = new AuthenticationParameters();
+    public AuthenticationParameters AuthenticationParameters { get; set; } = new();
     public bool Authenticate { get; set; } = false;
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }

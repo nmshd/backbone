@@ -28,7 +28,7 @@ public static class BlobStorageServiceCollectionExtensions
         else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
             {
-                googleCloudStorageOptions.GCPAuthJson = options.ConnectionInfo;
+                googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
                 googleCloudStorageOptions.BucketName = options.Container;
             });
         else if (options.CloudProvider.IsEmpty())

@@ -2,8 +2,6 @@
 using AdminUi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using RestSharp;
 using SolidToken.SpecFlow.DependencyInjection;
 
 namespace AdminUi.Tests.Integration.Support;

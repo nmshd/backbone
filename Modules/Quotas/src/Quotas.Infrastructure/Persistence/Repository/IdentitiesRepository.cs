@@ -47,6 +47,6 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)
     {
         _dbContext.UpdateRange(identities);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

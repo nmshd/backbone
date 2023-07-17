@@ -1,5 +1,4 @@
 ﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;

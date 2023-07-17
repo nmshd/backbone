@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using OpenIddict.Validation.AspNetCore;
 
 namespace AdminUi.Controllers;
 

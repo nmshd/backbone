@@ -72,11 +72,7 @@ public static class RelationshipQueryableExtensions
 
     public static async Task<Relationship> FirstWithId(this IQueryable<Relationship> query, RelationshipId relationshipId, CancellationToken cancellationToken)
     {
-        var relationship = await query.FirstWithIdOrDefault(relationshipId, cancellationToken);
-
-        if (relationship == null)
-            throw new NotFoundException(nameof(Relationship));
-
+        var relationship = await query.FirstWithIdOrDefault(relationshipId, cancellationToken) ?? throw new NotFoundException(nameof(Relationship));
         return relationship;
     }
 }
