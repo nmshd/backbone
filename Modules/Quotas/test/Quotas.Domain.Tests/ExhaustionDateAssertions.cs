@@ -3,7 +3,6 @@ using Enmeshed.Tooling.Extensions;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
-using FluentAssertions.Primitives;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
 

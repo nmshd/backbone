@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Enmeshed.Common.Infrastructure.Persistence.Context;
 using Dapper;
-using Microsoft.Extensions.Options;
 
 namespace Enmeshed.Common.Infrastructure;
 public static class IServiceCollectionExtension

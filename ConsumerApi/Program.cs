@@ -33,7 +33,6 @@ using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
 using Enmeshed.Common.Infrastructure;
-using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
