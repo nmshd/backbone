@@ -45,13 +45,13 @@ public class AzureNotificationHubPushService : IPushService
     {
         var notificationContent = new NotificationContent(recipient, pushNotification);
         var notificationId = GetNotificationId(pushNotification);
-        var (Title, Body) = GetNotificationText(pushNotification);
+        var (title, body) = GetNotificationText(pushNotification);
 
         foreach (var notificationPlatform in SUPPORTED_PLATFORMS)
         {
             var notification = NotificationBuilder
                 .Create(notificationPlatform)
-                .SetNotificationText(Title, Body)
+                .SetNotificationText(title, body)
                 .SetTag(notificationId)
                 .AddContent(notificationContent)
                 .Build();
