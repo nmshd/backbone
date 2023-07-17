@@ -117,7 +117,7 @@ public class Program
             return command;
         }
     }
-    
+
     private static Command DeleteClientsCommand
     {
         get
@@ -166,7 +166,7 @@ public class Program
             Console.WriteLine(JsonSerializer.Serialize(client, JSON_SERIALIZER_OPTIONS));
         }
     }
-    
+
     private static async Task DeleteClients(string? dbProvider, string? dbConnectionString, string[] clientIds)
     {
         var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);

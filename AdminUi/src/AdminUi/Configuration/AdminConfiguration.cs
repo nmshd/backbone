@@ -19,7 +19,7 @@ public class AdminConfiguration
 
     public class AuthenticationConfiguration
     {
-        public string ApiKey{ get; set; } = "";
+        public string ApiKey { get; set; } = "";
     }
 
     public class CorsConfiguration

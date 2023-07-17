@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<RejectRelationshipChangeRequestCommand, R
         var relationship = await _relationshipsRepository.FindRelationship(changeRequest.Id, _userContext.GetAddress(), cancellationToken, track: true, fillContent: false);
 
         var change = relationship.RejectChange(changeRequest.ChangeId, _userContext.GetAddress(), _userContext.GetDeviceId(), changeRequest.ResponseContent);
-        
+
         await _relationshipsRepository.Update(relationship);
 
         PublishIntegrationEvent(change);

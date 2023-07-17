@@ -76,7 +76,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             _request.Content);
-        
+
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
 
     }

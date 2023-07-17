@@ -11,11 +11,7 @@ public static class RelationshipTemplateQueryableExtensions
 {
     public static async Task<RelationshipTemplate> FirstWithId(this IQueryable<RelationshipTemplate> query, RelationshipTemplateId templateId, CancellationToken cancellationToken)
     {
-        var template = await query.FirstOrDefaultAsync(r => r.Id == templateId, cancellationToken);
-
-        if (template == null)
-            throw new NotFoundException(nameof(RelationshipTemplate));
-
+        var template = await query.FirstOrDefaultAsync(r => r.Id == templateId, cancellationToken) ?? throw new NotFoundException(nameof(RelationshipTemplate));
         return template;
     }
 

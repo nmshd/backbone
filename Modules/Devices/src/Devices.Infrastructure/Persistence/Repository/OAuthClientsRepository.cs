@@ -41,7 +41,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
                 Permissions.Endpoints.Token,
                 Permissions.GrantTypes.Password
             }
-        }, cancellationToken);
+        }, cancellationToken;
 
         if (client == null)
             throw new Exception($"Failed to create client '{displayName}' with id '{clientId}'");
@@ -49,11 +49,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)
     {
-        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
-
-        if (client == null)
-            throw new NotFoundException(nameof(OAuthClient));
-
+        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         await _applicationManager.DeleteAsync(client, cancellationToken);
     }
 }

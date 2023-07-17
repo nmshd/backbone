@@ -40,12 +40,8 @@ public class AuthorizationController : ApiControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Exchange()
     {
-        var request = HttpContext.GetOpenIddictServerRequest();
-
-        if (request == null)
-            throw new OperationFailedException(
+        var request = HttpContext.GetOpenIddictServerRequest() ?? throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
-
         if (!request.IsPasswordGrantType())
             throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("the specified grant type is not implemented"));

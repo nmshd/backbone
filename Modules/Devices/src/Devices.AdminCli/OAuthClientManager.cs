@@ -76,11 +76,7 @@ public class OAuthClientManager
         if (string.IsNullOrEmpty(clientId))
             throw new ArgumentNullException(nameof(clientId));
 
-        var client = await _applicationManager.FindByClientIdAsync(clientId);
-
-        if (client == null)
-            throw new ArgumentException($"A client with the client id '{clientId}' does not exist.");
-
+        var client = await _applicationManager.FindByClientIdAsync(clientId) ?? throw new ArgumentException($"A client with the client id '{clientId}' does not exist.");
         await _applicationManager.DeleteAsync(client);
     }
 

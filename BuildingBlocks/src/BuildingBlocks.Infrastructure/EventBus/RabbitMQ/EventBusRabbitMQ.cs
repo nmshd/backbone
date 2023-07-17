@@ -194,11 +194,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                     {
                         ContractResolver = new ContractResolverWithPrivates()
                     });
-                var handler = scope.ResolveOptional(subscription.HandlerType);
-                if (handler == null)
-                    throw new Exception(
+                var handler = scope.ResolveOptional(subscription.HandlerType) ?? throw new Exception(
                         $"The handler type {subscription.HandlerType.FullName} is not registered in the dependency container.");
-
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                 await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
             }

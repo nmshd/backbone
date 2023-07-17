@@ -39,11 +39,7 @@ public class TokensRepository : ITokensRepository
 
         await Task.WhenAll(getMetadata, getContent);
 
-        var token = await getMetadata;
-
-        if (token == null)
-            throw new NotFoundException(nameof(Token));
-
+        var token = await getMetadata ?? throw new NotFoundException(nameof(Token));
         token.Content = await getContent;
 
         return token;

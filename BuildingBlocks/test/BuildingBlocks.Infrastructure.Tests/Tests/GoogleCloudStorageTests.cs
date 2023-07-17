@@ -82,7 +82,7 @@ public class GoogleCloudStorageTests : IAsyncLifetime
         blobContent = "BlobContent2"u8.ToArray();
         _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
 
-        var acting = () => _blobStorageUnderTest.SaveAsync();
+        var acting = _blobStorageUnderTest.SaveAsync;
         await acting.Should().ThrowAsync<BlobAlreadyExistsException>();
     }
 

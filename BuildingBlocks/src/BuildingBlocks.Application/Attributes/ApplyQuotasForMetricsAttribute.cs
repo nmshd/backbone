@@ -9,6 +9,6 @@ public class ApplyQuotasForMetricsAttribute : Attribute
 
     public ApplyQuotasForMetricsAttribute(params string[] metricKeys)
     {
-        MetricKeys = metricKeys.Select(it=> new MetricKey(it)).ToArray();
+        MetricKeys = metricKeys.Select(it => new MetricKey(it)).ToArray();
     }
 }

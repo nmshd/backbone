@@ -9,11 +9,7 @@ public static class IdentityQueryableExtensions
 {
     public static async Task<Identity> FirstWithAddress(this IQueryable<Identity> query, IdentityAddress address, CancellationToken cancellationToken)
     {
-        var identity = await query.FirstOrDefaultAsync(e => e.Address == address, cancellationToken);
-
-        if (identity == null)
-            throw new NotFoundException(nameof(Identity));
-
+        var identity = await query.FirstOrDefaultAsync(e => e.Address == address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         return identity;
     }
 
