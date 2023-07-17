@@ -87,7 +87,7 @@ public partial class Reporters
                 {
                     // underscore style
                     step.Name = methodName.Replace("_", " ");
-                    step.Name = step.Name.Substring(step.Name.IndexOf(' ') + 1);
+                    step.Name = step.Name[(step.Name.IndexOf(' ') + 1)..];
 
                     var methodInfo = method as MethodInfo;
                     for (var i = 0; i < args.Length; i++)
