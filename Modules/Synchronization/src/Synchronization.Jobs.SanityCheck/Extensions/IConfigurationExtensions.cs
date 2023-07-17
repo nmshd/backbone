@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Synchronization.Jobs.SanityCheck.Extensions;
 
-[ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions
 {
     public static BlobStorageConfiguration GetBlobStorageConfiguration(this IConfiguration configuration)

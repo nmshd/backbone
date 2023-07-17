@@ -5,7 +5,7 @@ namespace Backbone.Modules.Quotas.Application.DTOs;
 
 public class MetricDTO : IMapTo<Metric>
 {
-    public MetricDTO() {}
+    public MetricDTO() { }
 
     public MetricDTO(Metric metric)
     {

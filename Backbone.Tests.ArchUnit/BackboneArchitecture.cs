@@ -6,7 +6,7 @@ using Assembly = System.Reflection.Assembly;
 namespace Backbone.Tests.ArchUnit;
 public static class Backbone
 {
-    public static readonly Architecture Architecture =
+    public static readonly Architecture ARCHITECTURE =
         new ArchLoader()
             .LoadAssemblies(GetSolutionAssemblies())
             .Build();

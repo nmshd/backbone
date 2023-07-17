@@ -1,8 +1,8 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.Tooling;
+using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
-using Enmeshed.UnitTestTools.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 

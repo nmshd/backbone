@@ -34,6 +34,8 @@ public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnecti
         if (_disposed) return;
 
         _disposed = true;
+#pragma warning disable CA2012
         _topicClient.DisposeAsync().GetAwaiter().GetResult();
+#pragma warning restore CA2012
     }
 }
