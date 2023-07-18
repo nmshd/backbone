@@ -33,7 +33,7 @@ public class Tier
     {
         var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
 
-        if(quotaDefinition == null)
+        if (quotaDefinition == null)
             return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
 
         Quotas.Remove(quotaDefinition);
