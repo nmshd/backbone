@@ -27,30 +27,26 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tierName = "some-tier-name";
-        var tier = new Tier(tierId, tierName);
+        var tier = new Tier(tierId, "some-tier-name");
 
-        var metricKey = MetricKey.NumberOfSentMessages;
-        var max = 5;
-        var period = QuotaPeriod.Month;
-        tier.CreateQuota(metricKey, max, period);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.ElementAt(0).Id);
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 
-        var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
-        var handler = CreateHandler(tierRepository);
+        var handler = CreateHandler(tiersRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
+        A.CallTo(() => tiersRepository.Update(A<Tier>.That.Matches(t =>
                 t.Id == tierId &&
                 t.Quotas.Count == 0)
             , CancellationToken.None)
-        ).MustHaveHappened();
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -58,8 +54,7 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tierName = "some-tier-name";
-        var tier = new Tier(tierId, tierName);
+        var tier = new Tier(tierId, "some-tier-name");
 
         var metricKey = MetricKey.NumberOfSentMessages;
         var max = 5;
@@ -68,18 +63,18 @@ public class HandlerTests
         tier.CreateQuota(metricKey, max, period);
         tier.CreateQuota(metricKey, max, period);
 
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.ElementAt(0).Id);
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 
-        var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
-        var handler = CreateHandler(tierRepository);
+        var handler = CreateHandler(tiersRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => tierRepository.Update(A<Tier>.That.Matches(t =>
+        A.CallTo(() => tiersRepository.Update(A<Tier>.That.Matches(t =>
                 t.Id == tierId &&
                 t.Quotas.Count == 2)
             , CancellationToken.None)
@@ -91,17 +86,16 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tierName = "some-tier-name";
-        var tier = new Tier(tierId, tierName);
+        var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.ElementAt(0).Id);
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 
-        var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 
-        var handler = CreateHandler(tierRepository);
+        var handler = CreateHandler(tiersRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
