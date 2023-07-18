@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
+import { Metric } from "../metrics-service/metrics.service";
 
 @Injectable({
     providedIn: "root"
@@ -12,10 +13,6 @@ export class QuotasService {
 
     constructor(private http: HttpClient) {
         this.apiUrl = environment.apiUrl;
-    }
-
-    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(this.apiUrl + "/Metrics");
     }
 
     getPeriods(): string[] {
@@ -29,12 +26,6 @@ export class QuotasService {
     deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Tiers/${tierId}/Quotas/${quotaId}`);
     }
-}
-
-export interface Metric {
-    id: string;
-    key: string;
-    displayName: string;
 }
 
 export interface TierQuota {
