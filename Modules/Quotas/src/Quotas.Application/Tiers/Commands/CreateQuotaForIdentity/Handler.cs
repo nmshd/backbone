@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 
@@ -11,14 +11,12 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IEventBus _eventBus;
     private readonly IMetricsRepository _metricsRepository;
 
-    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IEventBus eventBus, IMetricsRepository metricsRepository)
+    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
-        _eventBus = eventBus;
         _metricsRepository = metricsRepository;
     }
 
@@ -28,10 +26,14 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
         var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, true);
 
-        var metricKey = (MetricKey)Enum.Parse(typeof(MetricKey), request.MetricKey);
-        var metric = await _metricsRepository.Find(metricKey, cancellationToken); // ensure metric exists
+        var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
-        var individualQuota = identity.CreateIndividualQuota(metricKey, request.Max, request.Period);
+        if (parseMetricKeyResult.IsFailure)
+            throw new DomainException(parseMetricKeyResult.Error);
+
+        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+
+        var individualQuota = identity.CreateIndividualQuota(parseMetricKeyResult.Value, request.Max, request.Period);
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
