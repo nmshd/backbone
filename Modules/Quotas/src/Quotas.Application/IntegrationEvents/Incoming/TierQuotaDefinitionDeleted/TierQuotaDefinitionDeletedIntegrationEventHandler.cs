@@ -21,13 +21,13 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
     public async Task Handle(TierQuotaDefinitionDeletedIntegrationEvent @event)
     {
-        _logger.LogTrace("Handling TierQuotaDefinitionDeletedIntegrationEvent ... ");
+        _logger.LogTrace($"Handling '{nameof(TierQuotaDefinitionDeletedIntegrationEvent)}' ... ");
 
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
-            _logger.LogTrace($"No identities found with tier ID: {@event.TierId}");
+            _logger.LogTrace($"No identities found with tier ID: '{@event.TierId}'");
             return;
         }
 
@@ -40,6 +40,6 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully deleted quotas for Identities!");
+        _logger.LogTrace("Successfully deleted quotas for Identities.");
     }
 }
