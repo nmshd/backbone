@@ -37,6 +37,6 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
         _eventBus.Publish(new TierQuotaDefinitionDeletedIntegrationEvent(tier.Id, request.TierQuotaDefinitionId));
 
-        _logger.LogTrace($"Successfully published TierQuotaDefinitionDeletedIntegrationEvent with id: '{request.TierQuotaDefinitionId}' and tier id: '{request.TierId}'");
+        _logger.LogTrace($"Successfully published '{nameof(TierQuotaDefinitionDeletedIntegrationEvent)}' with id: '{request.TierQuotaDefinitionId}' and tier id: '{request.TierId}'");
     }
 }
