@@ -2,21 +2,26 @@
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.Tooling.Extensions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RestSharp;
 using static Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.IServiceCollectionExtensions.DirectPnsCommunicationOptions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
-    // TODO cache JWT
-    private readonly RestClient _client;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IJwtGenerator _jwtGenerator;
+    private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly ApnsOptions _options;
+    private static Jwt _jwt;
 
-    public ApplePushNotificationServiceConnector(RestClient client, IOptions<ApnsOptions> options)
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
     {
-        _client = client;
+        _httpClientFactory = httpClientFactory;
+        _jwtGenerator = jwtGenerator;
+        _logger = logger;
         _options = options.Value;
     }
 
@@ -28,19 +33,49 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        var jwt = Jwt.Create(_options.PrivateKey, _options.KeyId, _options.TeamId);
+        if (_jwt == null)
+            _jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
 
+        if (_jwt.IsExpired())
+        {
+            lock (_jwt)
+            {
+                if (_jwt.IsExpired())
+                    _jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
+            }
+        }
+
+        var client = _httpClientFactory.CreateClient();
         var tasks = recipients.Select(device =>
         {
-            var request = new ApnsMessageBuilder(_options.Server, _options.AppBundleIdentifier, device, jwt.Value)
+            var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", _jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetTag(notificationId)
                 .Build();
 
-            return _client.ExecuteAsync(request);
-        });
-        await Task.WhenAll(tasks);
+            return (request: client.SendAsync(request), deviceId: device);
+        }).ToList();
+
+        var responses = await Task.WhenAll(tasks.Select(x => x.request));
+        for (var index = 0; index < responses.Length; index++)
+        {
+            var response = responses[index];
+            if (response is { IsSuccessStatusCode: false })
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (!responseContent.IsNullOrEmpty())
+                {
+                    _logger.LogError(
+                        "The following error occurred while trying to send the notification for device {device}: {responseContent}",
+                        tasks.ElementAt(index).deviceId, responseContent);
+                }
+                else
+                {
+                    _logger.LogError("An unknown error occurred while trying to send the notification for device {device}.", tasks.ElementAt(index).deviceId);
+                }
+            }
+        }
     }
 
     private static int GetNotificationId(object pushNotification)

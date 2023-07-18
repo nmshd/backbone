@@ -1,8 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Enmeshed.Tooling.Extensions;
-using Microsoft.AspNetCore.Http;
-using RestSharp;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -10,16 +8,19 @@ public class ApnsMessageBuilder
 {
     private readonly Payload _notification = new();
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-    private readonly RestRequest _request;
+    private readonly HttpRequestMessage _request;
 
-    public ApnsMessageBuilder(string server, string appBundleIdentifier, string device, string jwt)
+    public ApnsMessageBuilder(string appBundleIdentifier, string path, string jwt)
     {
-        _request = new RestRequest(new PathString(server).Add(device), Method.Post);
-        _request.AddHeader("apns-topic", appBundleIdentifier);
-        _request.AddHeader("Authorization", $"Bearer {jwt}");
-        _request.AddHeader("apns-expiration", 0);
-        _request.AddHeader("apns-priority", 5);
-        _request.AddHeader("apns-push-type", "alert");
+        _request = new HttpRequestMessage(HttpMethod.Post, new Uri(path))
+        {
+            Version = new Version(2, 0)
+        };
+        _request.Headers.Add("apns-topic", appBundleIdentifier);
+        _request.Headers.Add("apns-expiration", "0");
+        _request.Headers.Add("apns-priority", "5");
+        _request.Headers.Add("apns-push-type", "alert");
+        _request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", jwt);
     }
 
     public ApnsMessageBuilder AddContent(NotificationContent content)
@@ -51,10 +52,10 @@ public class ApnsMessageBuilder
         return this;
     }
 
-    public RestRequest Build()
+    public HttpRequestMessage Build()
     {
         var payload = JsonSerializer.Serialize(_notification, _jsonSerializerOptions);
-        _request.AddBody(payload);
+        _request.Content = new StringContent(payload);
         return _request;
     }
 

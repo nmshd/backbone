@@ -18,11 +18,12 @@ public static class IServiceCollectionExtensions
                 ? GoogleCredential.GetApplicationDefault()
                 : GoogleCredential.FromJson(options.Fcm.ServiceAccountJson)
         });
-
+        services.AddHttpClient();
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
         services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IPushService, DirectPushService>();
+        services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
 
