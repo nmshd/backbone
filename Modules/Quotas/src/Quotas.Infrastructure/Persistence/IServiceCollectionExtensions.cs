@@ -49,12 +49,14 @@ public static class IServiceCollectionExtensions
         }
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<IMessagesRepository, MessagesRepository>();
+        services.AddTransient<IFilesRepository, FilesRepository>();
         services.AddTransient<IMetricsRepository, MetricsRepository>();
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
 
         services.AddTransient<NumberOfSentMessagesMetricCalculator>();
+        services.AddTransient<NumberOfFilesMetricCalculator>();
     }
 
     public class DbOptions

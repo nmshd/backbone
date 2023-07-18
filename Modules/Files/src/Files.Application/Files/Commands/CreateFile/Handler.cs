@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Application.IntegrationEvents.Out;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using File = Backbone.Modules.Files.Domain.Entities.File;
@@ -11,12 +13,14 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
     private readonly IMapper _mapper;
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
+    private readonly IEventBus _eventBus;
 
-    public Handler(IUserContext userContext, IMapper mapper, IFilesRepository filesRepository)
+    public Handler(IUserContext userContext, IMapper mapper, IFilesRepository filesRepository, IEventBus eventBus)
     {
         _userContext = userContext;
         _mapper = mapper;
         _filesRepository = filesRepository;
+        _eventBus = eventBus;
     }
 
     public async Task<CreateFileResponse> Handle(CreateFileCommand request, CancellationToken cancellationToken)
@@ -37,6 +41,8 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             file,
             cancellationToken
         );
+
+        _eventBus.Publish(new FileUploadedIntegrationEvent(file));
 
         var response = _mapper.Map<CreateFileResponse>(file);
 
