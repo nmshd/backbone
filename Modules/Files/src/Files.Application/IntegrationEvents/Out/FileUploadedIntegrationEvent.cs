@@ -6,10 +6,10 @@ public class FileUploadedIntegrationEvent : IntegrationEvent
 {
     public FileUploadedIntegrationEvent(File file) : base($"{file.Id}/Created")
     {
-        SenderIdentityAddress = file.CreatedBy.ToString();
+        Uploader = file.CreatedBy.ToString();
         FileId = file.Id.ToString();
     }
 
     public string FileId { get; private set; }
-    public string SenderIdentityAddress { get; private set; }
+    public string Uploader { get; private set; }
 }

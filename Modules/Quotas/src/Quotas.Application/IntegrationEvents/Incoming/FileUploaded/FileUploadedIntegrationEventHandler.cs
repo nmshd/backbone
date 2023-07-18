@@ -16,7 +16,7 @@ public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<File
 
     public async Task Handle(FileUploadedIntegrationEvent @event)
     {
-        var identities = new List<string> { @event.SenderIdentityAddress };
+        var identities = new List<string> { @event.Uploader };
         var metrics = new List<string> { MetricKey.NumberOfFiles.Value };
 
         await _mediator.Send(new RecalculateMetricStatusesCommand(identities, metrics));

@@ -4,5 +4,5 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUpl
 public class FileUploadedIntegrationEvent : IntegrationEvent
 {
     public string FileId { get; set; }
-    public string SenderIdentityAddress { get; set; }
+    public string Uploader { get; set; }
 }

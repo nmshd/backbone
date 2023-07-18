@@ -18,6 +18,6 @@ public abstract class MetricCalculatorFactory
         throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
     }
 
-    public abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
-    public abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
+    protected abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
+    protected abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
 }
