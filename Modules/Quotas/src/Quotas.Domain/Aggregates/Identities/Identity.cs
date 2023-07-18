@@ -38,7 +38,7 @@ public class Identity
 
     public void DeleteTierQuotaFromDefinitionId(string tierQuotaDefinitionId)
     {
-        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.Id == tierQuotaDefinitionId);
+        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.GetTierQuotaDefinitionId() == tierQuotaDefinitionId);
         _tierQuotas.Remove(tierQuota);
     }
 
