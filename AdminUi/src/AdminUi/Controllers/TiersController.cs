@@ -3,7 +3,7 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForTier;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
@@ -74,7 +74,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTierQuota([FromRoute] string tierId, [FromRoute] string tierQuotaDefinitionId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteQuotaForTierCommand(tierId, tierQuotaDefinitionId), cancellationToken);
+        await _mediator.Send(new DeleteTierQuotaDefinitionCommand(tierId, tierQuotaDefinitionId), cancellationToken);
         return NoContent();
     }
 }

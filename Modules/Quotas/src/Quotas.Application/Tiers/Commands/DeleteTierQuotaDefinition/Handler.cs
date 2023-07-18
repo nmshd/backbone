@@ -7,8 +7,8 @@ using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForTier;
-public class Handler : IRequestHandler<DeleteQuotaForTierCommand>
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
+public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<DeleteQuotaForTierCommand>
         _eventBus = eventBus;
     }
 
-    public async Task Handle(DeleteQuotaForTierCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteTierQuotaDefinitionCommand request, CancellationToken cancellationToken)
     {
         _logger.LogTrace($"Deleting tier quota definition with id: '{request.TierQuotaDefinitionId}'.");
 
