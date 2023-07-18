@@ -37,7 +37,7 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             file,
             cancellationToken
         );
-        
+
         var response = _mapper.Map<CreateFileResponse>(file);
 
         return response;

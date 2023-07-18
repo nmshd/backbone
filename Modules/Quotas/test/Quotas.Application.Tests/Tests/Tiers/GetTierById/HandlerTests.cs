@@ -24,7 +24,7 @@ public class HandlerTests
         tier.CreateQuota(metricKey, max, period);
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
-        var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> {new Metric(metricKey, "Number Of Sent Messages") });
+        var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { new(metricKey, "Number Of Sent Messages") });
 
         var handler = CreateHandler(stubTiersRepository, stubMetricsRepository);
 

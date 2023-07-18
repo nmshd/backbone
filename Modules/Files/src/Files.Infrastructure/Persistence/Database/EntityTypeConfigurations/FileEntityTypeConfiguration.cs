@@ -9,7 +9,7 @@ public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
     public void Configure(EntityTypeBuilder<File> builder)
     {
         builder.ToTable("FileMetadata");
-        
+
         builder.HasIndex(m => m.CreatedBy);
 
         builder.Property(m => m.CipherHash).IsRequired();

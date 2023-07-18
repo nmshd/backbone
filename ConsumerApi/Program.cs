@@ -5,6 +5,7 @@ using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -18,6 +19,8 @@ using Devices.ConsumerApi;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using Files.ConsumerApi;
 using MediatR;
@@ -32,10 +35,6 @@ using Relationships.ConsumerApi;
 using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
-using Enmeshed.Common.Infrastructure;
-using Backbone.Modules.Quotas.Domain;
-using Backbone.Modules.Quotas.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

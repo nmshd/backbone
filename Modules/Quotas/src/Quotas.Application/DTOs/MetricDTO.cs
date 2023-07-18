@@ -6,7 +6,7 @@ namespace Backbone.Modules.Quotas.Application.DTOs;
 
 public class MetricDTO : IHaveCustomMapping
 {
-    public MetricDTO() {}
+    public MetricDTO() { }
 
     public MetricDTO(Metric metric)
     {

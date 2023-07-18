@@ -9,17 +9,17 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 public class QuotaCheckerImplTests
 {
 
-    private static readonly MetricKey TestMetricKey = new("a-metric-key");
-    private static readonly MetricKey AnotherTestMetricKey = new("another-metric-key");
+    private static readonly MetricKey TEST_METRIC_KEY = new("a-metric-key");
+    private static readonly MetricKey ANOTHER_TEST_METRIC_KEY = new("another-metric-key");
 
     [Fact]
     public async Task ExhaustedStatuses_is_empty_when_the_metric_is_not_exhausted()
     {
         // Arrange
-        var quotaChecker = CreateQuotaCheckerImpl(new MetricStatus(TestMetricKey, null));
+        var quotaChecker = CreateQuotaCheckerImpl(new MetricStatus(TEST_METRIC_KEY, null));
 
         // Act
-        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TestMetricKey });
+        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TEST_METRIC_KEY });
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(0);
@@ -30,10 +30,10 @@ public class QuotaCheckerImplTests
     public async Task ExhaustedStatuses_has_value_when_one_metric_is_exhausted()
     {
         // Arrange
-        var quotaChecker = CreateQuotaCheckerImpl(new MetricStatus(TestMetricKey, SystemTime.UtcNow.AddMinutes(10)));
+        var quotaChecker = CreateQuotaCheckerImpl(new MetricStatus(TEST_METRIC_KEY, SystemTime.UtcNow.AddMinutes(10)));
 
         // Act
-        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TestMetricKey });
+        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TEST_METRIC_KEY });
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(1);
@@ -45,12 +45,12 @@ public class QuotaCheckerImplTests
     {
         // Arrange
         var quotaChecker = CreateQuotaCheckerImpl(
-            new MetricStatus(TestMetricKey, SystemTime.UtcNow.AddMinutes(10)),
-            new MetricStatus(AnotherTestMetricKey, SystemTime.UtcNow.AddMinutes(10))
+            new MetricStatus(TEST_METRIC_KEY, SystemTime.UtcNow.AddMinutes(10)),
+            new MetricStatus(ANOTHER_TEST_METRIC_KEY, SystemTime.UtcNow.AddMinutes(10))
             );
 
         // Act
-        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TestMetricKey, AnotherTestMetricKey });
+        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY });
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(2);
@@ -62,16 +62,16 @@ public class QuotaCheckerImplTests
     {
         // Arrange
         var quotaChecker = CreateQuotaCheckerImpl(
-            new MetricStatus(TestMetricKey, SystemTime.UtcNow.AddMinutes(-10)),
-            new MetricStatus(AnotherTestMetricKey, SystemTime.UtcNow.AddMinutes(10))
+            new MetricStatus(TEST_METRIC_KEY, SystemTime.UtcNow.AddMinutes(-10)),
+            new MetricStatus(ANOTHER_TEST_METRIC_KEY, SystemTime.UtcNow.AddMinutes(10))
             );
 
         // Act
-        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TestMetricKey, AnotherTestMetricKey });
+        var result = await quotaChecker.CheckQuotaExhaustion(new[] { TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY });
 
         // Assert
         result.ExhaustedStatuses.Should().HaveCount(1);
-        result.ExhaustedStatuses.Single().MetricKey.Should().Be(AnotherTestMetricKey);
+        result.ExhaustedStatuses.Single().MetricKey.Should().Be(ANOTHER_TEST_METRIC_KEY);
         result.IsSuccess.Should().BeFalse();
     }
 

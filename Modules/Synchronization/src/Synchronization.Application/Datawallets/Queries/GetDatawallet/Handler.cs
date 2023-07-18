@@ -24,11 +24,7 @@ internal class Handler : IRequestHandler<GetDatawalletQuery, DatawalletDTO>
 
     public async Task<DatawalletDTO> Handle(GetDatawalletQuery request, CancellationToken cancellationToken)
     {
-        var datawallet = await _dbContext.GetDatawallet(_activeIdentity, cancellationToken);
-
-        if (datawallet == null)
-            throw new NotFoundException(nameof(Datawallet));
-
+        var datawallet = await _dbContext.GetDatawallet(_activeIdentity, cancellationToken) ?? throw new NotFoundException(nameof(Datawallet));
         return _mapper.Map<DatawalletDTO>(datawallet);
     }
 }

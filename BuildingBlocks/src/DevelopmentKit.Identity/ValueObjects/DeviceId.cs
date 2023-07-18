@@ -13,7 +13,7 @@ public class DeviceId : StronglyTypedId
 
     private const string PREFIX = "DVC";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
 
     private DeviceId(string stringValue) : base(stringValue)
@@ -34,7 +34,7 @@ public class DeviceId : StronglyTypedId
 
     public static DeviceId New()
     {
-        var deviceIdAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var deviceIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new DeviceId(PREFIX + deviceIdAsString);
     }
 

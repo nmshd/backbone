@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "a");
-        await _dbContext.Set<ApplicationUser>().AddAsync(user);
+        await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
         user = new ApplicationUser
         {
@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
-        await _dbContext.Set<ApplicationUser>().AddAsync(user);
+        await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
