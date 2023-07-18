@@ -11,9 +11,9 @@ public class NumberOfFilesMetricCalculator : IMetricCalculator
         _filesRepository = filesRepository;
     }
 
-    public async Task<uint> CalculateUsage(DateTime createdAtFrom, DateTime createdAtTo, string uploader, CancellationToken cancellationToken)
+    public async Task<uint> CalculateUsage(DateTime from, DateTime to, string uploader, CancellationToken cancellationToken)
     {
-        var numberOfFiles = await _filesRepository.Count(uploader, createdAtFrom, createdAtTo, cancellationToken);
+        var numberOfFiles = await _filesRepository.Count(uploader, from, to, cancellationToken);
         return numberOfFiles;
     }
 }
