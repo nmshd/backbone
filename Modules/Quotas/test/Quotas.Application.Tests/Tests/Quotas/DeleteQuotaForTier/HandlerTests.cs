@@ -87,7 +87,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Triggers_QuotaDeletedForTierIntegrationEvent()
+    public async Task Triggers_TierQuotaDefinitionDeletedIntegrationEvent()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
@@ -107,7 +107,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(QuotaDeletedForTierIntegrationEvent)))).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappened();
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository)

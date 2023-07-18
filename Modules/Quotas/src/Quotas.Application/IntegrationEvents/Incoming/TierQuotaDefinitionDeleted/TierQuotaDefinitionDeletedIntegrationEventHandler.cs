@@ -4,24 +4,24 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaDeletedForTier;
-public class QuotaDeletedForTierIntegrationEventHandler : IIntegrationEventHandler<QuotaDeletedForTierIntegrationEvent>
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
+public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEventHandler<TierQuotaDefinitionDeletedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
-    private readonly ILogger<QuotaDeletedForTierIntegrationEventHandler> _logger;
+    private readonly ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> _logger;
 
-    public QuotaDeletedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<QuotaDeletedForTierIntegrationEventHandler> logger)
+    public TierQuotaDefinitionDeletedIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
+        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> logger)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
         _logger = logger;
     }
 
-    public async Task Handle(QuotaDeletedForTierIntegrationEvent @event)
+    public async Task Handle(TierQuotaDefinitionDeletedIntegrationEvent @event)
     {
-        _logger.LogTrace("Handling QuotaDeletedForTierIntegrationEvent ... ");
+        _logger.LogTrace("Handling TierQuotaDefinitionDeletedIntegrationEvent ... ");
 
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
