@@ -8,5 +8,6 @@ public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<Message>
     public void Configure(EntityTypeBuilder<Message> builder)
     {
         builder.ToTable(nameof(Message) + "s", "Messages", x => x.ExcludeFromMigrations());
+        builder.HasKey(x => x.Id);
     }
 }

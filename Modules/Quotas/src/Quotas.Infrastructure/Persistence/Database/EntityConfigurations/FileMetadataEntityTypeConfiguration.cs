@@ -8,5 +8,6 @@ public class FileMetadataEntityTypeConfiguration : IEntityTypeConfiguration<File
     public void Configure(EntityTypeBuilder<FileMetadata> builder)
     {
         builder.ToTable(nameof(FileMetadata), "Files", x => x.ExcludeFromMigrations());
+        builder.HasKey(x => x.Id);
     }
 }
