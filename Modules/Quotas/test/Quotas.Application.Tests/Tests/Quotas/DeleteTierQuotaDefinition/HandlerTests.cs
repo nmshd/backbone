@@ -2,14 +2,17 @@
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Enmeshed.BuildingBlocks.Domain;
 using FakeItEasy;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
 public class HandlerTests
@@ -23,7 +26,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Deletes_quota_for_tier()
+    public async Task Deletes_tier_quota_definition()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
@@ -50,7 +53,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Deletes_quota_for_tier_with_multiple_quotas()
+    public async Task Deletes_tier_quota_definition_with_multiple_quotas()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
@@ -79,6 +82,50 @@ public class HandlerTests
                 t.Quotas.Count == 2)
             , CancellationToken.None)
         ).MustHaveHappened();
+    }
+
+    [Fact]
+    public async Task Fails_to_delete_tier_quota_definition_for_missing_tier()
+    {
+        // Arrange
+        var tierId = new TierId("SomeTierId");
+        var tier = new Tier(tierId, "some-tier-name");
+
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Tier>(null));
+
+        var handler = CreateHandler(tiersRepository);
+
+        // Act
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task Fails_to_delete_tier_quota_definition_for_missing_quota()
+    {
+        // Arrange
+        var tierId = new TierId("SomeTierId");
+        var tier = new Tier(tierId, "some-tier-name");
+
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, "SomeTierQuotaDefinitionId");
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
+
+        var handler = CreateHandler(tiersRepository);
+
+        // Act
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<DomainException>().WithMessage($"{nameof(TierQuotaDefinition)} not found");
     }
 
     [Fact]
