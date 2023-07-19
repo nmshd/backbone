@@ -15,6 +15,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly IJwtGenerator _jwtGenerator;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly ApnsOptions _options;
+    private const string JWT_LOCK = "JWT_LOCK";
     private static Jwt _jwt;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
@@ -33,14 +34,13 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        if (_jwt == null)
-            _jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
-
-        if (_jwt.IsExpired())
+        if (_jwt == null || _jwt.IsExpired())
         {
-            lock (_jwt)
+            // we cannot lock _jwt because it is possibly null here, and you cannot lock on null
+            // CAUTION: don't remove this, since it would cause the JWT to be generated multiple times, and we are only allowed to generate one JWT per 20 minutes (see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns#2943374)
+            lock (JWT_LOCK)
             {
-                if (_jwt.IsExpired())
+                if (_jwt == null || _jwt.IsExpired())
                     _jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
             }
         }
@@ -91,15 +91,15 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             case null:
                 return ("", "");
             case JsonElement jsonElement:
-                {
-                    var notification = jsonElement.Deserialize<NotificationTextAttribute>();
-                    return notification == null ? ("", "") : (notification.Title, notification.Body);
-                }
+            {
+                var notification = jsonElement.Deserialize<NotificationTextAttribute>();
+                return notification == null ? ("", "") : (notification.Title, notification.Body);
+            }
             default:
-                {
-                    var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-                    return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
-                }
+            {
+                var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
+                return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
+            }
         }
     }
 }
