@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
     selector: "app-tier-edit",
@@ -155,14 +155,14 @@ export class TierEditComponent {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: any) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
             if (result) {
                 this.createTierQuota(result);
             }
         });
     }
 
-    createTierQuota(quota: TierQuota) {
+    createTierQuota(quota: AssignQuotaData) {
         this.loading = true;
         this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
             next: (data: HttpResponseEnvelope<TierQuota>) => {
