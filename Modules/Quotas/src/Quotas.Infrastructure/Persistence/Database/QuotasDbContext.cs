@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
@@ -18,6 +18,8 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<Tier> Tiers { get; set; }
 
     public DbSet<TierQuota> TierQuotas { get; set; }
+
+    public DbSet<IndividualQuota> IndividualQuotas { get; set; }
 
     public DbSet<TierQuotaDefinition> TierQuotaDefinitions { get; set; }
 
