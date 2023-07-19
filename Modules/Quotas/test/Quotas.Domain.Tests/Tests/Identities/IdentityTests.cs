@@ -28,7 +28,7 @@ public class IdentityTests
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
         var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
-        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.FileStorageCapacity, 2, QuotaPeriod.Hour);
+        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.UsedFileStorageSpace, 2, QuotaPeriod.Hour);
 
         // Act
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);

@@ -49,7 +49,7 @@ public class HandlerTests
         var tier = new Tier(tierId, tierName);
 
         var metricWithTwoQuotas = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
-        var metricWithOneQuota = new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity");
+        var metricWithOneQuota = new Metric(MetricKey.UsedFileStorageSpace, "Used File Storage Space");
         var metrics = new List<Metric> { metricWithTwoQuotas, metricWithOneQuota };
 
         tier.CreateQuota(metricWithTwoQuotas.Key, 1, QuotaPeriod.Day);
