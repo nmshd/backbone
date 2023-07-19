@@ -14,12 +14,17 @@ public class ApnsMessageBuilder
     {
         _request = new HttpRequestMessage(HttpMethod.Post, new Uri(path))
         {
-            Version = new Version(2, 0)
+            Version = new Version(2, 0),
+            Headers =
+            {
+                {"apns-topic", appBundleIdentifier},
+                {"apns-expiration", "0"},
+                {"apns-priority", "5"},
+                {"apns-push-type", "alert"},
+                {"apns-push-type", "alert"}
+            }
         };
-        _request.Headers.Add("apns-topic", appBundleIdentifier);
-        _request.Headers.Add("apns-expiration", "0");
-        _request.Headers.Add("apns-priority", "5");
-        _request.Headers.Add("apns-push-type", "alert");
+
         _request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", jwt);
     }
 
@@ -100,10 +105,5 @@ public class ApnsMessageBuilder
         {
             writer.WriteStringValue(value.ToUniversalString());
         }
-    }
-
-    public object SetTopic()
-    {
-        throw new NotImplementedException();
     }
 }
