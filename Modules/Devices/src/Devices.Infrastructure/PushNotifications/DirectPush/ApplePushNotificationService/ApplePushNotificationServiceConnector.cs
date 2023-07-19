@@ -46,6 +46,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         }
 
         var client = _httpClientFactory.CreateClient();
+
         var tasks = recipients.Select(device =>
         {
             var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", _jwt.Value)
@@ -54,26 +55,26 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
                 .SetTag(notificationId)
                 .Build();
 
-            return (request: client.SendAsync(request), deviceId: device);
+            return client.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));
         }).ToList();
 
-        var responses = await Task.WhenAll(tasks.Select(x => x.request));
-        for (var index = 0; index < responses.Length; index++)
+        await Task.WhenAll(tasks);
+    }
+
+    private async Task HandleResponse(HttpResponseMessage response, string device)
+    {
+        if (response is { IsSuccessStatusCode: false })
         {
-            var response = responses[index];
-            if (response is { IsSuccessStatusCode: false })
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (!responseContent.IsNullOrEmpty())
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                if (!responseContent.IsNullOrEmpty())
-                {
-                    _logger.LogError(
-                        "The following error occurred while trying to send the notification for device {device}: {responseContent}",
-                        tasks.ElementAt(index).deviceId, responseContent);
-                }
-                else
-                {
-                    _logger.LogError("An unknown error occurred while trying to send the notification for device {device}.", tasks.ElementAt(index).deviceId);
-                }
+                _logger.LogError(
+                    "The following error occurred while trying to send the notification for device {device}: {responseContent}",
+                    device, responseContent);
+            }
+            else
+            {
+                _logger.LogError("An unknown error occurred while trying to send the notification for device {device}.", device);
             }
         }
     }
