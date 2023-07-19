@@ -57,6 +57,7 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<NumberOfSentMessagesMetricCalculator>();
         services.AddTransient<NumberOfFilesMetricCalculator>();
+        services.AddTransient<UsedFileStorageSpaceMetricCalculator>();
     }
 
     public class DbOptions
