@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 using static Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.IServiceCollectionExtensions.DirectPnsCommunicationOptions;
-using IHttpClientFactory = System.Net.Http.IHttpClientFactory;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
@@ -25,8 +24,7 @@ public class ApplePushNotificationServiceConnectorTests
     {
         // Arrange
         var client = HttpClientMock.Create();
-        var httpClientFactory = CreateHttpClientFactoryReturning(client);
-        var connector = CreateConnector(httpClientFactory);
+        var connector = CreateConnector(client);
 
         // Act
         var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
@@ -40,18 +38,21 @@ public class ApplePushNotificationServiceConnectorTests
         client.SendAsyncCalls.Should().Be(1);
     }
 
+    private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
+    {
+        var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
+        var options = new OptionsWrapper<ApnsOptions>(new ApnsOptions());
+        var jwtGenerator = A.Fake<IJwtGenerator>();
+        var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
+
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+    }
+
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)
     {
         var httpClientFactory = A.Fake<IHttpClientFactory>();
         A.CallTo(() => httpClientFactory.CreateClient(A<string>._)).Returns(client);
         return httpClientFactory;
-    }
-
-
-    private static ApplePushNotificationServiceConnector CreateConnector(IHttpClientFactory httpClientFactory)
-    {
-        return new ApplePushNotificationServiceConnector(httpClientFactory, new OptionsWrapper<ApnsOptions>(new ApnsOptions()), A.Fake<IJwtGenerator>(),
-            A.Fake<ILogger<ApplePushNotificationServiceConnector>>());
     }
 }
 
