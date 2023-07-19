@@ -31,4 +31,31 @@ public class TierTests
         // Assert
         tier.Quotas.Should().HaveCount(1);
     }
+
+    [Fact]
+    public void Can_delete_quota_on_tier()
+    {
+        // Arrange
+        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+
+        // Act
+        tier.DeleteQuota(tier.Quotas.First().Id);
+
+        // Assert
+        tier.Quotas.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Cannot_delete_non_existent_quota_on_tier()
+    {
+        // Arrange
+        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+
+        // Act
+        var result = tier.DeleteQuota("SomeTierQuotaDefinitionId");
+
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+    }
 }
