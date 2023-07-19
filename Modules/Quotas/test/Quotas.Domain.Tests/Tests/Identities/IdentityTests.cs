@@ -238,6 +238,11 @@ public class IdentityTests
         {
             return _calculator;
         }
+
+        protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
+        {
+            return _calculator;
+        }
     }
 }
 
