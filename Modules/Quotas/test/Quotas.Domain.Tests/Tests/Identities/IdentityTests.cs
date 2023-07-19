@@ -34,6 +34,7 @@ public class IdentityTests
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
 
+        // Assert
         identity.TierQuotas.Should().HaveCount(2);
 
         identity.TierQuotas.First().MetricKey.Should().Be(tierQuotaDefinition1.MetricKey);
@@ -42,6 +43,21 @@ public class IdentityTests
         identity.TierQuotas.Second().MetricKey.Should().Be(tierQuotaDefinition2.MetricKey);
         identity.TierQuotas.Second().Max.Should().Be(tierQuotaDefinition2.Max);
         identity.TierQuotas.Second().Period.Should().Be(tierQuotaDefinition2.Period);
+    }
+
+    [Fact]
+    public void Can_delete_tier_quota_by_definition_id_from_identity()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+
+        // Act
+        identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition.Id);
+
+        // Assert
+        identity.TierQuotas.Should().HaveCount(0);
     }
 
     [Fact]
