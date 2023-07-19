@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
-[ApplyQuotasForMetrics("NumberOfFiles", "UsedFileStorageSpace")]
+[ApplyQuotasForMetrics("NumberOfFiles", "UsedFileStorageSpace (MB)")]
 public class CreateFileCommand : IRequest<CreateFileResponse>
 {
     public byte[] FileContent { get; set; }
