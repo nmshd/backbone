@@ -13,7 +13,7 @@ public class UsedFileStorageSpaceMetricCalculator : IMetricCalculator
 
     public async Task<uint> CalculateUsage(DateTime from, DateTime to, string uploader, CancellationToken cancellationToken)
     {
-        var numberOfFiles = await _filesRepository.Count(uploader, from, to, cancellationToken);
+        var numberOfFiles = await _filesRepository.UsedSpace(uploader, from, to, cancellationToken);
         return numberOfFiles;
     }
 }
