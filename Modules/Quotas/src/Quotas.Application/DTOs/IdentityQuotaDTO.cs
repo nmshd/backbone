@@ -2,9 +2,9 @@
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
 
-public class IdentityQuotaDefinitionDTO
+public class IdentityQuotaDTO
 {
-    public IdentityQuotaDefinitionDTO(string id, MetricDTO metric, int max, QuotaPeriod period)
+    public IdentityQuotaDTO(string id, MetricDTO metric, int max, QuotaPeriod period)
     {
         Id = id;
         Metric = metric;

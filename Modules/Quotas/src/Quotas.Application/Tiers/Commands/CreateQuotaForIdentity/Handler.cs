@@ -1,5 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -7,7 +9,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 
-public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQuotaDefinitionDTO>
+public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQuotaDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
@@ -20,11 +22,12 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<IdentityQuotaDefinitionDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task<IdentityQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handling CreateQuotaForTierCommand ...");
+        var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true);
 
-        var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, true);
+        if (identity == null)
+            throw new NotFoundException(nameof(Identity));
 
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
@@ -33,13 +36,13 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
         var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
 
-        var individualQuota = identity.CreateIndividualQuota(parseMetricKeyResult.Value, request.Max, request.Period);
+        var individualQuota = identity.CreateIndividualQuota(metric.Key, request.Max, request.Period);
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.LogTrace($"Successfully created assigned Quota to Identity. Identity Address: {identity.Address}");
+        _logger.LogTrace($"Successfully created Quota for Identity. Identity Address: '{identity.Address}'");
 
-        var response = new IdentityQuotaDefinitionDTO(individualQuota.Id, new MetricDTO(metric.Key, metric.DisplayName), individualQuota.Max, individualQuota.Period);
+        var response = new IdentityQuotaDTO(individualQuota.Id, new MetricDTO(metric.Key, metric.DisplayName), individualQuota.Max, individualQuota.Period);
         return response;
     }
 }

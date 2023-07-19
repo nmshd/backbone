@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
@@ -13,11 +12,6 @@ public static class IdentitiesQueryableExtensions
 
     public static Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
     {
-        var identity = query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
-
-        if (identity == null)
-            throw new NotFoundException(nameof(Identity));
-
-        return identity;
+        return query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
     }
 }
