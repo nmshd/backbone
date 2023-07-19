@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using Enmeshed.Tooling;
 using JWT.Algorithms;
 using JWT.Builder;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -9,7 +8,26 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 
 public class JwtGenerator : IJwtGenerator
 {
+    private const string JWT_LOCK = "JWT_LOCK";
+    private Jwt _jwt;
+
     public Jwt Generate(string privateKey, string keyId, string teamId)
+    {
+        if (_jwt == null || _jwt.IsExpired())
+        {
+            // we cannot lock _jwt because it is possibly null here, and you cannot lock on null
+            // CAUTION: don't remove this, since it would cause the JWT to be generated multiple times, and we are only allowed to generate one JWT per 20 minutes (see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns#2943374)
+            lock (JWT_LOCK)
+            {
+                if (_jwt == null || _jwt.IsExpired())
+                    _jwt = CreateNew(privateKey, keyId, teamId);
+            }
+        }
+
+        return _jwt;
+    }
+
+    protected virtual Jwt CreateNew(string privateKey, string keyId, string teamId)
     {
         var keyParams = (ECPrivateKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
         var q = keyParams.Parameters.G.Multiply(keyParams.D).Normalize();
@@ -37,22 +55,5 @@ public class JwtGenerator : IJwtGenerator
     {
         var span = time - new DateTime(1970, 1, 1);
         return Convert.ToInt32(span.TotalSeconds);
-    }
-}
-
-public class Jwt
-{
-    public readonly string Value;
-    private readonly DateTime _createdAt;
-
-    public Jwt(string value)
-    {
-        Value = value;
-        _createdAt = SystemTime.UtcNow;
-    }
-
-    public bool IsExpired()
-    {
-        return _createdAt.AddMinutes(50) < SystemTime.UtcNow;
     }
 }

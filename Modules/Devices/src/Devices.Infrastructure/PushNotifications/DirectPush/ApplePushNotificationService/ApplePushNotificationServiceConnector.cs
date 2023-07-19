@@ -11,16 +11,14 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IJwtGenerator _jwtGenerator;
+    private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly ApnsOptions _options;
-    private const string JWT_LOCK = "JWT_LOCK";
-    private static Jwt _jwt;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
     {
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
         _logger = logger;
         _options = options.Value;
@@ -34,28 +32,17 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        if (_jwt == null || _jwt.IsExpired())
-        {
-            // we cannot lock _jwt because it is possibly null here, and you cannot lock on null
-            // CAUTION: don't remove this, since it would cause the JWT to be generated multiple times, and we are only allowed to generate one JWT per 20 minutes (see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns#2943374)
-            lock (JWT_LOCK)
-            {
-                if (_jwt == null || _jwt.IsExpired())
-                    _jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
-            }
-        }
-
-        var client = _httpClientFactory.CreateClient();
+        var jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
 
         var tasks = recipients.Select(device =>
         {
-            var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", _jwt.Value)
+            var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetTag(notificationId)
                 .Build();
 
-            return client.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));
+            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));
         }).ToList();
 
         await Task.WhenAll(tasks);
