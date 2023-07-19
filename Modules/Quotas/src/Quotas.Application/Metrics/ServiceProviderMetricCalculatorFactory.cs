@@ -12,9 +12,15 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
         _serviceProvider = serviceProvider;
     }
 
-    public override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
+    protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
     {
         var calculator = _serviceProvider.GetRequiredService<NumberOfSentMessagesMetricCalculator>();
+        return calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
+    {
+        var calculator = _serviceProvider.GetRequiredService<NumberOfFilesMetricCalculator>();
         return calculator;
     }
 }
