@@ -26,19 +26,21 @@ services:
     depends_on:
       - ms-sql-server
       - rabbitmq
+      - azure-storage-emulator
     volumes:
       - ../:/app
     
   ### infrastructure ###
 
-  #azure-storage-emulator:
-  #  container_name: azure-storage-emulator
-  #  image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
-  #  command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
-  #  ports:
-  #    - "10000:10000"
-  #  volumes:
-  #    - azure-storage-emulator-volume:/data
+  azure-storage-emulator:
+   container_name: azure-storage-emulator
+   hostname: azurite
+   image: mcr.microsoft.com/azure-storage/azurite
+   command: azurite-blob -l /data --blobHost "0.0.0.0"
+   ports:
+     - "10000:10000"
+   volumes:
+     - azure-storage-emulator-volume:/data
 
   ms-sql-server:
     container_name: bkb-mssql_server
@@ -129,8 +131,8 @@ volumes:
   rabbitmq-volume:
   mssql-server-volume:
     external: true
-  #postgres-volume:
-    #external: true
-  #azure-storage-emulator-volume:
-  #  external: true
+  postgres-volume:
+    external: true
+  azure-storage-emulator-volume:
+    external: true
   elastic_data:

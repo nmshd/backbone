@@ -12,10 +12,10 @@ public class MetricsRepository : IMetricsRepository
     {
         _metrics = new List<Metric>
         {
-            new Metric(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
-            new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"),
-            new Metric(MetricKey.NumberOfFiles, "Number of Files"),
-            new Metric(MetricKey.FileStorageCapacity, "File Storage Capacity")
+            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
+            new(MetricKey.NumberOfRelationships, "Number of Relationships"),
+            new(MetricKey.NumberOfFiles, "Number of Files"),
+            new(MetricKey.FileStorageCapacity, "File Storage Capacity")
         };
     }
 
@@ -29,5 +29,12 @@ public class MetricsRepository : IMetricsRepository
     public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult(_metrics.AsEnumerable());
+    }
+
+    public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
+    {
+        var metrics = _metrics.Where(m => keys.Contains(m.Key));
+
+        return Task.FromResult(metrics);
     }
 }

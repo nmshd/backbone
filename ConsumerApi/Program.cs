@@ -5,6 +5,7 @@ using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -18,6 +19,8 @@ using Devices.ConsumerApi;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using Files.ConsumerApi;
 using MediatR;
@@ -32,10 +35,6 @@ using Relationships.ConsumerApi;
 using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
-using Enmeshed.Common.Infrastructure;
-using Backbone.Modules.Quotas.Domain;
-using Backbone.Modules.Quotas.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -69,10 +68,7 @@ app
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) =>
-    {
-        new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait();
-    })
+    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
     .MigrateDbContext<MessagesDbContext>()
     .MigrateDbContext<SynchronizationDbContext>()
     .MigrateDbContext<TokensDbContext>()
@@ -90,12 +86,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule>(configuration)
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
-        .AddModule<TokensModule>(configuration)
-        .AddMetricStatusesRepository(c =>
-        {
-            c.ConnectionString = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:ConnectionString").Value;
-            c.Provider = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase:Provider").Value;
-        });
+        .AddModule<TokensModule>(configuration);
+
+    var quotasSqlDatabaseConfiguration = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase");
+    var quotasDbProvider = quotasSqlDatabaseConfiguration.GetValue<string>("Provider") ?? throw new ArgumentException("Quotas database connection string is not configured");
+    var quotasDbConnectionString = quotasSqlDatabaseConfiguration.GetValue<string>("ConnectionString") ?? throw new ArgumentException("Quotas database connection string is not configured");
+    services.AddMetricStatusesRepository(quotasDbProvider, quotasDbConnectionString);
+
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);

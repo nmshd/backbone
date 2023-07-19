@@ -45,7 +45,7 @@ public class DevicesDbContextSeed
 
     private async Task SeedBasicTier(DevicesDbContext context)
     {
-        if(await GetBasicTier(context) == null)
+        if (await GetBasicTier(context) == null)
         {
             await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
         }
@@ -54,7 +54,7 @@ public class DevicesDbContextSeed
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
         var basicTier = await GetBasicTier(context);
-        if(basicTier == null)
+        if (basicTier == null)
         {
             return;
         }

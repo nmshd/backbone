@@ -49,7 +49,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         _logger.LogTrace("Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
 
-        var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric.Key, metric.DisplayName), result.Value.Max, result.Value.Period);
+        var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric), result.Value.Max, result.Value.Period);
         return response;
     }
 }

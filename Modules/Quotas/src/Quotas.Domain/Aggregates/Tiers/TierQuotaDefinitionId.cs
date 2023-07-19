@@ -11,7 +11,7 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     private const string PREFIX = "TQD";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private TierQuotaDefinitionId(string value) : base(value)
     {
@@ -20,7 +20,7 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     public static TierQuotaDefinitionId Generate()
     {
-        var value = PREFIX + StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var value = PREFIX + StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new TierQuotaDefinitionId(value);
     }
 
@@ -34,7 +34,7 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     public static TierQuotaDefinitionId New()
     {
-        var randomPart = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new TierQuotaDefinitionId(PREFIX + randomPart);
     }
 }

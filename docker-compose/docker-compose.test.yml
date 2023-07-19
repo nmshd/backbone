@@ -1,10 +1,11 @@
+version: "3.3"
 services:
-  consumer-api:
+  test-consumer-api:
     container_name: consumer-api
     hostname: consumer-api
     build:
       context: ..
-      dockerfile: ConsumerApi/Dockerfile.debug
+      dockerfile: ConsumerApi/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -26,21 +27,50 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      - ms-sql-server
-      - rabbitmq
-    volumes:
-      - ../:/app
+      test-ms-sql-server:
+        condition: service_started
+      test-rabbitmq:
+        condition: service_started
+      test-seed-mssql:
+        condition: service_completed_successfully
+      test-azure-storage-emulator:
+        condition: service_started
+    configs:
+      - source: ConsumerApiOverrideConfig
+        target: app/appsettings.override.json
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      test: ["CMD", "wget", "http://localhost/health"]
       interval: 5s
-      timeout: 5s
+      timeout: 2s
       retries: 40
-      start_period: 1m
+
+  test-admin-ui:
+    container_name: admin-ui
+    hostname: admin-ui
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      test-ms-sql-server:
+        condition: service_started
+      test-rabbitmq:
+        condition: service_started
+      test-consumer-api:
+        condition: service_started
+    configs:
+      - source: AdminUiOverrideConfig
+        target: app/appsettings.override.json
+    environment:
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True
+      - Infrastructure__EventBus__ConnectionInfo=rabbitmq
 
 
   ### infrastructure ###
 
-  azure-storage-emulator:
+  test-azure-storage-emulator:
    container_name: azure-storage-emulator
    hostname: azurite
    image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
@@ -50,7 +80,7 @@ services:
    volumes:
      - azure-storage-emulator-volume:/data
 
-  ms-sql-server:
+  test-ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -63,7 +93,7 @@ services:
     ports:
       - 1433:1433
 
-  rabbitmq:
+  test-rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
     image: rabbitmq:3.7-management-alpine
@@ -76,22 +106,22 @@ services:
 
   ### seeds ###
 
-  seed-mssql:
+  test-seed-mssql:
     image: mcr.microsoft.com/mssql-tools
     volumes: 
       - ../setup-db:/app/setup-db
     command: >
       bash -c "
-      sleep 10 &&
+      sleep 20 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" &&
       sleep 1 &&
       /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql
       "
     depends_on:
-      - ms-sql-server
+      - test-ms-sql-server
 
-  seed-client:
+  test-seed-client:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     command: >
@@ -99,8 +129,14 @@ services:
       -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
       --clientId test --clientSecret test
     depends_on:
-      consumer-api:
+      test-consumer-api:
         condition: service_healthy
+
+configs:
+  AdminUiOverrideConfig:
+    file: ../AdminUi/src/AdminUi/appsettings.override.json
+  ConsumerApiOverrideConfig:
+    file: ../ConsumerApi/appsettings.override.json
 
 networks:
   default:

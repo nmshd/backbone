@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         var changePasswordResult = await _userManager.ChangePasswordAsync(currentDevice.User, request.OldPassword, request.NewPassword);
 
         if (!changePasswordResult.Succeeded)
-                throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
+            throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
         _logger.LogTrace($"Successfully changed password for device with id '{_activeDevice}'.");
     }

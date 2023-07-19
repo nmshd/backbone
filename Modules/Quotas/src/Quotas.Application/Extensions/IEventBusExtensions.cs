@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
@@ -20,5 +21,6 @@ public static class IEventBusExtensions
         eventBus.Subscribe<TierCreatedIntegrationEvent, TierCreatedIntegrationEventHandler>();
         eventBus.Subscribe<QuotaCreatedForTierIntegrationEvent, QuotaCreatedForTierIntegrationEventHandler>();
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<FileUploadedIntegrationEvent, FileUploadedIntegrationEventHandler>();
     }
 }

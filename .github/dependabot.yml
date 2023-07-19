@@ -4,25 +4,39 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      update-nuget-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "OpenIddict.*"
     reviewers:
       - "tnotheis"
     labels:
-      - "chore"
+      - "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      update-github-actions-dependencies:
+        patterns:
+          - "*"
     reviewers:
       - "tnotheis"
     labels:
-      - "chore"
+      - "dependencies"
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
     reviewers:
       - "tnotheis"
     labels:
-      - "chore"
+      - "dependencies"

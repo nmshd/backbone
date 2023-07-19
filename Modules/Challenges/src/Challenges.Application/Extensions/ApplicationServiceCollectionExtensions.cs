@@ -5,7 +5,6 @@ using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-
 using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
 namespace Backbone.Modules.Challenges.Application.Extensions;

@@ -57,11 +57,19 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            - name: Infrastructure__EventBus__RabbitMQPassword
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-password
                   key: "VALUE" 
+            {{- end }}
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

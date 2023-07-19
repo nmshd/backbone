@@ -7,11 +7,11 @@ namespace AdminUi.Tests.Integration.Support;
 
 public class JsonValidators
 {
-    private static readonly Dictionary<Type, JSchema> CachedSchemas = new();
+    private static readonly Dictionary<Type, JSchema> CACHED_SCHEMAS = new();
 
     public static bool ValidateJsonSchema<T>(string json, out IList<string> errors)
     {
-        if (CachedSchemas.TryGetValue(typeof(T), out var schema))
+        if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
             var parsedJson = JObject.Parse(json);
             return parsedJson.IsValid(schema, out errors);
@@ -23,7 +23,7 @@ public class JsonValidators
         };
         var schemaJson = generator.Generate(typeof(T));
         schema = JSchema.Parse(schemaJson.ToString());
-        CachedSchemas.Add(typeof(T), schema);
+        CACHED_SCHEMAS.Add(typeof(T), schema);
         var responseJson = JObject.Parse(json);
         return responseJson.IsValid(schema, out errors);
     }

@@ -2,12 +2,13 @@
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
-
+[Authorize("ApiKey")]
 public class MetricsController : ApiControllerBase
 {
     public MetricsController(IMediator mediator) : base(mediator) { }

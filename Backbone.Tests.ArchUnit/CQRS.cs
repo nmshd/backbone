@@ -4,16 +4,16 @@ using MediatR;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Backbone.Tests.ArchUnit;
-public class CQRS
+public class Cqrs
 {
 
-    private static readonly IObjectProvider<IType> Commands =
+    private static readonly IObjectProvider<IType> COMMANDS =
         Classes().That()
             .AreNotAbstract()
             .And().AreAssignableTo(typeof(IRequest<>))
             .And().HaveName(".+Command$", true);
 
-    private static readonly IObjectProvider<IType> Queries =
+    private static readonly IObjectProvider<IType> QUERIES =
         Classes().That()
             .AreNotAbstract()
             .And().AreAssignableTo(typeof(IRequest<>))
@@ -27,25 +27,25 @@ public class CQRS
             .And().AreNotAbstract()
             .Should().HaveName(".+Command$", true)
             .OrShould().HaveName(".+Query$", true)
-            .Check(Backbone.Architecture);
+            .Check(Backbone.ARCHITECTURE);
     }
 
     [Fact]
     public void CommandsShouldResideInCommandsNamespace()
     {
         Classes()
-            .That().Are(Commands)
+            .That().Are(COMMANDS)
             .Should().ResideInNamespace(".+\\.Commands\\.", true)
-            .Check(Backbone.Architecture);
+            .Check(Backbone.ARCHITECTURE);
     }
 
     [Fact]
     public void QueriesShouldResideInQueriesNamespace()
     {
         Classes()
-            .That().Are(Queries)
+            .That().Are(QUERIES)
             .Should().ResideInNamespace(".+\\.Queries\\.", true)
-            .Check(Backbone.Architecture);
+            .Check(Backbone.ARCHITECTURE);
     }
 
 }

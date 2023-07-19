@@ -2,7 +2,7 @@
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public interface IRabbitMQPersistentConnection
+public interface IRabbitMqPersistentConnection
     : IDisposable
 {
     bool IsConnected { get; }

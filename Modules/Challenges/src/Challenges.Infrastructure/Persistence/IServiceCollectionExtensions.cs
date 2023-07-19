@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
