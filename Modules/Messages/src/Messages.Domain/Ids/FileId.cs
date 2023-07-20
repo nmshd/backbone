@@ -11,25 +11,25 @@ public class FileId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "FIL";
-    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private FileId(string stringValue) : base(stringValue) { }
 
     public static FileId Parse(string stringValue)
     {
-        Utils.Validate(stringValue);
+        UTILS.Validate(stringValue);
 
         return new FileId(stringValue);
     }
 
     public static bool IsValid(string stringValue)
     {
-        return Utils.IsValid(stringValue);
+        return UTILS.IsValid(stringValue);
     }
 
     public static FileId New()
     {
-        var stringValue = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var stringValue = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new FileId(PREFIX + stringValue);
     }
 

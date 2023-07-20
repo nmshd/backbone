@@ -14,9 +14,16 @@ public abstract class Quota
 
     public QuotaId Id { get; }
     public string ApplyTo { get; }
-    public DateTime? IsExhaustedUntil { get; }
     public abstract int Weight { get; }
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
+
+    internal ExhaustionDate CalculateExhaustion(uint newUsage)
+    {
+        if (newUsage >= Max)
+            return new ExhaustionDate(Period.CalculateEnd());
+
+        return ExhaustionDate.Unexhausted;
+    }
 }

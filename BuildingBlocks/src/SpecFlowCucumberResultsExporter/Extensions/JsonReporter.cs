@@ -25,9 +25,9 @@ public class JsonReporter : Reporter
 
     public override void WriteToStream(Stream stream)
     {
-        string s = JsonConvert.SerializeObject(base.Report.Features, JsonSerializerSettings);
-        byte[] bytes = Encoding.UTF8.GetBytes(s);
-        using MemoryStream memoryStream = new MemoryStream(bytes);
+        var s = JsonConvert.SerializeObject(base.Report.Features, JsonSerializerSettings);
+        var bytes = Encoding.UTF8.GetBytes(s);
+        using var memoryStream = new MemoryStream(bytes);
         memoryStream.CopyTo(stream);
     }
 }

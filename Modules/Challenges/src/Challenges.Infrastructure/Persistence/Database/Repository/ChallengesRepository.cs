@@ -9,7 +9,7 @@ public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;
     private readonly ChallengesDbContext _dbContext;
-    
+
     public ChallengesRepository(ChallengesDbContext dbContext)
     {
         _challenges = dbContext.Challenges;
@@ -29,6 +29,6 @@ public class ChallengesRepository : IChallengesRepository
 
     public async Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken)
     {
-        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync();
+        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
 }

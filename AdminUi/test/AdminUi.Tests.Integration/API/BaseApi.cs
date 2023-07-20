@@ -1,21 +1,23 @@
 ﻿using System.Net;
-using AdminApi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.Configuration;
+using AdminUi.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using RestSharp;
 
-namespace AdminApi.Tests.Integration.API;
+namespace AdminUi.Tests.Integration.API;
 
 public class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
 
-    protected BaseApi(RestClient client)
+    protected BaseApi(IOptions<HttpClientOptions> httpConfiguration)
     {
-        _client = client;
+        _client = new RestClient(httpConfiguration.Value.BaseUrl);
+        _client.AddDefaultHeader("X-API-KEY", httpConfiguration.Value.ApiKey);
 
-        ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
+        ServicePointManager.ServerCertificateValidationCallback += (_, _, _, _) => true;
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -26,6 +28,11 @@ public class BaseApi
     protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
         return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
+    }
+
+    protected async Task<HttpResponse<T>> Delete<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest<T>(Method.Delete, endpoint, requestConfiguration);
     }
 
     private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)

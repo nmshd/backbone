@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
             case PROVIDER_AZURE_NOTIFICATION_HUB:
                 services.AddAzureNotificationHubPushNotifications(options.AzureNotificationHub);
                 break;
-            case PROVIDER_DUMMY: 
+            case PROVIDER_DUMMY:
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:

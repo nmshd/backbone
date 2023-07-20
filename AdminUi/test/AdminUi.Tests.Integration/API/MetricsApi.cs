@@ -1,10 +1,11 @@
-﻿using AdminApi.Tests.Integration.Models;
-using RestSharp;
+﻿using AdminUi.Tests.Integration.Configuration;
+using AdminUi.Tests.Integration.Models;
+using Microsoft.Extensions.Options;
 
-namespace AdminApi.Tests.Integration.API;
+namespace AdminUi.Tests.Integration.API;
 public class MetricsApi : BaseApi
 {
-    public MetricsApi(RestClient client) : base(client) { }
+    public MetricsApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
 
     public async Task<HttpResponse<List<MetricDTO>>> GetAllMetrics(RequestConfiguration requestConfiguration)
     {

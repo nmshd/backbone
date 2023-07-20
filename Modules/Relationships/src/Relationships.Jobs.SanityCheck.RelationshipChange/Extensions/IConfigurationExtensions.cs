@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Relationships.Jobs.SanityCheck.RelationshipChange.Extensions;
 
-[ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions
 {
     public static BlobStorageConfiguration GetBlobStorageConfiguration(this IConfiguration configuration)

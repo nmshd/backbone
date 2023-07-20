@@ -32,7 +32,7 @@ public class TiersRepository : ITiersRepository
             .OrderAndPaginate(d => d.Name, paginationFilter);
         return paginationResult;
     }
-    
+
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
     {
         return await _tiersDbSet.GetBasicTier(cancellationToken);

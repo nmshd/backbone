@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Relationships.Application.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;

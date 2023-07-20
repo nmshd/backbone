@@ -11,25 +11,25 @@ public class RelationshipTemplateId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "RLT";
-    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private RelationshipTemplateId(string stringValue) : base(stringValue) { }
 
     public static RelationshipTemplateId Parse(string stringValue)
     {
-        Utils.Validate(stringValue);
+        UTILS.Validate(stringValue);
 
         return new RelationshipTemplateId(stringValue);
     }
 
     public static bool IsValid(string stringValue)
     {
-        return Utils.IsValid(stringValue);
+        return UTILS.IsValid(stringValue);
     }
 
     public static RelationshipTemplateId New()
     {
-        var stringValue = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var stringValue = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new RelationshipTemplateId(PREFIX + stringValue);
     }
 

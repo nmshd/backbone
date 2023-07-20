@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
@@ -12,6 +13,7 @@ using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Ex
 namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
+[Authorize("ApiKey")]
 public class IdentitiesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;

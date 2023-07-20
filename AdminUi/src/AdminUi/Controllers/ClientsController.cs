@@ -1,13 +1,16 @@
-﻿using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+﻿using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
-
+[Authorize("ApiKey")]
 public class ClientsController : ApiControllerBase
 {
     public ClientsController(IMediator mediator) : base(mediator) { }
@@ -20,4 +23,22 @@ public class ClientsController : ApiControllerBase
         var clients = await _mediator.Send(new ListClientsQuery(), cancellationToken);
         return Ok(clients);
     }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateClientResponse>), StatusCodes.Status200OK)]
+    public async Task<CreatedResult> CreateOAuthClients(CreateClientCommand command, CancellationToken cancellationToken)
+    {
+        var createdClient = await _mediator.Send(command, cancellationToken);
+        return Created(createdClient);
+    }
+
+    [HttpDelete("{clientId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteClient([FromRoute] string clientId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteClientCommand(clientId), cancellationToken);
+        return NoContent();
+    }
 }
+

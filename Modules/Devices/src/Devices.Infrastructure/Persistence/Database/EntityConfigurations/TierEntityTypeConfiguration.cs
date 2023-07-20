@@ -8,8 +8,6 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
 {
     public void Configure(EntityTypeBuilder<Tier> builder)
     {
-        builder.ToTable("Tier");
-
         builder.HasKey(x => x.Id);
         builder.HasIndex(x => x.Name).IsUnique();
     }

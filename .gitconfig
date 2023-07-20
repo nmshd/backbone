@@ -1,0 +1,4 @@
+[core]
+	ignorecase = false
+	autocrlf = false
+	eol = lf

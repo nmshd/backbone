@@ -13,7 +13,7 @@ public class Username : StronglyTypedId
 
     private const string PREFIX = "USR";
 
-    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private Username(string stringValue) : base(stringValue)
     {
@@ -21,19 +21,19 @@ public class Username : StronglyTypedId
 
     public static Username Parse(string stringValue)
     {
-        Utils.Validate(stringValue);
+        UTILS.Validate(stringValue);
 
         return new Username(stringValue);
     }
 
     public static bool IsValid(string stringValue)
     {
-        return Utils.IsValid(stringValue);
+        return UTILS.IsValid(stringValue);
     }
 
     public static Username New()
     {
-        var deviceNameAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var deviceNameAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new Username(PREFIX + deviceNameAsString);
     }
 

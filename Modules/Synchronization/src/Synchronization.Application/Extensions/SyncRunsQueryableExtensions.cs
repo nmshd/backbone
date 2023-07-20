@@ -24,11 +24,7 @@ public static class SyncRunsQueryableExtensions
 
     public static async Task<SyncRun> GetFirst(this IQueryable<SyncRun> query, CancellationToken cancellationToken)
     {
-        var syncRun = await query.FirstOrDefaultAsync(cancellationToken);
-
-        if (syncRun == null)
-            throw new NotFoundException(nameof(SyncRun));
-
+        var syncRun = await query.FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(nameof(SyncRun));
         return syncRun;
     }
 }
