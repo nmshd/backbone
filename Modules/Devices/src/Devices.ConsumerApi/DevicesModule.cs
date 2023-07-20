@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -10,7 +11,6 @@ using Enmeshed.Crypto.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.IServiceCollectionExtensions;
 
 namespace Devices.ConsumerApi;
 
@@ -21,7 +21,7 @@ public class DevicesModule : IModule
     public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-        services.ConfigureAndValidate<IServiceCollectionExtensions.DirectPnsCommunicationOptions.ApnsOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Apns").Bind(options));
+        services.ConfigureAndValidate<DirectPnsCommunicationOptions.ApnsOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Apns").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;

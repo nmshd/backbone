@@ -13,7 +13,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
-using static Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.IServiceCollectionExtensions.DirectPnsCommunicationOptions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
@@ -41,7 +40,7 @@ public class ApplePushNotificationServiceConnectorTests
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
     {
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
-        var options = new OptionsWrapper<ApnsOptions>(new ApnsOptions());
+        var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions());
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
 

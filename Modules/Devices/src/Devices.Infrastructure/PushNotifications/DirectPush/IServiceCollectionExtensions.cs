@@ -37,37 +37,4 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<ApnsJwtCache>();
     }
-
-    public class DirectPnsCommunicationOptions
-    {
-        public FcmOptions Fcm { get; set; }
-
-        public class FcmOptions
-        {
-            public string ServiceAccountJson { get; set; } = string.Empty;
-        }
-
-        public ApnsOptions Apns { get; set; }
-
-        public class ApnsOptions
-        {
-            public string TeamId { get; set; } = string.Empty;
-            public string KeyId { get; set; } = string.Empty;
-            public string PrivateKey { get; set; } = string.Empty;
-            public string AppBundleIdentifier { get; set; } = string.Empty;
-            public ApnsServerType ServerType { get; set; }
-            public string Server => ServerType switch
-            {
-                ApnsServerType.Development => "https://api.development.push.apple.com:443/3/device/",
-                ApnsServerType.Production => "https://api.push.apple.com:443/3/device/",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
-
-        public enum ApnsServerType
-        {
-            Development,
-            Production
-        }
-    }
 }
