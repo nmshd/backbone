@@ -46,7 +46,7 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Can_delete_tier_quota_by_definition_id_from_identity()
+    public void Can_delete_tier_quota_by_definition_id()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
@@ -58,6 +58,24 @@ public class IdentityTests
 
         // Assert
         identity.TierQuotas.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Can_delete_tier_quota_by_definition_id_with_multiple_quotas()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
+
+        // Act
+        identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition1.Id);
+
+        // Assert
+        identity.TierQuotas.Should().HaveCount(1);
+        identity.TierQuotas.ElementAt(0).DefinitionId.Should().Be(tierQuotaDefinition2.Id);
     }
 
     [Fact]
