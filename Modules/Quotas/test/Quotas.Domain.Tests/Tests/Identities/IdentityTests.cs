@@ -79,6 +79,19 @@ public class IdentityTests
     }
 
     [Fact]
+    public void Cannot_delete_nonexistent_tier_quota_by_definition_id()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+
+        // Act
+        var acting = () => identity.DeleteTierQuotaFromDefinitionId("some-nonexistent-tier-quota-definition-id");
+
+        // Assert
+        acting.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
     public async Task Updating_a_non_existing_MetricStatus_creates_a_MetricStatus()
     {
         // Arrange
