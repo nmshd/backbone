@@ -14,6 +14,6 @@ public class UsedFileStorageSpaceMetricCalculator : IMetricCalculator
     public async Task<uint> CalculateUsage(DateTime from, DateTime to, string uploader, CancellationToken cancellationToken)
     {
         var usedSpace = await _filesRepository.AggregateUsedSpace(uploader, from, to, cancellationToken);
-        return (uint)(usedSpace / 1024 / 1024);
+        return Convert.ToUInt32(usedSpace / 1024 / 1024);
     }
 }
