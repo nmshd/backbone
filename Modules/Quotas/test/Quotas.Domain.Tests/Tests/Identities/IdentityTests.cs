@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
@@ -88,7 +89,7 @@ public class IdentityTests
         var acting = () => identity.DeleteTierQuotaFromDefinitionId("some-nonexistent-tier-quota-definition-id");
 
         // Assert
-        acting.Should().Throw<InvalidOperationException>();
+        acting.Should().Throw<DomainException>();
     }
 
     [Fact]
