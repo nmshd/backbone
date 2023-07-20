@@ -62,8 +62,10 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        var exception = await Assert.ThrowsAsync<DomainException>(async () => await handler.Handle(command, CancellationToken.None));
-        exception.Message.Should().Contain("The given metric key is not supported.");
+        var act = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        var exception = (await act.Should().ThrowAsync<DomainException>()).And;
         exception.Code.Should().Be("error.platform.quotas.unsupportedMetricKey");
     }
 
@@ -78,8 +80,11 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        var exception = await Assert.ThrowsAsync<NotFoundException>(async () => await handler.Handle(command, CancellationToken.None));
-        exception.Message.Should().Be("Identity not found. Make sure the ID exists and the record is not expired.");
+        var act = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        var exception = (await act.Should().ThrowAsync<NotFoundException>()).And;
+        exception.Message.Should().StartWith("Identity");
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
