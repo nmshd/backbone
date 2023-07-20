@@ -5,5 +5,5 @@ public class FileMetadata
     public DateTime CreatedAt { get; set; }
     public string CreatedBy { get; set; }
 
-    public int CipherSize { get; set; }
+    public long CipherSize { get; set; }
 }
