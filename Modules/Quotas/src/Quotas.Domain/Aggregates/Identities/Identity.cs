@@ -37,7 +37,7 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public void DeleteTierQuotaFromDefinitionId(string tierQuotaDefinitionId)
+    public void DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
         var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.DefinitionId == tierQuotaDefinitionId)
                         ?? throw new DomainException(DomainErrors.TierQuotaNotFoundOnIdentity(tierQuotaDefinitionId, Address));
