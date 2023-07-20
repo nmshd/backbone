@@ -8,7 +8,7 @@ public class NumberOfRelationshipsMetricCalculator : IMetricCalculator
 
     public NumberOfRelationshipsMetricCalculator(IRelationshipsRepository relationshipsRepository)
     {
-        _relationshipsRepository = relationshipsRepository;    
+        _relationshipsRepository = relationshipsRepository;
     }
 
     public async Task<uint> CalculateUsage(DateTime from, DateTime to, string uploader, CancellationToken cancellationToken)
