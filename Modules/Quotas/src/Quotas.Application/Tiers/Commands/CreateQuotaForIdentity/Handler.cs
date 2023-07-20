@@ -24,11 +24,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
     public async Task<IdentityQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true);
-
-        if (identity == null)
-            throw new NotFoundException(nameof(Identity));
-
+        var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
         if (parseMetricKeyResult.IsFailure)
