@@ -10,7 +10,7 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions? options)
+    public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
     {
         FirebaseApp.Create(new AppOptions
         {
@@ -21,9 +21,11 @@ public static class IServiceCollectionExtensions
         services.AddHttpClient();
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
+
         services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IPushService, DirectPushService>();
         services.AddTransient<IJwtGenerator, JwtGenerator>();
+        services.AddSingleton<ApnsJwtCache>();
         services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
 
