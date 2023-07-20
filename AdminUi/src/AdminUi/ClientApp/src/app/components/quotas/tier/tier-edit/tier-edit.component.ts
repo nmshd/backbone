@@ -76,7 +76,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -104,7 +104,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -130,7 +130,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -171,7 +171,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -218,7 +218,7 @@ export class TierEditComponent {
             },
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
