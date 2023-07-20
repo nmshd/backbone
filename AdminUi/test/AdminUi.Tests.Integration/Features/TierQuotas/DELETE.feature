@@ -4,14 +4,12 @@ Feature: DELETE TierQuota
 Administrator Deletes a Tier Quota
 
 Scenario: Deleting an existing Tier Quota
-	Given a Tier t
-	Given a TierQuotaDefinition tq
-	When a DELETE request is sent to the /Tier/{t.id}/Quotas/{tq.id} endpoint
+	Given a Tier t with a Quota q
+	When a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint
 	Then the response status code is 204 (NO CONTENT)
 
-Scenario: Deleting a non-existent Tier Quota
+Scenario: Deleting an inexistent Tier Quota
 	Given a Tier t
-	Given an inexistent TierQuotaDefinition tq
-	When a DELETE request is sent to the /Tier/{t.id}/Quotas/{tq.id} endpoint
+	When a DELETE request is sent to the /Tiers/{t.id}/Quotas/inexistentQuotaId endpoint
 	Then the response status code is 404 (Not Found)
 	And the response content includes an error with the error code "error.platform.recordNotFound"

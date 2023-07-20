@@ -42,9 +42,11 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [Given(@"a TierQuotaDefinition tq")]
-    public async Task GivenAValidTierQuotaDefinition()
+    [Given(@"a Tier t with a Quota q")]
+    public async Task GivenAValidTierWithAQuota()
     {
+        await GivenAValidTier();
+
         var createTierQuotaRequest = new CreateTierQuotaRequest
         {
             MetricKey = "NumberOfSentMessages",
@@ -72,14 +74,8 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierId = "some-inexistent-tier-id";
     }
 
-    [Given(@"an inexistent TierQuotaDefinition tq")]
-    public void GivenANonExistentTierQuotaDefinitionTq()
-    {
-        _tierQuotaDefinitionId = "some-inexistent-tier-quota-definition-id";
-    }
-
-    [When(@"a POST request is sent to the /Tier/{t.id}/Quotas endpoint")]
-    public async Task WhenAPOSTRequestIsSentToTheCreateTiersQuotaEndpoint()
+    [When(@"a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpoint()
     {
         var createTierQuotaRequest = new CreateTierQuotaRequest
         {
@@ -95,10 +91,17 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
     }
 
-    [When(@"a DELETE request is sent to the /Tier/{t.id}/Quotas/{tq.id} endpoint")]
+    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
     public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpoint()
     {
         _response = await _tiersApi.DeleteTierQuota(_tierId, _tierQuotaDefinitionId, _requestConfiguration);
+        _response.Should().NotBeNull();
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/inexistentQuotaId endpoint")]
+    public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
+    {
+        _response = await _tiersApi.DeleteTierQuota(_tierId, "inexistentQuotaId", _requestConfiguration);
         _response.Should().NotBeNull();
     }
 
