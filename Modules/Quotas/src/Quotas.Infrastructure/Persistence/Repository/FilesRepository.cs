@@ -20,9 +20,9 @@ public class FilesRepository : IFilesRepository
         return (uint)count;
     }
 
-    public async Task<ulong> AggregateUsedSpace(string uploader, DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<long> AggregateUsedSpace(string uploader, DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         var totalSpace = await _readOnlyFiles.Where(f => f.CreatedBy == uploader).SumAsync(f => f.CipherSize, cancellationToken);
-        return (ulong)totalSpace;
+        return totalSpace;
     }
 }
