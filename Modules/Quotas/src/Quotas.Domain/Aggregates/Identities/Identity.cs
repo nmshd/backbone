@@ -38,7 +38,9 @@ public class Identity
 
     public void DeleteTierQuotaFromDefinitionId(string tierQuotaDefinitionId)
     {
-        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.DefinitionId == tierQuotaDefinitionId);
+        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.DefinitionId == tierQuotaDefinitionId)
+                        ?? throw new InvalidOperationException($"The Tier Quota with Definition Id '{tierQuotaDefinitionId}' does not exist for Identity '{Address}'. It is not possible to delete it.");
+
         _tierQuotas.Remove(tierQuota);
     }
 
