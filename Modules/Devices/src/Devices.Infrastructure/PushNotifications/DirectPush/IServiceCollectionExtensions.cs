@@ -12,21 +12,30 @@ public static class IServiceCollectionExtensions
 {
     public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
     {
+        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
+        services.AddFcm(options.Fcm);
+        services.AddApns();
+    }
+
+    private static void AddFcm(this IServiceCollection services, DirectPnsCommunicationOptions.FcmOptions options)
+    {
         FirebaseApp.Create(new AppOptions
         {
-            Credential = options?.Fcm?.ServiceAccountJson is null
+            Credential = options?.ServiceAccountJson is null
                 ? GoogleCredential.GetApplicationDefault()
-                : GoogleCredential.FromJson(options.Fcm.ServiceAccountJson)
+                : GoogleCredential.FromJson(options.ServiceAccountJson)
         });
-        services.AddHttpClient();
-        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
+        services.AddSingleton(FirebaseMessaging.DefaultInstance);
+    }
 
+    private static void AddApns(this IServiceCollection services)
+    {
+        services.AddHttpClient();
         services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IPushService, DirectPushService>();
         services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<ApnsJwtCache>();
-        services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
 
     public class DirectPnsCommunicationOptions
