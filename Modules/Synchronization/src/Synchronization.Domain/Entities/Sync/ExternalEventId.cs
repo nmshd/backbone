@@ -11,7 +11,7 @@ public class ExternalEventId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "SYI";
-    private static readonly StronglyTypedIdHelpers Utils = new(PREFIX, DefaultValidChars, MAX_LENGTH);
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private ExternalEventId(string stringValue) : base(stringValue) { }
 
@@ -25,12 +25,12 @@ public class ExternalEventId : StronglyTypedId
 
     public static bool IsValid(string stringValue)
     {
-        return Utils.IsValid(stringValue);
+        return UTILS.IsValid(stringValue);
     }
 
     public static ExternalEventId New()
     {
-        var challengeIdAsString = StringUtils.Generate(DefaultValidChars, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        var challengeIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new ExternalEventId(PREFIX + challengeIdAsString);
     }
 

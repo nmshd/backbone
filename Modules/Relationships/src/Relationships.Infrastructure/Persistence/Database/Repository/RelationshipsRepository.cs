@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Backbone.Modules.Relationships.Application;
+﻿using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Common;
@@ -12,7 +11,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Google.Apis.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -163,9 +161,9 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         var latestChange = relationship.Changes.MaxBy(c => c.CreatedAt);
 
-        if(relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
+        if (relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
             _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Req", latestChange.Request.Content);
-        else if(latestChange.Response?.Content != null)
+        else if (latestChange.Response?.Content != null)
             _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Res", latestChange.Response.Content);
 
         try
@@ -177,7 +175,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             _logger.LogError(ex, "There was an error while trying to save the content of the RelationshipChange with the id {id}. The name of the blob was {name}.", latestChange.Id, ex.BlobName);
         }
     }
-    
+
     private async Task FillContentOfChange(RelationshipChange change)
     {
         if (change.Type == RelationshipChangeType.Creation)

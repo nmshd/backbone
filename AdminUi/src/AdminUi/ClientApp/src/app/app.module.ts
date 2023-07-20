@@ -1,46 +1,49 @@
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 
-import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from "@angular/material/card";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { LayoutModule } from "@angular/cdk/layout";
+import { ClipboardModule } from "@angular/cdk/clipboard";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSelectModule } from "@angular/material/select";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { SidebarService } from './services/sidebar-service/sidebar.service';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PageNotFoundComponent } from './components/error/page-not-found/page-not-found.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { TopbarComponent } from './components/topbar/topbar.component';
-import { IdentityListComponent } from './components/quotas/identity/identity-list/identity-list.component';
-import { TierListComponent } from './components/quotas/tier/tier-list/tier-list.component';
-import { TierEditComponent } from './components/quotas/tier/tier-edit/tier-edit.component';
-import { ClientListComponent } from './components/client/client-list/client-list.component';
-import { IdentityEditComponent } from './components/quotas/identity/identity-edit/identity-edit.component';
-import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
-import { AssignQuotasDialogComponent } from './components/quotas/assign-quotas-dialog/assign-quotas-dialog.component';
-import { ConfirmationDialogComponent } from './components/shared/confirmation-dialog/confirmation-dialog.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { SidebarService } from "./services/sidebar-service/sidebar.service";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
+import { SidebarComponent } from "./components/sidebar/sidebar.component";
+import { TopbarComponent } from "./components/topbar/topbar.component";
+import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
+import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
+import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
+import { ClientListComponent } from "./components/client/client-list/client-list.component";
+import { IdentityEditComponent } from "./components/quotas/identity/identity-edit/identity-edit.component";
+import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
+import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
+import { LoginComponent } from "./components/shared/login/login.component";
+import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 
 @NgModule({
     declarations: [
@@ -57,6 +60,7 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         ClientEditComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
+        LoginComponent
     ],
     imports: [
         FormsModule,
@@ -64,6 +68,7 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ClipboardModule,
         HttpClientModule,
         MatCardModule,
         MatToolbarModule,
@@ -84,15 +89,16 @@ import { ConfirmationDialogComponent } from './components/shared/confirmation-di
         LayoutModule,
         MatDialogModule,
         MatSelectModule,
-        MatChipsModule,
+        MatChipsModule
     ],
     providers: [
         SidebarService,
         {
             provide: DATE_PIPE_DEFAULT_OPTIONS,
-            useValue: { dateFormat: 'dd.MM.yyyy HH:mm:ss' },
+            useValue: { dateFormat: "dd.MM.yyyy HH:mm:ss" }
         },
+        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true }
     ],
-    bootstrap: [AppComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

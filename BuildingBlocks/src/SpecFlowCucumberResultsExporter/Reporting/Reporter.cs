@@ -16,10 +16,10 @@ public abstract class Reporter
 
     public virtual void WriteToFile(string path)
     {
-        using MemoryStream memoryStream = new MemoryStream();
+        using var memoryStream = new MemoryStream();
         WriteToStream(memoryStream);
         memoryStream.Seek(0L, SeekOrigin.Begin);
-        using FileStream destination = File.Create(path);
+        using var destination = File.Create(path);
         memoryStream.CopyTo(destination);
     }
 
@@ -27,10 +27,10 @@ public abstract class Reporter
 
     public string WriteToString()
     {
-        using MemoryStream memoryStream = new MemoryStream();
+        using var memoryStream = new MemoryStream();
         WriteToStream(memoryStream);
         memoryStream.Position = 0L;
-        using StreamReader streamReader = new StreamReader(memoryStream);
+        using var streamReader = new StreamReader(memoryStream);
         return streamReader.ReadToEnd();
     }
 }

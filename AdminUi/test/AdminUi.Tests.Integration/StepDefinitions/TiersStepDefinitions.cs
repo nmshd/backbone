@@ -16,7 +16,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a GET request is sent to the /Tiers endpoint")]
-    public async Task WhenAGETRequestIsSentToTheTiersEndpointAsync()
+    public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
         _response = await _tiersApi.GetTiers(_requestConfiguration);
         _response.Should().NotBeNull();

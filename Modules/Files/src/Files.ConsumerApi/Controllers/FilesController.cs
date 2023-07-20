@@ -41,7 +41,7 @@ public class FilesController : ApiControllerBase
     {
         var inputStream = new MemoryStream();
 
-        await dto.Content.CopyToAsync(inputStream);
+        await dto.Content.CopyToAsync(inputStream, cancellationToken);
 
         var command = new CreateFileCommand
         {

@@ -48,7 +48,7 @@ public partial class InMemoryEventBusSubscriptionsManager
     {
         return _handlers.ContainsKey(eventName);
     }
-    
+
     public string GetEventKey<T>()
     {
         return GetEventKey(typeof(T));

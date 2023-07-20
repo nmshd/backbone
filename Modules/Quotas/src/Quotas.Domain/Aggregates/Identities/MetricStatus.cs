@@ -6,7 +6,7 @@ public class MetricStatus
 {
     public MetricKey MetricKey { get; }
     public ExhaustionDate IsExhaustedUntil { get; private set; }
-    
+
     /// <summary>
     /// An IdentityAddress
     /// </summary>

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Devices.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 
@@ -120,8 +118,10 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
             {
+#pragma warning disable IDE0037
                 MetricKey = m.MetricKey,
                 IsExhaustedUntil = m.IsExhaustedUntil
+#pragma warning restore IDE0037
             });
         }
 

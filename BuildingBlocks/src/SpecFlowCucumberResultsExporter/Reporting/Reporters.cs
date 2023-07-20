@@ -10,7 +10,7 @@ public partial class Reporters
 {
     #region Private/Internal
 
-    private static readonly List<Reporter> reporters = new List<Reporter>();
+    private static readonly List<Reporter> REPORTERS = new();
 
     /// <summary>
     ///     Returns the current date/time which is used during the test run. It can set to a fixed
@@ -28,9 +28,9 @@ public partial class Reporters
         }
     }
 
-    private static void addStepRows(ref Step step, Table table)
+    private static void AddStepRows(ref Step step, Table table)
     {
-        step.Rows = new List<Row> { new Row() { Cells = table.Header.ToList() } };
+        step.Rows = new List<Row> { new() { Cells = table.Header.ToList() } };
         foreach (var tableRow in table.Rows)
         {
             step.Rows.Add(new Row() { Cells = tableRow.Select(x => x.Value).ToList() });
@@ -60,10 +60,9 @@ public partial class Reporters
                 for (var i = 0; i < args.Length; i++)
                 {
                     var arg = args[i];
-                    var table = arg as Table;
-                    if (table != null)
+                    if (arg is Table table)
                     {
-                        addStepRows(ref step, table);
+                        AddStepRows(ref step, table);
                     }
                     else
                     {
@@ -87,16 +86,15 @@ public partial class Reporters
                 {
                     // underscore style
                     step.Name = methodName.Replace("_", " ");
-                    step.Name = step.Name.Substring(step.Name.IndexOf(' ') + 1);
+                    step.Name = step.Name[(step.Name.IndexOf(' ') + 1)..];
 
                     var methodInfo = method as MethodInfo;
                     for (var i = 0; i < args.Length; i++)
                     {
                         var arg = args[i];
-                        var table = arg as Table;
-                        if (table != null)
+                        if (arg is Table table)
                         {
-                            addStepRows(ref step, table);
+                            AddStepRows(ref step, table);
                         }
                         else
                         {
@@ -125,7 +123,7 @@ public partial class Reporters
             var table = stepInfo.Table;
             if (table != null)
             {
-                addStepRows(ref step, table);
+                AddStepRows(ref step, table);
             }
             step.MultiLineParameter = stepInfo.MultilineText;
         }
@@ -162,11 +160,11 @@ public partial class Reporters
         {
             if (!stepFunc.Method.GetParameters().Any())
             {
-                await (Task)stepFunc.Method.Invoke(stepFunc.Target, null);
+                await ((Task)stepFunc.Method.Invoke(stepFunc.Target, null))!;
             }
             else
             {
-                await (Task)stepFunc.Method.Invoke(stepFunc.Target, args);
+                await ((Task)stepFunc.Method.Invoke(stepFunc.Target, args))!;
             }
         }
         catch (Exception ex)
@@ -183,30 +181,24 @@ public partial class Reporters
         }
         finally
         {
-            var endtime = CurrentRunTime;
+            var endTime = CurrentRunTime;
 
             TestResult testResult;
             if (actionException is PendingStepException)
             {
                 testResult = TestResult.Pending;
             }
-            else if (actionException != null)
-            {
-                testResult = TestResult.Failed;
-            }
             else
-            {
-                testResult = TestResult.Passed;
-            }
+                testResult = actionException == null ? TestResult.Passed : TestResult.Failed;
 
 
             foreach (var reporter in GetAll())
             {
-                reporter.CurrentStep.EndTime = endtime;
+                reporter.CurrentStep.EndTime = endTime;
                 reporter.CurrentStep.Result = new StepResult
                 {
                     Duration =
-                        (long)((endtime - reporter.CurrentStep.StartTime).TotalMilliseconds * 1000000),
+                        (long)((endTime - reporter.CurrentStep.StartTime).TotalMilliseconds * 1000000),
                     Status = testResult,
                     Error = actionException != null ? actionException.ToExceptionInfo().Message : string.Empty
                 };
@@ -218,7 +210,9 @@ public partial class Reporters
 
             if (actionException != null)
             {
+#pragma warning disable CA2219
                 throw actionException;
+#pragma warning restore CA2219
             }
         }
     }
@@ -234,13 +228,13 @@ public partial class Reporters
 
     public static Reporter Add(Reporter reporter)
     {
-        reporters.Add(reporter);
+        REPORTERS.Add(reporter);
         return reporter;
     }
 
     public static IEnumerable<Reporter> GetAll()
     {
-        return reporters;
+        return REPORTERS;
     }
 
     #endregion Public

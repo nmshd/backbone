@@ -20,11 +20,7 @@ public static class ChallengeQueryableExtensions
 
     public static async Task<Challenge> FirstWithId(this IQueryable<Challenge> query, ChallengeId id, CancellationToken cancellationToken)
     {
-        var challenge = await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-
-        if (challenge == null)
-            throw new NotFoundException(nameof(Challenge));
-
+        var challenge = await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken) ?? throw new NotFoundException(nameof(Challenge));
         return challenge;
     }
 }

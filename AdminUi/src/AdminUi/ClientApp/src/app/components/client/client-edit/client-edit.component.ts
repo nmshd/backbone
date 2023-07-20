@@ -87,13 +87,6 @@ export class ClientEditComponent {
         });
     }
 
-    validateClient(): boolean {
-        if (this.client && this.client.displayName && this.client.displayName.length > 0) {
-            return true;
-        }
-        return false;
-    }
-
     togglePasswordVisibility(): void {
         this.showPassword = !this.showPassword;
     }

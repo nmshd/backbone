@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -34,14 +34,15 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .IsUnicode(true)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("character varying(30)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tier", (string)null);
+                    b.ToTable("Tiers");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
