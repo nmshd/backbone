@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -24,6 +25,8 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<TierQuotaDefinition> TierQuotaDefinitions { get; set; }
 
     public DbSet<Message> Messages { get; set; }
+
+    public DbSet<FileMetadata> Files { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

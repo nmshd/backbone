@@ -28,17 +28,17 @@ public class ApnsNotificationBuilder : NotificationBuilder
     public override NotificationBuilder SetNotificationText(string title, string body)
     {
         if (!string.IsNullOrWhiteSpace(title))
-            _notification.APS.Alert.Title = title;
+            _notification.Aps.Alert.Title = title;
 
         if (!string.IsNullOrWhiteSpace(body))
-            _notification.APS.Alert.Body = body;
+            _notification.Aps.Alert.Body = body;
 
         return this;
     }
 
     private void SetContentAvailable(bool contentAvailable)
     {
-        _notification.APS.ContentAvailable = contentAvailable ? "1" : "0";
+        _notification.Aps.ContentAvailable = contentAvailable ? "1" : "0";
     }
 
     public override NotificationBuilder SetTag(int notificationId)
@@ -65,7 +65,7 @@ public class ApnsNotificationBuilder : NotificationBuilder
         public NotificationContent Content { get; set; }
 
         [JsonPropertyName("aps")]
-        public PayloadAps APS { get; } = new();
+        public PayloadAps Aps { get; } = new();
 
         public class PayloadAps
         {

@@ -26,7 +26,7 @@ public class IdentitiesController : ApiControllerBase
     {
         _applicationManager = applicationManager;
     }
-    
+
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]

@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { environment } from "src/environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root"
 })
 export class QuotasService {
     apiUrl: string;
@@ -15,33 +15,19 @@ export class QuotasService {
     }
 
     getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(
-            this.apiUrl + '/Metrics'
-        );
+        return this.http.get<HttpResponseEnvelope<Metric>>(this.apiUrl + "/Metrics");
     }
 
     getPeriods(): string[] {
-        return ['Hour', 'Day', 'Week', 'Month', 'Year'];
+        return ["Hour", "Day", "Week", "Month", "Year"];
     }
 
-    createTierQuota(
-        request: CreateQuotaForTierRequest,
-        tierId: string
-    ): Observable<HttpResponseEnvelope<TierQuota>> {
-        return this.http.post<HttpResponseEnvelope<TierQuota>>(
-            this.apiUrl + '/Tiers/' + tierId + '/Quotas',
-            request
-        );
+    createTierQuota(request: CreateQuotaForTierRequest, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {
+        return this.http.post<HttpResponseEnvelope<TierQuota>>(`${this.apiUrl}/Tiers/${tierId}/Quotas`, request);
     }
 
-    createIdentityQuota(
-        request: CreateQuotaForIdentityRequest,
-        identityAddress: string
-    ): Observable<HttpResponseEnvelope<IdentityQuota>> {
-        return this.http.post<HttpResponseEnvelope<IdentityQuota>>(
-            this.apiUrl + '/Identity/' + identityAddress + '/Quotas',
-            request
-        );
+    createIdentityQuota(request: CreateQuotaForIdentityRequest, identityAddress: string): Observable<HttpResponseEnvelope<IdentityQuota>> {
+        return this.http.post<HttpResponseEnvelope<IdentityQuota>>(`${this.apiUrl}/Identity/${identityAddress}/Quotas`, request);
     }
 }
 

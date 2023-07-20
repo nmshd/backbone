@@ -66,7 +66,7 @@ public class HandlerTests
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
         var tier = new Tier(tierId, "some-tier-name");
-        
+
         var tierRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
 

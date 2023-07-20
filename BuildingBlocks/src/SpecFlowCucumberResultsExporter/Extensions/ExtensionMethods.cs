@@ -62,7 +62,7 @@ public static class Extensions
     internal static string ReplaceFirst(this string s, string find, string replace)
     {
         var first = s.IndexOf(find, StringComparison.Ordinal);
-        return s.Substring(0, first) + replace + s.Substring(first + find.Length);
+        return s[..first] + replace + s[(first + find.Length)..];
     }
 
     internal static string GetParamName(this MethodInfo method, int index)

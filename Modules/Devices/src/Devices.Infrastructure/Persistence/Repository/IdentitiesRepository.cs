@@ -1,15 +1,15 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Microsoft.AspNetCore.Identity;
-using Backbone.Modules.Devices.Application;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 public class IdentitiesRepository : IIdentitiesRepository

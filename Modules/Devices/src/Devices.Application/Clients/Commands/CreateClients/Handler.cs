@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
 
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
-        var displayName = string.IsNullOrEmpty(request.DisplayName) ? request.ClientId : request.DisplayName;
+        var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
 
         await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, cancellationToken);
 

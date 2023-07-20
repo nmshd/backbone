@@ -3,7 +3,6 @@ using Enmeshed.Tooling.Extensions;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
-using FluentAssertions.Primitives;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
 
@@ -21,7 +20,7 @@ public class ExhaustionDateAssertions :
     public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject) { }
 
     protected override string Identifier => "ExhaustionDate";
-    
+
     public AndConstraint<ExhaustionDateAssertions> BeEndOfHour(string because = "", params object[] becauseArgs)
     {
         Execute.Assertion

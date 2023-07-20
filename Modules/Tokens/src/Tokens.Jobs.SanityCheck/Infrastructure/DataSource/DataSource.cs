@@ -28,6 +28,6 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<TokenId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<Token>().AsNoTracking().Select(t => t.Id).ToListAsync();
+        return await _dbContext.Set<Token>().AsNoTracking().Select(t => t.Id).ToListAsync(cancellationToken);
     }
 }

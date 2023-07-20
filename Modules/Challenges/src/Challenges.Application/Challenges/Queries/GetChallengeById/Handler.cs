@@ -10,7 +10,7 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 {
     private readonly IChallengesRepository _challengesRepository;
     private readonly IMapper _mapper;
-   
+
     public Handler(IChallengesRepository challengesRepository, IMapper mapper)
     {
         _challengesRepository = challengesRepository;
@@ -21,7 +21,8 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
     {
         var challenge = await _challengesRepository.Find(request.Id, cancellationToken);
 
-        if (challenge.IsExpired()){
+        if (challenge.IsExpired())
+        {
             throw new NotFoundException();
         }
 

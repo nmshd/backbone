@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
         _logger.LogTrace($"Successfully created assigned Quota to Identity. Identity Address: {identity.Address}");
 
-        var response = new IdentityQuotaDefinitionDTO(individualQuota.Id, new MetricDTO(metric.Key, metric.DisplayName), individualQuota.Max, individualQuota.Period);
+        var response = new IdentityQuotaDefinitionDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
         return response;
     }
 }

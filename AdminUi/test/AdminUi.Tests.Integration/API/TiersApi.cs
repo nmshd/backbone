@@ -1,15 +1,21 @@
-﻿using AdminUi.Tests.Integration.Models;
-using RestSharp;
+﻿using AdminUi.Tests.Integration.Configuration;
+using AdminUi.Tests.Integration.Models;
+using Microsoft.Extensions.Options;
 
 namespace AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {
-    public TiersApi(RestClient client) : base(client) { }
+    public TiersApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
 
     public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {
         return await Get<List<TierDTO>>("/Tiers", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<TierDetailsDTO>> GetTierById(RequestConfiguration requestConfiguration, string tierId)
+    {
+        return await Get<TierDetailsDTO>($"/Tiers/{tierId}", requestConfiguration);
     }
 
     public async Task<HttpResponse<TierQuotaDTO>> CreateTierQuota(RequestConfiguration requestConfiguration, string tierId)

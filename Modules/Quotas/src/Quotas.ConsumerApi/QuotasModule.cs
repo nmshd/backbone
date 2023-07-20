@@ -31,7 +31,7 @@ public class QuotasModule : IModule
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
-    
+
     public void ConfigureEventBus(IEventBus eventBus)
     {
         eventBus.AddQuotasIntegrationEventSubscriptions();

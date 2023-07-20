@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
 
     public Handler(IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        _mapper= mapper;
+        _mapper = mapper;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
     }

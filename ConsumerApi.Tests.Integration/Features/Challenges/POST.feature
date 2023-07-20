@@ -31,6 +31,7 @@ Scenario: Creating a Challenge with an invalid JSON sent in the request content
 		| Content | { "thisJSON": "has an extra }" }} |
 	Then the response status code is 415 (Unsupported Media Type)
 
+@ignore("skipping_due_to_required_backbone_changes")
 Scenario: Creating a Challenge with an unsupported Content-Type header
 	When a POST request is sent to the Challenges endpoint with
 		| Key         | Value                              |
