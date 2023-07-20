@@ -234,6 +234,11 @@ public class IdentityTests
             return _calculator;
         }
 
+        protected override IMetricCalculator CreateNumberOfRelationshipsMetricCalculator()
+        {
+            return _calculator;
+        }
+
         protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
         {
             return _calculator;

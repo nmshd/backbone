@@ -15,9 +15,15 @@ public abstract class MetricCalculatorFactory
             return CreateNumberOfFilesMetricCalculator();
         }
 
+        if (metricKey == MetricKey.NumberOfRelationships)
+        {
+            return CreateNumberOfRelationshipsMetricCalculator();
+        }
+
         throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
     }
 
     protected abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
+    protected abstract IMetricCalculator CreateNumberOfRelationshipsMetricCalculator();
 }
