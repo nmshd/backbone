@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,10 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
     public async Task<CreateTierResponse> Handle(CreateTierCommand request, CancellationToken cancellationToken)
     {
+        var tierExists = await _tierRepository.ExistsWithName(request.Name, cancellationToken);
+        if (tierExists)
+            throw new OperationFailedException(ApplicationErrors.Devices.TierNameAlreadyExists());
+
         var tierName = TierName.Create(request.Name);
         var tier = new Tier(tierName.Value);
 
