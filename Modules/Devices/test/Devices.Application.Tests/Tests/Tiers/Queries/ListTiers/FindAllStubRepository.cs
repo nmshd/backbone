@@ -18,6 +18,11 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<bool> ExistsWithName(string tierName, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
     {
         return Task.FromResult(_tiers);
