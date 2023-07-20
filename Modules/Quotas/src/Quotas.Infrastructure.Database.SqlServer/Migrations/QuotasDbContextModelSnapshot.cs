@@ -17,10 +17,29 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata.FileMetadata", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileMetadata", "Files", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
@@ -43,6 +62,25 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Identities");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
+                {
+                    b.Property<string>("Owner")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("MetricKey")
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(50)")
+                        .IsFixedLength(false);
+
+                    b.Property<DateTime?>("IsExhaustedUntil")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Owner", "MetricKey");
+
+                    b.ToTable("MetricStatuses", (string)null);
+                });
+
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.TierQuota", b =>
                 {
                     b.Property<string>("Id")
@@ -53,9 +91,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ApplyTo")
                         .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("IsExhaustedUntil")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)
@@ -71,6 +106,25 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.HasIndex("_definitionId");
 
                     b.ToTable("TierQuotas");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", b =>
@@ -104,7 +158,6 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MetricKey")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)")
@@ -132,6 +185,15 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         .HasForeignKey("TierId");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
+                {
+                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
+                        .WithMany("MetricStatuses")
+                        .HasForeignKey("Owner")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.TierQuota", b =>
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
@@ -154,6 +216,8 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
+                    b.Navigation("MetricStatuses");
+
                     b.Navigation("TierQuotas");
                 });
 

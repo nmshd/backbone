@@ -22,10 +22,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public IdentityAddress GetAddress()
     {
-        var address = _context.HttpContext.User.FindFirstValue(ADDRESS_CLAIM);
-
-        if (address == null) throw new NotFoundException();
-
+        var address = _context.HttpContext.User.FindFirstValue(ADDRESS_CLAIM) ?? throw new NotFoundException();
         return IdentityAddress.Parse(address);
     }
 
@@ -38,10 +35,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public DeviceId GetDeviceId()
     {
-        var deviceId = _context.HttpContext.User.FindFirstValue(DEVICE_ID_CLAIM);
-
-        if (deviceId == null) throw new NotFoundException();
-
+        var deviceId = _context.HttpContext.User.FindFirstValue(DEVICE_ID_CLAIM) ?? throw new NotFoundException();
         return DeviceId.Parse(deviceId);
     }
 
@@ -54,10 +48,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public string GetUserId()
     {
-        var userId = _context.HttpContext.User.FindFirstValue(USER_ID_CLAIM);
-
-        if (userId == null) throw new NotFoundException();
-
+        var userId = _context.HttpContext.User.FindFirstValue(USER_ID_CLAIM) ?? throw new NotFoundException();
         return userId;
     }
 

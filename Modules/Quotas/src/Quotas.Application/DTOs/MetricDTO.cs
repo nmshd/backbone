@@ -5,12 +5,14 @@ namespace Backbone.Modules.Quotas.Application.DTOs;
 
 public class MetricDTO : IMapTo<Metric>
 {
-    public MetricDTO(MetricKey key, string displayName)
+    public MetricDTO() { }
+
+    public MetricDTO(Metric metric)
     {
-        Key = key;
-        DisplayName = displayName;
+        Key = metric.Key.Value;
+        DisplayName = metric.DisplayName;
     }
 
-    public MetricKey Key { get; set; }
+    public string Key { get; set; }
     public string DisplayName { get; set; }
 }

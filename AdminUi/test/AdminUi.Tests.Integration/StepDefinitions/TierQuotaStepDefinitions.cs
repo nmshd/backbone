@@ -1,10 +1,9 @@
-﻿using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Extensions;
-using AdminApi.Tests.Integration.Models;
-using Enmeshed.UnitTestTools.Data;
-using Newtonsoft.Json;
+using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Extensions;
+using AdminUi.Tests.Integration.Models;
+using Backbone.Modules.Quotas.Domain.Tests;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Scope(Feature = "POST TierQuota")]
 public class TierQuotaStepDefinitions : BaseStepDefinitions
@@ -13,14 +12,14 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private HttpResponse<TierQuotaDTO>? _response;
 
-    public TierQuotaStepDefinitions(TiersApi tiersApi) : base()
+    public TierQuotaStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
         _tierId = string.Empty;
     }
 
     [Given(@"a Tier t")]
-    public async Task GivenAValidTierAsync()
+    public async Task GivenAValidTier()
     {
         var createTierQuotaRequest = new CreateTierRequest
         {
@@ -29,18 +28,16 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierQuotaRequest);
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
-        var actualStatusCode = (int)response!.StatusCode;
+        var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _tierId = response.Content.Result.Id;
+        _tierId = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
-
-        return;
     }
 
     [Given(@"an inexistent Tier t")]
@@ -61,7 +58,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierQuotaRequest);
 
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
     }

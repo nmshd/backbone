@@ -1,7 +1,5 @@
 ﻿using SpecFlowCucumberResultsExporter.Extensions;
 using SpecFlowCucumberResultsExporter.Model;
-using TechTalk.SpecFlow.Bindings;
-using TechTalk.SpecFlow.Bindings.Reflection;
 
 namespace SpecFlowCucumberResultsExporter.Reporting;
 
@@ -12,7 +10,7 @@ public partial class Reporters
     [AfterFeature]
     internal static void AfterFeature()
     {
-        foreach (var reporter in reporters)
+        foreach (var reporter in REPORTERS)
         {
             var feature = reporter.CurrentFeature;
 
@@ -41,7 +39,7 @@ public partial class Reporters
     [AfterScenario]
     internal static void AfterScenario()
     {
-        foreach (var reporter in reporters.ToArray())
+        foreach (var reporter in REPORTERS.ToArray())
         {
             var scenario = reporter.CurrentScenario;
             scenario.EndTime = CurrentRunTime;
@@ -56,7 +54,7 @@ public partial class Reporters
     [AfterTestRun]
     internal static void AfterTestRun()
     {
-        foreach (var reporter in reporters)
+        foreach (var reporter in REPORTERS)
         {
             reporter.Report.EndTime = CurrentRunTime;
             OnFinishedReport(reporter);
@@ -71,7 +69,7 @@ public partial class Reporters
         var error = scenarioContext.TestError?.ToExceptionInfo().Message;
         error = error == null && result == TestResult.Pending ? new PendingStepException().ToExceptionInfo().Message : string.Empty;
 
-        foreach (var reporter in reporters.ToArray())
+        foreach (var reporter in REPORTERS.ToArray())
         {
             var step = reporter.CurrentStep;
             step.EndTime = CurrentRunTime;
@@ -97,7 +95,7 @@ public partial class Reporters
         // initialization before the reports are created.
         if (_testrunIsFirstFeature)
         {
-            foreach (var reporter in reporters)
+            foreach (var reporter in REPORTERS)
             {
                 reporter.Report = new Report
                 {
@@ -111,7 +109,7 @@ public partial class Reporters
             _testrunIsFirstFeature = false;
         }
 
-        foreach (var reporter in reporters)
+        foreach (var reporter in REPORTERS)
         {
             var featureId = featureContext.FeatureInfo.Title.Replace(" ", "-").ToLower();
             var feature = new Feature
@@ -137,7 +135,7 @@ public partial class Reporters
     {
         var starttime = CurrentRunTime;
 
-        foreach (var reporter in reporters)
+        foreach (var reporter in REPORTERS)
         {
             var scenario = new Scenario
             {
@@ -164,14 +162,11 @@ public partial class Reporters
     [BeforeStep]
     internal static void BeforeStep(ScenarioContext scenarioContext)
     {
-        var starttime = CurrentRunTime;
-        var stepInfo = ScenarioStepContext.Current.StepInfo;
-        var binding = stepInfo.BindingMatch.StepBinding as StepDefinitionBinding;
-        var method = binding?.Method as RuntimeBindingMethod;
+        var startTime = CurrentRunTime;
 
-        foreach (var reporter in reporters)
+        foreach (var reporter in REPORTERS)
         {
-            var step = CreateStep(scenarioContext, starttime);
+            var step = CreateStep(scenarioContext, startTime);
 
             reporter.CurrentScenario.Steps.Add(step);
             reporter.CurrentStep = step;

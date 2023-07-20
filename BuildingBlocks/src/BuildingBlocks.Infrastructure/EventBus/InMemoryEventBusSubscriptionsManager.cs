@@ -23,8 +23,7 @@ public partial class InMemoryEventBusSubscriptionsManager
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-        var eventName = GetEventKey<T>();
-        DoAddSubscription(typeof(TH), eventName);
+        DoAddSubscription(typeof(TH), typeof(T));
         _eventTypes.Add(typeof(T));
     }
 
@@ -50,24 +49,26 @@ public partial class InMemoryEventBusSubscriptionsManager
         return _handlers.ContainsKey(eventName);
     }
 
-    public Type? GetEventTypeByName(string eventName)
-    {
-        return _eventTypes.SingleOrDefault(t => t.Name == eventName);
-    }
-
     public string GetEventKey<T>()
     {
-        return typeof(T).Name;
+        return GetEventKey(typeof(T));
     }
 
-    private void DoAddSubscription(Type handlerType, string eventName)
+    public string GetEventKey(Type eventType)
     {
+        return eventType.Name;
+    }
+
+    private void DoAddSubscription(Type handlerType, Type eventType)
+    {
+        var eventName = GetEventKey(eventType);
+
         if (!HasSubscriptionsForEvent(eventName)) _handlers.Add(eventName, new List<SubscriptionInfo>());
 
         if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
             throw new ArgumentException(
                 $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
 
-        _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));
+        _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType, eventType));
     }
 }

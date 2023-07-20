@@ -19,7 +19,13 @@ public static class GenericApplicationErrors
     public static ApplicationError Forbidden()
     {
         return new ApplicationError("error.platform.forbidden",
-            "You are not allowed to perform this action. This could be due to insufficient privileges or an exhausted quota.");
+            "You are not allowed to perform this action due to insufficient privileges.");
+    }
+
+    public static ApplicationError QuotaExhausted()
+    {
+        return new ApplicationError("error.platform.quotaExhausted",
+            "You are not allowed to perform this action because one or more quotas have been exhausted.");
     }
 
     public static class Validation

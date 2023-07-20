@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -36,8 +37,8 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier.Id, tierQuotaDefinition.Id));
 
         // Assert
-        A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(identities =>
-            identities.All(i => i.TierQuotas.Count == 1))
+        A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>
+            ids.All(i => i.TierQuotas.Count == 1))
             , CancellationToken.None)
         ).MustHaveHappened();
     }

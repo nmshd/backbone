@@ -1,4 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
@@ -19,6 +21,10 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<TierQuota> TierQuotas { get; set; }
 
     public DbSet<TierQuotaDefinition> TierQuotaDefinitions { get; set; }
+
+    public DbSet<Message> Messages { get; set; }
+
+    public DbSet<FileMetadata> Files { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -42,5 +48,6 @@ public class QuotasDbContext : AbstractDbContextBase
             .HaveMaxLength(50).HaveConversion<MetricKeyEntityFrameworkValueConverter>();
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
+        configurationBuilder.Properties<ExhaustionDate>().HaveConversion<ExhaustionDateValueConverter>();
     }
 }

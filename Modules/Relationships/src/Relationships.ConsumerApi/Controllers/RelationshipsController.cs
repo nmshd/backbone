@@ -95,7 +95,7 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var changes = await _mediator.Send(request);
+        var changes = await _mediator.Send(request, cancellationToken);
         return Paged(changes);
     }
 

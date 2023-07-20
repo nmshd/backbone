@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+
 public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
@@ -17,9 +18,8 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
     public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
     {
         var clients = await _oAuthClientsRepository.FindAll(cancellationToken);
+        var clientDtos = _mapper.Map<IEnumerable<ClientDTO>>(clients);
 
-        var clientDTOs = _mapper.Map<IEnumerable<ClientDTO>>(clients);
-
-        return new ListClientsResponse(clientDTOs);
+        return new ListClientsResponse(clientDtos);
     }
 }

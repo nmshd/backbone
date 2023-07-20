@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
@@ -79,7 +76,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             _request.Content);
-        
+
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
 
     }

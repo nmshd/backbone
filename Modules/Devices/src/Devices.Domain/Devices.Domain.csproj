@@ -5,19 +5,19 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>Enable</Nullable>
-        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7" />
-		<PackageReference Include="CSharpFunctionalExtensions" Version="2.39.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.9" />
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
-	  <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
 	</ItemGroup>
 
 </Project>

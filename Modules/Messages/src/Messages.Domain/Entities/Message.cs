@@ -37,7 +37,7 @@ public class Message : IIdentifiable<MessageId>
 
     public void LoadBody(byte[] bytes)
     {
-        if(Body != null)
+        if (Body != null)
         {
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }

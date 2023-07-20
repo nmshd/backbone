@@ -84,10 +84,10 @@ public class HttpErrorDev : HttpError
 public struct HttpErrorId
 {
     public const int MAX_LENGTH = 20;
-    private static readonly int MaxLengthWithoutPrefix = MAX_LENGTH - PREFIX.Length;
+    private static readonly int MAX_LENGTH_WITHOUT_PREFIX = MAX_LENGTH - PREFIX.Length;
     private const string PREFIX = "ERR";
 
-    private static readonly char[] ValidChars =
+    private static readonly char[] VALID_CHARS =
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U',
         'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -114,14 +114,14 @@ public struct HttpErrorId
 
         var hasPrefix = stringValue.StartsWith(PREFIX);
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
-        var hasOnlyValidChars = stringValue.ContainsOnly(ValidChars);
+        var hasOnlyValidChars = stringValue.ContainsOnly(VALID_CHARS);
 
         return hasPrefix && lengthIsValid && hasOnlyValidChars;
     }
 
     public static HttpErrorId New()
     {
-        var tokenIdAsString = StringUtils.Generate(ValidChars, MaxLengthWithoutPrefix);
+        var tokenIdAsString = StringUtils.Generate(VALID_CHARS, MAX_LENGTH_WITHOUT_PREFIX);
         return new HttpErrorId(PREFIX + tokenIdAsString);
     }
 

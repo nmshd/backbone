@@ -15,9 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-      <ProjectReference Include="..\Synchronization.Application\Synchronization.Application.csproj" />
-      <ProjectReference Include="..\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\Synchronization.Application\Synchronization.Application.csproj" />
+        <ProjectReference Include="..\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -9,7 +9,6 @@ public class TierQuotaEntityTypeConfiguration : IEntityTypeConfiguration<TierQuo
     public void Configure(EntityTypeBuilder<TierQuota> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.IsExhaustedUntil);
         builder.HasOne("_definition");
         builder.Property("_definitionId").HasColumnName("DefinitionId");
     }
