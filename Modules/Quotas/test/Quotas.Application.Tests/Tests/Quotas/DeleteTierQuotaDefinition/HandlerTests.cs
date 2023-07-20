@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -10,6 +11,8 @@ using Enmeshed.BuildingBlocks.Domain;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentAssertions.Specialized;
+using Google.Rpc;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -59,12 +62,9 @@ public class HandlerTests
         var tierId = new TierId("SomeTierId");
         var tier = new Tier(tierId, "some-tier-name");
 
-        var metricKey = MetricKey.NumberOfSentMessages;
-        var max = 5;
-        var period = QuotaPeriod.Month;
-        tier.CreateQuota(metricKey, max, period);
-        tier.CreateQuota(metricKey, max, period);
-        tier.CreateQuota(metricKey, max, period);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
         var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 
@@ -89,11 +89,8 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tier = new Tier(tierId, "some-tier-name");
 
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
+        var command = new DeleteTierQuotaDefinitionCommand(tierId, "SomeTierQuotaDefinitionId");
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Tier>(null));
@@ -125,7 +122,7 @@ public class HandlerTests
         var acting = async () => await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<DomainException>().WithMessage($"{nameof(TierQuotaDefinition)} not found");
+        await acting.Should().ThrowAsync<DomainException>().WithErrorCode("error.platform.recordNotFound");
     }
 
     [Fact]
@@ -148,7 +145,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappenedOnceExactly();
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository)
@@ -158,3 +155,5 @@ public class HandlerTests
         return new Handler(tiersRepository, logger, _eventBus);
     }
 }
+
+
