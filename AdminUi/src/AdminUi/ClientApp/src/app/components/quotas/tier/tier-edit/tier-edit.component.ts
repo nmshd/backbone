@@ -6,6 +6,9 @@ import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { SelectionModel } from "@angular/cdk/collections";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
+import { Observable, forkJoin } from "rxjs";
 
 @Component({
     selector: "app-tier-edit",
@@ -19,6 +22,7 @@ export class TierEditComponent {
     headerDescriptionCreate: string;
     headerQuotas: string;
     headerQuotasDescription: string;
+    selectionQuotas: SelectionModel<TierQuota>;
     quotasTableDisplayedColumns: string[];
     tierId?: string;
     disabled: boolean;
@@ -33,7 +37,8 @@ export class TierEditComponent {
         this.headerDescriptionEdit = "Perform your desired changes and save to edit your Tier";
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this tier.";
-        this.quotasTableDisplayedColumns = ["metricName", "max", "period"];
+        this.selectionQuotas = new SelectionModel<TierQuota>(true, []);
+        this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
@@ -61,7 +66,7 @@ export class TierEditComponent {
 
     getTier() {
         this.loading = true;
-
+        this.selectionQuotas = new SelectionModel<TierQuota>(true, []);
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
@@ -71,7 +76,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -99,7 +104,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -124,7 +129,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -165,12 +170,81 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error && err.error.error && err.error.error.message ? err.error.error.message : err.message;
+                let errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
             }
         });
+    }
+
+    openConfirmationDialogQuotaDeletion() {
+        let confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
+        let confirmDialogMessage =
+            this.selectionQuotas.selected.length > 1
+                ? `Are you sure you want to delete the ${this.selectionQuotas.selected.length} selected quotas?`
+                : "Are you sure you want to delete the selected quota?";
+        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            minWidth: "40%",
+            disableClose: true,
+            data: { header: confirmDialogHeader, message: confirmDialogMessage }
+        });
+
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+            if (result) {
+                this.deleteQuota();
+            }
+        });
+    }
+
+    deleteQuota(): void {
+        this.loading = true;
+        let observableBatch: Observable<any>[] = [];
+        this.selectionQuotas.selected.forEach((item) => {
+            observableBatch.push(this.quotasService.deleteTierQuota(item.id, this.tier.id));
+        });
+
+        forkJoin(observableBatch).subscribe({
+            next: (_: any) => {
+                let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
+                this.getTier();
+                this.snackBar.open(successMessage, "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            error: (err: any) => {
+                this.loading = false;
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
+
+    isAllSelected() {
+        const numSelected = this.selectionQuotas.selected.length;
+        const numRows = this.tier.quotas.length;
+        return numSelected === numRows;
+    }
+
+    toggleAllRowsQuotas() {
+        if (this.isAllSelected()) {
+            this.selectionQuotas.clear();
+            return;
+        }
+
+        this.selectionQuotas.select(...this.tier.quotas);
+    }
+
+    checkboxLabelQuotas(index?: number, row?: TierQuota): string {
+        if (!row || !index) {
+            return `${this.isAllSelected() ? "deselect" : "select"} all`;
+        }
+        return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
     }
 }

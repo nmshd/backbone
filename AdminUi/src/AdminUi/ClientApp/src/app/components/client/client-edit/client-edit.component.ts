@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
-import { Client } from 'src/app/services/client-service/client-service';
-import { ClientServiceService } from 'src/app/services/client-service/client-service';
-import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
+import { Component } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
+import { Client } from "src/app/services/client-service/client-service";
+import { ClientServiceService } from "src/app/services/client-service/client-service";
+import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
-    selector: 'app-client-edit',
-    templateUrl: './client-edit.component.html',
-    styleUrls: ['./client-edit.component.css']
+    selector: "app-client-edit",
+    templateUrl: "./client-edit.component.html",
+    styleUrls: ["./client-edit.component.css"]
 })
 export class ClientEditComponent {
     showPassword: boolean;
@@ -21,29 +21,25 @@ export class ClientEditComponent {
     disabled: boolean;
     displayClientSecretWarning: boolean;
 
-    constructor(
-        private route: ActivatedRoute,
-        private snackBar: MatSnackBar,
-        private clientService: ClientServiceService
-    ) {
-        this.headerCreate = 'Create Client';
-        this.headerDescription = 'Please fill the form below to create your Client';
+    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private clientService: ClientServiceService) {
+        this.headerCreate = "Create Client";
+        this.headerDescription = "Please fill the form below to create your Client";
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
         this.displayClientSecretWarning = false;
         this.showPassword = false;
         this.client = {
-            clientId: '',
-            displayName: '',
-            clientSecret: '',
+            clientId: "",
+            displayName: "",
+            clientSecret: ""
         } as Client;
     }
 
     ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            if (params['id']) {
-                this.clientId = params['id'];
+            if (params["id"]) {
+                this.clientId = params["id"];
             }
         });
         this.initClient();
@@ -51,9 +47,9 @@ export class ClientEditComponent {
 
     initClient(): void {
         this.client = {
-            clientId: '',
-            displayName: '',
-            clientSecret: '',
+            clientId: "",
+            displayName: "",
+            clientSecret: ""
         } as Client;
 
         this.loading = false;
@@ -68,22 +64,22 @@ export class ClientEditComponent {
                 }
                 this.displayClientSecretWarning = true;
                 this.disabled = true;
-                this.snackBar.open('Successfully added client.', 'Dismiss', {
+                this.snackBar.open("Successfully added client.", "Dismiss", {
                     duration: 4000,
-                    verticalPosition: 'top',
-                    horizontalPosition: 'center'
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
-                this.snackBar.open(errorMessage, 'Dismiss', {
-                    verticalPosition: 'top',
-                    horizontalPosition: 'center'
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
                 this.disabled = true;
-            },
+            }
         });
     }
 

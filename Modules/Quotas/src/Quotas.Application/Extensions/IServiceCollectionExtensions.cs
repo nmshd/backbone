@@ -12,7 +12,7 @@ public static class IServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommandValidator>()
+            .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommand>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
