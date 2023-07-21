@@ -1,6 +1,8 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Tests.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using FakeItEasy;
 using FluentAssertions;
@@ -41,5 +43,19 @@ public class HandlerTests
         // Assert
         result.Id.Should().NotBeNull();
         result.Name.Should().Be(expectedTierName.Value);
+    }
+
+    [Fact]
+    public async void Fails_to_create_a_tier_when_tier_name_already_exists()
+    {
+        // Arrange
+        var expectedTierName = TierName.Create("my-tier-name");
+        A.CallTo(() => _tierRepository.ExistsWithName(expectedTierName.Value, CancellationToken.None)).Returns(Task.FromResult(true));
+
+        // Act
+        var acting = async () => await _handler.Handle(new CreateTierCommand(expectedTierName.Value), CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.device.tierNameAlreadyExists");
     }
 }
