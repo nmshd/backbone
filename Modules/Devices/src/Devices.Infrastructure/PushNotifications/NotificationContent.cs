@@ -1,9 +1,6 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
@@ -28,7 +25,7 @@ public class NotificationContent
 
         return "dynamic";
     }
-    
+
     [JsonPropertyName("accRef")]
     public string AccountReference { get; }
 
