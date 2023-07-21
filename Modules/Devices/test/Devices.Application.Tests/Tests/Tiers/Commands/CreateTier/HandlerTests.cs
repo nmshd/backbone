@@ -2,12 +2,12 @@
 using Backbone.Modules.Devices.Application.Tests.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
@@ -55,6 +55,6 @@ public class HandlerTests
         var acting = async () => await _handler.Handle(new CreateTierCommand("my-tier-name"), CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.device.tierNameAlreadyExists");
+        await acting.Should().ThrowAsync<ApplicationException>().WithErrorCode("error.platform.validation.device.tierNameAlreadyExists");
     }
 }
