@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
@@ -69,15 +68,12 @@ public class JwtGeneratorTests : IDisposable
         var results = new ConcurrentBag<Jwt>();
 
         // Act
-        Parallel.For(0, 10000, _ =>
-        {
-            results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id"));
-        });
+        Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id")); });
 
         // Assert
         results.Should().NotBeNull();
         results.Should().HaveCount(10000);
-        
+
         results.Distinct().Count().Should().Be(1);
     }
 
@@ -89,13 +85,10 @@ public class JwtGeneratorTests : IDisposable
 
         var initialJwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
         SystemTime.Set(DateTime.UtcNow.AddMinutes(51));
-        
+
         // Act
         var results = new ConcurrentBag<Jwt>();
-        Parallel.For(0, 10000, _ =>
-        {
-            results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id"));
-        });
+        Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id")); });
 
         // Assert
         results.Should()

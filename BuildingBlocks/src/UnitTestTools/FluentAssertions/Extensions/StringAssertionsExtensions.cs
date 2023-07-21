@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using FluentAssertions.Primitives;
-using System.Text.Json;
+﻿using System.Text.Json;
+using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentAssertions.Primitives;
 
 namespace Enmeshed.UnitTestTools.FluentAssertions.Extensions;
 public static class StringAssertionsExtensions

@@ -18,18 +18,18 @@ public record PnsHandle
         switch (platform)
         {
             case PushNotificationPlatform.Fcm:
-            {
-                var parseHandleResult = FcmHandle.Parse(value);
-                return parseHandleResult.IsSuccess
-                    ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
-                    : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
+                {
+                    var parseHandleResult = FcmHandle.Parse(value);
+                    return parseHandleResult.IsSuccess
+                        ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
+                        : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
                 }
             case PushNotificationPlatform.Apns:
-            {
-                var parseHandleResult = ApnsHandle.Parse(value);
-                return parseHandleResult.IsSuccess
-                    ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
-                    : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
+                {
+                    var parseHandleResult = ApnsHandle.Parse(value);
+                    return parseHandleResult.IsSuccess
+                        ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
+                        : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
                 }
             default:
                 return Result.Failure<PnsHandle, DomainError>(
