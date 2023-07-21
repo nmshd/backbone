@@ -7,6 +7,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -53,7 +54,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Create_quota_with_invalid_metric_key_throws_domain_exception()
+    public void Create_quota_with_invalid_metric_key_throws_domain_exception()
     {
         // Arrange
         var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
@@ -62,15 +63,14 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        var act = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        var exception = (await act.Should().ThrowAsync<DomainException>()).And;
-        exception.Code.Should().Be("error.platform.quotas.unsupportedMetricKey");
+        acting.Should().AwaitThrowAsync<DomainException>().Which.Code.Should().Be("error.platform.quotas.unsupportedMetricKey");
     }
 
     [Fact]
-    public async Task Create_quota_for_non_existent_identity_throws_not_found_exception()
+    public void Create_quota_for_non_existent_identity_throws_not_found_exception()
     {
         // Arrange
         var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
@@ -80,10 +80,10 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        var act = async () => await handler.Handle(command, CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        var exception = (await act.Should().ThrowAsync<NotFoundException>()).And;
+        var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
         exception.Message.Should().StartWith("Identity");
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
