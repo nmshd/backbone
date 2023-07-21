@@ -38,7 +38,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
-                .SetTag(notificationId)
+                .SetNotificationId(notificationId)
                 .Build();
 
             return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));

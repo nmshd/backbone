@@ -37,7 +37,7 @@ public class ApnsMessageBuilderTests
         var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .SetTag(1)
+            .SetNotificationId(1)
             .Build();
         var requestBody = FormatJson(await request.Content!.ReadAsStringAsync());
 

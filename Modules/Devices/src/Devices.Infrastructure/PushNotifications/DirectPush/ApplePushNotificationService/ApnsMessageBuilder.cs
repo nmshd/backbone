@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Enmeshed.Tooling.Extensions;
 
@@ -50,7 +51,7 @@ public class ApnsMessageBuilder
         _notification.Aps.ContentAvailable = contentAvailable ? "1" : "0";
     }
 
-    public ApnsMessageBuilder SetTag(int notificationId)
+    public ApnsMessageBuilder SetNotificationId(int notificationId)
     {
         _notification.NotificationId = notificationId;
         return this;
