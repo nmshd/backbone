@@ -6,20 +6,21 @@ namespace Enmeshed.Tooling;
 /// Provides access to system time while allowing it to be set to a fixed <see cref="DateTime"/> value.
 /// </summary>
 /// <remarks>
+/// This class is thread safe.
 /// </remarks>
 public static class SystemTime
 {
-    private static Func<DateTime> _getTime = () => DateTime.UtcNow;
+    private static readonly ThreadLocal<Func<DateTime>> GET_TIME = new(() => () => DateTime.Now);
 
     /// <inheritdoc cref="DateTime.Today"/>
-    public static DateTime UtcToday => _getTime == null
+    public static DateTime UtcToday => GET_TIME.Value == null
         ? throw new Exception("Time function is null")
-        : _getTime().ToUniversalTime().Date;
+        : GET_TIME.Value().ToUniversalTime().Date;
 
     /// <inheritdoc cref="DateTime.UtcNow"/>
-    public static DateTime UtcNow => _getTime == null
+    public static DateTime UtcNow => GET_TIME.Value == null
         ? throw new Exception("Time function is null")
-        : _getTime().ToUniversalTime();
+        : GET_TIME.Value().ToUniversalTime();
 
     /// <summary>
     /// Sets a fixed (deterministic) time for the current thread to return by <see cref="SystemTime"/>.
@@ -37,7 +38,7 @@ public static class SystemTime
         if (time.Kind != DateTimeKind.Local)
             time = time.ToLocalTime();
 
-        _getTime = () => time;
+        GET_TIME.Value = () => time;
     }
 
     /// <summary>
@@ -45,6 +46,6 @@ public static class SystemTime
     /// </summary>
     public static void Reset()
     {
-        _getTime = () => DateTime.UtcNow;
+        GET_TIME.Value = () => DateTime.Now;
     }
 }
