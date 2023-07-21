@@ -13,16 +13,16 @@ public class TiersStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;
     private HttpResponse<List<TierDTO>>? _tiersResponse;
-    private string _tierName;
+    private string _existingTier;
 
     public TiersStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
-        _tierName = string.Empty;
+        _existingTier = string.Empty;
     }
 
     [Given(@"a Tier t")]
-    public async Task GivenAValidTier()
+    public async Task GivenATier()
     {
         var createTierRequest = new CreateTierRequest
         {
@@ -37,7 +37,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
 
         var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _tierName = response.Content.Result!.Name;
+        _existingTier = response.Content.Result!.Name;
     }
 
     [When(@"a GET request is sent to the /Tiers endpoint")]
@@ -68,7 +68,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     {
         var createTierRequest = new CreateTierRequest
         {
-            Name = _tierName
+            Name = _existingTier
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
