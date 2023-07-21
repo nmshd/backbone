@@ -17,10 +17,30 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata.FileMetadata", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileMetadata", "Files", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
@@ -31,6 +51,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("TierId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -41,6 +62,38 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("TierId");
 
                     b.ToTable("Identities");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IndividualQuota", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("ApplyTo")
+                        .IsRequired()
+                        .HasColumnType("character(36)");
+
+                    b.Property<int>("Max")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MetricKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(50)")
+                        .IsFixedLength(false);
+
+                    b.Property<int>("Period")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplyTo");
+
+                    b.ToTable("IndividualQuotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -54,7 +107,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character varying(50)")
                         .IsFixedLength(false);
 
-                    b.Property<DateTime?>("IsExhaustedUntil")
+                    b.Property<DateTime>("IsExhaustedUntil")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Owner", "MetricKey");
@@ -71,6 +124,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("ApplyTo")
+                        .IsRequired()
                         .HasColumnType("character(36)");
 
                     b.Property<string>("_definitionId")
@@ -91,16 +145,14 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -120,6 +172,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .IsUnicode(true)
                         .HasColumnType("character varying(30)")
@@ -142,6 +195,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("MetricKey")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("character varying(50)")
@@ -166,7 +220,18 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", null)
                         .WithMany()
-                        .HasForeignKey("TierId");
+                        .HasForeignKey("TierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IndividualQuota", b =>
+                {
+                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
+                        .WithMany("IndividualQuotas")
+                        .HasForeignKey("ApplyTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -182,7 +247,9 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", null)
                         .WithMany("TierQuotas")
-                        .HasForeignKey("ApplyTo");
+                        .HasForeignKey("ApplyTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", "_definition")
                         .WithMany()
@@ -200,6 +267,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
+                    b.Navigation("IndividualQuotas");
+
                     b.Navigation("MetricStatuses");
 
                     b.Navigation("TierQuotas");

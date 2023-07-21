@@ -10,8 +10,8 @@ public static class IdentitiesQueryableExtensions
         return identities;
     }
 
-    public static Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
+    public static async Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
     {
-        return query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
+        return await query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
     }
 }
