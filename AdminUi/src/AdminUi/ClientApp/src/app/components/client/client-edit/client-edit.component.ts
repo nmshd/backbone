@@ -78,7 +78,6 @@ export class ClientEditComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-                this.disabled = true;
             }
         });
     }
