@@ -8,7 +8,7 @@ public interface ITiersRepository
 {
     Task AddAsync(Tier tier, CancellationToken cancellationToken);
 
-    Task<bool> ExistsWithName(string tierName, CancellationToken cancellationToken);
+    Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken);
 
     Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter);
 

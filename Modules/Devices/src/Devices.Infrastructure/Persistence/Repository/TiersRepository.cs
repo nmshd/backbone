@@ -26,7 +26,7 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> ExistsWithName(string tierName, CancellationToken cancellationToken)
+    public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         var tier = await _tiersDbSet.FirstOrDefaultAsync(t => t.Name == tierName, cancellationToken);
         return tier != null;
