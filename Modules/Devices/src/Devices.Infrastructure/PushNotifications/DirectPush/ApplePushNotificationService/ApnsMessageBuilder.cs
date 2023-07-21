@@ -35,6 +35,11 @@ public class ApnsMessageBuilder
         return this;
     }
 
+    private void SetContentAvailable(bool contentAvailable)
+    {
+        _notification.Aps.ContentAvailable = contentAvailable ? "1" : "0";
+    }
+
     public ApnsMessageBuilder SetNotificationText(string title, string body)
     {
         if (!string.IsNullOrWhiteSpace(title))
@@ -44,11 +49,6 @@ public class ApnsMessageBuilder
             _notification.Aps.Alert.Body = body;
 
         return this;
-    }
-
-    private void SetContentAvailable(bool contentAvailable)
-    {
-        _notification.Aps.ContentAvailable = contentAvailable ? "1" : "0";
     }
 
     public ApnsMessageBuilder SetNotificationId(int notificationId)
