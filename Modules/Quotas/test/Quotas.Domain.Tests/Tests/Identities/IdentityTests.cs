@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
@@ -79,16 +80,16 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Cannot_delete_nonexistent_tier_quota_by_definition_id()
+    public void Trying_to_delete_inexistent_quota_throws_DomainException()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
 
         // Act
-        var acting = () => identity.DeleteTierQuotaFromDefinitionId("some-nonexistent-tier-quota-definition-id");
+        var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.Create("TQDsomeInexistentIdx").Value);
 
         // Assert
-        acting.Should().Throw<InvalidOperationException>();
+        acting.Should().Throw<DomainException>();
     }
 
     [Fact]

@@ -1,6 +1,8 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -36,10 +38,10 @@ public class Identity
         _tierQuotas.Add(tierQuota);
     }
 
-    public void DeleteTierQuotaFromDefinitionId(string tierQuotaDefinitionId)
+    public void DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
         var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.DefinitionId == tierQuotaDefinitionId)
-                        ?? throw new InvalidOperationException($"The Tier Quota with Definition Id '{tierQuotaDefinitionId}' does not exist for Identity '{Address}'. It is not possible to delete it.");
+                        ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
 
         _tierQuotas.Remove(tierQuota);
     }

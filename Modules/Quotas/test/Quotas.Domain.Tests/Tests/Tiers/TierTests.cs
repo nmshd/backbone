@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -47,26 +48,26 @@ public class TierTests
     }
 
     [Fact]
-    public void Can_delete_quota_on_tier_with_multiple_quotas()
+    public void Does_only_delete_quota_with_given_id()
     {
         // Arrange
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
-        var deletedQuotaId = tier.Quotas.ElementAt(0).Id;
-        var notDeletedQuotaId = tier.Quotas.ElementAt(1).Id;
+        var quotaIdToDelete = tier.Quotas.First().Id;
+        var otherQuotaId = tier.Quotas.Second().Id;
 
         // Act
-        tier.DeleteQuota(deletedQuotaId);
+        tier.DeleteQuota(quotaIdToDelete);
 
         // Assert
         tier.Quotas.Should().HaveCount(1);
-        tier.Quotas.ElementAt(0).Id.Should().Be(notDeletedQuotaId);
+        tier.Quotas.First().Id.Should().Be(otherQuotaId);
     }
 
     [Fact]
-    public void Cannot_delete_non_existent_quota_on_tier()
+    public void Trying_to_delete_inexistent_quota_fails()
     {
         // Arrange
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
@@ -76,5 +77,6 @@ public class TierTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
+        result.Error.Code.Should().Be("error.platform.recordNotFound");
     }
 }

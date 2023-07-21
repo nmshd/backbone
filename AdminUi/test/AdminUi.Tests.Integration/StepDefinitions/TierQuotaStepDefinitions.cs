@@ -68,12 +68,6 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [Given(@"an inexistent Tier t")]
-    public void GivenAnInexistentTier()
-    {
-        _tierId = "some-inexistent-tier-id";
-    }
-
     [When(@"a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpoint()
     {
@@ -89,6 +83,23 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createTierQuotaRequest);
 
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
+    }
+
+    [When(@"a POST request is sent to the /Tiers/inexistentTierId/Quotas endpoint")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
+    {
+        var createTierQuotaRequest = new CreateTierQuotaRequest
+        {
+            MetricKey = "NumberOfSentMessages",
+            Max = 2,
+            Period = "Week"
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierQuotaRequest);
+
+        _response = await _tiersApi.CreateTierQuota(requestConfiguration, "inexistentTierId");
     }
 
     [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
