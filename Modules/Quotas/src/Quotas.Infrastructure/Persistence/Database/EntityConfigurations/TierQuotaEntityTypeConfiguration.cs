@@ -10,6 +10,7 @@ public class TierQuotaEntityTypeConfiguration : IEntityTypeConfiguration<TierQuo
     {
         builder.HasKey(x => x.Id);
         builder.ToTable($"{nameof(TierQuota)}s");
+        builder.Ignore(x => x.Weight);
         builder.HasOne("_definition");
         builder.Property("_definitionId").HasColumnName("DefinitionId");
     }
