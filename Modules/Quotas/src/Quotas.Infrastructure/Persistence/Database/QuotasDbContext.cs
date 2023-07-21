@@ -1,5 +1,5 @@
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -17,12 +17,6 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<Identity> Identities { get; set; }
 
     public DbSet<Tier> Tiers { get; set; }
-
-    public DbSet<TierQuota> TierQuotas { get; set; }
-
-    public DbSet<IndividualQuota> IndividualQuotas { get; set; }
-
-    public DbSet<TierQuotaDefinition> TierQuotaDefinitions { get; set; }
 
     public DbSet<Message> Messages { get; set; }
 
