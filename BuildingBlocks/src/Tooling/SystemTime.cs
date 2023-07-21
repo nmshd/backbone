@@ -9,17 +9,17 @@ namespace Enmeshed.Tooling;
 /// </remarks>
 public static class SystemTime
 {
-    private static Func<DateTime> GetTime = () => DateTime.UtcNow;
+    private static Func<DateTime> _getTime = () => DateTime.UtcNow;
 
     /// <inheritdoc cref="DateTime.Today"/>
-    public static DateTime UtcToday => GetTime == null
+    public static DateTime UtcToday => _getTime == null
         ? throw new Exception("Time function is null")
-        : GetTime().ToUniversalTime().Date;
+        : _getTime().ToUniversalTime().Date;
 
     /// <inheritdoc cref="DateTime.UtcNow"/>
-    public static DateTime UtcNow => GetTime == null
+    public static DateTime UtcNow => _getTime == null
         ? throw new Exception("Time function is null")
-        : GetTime().ToUniversalTime();
+        : _getTime().ToUniversalTime();
 
     /// <summary>
     /// Sets a fixed (deterministic) time for the current thread to return by <see cref="SystemTime"/>.
@@ -37,7 +37,7 @@ public static class SystemTime
         if (time.Kind != DateTimeKind.Local)
             time = time.ToLocalTime();
 
-        GetTime = () => time;
+        _getTime = () => time;
     }
 
     /// <summary>
@@ -45,6 +45,6 @@ public static class SystemTime
     /// </summary>
     public static void Reset()
     {
-        GetTime = () => DateTime.UtcNow;
+        _getTime = () => DateTime.UtcNow;
     }
 }
