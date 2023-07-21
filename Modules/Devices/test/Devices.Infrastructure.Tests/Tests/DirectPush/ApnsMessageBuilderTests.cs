@@ -22,7 +22,7 @@ public class ApnsMessageBuilderTests
         request.RequestUri!.ToString().Should().Contain("https://api.development.push.apple.com/3/device/someDeviceId");
         request.Headers.GetValues("apns-topic").FirstOrDefault().Should().Be("someAppBundleIdentifier");
         request.Headers.GetValues("apns-expiration").FirstOrDefault().Should().Be("0");
-        request.Headers.GetValues("apns-push-type").FirstOrDefault().Should().Be("alert");
+        request.Headers.GetValues("apns-push-type").FirstOrDefault().Should().Be("background");
         request.Headers.GetValues("apns-priority").FirstOrDefault().Should().Be("5");
         request.Headers.GetValues("Authorization").FirstOrDefault().Should().NotBeNull();
     }
