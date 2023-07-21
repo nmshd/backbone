@@ -41,5 +41,5 @@ public class PushNotificationOptions
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
 #nullable enable
-    public DirectPush.IServiceCollectionExtensions.DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
+    public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }

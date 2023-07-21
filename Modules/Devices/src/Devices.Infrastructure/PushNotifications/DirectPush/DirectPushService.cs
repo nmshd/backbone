@@ -23,7 +23,7 @@ public class DirectPushService : IPushService
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
-        foreach(var group in groups)
+        foreach (var group in groups)
         {
             var platform = group.Key;
 
@@ -46,7 +46,8 @@ public class DirectPushService : IPushService
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
 
             _logger.LogTrace("Device successfully updated.");
-        } else
+        }
+        else
         {
             await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle), cancellationToken);
 

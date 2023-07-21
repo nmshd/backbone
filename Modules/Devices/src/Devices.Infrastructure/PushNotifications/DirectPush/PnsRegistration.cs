@@ -5,7 +5,7 @@ using Enmeshed.Tooling;
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public class PnsRegistration
 {
-    private PnsRegistration() {}
+    private PnsRegistration() { }
 
     public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle)
     {

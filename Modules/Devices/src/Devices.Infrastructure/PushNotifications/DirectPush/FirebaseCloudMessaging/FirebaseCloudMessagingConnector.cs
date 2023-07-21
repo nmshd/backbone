@@ -40,15 +40,15 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             case null:
                 return ("", "");
             case JsonElement jsonElement:
-                {
-                    var notification = jsonElement.Deserialize<NotificationTextAttribute>();
-                    return notification == null ? ("", "") : (notification.Title, notification.Body);
-                }
+            {
+                var notification = jsonElement.Deserialize<NotificationTextAttribute>();
+                return notification == null ? ("", "") : (notification.Title, notification.Body);
+            }
             default:
-                {
-                    var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-                    return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
-                }
+            {
+                var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
+                return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
+            }
         }
     }
 

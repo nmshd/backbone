@@ -55,9 +55,9 @@ public class FcmMessageBuilderTests
         contentJson.Should().Be(FormatJson(@"{
           'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
           'eventName': 'dynamic',
-          'sentAt': '2021-01-01T00:00:00Z',
+          'sentAt': '2021-01-01T00:00:00.000Z',
           'payload': {
-            'SomeProperty': 'someValue'
+            'someProperty': 'someValue'
           }
         }"));
     }

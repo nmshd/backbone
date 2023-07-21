@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
@@ -9,28 +10,31 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions? options)
+    public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
+    {
+        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
+        services.AddFcm(options.Fcm);
+        services.AddApns();
+    }
+
+    private static void AddFcm(this IServiceCollection services, DirectPnsCommunicationOptions.FcmOptions options)
     {
         FirebaseApp.Create(new AppOptions
         {
-            Credential = options?.Fcm?.ServiceAccountJson is null
+            Credential = options?.ServiceAccountJson is null
                 ? GoogleCredential.GetApplicationDefault()
-                : GoogleCredential.FromJson(options.Fcm.ServiceAccountJson)
+                : GoogleCredential.FromJson(options.ServiceAccountJson)
         });
-
-        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
-        services.AddTransient<IPushService, DirectPushService>();
         services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
 
-    public class DirectPnsCommunicationOptions
+    private static void AddApns(this IServiceCollection services)
     {
-        public FcmOptions Fcm { get; set; }
-
-        public class FcmOptions
-        {
-            public string ServiceAccountJson { get; set; } = string.Empty;
-        }
+        services.AddHttpClient();
+        services.AddTransient<ApplePushNotificationServiceConnector>();
+        services.AddTransient<IPushService, DirectPushService>();
+        services.AddTransient<IJwtGenerator, JwtGenerator>();
+        services.AddSingleton<ApnsJwtCache>();
     }
 }
