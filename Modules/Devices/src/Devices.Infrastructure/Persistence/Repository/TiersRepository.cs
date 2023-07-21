@@ -28,8 +28,7 @@ public class TiersRepository : ITiersRepository
 
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
-        var tier = await _tiersDbSet.FirstOrDefaultAsync(t => t.Name == tierName, cancellationToken);
-        return tier != null;
+        return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
     }
 
     public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
