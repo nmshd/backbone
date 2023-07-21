@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -12,33 +13,22 @@ public class NotificationContent
 
     public NotificationContent(IdentityAddress recipient, object pushNotification)
     {
+        EventName = DetermineEventName(pushNotification);
+        AccountReference = recipient;
+        Payload = pushNotification;
+        SentAt = SystemTime.UtcNow;
+    }
+
+    private string DetermineEventName(object pushNotification)
+    {
         var notificationTypeName = pushNotification.GetType().Name;
 
         if (notificationTypeName.Contains(PUSH_NOTIFICATION_POSTFIX))
-            HandleStaticContent(pushNotification, notificationTypeName);
-        else
-            HandleDynamicContent(pushNotification);
+            return notificationTypeName.Replace(PUSH_NOTIFICATION_POSTFIX, "");
 
-        SentAt = SystemTime.UtcNow;
-        AccountReference = recipient;
+        return "dynamic";
     }
-
-    private void HandleStaticContent(object pushNotification, string notificationTypeName)
-    {
-        EventName = notificationTypeName.Replace(PUSH_NOTIFICATION_POSTFIX, "");
-        Payload = pushNotification;
-    }
-
-    private void HandleDynamicContent(object pushNotification)
-    {
-        EventName = "dynamic";
-
-        if (pushNotification is JsonElement jsonElement)
-            Payload = JsonConvert.DeserializeObject<object>(jsonElement.GetRawText());
-        else
-            Payload = pushNotification;
-    }
-
+    
     [JsonPropertyName("accRef")]
     public string AccountReference { get; }
 
