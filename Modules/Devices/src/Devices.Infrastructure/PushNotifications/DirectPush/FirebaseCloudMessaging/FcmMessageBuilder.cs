@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -8,6 +9,7 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.F
 /// </summary>
 public class FcmMessageBuilder
 {
+    protected JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase /*, Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement)*/};
     private readonly MulticastMessage _message;
 
     private readonly Dictionary<string, string> _data;
@@ -36,7 +38,7 @@ public class FcmMessageBuilder
 
     public FcmMessageBuilder AddContent(NotificationContent content)
     {
-        _data["content"] = JsonSerializer.Serialize(content);
+        _data["content"] = JsonSerializer.Serialize(content, _jsonSerializerOptions);
         SetContentAvailable(true);
 
         return this;
@@ -80,7 +82,7 @@ public class FcmMessageBuilder
 
     public MulticastMessage Build()
     {
-        _message.Data = _data.AsReadOnly();
+        _message.Data = _data;
         return _message;
     }
 }
