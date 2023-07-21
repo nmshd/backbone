@@ -1,20 +1,20 @@
-﻿using AdminApi.Tests.Integration.API;
-using AdminApi.Tests.Integration.Extensions;
-using AdminApi.Tests.Integration.Models;
+﻿using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.Extensions;
+using AdminUi.Tests.Integration.Models;
 
-namespace AdminApi.Tests.Integration.StepDefinitions;
+namespace AdminUi.Tests.Integration.StepDefinitions;
 internal class MetricsStepDefinitions : BaseStepDefinitions
 {
     private readonly MetricsApi _metricsApi;
     private HttpResponse<List<MetricDTO>>? _response;
 
-    public MetricsStepDefinitions(MetricsApi metricsApi) : base()
+    public MetricsStepDefinitions(MetricsApi metricsApi)
     {
         _metricsApi = metricsApi;
     }
 
     [When(@"a GET request is sent to the /Metrics endpoint")]
-    public async Task WhenAGETRequestIsSentToTheMetricsEndpointAsync()
+    public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
         _response = await _metricsApi.GetAllMetrics(_requestConfiguration);
         _response.Should().NotBeNull();
@@ -24,7 +24,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a list of Metrics")]
     public void ThenTheResponseContainsAListOfMetrics()
     {
-        _response!.Content!.Result.Should().NotBeNullOrEmpty();
+        _response!.Content.Result.Should().NotBeNullOrEmpty();
         _response.AssertContentCompliesWithSchema();
     }
 

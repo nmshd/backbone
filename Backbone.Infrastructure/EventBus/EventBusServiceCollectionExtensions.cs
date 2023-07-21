@@ -32,11 +32,11 @@ public static class EventBusServiceCollectionExtensions
                 });
                 break;
             case RABBIT_MQ:
-                services.AddRabbitMQ(options =>
+                services.AddRabbitMq(options =>
                 {
                     options.HostName = configuration.ConnectionInfo;
-                    options.Username = configuration.RabbitMQUsername;
-                    options.Password = configuration.RabbitMQPassword;
+                    options.Username = configuration.RabbitMqUsername;
+                    options.Password = configuration.RabbitMqPassword;
                     options.SubscriptionClientName = configuration.SubscriptionClientName;
                     options.RetryCount = configuration.ConnectionRetryCount;
                 });

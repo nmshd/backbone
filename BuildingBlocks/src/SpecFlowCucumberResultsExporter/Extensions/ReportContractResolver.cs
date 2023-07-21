@@ -8,9 +8,9 @@ public class ReportContractResolver : DefaultContractResolver
 {
     protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
     {
-        IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+        var properties = base.CreateProperties(type, memberSerialization);
 
-        foreach (JsonProperty property in properties)
+        foreach (var property in properties)
         {
             property.PropertyName = ConvertPropertyName(property.PropertyName);
         }
@@ -21,11 +21,11 @@ public class ReportContractResolver : DefaultContractResolver
 
     private string ConvertPropertyName(string name)
     {
-        StringBuilder result = new StringBuilder();
+        var result = new StringBuilder();
 
-        for (int i = 0; i < name.Length; i++)
+        for (var i = 0; i < name.Length; i++)
         {
-            char c = name[i];
+            var c = name[i];
             if (char.IsUpper(c))
             {
                 if (i > 0)

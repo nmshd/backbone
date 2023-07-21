@@ -1,7 +1,7 @@
-﻿using AdminApi.Tests.Integration.Models;
-using AdminApi.Tests.Integration.Support;
+﻿using AdminUi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.Support;
 
-namespace AdminApi.Tests.Integration.Extensions;
+namespace AdminUi.Tests.Integration.Extensions;
 
 public static class HttpResponseExtensions
 {

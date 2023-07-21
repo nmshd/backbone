@@ -1,18 +1,12 @@
-<h2>{{ header }}</h2>
-<mat-grid-list
-    cols="{{ isMobile() ? '2' : '4' }}"
-    rowHeight="4:3"
-    gutterSize="4"
->
-    <mat-grid-tile
-        *ngFor="let dashboardPanel of dashboardOverviewPanels"
-        [routerLink]="dashboardPanel.routerLink"
-        class="dashboard-tile"
-        matTooltip="Go to {{ dashboardPanel.header }}"
-    >
-        <mat-icon class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
-        <mat-grid-tile-footer>
-            <span>{{ dashboardPanel.header }}</span>
-        </mat-grid-tile-footer>
+<mat-grid-list [cols]="breakpoint" rowHeight="3:2" gutterSize="10" (window:resize)="onResize($event)">
+    <mat-grid-tile *ngFor="let dashboardPanel of dashboardOverviewPanels" [routerLink]="dashboardPanel.routerLink"
+        class="dashboard-tile" matTooltip="Go to {{ dashboardPanel.header }}">
+        <div class="container">
+            <mat-icon *ngIf="!isMobile()" class="panel-icon">{{ dashboardPanel.icon }}</mat-icon>
+            <h4 class="panel-title">{{ dashboardPanel.header }}</h4>
+            <p class="panel-description">{{ dashboardPanel.description }}
+            </p>
+            <button mat-raised-button routerLink="/clients" color="primary" class="more-button">More</button>
+        </div>
     </mat-grid-tile>
 </mat-grid-list>

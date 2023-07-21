@@ -26,8 +26,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
         var recipient = message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress());
 
-        if(recipient != null) 
-            recipient.FetchedMessage(_userContext.GetDeviceId());
+        recipient?.FetchedMessage(_userContext.GetDeviceId());
 
         await _messagesRepository.Update(message);
 

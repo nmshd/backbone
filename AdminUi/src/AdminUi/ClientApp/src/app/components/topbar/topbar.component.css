@@ -1,0 +1,14 @@
+.toolbar {
+    background: #fff;
+    color: darkslategray;
+    border-bottom: 1px #cccccc solid;
+}
+
+.logo {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}

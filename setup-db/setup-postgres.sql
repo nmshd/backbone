@@ -146,6 +146,12 @@ GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationshi
 GRANT USAGE ON SCHEMA "Challenges" TO devices;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO devices;
 
+GRANT USAGE ON SCHEMA "Messages" TO quotas;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Messages" TO quotas;
+
+GRANT USAGE ON SCHEMA "Files" TO quotas;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO quotas;
+
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
 (
     "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,

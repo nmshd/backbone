@@ -53,7 +53,7 @@ public class OAuthClientManager
             throw new Exception($"A client with the id '{clientId}' already exists.");
         }
 
-        var managerResult = await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
         {
             ClientId = clientId,
             ClientSecret = clientSecret, // Note: the default implementation automatically hashes the client secret before storing it in the database, for security reasons.
@@ -65,9 +65,6 @@ public class OAuthClientManager
             }
         });
 
-        if (managerResult == null)
-            throw new Exception($"Failed to create the client: '{name}'");
-
         return new CreatedClientDTO(clientId, name, clientSecret);
     }
 
@@ -76,11 +73,7 @@ public class OAuthClientManager
         if (string.IsNullOrEmpty(clientId))
             throw new ArgumentNullException(nameof(clientId));
 
-        var client = await _applicationManager.FindByClientIdAsync(clientId);
-
-        if (client == null)
-            throw new ArgumentException($"A client with the client id '{clientId}' does not exist.");
-
+        var client = await _applicationManager.FindByClientIdAsync(clientId) ?? throw new ArgumentException($"A client with the client id '{clientId}' does not exist.");
         await _applicationManager.DeleteAsync(client);
     }
 
@@ -97,7 +90,7 @@ public static class ClientIdGenerator
     public const int MAX_LENGTH_WITHOUT_PREFIX = MAX_LENGTH - PREFIX_LENGTH;
     public const string PREFIX = "CLT";
 
-    private static readonly char[] ValidChars =
+    private static readonly char[] VALID_CHARS =
     {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -106,7 +99,7 @@ public static class ClientIdGenerator
 
     public static string Generate()
     {
-        var stringValue = StringUtils.Generate(ValidChars, MAX_LENGTH_WITHOUT_PREFIX);
+        var stringValue = StringUtils.Generate(VALID_CHARS, MAX_LENGTH_WITHOUT_PREFIX);
         return PREFIX + stringValue;
     }
 }

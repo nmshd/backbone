@@ -9,3 +9,9 @@
 .layout-content {
     padding: 1rem;
 }
+
+.login-layout {
+    display: flex;
+    justify-content: center;
+    background: #673ab7;
+}

@@ -10,7 +10,7 @@ namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
 public class RelationshipTemplateQueryableExtensionsTests
 {
-    private static readonly DateTime Yesterday = DateTime.UtcNow.AddDays(-1);
+    private static readonly DateTime YESTERDAY = DateTime.UtcNow.AddDays(-1);
 
     private readonly RelationshipsDbContext _arrangeContext;
     private readonly RelationshipsDbContext _actContext;
@@ -27,7 +27,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         var templateCreator = IdentityAddress.Create(new byte[2], "id0");
         var requestCreator = IdentityAddress.Create(new byte[5], "id0");
 
-        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, Yesterday, new byte[2]);
+        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, new byte[2]);
         var relationship = new Relationship(template, requestCreator, DeviceId.New(), new byte[2]);
 
 
@@ -85,7 +85,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         var templateCreator = TestDataGenerator.CreateRandomAddress();
         var requestCreator = TestDataGenerator.CreateRandomAddress();
 
-        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, Yesterday, TestDataGenerator.CreateRandomBytes());
+        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, TestDataGenerator.CreateRandomBytes());
         var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes());
 
 

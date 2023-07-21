@@ -1,8 +1,10 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Enmeshed.BuildingBlocks.Application.Attributes;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
+[ApplyQuotasForMetrics("NumberOfFiles")]
 public class CreateFileCommand : IRequest<CreateFileResponse>
 {
     public byte[] FileContent { get; set; }

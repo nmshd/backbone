@@ -14,4 +14,4 @@ jobs:
         with:
           disable-reviews: true
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          valid-labels: "ci, bug, enhancement, breaking-change, documentation, chore, refactoring, test"
+          valid-labels: "breaking-change, bug, chore, ci, dependencies, documentation, enhancement, refactoring, test"

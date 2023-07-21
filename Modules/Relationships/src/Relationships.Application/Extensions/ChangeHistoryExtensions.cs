@@ -15,11 +15,7 @@ public static class ChangeHistoryExtensions
 
     public static RelationshipChange GetLatestOfType(this IRelationshipChangeLog changes, RelationshipChangeType type)
     {
-        var change = changes.LastOrDefault(c => c.Type == type);
-
-        if (change == null)
-            throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(RelationshipChange)));
-
+        var change = changes.LastOrDefault(c => c.Type == type) ?? throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(RelationshipChange)));
         return change;
     }
 }
