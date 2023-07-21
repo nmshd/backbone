@@ -9,6 +9,7 @@ internal class TierQuotaDefinitionEntityTypeConfiguration : IEntityTypeConfigura
     public void Configure(EntityTypeBuilder<TierQuotaDefinition> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.ToTable($"{nameof(TierQuotaDefinition)}s");
         builder.Property(x => x.Period);
         builder.Property(x => x.MetricKey);
         builder.Property(x => x.Max);
