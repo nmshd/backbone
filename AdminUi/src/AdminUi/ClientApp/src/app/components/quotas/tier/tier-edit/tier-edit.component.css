@@ -5,7 +5,7 @@
 }
 
 .action-buttons button {
-    margin: 10px;
+    margin: 5px;
 }
 
 .disabled-container {
@@ -87,17 +87,14 @@
     color: rgba(255, 255, 255, 0.54) !important;
 }
 
-:host
-    ::ng-deep
-    .quotas-expansion-panel-header
-    > .mat-expansion-indicator::after {
+:host ::ng-deep .quotas-expansion-panel-header > .mat-expansion-indicator::after {
     color: white !important;
 }
 
 .mat-column-metricName,
 .mat-column-max,
 .mat-column-period {
-    width: 33%;
+    width: 25%;
     word-break: break-all;
 }
 
