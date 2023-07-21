@@ -20,7 +20,7 @@ public class ApnsMessageBuilder
                 {"apns-topic", appBundleIdentifier},
                 {"apns-expiration", "0"},
                 {"apns-priority", "5"},
-                {"apns-push-type", "alert"}
+                {"apns-push-type", "background"}
             }
         };
 
