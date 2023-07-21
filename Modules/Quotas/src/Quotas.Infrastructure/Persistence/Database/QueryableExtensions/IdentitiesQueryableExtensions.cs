@@ -11,13 +11,9 @@ public static class IdentitiesQueryableExtensions
         return identities;
     }
 
-    public static Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
+    public static async Task<Identity> FirstWithAddress(this IQueryable<Identity> query, string address, CancellationToken cancellationToken)
     {
-        var identity = query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken);
-
-        if (identity == null)
-            throw new NotFoundException(nameof(Identity));
-
+        var identity = await query.Where(identity => identity.Address == address).FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         return identity;
     }
 }
