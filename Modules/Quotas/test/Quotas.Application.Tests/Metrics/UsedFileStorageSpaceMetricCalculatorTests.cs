@@ -12,10 +12,10 @@ public class UsedFileStorageSpaceMetricCalculatorTests
     {
         // Arrange
         var repositoryStub = new FileMetadataRepositoryStub(long.MaxValue);
-        var it = new UsedFileStorageSpaceMetricCalculator(repositoryStub);
+        var metricCalculator = new UsedFileStorageSpaceMetricCalculator(repositoryStub);
 
         // Act
-        var acting = async () => await it.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "", CancellationToken.None);
+        var acting = async () => await metricCalculator.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "", CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<OverflowException>();
