@@ -27,7 +27,7 @@ public class Identity
     internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
     public string Address { get; }
-    public string TierId { get; }
+    public TierId TierId { get; }
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
