@@ -84,11 +84,16 @@ public class JwtGeneratorTests : IDisposable
         var jwtGenerator = new JwtGenerator(new ApnsJwtCache());
 
         var initialJwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
-        SystemTime.Set(DateTime.UtcNow.AddMinutes(51));
+
+        var expiredSystemTime = DateTime.UtcNow.AddMinutes(51);
 
         // Act
         var results = new ConcurrentBag<Jwt>();
-        Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id")); });
+        Parallel.For(0, 10000, _ =>
+        {
+            SystemTime.Set(expiredSystemTime); // we need to set the SystemTime in here, because Parallel executes each iteration in a different thread, and SystemTime sets the time only for the current thread
+            results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id"));
+        });
 
         // Assert
         results.Should()
