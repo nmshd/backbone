@@ -2,6 +2,7 @@
 using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+
 public record PnsHandle
 {
     public PushNotificationPlatform Platform { get; }
@@ -18,23 +19,17 @@ public record PnsHandle
         switch (platform)
         {
             case PushNotificationPlatform.Fcm:
-                {
-                    var parseHandleResult = FcmHandle.Parse(value);
-                    return parseHandleResult.IsSuccess
-                        ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
-                        : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
-                }
+            {
+                var parseHandleResult = FcmHandle.Parse(value);
+                return parseHandleResult.Map(v => (PnsHandle)v);
+            }
             case PushNotificationPlatform.Apns:
-                {
-                    var parseHandleResult = ApnsHandle.Parse(value);
-                    return parseHandleResult.IsSuccess
-                        ? Result.Success<PnsHandle, DomainError>(parseHandleResult.Value)
-                        : Result.Failure<PnsHandle, DomainError>(parseHandleResult.Error);
-                }
+            {
+                var parseHandleResult = ApnsHandle.Parse(value);
+                return parseHandleResult.Map(v => (PnsHandle)v);
+            }
             default:
-                return Result.Failure<PnsHandle, DomainError>(
-                    DomainErrors.InvalidPnsPlatform($"Platform '{platform}' does not exist"));
+                return Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsPlatform($"Platform '{platform}' does not exist"));
         }
     }
-
 }
