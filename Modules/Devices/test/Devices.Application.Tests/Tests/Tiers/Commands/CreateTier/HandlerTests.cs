@@ -49,11 +49,10 @@ public class HandlerTests
     public async void Fails_to_create_a_tier_when_tier_name_already_exists()
     {
         // Arrange
-        var expectedTierName = TierName.Create("my-tier-name");
-        A.CallTo(() => _tierRepository.ExistsWithName(expectedTierName.Value, CancellationToken.None)).Returns(Task.FromResult(true));
+        A.CallTo(() => _tierRepository.ExistsWithName(A<TierName>._, CancellationToken.None)).Returns(Task.FromResult(true));
 
         // Act
-        var acting = async () => await _handler.Handle(new CreateTierCommand(expectedTierName.Value), CancellationToken.None);
+        var acting = async () => await _handler.Handle(new CreateTierCommand("my-tier-name"), CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.device.tierNameAlreadyExists");
