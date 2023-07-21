@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 
-public class CreateQuotaForIdentityCommand : IRequest<IdentityQuotaDefinitionDTO>
+public class CreateQuotaForIdentityCommand : IRequest<IdentityQuotaDTO>
 {
     public CreateQuotaForIdentityCommand(string identityAddress, string metricKey, int max, QuotaPeriod period)
     {
