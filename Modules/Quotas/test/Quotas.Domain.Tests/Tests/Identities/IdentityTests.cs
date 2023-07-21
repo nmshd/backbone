@@ -80,13 +80,13 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Trying_to_delete_inexistent_quota_throws_NotFoundException()
+    public void Trying_to_delete_inexistent_quota_throws_DomainException()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
 
         // Act
-        var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.New());
+        var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.Create("TQDsomeInexistentIdx").Value);
 
         // Assert
         acting.Should().Throw<DomainException>();

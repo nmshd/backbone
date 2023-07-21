@@ -13,9 +13,4 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.quotas.invalidValueForMaxLimitInTierQuota", "A tier quota max value cannot be lower of equal to zero.");
     }
-
-    public static DomainError TierQuotaNotFoundOnIdentity(string tierQuotaDefinitionId, string address)
-    {
-        return new DomainError("error.platform.quotas.tierQuotaNotFoundOnIdentity", $"The Tier Quota with Definition Id '{tierQuotaDefinitionId}' does not exist for Identity '{address}'.");
-    }
 }
