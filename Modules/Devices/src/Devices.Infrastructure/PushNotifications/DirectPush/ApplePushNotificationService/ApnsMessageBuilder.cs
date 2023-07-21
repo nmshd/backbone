@@ -14,7 +14,7 @@ public class ApnsMessageBuilder
     {
         _request = new HttpRequestMessage(HttpMethod.Post, new Uri(path))
         {
-            Version = new Version(2, 0),
+            Version = HttpVersion.Version30,
             Headers =
             {
                 {"apns-topic", appBundleIdentifier},
