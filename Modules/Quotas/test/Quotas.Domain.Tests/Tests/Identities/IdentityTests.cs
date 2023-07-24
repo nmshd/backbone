@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
@@ -34,6 +35,7 @@ public class IdentityTests
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
 
+        // Assert
         identity.TierQuotas.Should().HaveCount(2);
 
         identity.TierQuotas.First().MetricKey.Should().Be(tierQuotaDefinition1.MetricKey);
@@ -42,6 +44,52 @@ public class IdentityTests
         identity.TierQuotas.Second().MetricKey.Should().Be(tierQuotaDefinition2.MetricKey);
         identity.TierQuotas.Second().Max.Should().Be(tierQuotaDefinition2.Max);
         identity.TierQuotas.Second().Period.Should().Be(tierQuotaDefinition2.Period);
+    }
+
+    [Fact]
+    public void Can_delete_tier_quota_by_definition_id()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+
+        // Act
+        identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition.Id);
+
+        // Assert
+        identity.TierQuotas.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Can_delete_tier_quota_by_definition_id_with_multiple_quotas()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
+
+        // Act
+        identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition1.Id);
+
+        // Assert
+        identity.TierQuotas.Should().HaveCount(1);
+        identity.TierQuotas.ElementAt(0).DefinitionId.Should().Be(tierQuotaDefinition2.Id);
+    }
+
+    [Fact]
+    public void Trying_to_delete_inexistent_quota_throws_DomainException()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+
+        // Act
+        var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.Create("TQDsomeInexistentIdx").Value);
+
+        // Assert
+        acting.Should().Throw<DomainException>();
     }
 
     [Fact]
