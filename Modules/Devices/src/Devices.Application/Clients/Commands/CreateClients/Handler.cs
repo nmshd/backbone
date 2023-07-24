@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         {
             var clientExists = await _oAuthClientsRepository.Exists(request.ClientId, cancellationToken);
             if (clientExists)
-                throw new OperationFailedException(ApplicationErrors.Devices.ClientIdAlreadyExists());
+                throw new ApplicationException(ApplicationErrors.Devices.ClientIdAlreadyExists());
         }
 
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
