@@ -34,7 +34,7 @@ public class TiersRepository : ITiersRepository
     {
         var tier = await (track ? _tiers : _readOnlyTiers)
             .IncludeAll(_dbContext)
-            .FirstAsync(t=>t.Id == id, cancellationToken);
+            .FirstWithId(id, cancellationToken);
 
         return tier;
     }
