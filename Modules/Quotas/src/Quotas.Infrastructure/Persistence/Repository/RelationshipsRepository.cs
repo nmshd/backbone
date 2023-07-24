@@ -17,7 +17,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         var relationshipsCount = await _relationshipsReadonly
             .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
-                r.Status == RelationshipStatus.Active && r.To == createdBy)
+                r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy))
             .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
     }
