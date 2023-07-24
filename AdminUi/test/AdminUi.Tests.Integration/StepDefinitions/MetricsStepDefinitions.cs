@@ -3,7 +3,10 @@ using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
-internal class MetricsStepDefinitions : BaseStepDefinitions
+
+[Binding]
+[Scope(Feature = "GET Metrics")]
+public class MetricsStepDefinitions : BaseStepDefinitions
 {
     private readonly MetricsApi _metricsApi;
     private HttpResponse<List<MetricDTO>>? _response;
