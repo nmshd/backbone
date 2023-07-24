@@ -28,4 +28,16 @@ public class Tier
 
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
     }
+
+    public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
+    {
+        var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
+
+        if (quotaDefinition == null)
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
+
+        Quotas.Remove(quotaDefinition);
+
+        return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
+    }
 }

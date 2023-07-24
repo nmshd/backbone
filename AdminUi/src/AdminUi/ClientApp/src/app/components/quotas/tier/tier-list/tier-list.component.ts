@@ -1,14 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { Tier, TierService } from 'src/app/services/tier-service/tier.service';
-import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { Component, ViewChild } from "@angular/core";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
-    selector: 'app-tier-list',
-    templateUrl: './tier-list.component.html',
-    styleUrls: ['./tier-list.component.css'],
+    selector: "app-tier-list",
+    templateUrl: "./tier-list.component.html",
+    styleUrls: ["./tier-list.component.css"]
 })
 export class TierListComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -24,14 +24,10 @@ export class TierListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = ['id', 'name'];
+    displayedColumns: string[] = ["id", "name"];
 
-    constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private tierService: TierService
-    ) {
-        this.header = 'Tiers';
+    constructor(private router: Router, private snackBar: MatSnackBar, private tierService: TierService) {
+        this.header = "Tiers";
         this.headerDescription = "A list of existing Tiers";
 
         this.tiers = [];
@@ -63,12 +59,12 @@ export class TierListComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
-                this.snackBar.open(errorMessage, 'Dismiss', {
-                    verticalPosition: 'top',
-                    horizontalPosition: 'center'
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
-            },
+            }
         });
     }
 

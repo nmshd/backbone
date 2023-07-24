@@ -13,5 +13,6 @@ public class TierQuotaEntityTypeConfiguration : IEntityTypeConfiguration<TierQuo
         builder.Ignore(x => x.Weight);
         builder.HasOne("_definition");
         builder.Property("_definitionId").HasColumnName("DefinitionId");
+        builder.Ignore(x => x.DefinitionId);
     }
 }

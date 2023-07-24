@@ -27,6 +27,9 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<long>("CipherSize")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 

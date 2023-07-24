@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
+import { Metric } from "../metrics-service/metrics.service";
 
 @Injectable({
     providedIn: "root"
@@ -28,6 +29,10 @@ export class QuotasService {
 
     createIdentityQuota(request: CreateQuotaForIdentityRequest, identityAddress: string): Observable<HttpResponseEnvelope<IdentityQuota>> {
         return this.http.post<HttpResponseEnvelope<IdentityQuota>>(`${this.apiUrl}/Identity/${identityAddress}/Quotas`, request);
+    }
+
+    deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
+        return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Tiers/${tierId}/Quotas/${quotaId}`);
     }
 }
 
@@ -57,6 +62,7 @@ export interface CreateQuotaForTierRequest {
 }
 
 export interface CreateQuotaForIdentityRequest {
+    tierId?: string;
     metricKey: string;
     max: number;
     period: string;

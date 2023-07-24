@@ -54,9 +54,6 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
-
-        services.AddTransient<NumberOfSentMessagesMetricCalculator>();
-        services.AddTransient<NumberOfFilesMetricCalculator>();
     }
 
     public class DbOptions
