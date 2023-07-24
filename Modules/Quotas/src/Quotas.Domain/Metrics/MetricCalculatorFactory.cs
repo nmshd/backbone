@@ -20,10 +20,16 @@ public abstract class MetricCalculatorFactory
             return CreateNumberOfRelationshipsMetricCalculator();
         }
 
+        if (metricKey == MetricKey.UsedFileStorageSpace)
+        {
+            return CreateUsedFileStorageSpaceCalculator();
+        }
+
         throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
     }
 
     protected abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfRelationshipsMetricCalculator();
+    protected abstract IMetricCalculator CreateUsedFileStorageSpaceCalculator();
 }
