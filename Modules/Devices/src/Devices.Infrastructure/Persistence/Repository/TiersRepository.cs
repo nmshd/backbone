@@ -26,6 +26,11 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
+    }
+
     public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
     {
         var paginationResult = await _tiersDbSet

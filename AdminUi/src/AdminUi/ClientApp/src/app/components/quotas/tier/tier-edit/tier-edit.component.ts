@@ -109,7 +109,6 @@ export class TierEditComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-                this.disabled = true;
             }
         });
     }
