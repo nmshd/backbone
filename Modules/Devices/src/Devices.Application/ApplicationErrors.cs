@@ -48,7 +48,12 @@ public static class ApplicationErrors
 
         public static ApplicationError ClientIdAlreadyExists()
         {
-            return new ApplicationError("error.platform.validation.device.clientIdAlreadyExists", "A client with the given client id already exists. Try a different client id");
+            return new ApplicationError("error.platform.validation.device.clientIdAlreadyExists", "A client with the given client id already exists. Try a different client id.");
+        }
+
+        public static ApplicationError TierNameAlreadyExists()
+        {
+            return new ApplicationError("error.platform.validation.device.tierNameAlreadyExists", "A tier with the given tier name already exists. Try a different tier name.");
         }
     }
 }
