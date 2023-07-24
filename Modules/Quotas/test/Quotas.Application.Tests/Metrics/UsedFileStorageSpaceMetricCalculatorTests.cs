@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using FluentAssertions;
 using Xunit;
 
@@ -15,7 +14,7 @@ public class UsedFileStorageSpaceMetricCalculatorTests
         var metricCalculator = new UsedFileStorageSpaceMetricCalculator(repositoryStub);
 
         // Act
-        var acting = async () => await metricCalculator.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "", CancellationToken.None);
+        var acting = async () => await metricCalculator.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "some-address", CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<OverflowException>();
