@@ -15,7 +15,10 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<uint> Count(string createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var relationshipsCount = 0; // _relationshipsReadonly.Count();
+        var relationshipsCount = await _relationshipsReadonly
+            .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
+                r.Status == RelationshipStatus.Active && r.To == createdBy)
+            .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
     }
 }

@@ -1,9 +1,17 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 public class Relationship
 {
     public string Id { get; set; }
-    public IdentityAddress From { get; }
-    public IdentityAddress To { get; }
+    public string From { get; set; }
+    public string To { get; set; }
+    public RelationshipStatus Status { get; set; }
+}
+public enum RelationshipStatus
+{
+    Pending = 10,
+    Active = 20,
+    Rejected = 30,
+    Revoked = 40,
+    Terminating = 50,
+    Terminated = 60
 }
