@@ -62,7 +62,9 @@ export class IdentityEditComponent {
     }
 
     openAssignQuotaDialog() {
-        let dialogRef = this.dialog.open(AssignQuotasDialogComponent);
+        let dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%"
+        });
 
         dialogRef.afterClosed().subscribe((result: any) => {
             if (result) {

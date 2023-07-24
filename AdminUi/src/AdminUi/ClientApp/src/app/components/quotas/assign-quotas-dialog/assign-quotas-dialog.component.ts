@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { Metric, MetricsService } from "src/app/services/metrics-service/metrics.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
