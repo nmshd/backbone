@@ -7,7 +7,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 
-public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQuotaDefinitionDTO>
+public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IndividualQuotaDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<IdentityQuotaDefinitionDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task<IndividualQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling CreateQuotaForTierCommand ...");
 
@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
         _logger.LogTrace($"Successfully created assigned Quota to Identity. Identity Address: {identity.Address}");
 
-        var response = new IdentityQuotaDefinitionDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
+        var response = new IndividualQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
         return response;
     }
 }

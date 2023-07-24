@@ -1,5 +1,8 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
+using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -36,4 +39,19 @@ public class IdentitiesController : ApiControllerBase
         var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter), cancellationToken);
         return Paged(identities);
     }
+
+    [HttpPost("{identityAddress}/Quotas")]
+    [ProducesResponseType(typeof(IndividualQuotaDTO), StatusCodes.Status201Created)]
+    public async Task<CreatedResult> CreateIndividualQuota([FromRoute] string identityAddress, [FromBody] CreateQuotaForIdentityRequest request, CancellationToken cancellationToken)
+    {
+        var createdIndividualQuotaDTO = await _mediator.Send(new CreateQuotaForIdentityCommand(identityAddress, request.MetricKey, request.Max, request.Period), cancellationToken);
+        return Created(createdIndividualQuotaDTO);
+    }
+}
+
+public class CreateQuotaForIdentityRequest
+{
+    public string MetricKey { get; set; }
+    public int Max { get; set; }
+    public QuotaPeriod Period { get; set; }
 }
