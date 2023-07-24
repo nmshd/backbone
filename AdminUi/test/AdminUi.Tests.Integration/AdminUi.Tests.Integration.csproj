@@ -40,8 +40,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\IndividualQuotas\" />
-  </ItemGroup>
-
 </Project>
