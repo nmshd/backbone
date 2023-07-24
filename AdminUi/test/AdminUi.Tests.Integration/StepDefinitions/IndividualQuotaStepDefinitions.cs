@@ -41,7 +41,7 @@ public class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _response = await _identitiesApi.CreateIndividualQuota(requestConfiguration, _identityAddress);
     }
 
-    [When(@"a POST request is sent to the /Identity/{i.id}/Quotas endpoint with an inexistent identity address")]
+    [When(@"a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInexistentIdentityAddress()
     {
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
