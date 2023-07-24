@@ -62,6 +62,8 @@ public class TiersController : ApiControllerBase
 
     [HttpPost("{tierId}/Quotas")]
     [ProducesResponseType(typeof(TierQuotaDefinitionDTO), StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateQuotaForTierRequest request, CancellationToken cancellationToken)
     {
         var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand(tierId, request.MetricKey, request.Max, request.Period), cancellationToken);

@@ -9,7 +9,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 
-public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQuotaDTO>
+public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IndividualQuotaDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<IdentityQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task<IndividualQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
@@ -38,7 +38,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IdentityQu
 
         _logger.LogTrace($"Successfully created Quota for Identity. Identity Address: '{identity.Address}'");
 
-        var response = new IdentityQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
+        var response = new IndividualQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
         return response;
     }
 }
