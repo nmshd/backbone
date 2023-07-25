@@ -1,0 +1,20 @@
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using FluentValidation;
+
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
+
+public class CreateQuotaForIdentityCommandValidator : AbstractValidator<CreateQuotaForIdentityCommand>
+{
+    public CreateQuotaForIdentityCommandValidator()
+    {
+        RuleFor(c => c.IdentityAddress)
+            .DetailedNotEmpty();
+        RuleFor(c => c.Max)
+            .GreaterThan(0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+        RuleFor(c => c.Period)
+            .DetailedNotNull();
+        RuleFor(c => c.MetricKey)
+            .DetailedNotNull();
+    }
+}

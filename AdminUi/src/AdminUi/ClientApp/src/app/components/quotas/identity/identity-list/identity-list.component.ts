@@ -1,9 +1,13 @@
-import { Component, ViewChild } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTableDataSource } from "@angular/material/table";
-import { Identity, IdentityService } from "src/app/services/identity-service/identity.service";
-import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+import { Component, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import {
+    Identity,
+    IdentityService,
+} from 'src/app/services/identity-service/identity.service';
+import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
 @Component({
     selector: "app-identity-list",
@@ -26,9 +30,13 @@ export class IdentityListComponent {
 
     displayedColumns: string[] = ["address", "clientId", "publicKey", "createdAt"];
 
-    constructor(private snackBar: MatSnackBar, private identityService: IdentityService) {
-        this.header = "Identities";
-        this.headerDescription = "A list of existing Identities";
+    constructor(
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private identityService: IdentityService
+    ) {
+        this.header = 'Identities';
+        this.headerDescription = 'A list of existing Identities';
 
         this.identities = [];
 
@@ -74,7 +82,7 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    dateConvert(date: any) {
-        return new Date(date).toLocaleDateString();
+    editIdentity(identity: Identity) {
+        this.router.navigate([`/identities/` + identity.address]);
     }
 }
