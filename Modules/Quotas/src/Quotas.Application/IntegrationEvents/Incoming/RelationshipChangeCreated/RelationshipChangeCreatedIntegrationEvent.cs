@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 public class RelationshipChangeCreatedIntegrationEvent : IntegrationEvent
