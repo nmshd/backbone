@@ -11,9 +11,9 @@ public class NumberOfRelationshipsMetricCalculator : IMetricCalculator
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task<uint> CalculateUsage(DateTime from, DateTime to, string uploader, CancellationToken cancellationToken)
+    public async Task<uint> CalculateUsage(DateTime from, DateTime to, string participant, CancellationToken cancellationToken)
     {
-        var numberOfRelationships = await _relationshipsRepository.Count(uploader, from, to, cancellationToken);
+        var numberOfRelationships = await _relationshipsRepository.Count(participant, from, to, cancellationToken);
         return numberOfRelationships;
     }
 }
