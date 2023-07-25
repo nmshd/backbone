@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
-import { Metric } from "../metrics-service/metrics.service";
 
 @Injectable({
     providedIn: "root"
@@ -15,17 +14,30 @@ export class QuotasService {
         this.apiUrl = environment.apiUrl;
     }
 
+    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
+        return this.http.get<HttpResponseEnvelope<Metric>>(this.apiUrl + "/Metrics");
+    }
+
     getPeriods(): string[] {
         return ["Hour", "Day", "Week", "Month", "Year"];
     }
 
-    createTierQuota(quota: TierQuota, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {
-        return this.http.post<HttpResponseEnvelope<TierQuota>>(`${this.apiUrl}/Tiers/${tierId}/Quotas`, quota);
+    createTierQuota(request: CreateQuotaForTierRequest, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {
+        return this.http.post<HttpResponseEnvelope<TierQuota>>(`${this.apiUrl}/Tiers/${tierId}/Quotas`, request);
+    }
+
+    createIdentityQuota(request: CreateQuotaForIdentityRequest, identityAddress: string): Observable<HttpResponseEnvelope<IdentityQuota>> {
+        return this.http.post<HttpResponseEnvelope<IdentityQuota>>(`${this.apiUrl}/Identities/${identityAddress}/Quotas`, request);
     }
 
     deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Tiers/${tierId}/Quotas/${quotaId}`);
     }
+}
+
+export interface Metric {
+    key: string;
+    displayName: string;
 }
 
 export interface TierQuota {
@@ -35,7 +47,20 @@ export interface TierQuota {
     period: string;
 }
 
-export interface Quota {
+export interface IdentityQuota {
+    id: string;
+    metric: Metric;
+    max: number;
+    period: string;
+}
+
+export interface CreateQuotaForTierRequest {
+    metricKey: string;
+    max: number;
+    period: string;
+}
+
+export interface CreateQuotaForIdentityRequest {
     tierId?: string;
     metricKey: string;
     max: number;

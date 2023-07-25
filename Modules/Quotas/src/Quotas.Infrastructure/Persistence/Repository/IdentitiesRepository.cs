@@ -27,6 +27,15 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Identity> Find(string address, CancellationToken cancellationToken, bool track = false)
+    {
+        var identity = await (track ? _identitiesDbSet : _readOnlyIdentities)
+            .IncludeAll(_dbContext)
+            .FirstWithAddress(address, cancellationToken);
+
+        return identity;
+    }
+
     public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identitiesDbSet : _readOnlyIdentities)
@@ -47,6 +56,12 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken)
     {
         _dbContext.UpdateRange(identities);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        _dbContext.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

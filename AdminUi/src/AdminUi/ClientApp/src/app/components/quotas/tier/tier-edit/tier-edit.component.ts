@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Observable, forkJoin } from "rxjs";
@@ -41,6 +41,7 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
+        this.tier = {} as Tier;
         this.disabled = false;
         this.tier = {
             id: "",
@@ -60,8 +61,16 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         } else {
-            this.loading = false;
+            this.initTier();
         }
+    }
+
+    initTier() {
+        this.tier = {
+            name: ""
+        } as Tier;
+
+        this.loading = false;
     }
 
     getTier() {
@@ -150,14 +159,14 @@ export class TierEditComponent {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: any) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
             if (result) {
                 this.createTierQuota(result);
             }
         });
     }
 
-    createTierQuota(quota: TierQuota) {
+    createTierQuota(quota: AssignQuotaData) {
         this.loading = true;
         this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
             next: (data: HttpResponseEnvelope<TierQuota>) => {
