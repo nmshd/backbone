@@ -42,7 +42,7 @@ public class Identity
         return individualQuota;
     }
 
-    public Result<QuotaId, DomainError> DeleteQuota(string individualQuotaId)
+    public Result<QuotaId, DomainError> DeleteIndividualQuota(string individualQuotaId)
     {
         var individualQuota = _individualQuotas.FirstOrDefault(q => q.Id == individualQuotaId);
 

@@ -47,6 +47,52 @@ public class IdentityTests
     }
 
     [Fact]
+    public void Can_delete_individual_quota_by_id()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var createdQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+
+        // Act
+        identity.DeleteIndividualQuota(createdQuota.Id);
+
+        // Assert
+        identity.IndividualQuotas.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Can_delete_individual_quota_by_id_with_multiple_quotas()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var firstQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var secondQuota = identity.CreateIndividualQuota(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day);
+
+        // Act
+        identity.DeleteIndividualQuota(firstQuota.Id);
+
+        // Assert
+        identity.IndividualQuotas.Should().HaveCount(1);
+        identity.IndividualQuotas.ElementAt(0).Id.Should().Be(secondQuota.Id);
+    }
+
+    [Fact]
+    public void Trying_to_delete_inexistent_individual_quota_throws_DomainException()
+    {
+        // Arrange
+        var identity = new Identity("some-address", new TierId("some-tier-id"));
+
+        // Act
+        var result = identity.DeleteIndividualQuota("a-non-existent-quota-id");
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.recordNotFound");
+        result.Error.Message.Should().StartWith("IndividualQuota");
+    }
+
+
+    [Fact]
     public void Can_delete_tier_quota_by_definition_id()
     {
         // Arrange
