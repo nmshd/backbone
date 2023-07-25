@@ -36,10 +36,6 @@ using Serilog;
 using Synchronization.ConsumerApi;
 using Tokens.ConsumerApi;
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
-
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
     .UseKestrel(options =>
@@ -51,7 +47,11 @@ builder.WebHost
 LoadConfiguration(builder, args);
 
 builder.Host
-    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+    .UseSerilog((context, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.WithCorrelationId()
+        .Enrich.WithCorrelationIdHeader("X-Correlation-Id")
+    )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
