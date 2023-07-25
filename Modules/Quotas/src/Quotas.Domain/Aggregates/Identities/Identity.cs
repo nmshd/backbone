@@ -1,5 +1,6 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using CSharpFunctionalExtensions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Domain.Errors;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -39,6 +40,18 @@ public class Identity
         _individualQuotas.Add(individualQuota);
 
         return individualQuota;
+    }
+
+    public Result<QuotaId, DomainError> DeleteQuota(string individualQuotaId)
+    {
+        var individualQuota = _individualQuotas.FirstOrDefault(q => q.Id == individualQuotaId);
+
+        if (individualQuota == null)
+            return Result.Failure<QuotaId, DomainError>(GenericDomainErrors.NotFound(nameof(IndividualQuota)));
+
+        _individualQuotas.Remove(individualQuota);
+
+        return Result.Success<QuotaId, DomainError>(individualQuota.Id);
     }
 
     public void AssignTierQuotaFromDefinition(TierQuotaDefinition definition)

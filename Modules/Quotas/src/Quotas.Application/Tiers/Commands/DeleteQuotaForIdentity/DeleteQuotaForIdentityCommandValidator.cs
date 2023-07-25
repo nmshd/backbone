@@ -1,0 +1,13 @@
+﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using FluentValidation;
+
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
+
+public class DeleteQuotaForIdentityCommandValidator : AbstractValidator<DeleteQuotaForIdentityCommand>
+{
+    public DeleteQuotaForIdentityCommandValidator()
+    {
+        RuleFor(c => c.IdentityAddress).DetailedNotEmpty();
+        RuleFor(c => c.IndividualQuotaId).DetailedNotEmpty();
+    }
+}
