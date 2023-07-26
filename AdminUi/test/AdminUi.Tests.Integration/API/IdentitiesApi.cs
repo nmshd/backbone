@@ -18,8 +18,8 @@ public class IdentitiesApi : BaseApi
         return await Post<IndividualQuotaDTO>($"/Identities/{identityAddress}/Quotas", requestConfiguration);
     }
 
-    public async Task<HttpResponse<IndividualQuotaDTO>> DeleteIndividualQuota(string identityAddress, string individualQuotaId, RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse> DeleteIndividualQuota(string identityAddress, string individualQuotaId, RequestConfiguration requestConfiguration)
     {
-        return await Delete<IndividualQuotaDTO>($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
+        return await Delete($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
     }
 }

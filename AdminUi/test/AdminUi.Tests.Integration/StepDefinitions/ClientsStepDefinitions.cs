@@ -12,6 +12,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private readonly ClientsApi _clientsApi;
     private string _clientId;
     private HttpResponse<List<ClientDTO>>? _response;
+    private HttpResponse? _deleteResponse;
 
     public ClientsStepDefinitions(ClientsApi clientsApi)
     {
@@ -49,8 +50,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the /Clients endpoint")]
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
-        _response = await _clientsApi.DeleteClient(_clientId, _requestConfiguration);
-        _response.Should().NotBeNull();
+        _deleteResponse = await _clientsApi.DeleteClient(_clientId, _requestConfiguration);
+        _deleteResponse.Should().NotBeNull();
     }
 
     [When(@"a GET request is sent to the /Clients endpoint")]
@@ -72,14 +73,32 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        if (_response != null)
+        {
+            var actualStatusCode = (int)_response.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            var actualStatusCode = (int)_deleteResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _response!.Content.Error.Should().NotBeNull();
-        _response.Content.Error!.Code.Should().Be(errorCode);
+        if (_response != null)
+        {
+            _response!.Content.Error.Should().NotBeNull();
+            _response.Content.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            _deleteResponse.Error.Should().NotBeNull();
+            _deleteResponse.Error!.Code.Should().Be(errorCode);
+        }
     }
 }

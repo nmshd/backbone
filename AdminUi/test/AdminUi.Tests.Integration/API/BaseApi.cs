@@ -3,7 +3,9 @@ using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using RestSharp;
+using HttpResponse = AdminUi.Tests.Integration.Models.HttpResponse;
 
 namespace AdminUi.Tests.Integration.API;
 
@@ -30,9 +32,34 @@ public class BaseApi
         return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
     }
 
-    protected async Task<HttpResponse<T>> Delete<T>(string endpoint, RequestConfiguration requestConfiguration)
+    protected async Task<HttpResponse> Delete(string endpoint, RequestConfiguration requestConfiguration)
     {
-        return await ExecuteRequest<T>(Method.Delete, endpoint, requestConfiguration);
+        return await ExecuteRequest(Method.Delete, endpoint, requestConfiguration);
+    }
+
+    private async Task<HttpResponse> ExecuteRequest(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.AddBody(requestConfiguration.Content);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
+            request.AddHeader("Content-Type", requestConfiguration.ContentType);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
+            request.AddHeader("Accept", requestConfiguration.AcceptHeader);
+
+        var response = await _client.ExecuteAsync(request);
+        var result = new HttpResponse();
+        if (!response.IsSuccessful)
+            result = JsonConvert.DeserializeObject<HttpResponse>(response.Content!);
+
+        result!.IsSuccessStatusCode = response.IsSuccessStatusCode;
+        result.StatusCode = response.StatusCode;
+        result.RawContent = response.Content;
+
+        return result;
     }
 
     private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
