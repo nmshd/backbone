@@ -7,7 +7,7 @@ public class GetIdentityQuotasByAddressResponse
 {
     public GetIdentityQuotasByAddressResponse(IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)
     {
-        TierQuotas = tierQuotas.Select(q => 
+        TierQuotas = tierQuotas.Select(q =>
             new TierQuotaDTO(
                 q.Id,
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
