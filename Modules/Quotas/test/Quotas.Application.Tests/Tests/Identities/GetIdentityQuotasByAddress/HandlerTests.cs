@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -61,10 +62,12 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        var acting = async () => await handler.Handle(new GetIdentityQuotasByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new GetIdentityQuotasByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>();
+        var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
+        exception.Message.Should().StartWith("Identity");
+        exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
     private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)

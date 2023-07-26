@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -42,10 +43,12 @@ public class HandlerTests
         var handler = CreateHandler(identityRepository);
 
         // Act
-        var acting = async () => await handler.Handle(new GetIdentityByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new GetIdentityByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>();
+        var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
+        exception.Message.Should().StartWith("Identity");
+        exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
     private Handler CreateHandler(IIdentitiesRepository identitiesRepository)
