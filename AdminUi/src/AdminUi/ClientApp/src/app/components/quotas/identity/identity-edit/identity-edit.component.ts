@@ -72,6 +72,7 @@ export class IdentityEditComponent {
         let quotas = [...this.identity.quotas];
         this.quotasTableData = [];
 
+        quotas.sort((a, b) => a.metric.key.localeCompare(b.metric.key) || a.source.localeCompare(b.source));
         while (quotas.length > 0) {
             this.quotasTableData.push({
                 metric: quotas[0].metric,
@@ -89,7 +90,7 @@ export class IdentityEditComponent {
             return this.iterateQuotasByMetric(quotas.slice(1), metricKey);
         }
 
-        return [quotas[0]].concat(this.iterateQuotasByMetric(quotas.slice(1), metricKey));
+        return quotas;
     }
 
     isGroup(index: any, item: any): boolean {
