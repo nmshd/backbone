@@ -37,4 +37,9 @@ public class FindAllStubRepository : ITiersRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task Remove(Tier tier)
+    {
+        throw new NotImplementedException();
+    }
 }
