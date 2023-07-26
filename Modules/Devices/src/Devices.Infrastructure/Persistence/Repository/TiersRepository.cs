@@ -26,6 +26,12 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task Remove(Tier tier)
+    {
+        _tiersDbSet.Remove(tier);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
@@ -36,6 +42,11 @@ public class TiersRepository : ITiersRepository
         var paginationResult = await _tiersDbSet
             .OrderAndPaginate(d => d.Name, paginationFilter);
         return paginationResult;
+    }
+
+    public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.Include("Identities").SingleAsync(t=>t.Id == tierId, cancellationToken);
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)

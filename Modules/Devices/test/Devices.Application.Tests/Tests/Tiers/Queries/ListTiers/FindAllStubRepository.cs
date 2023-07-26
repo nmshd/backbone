@@ -28,6 +28,11 @@ public class FindAllStubRepository : ITiersRepository
         return Task.FromResult(_tiers);
     }
 
+    public Task<Tier> FindById(TierId tierName, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

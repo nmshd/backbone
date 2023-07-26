@@ -13,4 +13,7 @@ public interface ITiersRepository
     Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter);
 
     Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
+
+    Task<Tier> FindById(TierId tierName, CancellationToken cancellationToken);
+    Task Remove(Tier tier);
 }

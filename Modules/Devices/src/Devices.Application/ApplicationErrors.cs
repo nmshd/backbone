@@ -55,5 +55,15 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierNameAlreadyExists", "A tier with the given tier name already exists. Try a different tier name.");
         }
+
+        internal static ApplicationError BasicTierCannotBeDeleted()
+        {
+            return new ApplicationError("error.platform.validation.device.basicTierCannotBeDeleted", "The Basic Tier of Enmeshed cannot be deleted.");
+        }
+
+        internal static ApplicationError UsedTierCannotBeDeleted(int count)
+        {
+            return new ApplicationError("error.platform.validation.device.usedTierCannotBeDeleted", $"The Tier cannot be deleted if there are Identities assigned to it ({count} found).");
+        }
     }
 }

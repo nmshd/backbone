@@ -1,4 +1,6 @@
-﻿namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Entities;
+
+namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public class Tier
 {
@@ -10,4 +12,5 @@ public class Tier
 
     public TierId Id { get; }
     public TierName Name { get; }
+    public ICollection<Identity> Identities { get; }
 }

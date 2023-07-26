@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+System.Console.WriteLine("Started\r\n");
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

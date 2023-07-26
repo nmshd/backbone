@@ -107,12 +107,5 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
-
-        builder.Entity<Identity>(i =>
-        {
-            i.HasOne<Tier>()
-            .WithMany()
-            .HasForeignKey(c => c.TierId);
-        });
     }
 }
