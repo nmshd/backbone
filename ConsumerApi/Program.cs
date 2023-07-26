@@ -49,8 +49,7 @@ LoadConfiguration(builder, args);
 builder.Host
     .UseSerilog((context, configuration) => configuration
         .ReadFrom.Configuration(context.Configuration)
-        .Enrich.WithCorrelationId()
-        .Enrich.WithCorrelationIdHeader("X-Correlation-Id")
+        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
         .Enrich.WithDemystifiedStackTraces()
     )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
