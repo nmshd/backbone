@@ -96,7 +96,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ApplyTo");
 
-                    b.ToTable("IndividualQuotas");
+                    b.ToTable("IndividualQuotas", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -143,7 +143,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("_definitionId");
 
-                    b.ToTable("TierQuotas");
+                    b.ToTable("TierQuotas", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
@@ -161,6 +161,30 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
                         {
                             t.ExcludeFromMigrations();
                         });
@@ -216,7 +240,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("TierQuotaDefinitions");
+                    b.ToTable("TierQuotaDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
