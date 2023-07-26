@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -53,6 +54,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IMetricsRepository, MetricsRepository>();
         services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
+        services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
     }
 
