@@ -1,6 +1,7 @@
 using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
+using AdminUi.Tests.Integration.TestData;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
 
@@ -22,7 +23,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i")]
     public void GivenAnIdentity()
     {
-        _existingIdentity = "id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm";
+        _existingIdentity = Identities.IDENTITY_A;
     }
 
     [When(@"a GET request is sent to the /Identities endpoint")]
