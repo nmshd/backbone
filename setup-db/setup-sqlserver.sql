@@ -236,5 +236,6 @@ GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
 GRANT SELECT ON SCHEMA::Messages TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
+GRANT SELECT ON SCHEMA::Relationships TO quotas
 PRINT 'Finished changing authorizations' ;
 GO

@@ -2,7 +2,6 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents;
-
 public class RelationshipChangeCreatedIntegrationEvent : IntegrationEvent
 {
     public RelationshipChangeCreatedIntegrationEvent(RelationshipChange change) : base($"{change.Id}/Created")

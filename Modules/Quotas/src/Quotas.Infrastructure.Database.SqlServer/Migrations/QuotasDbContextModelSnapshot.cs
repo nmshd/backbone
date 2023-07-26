@@ -17,7 +17,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -96,7 +96,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("ApplyTo");
 
-                    b.ToTable("IndividualQuotas");
+                    b.ToTable("IndividualQuotas", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -143,7 +143,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("_definitionId");
 
-                    b.ToTable("TierQuotas");
+                    b.ToTable("TierQuotas", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
@@ -161,6 +161,30 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
                         {
                             t.ExcludeFromMigrations();
                         });
@@ -216,7 +240,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("TierQuotaDefinitions");
+                    b.ToTable("TierQuotaDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
