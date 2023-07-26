@@ -51,6 +51,7 @@ builder.Host
         .ReadFrom.Configuration(context.Configuration)
         .Enrich.WithCorrelationId()
         .Enrich.WithCorrelationIdHeader("X-Correlation-Id")
+        .Enrich.WithDemystifiedStackTraces()
     )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
