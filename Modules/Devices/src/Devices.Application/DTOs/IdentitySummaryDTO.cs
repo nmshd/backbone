@@ -20,6 +20,8 @@ public class IdentitySummaryDTO
 
     public IEnumerable<DeviceDTO> Devices { get; set; }
 
+    public IEnumerable<QuotaDTO> Quotas { get; set; }
+
     public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices, string tierId)
     {
         Address = address.ToString();
