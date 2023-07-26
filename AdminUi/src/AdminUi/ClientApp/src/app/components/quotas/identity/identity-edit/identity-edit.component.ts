@@ -4,7 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { CreateQuotaForIdentityRequest, IdentityQuota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
@@ -17,6 +17,8 @@ export class IdentityEditComponent {
     headerDescription: string;
     headerQuotas: string;
     headerQuotasDescription: string;
+    quotasTableDisplayedColumns: string[];
+    quotasTableData: (Quota | MetricGroup)[];
     identityAddress?: string;
     disabled: boolean;
     identity: Identity;
@@ -27,6 +29,8 @@ export class IdentityEditComponent {
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
+        this.quotasTableDisplayedColumns = ["metric", "source", "max", "period"];
+        this.quotasTableData = [];
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
@@ -49,16 +53,47 @@ export class IdentityEditComponent {
             next: (data: HttpResponseEnvelope<Identity>) => {
                 if (data && data.result) {
                     this.identity = data.result;
+                    this.groupQuotasByMetricForTable();
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, "Dismiss", {
-                    panelClass: ["snack-bar"]
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
             }
         });
+    }
+
+    groupQuotasByMetricForTable() {
+        let quotas = [...this.identity.quotas];
+        this.quotasTableData = [];
+
+        while (quotas.length > 0) {
+            this.quotasTableData.push({
+                metric: quotas[0].metric,
+                isGroup: true
+            } as MetricGroup);
+            quotas = this.iterateQuotasByMetric(quotas, quotas[0].metric.key);
+        }
+    }
+
+    iterateQuotasByMetric(quotas: Quota[], metricKey: string): Quota[] {
+        if (quotas.length == 0) return [];
+
+        if (quotas[0].metric.key == metricKey) {
+            this.quotasTableData.push(quotas[0]);
+            return this.iterateQuotasByMetric(quotas.slice(1), metricKey);
+        }
+
+        return [quotas[0]].concat(this.iterateQuotasByMetric(quotas.slice(1), metricKey));
+    }
+
+    isGroup(index: any, item: any): boolean {
+        return item.isGroup;
     }
 
     openAssignQuotaDialog() {
@@ -85,6 +120,7 @@ export class IdentityEditComponent {
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
             next: (data: HttpResponseEnvelope<IdentityQuota>) => {
                 if (data && data.result) {
+                    this.getIdentity();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                         panelClass: ["snack-bar"]
                     });
@@ -93,10 +129,17 @@ export class IdentityEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, "Dismiss", {
-                    panelClass: ["snack-bar"]
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
             }
         });
     }
+}
+
+interface MetricGroup {
+    metric: Metric;
+    isGroup: boolean;
 }
