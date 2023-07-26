@@ -2,7 +2,7 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-public class TierDeletedIntegrationEvent:IntegrationEvent
+public class TierDeletedIntegrationEvent : IntegrationEvent
 {
     public TierDeletedIntegrationEvent(Tier tier) : base($"{tier.Id}/Deleted")
     {

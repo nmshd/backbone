@@ -46,7 +46,7 @@ public class TiersRepository : ITiersRepository
 
     public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.Include("Identities").SingleAsync(t=>t.Id == tierId, cancellationToken);
+        return await _tiersDbSet.Include("Identities").SingleAsync(t => t.Id == tierId, cancellationToken);
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
