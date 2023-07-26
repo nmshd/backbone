@@ -31,6 +31,18 @@ consumerapi:
   service:
     type: "ClusterIP"
     port: 80
+    loadBalancer:
+      # ip - the static ip address the LoadBalancer should use
+      ip: ""
+      # resourceGroup - the Azure resource group the LoadBalancer should be created in
+      azureResourceGroup: ""
+
+  ingress:
+    # enabled - whether to enable the Ingress for the Consumer API
+    enabled: false
+    host: ""
+    # certName - the name of the certificate to use for SSL/TLS
+    certName: ""
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
