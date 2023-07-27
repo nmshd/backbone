@@ -34,7 +34,7 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListIdentitiesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetIdentitiesAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetIdentities([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
@@ -58,7 +58,7 @@ public class IdentitiesController : ApiControllerBase
     [HttpGet("{address}")]
     [ProducesResponseType(typeof(GetIdentityByAddressResponse), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetIdentityByAddressAsync([FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
         var identity = await _mediator.Send(new GetIdentityByAddressQuery(address), cancellationToken);
         var identityWithQuotas = await _mediator.Send(new GetIdentityQuotasByAddressQuery(address), cancellationToken);
