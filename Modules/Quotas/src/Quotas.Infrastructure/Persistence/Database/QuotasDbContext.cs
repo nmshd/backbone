@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
@@ -24,6 +25,8 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<FileMetadata> Files { get; set; }
 
     public DbSet<Relationship> Relationships { get; set; }
+
+    public DbSet<Token> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
