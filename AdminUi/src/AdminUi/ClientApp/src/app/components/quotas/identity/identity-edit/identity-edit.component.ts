@@ -74,20 +74,26 @@ export class IdentityEditComponent {
 
         quotas.sort((a, b) => a.metric.key.localeCompare(b.metric.key) || a.source.localeCompare(b.source));
         while (quotas.length > 0) {
-            this.quotasTableData.push({
+            let metricGroup = {
                 metric: quotas[0].metric,
-                isGroup: true
-            } as MetricGroup);
-            quotas = this.iterateQuotasByMetric(quotas, quotas[0].metric.key);
+                isGroup: true,
+                tierDisabled: false
+            } as MetricGroup;
+
+            this.quotasTableData.push(metricGroup);
+            quotas = this.iterateQuotasByMetricGroup(quotas, metricGroup);
         }
+        console.log(this.quotasTableData);
     }
 
-    iterateQuotasByMetric(quotas: Quota[], metricKey: string): Quota[] {
+    iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
         if (quotas.length == 0) return [];
 
-        if (quotas[0].metric.key == metricKey) {
+        if (quotas[0].metric.key == metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
-            return this.iterateQuotasByMetric(quotas.slice(1), metricKey);
+            if (quotas[0].source == "Individual") metricGroup.tierDisabled = true;
+            if (quotas[0].source == "Tier") quotas[0].tierDisabled = metricGroup.tierDisabled;
+            return this.iterateQuotasByMetricGroup(quotas.slice(1), metricGroup);
         }
 
         return quotas;
@@ -143,4 +149,5 @@ export class IdentityEditComponent {
 interface MetricGroup {
     metric: Metric;
     isGroup: boolean;
+    tierDisabled: boolean;
 }

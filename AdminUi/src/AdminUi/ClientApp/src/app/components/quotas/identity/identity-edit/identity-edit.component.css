@@ -98,6 +98,10 @@
     word-break: break-all;
 }
 
+.disabled-tier {
+    opacity: 0.5;
+}
+
 .no-data {
     padding: 25px;
 }

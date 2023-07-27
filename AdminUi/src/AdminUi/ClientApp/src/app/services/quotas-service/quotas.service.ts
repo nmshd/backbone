@@ -60,6 +60,7 @@ export interface Quota {
     metric: Metric;
     max: number;
     period: string;
+    tierDisabled: boolean;
 }
 
 export interface CreateQuotaForTierRequest {

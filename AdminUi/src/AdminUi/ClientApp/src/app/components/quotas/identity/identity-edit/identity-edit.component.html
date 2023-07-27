@@ -71,7 +71,13 @@
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="quotasTableDisplayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: quotasTableDisplayedColumns"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: quotasTableDisplayedColumns"
+                    [ngClass]="{ 'disabled-tier': row.tierDisabled }"
+                    [matTooltipDisabled]="!row.tierDisabled"
+                    matTooltip="Tier quotas are disabled if an individual quota is present"
+                ></tr>
 
                 <!--Metric Group-->
                 <ng-container matColumnDef="metricGroup">
