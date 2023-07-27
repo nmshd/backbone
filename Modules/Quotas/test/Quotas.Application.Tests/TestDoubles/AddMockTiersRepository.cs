@@ -24,6 +24,11 @@ public class AddMockTiersRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task Remove(Tier tier)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Update(Tier tier, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
