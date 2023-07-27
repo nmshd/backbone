@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+﻿using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -42,11 +43,13 @@ public class HandlerTests
 
         result.Quotas.First().Max.Should().Be(max);
         result.Quotas.First().Period.Should().Be(period.ToString());
+        result.Quotas.First().Source.Should().Be(QuotaSource.Individual);
         result.Quotas.First().Metric.Key.Should().Be(metric.Key.Value);
         result.Quotas.First().Metric.DisplayName.Should().Be(metric.DisplayName);
 
         result.Quotas.Second().Max.Should().Be(max);
         result.Quotas.Second().Period.Should().Be(period.ToString());
+        result.Quotas.First().Source.Should().Be(QuotaSource.Tier);
         result.Quotas.Second().Metric.Key.Should().Be(metric.Key.Value);
         result.Quotas.Second().Metric.DisplayName.Should().Be(metric.DisplayName);
     }

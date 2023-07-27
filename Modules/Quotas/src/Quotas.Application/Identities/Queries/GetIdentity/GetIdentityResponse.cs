@@ -11,7 +11,7 @@ public class GetIdentityResponse
         quotasList.AddRange(individualQuotas.Select(q =>
             new QuotaDTO(
                 q.Id,
-                "Individual",
+                QuotaSource.Individual,
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
                 q.Max,
                 q.Period.ToString()
@@ -20,7 +20,7 @@ public class GetIdentityResponse
         quotasList.AddRange(tierQuotas.Select(q =>
             new QuotaDTO(
                 q.Id,
-                "Tier",
+                QuotaSource.Tier,
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
                 q.Max,
                 q.Period.ToString()
