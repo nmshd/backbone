@@ -207,6 +207,33 @@ export class TierEditComponent {
         });
     }
 
+    openConfirmationDialogTierDeletion() {
+        let confirmDialogHeader = "Delete Tier";
+        let confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
+        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            minWidth: "40%",
+            disableClose: true,
+            data: { header: confirmDialogHeader, message: confirmDialogMessage }
+        });
+
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+            if (result) {
+                this.deleteTier();
+            }
+        });
+    }
+
+    deleteTier(): void {
+        this.tierService.deleteTierById(this.tierId!).subscribe((result) => {
+            console.log(result);
+            this.snackBar.open("Tier Deleted Successfully.", "Dismiss", {
+                duration: 4000,
+                verticalPosition: "top",
+                horizontalPosition: "center"
+            });
+        })
+    }
+
     deleteQuota(): void {
         this.loading = true;
         let observableBatch: Observable<any>[] = [];

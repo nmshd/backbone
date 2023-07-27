@@ -35,6 +35,10 @@ export class TierService {
     updateTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
         return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
+
+    deleteTierById(id: string): Observable<HttpResponseEnvelope<boolean>> {
+        return this.http.delete<HttpResponseEnvelope<boolean>>(this.apiUrl + `/${id}`);
+    }
 }
 
 export interface Tier {
