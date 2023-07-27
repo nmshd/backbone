@@ -391,7 +391,7 @@ global:
       using:
         - Serilog.Sinks.ApplicationInsights
       minimumLevel:
-        default: Debug
+        default: Information
       enrich:
         - FromLogContext
         - WithMachineName
