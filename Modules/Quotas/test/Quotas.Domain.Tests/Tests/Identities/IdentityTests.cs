@@ -73,7 +73,7 @@ public class IdentityTests
 
         // Assert
         identity.IndividualQuotas.Should().HaveCount(1);
-        identity.IndividualQuotas.ElementAt(0).Id.Should().Be(secondQuota.Id);
+        identity.IndividualQuotas.Should().Contain(secondQuota);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class IdentityTests
         var identity = new Identity("some-address", new TierId("some-tier-id"));
 
         // Act
-        var result = identity.DeleteIndividualQuota("a-non-existent-quota-id");
+        var result = identity.DeleteIndividualQuota(QuotaId.Generate());
 
         // Assert
         result.IsFailure.Should().BeTrue();
