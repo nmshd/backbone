@@ -8,17 +8,20 @@ namespace AdminUi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET Tiers")]
 [Scope(Feature = "POST Tier")]
+[Scope(Feature = "DELETE Tier")]
 public class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;
     private HttpResponse<List<TierDTO>>? _tiersResponse;
-    private string _existingTier;
+    private string _existingTierName;
+    private string _existingTierId;
 
     public TiersStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
-        _existingTier = string.Empty;
+        _existingTierName = string.Empty;
+        _existingTierId = string.Empty;
     }
 
     [Given(@"a Tier t")]
@@ -37,7 +40,8 @@ public class TiersStepDefinitions : BaseStepDefinitions
 
         var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _existingTier = response.Content.Result!.Name;
+        _existingTierName = response.Content.Result!.Name;
+        _existingTierId = response.Content.Result!.Id;
     }
 
     [When(@"a GET request is sent to the /Tiers endpoint")]
@@ -68,7 +72,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     {
         var createTierRequest = new CreateTierRequest
         {
-            Name = _existingTier
+            Name = _existingTierName
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -76,6 +80,12 @@ public class TiersStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createTierRequest);
 
         _tierResponse = await _tiersApi.CreateTier(requestConfiguration);
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/TierId endpoint")]
+    public async void WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
+    {
+        _tierResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
     }
 
     [Then(@"the response contains a paginated list of Tiers")]

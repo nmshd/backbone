@@ -32,4 +32,9 @@ public class TiersApi : BaseApi
     {
         return await Post<TierDTO>($"/Tiers", requestConfiguration);
     }
+
+    public async Task<HttpResponse<TierDTO>> DeleteTier(RequestConfiguration requestConfiguration, string tierId)
+    {
+        return await Delete<TierDTO>($"/Tiers/{tierId}", requestConfiguration);
+    }
 }
