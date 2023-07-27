@@ -42,6 +42,14 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityResponse.Content.Should().NotBeNull();
     }
 
+    [When(@"a GET request is sent to the /Identities/inexistentIdentityAddress endpoint")]
+    public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
+    {
+        _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, "inexistentIdentityAddress");
+        _identityResponse.Should().NotBeNull();
+        _identityResponse.Content.Should().NotBeNull();
+    }
+
     [Then(@"the response contains a paginated list of Identities")]
     public void ThenTheResponseContainsAList()
     {
@@ -71,6 +79,22 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
         {
             var actualStatusCode = (int)_identitiesResponse!.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
+        }
+    }
+
+    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    {
+        if (_identityResponse != null)
+        {
+            _identityResponse!.Content.Error.Should().NotBeNull();
+            _identityResponse.Content.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_identitiesResponse != null)
+        {
+            _identityResponse!.Content.Error.Should().NotBeNull();
+            _identityResponse.Content.Error!.Code.Should().Be(errorCode);
         }
     }
 }
