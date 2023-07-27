@@ -8,13 +8,13 @@ version: 0.0.0
 
 dependencies:
   - name: admincli
-    version: "1.0.0"
+    version: "*"
     repository: file://charts/admincli
   - name: adminui
-    version: "1.0.0"
+    version: "*"
     repository: file://charts/adminui
   - name: consumerapi
-    version: "1.0.0"
+    version: "*"
     repository: file://charts/consumerapi
 
 icon: https://raw.githubusercontent.com/nmshd/nmshd.github.io/main/assets/images/Logo.svg

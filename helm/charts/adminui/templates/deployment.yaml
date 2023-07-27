@@ -20,7 +20,9 @@ spec:
         {{- include "global.labels" . | nindent 8 }}
         app: {{ include "global.name" . }}
     spec:
-      serviceAccountName: {{ include "global.serviceAccountName" . }}
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
