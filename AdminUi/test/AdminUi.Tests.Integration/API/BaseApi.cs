@@ -50,16 +50,12 @@ public class BaseApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        var response = await _client.ExecuteAsync(request);
-        var result = new HttpResponse();
-        if (!response.IsSuccessful)
-            result = JsonConvert.DeserializeObject<HttpResponse>(response.Content!);
+        var restResponse = await _client.ExecuteAsync(request);
+        var response = restResponse.IsSuccessful ? new HttpResponse() : JsonConvert.DeserializeObject<HttpResponse>(restResponse.Content!)!; // restResponse only has content if it's not successful (content = error)
+        response.IsSuccessStatusCode = restResponse.IsSuccessStatusCode;
+        response.StatusCode = restResponse.StatusCode;
 
-        result!.IsSuccessStatusCode = response.IsSuccessStatusCode;
-        result.StatusCode = response.StatusCode;
-        result.RawContent = response.Content;
-
-        return result;
+        return response;
     }
 
     private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
@@ -75,17 +71,17 @@ public class BaseApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
-        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
+        var restResponse = await _client.ExecuteAsync<ResponseContent<T>>(request);
 
-        var result = new HttpResponse<T>
+        var response = new HttpResponse<T>
         {
-            IsSuccessStatusCode = response.IsSuccessStatusCode,
-            StatusCode = response.StatusCode,
-            Content = response.Data!,
-            ContentType = response.ContentType,
-            RawContent = response.Content
+            IsSuccessStatusCode = restResponse.IsSuccessStatusCode,
+            StatusCode = restResponse.StatusCode,
+            Content = restResponse.Data!,
+            ContentType = restResponse.ContentType,
+            RawContent = restResponse.Content
         };
 
-        return result;
+        return response;
     }
 }

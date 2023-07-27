@@ -15,6 +15,5 @@ public class HttpResponse
 {
     public HttpStatusCode StatusCode { get; set; }
     public bool IsSuccessStatusCode { get; set; }
-    public string? RawContent { get; set; }
     public Error? Error { get; set; }
 }
