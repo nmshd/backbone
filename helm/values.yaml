@@ -31,6 +31,28 @@ consumerapi:
   service:
     type: "ClusterIP"
     port: 80
+    loadBalancer:
+      # ip - the static ip address the LoadBalancer should use
+      ip: ""
+      # resourceGroup - the Azure resource group the LoadBalancer should be created in
+      azureResourceGroup: ""
+
+  # httpRoute - the configuration of the HttpRoute for the Consumer API
+  httpRoute:
+    # enabled - whether to enable the HttpRoute for the Consumer API
+    enabled: false
+    # parentRefName - the name of the gateway this Route wants to be attached to
+    parentRefName: ""
+    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
+    parentRefNamespace: ""
+    hostnames: []
+
+  ingress:
+    # enabled - whether to enable the Ingress for the Consumer API
+    enabled: false
+    host: ""
+    # certName - the name of the certificate to use for SSL/TLS
+    certName: ""
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
@@ -47,16 +69,6 @@ consumerapi:
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
-
-  # httpRoute - the configuration of the HttpRoute for the Consumer API
-  httpRoute:
-    # enabled - whether to enable the HttpRoute for the Consumer API
-    enabled: false
-    # parentRefName - the name of the gateway this Route wants to be attached to
-    parentRefName: ""
-    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
-    parentRefNamespace: ""
-    hostnames: []
 
   # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
   backendConfig:
@@ -379,7 +391,7 @@ global:
       using:
         - Serilog.Sinks.ApplicationInsights
       minimumLevel:
-        default: Debug
+        default: Information
       enrich:
         - FromLogContext
         - WithMachineName
