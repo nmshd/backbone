@@ -15,10 +15,7 @@ public class HandlerTests
     public async void Gets_identity_by_address()
     {
         // Arrange
-        var expectedClientId = TestDataGenerator.CreateRandomDeviceId();
-        var expectedAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var expectedTierId = TestDataGenerator.CreateRandomTierId();
-        var identity = new Identity(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1);
+        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, TestDataGenerator.CreateRandomTierId(), 1);
 
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
@@ -26,10 +23,10 @@ public class HandlerTests
         var result = await handler.Handle(new GetIdentityByAddressQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.ClientId.Should().Be(expectedClientId);
-        result.Address.Should().Be(expectedAddress);
-        result.PublicKey.Should().BeEquivalentTo(Array.Empty<byte>());
-        result.TierId.Should().BeEquivalentTo(expectedTierId);
+        result.ClientId.Should().Be(identity.ClientId);
+        result.Address.Should().Be(identity.Address);
+        result.PublicKey.Should().BeEquivalentTo(identity.PublicKey);
+        result.TierId.Should().BeEquivalentTo(identity.TierId);
         result.IdentityVersion.Should().Be(1);
     }
 
