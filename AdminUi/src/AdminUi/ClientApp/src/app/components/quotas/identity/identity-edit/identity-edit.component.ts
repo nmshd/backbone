@@ -83,7 +83,6 @@ export class IdentityEditComponent {
             this.quotasTableData.push(metricGroup);
             quotas = this.iterateQuotasByMetricGroup(quotas, metricGroup);
         }
-        console.log(this.quotasTableData);
     }
 
     iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
