@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Quotas.Application.DTOs;
@@ -15,8 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
-using MetricDTO = Backbone.Modules.Devices.Application.DTOs.MetricDTO;
-using QuotaDTO = Backbone.Modules.Devices.Application.DTOs.QuotaDTO;
 
 namespace AdminUi.Controllers;
 
@@ -61,33 +60,22 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
         var identity = await _mediator.Send(new GetIdentityQuery(address), cancellationToken);
-        var identityWithQuotas = await _mediator.Send(new GetIdentityQuotasByAddressQuery(address), cancellationToken);
+        var quotas = await _mediator.Send(new GetIdentityQuotasByAddressQuery(address), cancellationToken);
 
-        var quotas = new List<QuotaDTO>();
+        var response = new GetIdentityResponse
+        {
+            Address = identity.Address,
+            ClientId = identity.ClientId,
+            PublicKey = identity.PublicKey,
+            TierId = identity.TierId,
+            CreatedAt = identity.CreatedAt,
+            IdentityVersion = identity.IdentityVersion,
+            NumberOfDevices = identity.NumberOfDevices,
+            Devices = identity.Devices,
+            Quotas = quotas.Quotas
+        };
 
-        quotas.AddRange(identityWithQuotas.IndividualQuotas.Select(q =>
-            new QuotaDTO(
-                q.Id,
-                "Individual",
-                new MetricDTO(q.Metric.Key, q.Metric.DisplayName),
-                q.Max,
-                q.Period.ToString()
-            )
-        ));
-
-        quotas.AddRange(identityWithQuotas.TierQuotas.Select(q =>
-            new QuotaDTO(
-                q.Id,
-                "Tier",
-                new MetricDTO(q.Metric.Key, q.Metric.DisplayName),
-                q.Max,
-                q.Period.ToString()
-            )
-        ));
-
-        identity.Quotas = quotas;
-
-        return Ok(identity);
+        return Ok(response);
     }
 }
 
@@ -96,4 +84,23 @@ public class CreateQuotaForIdentityRequest
     public string MetricKey { get; set; }
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
+}
+
+public class GetIdentityResponse
+{
+    public string Address { get; set; }
+    public string ClientId { get; set; }
+    public byte[] PublicKey { get; set; }
+
+    public string TierId { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public byte IdentityVersion { get; set; }
+
+    public int NumberOfDevices { get; set; }
+
+    public IEnumerable<DeviceDTO> Devices { get; set; }
+
+    public IEnumerable<QuotaDTO> Quotas { get; set; }
 }

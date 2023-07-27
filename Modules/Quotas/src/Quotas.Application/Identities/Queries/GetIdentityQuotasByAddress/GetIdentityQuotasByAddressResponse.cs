@@ -5,27 +5,32 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentityQuotasByAddress;
 public class GetIdentityQuotasByAddressResponse
 {
-    public GetIdentityQuotasByAddressResponse(IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)
+    public GetIdentityQuotasByAddressResponse(string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)
     {
-        TierQuotas = tierQuotas.Select(q =>
-            new TierQuotaDTO(
+        var quotasList = new List<QuotaDTO>();
+        quotasList.AddRange(individualQuotas.Select(q =>
+            new QuotaDTO(
                 q.Id,
+                "Individual",
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
                 q.Max,
-                q.Period
+                q.Period.ToString()
             )
-        );
+        ));
+        quotasList.AddRange(tierQuotas.Select(q =>
+            new QuotaDTO(
+                q.Id,
+                "Tier",
+                new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
+                q.Max,
+                q.Period.ToString()
+            )
+        ));
 
-        IndividualQuotas = individualQuotas.Select(q =>
-            new IndividualQuotaDTO(
-                q.Id,
-                new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
-                q.Max,
-                q.Period
-            )
-        );
+        Address = identityAddress;
+        Quotas = quotasList;
     }
 
-    public IEnumerable<TierQuotaDTO> TierQuotas { get; set; }
-    public IEnumerable<IndividualQuotaDTO> IndividualQuotas { get; set; }
+    public string Address { get; set; }
+    public IEnumerable<QuotaDTO> Quotas { get; set; }
 }

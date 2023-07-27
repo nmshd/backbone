@@ -37,18 +37,18 @@ public class HandlerTests
         var result = await handler.Handle(new GetIdentityQuotasByAddressQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.IndividualQuotas.Should().HaveCount(1);
-        result.TierQuotas.Should().HaveCount(1);
+        result.Address.Should().Be(identity.Address);
+        result.Quotas.Should().HaveCount(2);
 
-        result.IndividualQuotas.First().Max.Should().Be(max);
-        result.IndividualQuotas.First().Period.Should().Be(period);
-        result.IndividualQuotas.First().Metric.Key.Should().Be(metric.Key.Value);
-        result.IndividualQuotas.First().Metric.DisplayName.Should().Be(metric.DisplayName);
+        result.Quotas.First().Max.Should().Be(max);
+        result.Quotas.First().Period.Should().Be(period.ToString());
+        result.Quotas.First().Metric.Key.Should().Be(metric.Key.Value);
+        result.Quotas.First().Metric.DisplayName.Should().Be(metric.DisplayName);
 
-        result.TierQuotas.First().Max.Should().Be(max);
-        result.TierQuotas.First().Period.Should().Be(period);
-        result.TierQuotas.First().Metric.Key.Should().Be(metric.Key.Value);
-        result.TierQuotas.First().Metric.DisplayName.Should().Be(metric.DisplayName);
+        result.Quotas.Second().Max.Should().Be(max);
+        result.Quotas.Second().Period.Should().Be(period.ToString());
+        result.Quotas.Second().Metric.Key.Should().Be(metric.Key.Value);
+        result.Quotas.Second().Metric.DisplayName.Should().Be(metric.DisplayName);
     }
 
     [Fact]

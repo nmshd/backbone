@@ -22,6 +22,6 @@ public class Handler : IRequestHandler<GetIdentityQuotasByAddressQuery, GetIdent
         var metricsKeys = identity.TierQuotas.Select(q => q.MetricKey).Union(identity.IndividualQuotas.Select(q => q.MetricKey));
         var metrics = await _metricsRepository.FindAllWithKeys(metricsKeys, cancellationToken);
 
-        return new GetIdentityQuotasByAddressResponse(identity.TierQuotas, identity.IndividualQuotas, metrics);
+        return new GetIdentityQuotasByAddressResponse(identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics);
     }
 }
