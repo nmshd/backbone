@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentityQuotasByAddress;
+﻿using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -34,7 +34,7 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, stubMetricsRepository);
 
         // Act
-        var result = await handler.Handle(new GetIdentityQuotasByAddressQuery(identity.Address), CancellationToken.None);
+        var result = await handler.Handle(new GetIdentityQuery(identity.Address), CancellationToken.None);
 
         // Assert
         result.Address.Should().Be(identity.Address);
@@ -62,7 +62,7 @@ public class HandlerTests
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new GetIdentityQuotasByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;

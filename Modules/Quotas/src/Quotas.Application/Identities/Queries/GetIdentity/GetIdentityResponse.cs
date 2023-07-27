@@ -2,10 +2,10 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentityQuotasByAddress;
-public class GetIdentityQuotasByAddressResponse
+namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+public class GetIdentityResponse
 {
-    public GetIdentityQuotasByAddressResponse(string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)
+    public GetIdentityResponse(string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)
     {
         var quotasList = new List<QuotaDTO>();
         quotasList.AddRange(individualQuotas.Select(q =>
