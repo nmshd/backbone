@@ -154,9 +154,9 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Content.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
         }
-
     }
 }

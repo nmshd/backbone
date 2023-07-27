@@ -51,9 +51,13 @@ public class BaseApi
             request.AddHeader("Accept", requestConfiguration.AcceptHeader);
 
         var restResponse = await _client.ExecuteAsync(request);
-        var response = restResponse.IsSuccessful ? new HttpResponse() : JsonConvert.DeserializeObject<HttpResponse>(restResponse.Content!)!; // restResponse only has content if it's not successful (content = error)
-        response.IsSuccessStatusCode = restResponse.IsSuccessStatusCode;
-        response.StatusCode = restResponse.StatusCode;
+        var response = new HttpResponse
+        {
+            Content = JsonConvert.DeserializeObject<ErrorResponseContent>(restResponse.Content!)!,
+            ContentType = restResponse.ContentType,
+            IsSuccessStatusCode = restResponse.IsSuccessStatusCode,
+            StatusCode = restResponse.StatusCode
+        }; 
 
         return response;
     }

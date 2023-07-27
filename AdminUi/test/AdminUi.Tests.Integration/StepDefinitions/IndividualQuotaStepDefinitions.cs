@@ -59,7 +59,7 @@ public class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithAnInexistentQuotaId()
     {
-        _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, "some-inexistent-quota-id", _requestConfiguration);
+        _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx", _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
@@ -133,8 +133,9 @@ public class IndividualQuotaStepDefinitions : BaseStepDefinitions
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Content.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
         }
     }
 }
