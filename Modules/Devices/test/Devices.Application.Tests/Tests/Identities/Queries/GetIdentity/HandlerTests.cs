@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentityByAddress;
+﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -8,7 +8,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentityByAddress;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
 public class HandlerTests
 {
     [Fact]
@@ -20,7 +20,7 @@ public class HandlerTests
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
         // Act
-        var result = await handler.Handle(new GetIdentityByAddressQuery(identity.Address), CancellationToken.None);
+        var result = await handler.Handle(new GetIdentityQuery(identity.Address), CancellationToken.None);
 
         // Assert
         result.ClientId.Should().Be(identity.ClientId);
@@ -40,7 +40,7 @@ public class HandlerTests
         var handler = CreateHandler(identityRepository);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new GetIdentityByAddressQuery("some-inexistent-identity-address"), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;

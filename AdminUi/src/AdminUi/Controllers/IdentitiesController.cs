@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentityByAddress;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentityQuotasByAddress;
@@ -56,11 +56,11 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{address}")]
-    [ProducesResponseType(typeof(GetIdentityByAddressResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetIdentityResponse), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
-        var identity = await _mediator.Send(new GetIdentityByAddressQuery(address), cancellationToken);
+        var identity = await _mediator.Send(new GetIdentityQuery(address), cancellationToken);
         var identityWithQuotas = await _mediator.Send(new GetIdentityQuotasByAddressQuery(address), cancellationToken);
 
         var quotas = new List<QuotaDTO>();

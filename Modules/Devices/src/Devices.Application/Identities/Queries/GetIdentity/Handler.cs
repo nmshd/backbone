@@ -3,8 +3,8 @@ using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Queries.GetIdentityByAddress;
-public class Handler : IRequestHandler<GetIdentityByAddressQuery, GetIdentityByAddressResponse>
+namespace Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -13,10 +13,10 @@ public class Handler : IRequestHandler<GetIdentityByAddressQuery, GetIdentityByA
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task<GetIdentityByAddressResponse> Handle(GetIdentityByAddressQuery request, CancellationToken cancellationToken)
+    public async Task<GetIdentityResponse> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        return new GetIdentityByAddressResponse(identity);
+        return new GetIdentityResponse(identity);
     }
 }

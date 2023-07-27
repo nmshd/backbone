@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentityByAddress;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
 public class FindByAddressStubRepository : IIdentitiesRepository
 {
     private readonly Identity _identity;
