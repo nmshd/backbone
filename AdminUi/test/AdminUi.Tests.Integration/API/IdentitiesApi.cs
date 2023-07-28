@@ -13,6 +13,11 @@ public class IdentitiesApi : BaseApi
         return await Get<List<IdentitySummaryDTO>>("/Identities", requestConfiguration);
     }
 
+    public async Task<HttpResponse<IdentitySummaryDTO>> GetIdentityByAddress(RequestConfiguration requestConfiguration, string identityAddress)
+    {
+        return await Get<IdentitySummaryDTO>($"/Identities/{identityAddress}", requestConfiguration);
+    }
+
     public async Task<HttpResponse<IndividualQuotaDTO>> CreateIndividualQuota(RequestConfiguration requestConfiguration, string identityAddress)
     {
         return await Post<IndividualQuotaDTO>($"/Identities/{identityAddress}/Quotas", requestConfiguration);
