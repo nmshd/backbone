@@ -85,7 +85,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
     }
 
-    [When(@"a POST request is sent to the /Tiers/inexistentTierId/Quotas endpoint")]
+    [When(@"a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
     {
         var createTierQuotaRequest = new CreateTierQuotaRequest
@@ -109,7 +109,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _response.Should().NotBeNull();
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/inexistentQuotaId endpoint")]
+    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id")]
     public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
     {
         _response = await _tiersApi.DeleteTierQuota(_tierId, "inexistentQuotaId", _requestConfiguration);

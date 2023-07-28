@@ -42,7 +42,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a GET request is sent to the /Identities/inexistentIdentityAddress endpoint")]
+    [When(@"a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
         _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, "inexistentIdentityAddress");

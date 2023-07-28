@@ -91,7 +91,7 @@ export class IdentityEditComponent {
         if (quotas[0].metric.key == metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
             if (quotas[0].source == "Individual") metricGroup.tierDisabled = true;
-            if (quotas[0].source == "Tier") quotas[0].tierDisabled = metricGroup.tierDisabled;
+            if (quotas[0].source == "Tier") quotas[0].disabled = metricGroup.tierDisabled;
             return this.iterateQuotasByMetricGroup(quotas.slice(1), metricGroup);
         }
 

@@ -15,6 +15,6 @@ Scenario: Requesting an Identity
 	And the response contains Identity i
 
 Scenario: Requesting an inexistent Identity
-	When a GET request is sent to the /Identities/inexistentIdentityAddress endpoint
+	When a GET request is sent to the /Identities/{address} endpoint with an inexistent address
 	Then the response status code is 404 (NOTFOUND)
 	And the response content includes an error with the error code "error.platform.recordNotFound"

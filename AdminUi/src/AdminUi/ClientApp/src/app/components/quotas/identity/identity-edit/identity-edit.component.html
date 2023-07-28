@@ -74,9 +74,9 @@
                 <tr
                     mat-row
                     *matRowDef="let row; columns: quotasTableDisplayedColumns"
-                    [ngClass]="{ 'disabled-tier': row.tierDisabled }"
-                    [matTooltipDisabled]="!row.tierDisabled"
-                    matTooltip="Tier quotas are disabled if an individual quota is present"
+                    [ngClass]="{ 'disabled-tier': row.disabled }"
+                    [matTooltipDisabled]="!row.disabled"
+                    matTooltip="Tier quotas do not take effect if there is an individual quota."
                 ></tr>
 
                 <!--Metric Group-->
