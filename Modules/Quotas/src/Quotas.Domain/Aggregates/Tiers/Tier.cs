@@ -21,11 +21,23 @@ public class Tier
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (max <= 0)
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.TierQuotaMaxValueCannotBeLowerOrEqualToZero());
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         Quotas.Add(quotaDefinition);
 
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
+    }
+
+    public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
+    {
+        var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
+
+        if (quotaDefinition == null)
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
+
+        Quotas.Remove(quotaDefinition);
+
+        return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
 }

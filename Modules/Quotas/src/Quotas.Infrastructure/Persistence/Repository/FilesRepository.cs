@@ -14,9 +14,15 @@ public class FilesRepository : IFilesRepository
         _readOnlyFiles = dbContext.Files.AsNoTracking();
     }
 
-    public async Task<uint> Count(IdentityAddress createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
+    public async Task<uint> Count(string uploader, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var count = await _readOnlyFiles.CountAsync(f => f.CreatedBy == createdBy.StringValue, cancellationToken);
+        var count = await _readOnlyFiles.CountAsync(f => f.CreatedBy == uploader, cancellationToken);
         return (uint)count;
+    }
+
+    public async Task<long> AggregateUsedSpace(string uploader, DateTime from, DateTime to, CancellationToken cancellationToken)
+    {
+        var totalSpace = await _readOnlyFiles.Where(f => f.CreatedBy == uploader).SumAsync(f => f.CipherSize, cancellationToken);
+        return totalSpace;
     }
 }

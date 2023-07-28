@@ -28,13 +28,10 @@
         </mat-form-field>
     </div>
     <div *ngIf="loading" class="loading">
-        <mat-progress-spinner color="primary" mode="indeterminate">
-        </mat-progress-spinner>
+        <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="primary" (click)="assignQuota()" [disabled]="!isValid()">
-        Confirm
-    </button>
+    <button mat-flat-button color="primary" (click)="assignQuota()" [disabled]="!isValid()">Confirm</button>
 </mat-dialog-actions>

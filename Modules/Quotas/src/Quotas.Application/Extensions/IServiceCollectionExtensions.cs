@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Backbone.Modules.Quotas.Application.AutoMapper;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ public static class IServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommandValidator>()
+            .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommand>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
@@ -20,6 +21,7 @@ public static class IServiceCollectionExtensions
 
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
+        services.AddMetricCalculators();
     }
 
     private static void AddEventHandlers(this IServiceCollection services)
@@ -27,6 +29,18 @@ public static class IServiceCollectionExtensions
         foreach (var eventHandler in GetAllIntegrationEventHandlers())
         {
             services.AddTransient(eventHandler);
+        }
+    }
+
+    private static void AddMetricCalculators(this IServiceCollection services)
+    {
+        var lookupType = typeof(IMetricCalculator);
+        var types = Assembly.GetExecutingAssembly().GetTypes().Where(
+                t => lookupType.IsAssignableFrom(t) && !t.IsInterface);
+
+        foreach (var type in types)
+        {
+            services.AddTransient(type);
         }
     }
 

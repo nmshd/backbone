@@ -28,10 +28,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "global.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "global.serviceAccountName" }}
-{{- default .Chart.Name .Values.global.serviceAccount.name }}
-{{- end }}

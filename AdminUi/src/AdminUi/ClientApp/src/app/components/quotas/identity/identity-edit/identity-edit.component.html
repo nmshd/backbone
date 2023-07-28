@@ -1,0 +1,97 @@
+<div class="card-header">
+    <h2 class="header-title">{{ header }}</h2>
+    <p class="header-description">
+        {{ headerDescription }}
+    </p>
+</div>
+<div [ngClass]="{ 'disabled-container': loading }">
+    <mat-card>
+        <mat-card-content class="form-card">
+            <div *ngIf="loading" class="loading">
+                <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+            </div>
+            <div class="form-details">
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Address</span>
+                        <span matListItemLine>{{ identity.address }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Client Id</span>
+                        <span matListItemLine>{{ identity.clientId }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Public Key</span>
+                        <span matListItemLine>{{ identity.publicKey }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Created At</span>
+                        <span matListItemLine>{{ identity.createdAt | date }}</span>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="quotas-expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="quotas-expansion-panel-header">
+                <mat-panel-title class="quotas-panel-header-title">
+                    {{ headerQuotas }}
+                </mat-panel-title>
+                <mat-panel-description class="quotas-panel-header-desc">
+                    {{ headerQuotasDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="action-buttons">
+                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!identity.address">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+            <table mat-table class="responsive" [dataSource]="quotasTableData">
+                <ng-container matColumnDef="metric">
+                    <th mat-header-cell *matHeaderCellDef>Metric</th>
+                    <td mat-cell *matCellDef="let Quota"></td>
+                </ng-container>
+                <ng-container matColumnDef="source">
+                    <th mat-header-cell *matHeaderCellDef>Source</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Source">
+                        {{ Quota.source }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="max">
+                    <th mat-header-cell *matHeaderCellDef>Max</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Max">
+                        {{ Quota.max }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="period">
+                    <th mat-header-cell *matHeaderCellDef>Period</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Period">
+                        {{ Quota.period }}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="quotasTableDisplayedColumns"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: quotasTableDisplayedColumns"
+                    [ngClass]="{ 'disabled-tier': row.disabled }"
+                    [matTooltipDisabled]="!row.disabled"
+                    matTooltip="Tier quotas do not take effect if there is an individual quota."
+                ></tr>
+
+                <!--Metric Group-->
+                <ng-container matColumnDef="metricGroup">
+                    <td mat-cell *matCellDef="let group" colspan="999" data-label="Metric">
+                        {{ group.metric.displayName }}
+                    </td>
+                </ng-container>
+
+                <tr mat-row *matRowDef="let row; columns: ['metricGroup']; when: isGroup"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
+                </tr>
+            </table>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

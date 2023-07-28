@@ -25,6 +25,11 @@
     padding: 25px;
 }
 
+.mat-mdc-row:hover {
+    background-color: #ddd !important;
+    cursor: pointer;
+}
+
 .card-header {
     border-radius: 3px;
     padding: 15px;

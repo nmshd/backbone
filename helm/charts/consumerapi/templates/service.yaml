@@ -9,8 +9,15 @@ metadata:
   annotations:
     cloud.google.com/backend-config: '{"default": "{{ include "global.name" . }}"}'
   {{- end }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: {{ .Values.service.loadBalancer.azureResourceGroup }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  loadBalancerIP: {{ .Values.service.loadBalancer.ip }}
+  {{- end }}
   ports:
     - port: 80
       targetPort: {{ .Values.service.port }}

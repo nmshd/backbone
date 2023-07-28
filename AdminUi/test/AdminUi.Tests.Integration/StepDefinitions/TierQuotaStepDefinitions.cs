@@ -6,10 +6,12 @@ using Enmeshed.UnitTestTools.Data;
 namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Scope(Feature = "POST TierQuota")]
+[Scope(Feature = "DELETE TierQuota")]
 public class TierQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private string _tierId;
+    private string _tierQuotaDefinitionId;
     private HttpResponse<TierQuotaDTO>? _response;
 
     public TierQuotaStepDefinitions(TiersApi tiersApi)
@@ -21,14 +23,14 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     [Given(@"a Tier t")]
     public async Task GivenAValidTier()
     {
-        var createTierQuotaRequest = new CreateTierRequest
+        var createTierRequest = new CreateTierRequest
         {
             Name = "TestTier_" + TestDataGenerator.GenerateString(12)
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierRequest);
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
@@ -40,14 +42,34 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [Given(@"an inexistent Tier t")]
-    public void GivenAnInexistentTier()
+    [Given(@"a Tier t with a Quota q")]
+    public async Task GivenAValidTierWithAQuota()
     {
-        _tierId = "some-inexistent-tier-id";
+        await GivenAValidTier();
+
+        var createTierQuotaRequest = new CreateTierQuotaRequest
+        {
+            MetricKey = "NumberOfSentMessages",
+            Max = 2,
+            Period = "Week"
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierQuotaRequest);
+
+        var response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tierQuotaDefinitionId = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier quota definition on the Quotas module
+        Thread.Sleep(2000);
     }
 
-    [When(@"a POST request is sent to the /Tier/{t.id}/Quotas endpoint")]
-    public async Task WhenAPOSTRequestIsSentToTheCreateTiersQuotaEndpoint()
+    [When(@"a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpoint()
     {
         var createTierQuotaRequest = new CreateTierQuotaRequest
         {
@@ -61,6 +83,37 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createTierQuotaRequest);
 
         _response = await _tiersApi.CreateTierQuota(requestConfiguration, _tierId);
+    }
+
+    [When(@"a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
+    {
+        var createTierQuotaRequest = new CreateTierQuotaRequest
+        {
+            MetricKey = "NumberOfSentMessages",
+            Max = 2,
+            Period = "Week"
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierQuotaRequest);
+
+        _response = await _tiersApi.CreateTierQuota(requestConfiguration, "inexistentTierId");
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
+    public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpoint()
+    {
+        _response = await _tiersApi.DeleteTierQuota(_tierId, _tierQuotaDefinitionId, _requestConfiguration);
+        _response.Should().NotBeNull();
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id")]
+    public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
+    {
+        _response = await _tiersApi.DeleteTierQuota(_tierId, "inexistentQuotaId", _requestConfiguration);
+        _response.Should().NotBeNull();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

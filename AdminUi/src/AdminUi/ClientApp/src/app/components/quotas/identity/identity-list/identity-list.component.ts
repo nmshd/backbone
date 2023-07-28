@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import {
     Identity,
     IdentityService,
@@ -9,9 +10,9 @@ import {
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
 
 @Component({
-    selector: 'app-identity-list',
-    templateUrl: './identity-list.component.html',
-    styleUrls: ['./identity-list.component.css'],
+    selector: "app-identity-list",
+    templateUrl: "./identity-list.component.html",
+    styleUrls: ["./identity-list.component.css"]
 })
 export class IdentityListComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -27,14 +28,10 @@ export class IdentityListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = [
-        'address',
-        'clientId',
-        'publicKey',
-        'createdAt',
-    ];
+    displayedColumns: string[] = ["address", "clientId", "publicKey", "createdAt"];
 
     constructor(
+        private router: Router,
         private snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
@@ -56,29 +53,27 @@ export class IdentityListComponent {
 
     getPagedData() {
         this.loading = true;
-        this.identityService
-            .getIdentities(this.pageIndex, this.pageSize)
-            .subscribe({
-                next: (data: PagedHttpResponseEnvelope<Identity>) => {
-                    if (data) {
-                        this.identities = data.result;
-                        if (data.pagination) {
-                            this.totalRecords = data.pagination.totalRecords!;
-                        } else {
-                            this.totalRecords = data.result.length;
-                        }
+        this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<Identity>) => {
+                if (data) {
+                    this.identities = data.result;
+                    if (data.pagination) {
+                        this.totalRecords = data.pagination.totalRecords!;
+                    } else {
+                        this.totalRecords = data.result.length;
                     }
-                },
-                complete: () => (this.loading = false),
-                error: (err: any) => {
-                    this.loading = false;
-                    let errorMessage = (err.error && err.error.error && err.error.error.message) ? err.error.error.message : err.message;
-                    this.snackBar.open(errorMessage, 'Dismiss', {
-                        verticalPosition: 'top',
-                        horizontalPosition: 'center'
-                    });
-                },
-            });
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
     }
 
     pageChangeEvent(event: PageEvent) {
@@ -87,7 +82,7 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    dateConvert(date: any) {
-        return new Date(date).toLocaleDateString();
+    editIdentity(identity: Identity) {
+        this.router.navigate([`/identities/` + identity.address]);
     }
 }

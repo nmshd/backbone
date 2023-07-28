@@ -1,13 +1,15 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
     private readonly List<TierQuota> _tierQuotas;
-
+    private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
     public Identity(string address, TierId tierId)
@@ -15,25 +17,42 @@ public class Identity
         Address = address;
         TierId = tierId;
         _tierQuotas = new List<TierQuota>();
+        _individualQuotas = new List<IndividualQuota>();
         _metricStatuses = new List<MetricStatus>();
     }
+    private Identity() { }
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // To: The dev who implements individualQuotas
-    // uncomment the line below
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    internal IReadOnlyCollection<Quota> AllQuotas => _tierQuotas; //.Concat(_identityQuotas);
+    public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
+    internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
     public string Address { get; }
     public TierId TierId { get; }
+
+    public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
+    {
+        if (max <= 0)
+            throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
+
+        var individualQuota = new IndividualQuota(metricKey, max, period, Address);
+        _individualQuotas.Add(individualQuota);
+
+        return individualQuota;
+    }
 
     public void AssignTierQuotaFromDefinition(TierQuotaDefinition definition)
     {
         var tierQuota = new TierQuota(definition, Address);
         _tierQuotas.Add(tierQuota);
+    }
+
+    public void DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId tierQuotaDefinitionId)
+    {
+        var tierQuota = _tierQuotas.FirstOrDefault(tq => tq.DefinitionId == tierQuotaDefinitionId)
+                        ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
+
+        _tierQuotas.Remove(tierQuota);
     }
 
     public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory,
