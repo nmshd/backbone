@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
-using Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
 namespace Tokens.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 

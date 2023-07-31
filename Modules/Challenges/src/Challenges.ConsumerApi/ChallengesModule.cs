@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Challenges.ConsumerApi;
+namespace Backbone.Modules.Challenges.ConsumerApi;
 
 public class ChallengesModule : IModule
 {

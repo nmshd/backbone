@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Relationships.ConsumerApi;
+namespace Backbone.Modules.Relationships.ConsumerApi;
 
 public class RelationshipsModule : IModule
 {

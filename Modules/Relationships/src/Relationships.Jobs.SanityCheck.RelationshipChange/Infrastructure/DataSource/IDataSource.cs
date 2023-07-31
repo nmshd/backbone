@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
 
 public interface IDataSource
 {

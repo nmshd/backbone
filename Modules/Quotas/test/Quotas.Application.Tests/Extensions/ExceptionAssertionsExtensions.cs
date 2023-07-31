@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Specialized;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Extensions;
+namespace Quotas.Application.Tests.Extensions;
 public static class ExceptionAssertionsExtensions
 {
     public static void WithErrorCode<T>(this ExceptionAssertions<T> assertions, string code) where T : DomainException

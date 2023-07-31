@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
-using Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 
 namespace Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 

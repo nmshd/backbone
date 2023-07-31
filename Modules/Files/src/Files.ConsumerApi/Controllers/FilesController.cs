@@ -5,13 +5,13 @@ using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
+using Backbone.Modules.Files.ConsumerApi.DTOs;
 using Backbone.Modules.Files.Domain.Entities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-using Files.ConsumerApi.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +20,7 @@ using Microsoft.Extensions.Options;
 using NeoSmart.Utils;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Files.ConsumerApi.Controllers;
+namespace Backbone.Modules.Files.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

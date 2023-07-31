@@ -1,11 +1,11 @@
 using System.Reflection;
 using Backbone.Modules.Tokens.Infrastructure.Persistence;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Extensions;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 using Enmeshed.Tooling.Extensions;
-using Tokens.Jobs.SanityCheck.Extensions;
-using Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
-using Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Tokens.Jobs.SanityCheck;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck;
 
 public class Program
 {

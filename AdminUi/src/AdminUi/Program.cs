@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using AdminUi.AspNet;
+using AdminUi.Authentication;
 using AdminUi.Configuration;
 using AdminUi.Extensions;
 using AdminUi.OpenIddict;
