@@ -13,6 +13,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;
+    private HttpResponse<Empty>? _deleteResponse;
     private HttpResponse<List<TierDTO>>? _tiersResponse;
     private string _existingTierName;
     private string _existingTierId;
@@ -85,7 +86,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
     public async void WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
     {
-        _tierResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
+        _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
     }
 
     [Then(@"the response contains a paginated list of Tiers")]
@@ -116,6 +117,12 @@ public class TiersStepDefinitions : BaseStepDefinitions
         if (_tiersResponse != null)
         {
             var actualStatusCode = (int)_tiersResponse!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            var actualStatusCode = (int)_deleteResponse!.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
     }
