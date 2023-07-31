@@ -12,7 +12,7 @@ using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Devices.ConsumerApi.Controllers;
+namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

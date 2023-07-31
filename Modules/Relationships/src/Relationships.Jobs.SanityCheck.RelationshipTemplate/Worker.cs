@@ -1,7 +1,7 @@
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipTemplate;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate;
 
 public class Worker : IHostedService
 {

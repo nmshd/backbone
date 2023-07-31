@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Quotas.ConsumerApi;
+namespace Backbone.Modules.Quotas.ConsumerApi;
 
 public class QuotasModule : IModule
 {

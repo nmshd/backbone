@@ -92,6 +92,11 @@ public class Modules : IEnumerable<object[]>
             .ResideInAssembly("Backbone.Modules.Messages.*", true)
             .As("Messages Module");
 
+    private static readonly IObjectProvider<IType> QUOTAS_MODULE =
+        Types().That()
+            .ResideInAssembly("Backbone.Modules.Quotas.*", true)
+            .As("Quotas Module");
+
     private static readonly IObjectProvider<IType> RELATIONSHIPS_MODULE =
         Types().That()
             .ResideInAssembly("Backbone.Modules.Relationships.*", true)
@@ -115,6 +120,7 @@ public class Modules : IEnumerable<object[]>
             new[] { DEVICES_MODULE },
             new[] { FILES_MODULE },
             new[] { MESSAGES_MODULE },
+            new[] { QUOTAS_MODULE },
             new[] { RELATIONSHIPS_MODULE },
             new[] { SYNCHRONIZATION_MODULE },
             new[] { TOKENS_MODULE }

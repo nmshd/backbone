@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
 public class LogReporter : IReporter
 {

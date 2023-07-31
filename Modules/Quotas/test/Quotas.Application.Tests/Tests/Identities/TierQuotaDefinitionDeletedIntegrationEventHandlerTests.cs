@@ -1,15 +1,15 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
+namespace Quotas.Application.Tests.Tests.Identities;
 public class TierQuotaDefinitionDeletedIntegrationEventHandlerTests
 {
     [Fact]

@@ -2,6 +2,8 @@
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
+namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
+
 public class MetricStatusesStubRepository : IMetricStatusesRepository
 {
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.

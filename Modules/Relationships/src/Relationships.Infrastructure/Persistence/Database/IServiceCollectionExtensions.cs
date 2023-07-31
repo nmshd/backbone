@@ -6,9 +6,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 public static class IServiceCollectionExtensions
 {
     private const string SQLSERVER = "SqlServer";
-    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Relationships.Infrastructure.Database.SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Relationships.Infrastructure.Database.SqlServer";
     private const string POSTGRES = "Postgres";
-    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Relationships.Infrastructure.Database.Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Relationships.Infrastructure.Database.Postgres";
 
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {

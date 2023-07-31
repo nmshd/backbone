@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Tokens.ConsumerApi;
+namespace Backbone.Modules.Tokens.ConsumerApi;
 
 public class TokensModule : IModule
 {

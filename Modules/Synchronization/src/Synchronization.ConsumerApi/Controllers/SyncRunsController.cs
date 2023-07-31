@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Synchronization.ConsumerApi.Controllers;
+namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

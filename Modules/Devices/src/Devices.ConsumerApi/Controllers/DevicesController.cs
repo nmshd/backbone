@@ -19,7 +19,7 @@ using Microsoft.Extensions.Options;
 using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Devices.ConsumerApi.Controllers;
+namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

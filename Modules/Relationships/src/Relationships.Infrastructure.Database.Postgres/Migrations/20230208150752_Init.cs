@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 
 namespace Relationships.Infrastructure.Database.Postgres.Migrations;
