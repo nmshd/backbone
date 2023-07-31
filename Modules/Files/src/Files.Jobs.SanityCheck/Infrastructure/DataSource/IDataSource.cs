@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Files.Domain.Entities;
 
-namespace Files.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public interface IDataSource
 {

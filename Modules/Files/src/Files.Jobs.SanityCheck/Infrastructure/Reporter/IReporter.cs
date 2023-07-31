@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Files.Domain.Entities;
 
-namespace Files.Jobs.SanityCheck.Infrastructure.Reporter;
+namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 
 public interface IReporter
 {

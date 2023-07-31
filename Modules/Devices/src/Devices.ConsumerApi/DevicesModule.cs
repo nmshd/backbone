@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Devices.ConsumerApi;
+namespace Backbone.Modules.Devices.ConsumerApi;
 
 public class DevicesModule : IModule
 {

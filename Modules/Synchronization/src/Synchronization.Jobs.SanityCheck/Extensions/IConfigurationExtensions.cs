@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Synchronization.Jobs.SanityCheck.Extensions;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Extensions;
 
 internal static class IConfigurationExtensions
 {

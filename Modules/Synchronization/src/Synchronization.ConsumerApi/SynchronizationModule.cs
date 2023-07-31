@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Synchronization.ConsumerApi;
+namespace Backbone.Modules.Synchronization.ConsumerApi;
 
 public class SynchronizationModule : IModule
 {

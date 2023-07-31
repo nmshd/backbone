@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
 
 namespace Relationships.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
