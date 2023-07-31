@@ -65,7 +65,7 @@ public class HandlerTests
     public void Fails_to_delete_individual_quota_for_inexistent_identity()
     {
         // Arrange
-        var command = new DeleteQuotaForIdentityCommand("some-inexistent-identity", "some-quota-id");
+        var command = new DeleteQuotaForIdentityCommand("some-inexistent-identity", "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find("some-inexistent-identity", A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Identity>(null));
         var handler = CreateHandler(identitiesRepository);
@@ -85,7 +85,7 @@ public class HandlerTests
         // Arrange
         var identityAddress = "some-identity-address";
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
-        var command = new DeleteQuotaForIdentityCommand(identityAddress, "some-quota-id");
+        var command = new DeleteQuotaForIdentityCommand(identityAddress, "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
         var handler = CreateHandler(identitiesRepository);
