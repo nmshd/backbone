@@ -82,7 +82,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
         _tierResponse = await _tiersApi.CreateTier(requestConfiguration);
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/TierId endpoint")]
+    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
     public async void WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
     {
         _tierResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);

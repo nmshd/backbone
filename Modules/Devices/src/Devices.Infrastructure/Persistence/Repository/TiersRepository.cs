@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
@@ -46,7 +47,7 @@ public class TiersRepository : ITiersRepository
 
     public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.Include("Identities").SingleAsync(t => t.Id == tierId, cancellationToken);
+        return await _tiersDbSet.IncludeAll(_dbContext).FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)

@@ -13,4 +13,9 @@ public class Tier
     public TierId Id { get; }
     public TierName Name { get; }
     public ICollection<Identity> Identities { get; internal set; }
+
+    public bool IsBasicTier()
+    {
+        return Name == TierName.BASIC_DEFAULT_NAME;
+    }
 }

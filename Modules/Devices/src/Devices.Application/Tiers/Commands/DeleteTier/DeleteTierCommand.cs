@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 
-public class DeleteTierCommand : IRequest<DeleteTierResponse>
+public class DeleteTierCommand : IRequest
 {
     public DeleteTierCommand(string tierId)
     {

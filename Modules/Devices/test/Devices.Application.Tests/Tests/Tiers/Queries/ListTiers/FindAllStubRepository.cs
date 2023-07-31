@@ -28,7 +28,7 @@ public class FindAllStubRepository : ITiersRepository
         return Task.FromResult(_tiers);
     }
 
-    public Task<Tier> FindById(TierId tierName, CancellationToken cancellationToken)
+    public Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

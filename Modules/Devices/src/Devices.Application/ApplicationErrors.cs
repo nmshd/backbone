@@ -58,12 +58,12 @@ public static class ApplicationErrors
 
         internal static ApplicationError BasicTierCannotBeDeleted()
         {
-            return new ApplicationError("error.platform.validation.device.basicTierCannotBeDeleted", "The Basic Tier of Enmeshed cannot be deleted.");
+            return new ApplicationError("error.platform.validation.device.basicTierCannotBeDeleted", "The Basic Tier cannot be deleted.");
         }
 
-        internal static ApplicationError UsedTierCannotBeDeleted(int count)
+        internal static ApplicationError UsedTierCannotBeDeleted(int numberOfAssignedIdentities)
         {
-            return new ApplicationError("error.platform.validation.device.usedTierCannotBeDeleted", $"The Tier cannot be deleted if there are Identities assigned to it ({count} found).");
+            return new ApplicationError("error.platform.validation.device.usedTierCannotBeDeleted", $"The Tier cannot be deleted if there are Identities assigned to it ({numberOfAssignedIdentities} found).");
         }
     }
 }
