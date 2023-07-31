@@ -55,7 +55,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Delete_Non_Basic_Tier_Without_Identities_Publishes_IntegrationEvent()
+    public async Task Delete_Valid_Tier_Publishes_IntegrationEvent()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() };
