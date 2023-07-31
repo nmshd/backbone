@@ -33,6 +33,10 @@ export class QuotasService {
     deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Tiers/${tierId}/Quotas/${quotaId}`);
     }
+
+    deleteIdentityQuota(quotaId: string, identityAddress: string): Observable<any> {
+        return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Identities/${identityAddress}/Quotas/${quotaId}`);
+    }
 }
 
 export interface Metric {
