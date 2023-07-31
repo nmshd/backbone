@@ -1,7 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
@@ -9,13 +7,11 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<TierDeletedIntegrationEventHandler> _logger;
-    private readonly IMediator _mediator;
 
-    public TierDeletedIntegrationEventHandler(ILogger<TierDeletedIntegrationEventHandler> logger, ITiersRepository tiersRepository, IMediator mediator)
+    public TierDeletedIntegrationEventHandler(ILogger<TierDeletedIntegrationEventHandler> logger, ITiersRepository tiersRepository)
     {
         _tiersRepository = tiersRepository;
         _logger = logger;
-        _mediator = mediator;
     }
 
     public async Task Handle(TierDeletedIntegrationEvent integrationEvent)
