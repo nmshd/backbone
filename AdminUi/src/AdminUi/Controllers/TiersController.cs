@@ -63,13 +63,14 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpDelete("{tierId}")]
-    [ProducesResponseType(typeof(DeleteTierResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<CreatedResult> DeleteTier([FromRoute] string tierId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
         var command = new DeleteTierCommand(tierId);
-        var deleteTier = await _mediator.Send(command, cancellationToken);
-        return Created(deleteTier);
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
     }
 
     [HttpPost("{tierId}/Quotas")]
