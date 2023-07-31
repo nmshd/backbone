@@ -13,7 +13,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;
-    private HttpResponse<Empty>? _deleteResponse;
+    private HttpResponse? _deleteResponse;
     private HttpResponse<List<TierDTO>>? _tiersResponse;
     private string _existingTierName;
     private string _existingTierId;
