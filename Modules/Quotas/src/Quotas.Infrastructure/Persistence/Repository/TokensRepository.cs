@@ -16,7 +16,7 @@ public class TokensRepository : ITokensRepository
 
     public async Task<uint> Count(IdentityAddress createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var relationshipsCount = await _tokensReadOnly.CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
+        var relationshipsCount = await _tokensReadOnly.CountAsync(t => t.CreatedBy == createdBy, cancellationToken);
         return (uint)relationshipsCount;
     }
 }

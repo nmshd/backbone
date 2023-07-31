@@ -8,6 +8,5 @@ public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
     public void Configure(EntityTypeBuilder<Token> builder)
     {
         builder.ToTable(nameof(Token) + "s", "Tokens", x => x.ExcludeFromMigrations());
-        builder.HasKey(x => x.Id);
     }
 }
