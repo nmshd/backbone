@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
 
@@ -14,15 +14,15 @@ public class DummyPushService : IPushService
         _logger = logger;
     }
 
-    public Task SendNotificationAsync(IdentityAddress recipient, object notification)
+    public Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Sending push notification to '{recipient}'.");
         return Task.CompletedTask;
     }
 
-    public Task RegisterDeviceAsync(IdentityAddress identity, DeviceRegistration registration)
+    public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Registering for push notifications of Identity '{identity}' and device '{registration.InstallationId}.");
+        _logger.LogInformation($"Registering for push notifications of Identity '{address}' and device '{deviceId}.");
         return Task.CompletedTask;
     }
 }

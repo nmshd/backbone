@@ -15,6 +15,6 @@ public class ExternalEventCreatedIntegrationEventHandler : IIntegrationEventHand
 
     public async Task Handle(ExternalEventCreatedIntegrationEvent @event)
     {
-        await _pushService.SendNotificationAsync(@event.Owner, new ExternalEventCreatedPushNotification());
+        await _pushService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
@@ -21,8 +24,26 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 
     public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var deviceRegistration = new DeviceRegistration(request.Platform, request.Handle, _activeDevice);
-        await _pushService.RegisterDeviceAsync(_activeIdentity, deviceRegistration);
+        var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
+        if (parseHandleResult.IsSuccess)
+        {
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, cancellationToken);
+        }
+        else
+        {
+            throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
+        }
+
         return Unit.Value;
+    }
+
+    private static PushNotificationPlatform DeserializePlatform(string platform)
+    {
+        return platform switch
+        {
+            "fcm" => PushNotificationPlatform.Fcm,
+            "apns" => PushNotificationPlatform.Apns,
+            _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
+        };
     }
 }
