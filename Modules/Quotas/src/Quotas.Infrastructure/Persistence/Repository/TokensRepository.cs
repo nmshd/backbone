@@ -5,7 +5,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
-public class TokensRepository: ITokensRepository
+public class TokensRepository : ITokensRepository
 {
     private readonly IQueryable<Token> _tokensReadOnly;
 
