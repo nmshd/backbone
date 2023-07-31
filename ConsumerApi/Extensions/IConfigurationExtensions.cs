@@ -11,7 +11,7 @@ internal static class IConfigurationExtensions
         return configuration.GetSection("ApplicationInsights").Get<ApplicationInsightsConfiguration>() ??
                new ApplicationInsightsConfiguration();
     }
-    
+
     public static AzureAppConfigurationConfiguration GetAzureAppConfigurationConfiguration(
         this IConfiguration configuration)
     {

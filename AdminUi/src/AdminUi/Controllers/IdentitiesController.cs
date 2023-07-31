@@ -66,7 +66,7 @@ public class IdentitiesController : ApiControllerBase
         await _mediator.Send(new DeleteQuotaForIdentityCommand(identityAddress, individualQuotaId), cancellationToken);
         return NoContent();
     }
-    
+
     [HttpGet("{address}")]
     [ProducesResponseType(typeof(GetIdentityResponse), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]

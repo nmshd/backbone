@@ -57,7 +57,7 @@ public class BaseApi
             ContentType = restResponse.ContentType,
             IsSuccessStatusCode = restResponse.IsSuccessStatusCode,
             StatusCode = restResponse.StatusCode
-        }; 
+        };
 
         return response;
     }
