@@ -3,7 +3,7 @@ using Backbone.Modules.Quotas.Application.Metrics;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Metrics;
+namespace Quotas.Application.Tests.Metrics;
 public class UsedFileStorageSpaceMetricCalculatorTests
 {
     [Fact]

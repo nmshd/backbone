@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Messages.Domain.Ids;
-using Messages.Jobs.SanityCheck.Infrastructure.Reporter;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
 
 namespace Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 

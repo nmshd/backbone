@@ -54,6 +54,15 @@ export interface IdentityQuota {
     period: string;
 }
 
+export interface Quota {
+    id: string;
+    source: "Tier" | "Individual";
+    metric: Metric;
+    max: number;
+    period: string;
+    disabled: boolean;
+}
+
 export interface CreateQuotaForTierRequest {
     metricKey: string;
     max: number;

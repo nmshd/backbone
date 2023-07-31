@@ -217,7 +217,6 @@ dotnet_style_qualification_for_property = false:warning
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 file_header_template = 
 
-dotnet_diagnostic.IDE0005.severity = disabled
 dotnet_diagnostic.bc40000.severity = warning
 dotnet_diagnostic.bc400005.severity = warning
 dotnet_diagnostic.bc40008.severity = warning
@@ -520,6 +519,7 @@ resharper_redundant_base_qualifier_highlighting = warning
 resharper_suggest_var_or_type_built_in_types_highlighting = hint
 resharper_suggest_var_or_type_elsewhere_highlighting = hint
 resharper_suggest_var_or_type_simple_types_highlighting = hint
+csharp_indent_case_contents_when_block = false
 
 [*.ts]
 quote_type = single

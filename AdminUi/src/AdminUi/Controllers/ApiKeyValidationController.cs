@@ -1,4 +1,4 @@
-﻿using AdminUi.AspNet;
+﻿using AdminUi.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

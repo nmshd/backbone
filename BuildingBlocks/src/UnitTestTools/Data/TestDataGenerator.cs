@@ -1,6 +1,6 @@
 ﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Domain.Tests;
+namespace Enmeshed.UnitTestTools.Data;
 
 public static class TestDataGenerator
 {

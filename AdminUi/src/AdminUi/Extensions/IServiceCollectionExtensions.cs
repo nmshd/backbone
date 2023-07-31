@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using AdminUi.AspNet;
+using AdminUi.Authentication;
 using AdminUi.Configuration;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
@@ -125,7 +125,7 @@ public static class IServiceCollectionExtensions
                     break;
                 case "Postgres":
                     services.AddHealthChecks().AddNpgSql(
-                        npgsqlConnectionString: connectionString,
+                        connectionString: connectionString,
                         name: moduleName);
                     break;
                 default:

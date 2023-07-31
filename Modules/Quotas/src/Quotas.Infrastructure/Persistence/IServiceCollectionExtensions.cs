@@ -12,9 +12,9 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence;
 public static class IServiceCollectionExtensions
 {
     private const string SQLSERVER = "SqlServer";
-    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Quotas.Infrastructure.Database.SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Quotas.Infrastructure.Database.SqlServer";
     private const string POSTGRES = "Postgres";
-    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Quotas.Infrastructure.Database.Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Quotas.Infrastructure.Database.Postgres";
 
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {

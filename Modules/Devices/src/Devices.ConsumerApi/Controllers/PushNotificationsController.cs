@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
 
-namespace Devices.ConsumerApi.Controllers;
+namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/Devices/Self/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

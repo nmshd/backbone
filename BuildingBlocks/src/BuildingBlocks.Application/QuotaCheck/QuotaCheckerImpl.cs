@@ -1,9 +1,8 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 
-namespace Backbone.Modules.Quotas.Application.QuotaCheck;
+namespace Enmeshed.BuildingBlocks.Application.QuotaCheck;
 public class QuotaCheckerImpl : IQuotaChecker
 {
     private readonly IUserContext _userContext;

@@ -5,7 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

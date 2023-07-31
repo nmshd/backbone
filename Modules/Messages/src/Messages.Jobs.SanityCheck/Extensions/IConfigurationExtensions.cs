@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Messages.Jobs.SanityCheck.Extensions;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Extensions;
 internal static class IConfigurationExtensions
 {
     public static BlobStorageConfiguration GetBlobStorageConfiguration(this IConfiguration configuration)
