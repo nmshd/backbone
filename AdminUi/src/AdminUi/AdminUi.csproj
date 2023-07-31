@@ -10,6 +10,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..</DockerfileContext>
+        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
