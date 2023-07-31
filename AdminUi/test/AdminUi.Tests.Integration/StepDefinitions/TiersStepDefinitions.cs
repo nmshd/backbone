@@ -45,6 +45,30 @@ public class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = response.Content.Result!.Id;
     }
 
+    [Given(@"the Tier T has one associated identity")]
+    public void GivenTheTierTHasOneAssociatedIdentity()
+    {
+        throw new PendingStepException();
+    }
+
+
+    [Given(@"the Basic Tier as t")]
+    public async void GivenTheBasicTierAsT()
+    {
+        var response = await _tiersApi.GetTiers(_requestConfiguration);
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(200);
+        var basicTier = response.Content.Result!.Single(t => t.Name == "Basic");
+        _existingTierName = basicTier.Name;
+        _existingTierId = basicTier.Id;
+    }
+
+    [Given(@"a non-existing Tier t")]
+    public void GivenANon_ExistingTierT()
+    {
+        _existingTierId = "TIR00000000000000000";
+    }
+
     [When(@"a GET request is sent to the /Tiers endpoint")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
