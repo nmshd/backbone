@@ -1,4 +1,4 @@
-﻿using AdminUi.Tests.Integration.API;
+using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
 using Enmeshed.UnitTestTools.Data;
