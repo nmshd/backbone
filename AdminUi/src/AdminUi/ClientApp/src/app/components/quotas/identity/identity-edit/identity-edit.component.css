@@ -90,11 +90,16 @@
     color: white !important;
 }
 
-.mat-column-metricName,
-.mat-column-metricMax,
+.mat-column-metric,
+.mat-column-source,
+.mat-column-max,
 .mat-column-period {
-    width: 33%;
+    width: 25%;
     word-break: break-all;
+}
+
+.disabled-tier {
+    opacity: 0.5;
 }
 
 .no-data {
