@@ -3,7 +3,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
-namespace AdminUi.AspNet;
+namespace AdminUi.Authentication;
 
 public class ApiKeyAuthenticationSchemeOptions : AuthenticationSchemeOptions
 {

@@ -1,11 +1,11 @@
-﻿using Backbone.Modules.Quotas.Application.QuotaCheck;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+﻿using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 using FluentAssertions;
+using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
+namespace Quotas.Application.Tests.Tests.QuotaCheck;
 public class QuotaCheckerImplTests
 {
 

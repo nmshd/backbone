@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

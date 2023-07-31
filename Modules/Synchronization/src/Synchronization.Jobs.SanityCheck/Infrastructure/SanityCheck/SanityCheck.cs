@@ -1,8 +1,8 @@
 ﻿using Backbone.Modules.Synchronization.Domain.Entities;
-using Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
-using Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
+using Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Synchronization.Jobs.SanityCheck.Infrastructure.SanityCheck;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.SanityCheck;
 
 public class SanityCheck
 {

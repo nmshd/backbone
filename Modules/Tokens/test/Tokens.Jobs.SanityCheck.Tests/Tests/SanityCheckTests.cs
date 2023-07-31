@@ -10,13 +10,13 @@ public class SanityCheckTests
 {
     private readonly FakeDataSource _dataSource;
     private readonly TestReporter _reporter;
-    private readonly SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTests()
     {
         _dataSource = new FakeDataSource();
         _reporter = new TestReporter();
-        _sanityCheck = new SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

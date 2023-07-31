@@ -2,7 +2,7 @@
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Quotas.Application.Tests.TestDoubles;
 
 internal class MetricStatusesStubRepository : IMetricStatusesRepository
 {

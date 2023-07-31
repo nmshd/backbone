@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Quotas.Application.Tests.TestDoubles;
 
 internal class UserContextStub : IUserContext
 {

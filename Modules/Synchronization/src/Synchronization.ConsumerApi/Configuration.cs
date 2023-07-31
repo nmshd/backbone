@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Synchronization.Application;
 
-namespace Synchronization.ConsumerApi;
+namespace Backbone.Modules.Synchronization.ConsumerApi;
 
 public class Configuration
 {

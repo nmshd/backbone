@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Quotas.Application.Tests.TestDoubles;
 public class AddMockTiersRepository : ITiersRepository
 {
     public bool WasCalled { get; private set; }

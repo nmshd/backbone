@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace AdminUi.AspNet;
+namespace AdminUi.Authentication;
 
 public class ApiKeyValidator
 {
