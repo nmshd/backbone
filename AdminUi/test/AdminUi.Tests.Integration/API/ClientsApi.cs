@@ -12,9 +12,9 @@ public class ClientsApi : BaseApi
         return await Get<List<ClientDTO>>("/Clients", requestConfiguration);
     }
 
-    public async Task<HttpResponse<List<ClientDTO>>> DeleteClient(string clientId, RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse> DeleteClient(string clientId, RequestConfiguration requestConfiguration)
     {
-        return await Delete<List<ClientDTO>>($"/Clients/{clientId}", requestConfiguration);
+        return await Delete($"/Clients/{clientId}", requestConfiguration);
     }
 
     public async Task<HttpResponse<ClientDTO>> CreateClient(RequestConfiguration requestConfiguration)

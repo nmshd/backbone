@@ -23,9 +23,9 @@ public class TiersApi : BaseApi
         return await Post<TierQuotaDTO>($"/Tiers/{tierId}/Quotas", requestConfiguration);
     }
 
-    public async Task<HttpResponse<TierQuotaDTO>> DeleteTierQuota(string tierId, string tierQuotaDefinitionId, RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse> DeleteTierQuota(string tierId, string tierQuotaDefinitionId, RequestConfiguration requestConfiguration)
     {
-        return await Delete<TierQuotaDTO>($"/Tiers/{tierId}/Quotas/{tierQuotaDefinitionId}", requestConfiguration);
+        return await Delete($"/Tiers/{tierId}/Quotas/{tierQuotaDefinitionId}", requestConfiguration);
     }
 
     public async Task<HttpResponse<TierDTO>> CreateTier(RequestConfiguration requestConfiguration)
