@@ -4,6 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
+
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
