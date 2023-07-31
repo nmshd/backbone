@@ -42,18 +42,13 @@ public class HandlerTests
     public async Task Cannot_Delete_Tier_With_Associated_Identities()
     {
         // Arrange
-        var someIdentity = new Identity(
-            TestDataGenerator.CreateRandomDeviceId(),
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomBytes(),
-            TestDataGenerator.CreateRandomTierId(),
-            1);
-        var anotherTier = new Tier(TierName.Create("random-tier").Value) { Identities = new List<Identity>() { someIdentity } };
+        var someIdentity = TestDataGenerator.CreateIdentity();
+        var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() { someIdentity } };
 
-        A.CallTo(() => _tiersRepository.FindById(anotherTier.Id, A<CancellationToken>._)).Returns(Task.FromResult(anotherTier));
+        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
 
         // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand(anotherTier.Id), CancellationToken.None);
+        var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<ApplicationException>().WithErrorCode("error.platform.validation.device.usedTierCannotBeDeleted");
@@ -63,12 +58,12 @@ public class HandlerTests
     public async Task Delete_Non_Basic_Tier_Without_Identities_Publishes_IntegrationEvent()
     {
         // Arrange
-        var anotherTier = new Tier(TierName.Create("random-tier").Value) { Identities = new List<Identity>() };
+        var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() };
 
-        A.CallTo(() => _tiersRepository.FindById(anotherTier.Id, A<CancellationToken>._)).Returns(Task.FromResult(anotherTier));
+        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
 
         // Act
-        await _handler.Handle(new DeleteTierCommand(anotherTier.Id), CancellationToken.None);
+        await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<TierDeletedIntegrationEvent>._)).MustHaveHappened();
