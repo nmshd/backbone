@@ -86,7 +86,7 @@ public class FcmNotificationBuilder : NotificationBuilder
             public string AndroidChannelId { get; set; }
 
             [JsonPropertyName("content-available")]
-            public string ContentAvailable { get; set; } // TODO: make boolean?
+            public string ContentAvailable { get; set; }
 
             [JsonPropertyName("content")]
             public NotificationContent Content { get; set; }
