@@ -9,7 +9,6 @@ using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.ConsumerApi;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.QuotaCheck;
 using Backbone.Modules.Quotas.ConsumerApi;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.ConsumerApi;

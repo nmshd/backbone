@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.QuotaCheck;
+﻿using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
 using FluentAssertions;
