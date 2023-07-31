@@ -43,11 +43,31 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()"
+                    [disabled]="selectionQuotas.selected.length === 0">
+                    <mat-icon>delete</mat-icon>
+                </button>
                 <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!identity.address">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
             <table mat-table class="responsive" [dataSource]="quotasTableData">
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? toggleAllRowsQuotas() : null"
+                            [checked]="selectionQuotas.hasValue() && isAllSelected()" color="primary"
+                            [indeterminate]="selectionQuotas.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabelQuotas()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selectionQuotas.toggle(row) : null"
+                            [checked]="selectionQuotas.isSelected(row)" color="primary"
+                            [aria-label]="checkboxLabelQuotas(i, row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="metric">
                     <th mat-header-cell *matHeaderCellDef>Metric</th>
                     <td mat-cell *matCellDef="let Quota"></td>
@@ -71,13 +91,9 @@
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="quotasTableDisplayedColumns"></tr>
-                <tr
-                    mat-row
-                    *matRowDef="let row; columns: quotasTableDisplayedColumns"
-                    [ngClass]="{ 'disabled-tier': row.disabled }"
-                    [matTooltipDisabled]="!row.disabled"
-                    matTooltip="Tier quotas do not take effect if there is an individual quota."
-                ></tr>
+                <tr mat-row *matRowDef="let row; columns: quotasTableDisplayedColumns"
+                    [ngClass]="{ 'disabled-tier': row.disabled }" [matTooltipDisabled]="!row.disabled"
+                    matTooltip="Tier quotas do not take effect if there is an individual quota."></tr>
 
                 <!--Metric Group-->
                 <ng-container matColumnDef="metricGroup">
@@ -89,7 +105,8 @@
                 <tr mat-row *matRowDef="let row; columns: ['metricGroup']; when: isGroup"></tr>
 
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
+                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.
+                    </td>
                 </tr>
             </table>
         </mat-expansion-panel>

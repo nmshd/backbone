@@ -13,11 +13,13 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private string _tierQuotaDefinitionId;
     private HttpResponse<TierQuotaDTO>? _response;
+    private HttpResponse? _deleteResponse;
 
     public TierQuotaStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
         _tierId = string.Empty;
+        _tierQuotaDefinitionId = string.Empty;
     }
 
     [Given(@"a Tier t")]
@@ -105,22 +107,31 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
     public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpoint()
     {
-        _response = await _tiersApi.DeleteTierQuota(_tierId, _tierQuotaDefinitionId, _requestConfiguration);
-        _response.Should().NotBeNull();
+        _deleteResponse = await _tiersApi.DeleteTierQuota(_tierId, _tierQuotaDefinitionId, _requestConfiguration);
+        _deleteResponse.Should().NotBeNull();
     }
 
     [When(@"a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id")]
     public async Task WhenADELETERequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
     {
-        _response = await _tiersApi.DeleteTierQuota(_tierId, "inexistentQuotaId", _requestConfiguration);
-        _response.Should().NotBeNull();
+        _deleteResponse = await _tiersApi.DeleteTierQuota(_tierId, "inexistentQuotaId", _requestConfiguration);
+        _deleteResponse.Should().NotBeNull();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        if (_response != null)
+        {
+            var actualStatusCode = (int)_response.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            var actualStatusCode = (int)_deleteResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
     }
 
     [Then(@"the response contains a TierQuota")]
@@ -135,7 +146,17 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _response!.Content.Error.Should().NotBeNull();
-        _response.Content.Error!.Code.Should().Be(errorCode);
+        if (_response != null)
+        {
+            _response!.Content.Error.Should().NotBeNull();
+            _response.Content.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            _deleteResponse.Content.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Should().NotBeNull();
+            _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
+        }
     }
 }
