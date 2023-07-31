@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Synchronization.Domain.Entities;
-using Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
 
 namespace Synchronization.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 

@@ -10,13 +10,13 @@ public class SanityCheckTestsRelationshipTemplate
 {
     private readonly FakeDataSourceRelationshipTemplate _dataSource;
     private readonly TestReporterRelationshipTemplate _reporter;
-    private readonly RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTestsRelationshipTemplate()
     {
         _dataSource = new FakeDataSourceRelationshipTemplate();
         _reporter = new TestReporterRelationshipTemplate();
-        _sanityCheck = new RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

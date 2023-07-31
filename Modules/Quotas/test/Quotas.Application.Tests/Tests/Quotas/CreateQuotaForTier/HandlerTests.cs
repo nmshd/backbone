@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
@@ -11,9 +10,10 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
+using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
+namespace Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
 
 public class HandlerTests
 {

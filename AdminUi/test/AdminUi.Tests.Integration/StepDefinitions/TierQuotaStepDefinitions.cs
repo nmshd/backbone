@@ -1,7 +1,7 @@
 ﻿using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
-using Backbone.Modules.Quotas.Domain.Tests;
+using Enmeshed.UnitTestTools.Data;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
 

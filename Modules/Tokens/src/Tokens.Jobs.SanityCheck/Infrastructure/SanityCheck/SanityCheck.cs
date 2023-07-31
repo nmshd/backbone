@@ -1,8 +1,8 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
-using Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
-using Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck;
 
 public class SanityCheck
 {

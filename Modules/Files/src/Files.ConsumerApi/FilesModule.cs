@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Files.ConsumerApi;
+namespace Backbone.Modules.Files.ConsumerApi;
 
 public class FilesModule : IModule
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Challenges.Application;
 
-namespace Challenges.ConsumerApi;
+namespace Backbone.Modules.Challenges.ConsumerApi;
 
 public class Configuration
 {

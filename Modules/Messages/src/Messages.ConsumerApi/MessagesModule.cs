@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Messages.ConsumerApi;
+namespace Backbone.Modules.Messages.ConsumerApi;
 
 public class MessagesModule : IModule
 {

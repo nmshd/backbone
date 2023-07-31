@@ -1,12 +1,12 @@
 ﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
+namespace Quotas.Application.Tests.Tests.Tiers;
 public class TierCreatedIntegrationEventHandlerTests
 {
     [Fact]

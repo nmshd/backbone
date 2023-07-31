@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
-using Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
 
 namespace Relationships.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 

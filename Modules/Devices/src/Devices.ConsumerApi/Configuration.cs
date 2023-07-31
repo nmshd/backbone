@@ -2,7 +2,7 @@
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
-namespace Devices.ConsumerApi;
+namespace Backbone.Modules.Devices.ConsumerApi;
 
 public class Configuration
 {
