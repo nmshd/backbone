@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Dapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
@@ -47,7 +48,14 @@ public class TiersRepository : ITiersRepository
 
     public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.IncludeAll(_dbContext).FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        var dto = await _tiersDbSet
+            .Select(t => new { Tier = t, Addresses = t.Identities.Select(i => i.Address) })
+            .FirstOrDefaultAsync(dto => dto.Tier.Id == tierId, cancellationToken);
+
+        var tier = dto.Tier;
+        tier.IdentityAddresses = dto.Addresses.AsList();
+
+        return tier;
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)

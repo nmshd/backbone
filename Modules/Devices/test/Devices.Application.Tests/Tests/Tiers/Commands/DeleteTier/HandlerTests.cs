@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -43,7 +44,7 @@ public class HandlerTests
     {
         // Arrange
         var someIdentity = TestDataGenerator.CreateIdentity();
-        var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() { someIdentity } };
+        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress>() { TestDataGenerator.CreateRandomIdentityAddress() } };
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
 
@@ -58,7 +59,7 @@ public class HandlerTests
     public async Task Publishes_TierDeletedIntegrationEvent_after_successful_deletion()
     {
         // Arrange
-        var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() };
+        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress>() };
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
 

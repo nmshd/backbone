@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
@@ -12,7 +13,9 @@ public class Tier
 
     public TierId Id { get; }
     public TierName Name { get; }
-    public ICollection<Identity> Identities { get; internal set; }
+    public virtual ICollection<Identity>? Identities { get; internal set; }
+
+    public virtual ICollection<IdentityAddress>? IdentityAddresses { get; set; }
 
     public bool IsBasicTier()
     {
