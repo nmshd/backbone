@@ -40,8 +40,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
         _existingTierName = response.Content.Result!.Name;
         _existingTierId = response.Content.Result!.Id;
     }
@@ -52,13 +51,15 @@ public class TiersStepDefinitions : BaseStepDefinitions
         throw new PendingStepException();
     }
 
-
     [Given(@"the Basic Tier as t")]
-    public async void GivenTheBasicTierAsT()
+    public async Task GivenTheBasicTierAsT()
     {
-        var response = await _tiersApi.GetTiers(_requestConfiguration);
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(HttpStatusCode.OK);
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _tiersApi.GetTiers(requestConfiguration);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
         var basicTier = response.Content.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
         _existingTierId = basicTier.Id;
@@ -109,7 +110,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
-    public async void WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
+    public async Task WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
     {
         _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
     }
