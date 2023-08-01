@@ -7,13 +7,9 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface ITiersRepository
 {
     Task AddAsync(Tier tier, CancellationToken cancellationToken);
-
     Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken);
-
     Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter);
-
     Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
-
     Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken);
     Task Remove(Tier tier);
 }
