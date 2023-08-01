@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Synchronization.Domain.Entities;
 
-namespace Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
 
 public class LogReporter : IReporter
 {

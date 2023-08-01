@@ -2,6 +2,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,9 +11,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence;
 public static class IServiceCollectionExtensions
 {
     private const string SQLSERVER = "SqlServer";
-    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Devices.Infrastructure.Database.SqlServer";
     private const string POSTGRES = "Postgres";
-    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Devices.Infrastructure.Database.Postgres";
 
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
@@ -58,6 +59,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
+        services.AddTransient<IPnsRegistrationRepository, PnsRegistrationRepository>();
     }
 
     public class DbOptions

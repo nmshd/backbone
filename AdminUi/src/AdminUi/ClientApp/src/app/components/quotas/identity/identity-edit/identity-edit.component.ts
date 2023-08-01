@@ -4,8 +4,11 @@ import { ActivatedRoute } from "@angular/router";
 import { Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { CreateQuotaForIdentityRequest, IdentityQuota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { SelectionModel } from "@angular/cdk/collections";
+import { Observable, forkJoin } from "rxjs";
 
 @Component({
     selector: "app-identity-edit",
@@ -17,6 +20,9 @@ export class IdentityEditComponent {
     headerDescription: string;
     headerQuotas: string;
     headerQuotasDescription: string;
+    selectionQuotas: SelectionModel<IdentityQuota>;
+    quotasTableDisplayedColumns: string[];
+    quotasTableData: (Quota | MetricGroup)[];
     identityAddress?: string;
     disabled: boolean;
     identity: Identity;
@@ -27,9 +33,12 @@ export class IdentityEditComponent {
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
+        this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
+        this.quotasTableData = [];
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
+        this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
     }
 
     ngOnInit() {
@@ -44,21 +53,58 @@ export class IdentityEditComponent {
 
     getIdentity() {
         this.loading = true;
-
+        this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.identityService.getIdentityByAddress(this.identityAddress!).subscribe({
             next: (data: HttpResponseEnvelope<Identity>) => {
                 if (data && data.result) {
                     this.identity = data.result;
+                    this.groupQuotasByMetricForTable();
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, "Dismiss", {
-                    panelClass: ["snack-bar"]
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
             }
         });
+    }
+
+    groupQuotasByMetricForTable() {
+        let quotas = [...this.identity.quotas];
+        this.quotasTableData = [];
+
+        quotas.sort((a, b) => a.metric.key.localeCompare(b.metric.key) || a.source.localeCompare(b.source));
+        while (quotas.length > 0) {
+            let metricGroup = {
+                metric: quotas[0].metric,
+                isGroup: true,
+                tierDisabled: false
+            } as MetricGroup;
+
+            this.quotasTableData.push(metricGroup);
+            quotas = this.iterateQuotasByMetricGroup(quotas, metricGroup);
+        }
+    }
+
+    iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
+        if (quotas.length == 0) return [];
+
+        if (quotas[0].metric.key == metricGroup.metric.key) {
+            this.quotasTableData.push(quotas[0]);
+            if (quotas[0].source == "Individual") metricGroup.tierDisabled = true;
+            if (quotas[0].source == "Tier") quotas[0].disabled = metricGroup.tierDisabled;
+            return this.iterateQuotasByMetricGroup(quotas.slice(1), metricGroup);
+        }
+
+        return quotas;
+    }
+
+    isGroup(index: any, item: any): boolean {
+        return item.isGroup;
     }
 
     openAssignQuotaDialog() {
@@ -85,6 +131,7 @@ export class IdentityEditComponent {
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
             next: (data: HttpResponseEnvelope<IdentityQuota>) => {
                 if (data && data.result) {
+                    this.getIdentity();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                         panelClass: ["snack-bar"]
                     });
@@ -93,10 +140,87 @@ export class IdentityEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                this.snackBar.open(err.message, "Dismiss", {
-                    panelClass: ["snack-bar"]
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
                 });
             }
         });
     }
+
+    openConfirmationDialogQuotaDeletion() {
+        let confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
+        let confirmDialogMessage =
+            this.selectionQuotas.selected.length > 1
+                ? `Are you sure you want to delete the ${this.selectionQuotas.selected.length} selected quotas?`
+                : "Are you sure you want to delete the selected quota?";
+        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            minWidth: "40%",
+            disableClose: true,
+            data: { header: confirmDialogHeader, message: confirmDialogMessage }
+        });
+
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+            if (result) {
+                this.deleteQuota();
+            }
+        });
+    }
+
+    deleteQuota(): void {
+        this.loading = true;
+        let observableBatch: Observable<any>[] = [];
+        this.selectionQuotas.selected.forEach((item) => {
+            observableBatch.push(this.quotasService.deleteIdentityQuota(item.id, this.identity.address));
+        });
+
+        forkJoin(observableBatch).subscribe({
+            next: (_: any) => {
+                let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
+                this.getIdentity();
+                this.snackBar.open(successMessage, "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            error: (err: any) => {
+                this.loading = false;
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
+
+    isAllSelected() {
+        const numSelected = this.selectionQuotas.selected.length;
+        const numRows = this.identity.quotas.length;
+        return numSelected === numRows;
+    }
+
+    toggleAllRowsQuotas() {
+        if (this.isAllSelected()) {
+            this.selectionQuotas.clear();
+            return;
+        }
+
+        this.selectionQuotas.select(...this.identity.quotas);
+    }
+
+    checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {
+        if (!row || !index) {
+            return `${this.isAllSelected() ? "deselect" : "select"} all`;
+        }
+        return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+}
+
+interface MetricGroup {
+    metric: Metric;
+    isGroup: boolean;
+    tierDisabled: boolean;
 }

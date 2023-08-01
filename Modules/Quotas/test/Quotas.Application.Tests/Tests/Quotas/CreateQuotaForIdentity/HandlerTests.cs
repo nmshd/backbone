@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
@@ -11,10 +10,11 @@ using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
+namespace Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
 
 public class HandlerTests
 {

@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Relationships.ConsumerApi.Controllers;
+namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
@@ -77,7 +77,7 @@ public class RelationshipsController : ApiControllerBase
         [FromQuery] string? status,
         [FromQuery] string? type, CancellationToken cancellationToken)
     {
-        var request = new ListChangesQuery(
+        var query = new ListChangesQuery(
             paginationFilter,
             ids,
             createdAt,
@@ -89,13 +89,13 @@ public class RelationshipsController : ApiControllerBase
             completedBy,
             onlyPeerChanges ?? false);
 
-        request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        query.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var changes = await _mediator.Send(request, cancellationToken);
+        var changes = await _mediator.Send(query, cancellationToken);
         return Paged(changes);
     }
 

@@ -243,6 +243,21 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("TierQuotaDefinitions", (string)null);
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tokens.Token", b =>
+                {
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("Tokens", "Tokens", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", null)
