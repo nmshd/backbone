@@ -65,12 +65,6 @@ public class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = basicTier.Id;
     }
 
-    [Given(@"a non-existing Tier t")]
-    public void GivenANon_ExistingTierT()
-    {
-        _existingTierId = "TIR00000000000000000";
-    }
-
     [When(@"a GET request is sent to the /Tiers endpoint")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
@@ -113,6 +107,12 @@ public class TiersStepDefinitions : BaseStepDefinitions
     public async Task WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
     {
         _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint with an inexistent id")]
+    public async Task WhenADELETERequestIsSentToTheTiersT_IdEndpointWithAnInexistentId()
+    {
+        _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, "TIR00000000000000000");
     }
 
     [Then(@"the response contains a paginated list of Tiers")]
