@@ -55,6 +55,10 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierNameAlreadyExists", "A tier with the given tier name already exists. Try a different tier name.");
         }
+        public static ApplicationError InvalidTierId()
+        {
+            return new ApplicationError("error.platform.validation.device.tierIdInvalid", "The passed tier ID is not valid.");
+        }
 
         internal static ApplicationError BasicTierCannotBeDeleted()
         {

@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 
@@ -7,8 +6,8 @@ public class DeleteTierCommand : IRequest
 {
     public DeleteTierCommand(string tierId)
     {
-        TierId = TierId.Create(tierId).Value;
+        TierId = tierId;
     }
 
-    public TierId TierId { get; set; }
+    public string TierId { get; set; }
 }

@@ -48,10 +48,9 @@ public class TiersRepository : ITiersRepository
         return tierQuotaDefinition;
     }
 
-    public async Task Remove(Tier tier)
+    public async Task RemoveById(TierId tierId)
     {
-        _tiers.Remove(tier);
-        await _dbContext.SaveChangesAsync();
+        await _tiers.Where(t => t.Id == tierId).ExecuteDeleteAsync();
     }
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)

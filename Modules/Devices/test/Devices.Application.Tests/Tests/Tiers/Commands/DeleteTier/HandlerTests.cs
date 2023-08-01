@@ -28,7 +28,7 @@ public class HandlerTests
     public async Task Cannot_Delete_Basic_Tier()
     {
         // Arrange
-        var basicTier = new Tier(TierName.Create(TierName.BASIC_DEFAULT_NAME).Value);
+        var basicTier = new Tier(TierName.BASIC_DEFAULT_NAME);
         A.CallTo(() => _tiersRepository.FindById(basicTier.Id, A<CancellationToken>._)).Returns(Task.FromResult(basicTier));
 
         // Act
@@ -55,7 +55,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Delete_Valid_Tier_Publishes_IntegrationEvent()
+    public async Task Publishes_TierDeletedIntegrationEvent_after_successful_deletion()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value) { Identities = new List<Identity>() };

@@ -18,7 +18,7 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
     {
         var tier = await _tiersRepository.Find(integrationEvent.Id, CancellationToken.None);
 
-        await _tiersRepository.Remove(tier);
+        await _tiersRepository.RemoveById(tier.Id);
 
         _logger.LogTrace($"Successfully deleted tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
     }
