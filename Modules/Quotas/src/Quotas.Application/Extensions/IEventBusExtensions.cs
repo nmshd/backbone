@@ -7,6 +7,7 @@ using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.Relationshi
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
@@ -30,5 +31,6 @@ public static class IEventBusExtensions
         eventBus.Subscribe<FileUploadedIntegrationEvent, FileUploadedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<TokenCreatedIntegrationEvent, TokenCreatedIntegrationEventHandler>();
     }
 }
