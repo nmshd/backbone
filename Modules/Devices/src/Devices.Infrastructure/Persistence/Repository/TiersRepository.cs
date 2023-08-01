@@ -50,7 +50,7 @@ public class TiersRepository : ITiersRepository
     {
         var dto = await _tiersDbSet
             .Select(t => new { Tier = t, Addresses = t.Identities.Select(i => i.Address) })
-            .FirstOrDefaultAsync(dto => dto.Tier.Id == tierId, cancellationToken);
+            .FirstOrDefaultAsync(dto => dto.Tier.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
 
         var tier = dto.Tier;
         tier.IdentityAddresses = dto.Addresses.AsList();
