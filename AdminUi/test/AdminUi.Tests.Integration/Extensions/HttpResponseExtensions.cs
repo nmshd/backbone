@@ -24,5 +24,5 @@ public static class HttpResponseExtensions
     {
         JsonValidators.ValidateJsonSchema<ResponseContent<T>>(response.RawContent!, out var errors)
             .Should().BeTrue($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
-    }   
+    }
 }
