@@ -55,6 +55,13 @@ BEGIN
 	CREATE LOGIN quotas WITH PASSWORD = 'Passw0rd'
 	PRINT 'Login "quotas" created' ;
 END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
+WHERE name = 'AdminUi')
+BEGIN
+	CREATE LOGIN AdminUi WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "AdminUi" created' ;
+END
 GO
 
 IF NOT (EXISTS (SELECT name
@@ -200,7 +207,15 @@ BEGIN
 	CREATE USER quotas FOR LOGIN quotas	WITH DEFAULT_SCHEMA = Quotas
 	PRINT 'User "Quotas" created' ;
 END
-	
+
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'AdminUi')
+BEGIN
+	CREATE USER AdminUi FOR LOGIN AdminUi WITH DEFAULT_SCHEMA = Quotas
+	PRINT 'User "AdminUi" created' ;
+END
+
 GO
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -237,5 +252,13 @@ GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
 GRANT SELECT ON SCHEMA::Messages TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
 GRANT SELECT ON SCHEMA::Relationships TO quotas
+GRANT SELECT ON SCHEMA::Relationships TO AdminUi
+GRANT SELECT ON SCHEMA::Files TO AdminUi
+GRANT SELECT ON SCHEMA::Messages TO AdminUi
+GRANT SELECT ON SCHEMA::Challenges TO AdminUi
+GRANT SELECT ON SCHEMA::Synchronization TO AdminUi
+GRANT SELECT ON SCHEMA::Devices TO AdminUi
+GRANT SELECT ON SCHEMA::Tokens TO AdminUi
+GRANT SELECT ON SCHEMA::Quotas TO AdminUi
 PRINT 'Finished changing authorizations' ;
 GO

@@ -117,6 +117,16 @@ BEGIN
 END
 $$;
 
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'AdminUi') THEN
+      CREATE USER AdminUi WITH password 'Passw0rd';
+      RAISE NOTICE 'User "AdminUi" created';
+   END IF;
+END
+$$;
+
 ALTER USER challenges SET search_path TO "Challenges";
 ALTER USER devices SET search_path TO "Devices";
 ALTER USER files SET search_path TO "Files";
@@ -154,6 +164,23 @@ GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO quotas;
 
 GRANT USAGE ON SCHEMA "Relationships" TO quotas;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Relationships" TO quotas;
+
+GRANT USAGE ON SCHEMA "Challenges" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO AdminUi;
+GRANT USAGE ON SCHEMA "Synchronization" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Synchronization" TO AdminUi;
+GRANT USAGE ON SCHEMA "Messages" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Messages" TO AdminUi;
+GRANT USAGE ON SCHEMA "Devices" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Devices" TO AdminUi;
+GRANT USAGE ON SCHEMA "Tokens" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO AdminUi;
+GRANT USAGE ON SCHEMA "Relationships" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Relationships" TO AdminUi;
+GRANT USAGE ON SCHEMA "Files" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO AdminUi;
+GRANT USAGE ON SCHEMA "Quotas" TO AdminUi;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Quotas" TO AdminUi;
 
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
 (
@@ -229,6 +256,7 @@ GRANT tokens TO "nmshdAdmin";
 GRANT relationships TO "nmshdAdmin";
 GRANT files TO "nmshdAdmin";
 GRANT quotas TO "nmshdAdmin";
+GRANT AdminUi TO "nmshdAdmin";
 
 ALTER SCHEMA "Challenges" OWNER TO challenges;
 ALTER SCHEMA "Devices" OWNER TO devices;
