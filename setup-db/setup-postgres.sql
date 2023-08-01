@@ -155,6 +155,9 @@ GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO quotas;
 GRANT USAGE ON SCHEMA "Relationships" TO quotas;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Relationships" TO quotas;
 
+GRANT USAGE ON SCHEMA "Tokens" TO quotas;
+GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO quotas;
+
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
 (
     "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
