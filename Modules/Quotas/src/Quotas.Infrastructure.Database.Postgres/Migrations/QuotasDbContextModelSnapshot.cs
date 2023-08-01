@@ -245,17 +245,12 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tokens.Token", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.HasKey("Id");
 
                     b.ToTable("Tokens", "Tokens", t =>
                         {
