@@ -1,5 +1,7 @@
-﻿using AdminUi.Tests.Integration.Models;
+﻿using System.Net;
+using AdminUi.Tests.Integration.Models;
 using AdminUi.Tests.Integration.Support;
+using FluentAssertions.Numeric;
 
 namespace AdminUi.Tests.Integration.Extensions;
 
@@ -24,5 +26,10 @@ public static class HttpResponseExtensions
     {
         JsonValidators.ValidateJsonSchema<ResponseContent<T>>(response.RawContent!, out var errors)
             .Should().BeTrue($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
+    }
+
+    public static AndConstraint<NumericAssertions<int>> Be(this NumericAssertions<int> it, HttpStatusCode statusCode)
+    {
+        return it.Be(statusCode);
     }
 }

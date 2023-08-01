@@ -27,7 +27,7 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
         return Task.FromResult(_tierQuotaDefinition);
     }
 
-    public Task Remove(Tier tier)
+    public Task RemoveById(TierId tierId)
     {
         throw new NotImplementedException();
     }

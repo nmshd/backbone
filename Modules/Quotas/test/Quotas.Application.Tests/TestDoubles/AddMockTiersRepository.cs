@@ -24,7 +24,7 @@ public class AddMockTiersRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task Remove(Tier tier)
+    public Task RemoveById(TierId tierId)
     {
         throw new NotImplementedException();
     }

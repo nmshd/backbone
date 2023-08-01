@@ -31,7 +31,7 @@ public class TierDeletedIntegrationEventHandlerTests
         await handler.Handle(tierDeletedIntegrationEvent);
 
         // Assert
-        A.CallTo(() => tiersRepository.Remove(tier)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => tiersRepository.RemoveById(tier.Id)).MustHaveHappenedOnceExactly();
     }
 
     private TierDeletedIntegrationEventHandler CreateHandler(ITiersRepository tiersRepository)

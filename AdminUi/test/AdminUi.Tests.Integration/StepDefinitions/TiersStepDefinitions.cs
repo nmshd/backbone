@@ -1,3 +1,4 @@
+using System.Net;
 using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
@@ -40,7 +41,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
         var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
+        actualStatusCode.Should().Be(HttpStatusCode.Created);
         _existingTierName = response.Content.Result!.Name;
         _existingTierId = response.Content.Result!.Id;
     }
@@ -57,7 +58,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     {
         var response = await _tiersApi.GetTiers(_requestConfiguration);
         var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(200);
+        actualStatusCode.Should().Be(HttpStatusCode.OK);
         var basicTier = response.Content.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
         _existingTierId = basicTier.Id;
