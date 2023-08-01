@@ -1,7 +1,8 @@
 .mat-column-address,
 .mat-column-clientId,
-.mat-column-publicKey {
-    width: 25%;
+.mat-column-publicKey,
+.mat-column-actions {
+    width: 20%;
     word-break: break-all;
 }
 
