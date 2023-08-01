@@ -6,6 +6,7 @@ using Backbone.Modules.Tokens.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
@@ -36,7 +37,9 @@ public class HandlerTests
         };
 
         var tokenRepository = A.Fake<ITokensRepository>();
-        A.CallTo(() => tokenRepository.Add(A<Token>._)).Returns(null);
+        A.CallTo(() => tokenRepository.Add(A<Token>._)).Returns(Task.CompletedTask);
+        A.CallTo(() => _userContext.GetAddress()).Returns("some-identity-address");
+        A.CallTo(() => _userContext.GetDeviceId()).Returns(DeviceId.Parse("DVCsomedeviceid12345"));
 
         var handler = CreateHandler(tokenRepository);
 
