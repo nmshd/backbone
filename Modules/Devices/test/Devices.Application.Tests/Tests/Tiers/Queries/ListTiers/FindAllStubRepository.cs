@@ -42,4 +42,9 @@ public class FindAllStubRepository : ITiersRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<int> GetIdentitiesCount(Tier tier, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

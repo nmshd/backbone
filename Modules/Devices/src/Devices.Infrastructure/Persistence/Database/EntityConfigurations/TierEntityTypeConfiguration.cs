@@ -10,6 +10,5 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
     {
         builder.HasKey(x => x.Id);
         builder.HasIndex(x => x.Name).IsUnique();
-        builder.Ignore(x => x.IdentityAddresses);
     }
 }
