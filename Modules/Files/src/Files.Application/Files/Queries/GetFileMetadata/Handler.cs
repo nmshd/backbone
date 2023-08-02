@@ -19,10 +19,7 @@ public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
 
     public async Task<FileMetadataDTO> Handle(GetFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(request.Id, cancellationToken, fillContent: false);
-
-        if (file == null) throw new NotFoundException(nameof(File));
-
+        var file = await _filesRepository.Find(request.Id, cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
         return _mapper.Map<FileMetadataDTO>(file);
     }
 }
