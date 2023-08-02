@@ -38,9 +38,11 @@ public class Handler : IRequestHandler<DeleteTierCommand>
             throw new ApplicationException(ApplicationErrors.Devices.BasicTierCannotBeDeleted());
         }
 
-        if (tier.IdentityAddresses.Count > 0)
+        var identitiesCount = await _tiersRepository.GetIdentitiesCount(tier, cancellationToken);
+
+        if (identitiesCount > 0)
         {
-            throw new ApplicationException(ApplicationErrors.Devices.UsedTierCannotBeDeleted(tier.IdentityAddresses.Count));
+            throw new ApplicationException(ApplicationErrors.Devices.UsedTierCannotBeDeleted(identitiesCount));
         }
 
         await _tiersRepository.Remove(tier);

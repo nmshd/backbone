@@ -34,6 +34,11 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<int> GetIdentitiesCount(Tier tier, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Identities.CountAsync(i => i.TierId == tier.Id, cancellationToken);
+    }
+
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
@@ -48,14 +53,7 @@ public class TiersRepository : ITiersRepository
 
     public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
-        var dto = await _tiersDbSet
-            .Select(t => new { Tier = t, Addresses = t.Identities.Select(i => i.Address) })
-            .FirstOrDefaultAsync(dto => dto.Tier.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
-
-        var tier = dto.Tier;
-        tier.IdentityAddresses = dto.Addresses.AsList();
-
-        return tier;
+        return await _tiersDbSet.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)

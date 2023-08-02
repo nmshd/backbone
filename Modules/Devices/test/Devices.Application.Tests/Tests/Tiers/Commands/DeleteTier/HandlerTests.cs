@@ -44,9 +44,10 @@ public class HandlerTests
     {
         // Arrange
         var someIdentity = TestDataGenerator.CreateIdentity();
-        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress> { TestDataGenerator.CreateRandomIdentityAddress() } };
+        var tier = new Tier(TierName.Create("tier-name").Value);
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
+        A.CallTo(() => _tiersRepository.GetIdentitiesCount(tier, A<CancellationToken>._)).Returns(Task.FromResult(1));
 
         // Act
         var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
@@ -59,9 +60,10 @@ public class HandlerTests
     public async Task Publishes_TierDeletedIntegrationEvent_after_successful_deletion()
     {
         // Arrange
-        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress>() };
+        var tier = new Tier(TierName.Create("tier-name").Value);
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
+        A.CallTo(() => _tiersRepository.GetIdentitiesCount(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
         // Act
         await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);

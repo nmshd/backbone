@@ -11,9 +11,5 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
     {
         builder.HasKey(x => x.Address);
         builder.Property(x => x.ClientId).HasMaxLength(200);
-
-        // When migrating from an old version, an Identity may not be associated with a tier yet,
-        // which is why the foreign key column is marked as not required.
-        builder.HasOne<Tier>().WithMany(x => x.Identities).HasForeignKey(x => x.TierId).IsRequired(false);
     }
 }
