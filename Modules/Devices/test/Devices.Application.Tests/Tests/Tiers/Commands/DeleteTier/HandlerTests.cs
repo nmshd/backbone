@@ -44,7 +44,7 @@ public class HandlerTests
     {
         // Arrange
         var someIdentity = TestDataGenerator.CreateIdentity();
-        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress>() { TestDataGenerator.CreateRandomIdentityAddress() } };
+        var tier = new Tier(TierName.Create("tier-name").Value) { IdentityAddresses = new List<IdentityAddress> { TestDataGenerator.CreateRandomIdentityAddress() } };
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
 
