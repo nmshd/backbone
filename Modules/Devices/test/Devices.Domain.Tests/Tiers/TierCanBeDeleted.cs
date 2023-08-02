@@ -20,7 +20,7 @@ public class CanBeDeletedTests
     }
 
     [Fact]
-    public void Tier_with_related_identities_Cannot_be_deleted()
+    public void Tier_with_related_identities_cannot_be_deleted()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
