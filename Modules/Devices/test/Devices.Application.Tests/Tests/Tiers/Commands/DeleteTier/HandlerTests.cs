@@ -26,7 +26,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Cannot_delete_tier_if_CanBeDeleted_check_does_not_return_null()
+    public async Task Cannot_delete_tier_if_CanBeDeleted_returns_an_error()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
