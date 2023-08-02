@@ -2,7 +2,6 @@
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 

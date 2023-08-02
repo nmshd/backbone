@@ -29,16 +29,17 @@ public class HandlerTests
     public async Task Cannot_delete_tier_if_CanBeDeleted_check_does_not_return_null()
     {
         // Arrange
-        var basicTier = new Tier(TierName.Create("tier-name").Value);
+        var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(basicTier.Id, A<CancellationToken>._)).Returns(Task.FromResult(basicTier));
-        A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(basicTier, A<CancellationToken>._)).Returns(1);
+        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
+        A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
 
         // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand(basicTier.Id), CancellationToken.None);
+        var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
         await acting.Should().ThrowAsync<DomainException>();
+        A.CallTo(() => _tiersRepository.Remove(tier)).MustNotHaveHappened();
     }
 
     [Fact]
