@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
 public class CanBeDeletedTests
 {
     [Fact]
-    public void Tier_with_name_Basic_Cannot_be_deleted()
+    public void Basic_Tier_cannot_be_deleted()
     {
         // Arrange
         var tier = new Tier(TierName.BASIC_DEFAULT_NAME);
