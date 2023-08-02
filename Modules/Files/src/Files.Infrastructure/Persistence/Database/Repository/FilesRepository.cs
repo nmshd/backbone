@@ -38,13 +38,18 @@ public class FilesRepository : IFilesRepository
 
     }
 
-    public async Task<File> Find(FileId fileId, bool track = false, bool fillContent = true)
+    public async Task<File> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
-        var file = (track ? _files : _readOnlyFiles)
+        var file = await (track ? _files : _readOnlyFiles)
             .WithId(fileId)
             .NotExpired()
             .NotDeleted()
-            .FirstOrDefault();
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (file == null)
+        {
+            return null;
+        }
 
         if (fillContent)
         {
