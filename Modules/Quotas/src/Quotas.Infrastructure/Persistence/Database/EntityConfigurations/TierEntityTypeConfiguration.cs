@@ -7,6 +7,7 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
 {
     public void Configure(EntityTypeBuilder<Tier> builder)
     {
+        builder.Property(x => x.Id);
         builder.Property(x => x.Name).IsUnicode(true).IsFixedLength(false).HasMaxLength(30);
     }
 }
