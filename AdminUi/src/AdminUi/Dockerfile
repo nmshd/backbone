@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src
 COPY ["AdminUi/src/AdminUi/AdminUi.csproj", "AdminUi/src/AdminUi/"]
+COPY ["AdminUi/src/AdminUi.Infrastructure/AdminUi.Infrastructure.csproj", "AdminUi/src/AdminUi.Infrastructure/"]
 COPY ["AdminUi/src/AdminUi.Infrastructure.Database.SqlServer/AdminUi.Infrastructure.Database.SqlServer.csproj", "AdminUi/src/AdminUi.Infrastructure.Database.SqlServer/"]
 COPY ["AdminUi/src/AdminUi.Infrastructure.Database.Postgres/AdminUi.Infrastructure.Database.Postgres.csproj", "AdminUi/src/AdminUi.Infrastructure.Database.Postgres/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
