@@ -107,7 +107,7 @@ public class IdentitiesController : ApiControllerBase
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var identityOverviews = await _adminUiDbContext.IdentityOverviews.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
-        return Ok(identityOverviews);
+        return Paged(new PagedResponse<IdentityOverviewDTO>(identityOverviews.ItemsOnPage, paginationFilter, identityOverviews.TotalNumberOfItems));
     }
 }
 
