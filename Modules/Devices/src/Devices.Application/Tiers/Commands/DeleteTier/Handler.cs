@@ -20,18 +20,12 @@ public class Handler : IRequestHandler<DeleteTierCommand>
 
     public async Task Handle(DeleteTierCommand request, CancellationToken cancellationToken)
     {
-        TierId tierId;
-
-        try
-        {
-            tierId = TierId.Create(request.TierId).Value;
-        }
-        catch (Exception)
-        {
+        var tierId = TierId.Create(request.TierId);
+        
+        if (tierId.IsFailure)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
-        }
 
-        var tier = await _tiersRepository.FindById(tierId, cancellationToken);
+        var tier = await _tiersRepository.FindById(tierId.Value, cancellationToken);
 
         if (tier.IsBasicTier())
         {
