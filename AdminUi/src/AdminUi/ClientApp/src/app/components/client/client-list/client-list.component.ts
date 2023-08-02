@@ -152,7 +152,8 @@ export class ClientListComponent {
     openChangeSecretDialog(clientId: any) {
         let dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
             data: { clientId: clientId },
-            minWidth: "50%"
+            minWidth: "50%",
+            maxWidth: "100%"
         });
     }
 }

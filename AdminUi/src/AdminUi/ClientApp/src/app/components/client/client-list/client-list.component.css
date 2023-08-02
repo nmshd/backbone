@@ -1,8 +1,7 @@
 .mat-column-address,
 .mat-column-clientId,
-.mat-column-publicKey,
-.mat-column-actions {
-    width: 20%;
+.mat-column-publicKey {
+    width: 25%;
     word-break: break-all;
 }
 
@@ -76,7 +75,7 @@
     }
 
     .mat-mdc-table .mat-mdc-cell:before {
-        content: attr(data-label) ":";
+        content: attr(data-label) "";
         float: left;
         font-weight: 500;
     }
