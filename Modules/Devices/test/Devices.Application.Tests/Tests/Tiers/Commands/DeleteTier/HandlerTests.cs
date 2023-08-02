@@ -3,9 +3,9 @@ using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Application.Tests.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -26,50 +26,36 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Cannot_Delete_Basic_Tier()
+    public async Task Cannot_delete_tier_if_CanBeDeleted_check_does_not_return_null()
     {
         // Arrange
-        var basicTier = new Tier(TierName.BASIC_DEFAULT_NAME);
+        var basicTier = new Tier(TierName.Create("tier-name").Value);
+
         A.CallTo(() => _tiersRepository.FindById(basicTier.Id, A<CancellationToken>._)).Returns(Task.FromResult(basicTier));
+        A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(basicTier, A<CancellationToken>._)).Returns(1);
 
         // Act
         var acting = async () => await _handler.Handle(new DeleteTierCommand(basicTier.Id), CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<ApplicationException>().WithErrorCode("error.platform.validation.device.basicTierCannotBeDeleted");
+        await acting.Should().ThrowAsync<DomainException>();
     }
 
     [Fact]
-    public async Task Cannot_Delete_Tier_With_Associated_Identities()
-    {
-        // Arrange
-        var someIdentity = TestDataGenerator.CreateIdentity();
-        var tier = new Tier(TierName.Create("tier-name").Value);
-
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
-        A.CallTo(() => _tiersRepository.GetIdentitiesCount(tier, A<CancellationToken>._)).Returns(Task.FromResult(1));
-
-        // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
-
-        // Assert
-        await acting.Should().ThrowAsync<ApplicationException>().WithErrorCode("error.platform.validation.device.usedTierCannotBeDeleted");
-    }
-
-    [Fact]
-    public async Task Publishes_TierDeletedIntegrationEvent_after_successful_deletion()
+    public async Task Publishes_TierDeletedIntegrationEvent_and_calls_Remove_after_successful_deletion()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
         A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
-        A.CallTo(() => _tiersRepository.GetIdentitiesCount(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
+        A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
         // Act
         await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<TierDeletedIntegrationEvent>._)).MustHaveHappened();
+        A.CallTo(() => _tiersRepository.Remove(tier)).MustHaveHappenedOnceExactly();
     }
 
     private Handler CreateHandler()

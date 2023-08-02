@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -21,22 +22,19 @@ public class Handler : IRequestHandler<DeleteTierCommand>
     public async Task Handle(DeleteTierCommand request, CancellationToken cancellationToken)
     {
         var tierId = TierId.Create(request.TierId);
-        
+
         if (tierId.IsFailure)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
 
         var tier = await _tiersRepository.FindById(tierId.Value, cancellationToken);
 
-        if (tier.IsBasicTier())
-        {
-            throw new ApplicationException(ApplicationErrors.Devices.BasicTierCannotBeDeleted());
-        }
+        var identitiesCount = await _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, cancellationToken);
 
-        var identitiesCount = await _tiersRepository.GetIdentitiesCount(tier, cancellationToken);
+        var impediment = tier.CanBeDeleted(identitiesCount);
 
-        if (identitiesCount > 0)
+        if (impediment != null)
         {
-            throw new ApplicationException(ApplicationErrors.Devices.UsedTierCannotBeDeleted(identitiesCount));
+            throw new DomainException(impediment);
         }
 
         await _tiersRepository.Remove(tier);

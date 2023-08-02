@@ -12,5 +12,5 @@ public interface ITiersRepository
     Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
     Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken);
     Task Remove(Tier tier);
-    Task<int> GetIdentitiesCount(Tier tier, CancellationToken cancellationToken);
+    Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken);
 }

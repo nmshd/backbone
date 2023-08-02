@@ -34,7 +34,7 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> GetIdentitiesCount(Tier tier, CancellationToken cancellationToken)
+    public async Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken)
     {
         return await _dbContext.Identities.CountAsync(i => i.TierId == tier.Id, cancellationToken);
     }

@@ -38,13 +38,14 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Remove(Tier tier)
     {
         throw new NotImplementedException();
     }
 
-    public Task<int> GetIdentitiesCount(Tier tier, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }
