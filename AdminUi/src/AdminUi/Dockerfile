@@ -37,7 +37,7 @@ RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/
 
 FROM build AS publish
 
-RUN apt update && apt upgrade 
+RUN apt update && apt upgrade --yes
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt install -y nodejs
 RUN npm i -g @angular/cli
 

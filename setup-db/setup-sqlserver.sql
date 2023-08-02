@@ -270,5 +270,6 @@ GRANT SELECT ON SCHEMA::Devices TO adminUi
 GRANT SELECT ON SCHEMA::Tokens TO adminUi
 GRANT SELECT ON SCHEMA::Quotas TO adminUi
 GRANT CREATE VIEW TO adminUi
+GRANT SELECT ON SCHEMA::Tokens TO quotas
 PRINT 'Finished changing authorizations' ;
 GO

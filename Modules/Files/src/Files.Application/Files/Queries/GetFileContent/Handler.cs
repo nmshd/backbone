@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
@@ -14,8 +15,7 @@ public class Handler : IRequestHandler<GetFileContentQuery, GetFileContentRespon
 
     public async Task<GetFileContentResponse> Handle(GetFileContentQuery request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(request.Id);
-
+        var file = await _filesRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(File));
         return new GetFileContentResponse()
         {
             FileContent = file.Content
