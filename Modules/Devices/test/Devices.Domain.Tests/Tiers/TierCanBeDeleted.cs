@@ -12,7 +12,7 @@ public class CanBeDeletedTests
         var tier = new Tier(TierName.BASIC_DEFAULT_NAME);
 
         // Act
-        var result = tier.CanBeDeleted(0);
+        var result = tier.CanBeDeleted(identitiesCount: 0);
 
         // Assert
         result.Should().NotBeNull();
@@ -26,7 +26,7 @@ public class CanBeDeletedTests
         var tier = new Tier(TierName.Create("tier-name").Value);
 
         // Act
-        var result = tier.CanBeDeleted(1);
+        var result = tier.CanBeDeleted(identitiesCount: 1);
 
         // Assert
         result.Should().NotBeNull();
