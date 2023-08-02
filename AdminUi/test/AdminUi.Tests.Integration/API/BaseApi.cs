@@ -37,6 +37,11 @@ public class BaseApi
         return await ExecuteRequest(Method.Delete, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse<T>> Patch<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest<T>(Method.Patch, endpoint, requestConfiguration);
+    }
+
     private async Task<HttpResponse> ExecuteRequest(Method method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);

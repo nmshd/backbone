@@ -21,4 +21,9 @@ public class ClientsApi : BaseApi
     {
         return await Post<ClientDTO>($"/Clients", requestConfiguration);
     }
+
+    public async Task<HttpResponse<ClientDTO>> ChangeClientSecret(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Patch<ClientDTO>($"/Clients/{clientId}/ChangeSecret", requestConfiguration);
+    }
 }
