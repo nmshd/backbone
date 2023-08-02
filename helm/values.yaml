@@ -83,6 +83,10 @@ consumerapi:
       unhealthyThreshold: 2
 
 adminui:
+  service:
+    type: "ClusterIP"
+    port: 80
+
   nameOverride: ""
   replicas: 1
 
@@ -116,10 +120,6 @@ adminui:
         secretKeyRef:
           name: "devices-sql-connectionstring"
           key: VALUE
-
-  service:
-    type: "ClusterIP"
-    port: 80
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
