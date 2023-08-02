@@ -14,6 +14,7 @@ export class ChangeSecretDialogComponent {
     clientId: string;
     clientSecret: string;
     showSecret: boolean;
+    displayClientSecretWarning: boolean;
     loading: boolean;
     disabled: boolean;
 
@@ -22,6 +23,7 @@ export class ChangeSecretDialogComponent {
         this.clientId = "";
         this.clientSecret = "";
         this.showSecret = false;
+        this.displayClientSecretWarning = false;
         this.loading = true;
         this.disabled = false;
     }
@@ -47,6 +49,7 @@ export class ChangeSecretDialogComponent {
                 if (data && data.result) {
                     this.clientSecret = data.result.clientSecret!;
                 }
+                this.displayClientSecretWarning = true;
                 this.disabled = true;
                 this.snackBar.open("Successfully changed client secret.", "Dismiss", {
                     duration: 4000,
