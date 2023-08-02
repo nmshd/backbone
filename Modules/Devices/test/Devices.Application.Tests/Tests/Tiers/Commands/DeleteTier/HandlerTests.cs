@@ -58,7 +58,7 @@ public class HandlerTests
         await acting.Should().ThrowAsync<DomainException>();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustNotHaveHappened();
     }
-    
+
     private Handler CreateHandler()
     {
         return new Handler(_tiersRepository, _eventBus);
