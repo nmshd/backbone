@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
@@ -19,6 +20,7 @@ public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
     public async Task<FileMetadataDTO> Handle(GetFileMetadataQuery request, CancellationToken cancellationToken)
     {
         var file = await _filesRepository.Find(request.Id, fillContent: false);
+        if (file == null) throw new NotFoundException(nameof(File));
 
         return _mapper.Map<FileMetadataDTO>(file);
     }
