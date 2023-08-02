@@ -27,4 +27,9 @@ public class IdentitiesApi : BaseApi
     {
         return await Delete($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
     }
+
+    public async Task<HttpResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
+    {
+        return await Get<List<IdentityOverviewDTO>>("/Identities/Overview", requestConfiguration);
+    }
 }
