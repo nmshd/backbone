@@ -222,6 +222,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Domain", "BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{360430CE-6850-4A67-88ED-E9508B7D2658}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quotas", "Quotas", "{78F88787-78AB-41E5-9A64-6B77B6CCFBCD}"
+	ProjectSection(SolutionItems) = preProject
+		Modules\Messages\test\Messages.Jobs.SanityCheck.Tests\Tests\SanityCheckTests.cs = Modules\Messages\test\Messages.Jobs.SanityCheck.Tests\Tests\SanityCheckTests.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C258DF5B-0AE0-4DDF-9284-60671699C6ED}"
 EndProject
@@ -281,7 +284,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{30CFBC0E-D72A-4890-9647-D488273B0F68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quotas.Jobs.ConsistencyCheck", "Modules\Quotas\Quotas.Jobs.ConsistencyCheck\Quotas.Jobs.ConsistencyCheck.csproj", "{0633DB5F-3564-458C-9C28-A6FFBA2193D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Jobs.ConsistencyCheck", "Modules\Quotas\Quotas.Jobs.ConsistencyCheck\Quotas.Jobs.ConsistencyCheck.csproj", "{0633DB5F-3564-458C-9C28-A6FFBA2193D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.Jobs.ConsistencyCheck.Tests", "Modules\Quotas\test\Quotas.Jobs.ConsistencyCheck\Quotas.Jobs.ConsistencyCheck.Tests.csproj", "{8DC150DD-4C32-42A7-AA4D-0BA810171892}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -697,6 +702,10 @@ Global
 		{0633DB5F-3564-458C-9C28-A6FFBA2193D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0633DB5F-3564-458C-9C28-A6FFBA2193D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0633DB5F-3564-458C-9C28-A6FFBA2193D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DC150DD-4C32-42A7-AA4D-0BA810171892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC150DD-4C32-42A7-AA4D-0BA810171892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC150DD-4C32-42A7-AA4D-0BA810171892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC150DD-4C32-42A7-AA4D-0BA810171892}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -830,6 +839,7 @@ Global
 		{F2823AB7-4361-437F-A5C7-D06540BCB362} = {E6BFD37D-335D-4975-B661-BC67FB82F5AA}
 		{30CFBC0E-D72A-4890-9647-D488273B0F68} = {E6BFD37D-335D-4975-B661-BC67FB82F5AA}
 		{0633DB5F-3564-458C-9C28-A6FFBA2193D1} = {C258DF5B-0AE0-4DDF-9284-60671699C6ED}
+		{8DC150DD-4C32-42A7-AA4D-0BA810171892} = {4192A28C-45C0-4D20-B880-F417B8AB752F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

@@ -55,6 +55,13 @@ BEGIN
 	CREATE LOGIN quotas WITH PASSWORD = 'Passw0rd'
 	PRINT 'Login "quotas" created' ;
 END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
+WHERE name = 'readonly')
+BEGIN
+	CREATE LOGIN readonly WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "readonly" created' ;
+END
 GO
 
 IF NOT (EXISTS (SELECT name
@@ -200,6 +207,14 @@ BEGIN
 	CREATE USER quotas FOR LOGIN quotas	WITH DEFAULT_SCHEMA = Quotas
 	PRINT 'User "Quotas" created' ;
 END
+
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'readonly')
+BEGIN
+	CREATE USER readonly FOR LOGIN readonly
+	PRINT 'User "readonly" created' ;
+END
 	
 GO
 
@@ -238,5 +253,15 @@ GRANT SELECT ON SCHEMA::Messages TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
 GRANT SELECT ON SCHEMA::Relationships TO quotas
 GRANT SELECT ON SCHEMA::Tokens TO quotas
+
+GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Synchronization TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Messages TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Devices TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Tokens TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Files TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Quotas TO readonly;
+
 PRINT 'Finished changing authorizations' ;
 GO
