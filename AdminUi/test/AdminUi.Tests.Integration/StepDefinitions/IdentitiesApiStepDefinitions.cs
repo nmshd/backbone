@@ -7,10 +7,12 @@ namespace AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Identities")]
+[Scope(Feature = "GET IdentityOverviews")]
 public class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
     private HttpResponse<List<IdentitySummaryDTO>>? _identitiesResponse;
+    private HttpResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
     private HttpResponse<IdentitySummaryDTO>? _identityResponse;
     private string _existingIdentity;
 
@@ -24,6 +26,14 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     public void GivenAnIdentity()
     {
         _existingIdentity = Identities.IDENTITY_A;
+    }
+
+    [When(@"a GET request is sent to the /Identities/Overview endpoint")]
+    public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
+    {
+        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews(_requestConfiguration);
+        _identityOverviewsResponse.Should().NotBeNull();
+        _identityOverviewsResponse!.Content.Should().NotBeNull();
     }
 
     [When(@"a GET request is sent to the /Identities endpoint")]
@@ -51,10 +61,17 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the response contains a paginated list of Identities")]
-    public void ThenTheResponseContainsAList()
+    public void ThenTheResponseContainsAListOfIdentities()
     {
         _identitiesResponse!.Content.Result.Should().NotBeNull();
         _identitiesResponse!.Content.Result.Should().NotBeEmpty();
+    }
+
+    [Then(@"the response contains a paginated list of Identity Overviews")]
+    public void ThenTheResponseContainsAListOfIdentityOverviews()
+    {
+        _identityOverviewsResponse!.Content.Result.Should().NotBeNull();
+        _identityOverviewsResponse!.Content.Result.Should().NotBeEmpty();
     }
 
     [Then(@"the response contains Identity i")]

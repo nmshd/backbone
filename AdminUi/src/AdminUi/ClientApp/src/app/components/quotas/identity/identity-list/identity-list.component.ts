@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
     Identity,
+    IdentityOverview,
     IdentityService,
 } from 'src/app/services/identity-service/identity.service';
 import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
@@ -20,7 +21,7 @@ export class IdentityListComponent {
     header: string;
     headerDescription: string;
 
-    identities: Identity[];
+    identityOverviews: IdentityOverview[];
 
     totalRecords: number;
     pageSize: number;
@@ -28,7 +29,7 @@ export class IdentityListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = ["address", "clientId", "publicKey", "createdAt"];
+    displayedColumns: string[] = ["address", "lastLoginAt", "datawalletVersion", "identityVersion", "createdWithClient", "tierName", "createdAt", "numberOfDevices"];
 
     constructor(
         private router: Router,
@@ -38,7 +39,7 @@ export class IdentityListComponent {
         this.header = 'Identities';
         this.headerDescription = 'A list of existing Identities';
 
-        this.identities = [];
+        this.identityOverviews = [];
 
         this.totalRecords = 0;
         this.pageSize = 10;
@@ -53,16 +54,17 @@ export class IdentityListComponent {
 
     getPagedData() {
         this.loading = true;
-        this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
-            next: (data: PagedHttpResponseEnvelope<Identity>) => {
+        this.identityService.getIdentityOverviews(this.pageIndex, this.pageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<IdentityOverview>) => {
                 if (data) {
-                    this.identities = data.result;
+                    this.identityOverviews = data.result;
                     if (data.pagination) {
                         this.totalRecords = data.pagination.totalRecords!;
                     } else {
                         this.totalRecords = data.result.length;
                     }
                 }
+                console.log(this.identityOverviews);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -82,7 +84,11 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    editIdentity(identity: Identity) {
-        this.router.navigate([`/identities/` + identity.address]);
+    editIdentity(identityAddress: string) {
+        this.router.navigate([`/identities/` + identityAddress]);
+    }
+
+    goToTier(tierId: string) {
+        this.router.navigate([`/tiers/` + tierId]);
     }
 }

@@ -24,6 +24,14 @@ export class IdentityService {
         return this.http.get<PagedHttpResponseEnvelope<Identity>>(this.apiUrl, httpOptions);
     }
 
+    getIdentityOverviews(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
+        const httpOptions = {
+            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
+        };
+
+        return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(`${this.apiUrl}/Overview`, httpOptions);
+    }
+
     getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
     }
@@ -36,4 +44,16 @@ export interface Identity {
     createdAt: Date;
     identityVersion: string;
     quotas: Quota[];
+}
+
+export interface IdentityOverview {
+    address: string;
+    createdAt: Date;
+    lastLoginAt: Date;
+    createdWithClient: string;
+    datawalletVersion: string;
+    tierName: string;
+    tierId: string;
+    identityVersion: string;
+    numberOfDevices: number;
 }
