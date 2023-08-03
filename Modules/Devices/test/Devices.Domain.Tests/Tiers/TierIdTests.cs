@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Devices.Domain.Tests;
+using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using FluentAssertions;
 using Xunit;
 
@@ -45,7 +46,7 @@ public class TierIdTests
     public void Cannot_create_tier_id_with_invalid_id_length()
     {
         var validTierIdPrefix = "TIR";
-        var tierIdValue = validTierIdPrefix + TestDataGenerator.GenerateString(Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records.StronglyTypedId.DEFAULT_MAX_LENGTH);
+        var tierIdValue = validTierIdPrefix + TestDataGenerator.GenerateString(StronglyTypedId.DEFAULT_MAX_LENGTH);
         var tierId = TierId.Create(tierIdValue);
 
         var isTierIdInvalid = tierId.IsFailure;
@@ -62,7 +63,7 @@ public class TierIdTests
     {
         char[] invalidCharacters = { '|', '-', '!' };
         var validTierIdPrefix = "TIR";
-        var tierIdValue = TestDataGenerator.GenerateString(Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records.StronglyTypedId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX, invalidCharacters);
+        var tierIdValue = TestDataGenerator.GenerateString(StronglyTypedId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX, invalidCharacters);
         var tierId = TierId.Create(validTierIdPrefix + tierIdValue);
 
         var isTierIdInvalid = tierId.IsFailure;
