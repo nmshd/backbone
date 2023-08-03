@@ -1,9 +1,8 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
-import { Identity, IdentityOverview, IdentityService } from "src/app/services/identity-service/identity.service";
+import { IdentityOverview, IdentityService } from "src/app/services/identity-service/identity.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
@@ -27,11 +26,7 @@ export class IdentityListComponent {
 
     displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
-    constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private identityService: IdentityService
-    ) {
+    constructor(private router: Router, private snackBar: MatSnackBar, private identityService: IdentityService) {
         this.header = "Identities";
         this.headerDescription = "A list of existing Identities";
 
@@ -60,7 +55,6 @@ export class IdentityListComponent {
                         this.totalRecords = data.result.length;
                     }
                 }
-                console.log(this.identities);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {

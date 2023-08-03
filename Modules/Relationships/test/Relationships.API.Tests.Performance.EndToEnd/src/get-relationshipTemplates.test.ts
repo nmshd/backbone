@@ -1,7 +1,7 @@
+import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
 import http from "k6/http";
 import { Options } from "k6/options";
-import { describe, expect } from "https://jslib.k6.io/k6chaijs/4.3.4.2/index.js";
-import { getConfiguration, getAuthorizationHeader, Size, tomorrow } from "./utils";
+import { Size, getAuthorizationHeader, getConfiguration, tomorrow } from "./utils";
 
 const configuration = getConfiguration();
 

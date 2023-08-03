@@ -28,13 +28,7 @@ export class IdentityEditComponent {
     identity: Identity;
     loading: boolean;
 
-    constructor(
-        private route: ActivatedRoute,
-        private snackBar: MatSnackBar,
-        private dialog: MatDialog,
-        private identityService: IdentityService,
-        private quotasService: QuotasService
-    ) {
+    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private identityService: IdentityService, private quotasService: QuotasService) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
@@ -101,8 +95,14 @@ export class IdentityEditComponent {
 
         if (quotas[0].metric.key == metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
-            if (quotas[0].source == "Individual") metricGroup.tierDisabled = true;
-            if (quotas[0].source == "Tier") quotas[0].disabled = metricGroup.tierDisabled;
+            if (quotas[0].source == "Individual") {
+                metricGroup.tierDisabled = true;
+                quotas[0].deleteable = true;
+            }
+            if (quotas[0].source == "Tier") {
+                quotas[0].disabled = metricGroup.tierDisabled;
+                quotas[0].deleteable = false;
+            }
             return this.iterateQuotasByMetricGroup(quotas.slice(1), metricGroup);
         }
 
@@ -206,7 +206,7 @@ export class IdentityEditComponent {
 
     isAllSelected() {
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.source === "Individual").length : 0;
+        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.deleteable).length : 0;
         return numSelected === numRows;
     }
 
@@ -215,7 +215,7 @@ export class IdentityEditComponent {
             this.selectionQuotas.clear();
             return;
         }
-        this.selectionQuotas.select(...this.identity.quotas.filter((i) => i.source === "Individual"));
+        this.selectionQuotas.select(...this.identity.quotas.filter((i) => i.deleteable));
     }
 
     checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {
