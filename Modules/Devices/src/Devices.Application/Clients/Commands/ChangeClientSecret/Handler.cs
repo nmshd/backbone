@@ -20,6 +20,6 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
 
         await _oAuthClientsRepository.Update(client, cancellationToken);
 
-        return new ChangeClientSecretResponse(client.ClientId, client.DisplayName, clientSecret);
+        return new ChangeClientSecretResponse(client);
     }
 }

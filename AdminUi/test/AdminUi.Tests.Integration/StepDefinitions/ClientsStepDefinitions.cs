@@ -13,8 +13,10 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private readonly ClientsApi _clientsApi;
     private string _clientId;
     private string _clientSecret;
-    private HttpResponse<List<ClientDTO>>? _clientsResponse;
-    private HttpResponse<ClientDTO>? _clientResponse;
+    private HttpResponse<List<ClientDTO>>? _getClientsResponse;
+    private HttpResponse<ClientDTO>? _getClientResponse;
+    private HttpResponse<CreateClientResponse>? _createClientResponse;
+    private HttpResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
     private HttpResponse? _deleteResponse;
 
     public ClientsStepDefinitions(ClientsApi clientsApi)
@@ -61,13 +63,13 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
-        _clientsResponse = await _clientsApi.GetAllClients(_requestConfiguration);
-        _clientsResponse.Should().NotBeNull();
-        _clientsResponse.Content.Should().NotBeNull();
+        _getClientsResponse = await _clientsApi.GetAllClients(_requestConfiguration);
+        _getClientsResponse.Should().NotBeNull();
+        _getClientsResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint")]
-    public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpoint()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
+    public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
 
@@ -80,10 +82,28 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
         requestConfiguration.SetContent(changeClientSecretRequest);
 
-        _clientResponse = await _clientsApi.ChangeClientSecret(_clientId, requestConfiguration);
+        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret(_clientId, requestConfiguration);
 
-        _clientResponse.Should().NotBeNull();
-        _clientResponse.Content.Should().NotBeNull();
+        _changeClientSecretResponse.Should().NotBeNull();
+        _changeClientSecretResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with an empty new secret")]
+    public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithAnEmptySecret()
+    {
+        var changeClientSecretRequest = new ChangeClientSecretRequest()
+        {
+            NewSecret = string.Empty
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(changeClientSecretRequest);
+
+        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret(_clientId, requestConfiguration);
+
+        _changeClientSecretResponse.Should().NotBeNull();
+        _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
     [When(@"a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
@@ -98,41 +118,63 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
         requestConfiguration.SetContent(changeClientSecretRequest);
 
-        _clientResponse = await _clientsApi.ChangeClientSecret("inexistentClientId", requestConfiguration);
+        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret("inexistentClientId", requestConfiguration);
 
-        _clientResponse.Should().NotBeNull();
-        _clientResponse.Content.Should().NotBeNull();
+        _changeClientSecretResponse.Should().NotBeNull();
+        _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
-        _clientsResponse!.Content.Result.Should().NotBeNull();
-        _clientsResponse!.Content.Result.Should().NotBeEmpty();
-        _clientsResponse.AssertContentCompliesWithSchema();
+        _getClientsResponse!.Content.Result.Should().NotBeNullOrEmpty();
+        _getClientsResponse.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response contains Client c with the new client secret")]
     public void ThenTheResponseContainsAClientWithNewSecret()
     {
-        _clientResponse!.AssertHasValue();
-        _clientResponse!.AssertStatusCodeIsSuccess();
-        _clientResponse!.AssertContentTypeIs("application/json");
-        _clientResponse!.AssertContentCompliesWithSchema();
+        _changeClientSecretResponse!.AssertHasValue();
+        _changeClientSecretResponse!.AssertStatusCodeIsSuccess();
+        _changeClientSecretResponse!.AssertContentTypeIs("application/json");
+        _changeClientSecretResponse!.AssertContentCompliesWithSchema();
+        _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().Be(_clientSecret);
+    }
+
+    [Then(@"the response contains Client c with a newly generated client secret")]
+    public void ThenTheResponseContainsAClientWithNewlyGeneratedSecret()
+    {
+        _changeClientSecretResponse!.AssertHasValue();
+        _changeClientSecretResponse!.AssertStatusCodeIsSuccess();
+        _changeClientSecretResponse!.AssertContentTypeIs("application/json");
+        _changeClientSecretResponse!.AssertContentCompliesWithSchema();
+        _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().NotBeNullOrEmpty();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_clientsResponse != null)
+        if (_getClientsResponse != null)
         {
-            var actualStatusCode = (int)_clientsResponse.StatusCode;
+            var actualStatusCode = (int)_getClientsResponse.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
 
-        if (_clientResponse != null)
+        if (_getClientResponse != null)
         {
-            var actualStatusCode = (int)_clientResponse.StatusCode;
+            var actualStatusCode = (int)_getClientResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_createClientResponse != null)
+        {
+            var actualStatusCode = (int)_createClientResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_changeClientSecretResponse != null)
+        {
+            var actualStatusCode = (int)_changeClientSecretResponse.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
 
@@ -146,16 +188,28 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_clientsResponse != null)
+        if (_getClientsResponse != null)
         {
-            _clientsResponse!.Content.Error.Should().NotBeNull();
-            _clientsResponse.Content.Error!.Code.Should().Be(errorCode);
+            _getClientsResponse!.Content.Error.Should().NotBeNull();
+            _getClientsResponse.Content.Error!.Code.Should().Be(errorCode);
         }
 
-        if (_clientResponse != null)
+        if (_getClientResponse != null)
         {
-            _clientResponse!.Content.Error.Should().NotBeNull();
-            _clientResponse.Content.Error!.Code.Should().Be(errorCode);
+            _getClientResponse!.Content.Error.Should().NotBeNull();
+            _getClientResponse.Content.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_createClientResponse != null)
+        {
+            _createClientResponse!.Content.Error.Should().NotBeNull();
+            _createClientResponse.Content.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_changeClientSecretResponse != null)
+        {
+            _changeClientSecretResponse!.Content.Error.Should().NotBeNull();
+            _changeClientSecretResponse.Content.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
