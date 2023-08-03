@@ -10,6 +10,7 @@ import { ClientDTO, ClientServiceService } from "src/app/services/client-service
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
+import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
 @Component({
     selector: "app-client-list",
     templateUrl: "./client-list.component.html",
@@ -25,7 +26,7 @@ export class ClientListComponent {
     pageIndex: number;
     loading = false;
     selection = new SelectionModel<ClientDTO>(true, []);
-    displayedColumns: string[] = ["select", "clientId", "displayName"];
+    displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
 
     constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar, private clientService: ClientServiceService) {
         this.header = "Clients";
@@ -146,5 +147,13 @@ export class ClientListComponent {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selection.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+
+    openChangeSecretDialog(clientId: any) {
+        let dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
+            data: { clientId: clientId },
+            minWidth: "50%",
+            maxWidth: "100%"
+        });
     }
 }

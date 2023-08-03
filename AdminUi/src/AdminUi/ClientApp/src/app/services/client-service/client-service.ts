@@ -1,33 +1,25 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpResponseEnvelope } from 'src/app/utils/http-response-envelope';
-import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
-import { environment } from 'src/environments/environment';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+import { environment } from "src/environments/environment";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root"
 })
 export class ClientServiceService {
     apiUrl: string;
     constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + '/Clients';
+        this.apiUrl = environment.apiUrl + "/Clients";
     }
 
-    getClients(
-        pageNumber: number,
-        pageSize: number
-    ): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
+    getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
         const httpOptions = {
-            params: new HttpParams()
-                .set('PageNumber', pageNumber + 1)
-                .set('PageSize', pageSize),
+            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(
-            this.apiUrl,
-            httpOptions
-        );
+        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(this.apiUrl, httpOptions);
     }
 
     createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
@@ -36,6 +28,10 @@ export class ClientServiceService {
 
     deleteClient(clientId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/${clientId}`);
+    }
+
+    changeClientSecret(clientId: string, request: ChangeClientSecretRequest): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}/ChangeSecret`, request);
     }
 }
 
@@ -48,4 +44,8 @@ export interface Client {
     clientId?: string;
     displayName: string;
     clientSecret?: string;
+}
+
+export interface ChangeClientSecretRequest {
+    newSecret?: string;
 }
