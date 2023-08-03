@@ -29,7 +29,7 @@ export class IdentityListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = ["address", "lastLoginAt", "datawalletVersion", "identityVersion", "createdWithClient", "tierName", "createdAt", "numberOfDevices"];
+    displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
     constructor(
         private router: Router,
