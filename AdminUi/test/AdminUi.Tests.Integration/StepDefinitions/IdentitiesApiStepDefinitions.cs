@@ -50,11 +50,13 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityResponse.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains a non empty list")]
+    [Then(@"the response contains a list of Identities")]
     public void ThenTheResponseContainsANonEmptyList()
     {
         _identityOverviewsResponse!.Content.Result.Should().NotBeNull();
         _identityOverviewsResponse!.Content.Result.Should().NotBeNullOrEmpty();
+        _identityOverviewsResponse!.AssertContentTypeIs("application/json");
+        _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response contains Identity i")]
