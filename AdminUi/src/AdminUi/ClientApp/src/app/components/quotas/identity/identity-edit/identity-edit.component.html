@@ -61,7 +61,7 @@
                         </mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef="let row; let i = index">
-                        <mat-checkbox (click)="$event.stopPropagation()"
+                        <mat-checkbox *ngIf="row.source === 'Individual'" (click)="$event.stopPropagation()"
                             (change)="$event ? selectionQuotas.toggle(row) : null"
                             [checked]="selectionQuotas.isSelected(row)" color="primary"
                             [aria-label]="checkboxLabelQuotas(i, row)">

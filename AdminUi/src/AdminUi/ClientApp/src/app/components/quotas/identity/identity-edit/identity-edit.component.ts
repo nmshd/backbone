@@ -133,7 +133,9 @@ export class IdentityEditComponent {
                 if (data && data.result) {
                     this.getIdentity();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
-                        panelClass: ["snack-bar"]
+                        duration: 4000,
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
                     });
                 }
             },
@@ -198,7 +200,7 @@ export class IdentityEditComponent {
 
     isAllSelected() {
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas.length;
+        const numRows = this.identity.quotas ? this.identity.quotas.filter(i => i.source === 'Individual').length : 0;
         return numSelected === numRows;
     }
 
@@ -207,8 +209,7 @@ export class IdentityEditComponent {
             this.selectionQuotas.clear();
             return;
         }
-
-        this.selectionQuotas.select(...this.identity.quotas);
+        this.selectionQuotas.select(...this.identity.quotas.filter(i => i.source === 'Individual'));
     }
 
     checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {
