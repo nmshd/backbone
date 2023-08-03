@@ -25,6 +25,6 @@ public class IdentitiesApi : BaseApi
 
     public async Task<HttpResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
     {
-        return await Get<List<IdentityOverviewDTO>>("/Identities/Overview", requestConfiguration);
+        return await Get<List<IdentityOverviewDTO>>("/Identities", requestConfiguration);
     }
 }
