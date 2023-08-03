@@ -8,7 +8,7 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IIdentitiesRepository
 {
     #region Identities
-    Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter);
+    Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
 #nullable enable
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken);
 #nullable disable
@@ -19,7 +19,7 @@ public interface IIdentitiesRepository
     #endregion
 
     #region Devices
-    Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter);
+    Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
     #endregion

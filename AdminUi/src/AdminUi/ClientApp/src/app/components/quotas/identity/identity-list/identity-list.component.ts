@@ -21,7 +21,7 @@ export class IdentityListComponent {
     header: string;
     headerDescription: string;
 
-    identityOverviews: IdentityOverview[];
+    identities: IdentityOverview[];
 
     totalRecords: number;
     pageSize: number;
@@ -39,7 +39,7 @@ export class IdentityListComponent {
         this.header = 'Identities';
         this.headerDescription = 'A list of existing Identities';
 
-        this.identityOverviews = [];
+        this.identities = [];
 
         this.totalRecords = 0;
         this.pageSize = 10;
@@ -54,17 +54,17 @@ export class IdentityListComponent {
 
     getPagedData() {
         this.loading = true;
-        this.identityService.getIdentityOverviews(this.pageIndex, this.pageSize).subscribe({
+        this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<IdentityOverview>) => {
                 if (data) {
-                    this.identityOverviews = data.result;
+                    this.identities = data.result;
                     if (data.pagination) {
                         this.totalRecords = data.pagination.totalRecords!;
                     } else {
                         this.totalRecords = data.result.length;
                     }
                 }
-                console.log(this.identityOverviews);
+                console.log(this.identities);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {

@@ -31,10 +31,10 @@ public class TiersRepository : ITiersRepository
         return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var paginationResult = await _tiersDbSet
-            .OrderAndPaginate(d => d.Name, paginationFilter);
+            .OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
         return paginationResult;
     }
 

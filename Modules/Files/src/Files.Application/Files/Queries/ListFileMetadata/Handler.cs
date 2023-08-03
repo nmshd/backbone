@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataRe
 
     public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids, _userContext.GetAddress(), request.PaginationFilter);
+        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
 
         var items = _mapper.Map<FileMetadataDTO[]>(dbPaginationResult.ItemsOnPage);
 

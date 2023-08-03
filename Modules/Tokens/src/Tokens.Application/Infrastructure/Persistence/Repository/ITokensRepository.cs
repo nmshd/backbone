@@ -9,7 +9,7 @@ public interface ITokensRepository
 {
     Task Add(Token token);
     Task<Token> Find(TokenId tokenId);
-    Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter);
-    Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter);
+    Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false);
 }

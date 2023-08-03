@@ -16,20 +16,12 @@ export class IdentityService {
         this.apiUrl = environment.apiUrl + "/Identities";
     }
 
-    getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<Identity>> {
+    getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<Identity>>(this.apiUrl, httpOptions);
-    }
-
-    getIdentityOverviews(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
-        const httpOptions = {
-            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
-        };
-
-        return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(`${this.apiUrl}/Overview`, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(this.apiUrl, httpOptions);
     }
 
     getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {

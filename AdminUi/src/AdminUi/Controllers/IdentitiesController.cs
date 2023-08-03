@@ -2,7 +2,6 @@
 using AdminUi.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
@@ -40,7 +39,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListIdentitiesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<IdentityOverview>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetIdentities([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
@@ -48,8 +47,8 @@ public class IdentitiesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter), cancellationToken);
-        return Paged(identities);
+        var identityOverviews = await _adminUiDbContext.IdentityOverviews.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+        return Paged(new PagedResponse<IdentityOverview>(identityOverviews.ItemsOnPage, paginationFilter, identityOverviews.TotalNumberOfItems));
     }
 
     [HttpPost("{identityAddress}/Quotas")]
@@ -94,20 +93,6 @@ public class IdentitiesController : ApiControllerBase
         };
 
         return Ok(response);
-    }
-
-    [HttpGet("Overview")]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<IdentityOverviewDTO>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetIdentitiesOverview([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var identityOverviews = await _adminUiDbContext.IdentityOverviews.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
-        return Paged(new PagedResponse<IdentityOverviewDTO>(identityOverviews.ItemsOnPage, paginationFilter, identityOverviews.TotalNumberOfItems));
     }
 }
 

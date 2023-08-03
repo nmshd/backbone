@@ -9,7 +9,7 @@ namespace Backbone.Modules.Synchronization.Application.Infrastructure;
 public interface ISynchronizationDbContext : IDbContext
 {
     Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity,
-        long? localIndex, PaginationFilter paginationFilter);
+        long? localIndex, PaginationFilter paginationFilter, CancellationToken cancellationToken);
 
     Task<Datawallet> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken);
     Task<Datawallet> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken);

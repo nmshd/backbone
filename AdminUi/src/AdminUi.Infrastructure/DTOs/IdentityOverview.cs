@@ -1,6 +1,6 @@
 ﻿namespace AdminUi.Infrastructure.DTOs;
 
-public class IdentityOverviewDTO
+public class IdentityOverview
 {
     public string Address { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -37,7 +37,7 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
         if (supportedDatawalletVersion < (datawallet?.Version ?? 0))
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
 
-        var dbPaginationResult = await _dbContext.GetDatawalletModifications(_activeIdentity, request.LocalIndex, request.PaginationFilter);
+        var dbPaginationResult = await _dbContext.GetDatawalletModifications(_activeIdentity, request.LocalIndex, request.PaginationFilter, cancellationToken);
 
         var dtos = _mapper.Map<IEnumerable<DatawalletModificationDTO>>(dbPaginationResult.ItemsOnPage).ToArray();
 

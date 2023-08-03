@@ -23,7 +23,7 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter)
+    public Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         return Task.FromResult(_tiers);
     }

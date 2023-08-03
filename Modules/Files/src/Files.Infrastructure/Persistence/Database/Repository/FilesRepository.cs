@@ -60,7 +60,7 @@ public class FilesRepository : IFilesRepository
         return file;
     }
 
-    public async Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _dbContext
             .SetReadOnly<File>()
@@ -71,6 +71,6 @@ public class FilesRepository : IFilesRepository
         if (fileIds.Any())
             query = query.WithIdIn(fileIds);
 
-        return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
 }

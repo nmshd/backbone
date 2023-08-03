@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AdminUi.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<IdentityOverviewDTO>
+public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<IdentityOverview>
 {
-    public void Configure(EntityTypeBuilder<IdentityOverviewDTO> builder)
+    public void Configure(EntityTypeBuilder<IdentityOverview> builder)
     {
         builder.ToView("IdentityOverviews");
-        builder.HasKey(i => i.Address);
+        builder.HasNoKey();
     }
 }
 

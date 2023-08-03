@@ -10,7 +10,7 @@ public interface ITiersRepository
 
     Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken);
 
-    Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter);
+    Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
 
     Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken);
 }
