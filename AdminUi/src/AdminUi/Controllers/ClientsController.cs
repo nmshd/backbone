@@ -1,8 +1,10 @@
-﻿using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
+using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
+using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +34,16 @@ public class ClientsController : ApiControllerBase
         return Created(createdClient);
     }
 
+    [HttpPatch("{clientId}/ChangeSecret")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChangeClientSecretResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeClientSecret([FromRoute] string clientId, [FromBody] ChangeClientSecretRequest request, CancellationToken cancellationToken)
+    {
+        var changedClient = await _mediator.Send(new ChangeClientSecretCommand(clientId, request.NewSecret), cancellationToken);
+        return Ok(changedClient);
+    }
+
     [HttpDelete("{clientId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -42,3 +54,7 @@ public class ClientsController : ApiControllerBase
     }
 }
 
+public class ChangeClientSecretRequest
+{
+    public string NewSecret { get; set; }
+}

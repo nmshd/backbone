@@ -24,6 +24,11 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return clients;
     }
 
+    public async Task<OpenIddictEntityFrameworkCoreApplication> Find(string clientId, CancellationToken cancellationToken)
+    {
+        return await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+    }
+
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
     {
         var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
@@ -43,6 +48,11 @@ public class OAuthClientsRepository : IOAuthClientsRepository
                 Permissions.GrantTypes.Password
             }
         }, cancellationToken);
+    }
+
+    public async Task Update(OpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
+    {
+        await _applicationManager.UpdateAsync(client, cancellationToken);
     }
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)

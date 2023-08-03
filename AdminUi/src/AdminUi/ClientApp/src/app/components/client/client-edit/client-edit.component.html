@@ -1,13 +1,12 @@
 <div class="card-header">
-    <h2 class="header-title ">{{ headerCreate }}</h2>
+    <h2 class="header-title">{{ headerCreate }}</h2>
     <p class="header-description">{{ headerDescription }}</p>
 </div>
-<div [ngClass]="{'disabled-container': loading}">
+<div [ngClass]="{ 'disabled-container': loading }">
     <mat-card>
         <mat-card-content class="form-card">
             <div *ngIf="loading" class="loading">
-                <mat-progress-spinner color="primary" mode="indeterminate">
-                </mat-progress-spinner>
+                <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
             </div>
             <div class="form-details">
                 <mat-form-field class="form-field">
@@ -22,20 +21,17 @@
                 </mat-form-field>
                 <mat-form-field class="form-field">
                     <mat-label>Client Secret</mat-label>
-                    <input [type]="showPassword ? 'text' : 'password'" matInput [(ngModel)]="client.clientSecret"
-                        [disabled]="disabled" />
-                    <button matSuffix mat-icon-button (click)="togglePasswordVisibility()" style="cursor: pointer;">
+                    <input [type]="showPassword ? 'text' : 'password'" matInput [(ngModel)]="client.clientSecret" [disabled]="disabled" />
+                    <button matSuffix mat-icon-button (click)="togglePasswordVisibility()" style="cursor: pointer">
                         <mat-icon>visibility</mat-icon>
                     </button>
-                    <button matSuffix mat-icon-button [disabled]="client.clientSecret! === ''"
-                        [cdkCopyToClipboard]="client.clientSecret!" style="cursor: pointer;">
+                    <button matSuffix mat-icon-button [disabled]="client.clientSecret! === ''" [cdkCopyToClipboard]="client.clientSecret!" style="cursor: pointer">
                         <mat-icon>file_copy</mat-icon>
                     </button>
                     <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
                 <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
-                    <span class="client-secret-warning">Please save the ClientSecret since it will be unaccessible after
-                        exiting.</span>
+                    <span class="client-secret-warning">Please save the Client Secret since it will be unaccessible after exiting.</span>
                 </div>
             </div>
         </mat-card-content>
