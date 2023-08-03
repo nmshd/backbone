@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, EMPTY } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
@@ -36,8 +36,8 @@ export class TierService {
         return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
 
-    deleteTierById(id: string): Observable<HttpResponseEnvelope<any>> {
-        return this.http.delete<HttpResponseEnvelope<any>>(this.apiUrl + `/${id}`);
+    deleteTierById(id: string): Observable<null> {
+        return this.http.delete<null>(this.apiUrl + `/${id}`);
     }
 }
 

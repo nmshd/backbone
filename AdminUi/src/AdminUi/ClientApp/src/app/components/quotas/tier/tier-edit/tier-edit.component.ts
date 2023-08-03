@@ -226,7 +226,7 @@ export class TierEditComponent {
 
     deleteTier(): void {
         this.tierService.deleteTierById(this.tierId!).subscribe({
-            next: (_: any) => {
+            next: (_) => {
                 this.router.navigate(["/tiers"]);
             },
             error: (err: HttpErrorResponseWrapper) => {
