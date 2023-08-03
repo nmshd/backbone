@@ -44,6 +44,7 @@ import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-d
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
 import { LoginComponent } from "./components/shared/login/login.component";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
+import { ChangeSecretDialogComponent } from './components/client/change-secret-dialog/change-secret-dialog.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
         ClientEditComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
-        LoginComponent
+        LoginComponent,
+        ChangeSecretDialogComponent
     ],
     imports: [
         FormsModule,

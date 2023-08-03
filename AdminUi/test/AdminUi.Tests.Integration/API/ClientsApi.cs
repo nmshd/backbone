@@ -17,8 +17,13 @@ public class ClientsApi : BaseApi
         return await Delete($"/Clients/{clientId}", requestConfiguration);
     }
 
-    public async Task<HttpResponse<ClientDTO>> CreateClient(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<CreateClientResponse>> CreateClient(RequestConfiguration requestConfiguration)
     {
-        return await Post<ClientDTO>($"/Clients", requestConfiguration);
+        return await Post<CreateClientResponse>($"/Clients", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<ChangeClientSecretResponse>> ChangeClientSecret(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Patch<ChangeClientSecretResponse>($"/Clients/{clientId}/ChangeSecret", requestConfiguration);
     }
 }
