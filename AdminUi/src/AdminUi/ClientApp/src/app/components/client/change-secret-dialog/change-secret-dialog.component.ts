@@ -18,7 +18,12 @@ export class ChangeSecretDialogComponent {
     loading: boolean;
     disabled: boolean;
 
-    constructor(private snackBar: MatSnackBar, private clientService: ClientServiceService, public dialogRef: MatDialogRef<ChangeSecretDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+    constructor(
+        private snackBar: MatSnackBar,
+        private clientService: ClientServiceService,
+        public dialogRef: MatDialogRef<ChangeSecretDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
         this.header = "Change secret";
         this.clientId = "";
         this.clientSecret = "";

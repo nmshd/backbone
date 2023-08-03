@@ -1,14 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import {
-    Identity,
-    IdentityOverview,
-    IdentityService,
-} from 'src/app/services/identity-service/identity.service';
-import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { Component, ViewChild } from "@angular/core";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
+import { Identity, IdentityOverview, IdentityService } from "src/app/services/identity-service/identity.service";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
     selector: "app-identity-list",
@@ -36,8 +32,8 @@ export class IdentityListComponent {
         private snackBar: MatSnackBar,
         private identityService: IdentityService
     ) {
-        this.header = 'Identities';
-        this.headerDescription = 'A list of existing Identities';
+        this.header = "Identities";
+        this.headerDescription = "A list of existing Identities";
 
         this.identities = [];
 

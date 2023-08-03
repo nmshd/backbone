@@ -30,7 +30,13 @@ export class TierEditComponent {
     tier: Tier;
     loading: boolean;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private tierService: TierService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private tierService: TierService,
+        private quotasService: QuotasService
+    ) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";

@@ -51,7 +51,7 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the response contains a list of Identities")]
-    public void ThenTheResponseContainsANonEmptyList()
+    public void ThenTheResponseContainsAListOfIdentities()
     {
         _identityOverviewsResponse!.Content.Result.Should().NotBeNull();
         _identityOverviewsResponse!.Content.Result.Should().NotBeNullOrEmpty();

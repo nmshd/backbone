@@ -1,14 +1,14 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
+import { Observable, forkJoin } from "rxjs";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Identity, IdentityService } from "src/app/services/identity-service/identity.service";
+import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
-import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { SelectionModel } from "@angular/cdk/collections";
-import { Observable, forkJoin } from "rxjs";
 
 @Component({
     selector: "app-identity-edit",
@@ -28,7 +28,13 @@ export class IdentityEditComponent {
     identity: Identity;
     loading: boolean;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private identityService: IdentityService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private identityService: IdentityService,
+        private quotasService: QuotasService
+    ) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
@@ -200,7 +206,7 @@ export class IdentityEditComponent {
 
     isAllSelected() {
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas ? this.identity.quotas.filter(i => i.source === 'Individual').length : 0;
+        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.source === "Individual").length : 0;
         return numSelected === numRows;
     }
 
@@ -209,7 +215,7 @@ export class IdentityEditComponent {
             this.selectionQuotas.clear();
             return;
         }
-        this.selectionQuotas.select(...this.identity.quotas.filter(i => i.source === 'Individual'));
+        this.selectionQuotas.select(...this.identity.quotas.filter((i) => i.source === "Individual"));
     }
 
     checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {

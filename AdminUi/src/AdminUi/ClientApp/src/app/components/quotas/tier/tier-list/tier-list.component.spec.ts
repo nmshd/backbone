@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TierListComponent } from './tier-list.component';
+import { TierListComponent } from "./tier-list.component";
 
-describe('TierListComponent', () => {
+describe("TierListComponent", () => {
     let component: TierListComponent;
     let fixture: ComponentFixture<TierListComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TierListComponent],
+            declarations: [TierListComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TierListComponent);
@@ -16,7 +16,7 @@ describe('TierListComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it("should create", () => {
         expect(component).toBeTruthy();
     });
 });

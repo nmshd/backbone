@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IdentityListComponent } from './identity-list.component';
+import { IdentityListComponent } from "./identity-list.component";
 
-describe('IdentityListComponent', () => {
+describe("IdentityListComponent", () => {
     let component: IdentityListComponent;
     let fixture: ComponentFixture<IdentityListComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [IdentityListComponent],
+            declarations: [IdentityListComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(IdentityListComponent);
@@ -16,7 +16,7 @@ describe('IdentityListComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it("should create", () => {
         expect(component).toBeTruthy();
     });
 });
