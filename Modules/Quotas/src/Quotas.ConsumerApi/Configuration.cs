@@ -11,10 +11,10 @@ public class Configuration
 public class QuotasInfrastructure
 {
     [Required]
-    public SqlDatabaseConfig SqlDatabase { get; set; } = new();
+    public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 }
 
-public class SqlDatabaseConfig
+public class SqlDatabaseConfiguration
 {
     [Required]
     [MinLength(1)]
