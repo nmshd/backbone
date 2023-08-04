@@ -56,4 +56,25 @@ public class ConsistencyCheck
             _reporter.ReportOrphanedIdentityIdOnQuotas(orphanedIdentityId);
         }
     }
+
+    public async Task Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken cancellationToken)
+    {
+        var devicesTiersIds = await _dataSource.GetDevicesTiersIds();
+        if (cancellationToken.IsCancellationRequested) return;
+
+        var quotasTiersIds = await _dataSource.GetQuotasTiersIds();
+        if (cancellationToken.IsCancellationRequested) return;
+
+        var (_, orphanedOnDevices, orphanedOnQuotas) = Distribute(devicesTiersIds, quotasTiersIds);
+
+        foreach (var orphanedIdentityId in orphanedOnDevices)
+        {
+            _reporter.ReportOrphanedTierIdOnDevices(orphanedIdentityId);
+        }
+
+        foreach (var orphanedIdentityId in orphanedOnQuotas)
+        {
+            _reporter.ReportOrphanedTierIdOnQuotas(orphanedIdentityId);
+        }
+    }
 }

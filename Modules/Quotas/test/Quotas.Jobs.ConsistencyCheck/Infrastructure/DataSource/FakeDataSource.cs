@@ -4,8 +4,9 @@ namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.Dat
 
 public class FakeDataSource : IDataSource
 {
-    public List<string> DevicesIdentitiesIds { get; } = new();
+    #region Identities
 
+    public List<string> DevicesIdentitiesIds { get; } = new();
     public List<string> QuotasIdentitiesIds { get; } = new();
 
     public Task<IEnumerable<string>> GetDevicesIdentitiesIds()
@@ -13,20 +14,30 @@ public class FakeDataSource : IDataSource
         return Task.FromResult(DevicesIdentitiesIds.AsEnumerable());
     }
 
-    public Task<IEnumerable<string>> GetDevicesTiersIds()
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<string>> GetQuotasIdentitiesIds()
     {
         return Task.FromResult(QuotasIdentitiesIds.AsEnumerable());
     }
 
+    #endregion
+
+    #region Tiers
+    public List<string> DevicesTiersIds { get; } = new();
+    public List<string> QuotasTiersIds { get; } = new();
+
+
+    public Task<IEnumerable<string>> GetDevicesTiersIds()
+    {
+        return Task.FromResult(DevicesTiersIds.AsEnumerable());
+    }
+
+
     public Task<IEnumerable<string>> GetQuotasTiersIds()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(QuotasTiersIds.AsEnumerable());
     }
+
+    #endregion
 
     public Task<IEnumerable<string>> GetTierQuotaDefinitionIds()
     {

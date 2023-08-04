@@ -4,8 +4,12 @@ public class LogReporter : IReporter
 {
     private readonly ILogger<LogReporter> _logger;
     private readonly ICollection<string> _tierQuotaIds;
+
     private readonly ICollection<string> _orphanedIdentityIdsOnDevices;
     private readonly ICollection<string> _orphanedIdentityIdsOnQuotas;
+
+    private readonly ICollection<string> _orphanedTierIdsOnDevices;
+    private readonly ICollection<string> _orphanedTierIdsOnQuotas;
 
     public LogReporter(ILogger<LogReporter> logger)
     {
@@ -41,6 +45,16 @@ public class LogReporter : IReporter
     public void ReportOrphanedIdentityIdOnQuotas(string id)
     {
         _orphanedIdentityIdsOnQuotas.Add(id);
+    }
+
+    public void ReportOrphanedTierIdOnDevices(string orphanedIdentityId)
+    {
+        _orphanedTierIdsOnDevices.Add(orphanedIdentityId);
+    }
+
+    public void ReportOrphanedTierIdOnQuotas(string orphanedIdentityId)
+    {
+        _orphanedTierIdsOnQuotas.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedTierQuotaId(string id)

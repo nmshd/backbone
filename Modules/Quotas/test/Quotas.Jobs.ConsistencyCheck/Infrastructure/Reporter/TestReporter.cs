@@ -5,6 +5,8 @@ public class TestReporter : IReporter
 {
     public List<string> ReportedOrphanedIdentityIdOnDevices { get; } = new();
     public List<string> ReportedOrphanedIdentityIdOnQuotas { get; } = new();
+    public List<string> ReportedOrphanedTierIdOnDevices { get; } = new();
+    public List<string> ReportedOrphanedTierIdOnQuotas { get; } = new();
 
     public void Complete()
     {
@@ -19,6 +21,16 @@ public class TestReporter : IReporter
     public void ReportOrphanedIdentityIdOnQuotas(string orphanedIdentityId)
     {
         ReportedOrphanedIdentityIdOnQuotas.Add(orphanedIdentityId);
+    }
+
+    public void ReportOrphanedTierIdOnDevices(string orphanedIdentityId)
+    {
+        ReportedOrphanedTierIdOnDevices.Add(orphanedIdentityId);
+    }
+
+    public void ReportOrphanedTierIdOnQuotas(string orphanedIdentityId)
+    {
+        ReportedOrphanedTierIdOnQuotas.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedTierQuotaId(string id)
