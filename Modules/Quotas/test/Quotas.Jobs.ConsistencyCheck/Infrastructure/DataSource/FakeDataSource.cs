@@ -22,7 +22,7 @@ public class FakeDataSource : IDataSource
     {
         return Task.FromResult(QuotasIdentitiesIds.AsEnumerable());
     }
-
+    
     public Task<IEnumerable<string>> GetQuotasTiersIds()
     {
         throw new NotImplementedException();

@@ -13,12 +13,12 @@ public class TestReporter : IReporter
 
     public void ReportOrphanedIdentityIdOnDevices(string orphanedIdentityId)
     {
-        throw new NotImplementedException();
+        ReportedOrphanedIdentityIdOnDevices.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedIdentityIdOnQuotas(string orphanedIdentityId)
     {
-        throw new NotImplementedException();
+        ReportedOrphanedIdentityIdOnQuotas.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedTierQuotaId(string id)

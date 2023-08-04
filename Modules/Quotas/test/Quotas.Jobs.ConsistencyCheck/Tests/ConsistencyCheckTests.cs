@@ -19,11 +19,70 @@ public class ConsistencyCheckTests
     }
 
     [Fact]
-    public async void SanityCheckNoEntries()
+    public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_NoEntries()
     {
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
         _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
         _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_ConsistentEntries()
+    {
+        var id = "identity-id";
+        _dataSource.DevicesIdentitiesIds.Add(id);
+        _dataSource.QuotasIdentitiesIds.Add(id);
+
+        await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
+
+        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
+        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromDevices()
+    {
+        var id = "identity-id";
+
+        _dataSource.QuotasIdentitiesIds.Add(id);
+
+        await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
+
+        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
+        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromQuotas()
+    {
+        var id = "identity-id";
+
+        _dataSource.DevicesIdentitiesIds.Add(id);
+
+        await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
+
+        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
+        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromBothSides()
+    {
+        var idCommon = "identity-id-common";
+        var idOnlyInDevices = "identity-id-devices";
+        var idOnlyInQuotas = "identity-id-quotas";
+
+        _dataSource.DevicesIdentitiesIds.Add(idCommon);
+        _dataSource.QuotasIdentitiesIds.Add(idCommon);
+
+        _dataSource.DevicesIdentitiesIds.Add(idOnlyInDevices);
+
+        _dataSource.QuotasIdentitiesIds.Add(idOnlyInQuotas);
+
+        await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
+
+        _reporter.ReportedOrphanedIdentityIdOnDevices.Single().Should().Be(idOnlyInDevices);
+        _reporter.ReportedOrphanedIdentityIdOnQuotas.Single().Should().Be(idOnlyInQuotas);
     }
 }
