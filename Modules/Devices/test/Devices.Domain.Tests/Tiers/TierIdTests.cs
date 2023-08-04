@@ -45,9 +45,8 @@ public class TierIdTests
     [Fact]
     public void Cannot_create_tier_id_with_invalid_id_length()
     {
-        var validTierIdPrefix = "TIR";
-        var tierIdValue = validTierIdPrefix + TestDataGenerator.GenerateString(StronglyTypedId.DEFAULT_MAX_LENGTH);
-        var tierId = TierId.Create(tierIdValue);
+        const string TIER_ID_WITH_21_CHARACTERS = "TIRxxxxxxxxxxxxxxxxxx";
+        var tierId = TierId.Create(TIER_ID_WITH_21_CHARACTERS);
 
         var isTierIdInvalid = tierId.IsFailure;
         var errorCode = tierId.Error.Code;
@@ -61,10 +60,8 @@ public class TierIdTests
     [Fact]
     public void Cannot_create_tier_id_with_invalid_id_characters()
     {
-        char[] invalidCharacters = { '|', '-', '!' };
-        var validTierIdPrefix = "TIR";
-        var tierIdValue = TestDataGenerator.GenerateString(StronglyTypedId.DEFAULT_MAX_LENGTH_WITHOUT_PREFIX, invalidCharacters);
-        var tierId = TierId.Create(validTierIdPrefix + tierIdValue);
+        const string TIER_ID_WITH_21_CHARACTERS = "TIRxxxxxxxxxxxxxxxxxx";
+        var tierId = TierId.Create(TIER_ID_WITH_21_CHARACTERS);
 
         var isTierIdInvalid = tierId.IsFailure;
         var errorCode = tierId.Error.Code;

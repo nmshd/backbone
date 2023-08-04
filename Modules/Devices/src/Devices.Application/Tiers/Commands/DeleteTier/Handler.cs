@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<DeleteTierCommand>
         var tierIdResult = TierId.Create(request.TierId);
 
         if (tierIdResult.IsFailure)
-            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
+            throw new DomainException(tierIdResult.Error);
 
         var tier = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken);
 
