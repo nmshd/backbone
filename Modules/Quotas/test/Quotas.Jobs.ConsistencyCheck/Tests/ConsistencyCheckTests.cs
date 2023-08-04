@@ -91,7 +91,7 @@ public class ConsistencyCheckTests
     #endregion
 
     #region DevicesTiers_vs_QuotasTiers
-    
+
     [Fact]
     public async void SanityCheck_DevicesTiers_vs_QuotasTiers_NoEntries()
     {
