@@ -36,8 +36,8 @@ export class TierService {
         return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
 
-    deleteTierById(id: string): Observable<null> {
-        return this.http.delete<null>(this.apiUrl + `/${id}`);
+    deleteTierById(id: string): Observable<void> {
+        return this.http.delete<void>(this.apiUrl + `/${id}`);
     }
 }
 
