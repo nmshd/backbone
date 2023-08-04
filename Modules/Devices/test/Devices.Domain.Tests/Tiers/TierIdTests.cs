@@ -60,8 +60,8 @@ public class TierIdTests
     [Fact]
     public void Cannot_create_tier_id_with_invalid_id_characters()
     {
-        const string TIER_ID_WITH_21_CHARACTERS = "TIRxxxxxxxxxxxxxxxxx!";
-        var tierId = TierId.Create(TIER_ID_WITH_21_CHARACTERS);
+        const string TIER_ID_WITH_INVALID_CHARACTER = "TIRxxxxxxxxxxxxxxxxx!";
+        var tierId = TierId.Create(TIER_ID_WITH_INVALID_CHARACTER);
 
         var isTierIdInvalid = tierId.IsFailure;
         var errorCode = tierId.Error.Code;
