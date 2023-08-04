@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
@@ -9,6 +9,7 @@ import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quota
 import { SelectionModel } from "@angular/cdk/collections";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Observable, forkJoin } from "rxjs";
+import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 
 @Component({
     selector: "app-tier-edit",
@@ -30,13 +31,7 @@ export class TierEditComponent {
     tier: Tier;
     loading: boolean;
 
-    constructor(
-        private route: ActivatedRoute,
-        private snackBar: MatSnackBar,
-        private dialog: MatDialog,
-        private tierService: TierService,
-        private quotasService: QuotasService
-    ) {
+    constructor(private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, private dialog: MatDialog, private tierService: TierService, private quotasService: QuotasService) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";
@@ -209,6 +204,37 @@ export class TierEditComponent {
         dialogRef.afterClosed().subscribe((result: boolean) => {
             if (result) {
                 this.deleteQuota();
+            }
+        });
+    }
+
+    openConfirmationDialogTierDeletion() {
+        let confirmDialogHeader = "Delete Tier";
+        let confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
+        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            minWidth: "40%",
+            disableClose: true,
+            data: { header: confirmDialogHeader, message: confirmDialogMessage }
+        });
+
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+            if (result) {
+                this.deleteTier();
+            }
+        });
+    }
+
+    deleteTier(): void {
+        this.tierService.deleteTierById(this.tierId!).subscribe({
+            next: (_) => {
+                this.router.navigate(["/tiers"]);
+            },
+            error: (err: HttpErrorResponseWrapper) => {
+                let errorMessage = err.error.error.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             }
         });
     }

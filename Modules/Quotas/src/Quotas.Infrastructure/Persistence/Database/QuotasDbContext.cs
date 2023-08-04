@@ -43,7 +43,7 @@ public class QuotasDbContext : AbstractDbContextBase
             .HaveMaxLength(QuotaId.MAX_LENGTH).HaveConversion<QuotaIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<TierQuotaDefinitionId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(TierQuotaDefinitionId.MAX_LENGTH).HaveConversion<TierQuotaDefinitionIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
+        configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength().HaveMaxLength(20)
             .HaveConversion<TierIdEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<MetricKey>().AreUnicode(true).AreFixedLength(false)

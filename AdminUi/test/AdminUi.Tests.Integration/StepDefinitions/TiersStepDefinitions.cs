@@ -1,3 +1,4 @@
+using System.Net;
 using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
@@ -8,17 +9,21 @@ namespace AdminUi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET Tiers")]
 [Scope(Feature = "POST Tier")]
+[Scope(Feature = "DELETE Tier")]
 public class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;
+    private HttpResponse? _deleteResponse;
     private HttpResponse<List<TierDTO>>? _tiersResponse;
-    private string _existingTier;
+    private string _existingTierName;
+    private string _existingTierId;
 
     public TiersStepDefinitions(TiersApi tiersApi)
     {
         _tiersApi = tiersApi;
-        _existingTier = string.Empty;
+        _existingTierName = string.Empty;
+        _existingTierId = string.Empty;
     }
 
     [Given(@"a Tier t")]
@@ -35,9 +40,29 @@ public class TiersStepDefinitions : BaseStepDefinitions
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
-        _existingTier = response.Content.Result!.Name;
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        _existingTierName = response.Content.Result!.Name;
+        _existingTierId = response.Content.Result!.Id;
+    }
+
+    [Given(@"the Tier T has one associated identity")]
+    public void GivenTheTierTHasOneAssociatedIdentity()
+    {
+        throw new PendingStepException();
+    }
+
+    [Given(@"the Basic Tier as t")]
+    public async Task GivenTheBasicTierAsT()
+    {
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _tiersApi.GetTiers(requestConfiguration);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var basicTier = response.Content.Result!.Single(t => t.Name == "Basic");
+        _existingTierName = basicTier.Name;
+        _existingTierId = basicTier.Id;
     }
 
     [When(@"a GET request is sent to the /Tiers endpoint")]
@@ -68,7 +93,7 @@ public class TiersStepDefinitions : BaseStepDefinitions
     {
         var createTierRequest = new CreateTierRequest
         {
-            Name = _existingTier
+            Name = _existingTierName
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -76,6 +101,18 @@ public class TiersStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createTierRequest);
 
         _tierResponse = await _tiersApi.CreateTier(requestConfiguration);
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
+    public async Task WhenADELETERequestIsSentToTheTiersTierIdEndpoint()
+    {
+        _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, _existingTierId);
+    }
+
+    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint with an inexistent id")]
+    public async Task WhenADELETERequestIsSentToTheTiersT_IdEndpointWithAnInexistentId()
+    {
+        _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, "TIR00000000000000000");
     }
 
     [Then(@"the response contains a paginated list of Tiers")]
@@ -106,6 +143,12 @@ public class TiersStepDefinitions : BaseStepDefinitions
         if (_tiersResponse != null)
         {
             var actualStatusCode = (int)_tiersResponse!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_deleteResponse != null)
+        {
+            var actualStatusCode = (int)_deleteResponse!.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
     }

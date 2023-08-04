@@ -232,6 +232,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("TierId")
+                        .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();

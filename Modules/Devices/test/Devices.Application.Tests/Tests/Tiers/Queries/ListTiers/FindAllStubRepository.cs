@@ -28,8 +28,24 @@ public class FindAllStubRepository : ITiersRepository
         return Task.FromResult(_tiers);
     }
 
+    public Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
+
+    public Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Remove(Tier tier)
+    {
+        throw new NotImplementedException();
+    }
+
 }

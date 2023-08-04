@@ -2,6 +2,8 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Dapper;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
@@ -26,6 +28,17 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task Remove(Tier tier)
+    {
+        _tiersDbSet.Remove(tier);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Identities.CountAsync(i => i.TierId == tier.Id, cancellationToken);
+    }
+
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
@@ -36,6 +49,11 @@ public class TiersRepository : ITiersRepository
         var paginationResult = await _tiersDbSet
             .OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
         return paginationResult;
+    }
+
+    public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
