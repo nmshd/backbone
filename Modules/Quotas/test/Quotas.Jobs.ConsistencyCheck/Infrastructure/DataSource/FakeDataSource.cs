@@ -4,7 +4,7 @@ namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.Dat
 
 public class FakeDataSource : IDataSource
 {
-    public List<string> DevicesIdentitiesIds { get; } = new ();
+    public List<string> DevicesIdentitiesIds { get; } = new();
 
     public List<string> QuotasIdentitiesIds { get; } = new();
 
@@ -22,7 +22,7 @@ public class FakeDataSource : IDataSource
     {
         return Task.FromResult(QuotasIdentitiesIds.AsEnumerable());
     }
-    
+
     public Task<IEnumerable<string>> GetQuotasTiersIds()
     {
         throw new NotImplementedException();
