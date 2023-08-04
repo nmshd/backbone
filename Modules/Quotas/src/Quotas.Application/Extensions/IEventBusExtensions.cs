@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreate
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
@@ -23,6 +24,7 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<IdentityCreatedIntegrationEvent, IdentityCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierCreatedIntegrationEvent, TierCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<TierDeletedIntegrationEvent, TierDeletedIntegrationEventHandler>();
         eventBus.Subscribe<QuotaCreatedForTierIntegrationEvent, QuotaCreatedForTierIntegrationEventHandler>();
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierQuotaDefinitionDeletedIntegrationEvent, TierQuotaDefinitionDeletedIntegrationEventHandler>();

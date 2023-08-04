@@ -30,6 +30,11 @@ public class TiersApi : BaseApi
 
     public async Task<HttpResponse<TierDTO>> CreateTier(RequestConfiguration requestConfiguration)
     {
-        return await Post<TierDTO>($"/Tiers", requestConfiguration);
+        return await Post<TierDTO>("/Tiers", requestConfiguration);
+    }
+
+    public async Task<HttpResponse> DeleteTier(RequestConfiguration requestConfiguration, string tierId)
+    {
+        return await Delete($"/Tiers/{tierId}", requestConfiguration);
     }
 }

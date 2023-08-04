@@ -2,7 +2,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using FluentAssertions;
 using Xunit;
 
-namespace Devices.Domain.Tests;
+namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
 
 public class TierTests
 {
