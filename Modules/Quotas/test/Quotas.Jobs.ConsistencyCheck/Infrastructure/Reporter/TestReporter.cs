@@ -13,14 +13,14 @@ public class TestReporter : IReporter
         throw new NotImplementedException();
     }
 
-    public void ReportIdentityMissingFromQuotas(string orphanedIdentityId)
+    public void ReportIdentityMissingFromQuotas(string address)
     {
-        ReportedIdentitiesMissingFromQuotas.Add(orphanedIdentityId);
+        ReportedIdentitiesMissingFromQuotas.Add(address);
     }
 
-    public void ReportIdentityMissingFromDevices(string orphanedIdentityId)
+    public void ReportIdentityMissingFromDevices(string address)
     {
-        ReportedIdentitiesMissingFromDevices.Add(orphanedIdentityId);
+        ReportedIdentitiesMissingFromDevices.Add(address);
     }
 
     public void ReportTierMissingFromQuotas(string orphanedIdentityId)

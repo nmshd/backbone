@@ -1,11 +1,14 @@
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
+
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck;
 
 public class Worker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    //private IDataSource _dataSource;
-    //private IReporter _reporter;
+    private IDataSource _dataSource;
+    private IReporter _reporter;
 
     public Worker(IHostApplicationLifetime host, IServiceScopeFactory serviceScopeFactory)
     {
@@ -17,8 +20,8 @@ public class Worker : IHostedService
     {
         using var scope = _serviceScopeFactory.CreateScope();
 
-        //_dataSource = scope.ServiceProvider.GetRequiredService<IDataSource>();
-        //_reporter = scope.ServiceProvider.GetRequiredService<IReporter>();
+        _dataSource = scope.ServiceProvider.GetRequiredService<IDataSource>();
+        _reporter = scope.ServiceProvider.GetRequiredService<IReporter>();
 
         await RunSanityCheck(cancellationToken);
 
@@ -32,8 +35,10 @@ public class Worker : IHostedService
 
     public async Task RunSanityCheck(CancellationToken cancellationToken)
     {
-        //var sanityCheck = new Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        var sanityCheck = new Infrastructure.ConsistencyCheck.ConsistencyCheck(_dataSource, _reporter);
 
-        //await sanityCheck.Run(cancellationToken);
+        await sanityCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(cancellationToken);
+        //await sanityCheck.Run_for_DevicesTiers_vs_QuotasTiers(cancellationToken);
+        //await sanityCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(cancellationToken);
     }
 }

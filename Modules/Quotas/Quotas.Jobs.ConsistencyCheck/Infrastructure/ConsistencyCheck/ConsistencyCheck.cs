@@ -16,14 +16,14 @@ public class ConsistencyCheck
 
     /// <summary>
     /// Checks that for any given Identity i, associated with a Tier t, which has several TierQuotaDefinitions tqd, the Identity i has matching tierQuotas tq.
-    /// ∀i ∃t : i ∈ t ∧ ∀t.tqd ∃i.tq : tq.DefinitionId = tqd.Id
+    /// ∀i ∃t : i ∈ t ∧ ∀t.tqd ∃i.tq : tq.DefinitionId = tqd.Address
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
-        var tierQuotaDefinitionIds = await _dataSource.GetTierQuotaDefinitionIds();
-        var tierQuotas = await _dataSource.GetTierQuotasWithDefinitionIds();
+        var tierQuotaDefinitionIds = await _dataSource.GetTierQuotaDefinitionIds(cancellationToken);
+        var tierQuotas = await _dataSource.GetTierQuotasWithDefinitionIds(cancellationToken);
 
         if (cancellationToken.IsCancellationRequested)
             return;
@@ -38,10 +38,10 @@ public class ConsistencyCheck
 
     public async Task Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken cancellationToken)
     {
-        var identitiesInDevices = await _dataSource.GetDevicesIdentitiesIds();
+        var identitiesInDevices = await _dataSource.GetDevicesIdentitiesAddresses(cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
 
-        var identitiesInQuotas = await _dataSource.GetQuotasIdentitiesIds();
+        var identitiesInQuotas = await _dataSource.GetQuotasIdentitiesAddresses(cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
 
         var (_, identitiesMissingFromQuotas, identitiesMissingFromDevices) = Distribute(identitiesInDevices, identitiesInQuotas);
@@ -59,10 +59,10 @@ public class ConsistencyCheck
 
     public async Task Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken cancellationToken)
     {
-        var tiersInDevices = await _dataSource.GetDevicesTiersIds();
+        var tiersInDevices = await _dataSource.GetDevicesTiersIds(cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
 
-        var tiersInQuotas = await _dataSource.GetQuotasTiersIds();
+        var tiersInQuotas = await _dataSource.GetQuotasTiersIds(cancellationToken);
         if (cancellationToken.IsCancellationRequested) return;
 
         var (_, tiersMissingFromQuotas, tiersMissingFromDevices) = Distribute(tiersInDevices, tiersInQuotas);

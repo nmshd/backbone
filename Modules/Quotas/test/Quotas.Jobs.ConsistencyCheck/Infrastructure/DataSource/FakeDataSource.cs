@@ -6,15 +6,15 @@ public class FakeDataSource : IDataSource
 {
     #region Identities
 
-    public List<string> DevicesIdentitiesIds { get; } = new();
+    public List<string> DevicesIdentitiesIds { get; } = new();  
     public List<string> QuotasIdentitiesIds { get; } = new();
 
-    public Task<IEnumerable<string>> GetDevicesIdentitiesIds()
+    public Task<IEnumerable<string>> GetDevicesIdentitiesAddresses(CancellationToken cancellationToken)
     {
         return Task.FromResult(DevicesIdentitiesIds.AsEnumerable());
     }
 
-    public Task<IEnumerable<string>> GetQuotasIdentitiesIds()
+    public Task<IEnumerable<string>> GetQuotasIdentitiesAddresses(CancellationToken cancellationToken)
     {
         return Task.FromResult(QuotasIdentitiesIds.AsEnumerable());
     }
@@ -26,25 +26,25 @@ public class FakeDataSource : IDataSource
     public List<string> QuotasTiersIds { get; } = new();
 
 
-    public Task<IEnumerable<string>> GetDevicesTiersIds()
+    public Task<IEnumerable<string>> GetDevicesTiersIds(CancellationToken cancellationToken)
     {
         return Task.FromResult(DevicesTiersIds.AsEnumerable());
     }
 
 
-    public Task<IEnumerable<string>> GetQuotasTiersIds()
+    public Task<IEnumerable<string>> GetQuotasTiersIds(CancellationToken cancellationToken)
     {
         return Task.FromResult(QuotasTiersIds.AsEnumerable());
     }
 
     #endregion
 
-    public Task<IEnumerable<string>> GetTierQuotaDefinitionIds()
+    public Task<IEnumerable<string>> GetTierQuotaDefinitionIds(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IDictionary<string, string>> GetTierQuotasWithDefinitionIds()
+    public Task<IDictionary<string, string>> GetTierQuotasWithDefinitionIds(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

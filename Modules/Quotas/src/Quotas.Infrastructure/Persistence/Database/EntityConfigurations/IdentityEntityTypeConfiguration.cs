@@ -10,6 +10,7 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
 {
     public void Configure(EntityTypeBuilder<Identity> builder)
     {
+        builder.ToTable("Identities", "Quotas");
         builder.HasKey(x => x.Address);
         builder.HasOne<Tier>().WithMany().HasForeignKey(x => x.TierId);
         builder.HasMany<TierQuota>(x => x.TierQuotas).WithOne().HasForeignKey(x => x.ApplyTo);

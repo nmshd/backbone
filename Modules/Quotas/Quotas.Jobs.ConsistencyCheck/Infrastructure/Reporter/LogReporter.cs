@@ -6,7 +6,7 @@ public class LogReporter : IReporter
     private readonly ICollection<string> _tierQuotaIds;
 
     private readonly ICollection<string> _identitiesMissingFromQuotas;
-    private readonly ICollection<string> _identititesMissingFromDevices;
+    private readonly ICollection<string> _identitiesMissingFromDevices;
 
     private readonly ICollection<string> _tiersMissingFromQuotas;
     private readonly ICollection<string> _tiersMissingFromDevices;
@@ -15,7 +15,7 @@ public class LogReporter : IReporter
     {
         _logger = logger;
         _tierQuotaIds = new List<string>();
-        _identititesMissingFromDevices = new List<string>();
+        _identitiesMissingFromDevices = new List<string>();
         _identitiesMissingFromQuotas = new List<string>();
     }
 
@@ -23,28 +23,28 @@ public class LogReporter : IReporter
     {
         foreach (var tierQuotaId in _tierQuotaIds)
         {
-            _logger.LogError("no TierQuotaDefinition found for TierQuota with id: {tierQuotaId}.", tierQuotaId);
+            _logger.LogError("no TierQuotaDefinition found for TierQuota with address: {tierQuotaId}.", tierQuotaId);
         }
 
-        foreach (var identityId in _identitiesMissingFromQuotas)
+        foreach (var identityAddress in _identitiesMissingFromQuotas)
         {
-            _logger.LogError("Identity with id {identityId} found on Devices but missing from Quotas.", identityId);
+            _logger.LogError("Identity with address {identityAddress} found on Devices but missing from Quotas.", identityAddress);
         }
 
-        foreach (var identityId in _identititesMissingFromDevices)
+        foreach (var identityAddress in _identitiesMissingFromDevices)
         {
-            _logger.LogError("Identity with id {identityId} found on Quotas but missing from Devices.", identityId);
+            _logger.LogError("Identity with address {identityAddress} found on Quotas but missing from Devices.", identityAddress);
         }
     }
 
-    public void ReportIdentityMissingFromQuotas(string id)
+    public void ReportIdentityMissingFromQuotas(string address)
     {
-        _identitiesMissingFromQuotas.Add(id);
+        _identitiesMissingFromQuotas.Add(address);
     }
 
-    public void ReportIdentityMissingFromDevices(string id)
+    public void ReportIdentityMissingFromDevices(string address)
     {
-        _identititesMissingFromDevices.Add(id);
+        _identitiesMissingFromDevices.Add(address);
     }
 
     public void ReportTierMissingFromQuotas(string orphanedIdentityId)
