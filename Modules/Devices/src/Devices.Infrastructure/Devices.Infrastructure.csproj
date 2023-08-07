@@ -11,9 +11,9 @@
         <PackageReference Include="Autofac" Version="7.0.1" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.15.0" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
-        <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
+        <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
         <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.6.0" />
-        <PackageReference Include="JWT" Version="10.0.2" />
+        <PackageReference Include="JWT" Version="10.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
