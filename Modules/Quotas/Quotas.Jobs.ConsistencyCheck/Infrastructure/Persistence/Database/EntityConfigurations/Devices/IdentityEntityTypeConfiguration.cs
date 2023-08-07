@@ -7,7 +7,7 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
 {
     public void Configure(EntityTypeBuilder<Identity> builder)
     {
-        builder.ToTable("Identities", "Devices", x=>x.ExcludeFromMigrations());
+        builder.ToTable("Identities", "Devices", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Address);
     }
 }
