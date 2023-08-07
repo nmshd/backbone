@@ -3,34 +3,34 @@
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.Reporter;
 public class TestReporter : IReporter
 {
-    public List<string> ReportedOrphanedIdentityIdOnDevices { get; } = new();
-    public List<string> ReportedOrphanedIdentityIdOnQuotas { get; } = new();
-    public List<string> ReportedOrphanedTierIdOnDevices { get; } = new();
-    public List<string> ReportedOrphanedTierIdOnQuotas { get; } = new();
+    public List<string> ReportedIdentitiesMissingFromQuotas { get; } = new();
+    public List<string> ReportedIdentitiesMissingFromDevices { get; } = new();
+    public List<string> ReportedTiersMissingFromQuotas { get; } = new();
+    public List<string> ReportedTiersMissingFromDevices { get; } = new();
 
     public void Complete()
     {
         throw new NotImplementedException();
     }
 
-    public void ReportOrphanedIdentityIdOnDevices(string orphanedIdentityId)
+    public void ReportIdentityMissingFromQuotas(string orphanedIdentityId)
     {
-        ReportedOrphanedIdentityIdOnDevices.Add(orphanedIdentityId);
+        ReportedIdentitiesMissingFromQuotas.Add(orphanedIdentityId);
     }
 
-    public void ReportOrphanedIdentityIdOnQuotas(string orphanedIdentityId)
+    public void ReportIdentityMissingFromDevices(string orphanedIdentityId)
     {
-        ReportedOrphanedIdentityIdOnQuotas.Add(orphanedIdentityId);
+        ReportedIdentitiesMissingFromDevices.Add(orphanedIdentityId);
     }
 
-    public void ReportOrphanedTierIdOnDevices(string orphanedIdentityId)
+    public void ReportTierMissingFromQuotas(string orphanedIdentityId)
     {
-        ReportedOrphanedTierIdOnDevices.Add(orphanedIdentityId);
+        ReportedTiersMissingFromQuotas.Add(orphanedIdentityId);
     }
 
-    public void ReportOrphanedTierIdOnQuotas(string orphanedIdentityId)
+    public void ReportTierMissingFromDevices(string orphanedIdentityId)
     {
-        ReportedOrphanedTierIdOnQuotas.Add(orphanedIdentityId);
+        ReportedTiersMissingFromDevices.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedTierQuotaId(string id)

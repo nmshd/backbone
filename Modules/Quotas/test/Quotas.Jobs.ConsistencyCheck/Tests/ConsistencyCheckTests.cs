@@ -25,8 +25,8 @@ public class ConsistencyCheckTests
     {
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
-        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
-        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromQuotas.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromDevices.Should().BeEmpty();
     }
 
     [Fact]
@@ -38,8 +38,8 @@ public class ConsistencyCheckTests
 
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
-        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
-        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromQuotas.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromDevices.Should().BeEmpty();
     }
 
     [Fact]
@@ -51,8 +51,8 @@ public class ConsistencyCheckTests
 
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
-        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().BeEmpty();
-        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().HaveCount(1);
+        _reporter.ReportedIdentitiesMissingFromQuotas.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromDevices.Should().HaveCount(1);
     }
 
     [Fact]
@@ -64,8 +64,8 @@ public class ConsistencyCheckTests
 
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
-        _reporter.ReportedOrphanedIdentityIdOnQuotas.Should().BeEmpty();
-        _reporter.ReportedOrphanedIdentityIdOnDevices.Should().HaveCount(1);
+        _reporter.ReportedIdentitiesMissingFromDevices.Should().BeEmpty();
+        _reporter.ReportedIdentitiesMissingFromQuotas.Should().HaveCount(1);
     }
 
     [Fact]
@@ -84,8 +84,8 @@ public class ConsistencyCheckTests
 
         await _consistencyCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken.None);
 
-        _reporter.ReportedOrphanedIdentityIdOnDevices.Single().Should().Be(idOnlyInDevices);
-        _reporter.ReportedOrphanedIdentityIdOnQuotas.Single().Should().Be(idOnlyInQuotas);
+        _reporter.ReportedIdentitiesMissingFromQuotas.Single().Should().Be(idOnlyInDevices);
+        _reporter.ReportedIdentitiesMissingFromDevices.Single().Should().Be(idOnlyInQuotas);
     }
 
     #endregion
@@ -97,8 +97,8 @@ public class ConsistencyCheckTests
     {
         await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
 
-        _reporter.ReportedOrphanedTierIdOnDevices.Should().BeEmpty();
-        _reporter.ReportedOrphanedTierIdOnQuotas.Should().BeEmpty();
+        _reporter.ReportedTiersMissingFromQuotas.Should().BeEmpty();
+        _reporter.ReportedTiersMissingFromDevices.Should().BeEmpty();
     }
 
     [Fact]
@@ -110,8 +110,8 @@ public class ConsistencyCheckTests
 
         await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
 
-        _reporter.ReportedOrphanedTierIdOnDevices.Should().BeEmpty();
-        _reporter.ReportedOrphanedTierIdOnQuotas.Should().BeEmpty();
+        _reporter.ReportedTiersMissingFromQuotas.Should().BeEmpty();
+        _reporter.ReportedTiersMissingFromDevices.Should().BeEmpty();
     }
 
     #endregion

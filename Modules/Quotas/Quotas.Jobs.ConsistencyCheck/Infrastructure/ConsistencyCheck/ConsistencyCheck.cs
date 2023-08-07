@@ -38,43 +38,43 @@ public class ConsistencyCheck
 
     public async Task Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken cancellationToken)
     {
-        var devicesIdentitiesIds = await _dataSource.GetDevicesIdentitiesIds();
+        var identitiesInDevices = await _dataSource.GetDevicesIdentitiesIds();
         if (cancellationToken.IsCancellationRequested) return;
 
-        var quotasIdentitiesIds = await _dataSource.GetQuotasIdentitiesIds();
+        var identitiesInQuotas = await _dataSource.GetQuotasIdentitiesIds();
         if (cancellationToken.IsCancellationRequested) return;
 
-        var (_, orphanedOnDevices, orphanedOnQuotas) = Distribute(devicesIdentitiesIds, quotasIdentitiesIds);
+        var (_, identitiesMissingFromQuotas, identitiesMissingFromDevices) = Distribute(identitiesInDevices, identitiesInQuotas);
 
-        foreach (var orphanedIdentityId in orphanedOnDevices)
+        foreach (var i in identitiesMissingFromQuotas)
         {
-            _reporter.ReportOrphanedIdentityIdOnDevices(orphanedIdentityId);
+            _reporter.ReportIdentityMissingFromQuotas(i);
         }
 
-        foreach (var orphanedIdentityId in orphanedOnQuotas)
+        foreach (var i in identitiesMissingFromDevices)
         {
-            _reporter.ReportOrphanedIdentityIdOnQuotas(orphanedIdentityId);
+            _reporter.ReportIdentityMissingFromDevices(i);
         }
     }
 
     public async Task Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken cancellationToken)
     {
-        var devicesTiersIds = await _dataSource.GetDevicesTiersIds();
+        var tiersInDevices = await _dataSource.GetDevicesTiersIds();
         if (cancellationToken.IsCancellationRequested) return;
 
-        var quotasTiersIds = await _dataSource.GetQuotasTiersIds();
+        var tiersInQuotas = await _dataSource.GetQuotasTiersIds();
         if (cancellationToken.IsCancellationRequested) return;
 
-        var (_, orphanedOnDevices, orphanedOnQuotas) = Distribute(devicesTiersIds, quotasTiersIds);
+        var (_, tiersMissingFromQuotas, tiersMissingFromDevices) = Distribute(tiersInDevices, tiersInQuotas);
 
-        foreach (var orphanedIdentityId in orphanedOnDevices)
+        foreach (var i in tiersMissingFromQuotas)
         {
-            _reporter.ReportOrphanedTierIdOnDevices(orphanedIdentityId);
+            _reporter.ReportTierMissingFromQuotas(i);
         }
 
-        foreach (var orphanedIdentityId in orphanedOnQuotas)
+        foreach (var i in tiersMissingFromDevices)
         {
-            _reporter.ReportOrphanedTierIdOnQuotas(orphanedIdentityId);
+            _reporter.ReportTierMissingFromDevices(i);
         }
     }
 }

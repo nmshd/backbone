@@ -5,18 +5,18 @@ public class LogReporter : IReporter
     private readonly ILogger<LogReporter> _logger;
     private readonly ICollection<string> _tierQuotaIds;
 
-    private readonly ICollection<string> _orphanedIdentityIdsOnDevices;
-    private readonly ICollection<string> _orphanedIdentityIdsOnQuotas;
+    private readonly ICollection<string> _identitiesMissingFromQuotas;
+    private readonly ICollection<string> _identititesMissingFromDevices;
 
-    private readonly ICollection<string> _orphanedTierIdsOnDevices;
-    private readonly ICollection<string> _orphanedTierIdsOnQuotas;
+    private readonly ICollection<string> _tiersMissingFromQuotas;
+    private readonly ICollection<string> _tiersMissingFromDevices;
 
     public LogReporter(ILogger<LogReporter> logger)
     {
         _logger = logger;
         _tierQuotaIds = new List<string>();
-        _orphanedIdentityIdsOnQuotas = new List<string>();
-        _orphanedIdentityIdsOnDevices = new List<string>();
+        _identititesMissingFromDevices = new List<string>();
+        _identitiesMissingFromQuotas = new List<string>();
     }
 
     public void Complete()
@@ -26,35 +26,35 @@ public class LogReporter : IReporter
             _logger.LogError("no TierQuotaDefinition found for TierQuota with id: {tierQuotaId}.", tierQuotaId);
         }
 
-        foreach (var identityId in _orphanedIdentityIdsOnDevices)
+        foreach (var identityId in _identitiesMissingFromQuotas)
         {
             _logger.LogError("Identity with id {identityId} found on Devices but missing from Quotas.", identityId);
         }
 
-        foreach (var identityId in _orphanedIdentityIdsOnQuotas)
+        foreach (var identityId in _identititesMissingFromDevices)
         {
             _logger.LogError("Identity with id {identityId} found on Quotas but missing from Devices.", identityId);
         }
     }
 
-    public void ReportOrphanedIdentityIdOnDevices(string id)
+    public void ReportIdentityMissingFromQuotas(string id)
     {
-        _orphanedIdentityIdsOnDevices.Add(id);
+        _identitiesMissingFromQuotas.Add(id);
     }
 
-    public void ReportOrphanedIdentityIdOnQuotas(string id)
+    public void ReportIdentityMissingFromDevices(string id)
     {
-        _orphanedIdentityIdsOnQuotas.Add(id);
+        _identititesMissingFromDevices.Add(id);
     }
 
-    public void ReportOrphanedTierIdOnDevices(string orphanedIdentityId)
+    public void ReportTierMissingFromQuotas(string orphanedIdentityId)
     {
-        _orphanedTierIdsOnDevices.Add(orphanedIdentityId);
+        _tiersMissingFromQuotas.Add(orphanedIdentityId);
     }
 
-    public void ReportOrphanedTierIdOnQuotas(string orphanedIdentityId)
+    public void ReportTierMissingFromDevices(string orphanedIdentityId)
     {
-        _orphanedTierIdsOnQuotas.Add(orphanedIdentityId);
+        _tiersMissingFromDevices.Add(orphanedIdentityId);
     }
 
     public void ReportOrphanedTierQuotaId(string id)

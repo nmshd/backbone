@@ -4,6 +4,17 @@ namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Extensions;
 
 internal static class IEnumerableExtensions
 {
+    /// <summary>
+    /// Given two sets A & B, distributes them in three parts:
+    /// </summary>
+    /// <typeparam name="T">The type of the Enumerable to be distributed</typeparam>
+    /// <param name="a">Set A</param>
+    /// <param name="b">Set B</param>
+    /// <returns>
+    /// intersection - A ∩ B
+    /// aExceptIntersection - A \ A ∩ B
+    /// bExceptIntersection - B \ A ∩ B
+    /// </returns>
     public static (IEnumerable<T> intersection, IEnumerable<T> aExceptIntersection, IEnumerable<T> bExceptIntersection) Distribute<T>(IEnumerable<T> a, IEnumerable<T> b) where T : class
     {
         var intersection = a.Intersect(b);
