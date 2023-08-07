@@ -1,6 +1,8 @@
 using System.Reflection;
 using Backbone.Modules.Quotas.Infrastructure.Persistence;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Extensions;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck;
 
@@ -39,9 +41,9 @@ public class Program
 
                 services.AddHostedService<Worker>();
 
-                //services.AddScoped<IDataSource, DataSource>();
+                services.AddScoped<IDataSource, DataSource>();
 
-                //services.AddScoped<IReporter, LogReporter>();
+                services.AddScoped<IReporter, LogReporter>();
 
                 services.AddDatabase(options =>
                 {
