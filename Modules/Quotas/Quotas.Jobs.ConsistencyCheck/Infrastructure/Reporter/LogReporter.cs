@@ -59,9 +59,9 @@ public class LogReporter : IReporter
             _logger.LogError("no TierQuota found for TierQuotaDefinition with id: {tierQuotaDefinitionId}.", tierQuotaDefinitionId);
         }
 
-        
+
     }
-    
+
     public void ReportIdentityMissingFromQuotas(string address)
     {
         _identitiesMissingFromQuotas.Add(address);

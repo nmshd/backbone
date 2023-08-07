@@ -1,4 +1,7 @@
-﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.DataSource;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.DataSource;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
 using Xunit;
@@ -121,10 +124,63 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_TierQuotaDefinitions_vs_TierQuotas_NoEntries()
     {
-        await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
+        await _consistencyCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken.None);
 
         _reporter.ReportedTierQuotasMissingFromTier.Should().BeEmpty();
         _reporter.ReportedTierQuotaDefinitionMissingFromIdentities.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async void SanityCheck_TierQuotaDefinitions_vs_TierQuotas_ConsistentEntries()
+    {
+        var tier = new Tier(new TierId("tier-id"), "Tier X");
+        var identity = new Identity("address", tier.Id);
+
+        var tierQuotaDefinition = tier.CreateQuota(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day).Value;
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+
+        _dataSource.Identities = new List<Identity> { identity };
+        _dataSource.Tiers = new List<Tier> { tier };
+
+        await _consistencyCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken.None);
+
+        _reporter.ReportedTierQuotasMissingFromTier.Should().BeEmpty();
+        _reporter.ReportedTierQuotaDefinitionMissingFromIdentities.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async void SanityCheck_TierQuotaDefinitions_vs_TierQuotas_QuotaMissingFromIdentity()
+    {
+        var tier = new Tier(new TierId("tier-id"), "Tier X");
+        var identity = new Identity("address", tier.Id);
+
+        var tierQuotaDefinition = tier.CreateQuota(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day).Value;
+
+        _dataSource.Identities = new List<Identity> { identity };
+        _dataSource.Tiers = new List<Tier> { tier };
+
+        await _consistencyCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken.None);
+
+        _reporter.ReportedTierQuotasMissingFromTier.Should().BeEmpty();
+        _reporter.ReportedTierQuotaDefinitionMissingFromIdentities.Single().Should().Be(tierQuotaDefinition.Id);
+    }
+
+    [Fact]
+    public async void SanityCheck_TierQuotaDefinitions_vs_TierQuotas_IdentityHasExtraQuota()
+    {
+        var tier = new Tier(new TierId("tier-id"), "Tier X");
+        var identity = new Identity("address", tier.Id);
+
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+
+        _dataSource.Identities = new List<Identity> { identity };
+        _dataSource.Tiers = new List<Tier> { tier };
+
+        await _consistencyCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken.None);
+
+        _reporter.ReportedTierQuotaDefinitionMissingFromIdentities.Should().BeEmpty();
+        _reporter.ReportedTierQuotasMissingFromTier.Single().Should().Be(tierQuotaDefinition.Id);
     }
 
     #endregion

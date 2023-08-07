@@ -8,7 +8,7 @@ public class TierQuotaDefinitionEntityTypeConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<TierQuotaDefinition> builder)
     {
-        builder.ToTable($"{nameof(TierQuotaDefinition)}s", "Quotas"); 
+        builder.ToTable($"{nameof(TierQuotaDefinition)}s", "Quotas");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Period);
         builder.Property(x => x.MetricKey);

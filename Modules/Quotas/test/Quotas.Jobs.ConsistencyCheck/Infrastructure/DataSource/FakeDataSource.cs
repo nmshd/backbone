@@ -41,13 +41,18 @@ public class FakeDataSource : IDataSource
 
     #endregion
 
+    #region TierQuotas vs TierQuotaDefinitions
+    public List<Tier> Tiers { get; set; } = new();
+    public List<Identity> Identities { get; set; } = new();
+
     public Task<IEnumerable<Tier>> GetTiers(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Tiers.AsEnumerable());
     }
 
     public Task<IEnumerable<Identity>> GetIdentities(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Identities.AsEnumerable());
     }
+    #endregion
 }
