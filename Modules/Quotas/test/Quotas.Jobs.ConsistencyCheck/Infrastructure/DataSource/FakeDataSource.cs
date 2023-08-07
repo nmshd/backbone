@@ -6,7 +6,7 @@ public class FakeDataSource : IDataSource
 {
     #region Identities
 
-    public List<string> DevicesIdentitiesIds { get; } = new();  
+    public List<string> DevicesIdentitiesIds { get; } = new();
     public List<string> QuotasIdentitiesIds { get; } = new();
 
     public Task<IEnumerable<string>> GetDevicesIdentitiesAddresses(CancellationToken cancellationToken)
