@@ -22,17 +22,33 @@ public class ConsistencyCheck
     /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
-        var tierQuotaDefinitionIds = await _dataSource.GetTierQuotaDefinitionIds(cancellationToken);
-        var tierQuotas = await _dataSource.GetTierQuotasWithDefinitionIds(cancellationToken);
-
+        var identities = await _dataSource.GetIdentities(cancellationToken);
+        var tiers = await _dataSource.GetTiers(cancellationToken);
         if (cancellationToken.IsCancellationRequested)
             return;
 
-        var orphanedTierQuotaIDs = tierQuotas.Where(it => !tierQuotaDefinitionIds.Contains(it.Value)).Select(it => it.Key);
-
-        foreach (var orphanedTierQuotaId in orphanedTierQuotaIDs)
+        foreach (var identity in identities)
         {
-            _reporter.ReportOrphanedTierQuotaId(orphanedTierQuotaId);
+            var tier = tiers.Single(t => t.Id == identity.TierId);
+            var tierQuotaDefinitions = tier.Quotas;
+
+            var (_,
+                tqdsMissingFromIdentity,
+                tqsMissingFromTier
+                ) = Distribute(
+                tierQuotaDefinitions.Select(x => x.Id),
+                identity.TierQuotas.Select(x => x.DefinitionId)
+                );
+
+            foreach (var id in tqdsMissingFromIdentity)
+            {
+                _reporter.ReportTierQuotaDefinitionMissingFromIdentity(id);
+            }
+
+            foreach (var id in tqsMissingFromTier)
+            {
+                _reporter.ReportTierQuotaMissingFromTier(id);
+            }
         }
     }
 

@@ -4,7 +4,9 @@ public interface IReporter
 {
     void Complete();
 
-    void ReportOrphanedTierQuotaId(string id);
+    void ReportTierQuotaDefinitionMissingFromIdentity(string id);
+    void ReportTierQuotaMissingFromTier(string id);
+
     void ReportIdentityMissingFromQuotas(string address);
     void ReportIdentityMissingFromDevices(string address);
 

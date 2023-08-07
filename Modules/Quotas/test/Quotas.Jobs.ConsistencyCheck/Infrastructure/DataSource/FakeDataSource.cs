@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
+using Identity = Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity;
+using Tier = Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.DataSource;
 
@@ -39,12 +41,12 @@ public class FakeDataSource : IDataSource
 
     #endregion
 
-    public Task<IEnumerable<string>> GetTierQuotaDefinitionIds(CancellationToken cancellationToken)
+    public Task<IEnumerable<Tier>> GetTiers(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IDictionary<string, string>> GetTierQuotasWithDefinitionIds(CancellationToken cancellationToken)
+    public Task<IEnumerable<Identity>> GetIdentities(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

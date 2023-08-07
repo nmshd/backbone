@@ -8,8 +8,8 @@ public class IndividualQuotaEntityTypeConfiguration : IEntityTypeConfiguration<I
 {
     public void Configure(EntityTypeBuilder<IndividualQuota> builder)
     {
+        builder.ToTable($"{nameof(IndividualQuota)}s", "Quotas");
         builder.HasKey(x => x.Id);
-        builder.ToTable($"{nameof(IndividualQuota)}s");
         builder.Property(x => x.Period);
         builder.Property(x => x.MetricKey);
         builder.Property(x => x.Max);

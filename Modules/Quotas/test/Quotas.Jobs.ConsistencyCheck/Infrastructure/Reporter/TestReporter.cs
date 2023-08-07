@@ -7,10 +7,18 @@ public class TestReporter : IReporter
     public List<string> ReportedIdentitiesMissingFromDevices { get; } = new();
     public List<string> ReportedTiersMissingFromQuotas { get; } = new();
     public List<string> ReportedTiersMissingFromDevices { get; } = new();
+    public List<string> ReportedTierQuotasMissingFromTier { get; } = new();
+    public List<string> ReportedTierQuotaDefinitionMissingFromIdentities { get; } = new();
+
 
     public void Complete()
     {
         throw new NotImplementedException();
+    }
+
+    public void ReportTierQuotaMissingFromTier(string id)
+    {
+        ReportedTierQuotasMissingFromTier.Add(id);
     }
 
     public void ReportIdentityMissingFromQuotas(string address)
@@ -33,8 +41,8 @@ public class TestReporter : IReporter
         ReportedTiersMissingFromDevices.Add(orphanedIdentityId);
     }
 
-    public void ReportOrphanedTierQuotaId(string id)
+    public void ReportTierQuotaDefinitionMissingFromIdentity(string id)
     {
-        throw new NotImplementedException();
+        ReportedTierQuotaDefinitionMissingFromIdentities.Add(id);
     }
 }

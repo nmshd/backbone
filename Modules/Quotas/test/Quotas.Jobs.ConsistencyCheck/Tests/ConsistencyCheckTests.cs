@@ -3,7 +3,7 @@ using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Infrastructure.Reporte
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests;
+namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Tests.Tests;
 
 public class ConsistencyCheckTests
 {
@@ -32,7 +32,7 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_ConsistentEntries()
     {
-        var id = "identity-id";
+        const string id = "identity-id";
         _dataSource.DevicesIdentitiesIds.Add(id);
         _dataSource.QuotasIdentitiesIds.Add(id);
 
@@ -45,7 +45,7 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromDevices()
     {
-        var id = "identity-id";
+        const string id = "identity-id";
 
         _dataSource.QuotasIdentitiesIds.Add(id);
 
@@ -58,7 +58,7 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromQuotas()
     {
-        var id = "identity-id";
+        const string id = "identity-id";
 
         _dataSource.DevicesIdentitiesIds.Add(id);
 
@@ -71,9 +71,9 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_DevicesIdentities_vs_QuotasIdentities_MissingFromBothSides()
     {
-        var idCommon = "identity-id-common";
-        var idOnlyInDevices = "identity-id-devices";
-        var idOnlyInQuotas = "identity-id-quotas";
+        const string idCommon = "identity-id-common";
+        const string idOnlyInDevices = "identity-id-devices";
+        const string idOnlyInQuotas = "identity-id-quotas";
 
         _dataSource.DevicesIdentitiesIds.Add(idCommon);
         _dataSource.QuotasIdentitiesIds.Add(idCommon);
@@ -104,7 +104,7 @@ public class ConsistencyCheckTests
     [Fact]
     public async void SanityCheck_DevicesTiers_vs_QuotasTiers_ConsistentEntries()
     {
-        var id = "tier-id";
+        const string id = "tier-id";
         _dataSource.DevicesTiersIds.Add(id);
         _dataSource.QuotasTiersIds.Add(id);
 
@@ -112,6 +112,19 @@ public class ConsistencyCheckTests
 
         _reporter.ReportedTiersMissingFromQuotas.Should().BeEmpty();
         _reporter.ReportedTiersMissingFromDevices.Should().BeEmpty();
+    }
+
+    #endregion
+
+    #region Run_for_TierQuotaDefinitions_vs_TierQuotas
+
+    [Fact]
+    public async void SanityCheck_TierQuotaDefinitions_vs_TierQuotas_NoEntries()
+    {
+        await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
+
+        _reporter.ReportedTierQuotasMissingFromTier.Should().BeEmpty();
+        _reporter.ReportedTierQuotaDefinitionMissingFromIdentities.Should().BeEmpty();
     }
 
     #endregion

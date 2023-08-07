@@ -7,7 +7,7 @@ public class MetricStatusEntityTypeConfiguration : IEntityTypeConfiguration<Metr
 {
     public void Configure(EntityTypeBuilder<MetricStatus> builder)
     {
-        builder.ToTable("MetricStatuses");
+        builder.ToTable("MetricStatuses", "Quotas");
         builder.HasKey(x => new { x.Owner, x.MetricKey });
         builder.HasOne<Identity>().WithMany(x => x.MetricStatuses).HasForeignKey(x => x.Owner);
     }
