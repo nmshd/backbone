@@ -12,6 +12,8 @@ public class DevicesDbContext : AbstractDbContextBase
 
     public DbSet<Identity> Identities { get; set; }
 
+    public DbSet<Tier> Tiers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -38,7 +38,7 @@ public class Worker : IHostedService
         var sanityCheck = new Infrastructure.ConsistencyCheck.ConsistencyCheck(_dataSource, _reporter);
 
         await sanityCheck.Run_for_DevicesIdentities_vs_QuotasIdentities(cancellationToken);
-        //await sanityCheck.Run_for_DevicesTiers_vs_QuotasTiers(cancellationToken);
+        await sanityCheck.Run_for_DevicesTiers_vs_QuotasTiers(cancellationToken);
         //await sanityCheck.Run_for_TierQuotaDefinitions_vs_TierQuotas(cancellationToken);
     }
 }

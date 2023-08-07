@@ -24,9 +24,9 @@ public class DataSource : IDataSource
         return await _devicesDbContext.Identities.Select(i => i.Address).ToListAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<string>> GetDevicesTiersIds(CancellationToken cancellationToken)
+    public async Task<IEnumerable<string>> GetDevicesTiersIds(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _devicesDbContext.Tiers.Select(i => i.Id).ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<string>> GetQuotasIdentitiesAddresses(CancellationToken cancellationToken)
@@ -34,9 +34,9 @@ public class DataSource : IDataSource
         return await _quotasDbContext.Identities.Select(i => i.Address).ToListAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<string>> GetQuotasTiersIds(CancellationToken cancellationToken)
+    public async Task<IEnumerable<string>> GetQuotasTiersIds(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _quotasDbContext.Tiers.Select(i => i.Id.Value).ToListAsync(cancellationToken);
     }
 
     public Task<IEnumerable<string>> GetTierQuotaDefinitionIds(CancellationToken cancellationToken)
