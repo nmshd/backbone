@@ -27,6 +27,11 @@ public class FindTiersStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task RemoveById(TierId tierId)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Update(Tier tier, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

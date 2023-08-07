@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
+using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
@@ -59,6 +60,17 @@ public class TiersController : ApiControllerBase
     {
         var createdTier = await _mediator.Send(command, cancellationToken);
         return Created(createdTier);
+    }
+
+    [HttpDelete("{tierId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteTier([FromRoute] string tierId, CancellationToken cancellationToken)
+    {
+        var command = new DeleteTierCommand(tierId);
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
     }
 
     [HttpPost("{tierId}/Quotas")]

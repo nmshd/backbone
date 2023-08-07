@@ -88,6 +88,8 @@
         </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">
+        <button *ngIf="editMode" mat-button color="warn" (click)="openConfirmationDialogTierDeletion()"
+            [disabled]="tier.name=='Basic'">Delete</button>
         <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateTier()"
             [disabled]="!validateTier() || true">Save</button>
         <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createTier()"
