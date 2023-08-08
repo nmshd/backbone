@@ -1,13 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import {
-    Identity,
-    IdentityService,
-} from 'src/app/services/identity-service/identity.service';
-import { PagedHttpResponseEnvelope } from 'src/app/utils/paged-http-response-envelope';
+import { Component, ViewChild } from "@angular/core";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { IdentityOverview, IdentityService } from "src/app/services/identity-service/identity.service";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
     selector: "app-identity-list",
@@ -20,7 +16,7 @@ export class IdentityListComponent {
     header: string;
     headerDescription: string;
 
-    identities: Identity[];
+    identities: IdentityOverview[];
 
     totalRecords: number;
     pageSize: number;
@@ -28,15 +24,11 @@ export class IdentityListComponent {
 
     loading = false;
 
-    displayedColumns: string[] = ["address", "clientId", "publicKey", "createdAt"];
+    displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
-    constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private identityService: IdentityService
-    ) {
-        this.header = 'Identities';
-        this.headerDescription = 'A list of existing Identities';
+    constructor(private router: Router, private snackBar: MatSnackBar, private identityService: IdentityService) {
+        this.header = "Identities";
+        this.headerDescription = "A list of existing Identities";
 
         this.identities = [];
 
@@ -54,7 +46,7 @@ export class IdentityListComponent {
     getPagedData() {
         this.loading = true;
         this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
-            next: (data: PagedHttpResponseEnvelope<Identity>) => {
+            next: (data: PagedHttpResponseEnvelope<IdentityOverview>) => {
                 if (data) {
                     this.identities = data.result;
                     if (data.pagination) {
@@ -82,7 +74,11 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    editIdentity(identity: Identity) {
-        this.router.navigate([`/identities/` + identity.address]);
+    editIdentity(identityAddress: string) {
+        this.router.navigate([`/identities/` + identityAddress]);
+    }
+
+    goToTier(tierId: string) {
+        this.router.navigate([`/tiers/` + tierId]);
     }
 }

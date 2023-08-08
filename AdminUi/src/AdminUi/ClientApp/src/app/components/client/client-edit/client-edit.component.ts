@@ -21,7 +21,11 @@ export class ClientEditComponent {
     disabled: boolean;
     displayClientSecretWarning: boolean;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private clientService: ClientServiceService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private clientService: ClientServiceService
+    ) {
         this.headerCreate = "Create Client";
         this.headerDescription = "Please fill the form below to create your Client";
         this.editMode = false;

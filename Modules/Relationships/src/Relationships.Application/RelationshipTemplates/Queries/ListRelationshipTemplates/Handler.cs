@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelat
 
     public async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, track: false);
+        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
 
         return new ListRelationshipTemplatesResponse(_mapper.Map<RelationshipTemplateDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }

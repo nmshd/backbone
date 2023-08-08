@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
     public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _messagesRepository.FindMessagesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, track: true);
+        var dbPaginationResult = await _messagesRepository.FindMessagesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: true);
 
         foreach (var message in dbPaginationResult.ItemsOnPage)
         {
