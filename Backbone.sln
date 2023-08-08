@@ -222,9 +222,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Domain", "BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{360430CE-6850-4A67-88ED-E9508B7D2658}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quotas", "Quotas", "{78F88787-78AB-41E5-9A64-6B77B6CCFBCD}"
-	ProjectSection(SolutionItems) = preProject
-		Modules\Messages\test\Messages.Jobs.SanityCheck.Tests\Tests\SanityCheckTests.cs = Modules\Messages\test\Messages.Jobs.SanityCheck.Tests\Tests\SanityCheckTests.cs
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C258DF5B-0AE0-4DDF-9284-60671699C6ED}"
 EndProject
