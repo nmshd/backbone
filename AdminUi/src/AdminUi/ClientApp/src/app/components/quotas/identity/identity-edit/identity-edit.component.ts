@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Identity, IdentityService } from "src/app/services/identity-service/identity.service";
+import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
@@ -20,9 +20,13 @@ export class IdentityEditComponent {
     headerDescription: string;
     headerQuotas: string;
     headerQuotasDescription: string;
+    headerDevices: string;
+    headerDevicesDescription: string;
     selectionQuotas: SelectionModel<IdentityQuota>;
     quotasTableDisplayedColumns: string[];
     quotasTableData: (Quota | MetricGroup)[];
+    devicesTableDisplayedColumns: string[];
+    devicesTableData: Device[];
     identityAddress?: string;
     disabled: boolean;
     identity: Identity;
@@ -33,8 +37,12 @@ export class IdentityEditComponent {
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
+        this.headerDevices = "Devices";
+        this.headerDevicesDescription = "View devices for this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
+        this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
+        this.devicesTableData = [];
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
@@ -59,6 +67,7 @@ export class IdentityEditComponent {
                 if (data && data.result) {
                     this.identity = data.result;
                     this.groupQuotasByMetricForTable();
+                    this.devicesTableData = this.identity.devices;
                 }
             },
             complete: () => (this.loading = false),
@@ -197,6 +206,7 @@ export class IdentityEditComponent {
     }
 
     isAllSelected() {
+        if (this.loading) return false;
         const numSelected = this.selectionQuotas.selected.length;
         const numRows = this.identity.quotas.length;
         return numSelected === numRows;

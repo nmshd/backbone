@@ -33,18 +33,17 @@
         </mat-card-content>
     </mat-card>
     <mat-accordion class="identity-accordion">
-        <mat-expansion-panel class="quotas-expansion-panel" [expanded]="true">
-            <mat-expansion-panel-header class="quotas-expansion-panel-header">
-                <mat-panel-title class="quotas-panel-header-title">
+        <mat-expansion-panel class="details-expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
                     {{ headerQuotas }}
                 </mat-panel-title>
-                <mat-panel-description class="quotas-panel-header-desc">
+                <mat-panel-description class="details-panel-header-desc">
                     {{ headerQuotasDescription }}
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
-                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()"
-                    [disabled]="selectionQuotas.selected.length === 0">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
                     <mat-icon>delete</mat-icon>
                 </button>
                 <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!identity.address">
@@ -54,17 +53,23 @@
             <table mat-table class="responsive" [dataSource]="quotasTableData">
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? toggleAllRowsQuotas() : null"
-                            [checked]="selectionQuotas.hasValue() && isAllSelected()" color="primary"
+                        <mat-checkbox
+                            (change)="$event ? toggleAllRowsQuotas() : null"
+                            [checked]="selectionQuotas.hasValue() && isAllSelected()"
+                            color="primary"
                             [indeterminate]="selectionQuotas.hasValue() && !isAllSelected()"
-                            [aria-label]="checkboxLabelQuotas()">
+                            [aria-label]="checkboxLabelQuotas()"
+                        >
                         </mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef="let row; let i = index">
-                        <mat-checkbox (click)="$event.stopPropagation()"
+                        <mat-checkbox
+                            (click)="$event.stopPropagation()"
                             (change)="$event ? selectionQuotas.toggle(row) : null"
-                            [checked]="selectionQuotas.isSelected(row)" color="primary"
-                            [aria-label]="checkboxLabelQuotas(i, row)">
+                            [checked]="selectionQuotas.isSelected(row)"
+                            color="primary"
+                            [aria-label]="checkboxLabelQuotas(i, row)"
+                        >
                         </mat-checkbox>
                     </td>
                 </ng-container>
@@ -74,30 +79,34 @@
                 </ng-container>
                 <ng-container matColumnDef="source">
                     <th mat-header-cell *matHeaderCellDef>Source</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Source">
+                    <td mat-cell *matCellDef="let Quota" data-label="Source:">
                         {{ Quota.source }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="max">
                     <th mat-header-cell *matHeaderCellDef>Max</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Max">
+                    <td mat-cell *matCellDef="let Quota" data-label="Max:">
                         {{ Quota.max }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="period">
                     <th mat-header-cell *matHeaderCellDef>Period</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Period">
+                    <td mat-cell *matCellDef="let Quota" data-label="Period:">
                         {{ Quota.period }}
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="quotasTableDisplayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: quotasTableDisplayedColumns"
-                    [ngClass]="{ 'disabled-tier': row.disabled }" [matTooltipDisabled]="!row.disabled"
-                    matTooltip="Tier quotas do not take effect if there is an individual quota."></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: quotasTableDisplayedColumns"
+                    [ngClass]="{ 'disabled-tier': row.disabled }"
+                    [matTooltipDisabled]="!row.disabled"
+                    matTooltip="Tier quotas do not take effect if there is an individual quota."
+                ></tr>
 
                 <!--Metric Group-->
                 <ng-container matColumnDef="metricGroup">
-                    <td mat-cell *matCellDef="let group" colspan="999" data-label="Metric">
+                    <td mat-cell *matCellDef="let group" colspan="999" data-label="Metric:">
                         {{ group.metric.displayName }}
                     </td>
                 </ng-container>
@@ -105,10 +114,60 @@
                 <tr mat-row *matRowDef="let row; columns: ['metricGroup']; when: isGroup"></tr>
 
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.
-                    </td>
+                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
                 </tr>
             </table>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerDevices }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerDevicesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <table mat-table class="responsive" [dataSource]="devicesTableData">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let Device" data-label="ID:">
+                            {{ Device.id }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="username">
+                        <th mat-header-cell *matHeaderCellDef>Username</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Username:">
+                            {{ Device.username }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell *matHeaderCellDef>Creation Date</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Creation Date:">
+                            {{ Device.createdAt | date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="lastLogin">
+                        <th mat-header-cell *matHeaderCellDef>Last Login Date</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Last Login Date:">
+                            {{ Device.lastLogin.time | date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdByDevice">
+                        <th mat-header-cell *matHeaderCellDef>Created By Device</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Created By Device:">
+                            {{ Device.createdByDevice }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="devicesTableDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: devicesTableDisplayedColumns"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell no-data" [attr.colspan]="devicesTableDisplayedColumns.length">No devices found.</td>
+                    </tr>
+                </table>
+            </ng-template>
         </mat-expansion-panel>
     </mat-accordion>
 </div>

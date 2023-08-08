@@ -36,4 +36,17 @@ export interface Identity {
     createdAt: Date;
     identityVersion: string;
     quotas: Quota[];
+    devices: Device[];
+}
+
+export interface Device {
+    id: string;
+    username: string;
+    createdAt: Date;
+    lastLogin: LastLoginInformation;
+    createdByDevice: string;
+}
+
+export interface LastLoginInformation {
+    time: Date;
 }
