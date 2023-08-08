@@ -117,6 +117,52 @@ public class ConsistencyCheckTests
         _reporter.ReportedTiersMissingFromDevices.Should().BeEmpty();
     }
 
+    [Fact]
+    public async void SanityCheck_DevicesTiers_vs_QuotasTiers_MissingFromDevices()
+    {
+        const string id = "tier-id";
+
+        _dataSource.DevicesTiersIds.Add(id);
+
+        await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
+
+        _reporter.ReportedTiersMissingFromDevices.Should().BeEmpty();
+        _reporter.ReportedTiersMissingFromQuotas.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesTiers_vs_QuotasTiers_MissingFromQuotas()
+    {
+        const string id = "tier-id";
+
+        _dataSource.QuotasTiersIds.Add(id);
+
+        await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
+
+        _reporter.ReportedTiersMissingFromDevices.Should().HaveCount(1);
+        _reporter.ReportedTiersMissingFromQuotas.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async void SanityCheck_DevicesTiers_vs_QuotasTiers_MissingFromBothSides()
+    {
+        const string idCommon = "tier-id-common";
+        const string idOnlyInDevices = "tier-id-devices";
+        const string idOnlyInQuotas = "tier-id-quotas";
+
+        _dataSource.QuotasTiersIds.Add(idCommon);
+        _dataSource.DevicesTiersIds.Add(idCommon);
+
+        _dataSource.DevicesTiersIds.Add(idOnlyInDevices);
+
+        _dataSource.QuotasTiersIds.Add(idOnlyInQuotas);
+
+        await _consistencyCheck.Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken.None);
+
+        _reporter.ReportedTiersMissingFromQuotas.Single().Should().Be(idOnlyInDevices);
+        _reporter.ReportedTiersMissingFromDevices.Single().Should().Be(idOnlyInQuotas);
+    }
+
     #endregion
 
     #region Run_for_TierQuotaDefinitions_vs_TierQuotas
