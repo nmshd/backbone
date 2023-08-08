@@ -128,6 +128,16 @@ BEGIN
 END
 $$;
 
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'readonly') THEN
+      CREATE USER "readonly" WITH password 'Passw0rd';
+      RAISE NOTICE 'User "readonly" created';
+   END IF;
+END
+$$;
+
 ALTER USER challenges SET search_path TO "Challenges";
 ALTER USER devices SET search_path TO "Devices";
 ALTER USER files SET search_path TO "Files";
@@ -183,6 +193,24 @@ GRANT USAGE ON SCHEMA "Files" TO "adminUi";
 GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO "adminUi";
 GRANT USAGE ON SCHEMA "Quotas" TO "adminUi";
 GRANT SELECT ON ALL TABLES IN SCHEMA "Quotas" TO "adminUi";
+
+GRANT USAGE ON SCHEMA "Challenges" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO "readonly";
+GRANT USAGE ON SCHEMA "Synchronization" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Synchronization" TO "readonly";
+GRANT USAGE ON SCHEMA "Messages" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Messages" TO "readonly";
+GRANT USAGE ON SCHEMA "Devices" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Devices" TO "readonly";
+GRANT USAGE ON SCHEMA "Tokens" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO "readonly";
+GRANT USAGE ON SCHEMA "Relationships" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Relationships" TO "readonly";
+GRANT USAGE ON SCHEMA "Files" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO "readonly";
+GRANT USAGE ON SCHEMA "Quotas" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Quotas" TO "readonly";
+
 GRANT USAGE ON SCHEMA "Tokens" TO quotas;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO quotas;
 
