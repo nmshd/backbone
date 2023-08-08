@@ -23,8 +23,8 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
     public async Task<ListTokensResponse> Handle(ListTokensQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = request.Ids.Any()
-            ? await _tokensRepository.FindAllWithIds(request.Ids, request.PaginationFilter)
-            : await _tokensRepository.FindAllOfOwner(_activeIdentity, request.PaginationFilter);
+            ? await _tokensRepository.FindAllWithIds(request.Ids, request.PaginationFilter, cancellationToken)
+            : await _tokensRepository.FindAllOfOwner(_activeIdentity, request.PaginationFilter, cancellationToken);
 
         return new ListTokensResponse(_mapper.Map<IEnumerable<TokenDTO>>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }

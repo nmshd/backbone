@@ -26,7 +26,11 @@ export class TierListComponent {
 
     displayedColumns: string[] = ["id", "name"];
 
-    constructor(private router: Router, private snackBar: MatSnackBar, private tierService: TierService) {
+    constructor(
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private tierService: TierService
+    ) {
         this.header = "Tiers";
         this.headerDescription = "A list of existing Tiers";
 

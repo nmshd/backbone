@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AdminUi.Infrastructure.Persistence;
 using Backbone.Infrastructure.EventBus;
 
 namespace AdminUi.Configuration;
 
 public class AdminConfiguration
 {
-    public AuthenticationConfiguration Authentication { get; set; }
+    public AuthenticationConfiguration Authentication { get; set; } = new();
 
     public CorsConfiguration Cors { get; set; } = new();
 
@@ -19,13 +20,13 @@ public class AdminConfiguration
 
     public class AuthenticationConfiguration
     {
-        public string ApiKey { get; set; } = "";
+        public string ApiKey { get; set; } = string.Empty;
     }
 
     public class CorsConfiguration
     {
-        public string AllowedOrigins { get; set; } = "";
-        public string ExposedHeaders { get; set; } = "";
+        public string AllowedOrigins { get; set; } = string.Empty;
+        public string ExposedHeaders { get; set; } = string.Empty;
     }
 
     public class SwaggerUiConfiguration
@@ -38,6 +39,7 @@ public class AdminConfiguration
     {
         [Required]
         public EventBusConfiguration EventBus { get; set; } = new();
+        public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
     }
 
     public class ModulesConfiguration

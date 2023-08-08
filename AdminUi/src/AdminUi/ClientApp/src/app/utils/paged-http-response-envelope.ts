@@ -1,4 +1,4 @@
-import { PaginationData } from './pagination-data';
+import { PaginationData } from "./pagination-data";
 
 export interface PagedHttpResponseEnvelope<Type> {
     result: Type[];

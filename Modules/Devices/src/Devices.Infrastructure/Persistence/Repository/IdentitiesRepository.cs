@@ -31,11 +31,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         _readonlyDevices = dbContext.Devices.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var paginationResult = await _readonlyIdentities
             .IncludeAll(_dbContext)
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
         return paginationResult;
     }
 
@@ -52,7 +52,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
-    public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices
             .NotDeleted()
@@ -62,8 +62,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         if (ids.Any())
             query = query.WithIdIn(ids);
 
-        return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
-
+        return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
 
     public async Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)

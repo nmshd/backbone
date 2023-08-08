@@ -29,18 +29,18 @@ services:
       - azure-storage-emulator
     volumes:
       - ../:/app
-    
+
   ### infrastructure ###
 
   azure-storage-emulator:
-   container_name: azure-storage-emulator
-   hostname: azurite
-   image: mcr.microsoft.com/azure-storage/azurite
-   command: azurite-blob -l /data --blobHost "0.0.0.0"
-   ports:
-     - "10000:10000"
-   volumes:
-     - azure-storage-emulator-volume:/data
+    container_name: azure-storage-emulator
+    hostname: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    command: azurite-blob -l /data --blobHost "0.0.0.0"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azure-storage-emulator-volume:/data
 
   ms-sql-server:
     container_name: bkb-mssql_server
@@ -74,7 +74,6 @@ services:
   #  environment:
   #     - PGADMIN_DEFAULT_PASSWORD=admin
   #     - PGADMIN_DEFAULT_EMAIL=admin@enmeshed.eu
-    
 
   rabbitmq:
     container_name: bkb-rabbitmq

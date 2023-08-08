@@ -50,7 +50,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
     }
 
-    public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         // Use SqlParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
         // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
@@ -66,11 +66,11 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             ? await DatawalletModifications
             .FromSqlInterpolated($@"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ""ObjectIdentifier"", ""Type"", ""PayloadCategory"" ORDER BY ""Index"" DESC) AS rank FROM ""Synchronization"".""DatawalletModifications"" m1 WHERE ""CreatedBy"" = {activeIdentityParam} AND ""Index"" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
             .AsNoTracking()
-            .OrderAndPaginate(m => m.Index, paginationFilter)
+            .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
             : await DatawalletModifications
             .FromSqlInterpolated($"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
             .AsNoTracking()
-            .OrderAndPaginate(m => m.Index, paginationFilter);
+            .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
 
         return paginationResult;
     }
@@ -189,7 +189,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         var query = await ExternalEvents
             .WithOwner(owner)
             .AssignedToSyncRun(syncRunId)
-            .OrderAndPaginate(x => x.Index, paginationFilter);
+            .OrderAndPaginate(x => x.Index, paginationFilter, cancellationToken);
 
         return query;
     }
