@@ -35,7 +35,8 @@ public class IdentitySummaryDTO
             DeletedByDevice = it.DeletedByDevice,
             DeletionCertificate = it.DeletionCertificate,
             Id = it.Id,
-            LastLogin = new LastLoginInformation() { Time = it.User?.LastLoginAt }
+            LastLogin = new LastLoginInformation() { Time = it.User?.LastLoginAt },
+            Username = it.User?.UserName
         });
         NumberOfDevices = devices.Count();
         TierId = tierId;
