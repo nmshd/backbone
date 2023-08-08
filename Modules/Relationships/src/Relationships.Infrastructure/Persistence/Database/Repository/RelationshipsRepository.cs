@@ -45,7 +45,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
         OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt,
         IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress,
-        PaginationFilter paginationFilter, bool onlyPeerChanges = false, bool track = false)
+        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false)
     {
         var query = (track ? _changes : _readOnlyChanges)
             .AsQueryable()
@@ -65,7 +65,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         if (onlyPeerChanges)
             query = query.OnlyPeerChanges(identityAddress);
 
-        var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await FillContentOfChanges(changes.ItemsOnPage);
 
@@ -107,7 +107,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
     public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
-        IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
+        IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _relationships : _readOnlyRelationships)
             .AsQueryable()
@@ -115,7 +115,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipant(identityAddress)
             .WithIdIn(ids);
 
-        var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await FillContentOfChanges(relationships.ItemsOnPage.SelectMany(r => r.Changes));
 

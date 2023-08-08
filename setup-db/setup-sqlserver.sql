@@ -62,6 +62,13 @@ BEGIN
 	CREATE LOGIN readonly WITH PASSWORD = 'Passw0rd'
 	PRINT 'Login "readonly" created' ;
 END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
+WHERE name = 'adminUi')
+BEGIN
+	CREATE LOGIN adminUi WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "adminUi" created' ;
+END
 GO
 
 IF NOT (EXISTS (SELECT name
@@ -142,6 +149,14 @@ BEGIN
 	PRINT 'Schema "Quotas" created' ;
 END
 
+IF NOT EXISTS ( SELECT *
+FROM sys.schemas
+WHERE name = N'AdminUi' )
+BEGIN
+	EXEC('CREATE SCHEMA [AdminUi]')
+	PRINT 'Schema "AdminUi" created' ;
+END
+
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 IF NOT EXISTS (SELECT *
 FROM sys.database_principals
@@ -215,7 +230,14 @@ BEGIN
 	CREATE USER readonly FOR LOGIN readonly
 	PRINT 'User "readonly" created' ;
 END
-	
+
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'adminUi')
+BEGIN
+	CREATE USER adminUi FOR LOGIN adminUi WITH DEFAULT_SCHEMA = AdminUi
+	PRINT 'User "adminUi" created' ;
+END
 GO
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -228,13 +250,14 @@ ALTER AUTHORIZATION ON SCHEMA::Tokens TO tokens
 ALTER AUTHORIZATION ON SCHEMA::Relationships TO relationships
 ALTER AUTHORIZATION ON SCHEMA::Files TO files
 ALTER AUTHORIZATION ON SCHEMA::Quotas TO quotas
+ALTER AUTHORIZATION ON SCHEMA::AdminUi TO adminUi
 PRINT 'Finished changing schema owners' ;
 GO
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
-GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files, quotas
+GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files, quotas, adminUi
 GRANT CREATE FUNCTION TO relationships
 GO
 
@@ -252,6 +275,15 @@ GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
 GRANT SELECT ON SCHEMA::Messages TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
 GRANT SELECT ON SCHEMA::Relationships TO quotas
+GRANT SELECT ON SCHEMA::Relationships TO adminUi
+GRANT SELECT ON SCHEMA::Files TO adminUi
+GRANT SELECT ON SCHEMA::Messages TO adminUi
+GRANT SELECT ON SCHEMA::Challenges TO adminUi
+GRANT SELECT ON SCHEMA::Synchronization TO adminUi
+GRANT SELECT ON SCHEMA::Devices TO adminUi
+GRANT SELECT ON SCHEMA::Tokens TO adminUi
+GRANT SELECT ON SCHEMA::Quotas TO adminUi
+GRANT CREATE VIEW TO adminUi
 GRANT SELECT ON SCHEMA::Tokens TO quotas
 
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO readonly;

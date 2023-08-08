@@ -45,14 +45,14 @@ public class TokensRepository : ITokensRepository
         return token;
     }
 
-    public async Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return await Find(null, ids, paginationFilter);
+        return await Find(null, ids, paginationFilter, cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter)
+    public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return await Find(owner, Array.Empty<TokenId>(), paginationFilter);
+        return await Find(owner, Array.Empty<TokenId>(), paginationFilter, cancellationToken);
     }
 
     public async Task<IEnumerable<TokenId>> GetAllTokenIds(bool includeExpired = false)
@@ -65,7 +65,7 @@ public class TokensRepository : ITokensRepository
         return await _readonlyTokensDbSet.Select(t => t.Id).ToListAsync();
     }
 
-    private async Task<DbPaginationResult<Token>> Find(IdentityAddress owner, IEnumerable<TokenId> ids, PaginationFilter paginationFilter)
+    private async Task<DbPaginationResult<Token>> Find(IdentityAddress owner, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         if (paginationFilter == null)
             throw new Exception("A pagination filter has to be provided.");
@@ -80,7 +80,7 @@ public class TokensRepository : ITokensRepository
         if (owner != null)
             query = query.Where(t => t.CreatedBy == owner);
 
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await FillContent(dbPaginationResult.ItemsOnPage);
         return dbPaginationResult;

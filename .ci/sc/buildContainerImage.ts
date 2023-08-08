@@ -5,9 +5,7 @@ import { getRequiredEnvVar, toCamelCase } from "../lib.js";
 
 const tag = getRequiredEnvVar("TAG");
 const moduleName = getRequiredEnvVar("MODULE");
-const projectSuffix = $.env["PROJECT_SUFFIX"]
-  ? `.${$.env["PROJECT_SUFFIX"]}`
-  : "";
+const projectSuffix = $.env["PROJECT_SUFFIX"] ? `.${$.env["PROJECT_SUFFIX"]}` : "";
 
 const moduleNameCamelCase = toCamelCase(moduleName);
 

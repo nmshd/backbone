@@ -1,8 +1,8 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Injectable } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root"
 })
 export class SidebarService {
     private extended: boolean;
@@ -11,15 +11,13 @@ export class SidebarService {
     constructor(breakpointObserver: BreakpointObserver) {
         this.mobile = false;
 
-        breakpointObserver
-            .observe([Breakpoints.XSmall, Breakpoints.Small])
-            .subscribe((result) => {
-                if (result.matches) {
-                    this.mobile = true;
-                } else {
-                    this.mobile = false;
-                }
-            });
+        breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe((result) => {
+            if (result.matches) {
+                this.mobile = true;
+            } else {
+                this.mobile = false;
+            }
+        });
 
         this.extended = !this.isMobile();
     }

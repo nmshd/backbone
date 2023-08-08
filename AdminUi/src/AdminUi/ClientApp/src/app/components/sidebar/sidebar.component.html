@@ -1,7 +1,6 @@
 <div class="sidebar sidebar-extended">
     <mat-nav-list>
-        <mat-list-item *ngFor="let option of sidebarOptions" [routerLink]="option.routerLink" routerLinkActive="active"
-            class="menu-entry">
+        <mat-list-item *ngFor="let option of sidebarOptions" [routerLink]="option.routerLink" routerLinkActive="active" class="menu-entry">
             <mat-icon matListItemIcon [routerLink]="option.routerLink">
                 {{ option.icon }}
             </mat-icon>

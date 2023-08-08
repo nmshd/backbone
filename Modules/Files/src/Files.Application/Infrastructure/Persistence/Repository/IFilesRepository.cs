@@ -8,6 +8,6 @@ namespace Backbone.Modules.Files.Application.Infrastructure.Persistence.Reposito
 public interface IFilesRepository
 {
     Task<File> Find(FileId id, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
-    Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter);
+    Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task Add(File file, CancellationToken cancellationToken);
 }

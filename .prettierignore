@@ -1,0 +1,7 @@
+**/.angular
+**/node_modules
+**/obj
+**/bin
+**/wwwroot
+**/helm
+!**/helm/**/values.yaml

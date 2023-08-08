@@ -53,7 +53,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, bool track = false)
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _templates : _readOnlyTemplates)
                     .AsQueryable()
@@ -61,7 +61,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
                     .NotDeleted()
                     .WithIdIn(ids);
 
-        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await FillContentOfTemplates(templates.ItemsOnPage);
 
