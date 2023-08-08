@@ -58,7 +58,7 @@ services:
       test-rabbitmq:
         condition: service_started
       test-consumer-api:
-        condition: service_started
+        condition: service_healthy
     configs:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
