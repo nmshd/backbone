@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { SidebarService } from 'src/app/services/sidebar-service/sidebar.service';
+import { Component } from "@angular/core";
+import { SidebarService } from "src/app/services/sidebar-service/sidebar.service";
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css'],
+    selector: "app-sidebar",
+    templateUrl: "./sidebar.component.html",
+    styleUrls: ["./sidebar.component.css"]
 })
 export class SidebarComponent {
     sidebarOptions: SidebarOption[];
@@ -16,25 +16,25 @@ export class SidebarComponent {
     ngOnInit() {
         this.sidebarOptions = [
             {
-                routerLink: '/dashboard',
-                icon: 'apps',
-                label: 'Dashboard',
+                routerLink: "/dashboard",
+                icon: "apps",
+                label: "Dashboard"
             },
             {
-                routerLink: '/identities',
-                icon: 'badge',
-                label: 'Identities',
+                routerLink: "/identities",
+                icon: "badge",
+                label: "Identities"
             },
             {
-                routerLink: '/tiers',
-                icon: 'clear_all',
-                label: 'Tiers',
+                routerLink: "/tiers",
+                icon: "clear_all",
+                label: "Tiers"
             },
             {
-                routerLink: '/clients',
-                icon: 'person',
-                label: 'Clients',
-            },
+                routerLink: "/clients",
+                icon: "person",
+                label: "Clients"
+            }
         ];
     }
 

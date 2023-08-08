@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TopbarComponent } from './topbar.component';
+import { TopbarComponent } from "./topbar.component";
 
-describe('TopbarComponent', () => {
+describe("TopbarComponent", () => {
     let component: TopbarComponent;
     let fixture: ComponentFixture<TopbarComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TopbarComponent],
+            declarations: [TopbarComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TopbarComponent);
@@ -16,7 +16,7 @@ describe('TopbarComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it("should create", () => {
         expect(component).toBeTruthy();
     });
 });

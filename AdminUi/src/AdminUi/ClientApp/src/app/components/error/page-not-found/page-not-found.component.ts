@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-    selector: 'app-page-not-found',
-    templateUrl: './page-not-found.component.html',
-    styleUrls: ['./page-not-found.component.css'],
+    selector: "app-page-not-found",
+    templateUrl: "./page-not-found.component.html",
+    styleUrls: ["./page-not-found.component.css"]
 })
 export class PageNotFoundComponent {
     error: ErrorInfo;
@@ -11,17 +11,16 @@ export class PageNotFoundComponent {
     constructor() {
         this.error = {
             code: 0,
-            title: '',
-            description: '',
+            title: "",
+            description: ""
         };
     }
 
     ngOnInit() {
         this.error = {
             code: 404,
-            title: 'Page not found',
-            description:
-                'Sorry, the page you were looking for does not exist or has been moved.',
+            title: "Page not found",
+            description: "Sorry, the page you were looking for does not exist or has been moved."
         };
     }
 }

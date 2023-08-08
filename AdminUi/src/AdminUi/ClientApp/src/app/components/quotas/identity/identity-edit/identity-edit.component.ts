@@ -1,14 +1,14 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
+import { Observable, forkJoin } from "rxjs";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
+import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
-import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { SelectionModel } from "@angular/cdk/collections";
-import { Observable, forkJoin } from "rxjs";
 
 @Component({
     selector: "app-identity-edit",
@@ -104,8 +104,14 @@ export class IdentityEditComponent {
 
         if (quotas[0].metric.key == metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
-            if (quotas[0].source == "Individual") metricGroup.tierDisabled = true;
-            if (quotas[0].source == "Tier") quotas[0].disabled = metricGroup.tierDisabled;
+            if (quotas[0].source == "Individual") {
+                metricGroup.tierDisabled = true;
+                quotas[0].deleteable = true;
+            }
+            if (quotas[0].source == "Tier") {
+                quotas[0].disabled = metricGroup.tierDisabled;
+                quotas[0].deleteable = false;
+            }
             return this.iterateQuotasByMetricGroup(quotas.slice(1), metricGroup);
         }
 
@@ -142,7 +148,9 @@ export class IdentityEditComponent {
                 if (data && data.result) {
                     this.getIdentity();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
-                        panelClass: ["snack-bar"]
+                        duration: 4000,
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
                     });
                 }
             },
@@ -208,7 +216,7 @@ export class IdentityEditComponent {
     isAllSelected() {
         if (this.loading) return false;
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas.length;
+        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.deleteable).length : 0;
         return numSelected === numRows;
     }
 
@@ -217,8 +225,7 @@ export class IdentityEditComponent {
             this.selectionQuotas.clear();
             return;
         }
-
-        this.selectionQuotas.select(...this.identity.quotas);
+        this.selectionQuotas.select(...this.identity.quotas.filter((i) => i.deleteable));
     }
 
     checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {

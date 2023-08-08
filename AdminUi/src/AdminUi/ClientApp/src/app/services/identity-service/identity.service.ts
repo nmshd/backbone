@@ -16,12 +16,12 @@ export class IdentityService {
         this.apiUrl = environment.apiUrl + "/Identities";
     }
 
-    getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<Identity>> {
+    getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<Identity>>(this.apiUrl, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(this.apiUrl, httpOptions);
     }
 
     getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
@@ -49,4 +49,16 @@ export interface Device {
 
 export interface LastLoginInformation {
     time: Date;
+}
+
+export interface IdentityOverview {
+    address: string;
+    createdAt: Date;
+    lastLoginAt: Date;
+    createdWithClient: string;
+    datawalletVersion: string;
+    tierName: string;
+    tierId: string;
+    identityVersion: string;
+    numberOfDevices: number;
 }

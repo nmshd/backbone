@@ -60,7 +60,7 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, bool track = false)
+    public async Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
@@ -71,7 +71,7 @@ public class MessagesRepository : IMessagesRepository
 
         var messages = await query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter);
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await Task.WhenAll(messages.ItemsOnPage.Select(FillBody).ToArray());
 

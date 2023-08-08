@@ -1,37 +1,28 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { Injectable } from "@angular/core";
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { AuthService } from "src/app/services/auth-service/auth.service";
 
 @Injectable()
 export class ApiKeyInterceptor implements HttpInterceptor {
+    isLoggedIn$: Observable<boolean> | undefined;
 
-  isLoggedIn$: Observable<boolean> | undefined;
+    constructor(private authService: AuthService) {}
 
-  constructor(private authService: AuthService) { }
-
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    this.isLoggedIn$ = this.authService.isLoggedIn;
-    const skipIntercept = request.headers.has('skip');
-    if (skipIntercept) {
-      request = request.clone({
-        headers: request.headers.delete('skip')
-      });
-    } else if (this.isLoggedIn$) {
-      request = request.clone({
-        setHeaders: {
-          'X-API-KEY': this.authService.getApiKey()!,
-        },
-      });
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        this.isLoggedIn$ = this.authService.isLoggedIn;
+        const skipIntercept = request.headers.has("skip");
+        if (skipIntercept) {
+            request = request.clone({
+                headers: request.headers.delete("skip")
+            });
+        } else if (this.isLoggedIn$) {
+            request = request.clone({
+                setHeaders: {
+                    "X-API-KEY": this.authService.getApiKey()!
+                }
+            });
+        }
+        return next.handle(request);
     }
-    return next.handle(request);
-  }
 }

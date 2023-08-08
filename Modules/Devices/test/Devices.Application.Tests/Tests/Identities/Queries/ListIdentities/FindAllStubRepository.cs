@@ -19,12 +19,12 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter)
+    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         return Task.FromResult(_identities);
     }
 
-    public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter)
+    public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

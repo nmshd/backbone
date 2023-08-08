@@ -8,11 +8,6 @@ public class IdentitiesApi : BaseApi
 {
     public IdentitiesApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
 
-    public async Task<HttpResponse<List<IdentitySummaryDTO>>> GetIdentities(RequestConfiguration requestConfiguration)
-    {
-        return await Get<List<IdentitySummaryDTO>>("/Identities", requestConfiguration);
-    }
-
     public async Task<HttpResponse<IdentitySummaryDTO>> GetIdentityByAddress(RequestConfiguration requestConfiguration, string identityAddress)
     {
         return await Get<IdentitySummaryDTO>($"/Identities/{identityAddress}", requestConfiguration);
@@ -26,5 +21,10 @@ public class IdentitiesApi : BaseApi
     public async Task<HttpResponse> DeleteIndividualQuota(string identityAddress, string individualQuotaId, RequestConfiguration requestConfiguration)
     {
         return await Delete($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
+    {
+        return await Get<List<IdentityOverviewDTO>>("/Identities", requestConfiguration);
     }
 }
