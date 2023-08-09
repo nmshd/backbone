@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
@@ -31,6 +32,11 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
             throw new DomainException(parseMetricKeyResult.Error);
 
         var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+
+        if (identity.IndividualQuotas.Any(q => q.MetricKey == metric.Key && q.Period == request.Period))
+        {
+            throw new DomainException(DomainErrors.DuplicateQuota());
+        }
 
         var individualQuota = identity.CreateIndividualQuota(metric.Key, request.Max, request.Period);
 

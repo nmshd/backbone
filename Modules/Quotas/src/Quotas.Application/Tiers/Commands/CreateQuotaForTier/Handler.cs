@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
@@ -36,6 +37,11 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
             throw new DomainException(parseMetricKeyResult.Error);
 
         var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+
+        if (tier.Quotas.Any(q => q.MetricKey == metric.Key && q.Period == request.Period))
+        {
+            throw new DomainException(DomainErrors.DuplicateQuota());
+        }
 
         var result = tier.CreateQuota(parseMetricKeyResult.Value, request.Max, request.Period);
         if (result.IsFailure)

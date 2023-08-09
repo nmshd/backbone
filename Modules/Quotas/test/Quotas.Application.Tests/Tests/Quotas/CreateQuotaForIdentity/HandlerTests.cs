@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -67,6 +68,31 @@ public class HandlerTests
 
         // Assert
         acting.Should().AwaitThrowAsync<DomainException>().Which.Code.Should().Be("error.platform.quotas.unsupportedMetricKey");
+    }
+
+    [Fact]
+    public async void Create_quota_with_duplicate_quota_metric_period_throws_domain_exception()
+    {
+        // Arrange
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identity = new Identity(identityAddress, new TierId("tier-id"));
+
+        var command1 = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
+        var command2 = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 10, QuotaPeriod.Month);
+
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
+
+        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+        var handler = CreateHandler(identitiesRepository, metricsRepository);
+
+        // Act
+        await handler.Handle(command1, CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(command2, CancellationToken.None);
+
+        // Assert
+        acting.Should().AwaitThrowAsync<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
     }
 
     [Fact]

@@ -13,4 +13,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.quotas.invalidValueForMaxLimitInQuota", "A quota max value cannot be lower of equal to zero.");
     }
+
+    public static DomainError DuplicateQuota()
+    {
+        return new DomainError("error.platform.quotas.duplicateQuota", "There is already a quota for this Tier/Identity targeting the same Metric and the same Period.");
+    }
 }
