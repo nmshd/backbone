@@ -10,6 +10,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.Tooling.Extensions;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -105,6 +106,7 @@ static void Configure(WebApplication app)
             .AddDefaultSecurityHeaders()
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny")
+            .AddCustomHeader("Access-Control-Allow-Credentials", "true")
     );
 
     if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
@@ -120,7 +122,6 @@ static void Configure(WebApplication app)
 
     app.UseAuthentication();
     app.UseAuthorization();
-
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 

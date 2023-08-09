@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from "@angular/common/http";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 
 import { MatCardModule } from "@angular/material/card";
@@ -44,7 +44,8 @@ import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-d
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
 import { LoginComponent } from "./components/shared/login/login.component";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
-import { ChangeSecretDialogComponent } from './components/client/change-secret-dialog/change-secret-dialog.component';
+import { ChangeSecretDialogComponent } from "./components/client/change-secret-dialog/change-secret-dialog.component";
+import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
 
 @NgModule({
     declarations: [
@@ -99,7 +100,8 @@ import { ChangeSecretDialogComponent } from './components/client/change-secret-d
             provide: DATE_PIPE_DEFAULT_OPTIONS,
             useValue: { dateFormat: "dd.MM.yyyy HH:mm:ss" }
         },
-        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: XSRFInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]
 })

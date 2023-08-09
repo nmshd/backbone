@@ -33,7 +33,11 @@ public static class IServiceCollectionExtensions
         AdminConfiguration configuration)
     {
         services
-            .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))
+            .AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(CustomExceptionFilter));
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
@@ -103,6 +107,12 @@ public static class IServiceCollectionExtensions
                 policy.AddAuthenticationSchemes("ApiKey");
                 policy.RequireAuthenticatedUser();
             });
+        });
+
+        services.AddAntiforgery(o =>
+        {
+            o.HeaderName = "X-XSRF-TOKEN";
+            o.Cookie.HttpOnly = false;
         });
 
         var modules = configuration.Modules.GetType().GetProperties();
