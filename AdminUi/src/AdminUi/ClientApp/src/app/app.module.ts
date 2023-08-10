@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 
+import { LoggerModule, NgxLoggerLevel, TOKEN_LOGGER_SERVER_SERVICE } from "ngx-logger";
+
 import { MatCardModule } from "@angular/material/card";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
@@ -45,6 +47,8 @@ import { ConfirmationDialogComponent } from "./components/shared/confirmation-di
 import { LoginComponent } from "./components/shared/login/login.component";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 import { ChangeSecretDialogComponent } from "./components/client/change-secret-dialog/change-secret-dialog.component";
+import { environment } from "src/environments/environment";
+import { LoggerServerService } from "./services/logger-server-service/logger-server.service";
 
 @NgModule({
     declarations: [
@@ -72,6 +76,20 @@ import { ChangeSecretDialogComponent } from "./components/client/change-secret-d
         BrowserAnimationsModule,
         ClipboardModule,
         HttpClientModule,
+        LoggerModule.forRoot(
+            {
+                serverLoggingUrl: environment.apiUrl + "/Logs",
+                level: NgxLoggerLevel.DEBUG,
+                serverLogLevel: NgxLoggerLevel.DEBUG,
+                enableSourceMaps: true
+            },
+            {
+                serverProvider: {
+                    provide: TOKEN_LOGGER_SERVER_SERVICE,
+                    useClass: LoggerServerService
+                }
+            }
+        ),
         MatCardModule,
         MatToolbarModule,
         MatButtonModule,
