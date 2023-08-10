@@ -65,6 +65,7 @@ export interface Quota {
     max: number;
     period: string;
     disabled: boolean;
+    deleteable: boolean;
 }
 
 export interface CreateQuotaForTierRequest {

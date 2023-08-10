@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ListChangesQuery, ListChangesResponse>
 
     public async Task<ListChangesResponse> Handle(ListChangesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipsRepository.FindChangesWithIds(request.Ids, request.Type, request.Status, request.ModifiedAt, request.CreatedAt, request.CompletedAt, request.CreatedBy, request.CompletedBy, _userContext.GetAddress(), request.PaginationFilter, track: false);
+        var dbPaginationResult = await _relationshipsRepository.FindChangesWithIds(request.Ids, request.Type, request.Status, request.ModifiedAt, request.CreatedAt, request.CompletedAt, request.CreatedBy, request.CompletedBy, _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
 
         return new ListChangesResponse(_mapper.Map<RelationshipChangeDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }

@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TierEditComponent } from './tier-edit.component';
+import { TierEditComponent } from "./tier-edit.component";
 
-describe('TierEditComponent', () => {
+describe("TierEditComponent", () => {
     let component: TierEditComponent;
     let fixture: ComponentFixture<TierEditComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TierEditComponent],
+            declarations: [TierEditComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TierEditComponent);
@@ -16,7 +16,7 @@ describe('TierEditComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it("should create", () => {
         expect(component).toBeTruthy();
     });
 });

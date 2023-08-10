@@ -14,5 +14,5 @@ This will open a shell in the container. From there, you can run the tool with t
 
 Note: all commands need a connection string and a database provider. These can be supplied in two ways:
 
-- via command options (see `backbone --help`)
-- via the environment variables `Database__Provider` and `Database__ConnectionString`
+-   via command options (see `backbone --help`)
+-   via the environment variables `Database__Provider` and `Database__ConnectionString`

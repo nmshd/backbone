@@ -34,8 +34,7 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
-                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()"
-                    [disabled]="selectionQuotas.selected.length === 0">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
                     <mat-icon>delete</mat-icon>
                 </button>
                 <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!tier.id">
@@ -45,16 +44,20 @@
             <table mat-table class="responsive" [dataSource]="tier.quotas">
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? toggleAllRowsQuotas() : null"
-                            [checked]="selectionQuotas.hasValue() && isAllSelected()" color="primary"
+                        <mat-checkbox
+                            (change)="$event ? toggleAllRowsQuotas() : null"
+                            [checked]="selectionQuotas.hasValue() && isAllSelected()"
+                            color="primary"
                             [indeterminate]="selectionQuotas.hasValue() && !isAllSelected()"
                             [aria-label]="checkboxLabelQuotas()">
                         </mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef="let row; let i = index">
-                        <mat-checkbox (click)="$event.stopPropagation()"
+                        <mat-checkbox
+                            (click)="$event.stopPropagation()"
                             (change)="$event ? selectionQuotas.toggle(row) : null"
-                            [checked]="selectionQuotas.isSelected(row)" color="primary"
+                            [checked]="selectionQuotas.isSelected(row)"
+                            color="primary"
                             [aria-label]="checkboxLabelQuotas(i, row)">
                         </mat-checkbox>
                     </td>
@@ -81,8 +84,7 @@
                 <tr mat-row *matRowDef="let row; columns: quotasTableDisplayedColumns"></tr>
 
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.
-                    </td>
+                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
                 </tr>
             </table>
         </mat-expansion-panel>

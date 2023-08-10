@@ -28,7 +28,12 @@ export class ClientListComponent {
     selection = new SelectionModel<ClientDTO>(true, []);
     displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
 
-    constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar, private clientService: ClientServiceService) {
+    constructor(
+        private router: Router,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private clientService: ClientServiceService
+    ) {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
         this.clients = [];

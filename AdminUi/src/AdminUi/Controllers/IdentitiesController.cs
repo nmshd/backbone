@@ -1,6 +1,7 @@
-﻿using Backbone.Modules.Devices.Application;
+﻿using AdminUi.Infrastructure.DTOs;
+using AdminUi.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
@@ -9,6 +10,7 @@ using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,16 +28,18 @@ namespace AdminUi.Controllers;
 [Authorize("ApiKey")]
 public class IdentitiesController : ApiControllerBase
 {
+    private readonly AdminUiDbContext _adminUiDbContext;
     private readonly ApplicationOptions _options;
 
     public IdentitiesController(
-        IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+        IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
     {
+        _adminUiDbContext = adminUiDbContext;
         _options = options.Value;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListIdentitiesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<IdentityOverview>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetIdentities([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
@@ -43,8 +47,8 @@ public class IdentitiesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var identities = await _mediator.Send(new ListIdentitiesQuery(paginationFilter), cancellationToken);
-        return Paged(identities);
+        var identityOverviews = await _adminUiDbContext.IdentityOverviews.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+        return Paged(new PagedResponse<IdentityOverview>(identityOverviews.ItemsOnPage, paginationFilter, identityOverviews.TotalNumberOfItems));
     }
 
     [HttpPost("{identityAddress}/Quotas")]
