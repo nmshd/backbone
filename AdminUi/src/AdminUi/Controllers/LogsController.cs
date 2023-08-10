@@ -33,23 +33,24 @@ public class LogsController : ApiControllerBase
 
         switch (request.LogLevel)
         {
-            case LogLevel.CRITICAL:
-                logger.LogCritical(request.MessageTemplate, request.Arguments);
-                break;
             case LogLevel.TRACE:
                 logger.LogTrace(request.MessageTemplate, request.Arguments);
                 break;
             case LogLevel.DEBUG:
                 logger.LogDebug(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.ERROR:
-                logger.LogError(request.MessageTemplate, request.Arguments);
-                break;
             case LogLevel.INFORMATION:
                 logger.LogInformation(request.MessageTemplate, request.Arguments);
                 break;
+            //missing LogLevel.LOG
             case LogLevel.WARNING:
                 logger.LogWarning(request.MessageTemplate, request.Arguments);
+                break;
+            case LogLevel.ERROR:
+                logger.LogError(request.MessageTemplate, request.Arguments);
+                break;
+            case LogLevel.CRITICAL:
+                logger.LogCritical(request.MessageTemplate, request.Arguments);
                 break;
             default:
                 throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(request.LogLevel)));
@@ -69,10 +70,11 @@ public class LogRequest
 
 public enum LogLevel
 {
-    CRITICAL,
     TRACE,
     DEBUG,
-    ERROR,
     INFORMATION,
-    WARNING
+    LOG,
+    WARNING,
+    ERROR,
+    CRITICAL
 }
