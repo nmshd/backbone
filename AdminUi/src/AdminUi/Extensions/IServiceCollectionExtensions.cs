@@ -91,7 +91,6 @@ public static class IServiceCollectionExtensions
                     .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
                     .AllowAnyHeader()
                     .AllowAnyMethod();
-                    //.AllowCredentials();
             });
         });
 

@@ -18,7 +18,6 @@ public class ClientsController : ApiControllerBase
     public ClientsController(IMediator mediator) : base(mediator) { }
 
     [HttpGet]
-    [IgnoreAntiforgeryToken]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListClientsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)

@@ -1,15 +1,14 @@
+import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from "@angular/common/http";
-import { from, lastValueFrom, Observable } from "rxjs";
-import { AuthService } from "src/app/services/auth-service/auth.service";
 import "cookie-store";
+import { from, lastValueFrom } from "rxjs";
+import { AuthService } from "src/app/services/auth-service/auth.service";
 
 @Injectable()
 export class XSRFInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
-        // convert promise to observable using 'from' operator
         return from(this.handle(req, next));
     }
 
