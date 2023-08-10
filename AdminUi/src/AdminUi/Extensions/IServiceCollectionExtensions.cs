@@ -91,6 +91,7 @@ public static class IServiceCollectionExtensions
                     .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
                     .AllowAnyHeader()
                     .AllowAnyMethod();
+                    //.AllowCredentials();
             });
         });
 
@@ -112,6 +113,7 @@ public static class IServiceCollectionExtensions
         services.AddAntiforgery(o =>
         {
             o.HeaderName = "X-XSRF-TOKEN";
+            o.Cookie.Name = "X-XSRF-COOKIE";
             o.Cookie.HttpOnly = false;
         });
 

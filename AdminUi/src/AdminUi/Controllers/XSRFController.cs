@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdminUi.Controllers;
 
 [Route("api/v1/xsrf")]
+[Authorize("ApiKey")]
 public class XsrfController : ControllerBase
 {
     [HttpGet]
