@@ -39,10 +39,9 @@ public class LogsController : ApiControllerBase
             case LogLevel.DEBUG:
                 logger.LogDebug(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.INFORMATION:
+            case LogLevel.INFORMATION: case LogLevel.LOG:
                 logger.LogInformation(request.MessageTemplate, request.Arguments);
                 break;
-            //missing LogLevel.LOG
             case LogLevel.WARNING:
                 logger.LogWarning(request.MessageTemplate, request.Arguments);
                 break;
