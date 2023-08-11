@@ -1,6 +1,5 @@
 import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import "cookie-store";
 import { from, lastValueFrom } from "rxjs";
 import { XSRFService } from "src/app/services/xsrf-service/xsrf.service";
 
