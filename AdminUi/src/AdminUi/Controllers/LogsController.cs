@@ -27,7 +27,7 @@ public class LogsController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public IActionResult PostTiers([FromBody] LogRequest request)
+    public IActionResult CreateLog([FromBody] LogRequest request)
     {
         var logger = _logger.CreateLogger(request.Category);
 
@@ -52,7 +52,8 @@ public class LogsController : ApiControllerBase
                 logger.LogCritical(request.MessageTemplate, request.Arguments);
                 break;
             default:
-                throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(request.LogLevel)));
+                throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(request.LogLevel)));
+                break;
         }
 
         return NoContent();
