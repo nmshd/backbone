@@ -15,14 +15,13 @@ export class XSRFInterceptor implements HttpInterceptor {
     async handle(req: HttpRequest<any>, next: HttpHandler) {
         const token = this.xsrfService.getStoredToken();
 
-        if (token) {
-            req = req.clone({
-                withCredentials: true,
-                setHeaders: {
-                    "X-XSRF-TOKEN": token
-                }
-            });
-        }
+        req = req.clone({
+            withCredentials: true,
+            setHeaders: {
+                "X-XSRF-TOKEN": token
+            }
+        });
+
         return await lastValueFrom(next.handle(req));
     }
 }
