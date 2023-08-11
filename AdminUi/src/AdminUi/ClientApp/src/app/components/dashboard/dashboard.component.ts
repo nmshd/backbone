@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { AuthService } from "src/app/services/auth-service/auth.service";
 import { SidebarService } from "src/app/services/sidebar-service/sidebar.service";
 
 @Component({
@@ -12,7 +11,7 @@ export class DashboardComponent {
     breakpoint: number;
     dashboardOverviewPanels: DashboardOverviewPanel[];
 
-    constructor(private sidebarService: SidebarService, private authService: AuthService) {
+    constructor(private sidebarService: SidebarService) {
         this.header = "";
         this.breakpoint = window.innerWidth <= 1150 ? 1 : window.innerWidth <= 1700 ? 2 : 3;
         this.dashboardOverviewPanels = [];
@@ -43,8 +42,6 @@ export class DashboardComponent {
                 description: "List all of the application's clients and create new ones."
             }
         ];
-
-        this.authService.getXSRFToken();
     }
 
     onResize(event: any): void {

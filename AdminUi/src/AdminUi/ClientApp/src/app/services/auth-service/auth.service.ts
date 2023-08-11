@@ -15,10 +15,7 @@ export class AuthService {
         return this.loggedIn.asObservable();
     }
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
+    constructor(private router: Router, private http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
@@ -48,14 +45,6 @@ export class AuthService {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
         this.router.navigate(["/login"]);
-    }
-
-    getXSRFToken(): void {
-        this.http.get(`${this.apiUrl}/xsrf`, { responseType: "text" }).subscribe({
-            next: (token) => {
-                localStorage.setItem("xsrf-token", token);
-            }
-        });
     }
 }
 
