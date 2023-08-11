@@ -21,10 +21,10 @@ export class XSRFService {
     }
 
     getStoredToken(): string {
-        const token = localStorage.getItem("xsrf-token");
-        if (!token) {
-            throw new Error("The xsrf token was not found");
-        }
-        return token;
+        return localStorage.getItem("xsrf-token") ?? "";
+    }
+
+    clearStoredToken(): void {
+        localStorage.removeItem("xsrf-token");
     }
 }
