@@ -8,6 +8,8 @@
 
 .layout-content {
     padding: 1rem;
+    max-width: 1140px;
+    margin: auto;
 }
 
 .login-layout {
