@@ -11,15 +11,41 @@ namespace AdminUi.Tests.Integration.API;
 
 public class BaseApi
 {
-    protected const string ROUTE_PREFIX = "/api/v1";
     private readonly RestClient _client;
+
+    protected const string ROUTE_PREFIX = "/api/v1";
+    private const string TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
+    private const string TOKEN_COOKIE_NAME = "X-XSRF-COOKIE";
+
+    private string _xsrfToken = string.Empty;
+    private string _xsrfCookie = string.Empty;
 
     protected BaseApi(IOptions<HttpClientOptions> httpConfiguration)
     {
         _client = new RestClient(httpConfiguration.Value.BaseUrl);
         _client.AddDefaultHeader("X-API-KEY", httpConfiguration.Value.ApiKey);
 
+        LoadAndAddXSRFHeaders();
+
         ServicePointManager.ServerCertificateValidationCallback += (_, _, _, _) => true;
+    }
+
+    private void LoadAndAddXSRFHeaders()
+    {
+        Task.Run(LoadXSRFTokensAsync).Wait();
+        _client.AddDefaultHeader(TOKEN_HEADER_NAME, _xsrfToken);
+        _client.AddDefaultHeader("Cookie", $"{TOKEN_COOKIE_NAME}={_xsrfCookie}");
+    }
+
+    private async Task LoadXSRFTokensAsync()
+    {
+        var token = await Get<string>("/xsrf", new() { AcceptHeader = "text/plain" });
+        if (token.RawContent != null && token.Cookies != null && token.Cookies.Count > 0)
+        {
+            var cookie = token.Cookies.Single(c => c.Name == TOKEN_COOKIE_NAME);
+            _xsrfCookie = cookie.Value;
+            _xsrfToken = token.RawContent;
+        }
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -88,7 +114,9 @@ public class BaseApi
             StatusCode = restResponse.StatusCode,
             Content = restResponse.Data!,
             ContentType = restResponse.ContentType,
-            RawContent = restResponse.Content
+            RawContent = restResponse.Content,
+            Cookies = restResponse.Cookies,
+            Headers = restResponse.Headers,
         };
 
         return response;
