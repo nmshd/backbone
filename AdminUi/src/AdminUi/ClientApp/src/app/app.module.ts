@@ -79,7 +79,7 @@ import { LoggerServerService } from "./services/logger-server-service/logger-ser
         LoggerModule.forRoot(
             {
                 serverLoggingUrl: environment.apiUrl + "/Logs",
-                level: NgxLoggerLevel.TRACE,
+                level: environment.production ? NgxLoggerLevel.INFO : NgxLoggerLevel.TRACE,
                 serverLogLevel: NgxLoggerLevel.INFO,
                 enableSourceMaps: true
             },
