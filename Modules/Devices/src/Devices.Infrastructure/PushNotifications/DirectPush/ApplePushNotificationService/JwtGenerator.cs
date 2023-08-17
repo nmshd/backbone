@@ -16,14 +16,14 @@ public class JwtGenerator : IJwtGenerator
         _jwtCache = jwtCache;
     }
 
-    public Jwt Generate(string privateKey, string keyId, string teamId)
+    public Jwt Generate(string privateKey, string keyId, string teamId, string bundleId)
     {
         lock (_jwtCache)
         {
-            if (!_jwtCache.HasValue())
-                _jwtCache.UpdateValue(CreateNew(privateKey, keyId, teamId));
+            if (!_jwtCache.HasValue(bundleId))
+                _jwtCache.UpdateValue(bundleId, CreateNew(privateKey, keyId, teamId));
 
-            return _jwtCache.GetValue();
+            return _jwtCache.GetValue(bundleId);
         }
     }
 

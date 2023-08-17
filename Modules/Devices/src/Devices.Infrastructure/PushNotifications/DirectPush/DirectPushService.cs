@@ -35,13 +35,13 @@ public class DirectPushService : IPushService
         }
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
 
         if (registration != null)
         {
-            registration.Update(handle);
+            registration.Update(handle, appId);
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
 
@@ -49,7 +49,7 @@ public class DirectPushService : IPushService
         }
         else
         {
-            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle), cancellationToken);
+            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
 
             _logger.LogTrace("New device successfully registered.");
         }

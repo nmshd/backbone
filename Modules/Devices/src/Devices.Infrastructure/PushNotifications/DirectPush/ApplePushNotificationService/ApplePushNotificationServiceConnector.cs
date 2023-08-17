@@ -25,17 +25,17 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var recipients = registrations.Select(r => r.Handle.Value).ToList();
-
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        var jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
-
-        var tasks = recipients.Select(device =>
+        var tasks = registrations.Select(pnsRegistration =>
         {
-            var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", jwt.Value)
+            var device = pnsRegistration.Handle.Value;
+            var apnsOptions = _options.KeysByBundleId[pnsRegistration.AppId];
+            var jwt = _jwtGenerator.Generate(apnsOptions.PrivateKey, apnsOptions.KeyId, apnsOptions.TeamId, pnsRegistration.AppId);
+
+            var request = new ApnsMessageBuilder(apnsOptions.AppBundleIdentifier, $"{apnsOptions.Server}{device}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)

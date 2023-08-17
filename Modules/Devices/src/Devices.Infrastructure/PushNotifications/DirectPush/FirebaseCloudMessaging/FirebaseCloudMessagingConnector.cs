@@ -3,34 +3,39 @@ using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
-    private readonly FirebaseMessaging _firebaseMessaging;
+    private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessaging firebaseMessaging)
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory)
     {
-        _firebaseMessaging = firebaseMessaging;
+        _firebaseMessagingFactory = firebaseMessagingFactory;
     }
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var recipients = registrations.Select(r => r.Handle.Value).ToList();
+        var uniqueAppIds = registrations.DistinctBy(r => r.AppId).Select(r => r.AppId);
+        foreach (var appId in uniqueAppIds)
+        {
+            var recipients = registrations.Where(r => r.AppId == appId).Select(r => r.Handle.Value).ToList();
 
-        var (notificationTitle, notificationBody) = GetNotificationText(notification);
-        var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(recipient, notification);
+            var (notificationTitle, notificationBody) = GetNotificationText(notification);
+            var notificationId = GetNotificationId(notification);
+            var notificationContent = new NotificationContent(recipient, notification);
 
-        var message = new FcmMessageBuilder()
-            .AddContent(notificationContent)
-            .SetNotificationText(notificationTitle, notificationBody)
-            .SetTag(notificationId)
-            .SetTokens(recipients.ToImmutableList())
-            .Build();
+            var message = new FcmMessageBuilder()
+                .AddContent(notificationContent)
+                .SetNotificationText(notificationTitle, notificationBody)
+                .SetTag(notificationId)
+                .SetTokens(recipients.ToImmutableList())
+                .Build();
 
-        await _firebaseMessaging.SendMulticastAsync(message);
+            var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(appId);
+            await firebaseMessaging.SendMulticastAsync(message);
+        }
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

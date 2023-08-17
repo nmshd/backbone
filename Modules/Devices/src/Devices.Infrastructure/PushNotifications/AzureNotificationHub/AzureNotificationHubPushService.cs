@@ -22,7 +22,7 @@ public class AzureNotificationHubPushService : IPushService
         _logger = logger;
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
     {
         var installation = new Installation
         {
