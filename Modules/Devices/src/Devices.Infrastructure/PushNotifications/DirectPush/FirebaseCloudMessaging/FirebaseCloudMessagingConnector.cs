@@ -17,11 +17,10 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var uniqueAppIds = registrations.DistinctBy(r => r.AppId).Select(r => r.AppId);
-        foreach (var appId in uniqueAppIds)
-        {
-            var recipients = registrations.Where(r => r.AppId == appId).Select(r => r.Handle.Value).ToList();
+        var registrationsByAppId = registrations.GroupBy(r => r.AppId).Select(r => new { AppId = r.Key, Handles = r.Select(pnsRegistrations => pnsRegistrations.Handle.Value).ToList() });
 
+        foreach (var pnsRegistrations in registrationsByAppId)
+        {
             var (notificationTitle, notificationBody) = GetNotificationText(notification);
             var notificationId = GetNotificationId(notification);
             var notificationContent = new NotificationContent(recipient, notification);
@@ -30,10 +29,10 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetTag(notificationId)
-                .SetTokens(recipients.ToImmutableList())
+                .SetTokens(pnsRegistrations.Handles.ToImmutableList())
                 .Build();
 
-            var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(appId);
+            var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
             await firebaseMessaging.SendMulticastAsync(message);
         }
     }

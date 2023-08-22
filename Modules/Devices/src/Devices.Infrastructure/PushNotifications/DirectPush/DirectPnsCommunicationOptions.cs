@@ -8,8 +8,8 @@ public class DirectPnsCommunicationOptions
 
     public class FcmOptions
     {
-        public Dictionary<string, ServiceAccounts> KeysByApplicationId { get; set; } = new();
-        public class ServiceAccounts
+        public Dictionary<string, ServiceAccount> KeysByApplicationId { get; set; } = new();
+        public class ServiceAccount
         {
             public string ServiceAccountJson { get; set; } = string.Empty;
         }
@@ -23,7 +23,6 @@ public class DirectPnsCommunicationOptions
             public string TeamId { get; set; } = string.Empty;
             public string KeyId { get; set; } = string.Empty;
             public string PrivateKey { get; set; } = string.Empty;
-            public string AppBundleIdentifier { get; set; } = string.Empty;
             public ApnsServerType ServerType { get; set; }
             public string Server => ServerType switch
             {

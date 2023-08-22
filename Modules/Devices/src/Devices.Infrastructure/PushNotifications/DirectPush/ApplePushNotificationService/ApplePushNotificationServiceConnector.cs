@@ -32,10 +32,10 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var tasks = registrations.Select(pnsRegistration =>
         {
             var device = pnsRegistration.Handle.Value;
-            var apnsOptions = _options.KeysByBundleId[pnsRegistration.AppId];
-            var jwt = _jwtGenerator.Generate(apnsOptions.PrivateKey, apnsOptions.KeyId, apnsOptions.TeamId, pnsRegistration.AppId);
+            var bundleInformation = _options.KeysByBundleId[pnsRegistration.AppId];
+            var jwt = _jwtGenerator.Generate(bundleInformation.PrivateKey, bundleInformation.KeyId, bundleInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(apnsOptions.AppBundleIdentifier, $"{apnsOptions.Server}{device}", jwt.Value)
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundleInformation.Server}{device}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)

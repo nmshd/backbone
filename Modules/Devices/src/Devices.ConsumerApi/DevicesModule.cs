@@ -22,6 +22,7 @@ public class DevicesModule : IModule
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<DirectPnsCommunicationOptions.ApnsOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Apns").Bind(options));
+        services.ConfigureAndValidate<DirectPnsCommunicationOptions.FcmOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Fcm").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
