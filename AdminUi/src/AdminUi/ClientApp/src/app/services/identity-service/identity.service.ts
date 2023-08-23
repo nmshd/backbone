@@ -48,7 +48,7 @@ export interface Device {
 }
 
 export interface LastLoginInformation {
-    time: Date;
+    time?: Date;
 }
 
 export interface IdentityOverview {
