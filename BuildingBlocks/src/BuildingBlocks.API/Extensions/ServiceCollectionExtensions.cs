@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
                 break;
             case "Postgres":
                 services.AddHealthChecks().AddNpgSql(
-                    connectionString: connectionString,
+                    npgsqlConnectionString: connectionString,
                     name: name);
                 break;
             default:
