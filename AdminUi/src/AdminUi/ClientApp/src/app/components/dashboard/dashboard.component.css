@@ -30,9 +30,9 @@
 }
 
 .panel-icon {
-    font-size: 3rem;
-    width: 3rem;
-    height: 3rem;
+    font-size: 100px;
+    width: 100px;
+    height: 100px;
     margin-top: 20px;
     color: #673ab7;
 }
