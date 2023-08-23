@@ -1,4 +1,5 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public interface IPnsConnector

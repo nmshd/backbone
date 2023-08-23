@@ -1,5 +1,6 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,12 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
+    }
+
+    public async Task Delete(List<PnsRegistration> registrations, CancellationToken cancellationToken)
+    {
+        _registrations.RemoveRange(registrations);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)

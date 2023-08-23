@@ -1,4 +1,5 @@
-﻿using FirebaseAdmin;
+﻿using Backbone.Modules.Devices.Application.PushNotifications;
+using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;

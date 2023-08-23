@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Application.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;

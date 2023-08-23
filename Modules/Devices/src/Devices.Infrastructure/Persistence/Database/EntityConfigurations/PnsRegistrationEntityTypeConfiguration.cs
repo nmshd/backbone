@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

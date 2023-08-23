@@ -2,7 +2,8 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+
 public class PnsRegistration
 {
     private PnsRegistration() { }
@@ -19,7 +20,7 @@ public class PnsRegistration
     public IdentityAddress IdentityAddress { get; }
     public DeviceId DeviceId { get; }
     public PnsHandle Handle { get; private set; }
-    public string AppId { get; private set; }
+    public string? AppId { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
     public void Update(PnsHandle newHandle, string appId)

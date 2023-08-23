@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿namespace Backbone.Modules.Devices.Application.PushNotifications;
 
 public class DirectPnsCommunicationOptions
 {
@@ -8,6 +8,7 @@ public class DirectPnsCommunicationOptions
 
     public class FcmOptions
     {
+        public string DefaultBundleId { get; set; }
         public Dictionary<string, ServiceAccount> KeysByApplicationId { get; set; } = new();
         public class ServiceAccount
         {
@@ -17,6 +18,7 @@ public class DirectPnsCommunicationOptions
 
     public class ApnsOptions
     {
+        public string DefaultBundleId { get; set; }
         public Dictionary<string, Key> KeysByBundleId { get; set; } = new();
         public class Key
         {

@@ -14,8 +14,5 @@ public class UpdateDeviceRegistrationValidator : AbstractValidator<UpdateDeviceR
         RuleFor(dto => dto.Handle)
             .DetailedNotEmpty()
             .Length(10, 500).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
-
-        RuleFor(dto => dto.AppId)
-            .DetailedNotEmpty();
     }
 }
