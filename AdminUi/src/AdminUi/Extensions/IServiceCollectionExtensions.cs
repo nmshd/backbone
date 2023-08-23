@@ -136,7 +136,7 @@ public static class IServiceCollectionExtensions
                     break;
                 case "Postgres":
                     services.AddHealthChecks().AddNpgSql(
-                        connectionString: connectionString,
+                        npgsqlConnectionString: connectionString,
                         name: moduleName);
                     break;
                 default:
