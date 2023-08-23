@@ -9,6 +9,8 @@ public class DeviceDTO : IHaveCustomMapping
 {
     public DeviceId Id { get; set; }
 
+    public string Username { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DeviceId CreatedByDevice { get; set; }
@@ -24,7 +26,9 @@ public class DeviceDTO : IHaveCustomMapping
         configuration
             .CreateMap<Device, DeviceDTO>()
             .ForMember(dto => dto.LastLogin,
-                expression => expression.MapFrom(device => new LastLoginInformation { Time = device.User.LastLoginAt }));
+                expression => expression.MapFrom(device => new LastLoginInformation { Time = device.User.LastLoginAt }))
+            .ForMember(dto => dto.Username,
+                expression => expression.MapFrom(device => device.User.UserName));
     }
 }
 
