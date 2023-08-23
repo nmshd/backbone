@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
-import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -16,10 +15,7 @@ export class AuthService {
         return this.loggedIn.asObservable();
     }
 
-    constructor(
-        private router: Router,
-        private http: HttpClient
-    ) {
+    constructor(private router: Router, private http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
@@ -45,10 +41,10 @@ export class AuthService {
         this.router.navigate(["/"]);
     }
 
-    logout(): void {
+    logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
-        this.router.navigate(["/login"]);
+        return this.router.navigate(["/login"]);
     }
 }
 
