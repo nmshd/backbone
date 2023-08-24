@@ -21,10 +21,10 @@ public class LogsStepDefinitions : BaseStepDefinitions
     {
         var createTierRequest = new LogRequest
         {
-            LogLevel = LogLevel.TRACE,
-            Category = TestDataGenerator.GenerateString(12),
-            MessageTemplate = TestDataGenerator.GenerateString(12),
-            Arguments = Array.Empty<object>()
+            LogLevel = LogLevel.Trace,
+            Category = "Test Category",
+            MessageTemplate = "The log request {0} has the following description: {1}",
+            Arguments = new object[] { "Request Name", "Request Description" }
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -40,9 +40,9 @@ public class LogsStepDefinitions : BaseStepDefinitions
         var createTierRequest = new LogRequest
         {
             LogLevel = (LogLevel)16,
-            Category = TestDataGenerator.GenerateString(12),
-            MessageTemplate = TestDataGenerator.GenerateString(12),
-            Arguments = Array.Empty<object>()
+            Category = "Test Category",
+            MessageTemplate = "The log request {0} has the following description: {1}",
+            Arguments = new object[] { "Request Name", "Request Description" }
         };
 
         var requestConfiguration = _requestConfiguration.Clone();

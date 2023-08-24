@@ -27,7 +27,7 @@ export class LoggerServerService extends NGXLoggerServerService {
         return httpRequest;
     }
 
-    public customiseRequestBody(metadata: INGXLoggerMetadata) {
+    public override customiseRequestBody(metadata: INGXLoggerMetadata) {
         return {
             logLevel: metadata.level,
             category: metadata.fileName,

@@ -15,41 +15,41 @@ namespace AdminUi.Controllers;
 public class LogsController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
-    private readonly ILoggerFactory _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
     public LogsController(
         IMediator mediator, IOptions<ApplicationOptions> options, ILoggerFactory logger) : base(mediator)
     {
         _options = options.Value;
-        _logger = logger;
+        _loggerFactory = logger;
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateLog([FromBody] LogRequest request)
+    public IActionResult CreateLog(LogRequest request)
     {
-        var logger = _logger.CreateLogger(request.Category);
+        var logger = _loggerFactory.CreateLogger(request.Category);
 
         switch (request.LogLevel)
         {
-            case LogLevel.TRACE:
+            case LogLevel.Trace:
                 logger.LogTrace(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.DEBUG:
+            case LogLevel.Debug:
                 logger.LogDebug(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.INFORMATION:
-            case LogLevel.LOG:
+            case LogLevel.Information:
+            case LogLevel.Log:
                 logger.LogInformation(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.WARNING:
+            case LogLevel.Warning:
                 logger.LogWarning(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.ERROR:
+            case LogLevel.Error:
                 logger.LogError(request.MessageTemplate, request.Arguments);
                 break;
-            case LogLevel.CRITICAL:
+            case LogLevel.Critical:
                 logger.LogCritical(request.MessageTemplate, request.Arguments);
                 break;
             default:
@@ -71,11 +71,11 @@ public class LogRequest
 
 public enum LogLevel
 {
-    TRACE,
-    DEBUG,
-    INFORMATION,
-    LOG,
-    WARNING,
-    ERROR,
-    CRITICAL
+    Trace,
+    Debug,
+    Information,
+    Log,
+    Warning,
+    Error,
+    Critical
 }

@@ -9,11 +9,11 @@ public class LogRequest
 
 public enum LogLevel
 {
-    TRACE,
-    DEBUG,
-    INFORMATION,
-    LOG,
-    WARNING,
-    ERROR,
-    CRITICAL
+    Trace,
+    Debug,
+    Information,
+    Log,
+    Warning,
+    Error,
+    Critical
 }
