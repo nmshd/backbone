@@ -73,6 +73,12 @@ app
     .MigrateDbContext<TokensDbContext>()
     .MigrateDbContext<QuotasDbContext>();
 
+var modules = app.Services.GetRequiredService<IEnumerable<IModule>>();
+foreach (var module in modules)
+{
+    module.GetType().GetMethod("PostStartupValidation")?.Invoke(module, new object[] { app.Services });
+}
+
 app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)

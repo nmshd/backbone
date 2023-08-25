@@ -1,16 +1,21 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.ConsumerApi;
 
@@ -80,6 +85,24 @@ public class DevicesModule : IModule
     public void ConfigureEventBus(IEventBus eventBus)
     {
         eventBus.AddDevicesIntegrationEventSubscriptions();
+    }
+
+    public void PostStartupValidation(IServiceProvider serviceProvider)
+    {
+        var apnsOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>().Value;
+        var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;
+        var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
+
+        foreach (var pnsRegistration in devicesDbContext.PnsRegistrations)
+        {
+            if (pnsRegistration.Handle.Platform == PushNotificationPlatform.Fcm
+            && (fcmOptions.KeysByApplicationId.GetValueOrDefault(pnsRegistration.AppId) == null || fcmOptions.KeysByApplicationId[pnsRegistration.AppId!].ServiceAccountJson.IsNullOrEmpty()))
+                throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("ServiceAccountJson"));
+
+            if (pnsRegistration.Handle.Platform == PushNotificationPlatform.Apns
+            && (apnsOptions.KeysByBundleId.GetValueOrDefault(pnsRegistration.AppId) == null || apnsOptions.KeysByBundleId[pnsRegistration.AppId!].PrivateKey.IsNullOrEmpty()))
+                throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("PrivateKey"));
+        }
     }
 }
 
