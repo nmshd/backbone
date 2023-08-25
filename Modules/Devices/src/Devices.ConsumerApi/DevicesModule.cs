@@ -22,13 +22,11 @@ namespace Backbone.Modules.Devices.ConsumerApi;
 public class DevicesModule : IModule
 {
     public string Name => "Devices";
+    public const string PROVIDER_DIRECT = "Direct";
 
     public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-        MapFcmOptions(services, configuration);
-        MapApnsOptions(services, configuration);
-
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
@@ -40,6 +38,12 @@ public class DevicesModule : IModule
             options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
         });
+
+        if (parsedConfiguration.Infrastructure.PushNotifications.Provider == PROVIDER_DIRECT)
+        {
+            MapFcmOptions(services, configuration);
+            MapApnsOptions(services, configuration);
+        }
 
         services.AddPushNotifications(parsedConfiguration.Infrastructure.PushNotifications);
 
@@ -89,19 +93,26 @@ public class DevicesModule : IModule
 
     public void PostStartupValidation(IServiceProvider serviceProvider)
     {
+        if (serviceProvider.GetRequiredService<IOptions<Configuration>>().Value.Infrastructure.PushNotifications.Provider != PROVIDER_DIRECT)
+            return;
+
         var apnsOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>().Value;
         var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
         foreach (var pnsRegistration in devicesDbContext.PnsRegistrations)
         {
-            if (pnsRegistration.Handle.Platform == PushNotificationPlatform.Fcm
-            && (fcmOptions.KeysByApplicationId.GetValueOrDefault(pnsRegistration.AppId) == null || fcmOptions.KeysByApplicationId[pnsRegistration.AppId!].ServiceAccountJson.IsNullOrEmpty()))
-                throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("ServiceAccountJson"));
-
-            if (pnsRegistration.Handle.Platform == PushNotificationPlatform.Apns
-            && (apnsOptions.KeysByBundleId.GetValueOrDefault(pnsRegistration.AppId) == null || apnsOptions.KeysByBundleId[pnsRegistration.AppId!].PrivateKey.IsNullOrEmpty()))
-                throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("PrivateKey"));
+            switch (pnsRegistration.Handle.Platform)
+            {
+                case PushNotificationPlatform.Fcm:
+                    if (fcmOptions.KeysByApplicationId.GetValueOrDefault(pnsRegistration.AppId) == null || fcmOptions.KeysByApplicationId[pnsRegistration.AppId!].ServiceAccountJson.IsNullOrEmpty())
+                        throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("ServiceAccountJson"));
+                    break;
+                case PushNotificationPlatform.Apns:
+                    if (apnsOptions.KeysByBundleId.GetValueOrDefault(pnsRegistration.AppId) == null || apnsOptions.KeysByBundleId[pnsRegistration.AppId!].PrivateKey.IsNullOrEmpty())
+                        throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("PrivateKey"));
+                    break;
+            }
         }
     }
 }
