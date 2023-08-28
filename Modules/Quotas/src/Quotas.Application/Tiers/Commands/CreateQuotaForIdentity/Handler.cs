@@ -33,11 +33,6 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
 
         var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
 
-        if (identity.IndividualQuotaAlreadyExists(metric, request.Period))
-        {
-            throw new DomainException(DomainErrors.DuplicateQuota());
-        }
-
         var individualQuota = identity.CreateIndividualQuota(metric.Key, request.Max, request.Period);
 
         await _identitiesRepository.Update(identity, cancellationToken);
