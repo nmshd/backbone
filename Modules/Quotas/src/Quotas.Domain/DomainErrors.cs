@@ -16,6 +16,6 @@ public static class DomainErrors
 
     public static DomainError DuplicateQuota()
     {
-        return new DomainError("error.platform.quotas.duplicateQuota", "There is already a quota for this Tier/Identity targeting the same Metric and the same Period.");
+        return new DomainError("error.platform.quotas.duplicateQuota", "A quota targeting the same metric and period already exists.");
     }
 }
