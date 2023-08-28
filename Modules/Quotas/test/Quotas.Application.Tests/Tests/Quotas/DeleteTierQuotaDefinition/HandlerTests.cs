@@ -61,8 +61,8 @@ public class HandlerTests
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 10, QuotaPeriod.Year);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 15, QuotaPeriod.Total);
 
         var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 
