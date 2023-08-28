@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
