@@ -27,11 +27,16 @@ export class LoggerServerService extends NGXLoggerServerService {
         return httpRequest;
     }
 
-    public override customiseRequestBody(metadata: INGXLoggerMetadata) {
+    protected override customiseRequestBody(metadata: INGXLoggerMetadata) {
+        let messageTemplate: string = metadata.message;
+        for (let i = 0; i < metadata.additional!.length; i++) {
+            messageTemplate = messageTemplate.replace("%s", `{${i}}`);
+        }
+
         return {
             logLevel: metadata.level,
             category: metadata.fileName,
-            messageTemplate: metadata.message,
+            messageTemplate: messageTemplate,
             arguments: metadata.additional
         } as LoggerRequest;
     }
