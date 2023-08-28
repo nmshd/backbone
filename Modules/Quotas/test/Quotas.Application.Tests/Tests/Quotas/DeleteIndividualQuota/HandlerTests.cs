@@ -42,9 +42,9 @@ public class HandlerTests
     {
         // Arrange
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
-        var quotaToDelete = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var quotaToDelete = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 50, QuotaPeriod.Year);
         var command = new DeleteQuotaForIdentityCommand(identity.Address, quotaToDelete.Id);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
