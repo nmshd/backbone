@@ -81,7 +81,7 @@ public class Identity
         }
     }
 
-    public bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
+    private bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
     {
         return _individualQuotas.Any(q => q.MetricKey == metricKey && q.Period == period);
     }
