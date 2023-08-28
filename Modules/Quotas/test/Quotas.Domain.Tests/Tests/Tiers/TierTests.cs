@@ -53,7 +53,7 @@ public class TierTests
         // Arrange
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Week);
 
         var quotaIdToDelete = tier.Quotas.First().Id;
         var otherQuotaId = tier.Quotas.Second().Id;
