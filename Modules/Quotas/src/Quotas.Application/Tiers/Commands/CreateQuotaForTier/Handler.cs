@@ -38,7 +38,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
 
-        if (tier.Quotas.Any(q => q.MetricKey == metric.Key && q.Period == request.Period))
+        if (tier.TierQuotaAlreadyExists(metric, request.Period))
         {
             throw new DomainException(DomainErrors.DuplicateQuota());
         }

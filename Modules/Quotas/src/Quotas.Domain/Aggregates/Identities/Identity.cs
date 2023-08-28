@@ -1,3 +1,4 @@
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using CSharpFunctionalExtensions;
@@ -76,6 +77,11 @@ public class Identity
             var metricCalculator = factory.CreateFor(metric);
             await UpdateMetricStatus(metric, metricCalculator, cancellationToken);
         }
+    }
+
+    public bool IndividualQuotaAlreadyExists(Metric metric, QuotaPeriod period)
+    {
+        return _individualQuotas.Any(q => q.MetricKey == metric.Key && q.Period == period);
     }
 
     private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator,

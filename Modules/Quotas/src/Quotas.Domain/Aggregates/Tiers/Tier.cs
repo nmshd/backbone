@@ -40,4 +40,9 @@ public class Tier
 
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
+
+    public bool TierQuotaAlreadyExists(Metric metric, QuotaPeriod period)
+    {
+        return Quotas.Any(q => q.MetricKey == metric.Key && q.Period == period);
+    }
 }
