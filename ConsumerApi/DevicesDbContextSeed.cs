@@ -47,12 +47,7 @@ public class DevicesDbContextSeed
 
     private async Task DeleteDeviceRegistrationWithoutAppId(DevicesDbContext context)
     {
-        var registrationsWithoutAppId = await context.PnsRegistrations.FindWithoutAppId(CancellationToken.None);
-        if (registrationsWithoutAppId.Any())
-        {
-            context.PnsRegistrations.RemoveRange(registrationsWithoutAppId);
-            await context.SaveChangesAsync();
-        }
+        await context.PnsRegistrations.Where(x => x.AppId == null || x.AppId == string.Empty).ExecuteDeleteAsync();
     }
 
     private async Task SeedBasicTier(DevicesDbContext context)
