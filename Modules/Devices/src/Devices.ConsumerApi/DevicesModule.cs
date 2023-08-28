@@ -112,6 +112,7 @@ public class DevicesModule : IModule
                     if (apnsOptions.KeysByBundleId.GetValueOrDefault(pnsRegistration.AppId) == null || apnsOptions.KeysByBundleId[pnsRegistration.AppId!].PrivateKey.IsNullOrEmpty())
                         throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("PrivateKey"));
                     break;
+                default: throw new Exception($"Unknown platform '{pnsRegistration.Handle.Platform}'.");
             }
         }
     }
