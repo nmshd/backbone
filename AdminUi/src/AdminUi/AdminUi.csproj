@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -33,7 +33,7 @@
         <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
         <!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[6.0.2]" />
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[7.0.0]" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
     </ItemGroup>
 
