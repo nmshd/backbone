@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Backbone.Modules.Quotas.Application.AutoMapper;
+using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -19,6 +20,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
 
+        services.AddScoped<MetricStatusesService>();
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         services.AddMetricCalculators();
