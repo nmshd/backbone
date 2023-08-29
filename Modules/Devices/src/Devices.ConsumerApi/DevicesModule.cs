@@ -1,21 +1,20 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.ConsumerApi;
 
@@ -41,8 +40,8 @@ public class DevicesModule : IModule
 
         if (parsedConfiguration.Infrastructure.PushNotifications.Provider == PROVIDER_DIRECT)
         {
-            MapFcmOptions(services, configuration);
-            MapApnsOptions(services, configuration);
+            services.ConfigureAndValidate<DirectPnsCommunicationOptions.ApnsOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication").Bind(options));
+            services.ConfigureAndValidate<DirectPnsCommunicationOptions.FcmOptions>(options => configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Fcm").Bind(options));
         }
 
         services.AddPushNotifications(parsedConfiguration.Infrastructure.PushNotifications);
@@ -50,40 +49,6 @@ public class DevicesModule : IModule
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
-    }
-
-    private static void MapFcmOptions(IServiceCollection services, IConfiguration configuration)
-    {
-        var fcmConfiguration = configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Fcm").Get<FcmSettings>();
-        services.ConfigureAndValidate<DirectPnsCommunicationOptions.FcmOptions>(options =>
-        {
-            options.DefaultBundleId = fcmConfiguration!.DefaultBundleId;
-            foreach (var app in fcmConfiguration!.Apps)
-            {
-                var serviceAccountJson = fcmConfiguration.ServiceAccounts.GetValueOrDefault(app.Value.ServiceAccountName)!.ServiceAccountJson;
-                options.KeysByApplicationId[app.Key] = new DirectPnsCommunicationOptions.FcmOptions.ServiceAccount() { ServiceAccountJson = serviceAccountJson };
-            }
-        });
-    }
-
-    private static void MapApnsOptions(IServiceCollection services, IConfiguration configuration)
-    {
-        var apnsConfiguration = configuration.GetSection("Infrastructure:PushNotifications:DirectPnsCommunication:Apns").Get<ApnsSettings>();
-        services.ConfigureAndValidate<DirectPnsCommunicationOptions.ApnsOptions>(options =>
-        {
-            options.DefaultBundleId = apnsConfiguration!.DefaultBundleId;
-            foreach (var app in apnsConfiguration!.Bundles)
-            {
-                var keyConfig = apnsConfiguration.Keys.GetValueOrDefault(app.Value.KeyName)!;
-                options.KeysByBundleId[app.Key] = new DirectPnsCommunicationOptions.ApnsOptions.Key()
-                {
-                    KeyId = keyConfig.KeyId,
-                    PrivateKey = keyConfig.PrivateKey,
-                    TeamId = keyConfig.TeamId,
-                    ServerType = app.Value.ServerType
-                };
-            }
-        });
     }
 
     public void ConfigureEventBus(IEventBus eventBus)
@@ -105,48 +70,19 @@ public class DevicesModule : IModule
             switch (pnsRegistration.Handle.Platform)
             {
                 case PushNotificationPlatform.Fcm:
-                    if (fcmOptions.KeysByApplicationId.GetValueOrDefault(pnsRegistration.AppId) == null || fcmOptions.KeysByApplicationId[pnsRegistration.AppId!].ServiceAccountJson.IsNullOrEmpty())
-                        throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("ServiceAccountJson"));
+                    var appIdEntry = fcmOptions.Apps.GetValueOrDefault(pnsRegistration.AppId);
+                    if (appIdEntry == null || appIdEntry.ServiceAccountName.IsNullOrEmpty() ||
+                        fcmOptions.ServiceAccounts.GetValueOrDefault(appIdEntry.ServiceAccountName) == null || fcmOptions.ServiceAccounts[appIdEntry.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty())
+                        throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
                     break;
                 case PushNotificationPlatform.Apns:
-                    if (apnsOptions.KeysByBundleId.GetValueOrDefault(pnsRegistration.AppId) == null || apnsOptions.KeysByBundleId[pnsRegistration.AppId!].PrivateKey.IsNullOrEmpty())
-                        throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue("PrivateKey"));
+                    var bundle = apnsOptions.Bundles.GetValueOrDefault(pnsRegistration.AppId);
+                    if (bundle == null || bundle.KeyName.IsNullOrEmpty() ||
+                        apnsOptions.Keys.GetValueOrDefault(bundle.KeyName) == null || apnsOptions.Keys[bundle.KeyName].PrivateKey.IsNullOrEmpty())
+                        throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
                     break;
                 default: throw new Exception($"Unknown platform '{pnsRegistration.Handle.Platform}'.");
             }
         }
-    }
-}
-
-public class FcmSettings
-{
-    public string DefaultBundleId { get; set; }
-    public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
-    public class ServiceAccount
-    {
-        public string ServiceAccountJson { get; set; } = string.Empty;
-    }
-    public Dictionary<string, ServiceAccountInformation> Apps { get; set; } = new();
-    public class ServiceAccountInformation
-    {
-        public string ServiceAccountName { get; set; } = string.Empty;
-    }
-}
-
-public class ApnsSettings
-{
-    public string DefaultBundleId { get; set; }
-    public Dictionary<string, Key> Keys { get; set; } = new();
-    public class Key
-    {
-        public string TeamId { get; set; } = string.Empty;
-        public string KeyId { get; set; } = string.Empty;
-        public string PrivateKey { get; set; } = string.Empty;
-    }
-    public Dictionary<string, Bundle> Bundles { get; set; } = new();
-    public class Bundle
-    {
-        public string KeyName { get; set; }
-        public DirectPnsCommunicationOptions.ApnsOptions.Key.ApnsServerType ServerType { get; set; }
     }
 }

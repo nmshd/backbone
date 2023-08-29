@@ -19,9 +19,9 @@ public class FirebaseMessagingFactory
     {
         var firebaseApp = FirebaseApp.GetInstance(appId) ?? FirebaseApp.Create(new AppOptions
         {
-            Credential = _options.KeysByApplicationId.GetValueOrDefault(appId)?.ServiceAccountJson is null
+            Credential = _options.ServiceAccounts.GetValueOrDefault(_options.Apps.GetValueOrDefault(appId)?.ServiceAccountName).ServiceAccountJson is null
                 ? GoogleCredential.GetApplicationDefault()
-                : GoogleCredential.FromJson(_options.KeysByApplicationId[appId].ServiceAccountJson)
+                : GoogleCredential.FromJson(_options.ServiceAccounts[_options.Apps[appId].ServiceAccountName].ServiceAccountJson)
         });
 
         return FirebaseMessaging.GetMessaging(firebaseApp);

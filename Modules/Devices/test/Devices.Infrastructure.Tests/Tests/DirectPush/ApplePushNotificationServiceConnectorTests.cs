@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Backbone.Modules.Devices.Application.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FakeItEasy;
@@ -19,6 +19,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class ApplePushNotificationServiceConnectorTests
 {
     private const string APP_ID = "some-app-id";
+    private const string KEY_NAME = "test-key-name";
 
     [Fact]
     public async Task Notification_is_sent_successfully()
@@ -44,9 +45,14 @@ public class ApplePushNotificationServiceConnectorTests
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
         var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions()
         {
-            KeysByBundleId = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
+            DefaultBundleId = APP_ID,
+            Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Key()}
+                {KEY_NAME, new DirectPnsCommunicationOptions.ApnsOptions.Key()}
+            },
+            Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
+            {
+                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = KEY_NAME, ServerType = DirectPnsCommunicationOptions.ApnsOptions.Bundle.ApnsServerType.Production }}
             }
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();

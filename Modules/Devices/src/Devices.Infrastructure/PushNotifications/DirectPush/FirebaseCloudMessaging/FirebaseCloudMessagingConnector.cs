@@ -3,22 +3,36 @@ using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.Tooling.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
+    private readonly DirectPnsCommunicationOptions.FcmOptions _options;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory)
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
+        _options = options.Value;
     }
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var registrationsByAppId = registrations.GroupBy(r => r.AppId).Select(r => new { AppId = r.Key, Handles = r.Select(pnsRegistrations => pnsRegistrations.Handle.Value).ToList() });
+        var registrationsByAppId = registrations.GroupBy(r => r.AppId)
+            .Select(r => new
+            {
+                AppId = r.Key,
+                Handles = r.Select(pnsRegistration =>
+            {
+                ValidateRegistration(pnsRegistration);
+                return pnsRegistration.Handle.Value;
+            }).ToList()
+            });
 
         foreach (var pnsRegistrations in registrationsByAppId)
         {
@@ -36,6 +50,18 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
             await firebaseMessaging.SendMulticastAsync(message);
         }
+    }
+
+    public void FixRegistration(PnsRegistration registration)
+    {
+        registration.AppId = _options.DefaultBundleId;
+    }
+
+    public void ValidateRegistration(PnsRegistration registration)
+    {
+        var appIdEntry = _options.Apps.GetValueOrDefault(registration.AppId);
+        if (appIdEntry == null || appIdEntry.ServiceAccountName.IsNullOrEmpty() || _options.ServiceAccounts.GetValueOrDefault(appIdEntry.ServiceAccountName) == null || _options.ServiceAccounts[appIdEntry.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty())
+            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Application.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
@@ -33,11 +33,13 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         var tasks = registrations.Select(pnsRegistration =>
         {
+            ValidateRegistration(pnsRegistration);
             var device = pnsRegistration.Handle.Value;
-            var bundleInformation = _options.KeysByBundleId[pnsRegistration.AppId];
+            var bundle = _options.Bundles[pnsRegistration.AppId!];
+            var bundleInformation = _options.Keys[bundle.KeyName];
             var jwt = _jwtGenerator.Generate(bundleInformation.PrivateKey, bundleInformation.KeyId, bundleInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundleInformation.Server}{device}", jwt.Value)
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundle.Server}{device}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)
@@ -47,6 +49,18 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         }).ToList();
 
         await Task.WhenAll(tasks);
+    }
+
+    public void FixRegistration(PnsRegistration registration)
+    {
+        registration.AppId = _options.DefaultBundleId;
+    }
+
+    public void ValidateRegistration(PnsRegistration registration)
+    {
+        var bundle = _options.Bundles.GetValueOrDefault(registration.AppId);
+        if (bundle == null || bundle.KeyName.IsNullOrEmpty() || _options.Keys.GetValueOrDefault(bundle.KeyName) == null || _options.Keys[bundle.KeyName].PrivateKey.IsNullOrEmpty())
+            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
     }
 
     private async Task HandleResponse(HttpResponseMessage response, string device)
