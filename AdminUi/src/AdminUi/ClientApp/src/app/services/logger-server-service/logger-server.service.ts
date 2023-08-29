@@ -30,7 +30,7 @@ export class LoggerServerService extends NGXLoggerServerService {
     protected override customiseRequestBody(metadata: INGXLoggerMetadata) {
         let messageTemplate: string = metadata.message;
         for (let i = 0; i < metadata.additional!.length; i++) {
-            messageTemplate = messageTemplate.replace("%s", `{${i}}`);
+            messageTemplate = messageTemplate.replace(new RegExp("(?<!%)%[dsj]"), `{${i}}`);
         }
 
         return {
