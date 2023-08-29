@@ -1,17 +1,16 @@
-﻿using Backbone.Modules.Quotas.Application.Metrics.Commands.RecalculateMetricStatuses;
+﻿using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
 
 public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<FileUploadedIntegrationEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly MetricStatusesService _metricStatusesService;
 
-    public FileUploadedIntegrationEventHandler(IMediator mediator)
+    public FileUploadedIntegrationEventHandler(MetricStatusesService metricStatusesService)
     {
-        _mediator = mediator;
+        _metricStatusesService = metricStatusesService;
     }
 
     public async Task Handle(FileUploadedIntegrationEvent @event)
@@ -19,6 +18,6 @@ public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<File
         var identities = new List<string> { @event.Uploader };
         var metrics = new List<string> { MetricKey.NumberOfFiles.Value, MetricKey.UsedFileStorageSpace.Value };
 
-        await _mediator.Send(new RecalculateMetricStatusesCommand(identities, metrics));
+        await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }
 }
