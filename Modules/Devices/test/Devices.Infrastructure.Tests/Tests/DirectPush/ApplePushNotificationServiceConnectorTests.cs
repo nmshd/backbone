@@ -48,7 +48,7 @@ public class ApplePushNotificationServiceConnectorTests
             DefaultBundleId = APP_ID,
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {KEY_NAME, new DirectPnsCommunicationOptions.ApnsOptions.Key()}
+                {KEY_NAME, new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}
             },
             Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
             {
