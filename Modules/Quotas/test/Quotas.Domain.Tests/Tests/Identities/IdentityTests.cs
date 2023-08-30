@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.Tooling;
+using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
@@ -302,6 +303,22 @@ public class IdentityTests
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+    }
+
+    [Fact]
+    public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
+    {
+        // Arrange
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identity = new Identity(identityAddress, new TierId("tier-id"));
+        identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Act
+        var acting = () => identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
     }
 
     private class MetricCalculatorFactoryStub : MetricCalculatorFactory
