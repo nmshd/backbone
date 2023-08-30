@@ -1,6 +1,6 @@
 namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
 
-public class MetricStatusesRepositoryOptions
+public class DapperRepositoryOptions
 {
     public string ConnectionString { get; set; } = string.Empty;
 }

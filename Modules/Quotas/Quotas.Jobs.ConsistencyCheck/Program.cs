@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Extensions;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
+using Enmeshed.Common.Infrastructure;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck;
 
@@ -42,20 +43,12 @@ public class Program
                 services.AddHostedService<Worker>();
 
                 services.AddScoped<IDataSource, DataSource>();
-
                 services.AddScoped<IReporter, LogReporter>();
 
-                services.AddDatabase(options =>
-                {
-                    options.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
-                    options.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
-                });
-
-                services.AddJobDatabases(options =>
-                {
-                    options.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
-                    options.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
-                });
+                var quotasSqlDatabaseConfiguration = configuration.GetSection("SqlDatabase");
+                var quotasDbProvider = quotasSqlDatabaseConfiguration.GetValue<string>("Provider") ?? throw new ArgumentException("Database provider is not configured");
+                var quotasDbConnectionString = quotasSqlDatabaseConfiguration.GetValue<string>("ConnectionString") ?? throw new ArgumentException("Database connection string is not configured");
+                services.AddConsistencyCheckRepository(quotasDbProvider, quotasDbConnectionString);
             });
     }
 }

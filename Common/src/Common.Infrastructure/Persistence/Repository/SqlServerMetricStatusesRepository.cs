@@ -10,9 +10,9 @@ public class SqlServerMetricStatusesRepository : IMetricStatusesRepository
 {
     private const string QUERY = "SELECT * FROM MetricStatuses WHERE Owner = @identityAddress AND MetricKey IN @keys";
 
-    private readonly MetricStatusesRepositoryOptions _options;
+    private readonly DapperRepositoryOptions _options;
 
-    public SqlServerMetricStatusesRepository(IOptions<MetricStatusesRepositoryOptions> options)
+    public SqlServerMetricStatusesRepository(IOptions<DapperRepositoryOptions> options)
     {
         _options = options.Value;
     }

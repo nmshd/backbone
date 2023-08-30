@@ -1,54 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
 public class DataSource : IDataSource
 {
-    private readonly QuotasDbContext _quotasDbContext;
-    private readonly DevicesDbContext _devicesDbContext;
+    private readonly IConsistencyCheckRepository _consistencyCheckRepository;
 
-    public DataSource(QuotasDbContext quotasDbContext, DevicesDbContext devicesDbContext)
+    public DataSource(IConsistencyCheckRepository consistencyCheckRepository)
     {
-        _quotasDbContext = quotasDbContext;
-        _devicesDbContext = devicesDbContext;
+        _consistencyCheckRepository = consistencyCheckRepository;
     }
 
-    public async Task<IEnumerable<string>> GetDevicesIdentitiesAddresses(CancellationToken cancellationToken)
+    public Task<IEnumerable<string>> GetIdentitiesMissingFromQuotas(CancellationToken cancellationToken)
     {
-        return await _devicesDbContext.Identities.AsNoTracking().Select(i => i.Address).ToListAsync(cancellationToken);
+        return _consistencyCheckRepository.GetIdentitiesMissingFromQuotas(cancellationToken);
     }
 
-    public async Task<IEnumerable<string>> GetDevicesTiersIds(CancellationToken cancellationToken)
+    public Task<IEnumerable<string>> GetIdentitiesMissingFromDevices(CancellationToken cancellationToken)
     {
-        return await _devicesDbContext.Tiers.AsNoTracking().Select(i => i.Id).ToListAsync(cancellationToken);
+        return _consistencyCheckRepository.GetIdentitiesMissingFromDevices(cancellationToken);
     }
 
-    public async Task<IEnumerable<string>> GetQuotasIdentitiesAddresses(CancellationToken cancellationToken)
+    public Task<IEnumerable<string>> GetTiersMissingFromQuotas(CancellationToken cancellationToken)
     {
-        return await _quotasDbContext.Identities.AsNoTracking().Select(i => i.Address).ToListAsync(cancellationToken);
+        return _consistencyCheckRepository.GetTiersMissingFromQuotas(cancellationToken);
     }
 
-    public async Task<IEnumerable<string>> GetQuotasTiersIds(CancellationToken cancellationToken)
+    public Task<IEnumerable<string>> GetTiersMissingFromDevices(CancellationToken cancellationToken)
     {
-        return await _quotasDbContext.Tiers.AsNoTracking().Select(i => i.Id.Value).ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<Tier>> GetTiers(CancellationToken cancellationToken)
-    {
-        return await _quotasDbContext.Tiers.IncludeAll(_quotasDbContext).AsNoTracking().ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<Identity>> GetIdentities(CancellationToken cancellationToken)
-    {
-        return await _quotasDbContext.Identities.AsNoTracking().IncludeAll(_quotasDbContext).ToListAsync(cancellationToken);
+        return _consistencyCheckRepository.GetTiersMissingFromDevices(cancellationToken);
     }
 }

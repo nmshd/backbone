@@ -22,45 +22,13 @@ public class ConsistencyCheck
     /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
-        var identities = await _dataSource.GetIdentities(cancellationToken);
-        var tiers = await _dataSource.GetTiers(cancellationToken);
-        if (cancellationToken.IsCancellationRequested)
-            return;
-
-        foreach (var identity in identities)
-        {
-            var tier = tiers.Single(t => t.Id == identity.TierId);
-            var tierQuotaDefinitions = tier.Quotas;
-
-            var (_,
-                tqdsMissingFromIdentity,
-                tqsMissingFromTier
-                ) = Distribute(
-                tierQuotaDefinitions.Select(x => x.Id),
-                identity.TierQuotas.Select(x => x.DefinitionId)
-                );
-
-            foreach (var id in tqdsMissingFromIdentity)
-            {
-                _reporter.ReportTierQuotaDefinitionMissingFromIdentity(id);
-            }
-
-            foreach (var id in tqsMissingFromTier)
-            {
-                _reporter.ReportTierQuotaMissingFromTier(id);
-            }
-        }
+        
     }
 
     public async Task Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken cancellationToken)
     {
-        var identitiesInDevices = await _dataSource.GetDevicesIdentitiesAddresses(cancellationToken);
-        if (cancellationToken.IsCancellationRequested) return;
-
-        var identitiesInQuotas = await _dataSource.GetQuotasIdentitiesAddresses(cancellationToken);
-        if (cancellationToken.IsCancellationRequested) return;
-
-        var (_, identitiesMissingFromQuotas, identitiesMissingFromDevices) = Distribute(identitiesInDevices, identitiesInQuotas);
+        var identitiesMissingFromQuotas = await _dataSource.GetIdentitiesMissingFromQuotas(cancellationToken);
+        var identitiesMissingFromDevices = await _dataSource.GetIdentitiesMissingFromDevices(cancellationToken);
 
         foreach (var i in identitiesMissingFromQuotas)
         {
@@ -75,13 +43,9 @@ public class ConsistencyCheck
 
     public async Task Run_for_DevicesTiers_vs_QuotasTiers(CancellationToken cancellationToken)
     {
-        var tiersInDevices = await _dataSource.GetDevicesTiersIds(cancellationToken);
-        if (cancellationToken.IsCancellationRequested) return;
+        var tiersMissingFromQuotas = await _dataSource.GetTiersMissingFromQuotas(cancellationToken);
+        var tiersMissingFromDevices = await _dataSource.GetTiersMissingFromDevices(cancellationToken);
 
-        var tiersInQuotas = await _dataSource.GetQuotasTiersIds(cancellationToken);
-        if (cancellationToken.IsCancellationRequested) return;
-
-        var (_, tiersMissingFromQuotas, tiersMissingFromDevices) = Distribute(tiersInDevices, tiersInQuotas);
 
         foreach (var i in tiersMissingFromQuotas)
         {

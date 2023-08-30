@@ -11,7 +11,7 @@ public static class IServiceCollectionExtension
 
     public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, string provider, string connectionString)
     {
-        services.Configure<MetricStatusesRepositoryOptions>(options => options.ConnectionString = connectionString);
+        services.Configure<DapperRepositoryOptions>(options => options.ConnectionString = connectionString);
 
         SqlMapper.AddTypeHandler(new MetricKeyTypeHandler());
 

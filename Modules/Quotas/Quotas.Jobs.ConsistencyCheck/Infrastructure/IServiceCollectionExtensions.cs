@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
+using Enmeshed.Common.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure;
 public static class IServiceCollectionExtensions
@@ -7,47 +7,20 @@ public static class IServiceCollectionExtensions
     private const string SQLSERVER = "SqlServer";
     private const string POSTGRES = "Postgres";
 
-    public static void AddJobDatabases(this IServiceCollection services, Action<DbOptions> setupOptions)
+    public static IServiceCollection AddConsistencyCheckRepository(this IServiceCollection services, string provider, string connectionString)
     {
-        var options = new DbOptions();
-        setupOptions?.Invoke(options);
+        services.Configure<DapperRepositoryOptions>(options => options.ConnectionString = connectionString);
 
-        switch (options.Provider)
+        switch (provider)
         {
             case SQLSERVER:
-                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                );
+                services.AddTransient<IConsistencyCheckRepository, SqlServerConsistencyCheckRepository>();
                 break;
             case POSTGRES:
-                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-
-                );
+                services.AddTransient<IConsistencyCheckRepository, PostgresConsistencyCheckRepository>();
                 break;
-            default:
-                throw new Exception($"Unsupported database provider: {options.Provider}");
         }
-    }
 
-    public class DbOptions
-    {
-        public string Provider { get; set; }
-        public string DbConnectionString { get; set; }
-        public RetryOptions RetryOptions { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public byte MaxRetryCount { get; set; } = 15;
-        public int MaxRetryDelayInSeconds { get; set; } = 30;
+        return services;
     }
 }

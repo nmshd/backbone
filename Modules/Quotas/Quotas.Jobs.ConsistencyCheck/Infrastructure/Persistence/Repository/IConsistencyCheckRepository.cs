@@ -1,5 +1,5 @@
-﻿namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
-public interface IDataSource
+﻿namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
+public interface IConsistencyCheckRepository
 {
     Task<IEnumerable<string>> GetIdentitiesMissingFromQuotas(CancellationToken cancellationToken);
     Task<IEnumerable<string>> GetIdentitiesMissingFromDevices(CancellationToken cancellationToken);
