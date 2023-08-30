@@ -22,7 +22,7 @@ public class ConsistencyCheck
     /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
-        
+
     }
 
     public async Task Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken cancellationToken)
