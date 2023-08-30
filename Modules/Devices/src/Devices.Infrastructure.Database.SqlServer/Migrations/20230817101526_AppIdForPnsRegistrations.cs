@@ -2,47 +2,48 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations;
+
+/// <inheritdoc />
+public partial class AppIdForPnsRegistrations : Migration
 {
     /// <inheritdoc />
-    public partial class AppIdForPnsRegistrations : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Identities_Tiers_TierId",
-                table: "Identities");
+        migrationBuilder.DropForeignKey(
+            name: "FK_Identities_Tiers_TierId",
+            table: "Identities");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Identities_TierId",
-                table: "Identities");
+        migrationBuilder.DropIndex(
+            name: "IX_Identities_TierId",
+            table: "Identities");
 
-            migrationBuilder.AddColumn<string>(
-                name: "AppId",
-                table: "PnsRegistrations",
-                type: "nvarchar(max)",
-                nullable: true);
-        }
+        migrationBuilder.AddColumn<string>(
+            name: "AppId",
+            table: "PnsRegistrations",
+            type: "nvarchar(max)",
+            nullable: false);
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "AppId",
-                table: "PnsRegistrations");
+        migrationBuilder.Sql("DELETE FROM [Devices].[PnsRegistrations] WHERE AppId IS NULL");
+    }
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Identities_TierId",
-                table: "Identities",
-                column: "TierId");
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "AppId",
+            table: "PnsRegistrations");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Identities_Tiers_TierId",
-                table: "Identities",
-                column: "TierId",
-                principalTable: "Tiers",
-                principalColumn: "Id");
-        }
+        migrationBuilder.CreateIndex(
+            name: "IX_Identities_TierId",
+            table: "Identities",
+            column: "TierId");
+
+        migrationBuilder.AddForeignKey(
+            name: "FK_Identities_Tiers_TierId",
+            table: "Identities",
+            column: "TierId",
+            principalTable: "Tiers",
+            principalColumn: "Id");
     }
 }

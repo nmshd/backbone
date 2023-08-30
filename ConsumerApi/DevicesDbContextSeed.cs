@@ -29,7 +29,6 @@ public class DevicesDbContextSeed
         await SeedBasicTier(context);
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
-        await DeleteDeviceRegistrationWithoutAppId(context);
     }
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
@@ -43,11 +42,6 @@ public class DevicesDbContextSeed
             return;
 
         await _mediator.Send(new SeedTestUsersCommand());
-    }
-
-    private async Task DeleteDeviceRegistrationWithoutAppId(DevicesDbContext context)
-    {
-        await context.PnsRegistrations.Where(x => x.AppId == null || x.AppId == string.Empty).ExecuteDeleteAsync();
     }
 
     private async Task SeedBasicTier(DevicesDbContext context)
