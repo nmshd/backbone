@@ -10,5 +10,6 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
         builder.ToTable(nameof(Tier) + "s", "Quotas");
         builder.Property(x => x.Id);
         builder.Property(x => x.Name).IsUnicode(true).IsFixedLength(false).HasMaxLength(30);
+        builder.HasMany(x => x.Quotas).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }
