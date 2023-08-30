@@ -1,4 +1,6 @@
-﻿namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿using Enmeshed.Tooling.Extensions;
+
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPnsCommunicationOptions
 {
@@ -8,7 +10,7 @@ public class DirectPnsCommunicationOptions
 
     public class FcmOptions
     {
-        public string DefaultBundleId { get; set; }
+        public string DefaultAppId { get; set; }
         public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
         public class ServiceAccount
         {
@@ -18,6 +20,23 @@ public class DirectPnsCommunicationOptions
         public class ServiceAccountInformation
         {
             public string ServiceAccountName { get; set; } = string.Empty;
+        }
+
+        public bool HasConfigForAppId(string appId)
+        {
+            var apps = Apps.GetValueOrDefault(appId);
+            return apps != null && !apps.ServiceAccountName.IsNullOrEmpty() && ServiceAccounts.ContainsKey(apps.ServiceAccountName) && !ServiceAccounts[apps.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty();
+        }
+
+        public string? GetServiceAccountForAppId(string appId)
+        {
+            var serviceAccountInformation = Apps.GetValueOrDefault(appId);
+            return ServiceAccounts.GetValueOrDefault(serviceAccountInformation.ServiceAccountName)?.ServiceAccountJson;
+        }
+
+        public List<string> GetSupportedAppIds()
+        {
+            return Apps.Where(app => HasConfigForAppId(app.Key)).Select(app => app.Key).ToList();
         }
     }
 
@@ -47,6 +66,27 @@ public class DirectPnsCommunicationOptions
                 Development,
                 Production
             }
+        }
+
+        public bool HasConfigForBundleId(string bundleId)
+        {
+            var bundle = Bundles.GetValueOrDefault(bundleId);
+            return bundle != null && !bundle.KeyName.IsNullOrEmpty() && Keys.ContainsKey(bundle.KeyName) && !Keys[bundle.KeyName].PrivateKey.IsNullOrEmpty();
+        }
+
+        public Key GetKeyInformationForBundleId(string bundleId)
+        {
+            return Keys[Bundles[bundleId].KeyName];
+        }
+
+        public Bundle GetBundleById(string bundleId)
+        {
+            return Bundles[bundleId];
+        }
+
+        public List<string> GetSupportedBundleIds()
+        {
+            return Bundles.Where(bundle => HasConfigForBundleId(bundle.Key)).Select(bundle => bundle.Key).ToList();
         }
     }
 }

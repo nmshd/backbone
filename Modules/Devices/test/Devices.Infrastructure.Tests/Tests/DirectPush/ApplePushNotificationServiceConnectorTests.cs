@@ -19,7 +19,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class ApplePushNotificationServiceConnectorTests
 {
     private const string APP_ID = "some-app-id";
-    private const string KEY_NAME = "test-key-name";
 
     [Fact]
     public async Task Notification_is_sent_successfully()
@@ -48,11 +47,11 @@ public class ApplePushNotificationServiceConnectorTests
             DefaultBundleId = APP_ID,
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {KEY_NAME, new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}
+                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}
             },
             Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
             {
-                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = KEY_NAME, ServerType = DirectPnsCommunicationOptions.ApnsOptions.Bundle.ApnsServerType.Production }}
+                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name", ServerType = DirectPnsCommunicationOptions.ApnsOptions.Bundle.ApnsServerType.Production }}
             }
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();

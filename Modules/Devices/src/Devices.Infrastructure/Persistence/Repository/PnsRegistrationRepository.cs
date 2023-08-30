@@ -36,12 +36,6 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
     }
 
-    public async Task Delete(List<PnsRegistration> registrations, CancellationToken cancellationToken)
-    {
-        _registrations.RemoveRange(registrations);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)
     {
         _registrations.Update(registration);

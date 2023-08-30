@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -28,10 +27,10 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             {
                 AppId = r.Key,
                 Handles = r.Select(pnsRegistration =>
-            {
-                ValidateRegistration(pnsRegistration);
-                return pnsRegistration.Handle.Value;
-            }).ToList()
+                {
+                    ValidateRegistration(pnsRegistration);
+                    return pnsRegistration.Handle.Value;
+                }).ToList()
             });
 
         foreach (var pnsRegistrations in registrationsByAppId)
@@ -52,16 +51,15 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         }
     }
 
-    public void FixRegistration(PnsRegistration registration)
+    public string GetDefaultAppId()
     {
-        registration.AppId = _options.DefaultBundleId;
+        return _options.DefaultAppId;
     }
 
     public void ValidateRegistration(PnsRegistration registration)
     {
-        var appIdEntry = _options.Apps.GetValueOrDefault(registration.AppId);
-        if (appIdEntry == null || appIdEntry.ServiceAccountName.IsNullOrEmpty() || _options.ServiceAccounts.GetValueOrDefault(appIdEntry.ServiceAccountName) == null || _options.ServiceAccounts[appIdEntry.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty())
-            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
+        if (!_options.HasConfigForAppId(registration.AppId))
+            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

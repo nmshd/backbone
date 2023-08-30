@@ -3,7 +3,7 @@
 public class ApnsJwtCache
 {
     private readonly Dictionary<string, Jwt> _jwts = new();
-    public bool HasValue(string bundleId) => _jwts.GetValueOrDefault(bundleId) != null && !_jwts[bundleId].IsExpired();
-    public Jwt GetValue(string bundleId) => _jwts[bundleId];
-    public void UpdateValue(string bundleId, Jwt jwt) => _jwts[bundleId] = jwt;
+    public bool HasValueFor(string bundleId) => _jwts.GetValueOrDefault(bundleId) != null && !_jwts[bundleId].IsExpired();
+    public Jwt GetValueFor(string bundleId) => _jwts[bundleId];
+    public void UpdateValueFor(string bundleId, Jwt jwt) => _jwts[bundleId] = jwt;
 }

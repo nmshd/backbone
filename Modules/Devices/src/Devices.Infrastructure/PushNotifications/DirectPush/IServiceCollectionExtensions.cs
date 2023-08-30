@@ -2,13 +2,17 @@
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddDirectPushNotifications(this IServiceCollection services)
+    public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
     {
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(options.Apns));
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.FcmOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.FcmOptions>(options.Fcm));
+
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddFcm();
         services.AddApns();

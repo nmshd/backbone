@@ -2,9 +2,9 @@
 
 public static class GenericInfrastructureErrors
 {
-    public static InfrastructureError InvalidPushNotificationConfiguration()
+    public static InfrastructureError InvalidPushNotificationConfiguration(List<string> supportedAppIds)
     {
-        return new InfrastructureError("error.platform.invalidConfiguration",
-            "Invalid or non existent configuration for push notifications application id.");
+        return new InfrastructureError("error.platform.unsupportedAppId",
+            $"The given app id is not supported. Support app ids are: {string.Join(", ", supportedAppIds)}.");
     }
 }

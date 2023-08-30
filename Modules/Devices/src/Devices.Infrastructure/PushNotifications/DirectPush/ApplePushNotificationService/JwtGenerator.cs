@@ -20,10 +20,10 @@ public class JwtGenerator : IJwtGenerator
     {
         lock (_jwtCache)
         {
-            if (!_jwtCache.HasValue(bundleId))
-                _jwtCache.UpdateValue(bundleId, CreateNew(privateKey, keyId, teamId));
+            if (!_jwtCache.HasValueFor(bundleId))
+                _jwtCache.UpdateValueFor(bundleId, CreateNew(privateKey, keyId, teamId));
 
-            return _jwtCache.GetValue(bundleId);
+            return _jwtCache.GetValueFor(bundleId);
         }
     }
 

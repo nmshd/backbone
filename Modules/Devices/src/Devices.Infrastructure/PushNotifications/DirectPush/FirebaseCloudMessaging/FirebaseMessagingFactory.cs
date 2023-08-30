@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.PushNotifications;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
@@ -17,12 +16,17 @@ public class FirebaseMessagingFactory
 
     public FirebaseMessaging CreateForAppId(string appId)
     {
-        var firebaseApp = FirebaseApp.GetInstance(appId) ?? FirebaseApp.Create(new AppOptions
+        var firebaseApp = FirebaseApp.GetInstance(appId);
+        if (firebaseApp == null)
         {
-            Credential = _options.ServiceAccounts.GetValueOrDefault(_options.Apps.GetValueOrDefault(appId)?.ServiceAccountName).ServiceAccountJson is null
-                ? GoogleCredential.GetApplicationDefault()
-                : GoogleCredential.FromJson(_options.ServiceAccounts[_options.Apps[appId].ServiceAccountName].ServiceAccountJson)
-        });
+            var serviceAccount = _options.GetServiceAccountForAppId(appId);
+            firebaseApp = FirebaseApp.Create(new AppOptions
+            {
+                Credential = serviceAccount is not null
+                    ? GoogleCredential.FromJson(serviceAccount)
+                    : GoogleCredential.GetApplicationDefault()
+            });
+        }
 
         return FirebaseMessaging.GetMessaging(firebaseApp);
     }

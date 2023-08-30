@@ -34,33 +34,32 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var tasks = registrations.Select(pnsRegistration =>
         {
             ValidateRegistration(pnsRegistration);
-            var device = pnsRegistration.Handle.Value;
-            var bundle = _options.Bundles[pnsRegistration.AppId!];
-            var bundleInformation = _options.Keys[bundle.KeyName];
-            var jwt = _jwtGenerator.Generate(bundleInformation.PrivateKey, bundleInformation.KeyId, bundleInformation.TeamId, pnsRegistration.AppId);
+            var handle = pnsRegistration.Handle.Value;
+            var bundle = _options.GetBundleById(pnsRegistration.AppId!);
+            var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
+            var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundle.Server}{device}", jwt.Value)
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundle.Server}{handle}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)
                 .Build();
 
-            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));
+            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
         }).ToList();
 
         await Task.WhenAll(tasks);
     }
 
-    public void FixRegistration(PnsRegistration registration)
+    public string GetDefaultAppId()
     {
-        registration.AppId = _options.DefaultBundleId;
+        return _options.DefaultBundleId;
     }
 
     public void ValidateRegistration(PnsRegistration registration)
     {
-        var bundle = _options.Bundles.GetValueOrDefault(registration.AppId);
-        if (bundle == null || bundle.KeyName.IsNullOrEmpty() || _options.Keys.GetValueOrDefault(bundle.KeyName) == null || _options.Keys[bundle.KeyName].PrivateKey.IsNullOrEmpty())
-            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration());
+        if (!_options.HasConfigForBundleId(registration.AppId))
+            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
     private async Task HandleResponse(HttpResponseMessage response, string device)
