@@ -32,6 +32,11 @@ public class BaseApi
         return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse> Post(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest(Method.Post, endpoint, requestConfiguration);
+    }
+
     protected async Task<HttpResponse> Delete(string endpoint, RequestConfiguration requestConfiguration)
     {
         return await ExecuteRequest(Method.Delete, endpoint, requestConfiguration);
