@@ -10,6 +10,8 @@ public partial class AppIdForPnsRegistrations : Migration
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
+        migrationBuilder.Sql("DELETE FROM [Devices].[PnsRegistrations]");
+
         migrationBuilder.DropForeignKey(
             name: "FK_Identities_Tiers_TierId",
             table: "Identities");
@@ -23,8 +25,6 @@ public partial class AppIdForPnsRegistrations : Migration
             table: "PnsRegistrations",
             type: "nvarchar(max)",
             nullable: false);
-
-        migrationBuilder.Sql("DELETE FROM [Devices].[PnsRegistrations] WHERE AppId IS NULL");
     }
 
     /// <inheritdoc />
