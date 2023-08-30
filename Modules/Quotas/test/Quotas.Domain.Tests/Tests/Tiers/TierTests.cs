@@ -1,9 +1,11 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -53,7 +55,7 @@ public class TierTests
         // Arrange
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Week);
 
         var quotaIdToDelete = tier.Quotas.First().Id;
         var otherQuotaId = tier.Quotas.Second().Id;
@@ -78,5 +80,21 @@ public class TierTests
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Error.Code.Should().Be("error.platform.recordNotFound");
+    }
+
+    [Fact]
+    public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
+    {
+        // Arrange
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Act
+        var result = tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+        result.Error.Code.Should().Be("error.platform.quotas.duplicateQuota");
     }
 }
