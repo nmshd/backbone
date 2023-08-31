@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Common;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
@@ -10,13 +9,9 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverte
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Npgsql;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-using NpgsqlTypes;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
@@ -50,14 +45,14 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        ExecutionStrategy? executionStrategy = null;
+        ExecutionStrategy? executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
                 executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
                 break;
             case POSTGRES:
-                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll<string>(x => x.ToString()) : new List<string>();
+                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : new List<string>();
                 executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
                 break;
             default:
@@ -92,34 +87,36 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return await RunInTransaction(func, null, isolationLevel);
     }
 
-    public int GetAmountOfInvalidRegistrations(List<string> supportedApnsBundleIds, List<string> supportedFcmAppIds)
+    public List<string> GetFcmAppIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
     {
-        var apnsBundleIdsSql = "'" + string.Join("', '", supportedApnsBundleIds) + "'";
-        var fcmAppIdsSql = "'" + string.Join("', '", supportedFcmAppIds) + "'";
+        return GetAppIdsForWhichNoConfigurationExists("fcm", supportedAppIds);
+    }
 
-        // Use SqlParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
-        // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
-        DbParameter apnsBundleIds = null;
-        DbParameter fcmAppIds = null;
-        if (Database.IsSqlServer())
-        {
-            apnsBundleIds = new SqlParameter("apnsBundleIds", SqlDbType.Char, apnsBundleIdsSql.Length, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, apnsBundleIdsSql);
-            fcmAppIds = new SqlParameter("fcmAppIds", SqlDbType.Char, fcmAppIdsSql.Length, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, fcmAppIdsSql);
-        }
-        else if (Database.IsNpgsql())
-        {
-            apnsBundleIds = new NpgsqlParameter("apnsBundleIds", NpgsqlDbType.Char, apnsBundleIdsSql.Length, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default, apnsBundleIdsSql);
-            fcmAppIds = new NpgsqlParameter("fcmAppIds", NpgsqlDbType.Char, fcmAppIdsSql.Length, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default, fcmAppIdsSql);
-        }
-        else
-        {
-            apnsBundleIds = new SqliteParameter("apnsBundleIds", apnsBundleIdsSql);
-            fcmAppIds = new SqliteParameter("fcmAppIds", fcmAppIdsSql);
-        }
+    public List<string> GetApnsBundleIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
+    {
+        return GetAppIdsForWhichNoConfigurationExists("apns", supportedAppIds);
+    }
 
-        return Database.IsNpgsql()
-            ? PnsRegistrations.FromSqlInterpolated($""" SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'fcm%' AND "AppId" not in ({fcmAppIds}) UNION SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'apns%' AND "AppId" not in ({apnsBundleIds})""").Count()
-            : PnsRegistrations.FromSqlInterpolated($"SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'fcm%' AND AppId not in ({fcmAppIds}) UNION SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'apns%' AND AppId not in ({apnsBundleIds})").Count();
+    private List<string> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
+    {
+        var query = PnsRegistrations.FromSqlRaw(
+            Database.IsNpgsql()
+                ? $""" 
+                    SELECT "AppId" 
+                    FROM "Devices"."PnsRegistrations" 
+                    WHERE "Handle" LIKE '{platform}%'
+                  """
+                : $""" 
+                    SELECT "AppId" 
+                    FROM [Devices].[PnsRegistrations] 
+                    WHERE Handle LIKE '{platform}%'
+                  """);
+
+        return query
+            .Where(x => !supportedAppIds.Contains(x.AppId))
+            .Select(x => x.AppId)
+            .Distinct()
+            .ToList();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

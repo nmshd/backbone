@@ -51,17 +51,35 @@ public class DevicesModule : AbstractModule
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
-        if (serviceProvider.GetRequiredService<IOptions<Configuration>>().Value.Infrastructure.PushNotifications.Provider != Infrastructure.PushNotifications.IServiceCollectionExtensions.PROVIDER_DIRECT)
+        if (serviceProvider.GetRequiredService<IOptions<Configuration>>().Value.Infrastructure.PushNotifications.Provider !=
+            Infrastructure.PushNotifications.IServiceCollectionExtensions.PROVIDER_DIRECT)
             return;
 
-        var apnsOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>().Value;
         var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;
+        var apnsOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
-        var supportedApnsAppIds = apnsOptions.GetSupportedBundleIds();
         var supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
+        var supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
 
-        if (devicesDbContext.GetAmountOfInvalidRegistrations(supportedApnsAppIds, supportedFcmAppIds) > 0)
-            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(supportedApnsAppIds.Concat(supportedFcmAppIds).ToList()));
+        var failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds);
+        var failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds);
+
+        if (failingFcmAppIds.Count + failingApnsBundleIds.Count > 0)
+        {
+            var configuredFcmAppIdsString = string.Join(", ", supportedFcmAppIds.Select(x => $"'{x}'"));
+            var configuredApnsBundleIdsString = string.Join(", ", supportedApnsBundleIds.Select(x => $"'{x}'"));
+
+            var failingFcmAppIdsString = failingFcmAppIds.Count > 0
+                ? "\nThe questionable FCM app ids are: " + string.Join(", ", failingFcmAppIds.Select(x => $"'{x}'")) + $". The configured app ids are: {configuredFcmAppIdsString}."
+                : "";
+            var failingApnsBundleIdsString = failingApnsBundleIds.Count > 0
+                ? "\nThe questionable APNs app ids are: " + string.Join(", ", failingApnsBundleIds.Select(x => $"'{x}'")) + $". The configured app ids are: {configuredApnsBundleIdsString}."
+                : "";
+
+            var errorMessage = $"There are push notification registrations in the database with an app id for which there is no configuration.{failingFcmAppIdsString}{failingApnsBundleIdsString}";
+
+            throw new Exception(errorMessage);
+        }
     }
 }
