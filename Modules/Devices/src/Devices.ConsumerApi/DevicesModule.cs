@@ -11,6 +11,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -59,13 +60,7 @@ public class DevicesModule : AbstractModule
 
         var supportedApnsAppIds = apnsOptions.GetSupportedBundleIds();
         var supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
-
-        //var devicesWithInvalidAppId = devicesDbContext.PnsRegistrations.Where(x =>
-        //        (x.Handle.Platform == PushNotificationPlatform.Apns && !supportedApnsAppIds.Contains(x.AppId)) ||
-        //        (x.Handle.Platform == PushNotificationPlatform.Fcm && !supportedFcmAppIds.Contains(x.AppId)))
-        //    .Select(x => x.DeviceId);
-
-        var devicesWithInvalidAppId = devicesDbContext.PnsRegistrations.Where(x => !supportedApnsAppIds.Contains(x.AppId) && !supportedFcmAppIds.Contains(x.AppId)).Select(x => x.DeviceId);
+        var devicesWithInvalidAppId = devicesDbContext.GetInvalidRegistrations(supportedApnsAppIds, supportedFcmAppIds);
 
         if (devicesWithInvalidAppId.Any())
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(supportedApnsAppIds.Concat(supportedFcmAppIds).ToList()));
