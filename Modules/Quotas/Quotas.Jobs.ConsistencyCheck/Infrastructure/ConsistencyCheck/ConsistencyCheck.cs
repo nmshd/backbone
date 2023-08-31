@@ -13,12 +13,6 @@ public class ConsistencyCheck
         _reporter = reporter;
     }
 
-    /// <summary>
-    /// Checks that for any given Identity i, associated with a Tier t, which has several TierQuotaDefinitions tqd, the Identity i has matching tierQuotas tq.
-    /// ∀i ∃t : i ∈ t ∧ ∀t.tqd ∃i.tq : tq.DefinitionId = tqd.Id
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
         var tierQuotasMissingFromIdentities = await _dataSource.GetTierQuotasMissingFromIdentities(cancellationToken);
