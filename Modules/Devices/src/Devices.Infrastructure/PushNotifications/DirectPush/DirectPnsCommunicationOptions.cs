@@ -12,11 +12,8 @@ public class DirectPnsCommunicationOptions
     {
         public string DefaultAppId { get; set; }
         public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
-        public class ServiceAccount
-        {
-            public string ServiceAccountJson { get; set; } = string.Empty;
-        }
         public Dictionary<string, ServiceAccountInformation> Apps { get; set; } = new();
+
         public class ServiceAccountInformation
         {
             public string ServiceAccountName { get; set; } = string.Empty;
@@ -37,6 +34,11 @@ public class DirectPnsCommunicationOptions
         public List<string> GetSupportedAppIds()
         {
             return Apps.Where(app => HasConfigForAppId(app.Key)).Select(app => app.Key).ToList();
+        }
+
+        public class ServiceAccount
+        {
+            public string ServiceAccountJson { get; set; } = string.Empty;
         }
     }
 
