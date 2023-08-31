@@ -24,14 +24,14 @@ public class DirectPnsCommunicationOptions
 
         public bool HasConfigForAppId(string appId)
         {
-            var apps = Apps.GetValueOrDefault(appId);
-            return apps != null && !apps.ServiceAccountName.IsNullOrEmpty() && ServiceAccounts.ContainsKey(apps.ServiceAccountName) && !ServiceAccounts[apps.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty();
+            var app = Apps.GetValueOrDefault(appId);
+            return app != null && !app.ServiceAccountName.IsNullOrEmpty() && ServiceAccounts.ContainsKey(app.ServiceAccountName) && !ServiceAccounts[app.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty();
         }
 
         public string? GetServiceAccountForAppId(string appId)
         {
-            var serviceAccountInformation = Apps.GetValueOrDefault(appId);
-            return ServiceAccounts.GetValueOrDefault(serviceAccountInformation.ServiceAccountName)?.ServiceAccountJson;
+            var app = Apps.GetValueOrDefault(appId);
+            return ServiceAccounts.GetValueOrDefault(app.ServiceAccountName)?.ServiceAccountJson;
         }
 
         public List<string> GetSupportedAppIds()
