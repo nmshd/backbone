@@ -23,7 +23,7 @@ public class ConsistencyCheck
     {
         var tierQuotasMissingFromIdentities = await _dataSource.GetTierQuotasMissingFromIdentities(cancellationToken);
 
-        foreach(var identityAddressTierQuotaDefinitionIdPair in tierQuotasMissingFromIdentities)
+        foreach (var identityAddressTierQuotaDefinitionIdPair in tierQuotasMissingFromIdentities)
         {
             _reporter.ReportTierQuotaDefinitionMissingFromIdentity(identityAddressTierQuotaDefinitionIdPair);
         }
