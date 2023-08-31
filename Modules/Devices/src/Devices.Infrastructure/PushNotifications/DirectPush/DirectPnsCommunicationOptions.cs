@@ -1,4 +1,5 @@
-﻿using Enmeshed.Tooling.Extensions;
+using System.ComponentModel.DataAnnotations;
+using Enmeshed.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
@@ -11,11 +12,19 @@ public class DirectPnsCommunicationOptions
     public class FcmOptions
     {
         public string DefaultAppId { get; set; }
+
+        [Required]
+        [MinLength(1)]
         public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
+
+        [Required]
+        [MinLength(1)]
         public Dictionary<string, ServiceAccountInformation> Apps { get; set; } = new();
 
         public class ServiceAccountInformation
         {
+            [Required]
+            [MinLength(1)]
             public string ServiceAccountName { get; set; } = string.Empty;
         }
 
@@ -38,37 +47,25 @@ public class DirectPnsCommunicationOptions
 
         public class ServiceAccount
         {
+            [Required]
+            [MinLength(1)]
             public string ServiceAccountJson { get; set; } = string.Empty;
         }
     }
 
     public class ApnsOptions
     {
+        [Required]
+        [MinLength(1)]
         public string DefaultBundleId { get; set; }
+
+        [Required]
+        [MinLength(1)]
         public Dictionary<string, Key> Keys { get; set; } = new();
-        public class Key
-        {
-            public string TeamId { get; set; } = string.Empty;
-            public string KeyId { get; set; } = string.Empty;
-            public string PrivateKey { get; set; } = string.Empty;
-        }
+
+        [Required]
+        [MinLength(1)]
         public Dictionary<string, Bundle> Bundles { get; set; } = new();
-        public class Bundle
-        {
-            public string KeyName { get; set; }
-            public string Server => ServerType switch
-            {
-                ApnsServerType.Development => "https://api.development.push.apple.com:443/3/device/",
-                ApnsServerType.Production => "https://api.push.apple.com:443/3/device/",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            public ApnsServerType ServerType { get; set; }
-            public enum ApnsServerType
-            {
-                Development,
-                Production
-            }
-        }
 
         public bool HasConfigForBundleId(string bundleId)
         {
@@ -89,6 +86,44 @@ public class DirectPnsCommunicationOptions
         public List<string> GetSupportedBundleIds()
         {
             return Bundles.Where(bundle => HasConfigForBundleId(bundle.Key)).Select(bundle => bundle.Key).ToList();
+        }
+
+        public class Bundle
+        {
+            [Required]
+            [MinLength(1)]
+            public string KeyName { get; set; }
+
+            public string Server => ServerType switch
+            {
+                ApnsServerType.Development => "https://api.development.push.apple.com:443/3/device/",
+                ApnsServerType.Production => "https://api.push.apple.com:443/3/device/",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            [Required]
+            public ApnsServerType ServerType { get; set; }
+
+            public enum ApnsServerType
+            {
+                Development,
+                Production
+            }
+        }
+
+        public class Key
+        {
+            [Required]
+            [MinLength(1)]
+            public string TeamId { get; set; } = string.Empty;
+
+            [Required]
+            [MinLength(1)]
+            public string KeyId { get; set; } = string.Empty;
+
+            [Required]
+            [MinLength(1)]
+            public string PrivateKey { get; set; } = string.Empty;
         }
     }
 }
