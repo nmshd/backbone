@@ -87,6 +87,16 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return await RunInTransaction(func, null, isolationLevel);
     }
 
+    public List<PnsRegistration> GetInvalidRegistrations(List<string> supportedApnsBundleIds, List<string> supportedFcmAppIds)
+    {
+        var apnsAppIdsSql = "'" + string.Join("', '", supportedApnsBundleIds) + "'";
+        var fcmAppIdsSql = "'" + string.Join("', '", supportedFcmAppIds) + "'";
+
+        return Database.IsNpgsql()
+            ? PnsRegistrations.FromSqlInterpolated($""" SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'fcm%' AND "AppId" not in ({fcmAppIdsSql}) UNION SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'apns%' AND "AppId" not in ({apnsAppIdsSql})""").ToList()
+            : PnsRegistrations.FromSqlInterpolated($"SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'fcm%' AND AppId not in ({fcmAppIdsSql}) UNION SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'apns%' AND AppId not in ({apnsAppIdsSql})").ToList();
+    }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
