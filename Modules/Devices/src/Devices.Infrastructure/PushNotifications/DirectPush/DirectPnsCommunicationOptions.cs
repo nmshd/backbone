@@ -44,10 +44,10 @@ public class DirectPnsCommunicationOptions
                 return null;
 
             var serviceAccount = ServiceAccounts.GetValueOrDefault(app.ServiceAccountName);
-            
-            if(serviceAccount == null)
+
+            if (serviceAccount == null)
                 return null;
-            
+
             return serviceAccount.ServiceAccountJson;
         }
 

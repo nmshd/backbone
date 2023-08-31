@@ -17,7 +17,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
-    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
+        ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
@@ -50,7 +51,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         await Task.WhenAll(tasks);
     }
-    
+
     public void ValidateRegistration(PnsRegistration registration)
     {
         if (!_options.HasConfigForBundleId(registration.AppId))
