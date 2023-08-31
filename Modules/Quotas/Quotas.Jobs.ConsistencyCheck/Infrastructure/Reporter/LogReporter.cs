@@ -1,11 +1,12 @@
-﻿namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
+
+namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
 
 public class LogReporter : IReporter
 {
     private readonly ILogger<LogReporter> _logger;
 
-    private readonly ICollection<string> _tierQuotaDefinitionsMissingFromIdentity;
-    private readonly ICollection<string> _tierQuotasMissingFromTier;
+    private readonly ICollection<IdentityAddressTierQuotaDefinitionIdPair> _tierQuotasMissingFromIdentity;
 
     private readonly ICollection<string> _identitiesMissingFromQuotas;
     private readonly ICollection<string> _identitiesMissingFromDevices;
@@ -17,8 +18,7 @@ public class LogReporter : IReporter
     {
         _logger = logger;
 
-        _tierQuotaDefinitionsMissingFromIdentity = new List<string>();
-        _tierQuotasMissingFromTier = new List<string>();
+        _tierQuotasMissingFromIdentity = new List<IdentityAddressTierQuotaDefinitionIdPair>();
 
         _identitiesMissingFromDevices = new List<string>();
         _identitiesMissingFromQuotas = new List<string>();
@@ -49,17 +49,10 @@ public class LogReporter : IReporter
             _logger.LogError("Tier with id {id} found on Devices but missing from Quotas.", id);
         }
 
-        foreach (var tierQuotaId in _tierQuotaDefinitionsMissingFromIdentity)
+        foreach (var pair in _tierQuotasMissingFromIdentity)
         {
-            _logger.LogError("no TierQuotaDefinition found for TierQuota with id: {tierQuotaId}.", tierQuotaId);
+            _logger.LogError("no TierQuota found for TierQuotaDefinition with id: {tierQuotaDefinitionId} and Identity with Address {Address}.", pair.TierQuotaDefinitionId, pair.IdentityAddress);
         }
-
-        foreach (var tierQuotaDefinitionId in _tierQuotasMissingFromTier)
-        {
-            _logger.LogError("no TierQuota found for TierQuotaDefinition with id: {tierQuotaDefinitionId}.", tierQuotaDefinitionId);
-        }
-
-
     }
 
     public void ReportIdentityMissingFromQuotas(string address)
@@ -82,13 +75,8 @@ public class LogReporter : IReporter
         _tiersMissingFromDevices.Add(orphanedIdentityId);
     }
 
-    public void ReportTierQuotaDefinitionMissingFromIdentity(string id)
+    public void ReportTierQuotaDefinitionMissingFromIdentity(IdentityAddressTierQuotaDefinitionIdPair identityAddressTierQuotaDefinitionIdPair)
     {
-        _tierQuotaDefinitionsMissingFromIdentity.Add(id);
-    }
-
-    public void ReportTierQuotaMissingFromTier(string id)
-    {
-        _tierQuotasMissingFromTier.Add(id);
+        _tierQuotasMissingFromIdentity.Add(identityAddressTierQuotaDefinitionIdPair);
     }
 }

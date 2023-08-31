@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
+using Dapper;
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,11 @@ internal class PostgresConsistencyCheckRepository : IConsistencyCheckRepository
         const string query = "";
         await using var connection = new SqlConnection(_options.ConnectionString);
         return await connection.QueryAsync<string>(new CommandDefinition(query, cancellationToken: cancellationToken));
+    }
+
+    public Task<IEnumerable<IdentityAddressTierQuotaDefinitionIdPair>> GetTierQuotasMissingFromIdentities(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public Task<IEnumerable<string>> GetTiersMissingFromDevices(CancellationToken cancellationToken)

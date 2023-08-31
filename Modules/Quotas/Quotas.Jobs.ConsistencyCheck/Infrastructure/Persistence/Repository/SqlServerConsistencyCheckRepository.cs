@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
+using Dapper;
 using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,22 @@ internal class SqlServerConsistencyCheckRepository : IConsistencyCheckRepository
         """;
 
         return await RunQueryAsync<string>(query, cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<IdentityAddressTierQuotaDefinitionIdPair>> GetTierQuotasMissingFromIdentities(CancellationToken cancellationToken)
+    {
+        const string query = """
+        SELECT i.Address AS IdentityAddress, tqd.id AS TierQuotaDefinitionId
+        FROM quotas.TierQuotaDefinitions tqd
+        JOIN quotas.Tiers t ON t.Id = tqd.TierId
+        JOIN quotas.Identities i ON i.TierId = t.id
+        EXCEPT
+        SELECT i.Address AS IdentityAddress, tq.DefinitionId AS TierQuotaDefinitionId
+        FROM quotas.TierQuotas tq
+        JOIN quotas.Identities i ON i.Address = tq.ApplyTo
+        """;
+
+        return await RunQueryAsync<IdentityAddressTierQuotaDefinitionIdPair>(query, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<string>> GetTiersMissingFromDevices(CancellationToken cancellationToken)

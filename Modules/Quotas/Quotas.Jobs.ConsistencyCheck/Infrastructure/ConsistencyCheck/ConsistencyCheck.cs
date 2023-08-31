@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
 using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Reporter;
-using static Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Extensions.IEnumerableExtensions;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.ConsistencyCheck;
 public class ConsistencyCheck
@@ -22,7 +21,12 @@ public class ConsistencyCheck
     /// <returns></returns>
     public async Task Run_for_TierQuotaDefinitions_vs_TierQuotas(CancellationToken cancellationToken)
     {
+        var tierQuotasMissingFromIdentities = await _dataSource.GetTierQuotasMissingFromIdentities(cancellationToken);
 
+        foreach(var identityAddressTierQuotaDefinitionIdPair in tierQuotasMissingFromIdentities)
+        {
+            _reporter.ReportTierQuotaDefinitionMissingFromIdentity(identityAddressTierQuotaDefinitionIdPair);
+        }
     }
 
     public async Task Run_for_DevicesIdentities_vs_QuotasIdentities(CancellationToken cancellationToken)

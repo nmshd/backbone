@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.DataSource;
 public class DataSource : IDataSource
@@ -28,5 +29,10 @@ public class DataSource : IDataSource
     public Task<IEnumerable<string>> GetTiersMissingFromDevices(CancellationToken cancellationToken)
     {
         return _consistencyCheckRepository.GetTiersMissingFromDevices(cancellationToken);
+    }
+
+    public Task<IEnumerable<IdentityAddressTierQuotaDefinitionIdPair>> GetTierQuotasMissingFromIdentities(CancellationToken cancellationToken)
+    {
+        return _consistencyCheckRepository.GetTierQuotasMissingFromIdentities(cancellationToken);
     }
 }
