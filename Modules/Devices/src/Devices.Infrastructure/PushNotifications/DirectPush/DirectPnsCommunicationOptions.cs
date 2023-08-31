@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Enmeshed.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -31,13 +31,26 @@ public class DirectPnsCommunicationOptions
         public bool HasConfigForAppId(string appId)
         {
             var app = Apps.GetValueOrDefault(appId);
-            return app != null && !app.ServiceAccountName.IsNullOrEmpty() && ServiceAccounts.ContainsKey(app.ServiceAccountName) && !ServiceAccounts[app.ServiceAccountName].ServiceAccountJson.IsNullOrEmpty();
+
+            var appWithAppIdExists = app != null;
+            var serviceAccountForServiceAccountNameExists = ServiceAccounts.ContainsKey(app.ServiceAccountName);
+
+            return appWithAppIdExists && serviceAccountForServiceAccountNameExists;
         }
 
         public string? GetServiceAccountForAppId(string appId)
         {
             var app = Apps.GetValueOrDefault(appId);
-            return ServiceAccounts.GetValueOrDefault(app.ServiceAccountName)?.ServiceAccountJson;
+
+            if (app == null)
+                return null;
+
+            var serviceAccount = ServiceAccounts.GetValueOrDefault(app.ServiceAccountName);
+            
+            if(serviceAccount == null)
+                return null;
+            
+            return serviceAccount.ServiceAccountJson;
         }
 
         public List<string> GetSupportedAppIds()
@@ -75,7 +88,12 @@ public class DirectPnsCommunicationOptions
 
         public Key GetKeyInformationForBundleId(string bundleId)
         {
-            return Keys[Bundles[bundleId].KeyName];
+            var bundle = Bundles.GetValueOrDefault(bundleId);
+
+            if (bundle == null)
+                return null;
+
+            return Keys[bundle.KeyName];
         }
 
         public Bundle GetBundleById(string bundleId)
