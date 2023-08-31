@@ -44,7 +44,6 @@ public class ApplePushNotificationServiceConnectorTests
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
         var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions()
         {
-            DefaultBundleId = APP_ID,
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
                 {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}

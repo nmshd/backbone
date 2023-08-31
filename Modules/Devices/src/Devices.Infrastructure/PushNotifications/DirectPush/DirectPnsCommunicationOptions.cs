@@ -11,8 +11,6 @@ public class DirectPnsCommunicationOptions
 
     public class FcmOptions
     {
-        public string DefaultAppId { get; set; }
-
         [Required]
         [MinLength(1)]
         public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
@@ -68,10 +66,6 @@ public class DirectPnsCommunicationOptions
 
     public class ApnsOptions
     {
-        [Required]
-        [MinLength(1)]
-        public string DefaultBundleId { get; set; }
-
         [Required]
         [MinLength(1)]
         public Dictionary<string, Key> Keys { get; set; } = new();

@@ -50,12 +50,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         await Task.WhenAll(tasks);
     }
-
-    public string GetDefaultAppId()
-    {
-        return _options.DefaultBundleId;
-    }
-
+    
     public void ValidateRegistration(PnsRegistration registration)
     {
         if (!_options.HasConfigForBundleId(registration.AppId))

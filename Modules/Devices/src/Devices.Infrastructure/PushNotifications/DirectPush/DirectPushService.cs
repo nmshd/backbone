@@ -44,7 +44,7 @@ public class DirectPushService : IPushService
 
         if (registration != null)
         {
-            registration.Update(handle, appId ?? pnsConnector.GetDefaultAppId());
+            registration.Update(handle, appId);
             pnsConnector.ValidateRegistration(registration);
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
@@ -53,7 +53,7 @@ public class DirectPushService : IPushService
         }
         else
         {
-            registration = new PnsRegistration(address, deviceId, handle, appId ?? pnsConnector.GetDefaultAppId());
+            registration = new PnsRegistration(address, deviceId, handle, appId);
             pnsConnector.ValidateRegistration(registration);
 
             await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);

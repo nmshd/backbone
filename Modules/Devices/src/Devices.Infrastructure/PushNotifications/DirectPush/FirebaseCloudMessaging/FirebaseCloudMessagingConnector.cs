@@ -50,12 +50,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             await firebaseMessaging.SendMulticastAsync(message);
         }
     }
-
-    public string GetDefaultAppId()
-    {
-        return _options.DefaultAppId;
-    }
-
+    
     public void ValidateRegistration(PnsRegistration registration)
     {
         if (!_options.HasConfigForAppId(registration.AppId))
