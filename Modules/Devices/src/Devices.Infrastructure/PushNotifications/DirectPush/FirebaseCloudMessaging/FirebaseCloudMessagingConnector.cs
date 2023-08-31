@@ -54,7 +54,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     public void ValidateRegistration(PnsRegistration registration)
     {
         if (!_options.HasConfigForAppId(registration.AppId))
-            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

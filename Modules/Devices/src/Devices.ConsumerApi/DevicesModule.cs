@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -10,7 +11,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -68,6 +68,6 @@ public class DevicesModule : AbstractModule
         var devicesWithInvalidAppId = devicesDbContext.PnsRegistrations.Where(x => !supportedApnsAppIds.Contains(x.AppId) && !supportedFcmAppIds.Contains(x.AppId)).Select(x => x.DeviceId);
 
         if (devicesWithInvalidAppId.Any())
-            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration(supportedApnsAppIds.Concat(supportedFcmAppIds).ToList()));
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(supportedApnsAppIds.Concat(supportedFcmAppIds).ToList()));
     }
 }

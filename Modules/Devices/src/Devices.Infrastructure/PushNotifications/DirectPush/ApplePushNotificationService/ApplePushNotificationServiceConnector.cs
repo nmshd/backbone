@@ -54,7 +54,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     public void ValidateRegistration(PnsRegistration registration)
     {
         if (!_options.HasConfigForBundleId(registration.AppId))
-            throw new InfrastructureException(GenericInfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
     private async Task HandleResponse(HttpResponseMessage response, string device)
