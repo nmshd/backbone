@@ -73,8 +73,7 @@ app
     .MigrateDbContext<TokensDbContext>()
     .MigrateDbContext<QuotasDbContext>();
 
-var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
-foreach (var module in modules)
+foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
 {
     module.PostStartupValidation(app.Services);
 }
