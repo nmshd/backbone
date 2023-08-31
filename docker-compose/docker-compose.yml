@@ -55,16 +55,16 @@ services:
     ports:
       - 1433:1433
 
-  postgres:
-   container_name: bkb-postgres
-   hostname: postgres
-   image: postgres
-   environment:
-     - POSTGRES_PASSWORD=admin
-   volumes:
-     - postgres-volume:/var/lib/postgresql/data
-   ports:
-     - 5432:5432
+  # postgres:
+  #  container_name: bkb-postgres
+  #  hostname: postgres
+  #  image: postgres
+  #  environment:
+  #    - POSTGRES_PASSWORD=admin
+  #  volumes:
+  #    - postgres-volume:/var/lib/postgresql/data
+  #  ports:
+  #    - 5432:5432
 
   #pg-admin:
   #  container_name: bkb-pgadmin
