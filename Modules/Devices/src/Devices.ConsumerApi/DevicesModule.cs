@@ -60,9 +60,8 @@ public class DevicesModule : AbstractModule
 
         var supportedApnsAppIds = apnsOptions.GetSupportedBundleIds();
         var supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
-        var devicesWithInvalidAppId = devicesDbContext.GetInvalidRegistrations(supportedApnsAppIds, supportedFcmAppIds);
 
-        if (devicesWithInvalidAppId.Any())
+        if (devicesDbContext.GetAmountOfInvalidRegistrations(supportedApnsAppIds, supportedFcmAppIds) > 0)
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(supportedApnsAppIds.Concat(supportedFcmAppIds).ToList()));
     }
 }

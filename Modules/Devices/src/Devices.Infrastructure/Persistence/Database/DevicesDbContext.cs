@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Common;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
@@ -9,9 +10,13 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverte
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using NpgsqlTypes;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
@@ -87,14 +92,34 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return await RunInTransaction(func, null, isolationLevel);
     }
 
-    public List<PnsRegistration> GetInvalidRegistrations(List<string> supportedApnsBundleIds, List<string> supportedFcmAppIds)
+    public int GetAmountOfInvalidRegistrations(List<string> supportedApnsBundleIds, List<string> supportedFcmAppIds)
     {
-        var apnsAppIdsSql = "'" + string.Join("', '", supportedApnsBundleIds) + "'";
+        var apnsBundleIdsSql = "'" + string.Join("', '", supportedApnsBundleIds) + "'";
         var fcmAppIdsSql = "'" + string.Join("', '", supportedFcmAppIds) + "'";
 
+        // Use SqlParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
+        // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
+        DbParameter apnsBundleIds = null;
+        DbParameter fcmAppIds = null;
+        if (Database.IsSqlServer())
+        {
+            apnsBundleIds = new SqlParameter("apnsBundleIds", SqlDbType.Char, apnsBundleIdsSql.Length, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, apnsBundleIdsSql);
+            fcmAppIds = new SqlParameter("fcmAppIds", SqlDbType.Char, fcmAppIdsSql.Length, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, fcmAppIdsSql);
+        }
+        else if (Database.IsNpgsql())
+        {
+            apnsBundleIds = new NpgsqlParameter("apnsBundleIds", NpgsqlDbType.Char, apnsBundleIdsSql.Length, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default, apnsBundleIdsSql);
+            fcmAppIds = new NpgsqlParameter("fcmAppIds", NpgsqlDbType.Char, fcmAppIdsSql.Length, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default, fcmAppIdsSql);
+        }
+        else
+        {
+            apnsBundleIds = new SqliteParameter("apnsBundleIds", apnsBundleIdsSql);
+            fcmAppIds = new SqliteParameter("fcmAppIds", fcmAppIdsSql);
+        }
+
         return Database.IsNpgsql()
-            ? PnsRegistrations.FromSqlInterpolated($""" SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'fcm%' AND "AppId" not in ({fcmAppIdsSql}) UNION SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'apns%' AND "AppId" not in ({apnsAppIdsSql})""").ToList()
-            : PnsRegistrations.FromSqlInterpolated($"SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'fcm%' AND AppId not in ({fcmAppIdsSql}) UNION SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'apns%' AND AppId not in ({apnsAppIdsSql})").ToList();
+            ? PnsRegistrations.FromSqlInterpolated($""" SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'fcm%' AND "AppId" not in ({fcmAppIds}) UNION SELECT * FROM "Devices"."PnsRegistrations" WHERE "Handle" LIKE 'apns%' AND "AppId" not in ({apnsBundleIds})""").Count()
+            : PnsRegistrations.FromSqlInterpolated($"SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'fcm%' AND AppId not in ({fcmAppIds}) UNION SELECT * FROM [Devices].[PnsRegistrations] WHERE Handle LIKE 'apns%' AND AppId not in ({apnsBundleIds})").Count();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
