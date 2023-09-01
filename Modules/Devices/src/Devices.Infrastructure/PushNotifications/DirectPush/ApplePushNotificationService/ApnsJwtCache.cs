@@ -2,8 +2,8 @@
 
 public class ApnsJwtCache
 {
-    private Jwt _jwt;
-    public bool HasValue() => _jwt != null && !_jwt.IsExpired();
-    public Jwt GetValue() => _jwt;
-    public void UpdateValue(Jwt jwt) => _jwt = jwt;
+    private readonly Dictionary<string, Jwt> _jwts = new();
+    public bool HasValueFor(string bundleId) => _jwts.GetValueOrDefault(bundleId) != null && !_jwts[bundleId].IsExpired();
+    public Jwt GetValueFor(string bundleId) => _jwts[bundleId];
+    public void UpdateValueFor(string bundleId, Jwt jwt) => _jwts[bundleId] = jwt;
 }

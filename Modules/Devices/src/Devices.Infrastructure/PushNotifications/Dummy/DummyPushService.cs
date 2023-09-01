@@ -20,7 +20,7 @@ public class DummyPushService : IPushService
         return Task.CompletedTask;
     }
 
-    public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
+    public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Registering for push notifications of Identity '{address}' and device '{deviceId}.");
         return Task.CompletedTask;

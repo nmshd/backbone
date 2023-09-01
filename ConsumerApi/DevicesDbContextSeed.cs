@@ -30,6 +30,7 @@ public class DevicesDbContextSeed
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
+
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
     {
         return await context.Tiers.GetBasicTier(CancellationToken.None) ?? null;

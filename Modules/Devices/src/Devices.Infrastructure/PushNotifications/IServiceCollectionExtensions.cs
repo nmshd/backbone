@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificatio
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Microsoft.Extensions.DependencyInjection;
+using DirectPnsCommunicationOptions = Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.DirectPnsCommunicationOptions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
@@ -36,7 +37,7 @@ public class PushNotificationOptions
     [Required]
     [RegularExpression(
         $"{IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB}|{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
-    public string Provider { get; set; } = IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB;
+    public string Provider { get; set; }
 
     public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 

@@ -10,11 +10,11 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Challenges.ConsumerApi;
 
-public class ChallengesModule : IModule
+public class ChallengesModule : AbstractModule
 {
-    public string Name => "Challenges";
+    public override string Name => "Challenges";
 
-    public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
@@ -32,7 +32,7 @@ public class ChallengesModule : IModule
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public void ConfigureEventBus(IEventBus eventBus)
+    public override void ConfigureEventBus(IEventBus eventBus)
     {
 
     }
