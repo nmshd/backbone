@@ -12,27 +12,45 @@ services:
 
       - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Modules__Files__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=files;Password=Passw0rd;Port=5432
+      - Modules__Files__Infrastructure__SqlDatabase__Provider=Postgres
 
       - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=messages;Password=Passw0rd;Port=5432
+      - Modules__Messages__Infrastructure__SqlDatabase__Provider=Postgres
 
       - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=relationships;Password=Passw0rd;Port=5432
+      - Modules__Relationships__Infrastructure__SqlDatabase__Provider=Postgres
 
       - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=synchronization;Password=Passw0rd;Port=5432
+      - Modules__Synchronization__Infrastructure__SqlDatabase__Provider=Postgres
 
       - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
       - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+      - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=tokens;Password=Passw0rd;Port=5432
+      - Modules__Tokens__Infrastructure__SqlDatabase__Provider=Postgres
+
+      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
+
+      - Modules__Challenges__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Challenges__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=challenges;Password=Passw0rd;Port=5432
+
+      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
+
     ports:
       - "5000:80"
     depends_on:
-      test-ms-sql-server:
-        condition: service_started
+      test-postgresql-server:
+        condition: service_healthy
       test-rabbitmq:
         condition: service_started
-      test-seed-mssql:
-        condition: service_completed_successfully
       test-azure-storage-emulator:
         condition: service_started
     configs:
@@ -53,7 +71,7 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      test-ms-sql-server:
+      test-postgresql-server:
         condition: service_started
       test-rabbitmq:
         condition: service_started
@@ -63,9 +81,15 @@ services:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
     environment:
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True
-      - Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True
+      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
+      
+      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
+      
+      - Infrastructure__SqlDatabase__Provider=Postgres
+      - Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=adminUi;Password=Passw0rd;Port=5432
+      
       - Infrastructure__EventBus__ConnectionInfo=rabbitmq
 
   ### infrastructure ###
@@ -80,18 +104,25 @@ services:
     volumes:
       - azure-storage-emulator-volume:/data
 
-  test-ms-sql-server:
-    container_name: bkb-mssql_server
-    hostname: ms-sql-server
-    image: mcr.microsoft.com/mssql/server:2019-latest
+  test-postgresql-server:
+    container_name: bkb-postgres
+    hostname: postgresql
+    image: postgres
     environment:
-      - MSSQL_SA_PASSWORD=Passw0rd
-      - ACCEPT_EULA=Y
-      - MSSQL_PID=Express
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=enmeshed
     volumes:
-      - mssql-server-volume:/var/opt/mssql
+      - postgresql-volume:/var/lib/postgresql/data
     ports:
-      - 1433:1433
+      - 5432:5432
+    configs:
+      - source: DockerEntrypointInitdb
+        target: /docker-entrypoint-initdb.d/seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   test-rabbitmq:
     container_name: bkb-rabbitmq
@@ -105,20 +136,11 @@ services:
 
   ### seeds ###
 
-  test-seed-mssql:
-    image: mcr.microsoft.com/mssql-tools
-    volumes:
-      - ../setup-db:/app/setup-db
-    command: >
-      bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"DROP DATABASE IF EXISTS enmeshed\" && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" && sleep 1 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql "
-    depends_on:
-      - test-ms-sql-server
-
   test-seed-client:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     command: >
-      ./backbone client create -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
+      ./backbone client create -p SqlServer -c "Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
     depends_on:
       test-consumer-api:
         condition: service_healthy
@@ -128,6 +150,8 @@ configs:
     file: ../AdminUi/src/AdminUi/appsettings.override.json
   ConsumerApiOverrideConfig:
     file: ../ConsumerApi/appsettings.override.json
+  DockerEntrypointInitdb:
+    file: ../setup-db/setup-postgres.sql
 
 networks:
   default:
@@ -135,6 +159,6 @@ networks:
 
 volumes:
   rabbitmq-volume:
-  mssql-server-volume:
+  postgresql-volume:
   azure-storage-emulator-volume:
   elastic_data:
