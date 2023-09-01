@@ -1,10 +1,8 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
-using FirebaseAdmin;
-using FirebaseAdmin.Messaging;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
@@ -12,21 +10,18 @@ public static class IServiceCollectionExtensions
 {
     public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
     {
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(options.Apns));
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.FcmOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.FcmOptions>(options.Fcm));
+
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
-        services.AddFcm(options.Fcm);
+        services.AddFcm();
         services.AddApns();
     }
 
-    private static void AddFcm(this IServiceCollection services, DirectPnsCommunicationOptions.FcmOptions options)
+    private static void AddFcm(this IServiceCollection services)
     {
-        FirebaseApp.Create(new AppOptions
-        {
-            Credential = options?.ServiceAccountJson is null
-                ? GoogleCredential.GetApplicationDefault()
-                : GoogleCredential.FromJson(options.ServiceAccountJson)
-        });
+        services.AddSingleton<FirebaseMessagingFactory>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
-        services.AddSingleton(FirebaseMessaging.DefaultInstance);
     }
 
     private static void AddApns(this IServiceCollection services)

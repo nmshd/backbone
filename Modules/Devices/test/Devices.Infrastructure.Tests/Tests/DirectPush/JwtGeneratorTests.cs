@@ -21,7 +21,7 @@ public class JwtGeneratorTests : IDisposable
         var jwtGenerator = CreateJwtGenerator();
 
         // Act
-        var jwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var jwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
         jwt.Should().NotBeNull();
@@ -34,13 +34,28 @@ public class JwtGeneratorTests : IDisposable
         // Arrange
         var jwtGenerator = CreateJwtGenerator();
 
-        var jwt1 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var jwt1 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Act
-        var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
         jwt1.Should().BeSameAs(jwt2);
+    }
+
+    [Fact]
+    public void Generates_new_jwt_for_different_bundle_id()
+    {
+        // Arrange
+        var jwtGenerator = CreateJwtGenerator();
+
+        var jwt1 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
+
+        // Act
+        var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-other-bundle-id");
+
+        // Assert
+        jwt1.Should().NotBeSameAs(jwt2);
     }
 
     [Fact]
@@ -49,11 +64,11 @@ public class JwtGeneratorTests : IDisposable
         // Arrange
         var jwtGenerator = CreateJwtGenerator();
 
-        var jwt1 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var jwt1 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
         SystemTime.Set(DateTime.UtcNow.AddMinutes(50));
 
         // Act
-        var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
         jwt1.Should().NotBeSameAs(jwt2);
@@ -68,7 +83,7 @@ public class JwtGeneratorTests : IDisposable
         var results = new ConcurrentBag<Jwt>();
 
         // Act
-        Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id")); });
+        Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id")); });
 
         // Assert
         results.Should().NotBeNull();
@@ -83,7 +98,7 @@ public class JwtGeneratorTests : IDisposable
         // Arrange
         var jwtGenerator = new JwtGenerator(new ApnsJwtCache());
 
-        var initialJwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id");
+        var initialJwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         var expiredSystemTime = DateTime.UtcNow.AddMinutes(51);
 
@@ -92,7 +107,7 @@ public class JwtGeneratorTests : IDisposable
         Parallel.For(0, 10000, _ =>
         {
             SystemTime.Set(expiredSystemTime); // we need to set the SystemTime in here, because Parallel executes each iteration in a different thread, and SystemTime sets the time only for the current thread
-            results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id"));
+            results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id"));
         });
 
         // Assert

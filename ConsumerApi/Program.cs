@@ -73,6 +73,11 @@ app
     .MigrateDbContext<TokensDbContext>()
     .MigrateDbContext<QuotasDbContext>();
 
+foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+{
+    module.PostStartupValidation(app.Services);
+}
+
 app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
@@ -154,7 +159,7 @@ static void Configure(WebApplication app)
     });
 
     var eventBus = app.Services.GetRequiredService<IEventBus>();
-    var modules = app.Services.GetRequiredService<IEnumerable<IModule>>();
+    var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
 
     foreach (var module in modules)
     {

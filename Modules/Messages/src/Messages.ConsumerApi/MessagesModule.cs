@@ -11,11 +11,11 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.ConsumerApi;
 
-public class MessagesModule : IModule
+public class MessagesModule : AbstractModule
 {
-    public string Name => "Messages";
+    public override string Name => "Messages";
 
-    public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
@@ -40,7 +40,7 @@ public class MessagesModule : IModule
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public void ConfigureEventBus(IEventBus eventBus)
+    public override void ConfigureEventBus(IEventBus eventBus)
     {
     }
 }
