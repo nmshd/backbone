@@ -38,14 +38,29 @@ jobs:
       - name: Run tests
         run: ./.ci/test.ts
 
-  integration-test:
-    name: Run Integration Tests
+  integration-test-mssql:
+    name: Run Integration Tests (on MS SQL)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Raise Conntainers with SQL Server
+        run: docker compose -f ./docker-compose/docker-compose.test.mssql.yml up test-consumer-api test-admin-ui test-seed-mssql test-seed-client -d
+      - name: Run integration tests
+        run: ./.ci/integrationTest.ts
+
+  integration-test-postgresql:
+    name: Run Integration Tests (on Postgres)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Raise Conntainers with Postgres
+        run: docker compose -f ./docker-compose/docker-compose.test.pgsql.yml up test-consumer-api test-admin-ui test-seed-postgres test-seed-client -d
       - name: Run integration tests
         run: ./.ci/integrationTest.ts
 
