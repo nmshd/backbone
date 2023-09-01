@@ -1,15 +1,15 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore;
-using OpenIddict.EntityFrameworkCore.Models;
 
 namespace AdminUi.OpenIddict;
 
 public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
-    OpenIddictEntityFrameworkCoreApplicationStore<DevicesDbContext>
+    OpenIddictEntityFrameworkCoreApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreToken, DevicesDbContext, string>
 {
     public CustomOpenIddictEntityFrameworkCoreApplicationStore(
         IMemoryCache cache,
@@ -19,21 +19,21 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
     {
     }
 
-    public override async ValueTask DeleteAsync(OpenIddictEntityFrameworkCoreApplication application, CancellationToken cancellationToken)
+    public override async ValueTask DeleteAsync(CustomOpenIddictEntityFrameworkCoreApplication application, CancellationToken cancellationToken)
     {
         if (application is null)
         {
             throw new ArgumentNullException(nameof(application));
         }
 
-        Task<List<OpenIddictEntityFrameworkCoreAuthorization>> ListAuthorizationsAsync()
-            => Context.Set<OpenIddictEntityFrameworkCoreAuthorization>()
+        Task<List<CustomOpenIddictEntityFrameworkCoreAuthorization>> ListAuthorizationsAsync()
+            => Context.Set<CustomOpenIddictEntityFrameworkCoreAuthorization>()
                 .Include(a => a.Tokens)
                 .Where(a => a.Application!.Id == application.Id)
                 .ToListAsync(cancellationToken);
 
-        Task<List<OpenIddictEntityFrameworkCoreToken>> ListTokensAsync()
-            => Context.Set<OpenIddictEntityFrameworkCoreToken>()
+        Task<List<CustomOpenIddictEntityFrameworkCoreToken>> ListTokensAsync()
+            => Context.Set<CustomOpenIddictEntityFrameworkCoreToken>()
                 .Where(t => t.Authorization == null)
                 .Where(t => t.Application!.Id == application.Id)
                 .ToListAsync(cancellationToken);
@@ -47,20 +47,20 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
             {
                 foreach (var token in authorization.Tokens)
                 {
-                    Context.Set<OpenIddictEntityFrameworkCoreToken>().Remove(token);
+                    Context.Set<CustomOpenIddictEntityFrameworkCoreToken>().Remove(token);
                 }
 
-                Context.Set<OpenIddictEntityFrameworkCoreAuthorization>().Remove(authorization);
+                Context.Set<CustomOpenIddictEntityFrameworkCoreAuthorization>().Remove(authorization);
             }
 
             // Remove all the tokens associated with the application.
             var tokens = await ListTokensAsync();
             foreach (var token in tokens)
             {
-                Context.Set<OpenIddictEntityFrameworkCoreToken>().Remove(token);
+                Context.Set<CustomOpenIddictEntityFrameworkCoreToken>().Remove(token);
             }
 
-            Context.Set<OpenIddictEntityFrameworkCoreApplication>().Remove(application);
+            Context.Set<CustomOpenIddictEntityFrameworkCoreApplication>().Remove(application);
 
             try
             {
