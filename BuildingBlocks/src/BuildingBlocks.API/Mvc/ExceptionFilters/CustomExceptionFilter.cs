@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Domain.Errors;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,16 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
         switch (context.Exception)
         {
+            case InfrastructureException infrastructureException:
+                _logger.LogInformation(
+                    $"An {nameof(InfrastructureException)} occurred. Error Code: {infrastructureException.Code}. Error message: {infrastructureException.Message}");
+
+                httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
+
+                context.HttpContext.Response.StatusCode =
+                    (int)GetStatusCodeForInfrastructureException(infrastructureException);
+
+                break;
             case ApplicationException applicationException:
                 _logger.LogInformation(
                     $"An {nameof(ApplicationException)} occurred. Error Code: {applicationException.Code}. Error message: {applicationException.Message}");
@@ -89,6 +100,17 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             });
     }
 
+    private HttpError CreateHttpErrorForInfrastructureException(InfrastructureException infrastructureException)
+    {
+        var httpError = HttpError.ForProduction(
+            infrastructureException.Code,
+            infrastructureException.Message,
+            "" // TODO: add documentation link
+        );
+
+        return httpError;
+    }
+
     private HttpError CreateHttpErrorForApplicationException(ApplicationException applicationException)
     {
         var httpError = HttpError.ForProduction(
@@ -126,6 +148,11 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         }
 
         return null;
+    }
+
+    private HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    {
+        return HttpStatusCode.BadRequest;
     }
 
     private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)

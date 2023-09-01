@@ -52,9 +52,9 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
     public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        // Use SqlParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
+        // Use DbParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
         // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
-        DbParameter activeIdentityParam = null;
+        DbParameter activeIdentityParam;
         if (Database.IsSqlServer())
             activeIdentityParam = new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, activeIdentity.StringValue);
         else if (Database.IsNpgsql())

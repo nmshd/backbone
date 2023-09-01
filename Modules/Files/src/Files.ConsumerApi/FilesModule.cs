@@ -11,11 +11,11 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Files.ConsumerApi;
 
-public class FilesModule : IModule
+public class FilesModule : AbstractModule
 {
-    public string Name => "Files";
+    public override string Name => "Files";
 
-    public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
@@ -40,7 +40,7 @@ public class FilesModule : IModule
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public void ConfigureEventBus(IEventBus eventBus)
+    public override void ConfigureEventBus(IEventBus eventBus)
     {
     }
 }
