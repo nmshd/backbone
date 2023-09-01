@@ -47,8 +47,8 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      test-postgresql-server:
-        condition: service_healthy
+      test-seed-postgresql:
+        condition: service_completed_successfully
       test-rabbitmq:
         condition: service_started
       test-azure-storage-emulator:
@@ -57,7 +57,7 @@ services:
       - source: ConsumerApiOverrideConfig
         target: app/appsettings.override.json
     healthcheck:
-      test: [ "CMD", "wget", "http://localhost/health" ]
+      test: [ "CMD", "wget", "http://localhost/health", "-O", "/dev/null" ]
       interval: 5s
       timeout: 2s
       retries: 40
@@ -109,18 +109,15 @@ services:
     hostname: postgresql
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_PASSWORD=passw0rd
       - POSTGRES_DB=enmeshed
     volumes:
       - postgresql-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    configs:
-      - source: DockerEntrypointInitdb
-        target: /docker-entrypoint-initdb.d/seed.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
       timeout: 5s
       retries: 5
 
@@ -140,9 +137,23 @@ services:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     command: >
-      ./backbone client create -p SqlServer -c "Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
+      ./backbone client create -p Postgres -c "Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
     depends_on:
       test-consumer-api:
+        condition: service_healthy
+
+  test-seed-postgresql:
+    container_name: seed-postgres
+    image: postgres
+    environment:
+      - PGPASSWORD=passw0rd
+    command: >
+      psql -h postgresql -U postgres -d enmeshed -a -f seed.sql
+    configs:
+      - source: DockerEntrypointInitdb
+        target: seed.sql
+    depends_on:
+      test-postgresql-server:
         condition: service_healthy
 
 configs:
