@@ -1,4 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+using Enmeshed.BuildingBlocks.Domain;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using OpenIddict.EntityFrameworkCore.Models;
@@ -34,10 +35,10 @@ public class ClientDTO
 
 public class OAuthClientManager
 {
-    private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
     public OAuthClientManager(
-        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
         _applicationManager = applicationManager;
     }

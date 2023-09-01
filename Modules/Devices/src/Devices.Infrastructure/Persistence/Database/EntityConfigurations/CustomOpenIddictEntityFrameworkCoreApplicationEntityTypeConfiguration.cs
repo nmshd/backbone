@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.OpenIddict;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

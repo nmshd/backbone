@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Core;
-using OpenIddict.EntityFrameworkCore.Models;
 using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
@@ -18,11 +18,11 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class IdentitiesController : ApiControllerBase
 {
-    private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
         _applicationManager = applicationManager;
     }

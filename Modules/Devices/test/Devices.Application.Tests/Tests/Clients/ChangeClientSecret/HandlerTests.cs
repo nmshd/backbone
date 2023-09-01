@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using FakeItEasy;
-using OpenIddict.EntityFrameworkCore.Models;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.ChangeClientSecret;
@@ -11,7 +11,7 @@ public class HandlerTests
     public async Task Change_client_secret()
     {
         // Arrange
-        var client = new OpenIddictEntityFrameworkCoreApplication
+        var client = new CustomOpenIddictEntityFrameworkCoreApplication
         {
             ClientId = "Some-client-id",
             ClientSecret = "Old-client-secret"
@@ -28,7 +28,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => oAuthClientsRepository.Update(A<OpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
+        A.CallTo(() => oAuthClientsRepository.Update(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
                 c.ClientId == client.ClientId &&
                 c.ClientSecret == newClientSecret)
             , CancellationToken.None)

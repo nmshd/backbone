@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
-using OpenIddict.EntityFrameworkCore.Models;
 
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -11,9 +11,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class OAuthClientsRepository : IOAuthClientsRepository
 {
-    private readonly OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
-    public OAuthClientsRepository(OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication> applicationManager)
+    public OAuthClientsRepository(OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
         _applicationManager = applicationManager;
     }
@@ -24,7 +24,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return clients;
     }
 
-    public async Task<OpenIddictEntityFrameworkCoreApplication> Find(string clientId, CancellationToken cancellationToken)
+    public async Task<CustomOpenIddictEntityFrameworkCoreApplication> Find(string clientId, CancellationToken cancellationToken)
     {
         return await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
     }
@@ -50,7 +50,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         }, cancellationToken);
     }
 
-    public async Task Update(OpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
+    public async Task Update(CustomOpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
     {
         await _applicationManager.UpdateAsync(client, cancellationToken);
     }
