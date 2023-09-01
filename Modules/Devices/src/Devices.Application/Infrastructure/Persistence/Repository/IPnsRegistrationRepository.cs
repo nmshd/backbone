@@ -1,6 +1,8 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+
 public interface IPnsRegistrationRepository
 {
     Task Add(PnsRegistration registration, CancellationToken cancellationToken);

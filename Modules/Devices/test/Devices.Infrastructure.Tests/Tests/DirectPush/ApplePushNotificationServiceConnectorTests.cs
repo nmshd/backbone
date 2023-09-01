@@ -18,6 +18,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
 public class ApplePushNotificationServiceConnectorTests
 {
+    private const string APP_ID = "some-app-id";
+
     [Fact]
     public async Task Notification_is_sent_successfully()
     {
@@ -29,7 +31,7 @@ public class ApplePushNotificationServiceConnectorTests
         var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var registrations = new List<PnsRegistration>
         {
-            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value)
+            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value, APP_ID)
         };
         await connector.Send(registrations, recipient, new { SomeProperty = "SomeValue" });
 
@@ -40,7 +42,17 @@ public class ApplePushNotificationServiceConnectorTests
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
     {
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
-        var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions());
+        var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions()
+        {
+            Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
+            {
+                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}
+            },
+            Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
+            {
+                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name", ServerType = DirectPnsCommunicationOptions.ApnsOptions.Bundle.ApnsServerType.Production }}
+            }
+        });
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
 

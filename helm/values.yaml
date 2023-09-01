@@ -273,11 +273,41 @@ global:
             # ConnectionString - should be set via environment variable
             connectionString: ""
           pushNotifications:
-            # Provider - possible values: "AzureNotificationHub"/"Dummy"
+            # Provider - possible values: "AzureNotificationHub"/"Dummy"/"Direct"
             provider: ""
-            azureNotificationHub:
-              hubName: ""
-              connectionString: ""
+            # azureNotificationHub:
+            #   hubName: ""
+            #   connectionString: ""
+            # directPnsCommunication:
+            #   fcm:
+            #     # serviceAccounts - the service accounts that should be used to communicate with the FCM service
+            #     serviceAccounts:
+            #       # the name of the service account (can be chosen freely)
+            #       serviceAccount1:
+            #         # the content of the service account json file
+            #         serviceAccountJson: ''
+            #     apps:
+            #       # the app id (has to match the app id specified for the app that should receive the push notifications)
+            #       appId1:
+            #         # the name of the service account that should be used to communicate with the FCM service (has to match the name of one of the service accounts specified above)
+            #         serviceAccountName: ''
+            #   apns:
+            #     # keys - the keys that should be used to communicate with APNs
+            #     keys:
+            #       # the name of the key (can be chosen freely)
+            #       key1:
+            #         # teamId - the team id
+            #         teamId: ''
+            #         # keyId - the team id
+            #         keyId: ''
+            #         # privateKey - the content of the p8 file between '-----BEGIN PRIVATE KEY-----' and '-----END PRIVATE KEY-----'
+            #         privateKey: ''
+            #     bundles:
+            #       # the bundle id (has to match the bundle id specified for the app that should receive the push notifications)
+            #      bundleId1:
+            #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
+            #         keyName: ''
+            #         serverType: ''
       files:
         application:
           # Pagination - the following options describe the default and maximum page size for the different endpoints

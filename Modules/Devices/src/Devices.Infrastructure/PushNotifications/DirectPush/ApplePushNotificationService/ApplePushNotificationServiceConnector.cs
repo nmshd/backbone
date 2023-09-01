@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
@@ -15,7 +17,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
-    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
+        ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
@@ -25,26 +28,34 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var recipients = registrations.Select(r => r.Handle.Value).ToList();
-
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        var jwt = _jwtGenerator.Generate(_options.PrivateKey, _options.KeyId, _options.TeamId);
-
-        var tasks = recipients.Select(device =>
+        var tasks = registrations.Select(pnsRegistration =>
         {
-            var request = new ApnsMessageBuilder(_options.AppBundleIdentifier, $"{_options.Server}{device}", jwt.Value)
+            ValidateRegistration(pnsRegistration);
+            var handle = pnsRegistration.Handle.Value;
+            var bundle = _options.GetBundleById(pnsRegistration.AppId!);
+            var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
+            var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, pnsRegistration.AppId);
+
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundle.Server}{handle}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)
                 .Build();
 
-            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, device));
+            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
         }).ToList();
 
         await Task.WhenAll(tasks);
+    }
+
+    public void ValidateRegistration(PnsRegistration registration)
+    {
+        if (!_options.HasConfigForBundleId(registration.AppId))
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
     private async Task HandleResponse(HttpResponseMessage response, string device)

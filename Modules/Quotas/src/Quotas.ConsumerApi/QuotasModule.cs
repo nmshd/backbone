@@ -10,11 +10,11 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Quotas.ConsumerApi;
 
-public class QuotasModule : IModule
+public class QuotasModule : AbstractModule
 {
-    public string Name => "Quotas";
+    public override string Name => "Quotas";
 
-    public void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
@@ -32,7 +32,7 @@ public class QuotasModule : IModule
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public void ConfigureEventBus(IEventBus eventBus)
+    public override void ConfigureEventBus(IEventBus eventBus)
     {
         eventBus.AddQuotasIntegrationEventSubscriptions();
     }
