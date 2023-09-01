@@ -8,6 +8,7 @@ using AdminUi.OpenIddict;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
@@ -73,7 +74,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         {
             options
                 .UseEntityFrameworkCore()
-                .UseDbContext<DevicesDbContext>();
+                .UseDbContext<DevicesDbContext>()
+                .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 

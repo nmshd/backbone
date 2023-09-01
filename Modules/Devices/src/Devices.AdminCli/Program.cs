@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -208,7 +209,7 @@ public class Program
                         sqlOptions.MigrationsAssembly(SQL_SERVER_MIGRATIONS_ASSEMBLY);
                     });
 
-                    options.UseOpenIddict();
+                    options.UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
                 });
                 break;
             case POSTGRES:
@@ -219,7 +220,7 @@ public class Program
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                     });
 
-                    options.UseOpenIddict();
+                    options.UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
                 });
                 break;
             default:
@@ -236,7 +237,8 @@ public class Program
             {
                 options
                     .UseEntityFrameworkCore()
-                    .UseDbContext<DevicesDbContext>();
+                    .UseDbContext<DevicesDbContext>()
+                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
             });
 
         services.AddLogging();

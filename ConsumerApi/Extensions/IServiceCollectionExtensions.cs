@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Domain.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using ConsumerApi.ApplicationInsights.TelemetryInitializers;
 using ConsumerApi.Configuration;
@@ -115,7 +116,8 @@ public static class IServiceCollectionExtensions
             .AddCore(options =>
             {
                 options.UseEntityFrameworkCore()
-                    .UseDbContext<DevicesDbContext>();
+                    .UseDbContext<DevicesDbContext>()
+                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
             })
             .AddServer(options =>
             {
