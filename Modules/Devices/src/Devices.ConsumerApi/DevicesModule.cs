@@ -51,8 +51,8 @@ public class DevicesModule : AbstractModule
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
-        if (serviceProvider.GetRequiredService<IOptions<Configuration>>().Value.Infrastructure.PushNotifications.Provider !=
-            Infrastructure.PushNotifications.IServiceCollectionExtensions.PROVIDER_DIRECT)
+        var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>();
+        if (configuration.Value.Infrastructure.PushNotifications.Provider != Infrastructure.PushNotifications.IServiceCollectionExtensions.PROVIDER_DIRECT)
             return;
 
         var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;
