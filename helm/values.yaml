@@ -273,7 +273,7 @@ global:
             # ConnectionString - should be set via environment variable
             connectionString: ""
           pushNotifications:
-            # Provider - possible values: "AzureNotificationHub"/"Dummy"
+            # Provider - possible values: "AzureNotificationHub"/"Dummy"/"Direct"
             provider: ""
             # azureNotificationHub:
             #   hubName: ""
