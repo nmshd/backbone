@@ -23,7 +23,7 @@ public class FirebaseMessagingFactory
             firebaseApp = FirebaseApp.Create(new AppOptions
             {
                 Credential = GoogleCredential.FromJson(serviceAccount)
-            });
+            }, appId);
         }
 
         return FirebaseMessaging.GetMessaging(firebaseApp);
