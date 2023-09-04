@@ -150,7 +150,7 @@ services:
     environment:
       - PGPASSWORD=Passw0rd
     command: >
-      psql -h postgresql -U postgres -d enmeshed -a -f seed.sql
+      psql -h postgresql -U postgres -d enmeshed -f seed.sql
     configs:
       - source: DockerEntrypointInitdb
         target: seed.sql
@@ -167,7 +167,7 @@ services:
       - source: DockerEntrypointInitdb
         target: seed.sql
     command: >
-      grep GRANT seed.sql > grants.sql && psql -h postgresql -U adminUi -d enmeshed -a -f grants.sql
+      psql -h postgresql -U postgres enmeshed -f seed.sql
     depends_on:
       test-consumer-api:
         condition: service_healthy
