@@ -77,6 +77,8 @@ services:
         condition: service_started
       test-consumer-api:
         condition: service_healthy
+      test-seed-postgresql-2:
+          condition: service_completed_successfully
     configs:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
@@ -154,6 +156,20 @@ services:
         target: seed.sql
     depends_on:
       test-postgresql-server:
+        condition: service_healthy
+
+  test-seed-postgresql-2:
+    container_name: seed-postgres-2
+    image: postgres
+    environment:
+      - PGPASSWORD=Passw0rd
+    configs:
+      - source: DockerEntrypointInitdb
+        target: seed.sql
+    command: >
+      grep GRANT seed.sql > grants.sql && psql -h postgresql -U adminUi -d enmeshed -a -f grants.sql
+    depends_on:
+      test-consumer-api:
         condition: service_healthy
 
 configs:
