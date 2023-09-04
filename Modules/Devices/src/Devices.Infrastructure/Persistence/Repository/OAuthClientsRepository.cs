@@ -1,10 +1,11 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.OpenIddict;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using OpenIddict.Abstractions;
 using OpenIddict.Core;
-
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -20,7 +21,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken)
     {
-        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new OAuthClient(c.ClientId, c.DisplayName)), cancellationToken).ToListAsync(cancellationToken);
+        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new OAuthClient(c.ClientId, c.DisplayName, c.TierId)), cancellationToken).ToListAsync(cancellationToken);
         return clients;
     }
 
@@ -35,19 +36,17 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return client != null;
     }
 
-    public async Task Add(string clientId, string displayName, string clientSecret, CancellationToken cancellationToken)
+    public async Task Add(string clientId, string displayName, string clientSecret, string tierId, CancellationToken cancellationToken)
     {
-        await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+        var application = new CustomOpenIddictEntityFrameworkCoreApplication()
         {
             ClientId = clientId,
-            ClientSecret = clientSecret,
             DisplayName = displayName,
-            Permissions =
-            {
-                Permissions.Endpoints.Token,
-                Permissions.GrantTypes.Password
-            }
-        }, cancellationToken);
+            TierId = tierId,
+            Permissions = GetPermissions()
+        };
+
+        await _applicationManager.CreateAsync(application, clientSecret, cancellationToken);
     }
 
     public async Task Update(CustomOpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
@@ -59,5 +58,33 @@ public class OAuthClientsRepository : IOAuthClientsRepository
     {
         var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         await _applicationManager.DeleteAsync(client, cancellationToken);
+    }
+
+    private static string GetPermissions()
+    {
+        var permissions = new List<string>()
+        {
+            Permissions.Endpoints.Token,
+            Permissions.GrantTypes.Password
+        };
+
+        using var stream = new MemoryStream();
+        var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Indented = false
+        });
+
+        writer.WriteStartArray();
+
+        foreach (var permission in permissions)
+        {
+            writer.WriteStringValue(permission);
+        }
+
+        writer.WriteEndArray();
+        writer.Flush();
+
+        return Encoding.UTF8.GetString(stream.ToArray());
     }
 }
