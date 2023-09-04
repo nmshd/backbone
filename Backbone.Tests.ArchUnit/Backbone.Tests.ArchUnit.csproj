@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.10.6" />
     <PackageReference Include="xunit" Version="2.5.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
