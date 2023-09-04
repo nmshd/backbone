@@ -16,16 +16,17 @@ public class FirebaseMessagingFactory
 
     public FirebaseMessaging CreateForAppId(string appId)
     {
-        var firebaseApp = FirebaseApp.GetInstance(appId);
-        if (firebaseApp == null)
-        {
-            var serviceAccount = _options.GetServiceAccountForAppId(appId);
-            firebaseApp = FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromJson(serviceAccount)
-            }, appId);
-        }
+        var firebaseApp = FirebaseApp.GetInstance(appId) ?? RegisterNewInstance(appId);
 
         return FirebaseMessaging.GetMessaging(firebaseApp);
+    }
+
+    private FirebaseApp RegisterNewInstance(string appId)
+    {
+        var serviceAccount = _options.GetServiceAccountForAppId(appId);
+        var credential = GoogleCredential.FromJson(serviceAccount);
+        var firebaseApp = FirebaseApp.Create(new AppOptions { Credential = credential }, appId);
+
+        return firebaseApp;
     }
 }
