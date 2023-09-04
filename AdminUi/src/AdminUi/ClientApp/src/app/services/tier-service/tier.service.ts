@@ -16,10 +16,12 @@ export class TierService {
         this.apiUrl = environment.apiUrl + "/Tiers";
     }
 
-    getTiers(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<Tier>> {
+    getTiers(pageNumber?: number, pageSize?: number): Observable<PagedHttpResponseEnvelope<Tier>> {
         const httpOptions = {
-            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
+            params: new HttpParams()
         };
+        if (pageNumber) httpOptions.params.set("PageNumber", pageNumber + 1);
+        if (pageSize) httpOptions.params.set("PageSize", pageSize);
 
         return this.http.get<PagedHttpResponseEnvelope<Tier>>(this.apiUrl, httpOptions);
     }
