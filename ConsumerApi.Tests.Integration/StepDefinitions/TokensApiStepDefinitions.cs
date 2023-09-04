@@ -131,7 +131,6 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
         {
-            requestConfiguration.ContentType = "application/json";
             switch (requestConfiguration.Content)
             {
                 case var c when c.Contains("<tomorrow>"):

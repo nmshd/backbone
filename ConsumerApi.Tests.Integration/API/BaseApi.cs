@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using ConsumerApi.Tests.Integration.Models;
 using Enmeshed.BuildingBlocks.API;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -15,7 +14,7 @@ public class BaseApi
     private readonly HttpClient _httpClient;
     private static AccessTokenResponse? _accessTokenResponse;
 
-    protected BaseApi(WebApplicationFactory<Program> factory)
+    protected BaseApi(CustomWebApplicationFactory<Program> factory)
     {
         _httpClient = factory.CreateClient();
 

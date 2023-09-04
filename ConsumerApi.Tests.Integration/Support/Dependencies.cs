@@ -1,6 +1,5 @@
 ﻿using ConsumerApi.Tests.Integration.API;
 using ConsumerApi.Tests.Integration.Configuration;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
@@ -29,5 +28,5 @@ public static class Dependencies
         return services;
     }
 
-    private static WebApplicationFactory<Program> GetWebApplicationFactory() => new();
+    private static CustomWebApplicationFactory<Program> GetWebApplicationFactory() => new();
 }
