@@ -30,10 +30,11 @@ public class DirectPnsCommunicationOptions
         {
             var app = Apps.GetValueOrDefault(appId);
 
-            var appWithAppIdExists = app != null;
+            if (app == null) return false;
+
             var serviceAccountForServiceAccountNameExists = ServiceAccounts.ContainsKey(app.ServiceAccountName);
 
-            return appWithAppIdExists && serviceAccountForServiceAccountNameExists;
+            return serviceAccountForServiceAccountNameExists;
         }
 
         public string? GetServiceAccountForAppId(string appId)
