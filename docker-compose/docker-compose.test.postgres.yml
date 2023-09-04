@@ -109,7 +109,7 @@ services:
     hostname: postgresql
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=passw0rd
+      - POSTGRES_PASSWORD=Passw0rd
       - POSTGRES_DB=enmeshed
     volumes:
       - postgresql-volume:/var/lib/postgresql/data
@@ -146,7 +146,7 @@ services:
     container_name: seed-postgres
     image: postgres
     environment:
-      - PGPASSWORD=passw0rd
+      - PGPASSWORD=Passw0rd
     command: >
       psql -h postgresql -U postgres -d enmeshed -a -f seed.sql
     configs:
