@@ -1,12 +1,13 @@
 ﻿using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Options;
 
 namespace AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {
-    public TiersApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
+    public TiersApi(IOptions<HttpClientOptions> httpConfiguration, WebApplicationFactory<Program> factory) : base(httpConfiguration, factory) { }
 
     public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {
