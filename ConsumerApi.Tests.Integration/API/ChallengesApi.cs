@@ -1,11 +1,11 @@
 ﻿using ConsumerApi.Tests.Integration.Models;
-using RestSharp;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ConsumerApi.Tests.Integration.API;
 
 public class ChallengesApi : BaseApi
 {
-    public ChallengesApi(RestClient client) : base(client) { }
+    public ChallengesApi(WebApplicationFactory<Program> factory) : base(factory) { }
 
     public async Task<HttpResponse<Challenge>> CreateChallenge(RequestConfiguration requestConfiguration)
     {

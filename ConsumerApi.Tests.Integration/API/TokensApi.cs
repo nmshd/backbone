@@ -1,11 +1,11 @@
 ﻿using ConsumerApi.Tests.Integration.Models;
-using RestSharp;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ConsumerApi.Tests.Integration.API;
 
 public class TokensApi : BaseApi
 {
-    public TokensApi(RestClient client) : base(client) { }
+    public TokensApi(WebApplicationFactory<Program> factory) : base(factory) { }
 
     public async Task<HttpResponse<CreateTokenResponse>> CreateToken(RequestConfiguration requestConfiguration)
     {

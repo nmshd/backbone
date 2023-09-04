@@ -187,3 +187,5 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddCommandLine(strings);
     webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
+
+public partial class Program { }
