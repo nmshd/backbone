@@ -30,6 +30,15 @@
                     </button>
                     <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
+                <mat-form-field class="form-field">
+                    <mat-label>Tier</mat-label>
+                    <mat-select [(ngModel)]="client.tierId" [disabled]="disabled">
+                        <mat-option *ngFor="let tier of tierList" [value]="tier.id">
+                            {{ tier.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-hint>The basic tier will be selected if this field is left blank.</mat-hint>
+                </mat-form-field>
                 <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
                     <span class="client-secret-warning">Please save the Client Secret since it will be unaccessible after exiting.</span>
                 </div>

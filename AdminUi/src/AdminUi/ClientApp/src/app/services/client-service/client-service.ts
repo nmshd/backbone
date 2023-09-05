@@ -44,6 +44,7 @@ export interface Client {
     clientId?: string;
     displayName: string;
     clientSecret?: string;
+    tierId?: string;
 }
 
 export interface ChangeClientSecretRequest {
