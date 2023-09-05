@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -46,9 +47,13 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
+        var tierId = TierId.Create(command.TierId).Value;
+        var tier = await _tiersRepository.FindById(tierId, cancellationToken);
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, basicTier.Id, command.IdentityVersion);
+        if (tier == null)
+            throw new OperationFailedException(ApplicationErrors.Devices.InvalidTierId());
+
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, tier.Id, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
@@ -58,7 +63,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {basicTier.Name}");
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {tier.Name}");
 
         return new CreateIdentityResponse
         {

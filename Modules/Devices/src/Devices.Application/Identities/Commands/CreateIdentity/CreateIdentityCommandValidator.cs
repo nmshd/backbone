@@ -9,6 +9,7 @@ public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCo
 {
     public CreateIdentityCommandValidator()
     {
+        RuleFor(c => c.TierId).DetailedNotEmpty();
         RuleFor(c => c.IdentityPublicKey).DetailedNotEmpty();
         RuleFor(c => c.DevicePassword).DetailedNotEmpty();
         RuleFor(c => c.SignedChallenge).DetailedNotEmpty().SetValidator(new SignedChallengeDTOValidator());

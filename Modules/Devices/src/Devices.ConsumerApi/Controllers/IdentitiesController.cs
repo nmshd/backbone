@@ -42,6 +42,7 @@ public class IdentitiesController : ApiControllerBase
         {
             ClientId = request.ClientId,
             DevicePassword = request.DevicePassword,
+            TierId = client.TierId,
             IdentityPublicKey = request.IdentityPublicKey,
             IdentityVersion = request.IdentityVersion,
             SignedChallenge = new SignedChallengeDTO
