@@ -15,9 +15,9 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
     private readonly IMetricsRepository _metricsRepository;
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository, MetricStatusesService metricStatusesService)
+    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository, IMetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;

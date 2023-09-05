@@ -6,9 +6,9 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.Relatio
 
 public class RelationshipChangeCreatedIntegrationEventHandler : IIntegrationEventHandler<RelationshipChangeCreatedIntegrationEvent>
 {
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public RelationshipChangeCreatedIntegrationEventHandler(MetricStatusesService metricStatusesService)
+    public RelationshipChangeCreatedIntegrationEventHandler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

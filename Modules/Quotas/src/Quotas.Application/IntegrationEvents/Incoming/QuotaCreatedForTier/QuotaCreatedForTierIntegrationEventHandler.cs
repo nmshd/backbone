@@ -12,10 +12,10 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<QuotaCreatedForTierIntegrationEventHandler> _logger;
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
     public QuotaCreatedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger, MetricStatusesService metricStatusesService)
+        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger, IMetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;

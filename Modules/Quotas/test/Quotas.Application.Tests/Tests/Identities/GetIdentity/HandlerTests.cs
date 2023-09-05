@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -7,10 +8,10 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
-using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Quotas.Application.Tests.Tests.Identities.GetIdentity;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.GetIdentity;
+
 public class HandlerTests
 {
     [Fact]
