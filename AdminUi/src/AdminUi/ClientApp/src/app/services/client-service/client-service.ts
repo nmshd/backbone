@@ -14,6 +14,10 @@ export class ClientServiceService {
         this.apiUrl = environment.apiUrl + "/Clients";
     }
 
+    getClientById(id: string): Observable<HttpResponseEnvelope<ClientDTO>> {
+        return this.http.get<HttpResponseEnvelope<ClientDTO>>(this.apiUrl + `/${id}`);
+    }
+
     getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
@@ -33,11 +37,16 @@ export class ClientServiceService {
     changeClientSecret(clientId: string, request: ChangeClientSecretRequest): Observable<HttpResponseEnvelope<Client>> {
         return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}/ChangeSecret`, request);
     }
+
+    updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<ClientDTO>> {
+        return this.http.patch<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${clientId}/Update`, request);
+    }
 }
 
 export interface ClientDTO {
     clientId: string;
     displayName?: string;
+    tierId: string;
 }
 
 export interface Client {
@@ -49,4 +58,8 @@ export interface Client {
 
 export interface ChangeClientSecretRequest {
     newSecret?: string;
+}
+
+export interface UpdateClientRequest {
+    newTierId?: string;
 }

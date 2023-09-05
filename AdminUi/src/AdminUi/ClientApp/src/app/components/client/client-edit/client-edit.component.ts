@@ -1,8 +1,7 @@
-import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Client } from "src/app/services/client-service/client-service";
+import { Client, ClientDTO, UpdateClientRequest } from "src/app/services/client-service/client-service";
 import { ClientServiceService } from "src/app/services/client-service/client-service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
@@ -14,9 +13,11 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
     styleUrls: ["./client-edit.component.css"]
 })
 export class ClientEditComponent {
-    showPassword: boolean;
+    headerEdit: string;
     headerCreate: string;
-    headerDescription: string;
+    headerDescriptionEdit: string;
+    headerDescriptionCreate: string;
+    showPassword: boolean;
     clientId?: string;
     editMode: boolean;
     client: Client;
@@ -27,7 +28,9 @@ export class ClientEditComponent {
 
     constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private clientService: ClientServiceService, private tierService: TierService) {
         this.headerCreate = "Create Client";
-        this.headerDescription = "Please fill the form below to create your Client";
+        this.headerEdit = "Edit Client";
+        this.headerDescriptionCreate = "Please fill the form below to create your Client";
+        this.headerDescriptionEdit = "Perform your desired changes and save to edit your Client";
         this.editMode = false;
         this.loading = true;
         this.disabled = false;
@@ -45,9 +48,16 @@ export class ClientEditComponent {
         this.route.params.subscribe((params) => {
             if (params["id"]) {
                 this.clientId = params["id"];
+                this.editMode = true;
             }
         });
-        this.initClient();
+
+        if (this.editMode) {
+            this.getClient();
+        } else {
+            this.initClient();
+        }
+
         this.getTiers();
     }
 
@@ -59,7 +69,32 @@ export class ClientEditComponent {
         } as Client;
     }
 
+    getClient() {
+        this.loading = true;
+        this.clientService.getClientById(this.clientId!).subscribe({
+            next: (data: HttpResponseEnvelope<ClientDTO>) => {
+                if (data && data.result) {
+                    this.client = {
+                        clientId: data.result.clientId,
+                        displayName: data.result.displayName!,
+                        tierId: data.result.tierId
+                    } as Client;
+                }
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
+
     getTiers(): void {
+        this.loading = true;
         this.tierList = [];
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<Tier>) => {
@@ -77,8 +112,6 @@ export class ClientEditComponent {
                 });
             }
         });
-
-        this.loading = false;
     }
 
     createClient(): void {
@@ -95,6 +128,41 @@ export class ClientEditComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                let errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
+
+    updateClient(): void {
+        this.loading = true;
+
+        let request = {
+            newTierId: this.client.tierId
+        } as UpdateClientRequest;
+
+        this.clientService.updateClient(this.client.clientId!, request).subscribe({
+            next: (data: HttpResponseEnvelope<ClientDTO>) => {
+                if (data && data.result) {
+                    this.client = {
+                        clientId: data.result.clientId,
+                        displayName: data.result.displayName!,
+                        tierId: data.result.tierId
+                    } as Client;
+
+                    this.snackBar.open("Successfully updated client.", "Dismiss", {
+                        duration: 4000,
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
+                    });
+                }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {

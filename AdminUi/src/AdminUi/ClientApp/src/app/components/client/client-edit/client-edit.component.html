@@ -1,6 +1,8 @@
 <div class="card-header">
-    <h2 class="header-title">{{ headerCreate }}</h2>
-    <p class="header-description">{{ headerDescription }}</p>
+    <h2 class="header-title">{{ editMode ? headerEdit : headerCreate }}</h2>
+    <p class="header-description">
+        {{ editMode ? headerDescriptionEdit : headerDescriptionCreate }}
+    </p>
 </div>
 <div [ngClass]="{ 'disabled-container': loading }">
     <mat-card>
@@ -11,15 +13,15 @@
             <div class="form-details">
                 <mat-form-field class="form-field">
                     <mat-label>Client Id</mat-label>
-                    <input matInput [(ngModel)]="client.clientId" [disabled]="disabled" />
-                    <mat-hint>A Client ID will be generated if this field is left blank.</mat-hint>
+                    <input matInput [(ngModel)]="client.clientId" [disabled]="disabled || editMode" />
+                    <mat-hint *ngIf="!editMode">A Client ID will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
                 <mat-form-field class="form-field">
                     <mat-label>Display Name</mat-label>
-                    <input matInput [(ngModel)]="client.displayName" [disabled]="disabled" />
-                    <mat-hint>Client ID will be used as a Display Name if no value is provided.</mat-hint>
+                    <input matInput [(ngModel)]="client.displayName" [disabled]="disabled || editMode" />
+                    <mat-hint *ngIf="!editMode">Client ID will be used as a Display Name if no value is provided.</mat-hint>
                 </mat-form-field>
-                <mat-form-field class="form-field">
+                <mat-form-field class="form-field" *ngIf="!editMode">
                     <mat-label>Client Secret</mat-label>
                     <input [type]="showPassword ? 'text' : 'password'" matInput [(ngModel)]="client.clientSecret" [disabled]="disabled" />
                     <button matSuffix mat-icon-button (click)="togglePasswordVisibility()" style="cursor: pointer">
@@ -46,7 +48,8 @@
         </mat-card-content>
     </mat-card>
     <div class="action-buttons">
-        <button mat-raised-button color="primary" (click)="createClient()" [disabled]="disabled">Save</button>
+        <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateClient()" [disabled]="disabled">Save</button>
+        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createClient()" [disabled]="disabled">Save</button>
         <button mat-raised-button routerLink="/clients">Cancel</button>
     </div>
 </div>
