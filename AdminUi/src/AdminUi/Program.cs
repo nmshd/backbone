@@ -61,11 +61,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddCustomAspNetCore(parsedConfiguration)
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
-        .AddCustomSwaggerWithUi()
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
         .AddHealthChecks();
+
+    if (parsedConfiguration.SwaggerUi.Enabled)
+        services.AddCustomSwaggerWithUi();
 
     services
         .AddOpenIddict()
@@ -113,7 +115,9 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
+    var swaggerUiConfiguration = app.Configuration.GetSection("SwaggerUi");
+    var isSwaggerEnabled = swaggerUiConfiguration.GetValue<bool>("Enabled");
+    if (isSwaggerEnabled && (app.Environment.IsLocal() || app.Environment.IsDevelopment()))
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
