@@ -41,7 +41,7 @@ services:
 
   test-admin-ui:
     depends_on:
-      test-seed-postgresql-2:
+      test-seed-database-2:
           condition: service_completed_successfully
 
     environment:
