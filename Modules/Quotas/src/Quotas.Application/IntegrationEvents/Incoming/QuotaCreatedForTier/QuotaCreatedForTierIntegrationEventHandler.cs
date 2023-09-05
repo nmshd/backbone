@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
@@ -11,13 +12,15 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<QuotaCreatedForTierIntegrationEventHandler> _logger;
+    private readonly MetricStatusesService _metricStatusesService;
 
     public QuotaCreatedForTierIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger)
+        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierIntegrationEventHandler> logger, MetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
         _logger = logger;
+        _metricStatusesService = metricStatusesService;
     }
 
     public async Task Handle(QuotaCreatedForTierIntegrationEvent @event)
@@ -40,6 +43,8 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
         }
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
+
+        await _metricStatusesService.RecalculateMetricStatuses(identitiesWithTier.Select(i => i.Address).ToList(), new List<string>() { tierQuotaDefinition.MetricKey.Value }, CancellationToken.None);
 
         _logger.LogTrace("Successfully created quotas for Identities!");
     }
