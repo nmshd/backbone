@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
-        var tierId = TierId.Create(request.TierId).Value;
+        var tierId = request.TierId;
 
         await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, tierId, cancellationToken);
 

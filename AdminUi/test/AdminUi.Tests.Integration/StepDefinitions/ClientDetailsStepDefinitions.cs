@@ -45,7 +45,7 @@ public class ClientDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the response contains Client c")]
-    public void ThenTheResponseContainsATier()
+    public void ThenTheResponseContainsAClient()
     {
         _response!.Content.Result.Should().NotBeNull();
         _response!.Content.Result!.ClientId.Should().NotBeNull();
