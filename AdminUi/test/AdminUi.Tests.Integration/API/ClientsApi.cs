@@ -31,4 +31,9 @@ public class ClientsApi : BaseApi
     {
         return await Patch<ChangeClientSecretResponse>($"/Clients/{clientId}/ChangeSecret", requestConfiguration);
     }
+
+    public async Task<HttpResponse<UpdateClientResponse>> UpdateClient(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Patch<UpdateClientResponse>($"/Clients/{clientId}/Update", requestConfiguration);
+    }
 }
