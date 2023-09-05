@@ -7,7 +7,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
-public class Handler : IRequestHandler<GetClientQuery, GetClientResponse>
+public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly IMapper _mapper;
@@ -17,11 +17,11 @@ public class Handler : IRequestHandler<GetClientQuery, GetClientResponse>
         _oAuthClientsRepository = oAuthClientsRepository;
         _mapper = mapper;
     }
-    public async Task<GetClientResponse> Handle(GetClientQuery request, CancellationToken cancellationToken)
+    public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(CustomOpenIddictEntityFrameworkCoreApplication));
-        var clientDto = _mapper.Map<ClientDTO>(new OAuthClient(client.ClientId, client.DisplayName, client.TierId));
+        var clientDto = _mapper.Map<ClientDTO>(new OAuthClient(client.ClientId!, client.DisplayName!, client.TierId));
 
-        return new GetClientResponse(clientDto);
+        return clientDto;
     }
 }

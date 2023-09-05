@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
+using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
@@ -29,7 +30,7 @@ public class ClientsController : ApiControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GetClientResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ClientDTO), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetClient([FromRoute] string id, CancellationToken cancellationToken)
     {
