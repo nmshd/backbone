@@ -113,6 +113,14 @@ jobs:
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
         run: npm run test:local:node:lokijs
+      - name: Save Docker Logs
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml logs > docker-log.txt
+      - name: Archive logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: cns-transport-test-postgresql-docker-logs
+          path: |
+            docker-log.txt
       - name: Stop Consumer API
         run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml down
 
