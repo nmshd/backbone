@@ -37,11 +37,6 @@ services:
       file: docker-compose.test.yml
       service: test-azure-storage-emulator
 
-  test-rabbitmq:
-    extends: 
-      file: docker-compose.test.yml
-      service: test-rabbitmq
-
   test-ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
@@ -54,6 +49,11 @@ services:
       - mssql-server-volume:/var/opt/mssql
     ports:
       - 1433:1433
+
+  test-rabbitmq:
+    extends: 
+      file: docker-compose.test.yml
+      service: test-rabbitmq
 
   ### seeds ###
 
