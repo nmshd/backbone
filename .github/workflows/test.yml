@@ -74,7 +74,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml up test-consumer-api test-seed-mssql test-seed-client -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml up test-consumer-api test-seed-mssql test-seed-client -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -86,7 +86,7 @@ jobs:
           NMSHD_TEST_CLIENTSECRET: test
         run: npm run test:local:node:lokijs
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml down
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml down
 
   cns-transport-test-postgresql:
     name: Run cns-transport Tests (on Postgres)
@@ -102,7 +102,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml up test-consumer-api test-admin-ui test-seed-client -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml up test-consumer-api test-admin-ui test-seed-client -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -114,7 +114,7 @@ jobs:
           NMSHD_TEST_CLIENTSECRET: test
         run: npm run test:local:node:lokijs
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml down
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml down
 
   build-helm-chart:
     name: Build Helm Chart
