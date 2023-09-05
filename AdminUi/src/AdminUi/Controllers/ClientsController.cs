@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+using Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
@@ -24,6 +25,15 @@ public class ClientsController : ApiControllerBase
     {
         var clients = await _mediator.Send(new ListClientsQuery(), cancellationToken);
         return Ok(clients);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(GetClientResponse), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetClient([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var client = await _mediator.Send(new GetClientQuery(id), cancellationToken);
+        return Ok(client);
     }
 
     [HttpPost]
