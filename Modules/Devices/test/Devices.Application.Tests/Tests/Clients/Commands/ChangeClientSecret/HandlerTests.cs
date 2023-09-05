@@ -4,7 +4,7 @@ using Backbone.Modules.Devices.Domain.OpenIddict;
 using FakeItEasy;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.ChangeClientSecret;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.Commands.ChangeClientSecret;
 public class HandlerTests
 {
     [Fact]
@@ -14,7 +14,8 @@ public class HandlerTests
         var client = new CustomOpenIddictEntityFrameworkCoreApplication
         {
             ClientId = "Some-client-id",
-            ClientSecret = "Old-client-secret"
+            ClientSecret = "Old-client-secret",
+            TierId = "Some-tier-id"
         };
         var newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);
