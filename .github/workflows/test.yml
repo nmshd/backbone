@@ -48,6 +48,8 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Run integration tests
         run: ./.ci/integrationTest.ts
+        env:
+          BASE_ADDRESS: http://localhost:5000
 
   cns-transport-test:
     name: Run cns-transport Tests

@@ -21,7 +21,7 @@ public static class Dependencies
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
-        services.AddSingleton(GetWebApplicationFactory());
+        services.AddSingleton(new HttpClientFactory(GetWebApplicationFactory()));
         services.AddTransient<TokensApi>();
         services.AddSingleton<ChallengesApi>();
 

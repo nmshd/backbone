@@ -4,7 +4,7 @@ namespace ConsumerApi.Tests.Integration.API;
 
 public class TokensApi : BaseApi
 {
-    public TokensApi(CustomWebApplicationFactory<Program> factory) : base(factory) { }
+    public TokensApi(HttpClientFactory factory) : base(factory) { }
 
     public async Task<HttpResponse<CreateTokenResponse>> CreateToken(RequestConfiguration requestConfiguration)
     {

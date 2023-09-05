@@ -4,7 +4,7 @@ namespace ConsumerApi.Tests.Integration.API;
 
 public class ChallengesApi : BaseApi
 {
-    public ChallengesApi(CustomWebApplicationFactory<Program> factory) : base(factory) { }
+    public ChallengesApi(HttpClientFactory factory) : base(factory) { }
 
     public async Task<HttpResponse<Challenge>> CreateChallenge(RequestConfiguration requestConfiguration)
     {

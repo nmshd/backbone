@@ -14,7 +14,7 @@ public class BaseApi
     private readonly HttpClient _httpClient;
     private static AccessTokenResponse? _accessTokenResponse;
 
-    protected BaseApi(CustomWebApplicationFactory<Program> factory)
+    protected BaseApi(HttpClientFactory factory)
     {
         _httpClient = factory.CreateClient();
 
