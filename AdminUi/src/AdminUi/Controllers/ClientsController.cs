@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
@@ -54,6 +55,16 @@ public class ClientsController : ApiControllerBase
         return Ok(changedClient);
     }
 
+    [HttpPatch("{clientId}/Update")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateClientResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateClient([FromRoute] string clientId, [FromBody] UpdateClientRequest request, CancellationToken cancellationToken)
+    {
+        var updatedClient = await _mediator.Send(new UpdateClientCommand(clientId, request.NewTierId), cancellationToken);
+        return Ok(updatedClient);
+    }
+
     [HttpDelete("{clientId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -67,4 +78,9 @@ public class ClientsController : ApiControllerBase
 public class ChangeClientSecretRequest
 {
     public string NewSecret { get; set; }
+}
+
+public class UpdateClientRequest
+{
+    public string NewTierId { get; set; }
 }
