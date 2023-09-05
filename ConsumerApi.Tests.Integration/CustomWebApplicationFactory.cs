@@ -11,7 +11,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     {
         builder.ConfigureHostConfiguration(config =>
         {
-            if (Environment.GetEnvironmentVariable("CI").IsNullOrEmpty())
+            if (Environment.GetEnvironmentVariable("GITHUB_ACTION").IsNullOrEmpty())
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Modules:Challenges:Infrastructure:SqlDatabase:ConnectionString", "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True"},
