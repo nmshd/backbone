@@ -63,9 +63,6 @@ services:
       - source: AdminUiOverrideConfig
         target: app/appsettings.override.json
     environment:
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True
-      - Infrastructure__SqlDatabase__ConnectionString=Server=ms-sql-server;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True
       - Infrastructure__EventBus__ConnectionInfo=rabbitmq
 
   ### infrastructure ###

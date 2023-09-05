@@ -54,8 +54,6 @@ services:
       - Infrastructure__SqlDatabase__Provider=Postgres
       - Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=adminUi;Password=Passw0rd;Port=5432
       
-      - Infrastructure__EventBus__ConnectionInfo=rabbitmq
-
   ### infrastructure ###
 
   test-database:
