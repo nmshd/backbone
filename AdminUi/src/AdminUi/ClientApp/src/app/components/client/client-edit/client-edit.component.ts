@@ -144,8 +144,16 @@ export class ClientEditComponent {
     updateClient(): void {
         this.loading = true;
 
+        let newTierId = "";
+        this.tierList.forEach((tier) => {
+            if (tier.id == this.client.tierId) {
+                newTierId = tier.id;
+                return;
+            }
+        });
+
         let request = {
-            newTierId: this.client.tierId
+            newTierId: newTierId
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
