@@ -2,6 +2,7 @@
 
 import { $ } from "zx";
 
+await $`echo $GITHUB_ACTION`;
 await $`docker compose -f ./docker-compose/docker-compose.test.yml up test-consumer-api test-admin-ui test-seed-mssql test-seed-client -d`;
 await $`dotnet restore "Backbone.sln"`;
 await $`dotnet build /property:WarningLevel=0 --no-restore "Backbone.sln"`;
