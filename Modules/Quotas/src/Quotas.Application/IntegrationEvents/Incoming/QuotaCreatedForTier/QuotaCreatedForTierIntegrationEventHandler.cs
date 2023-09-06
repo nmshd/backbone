@@ -44,7 +44,9 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        await _metricStatusesService.RecalculateMetricStatuses(identitiesWithTier.Select(i => i.Address).ToList(), new List<string>() { tierQuotaDefinition.MetricKey.Value }, CancellationToken.None);
+        var identityAddresses = identitiesWithTier.Select(i => i.Address).ToList();
+        var metrics = new List<string> { tierQuotaDefinition.MetricKey.Value };
+        await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
 
         _logger.LogTrace("Successfully created quotas for Identities!");
     }
