@@ -5,6 +5,7 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
+import { Tier } from "../tier-service/tier.service";
 
 @Injectable({
     providedIn: "root"
@@ -27,6 +28,10 @@ export class IdentityService {
     getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
     }
+
+    updateIdentityTier(identity: Identity, tier: Tier) {
+        return this.http.put<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${identity.address}`, { tierId: tier.id });
+    }
 }
 
 export interface Identity {
@@ -37,6 +42,7 @@ export interface Identity {
     identityVersion: string;
     quotas: Quota[];
     devices: Device[];
+    tierId: string;
 }
 
 export interface Device {

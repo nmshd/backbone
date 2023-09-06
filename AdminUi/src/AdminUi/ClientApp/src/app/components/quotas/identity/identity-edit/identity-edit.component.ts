@@ -7,6 +7,7 @@ import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
@@ -31,8 +32,18 @@ export class IdentityEditComponent {
     disabled: boolean;
     identity: Identity;
     loading: boolean;
+    tiers: Tier[];
+    tier?: Tier;
+    originalTier?: Tier;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private identityService: IdentityService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private identityService: IdentityService,
+        private quotasService: QuotasService,
+        private tierService: TierService
+    ) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
@@ -47,6 +58,7 @@ export class IdentityEditComponent {
         this.disabled = false;
         this.identity = {} as Identity;
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
+        this.tiers = [];
     }
 
     ngOnInit() {
@@ -59,6 +71,16 @@ export class IdentityEditComponent {
         this.getIdentity();
     }
 
+    getAdmissibleTiers() {
+        this.tierService.getTiers().subscribe({
+            next: (tiers) => {
+                this.tiers = tiers.result;
+                this.tier = this.tiers.filter((t) => t.id === this.identity.tierId)[0];
+                this.originalTier = this.tier;
+            }
+        });
+    }
+
     getIdentity() {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
@@ -68,6 +90,7 @@ export class IdentityEditComponent {
                     this.identity = data.result;
                     this.groupQuotasByMetricForTable();
                     this.devicesTableData = this.identity.devices;
+                    this.getAdmissibleTiers();
                 }
             },
             complete: () => (this.loading = false),
@@ -80,6 +103,10 @@ export class IdentityEditComponent {
                 });
             }
         });
+    }
+
+    pendingChanges(): boolean {
+        return this.originalTier != this.tier;
     }
 
     groupQuotasByMetricForTable() {
@@ -96,6 +123,27 @@ export class IdentityEditComponent {
 
             this.quotasTableData.push(metricGroup);
             quotas = this.iterateQuotasByMetricGroup(quotas, metricGroup);
+        }
+    }
+
+    saveIdentity(): void {
+        if (this.tier && this.tier.id) {
+            this.identityService.updateIdentityTier(this.identity, this.tier).subscribe({
+                next: () => {
+                    this.snackBar.open("Identity updated successfully", "Dismiss", {
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
+                    });
+                },
+                error: (err: any) => {
+                    this.loading = false;
+                    let errorMessage = err.error?.error?.message ?? err.message;
+                    this.snackBar.open(errorMessage, "Dismiss", {
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
+                    });
+                }
+            });
         }
     }
 

@@ -94,6 +94,14 @@ public class IdentitiesController : ApiControllerBase
 
         return Ok(response);
     }
+
+    [HttpPut("{address}")]
+    [ProducesResponseType(typeof(GetIdentityResponse), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> PutIdentityTierByAddress([FromRoute] string address, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    {
+        return Ok(null);
+    }
 }
 
 public class CreateQuotaForIdentityRequest
@@ -101,6 +109,10 @@ public class CreateQuotaForIdentityRequest
     public string MetricKey { get; set; }
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
+}
+public class UpdateIdentityTierRequest
+{
+    public string TierId { get; set; }
 }
 
 public class GetIdentityResponse
