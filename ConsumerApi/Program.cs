@@ -145,8 +145,7 @@ static void Configure(WebApplication app)
     );
 
     var backboneConfiguration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-    var isSwaggerEnabled = backboneConfiguration.SwaggerUi.Enabled;
-    if (isSwaggerEnabled)
+    if (backboneConfiguration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;

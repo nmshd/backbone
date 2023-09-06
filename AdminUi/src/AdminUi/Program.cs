@@ -116,8 +116,7 @@ static void Configure(WebApplication app)
     );
 
     var adminConfiguration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
-    var isSwaggerEnabled = adminConfiguration.SwaggerUi.Enabled;
-    if (isSwaggerEnabled)
+    if (adminConfiguration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
