@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Autofac;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
@@ -23,27 +23,24 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     private readonly ILifetimeScope _autofac;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
 
-    private readonly PublisherClient _publisher;
-
-    private readonly IGoogleCloudPubSubPersisterConnection _persisterConnection;
+    private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
 
-    public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection persisterConnection,
+    public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
         ILifetimeScope autofac)
     {
-        _persisterConnection = persisterConnection;
+        _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-
-        _publisher = _persisterConnection.PublisherClient;
+        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
     public void Dispose()
     {
         _subscriptionManager.Clear();
-        _persisterConnection.Dispose();
+        _connection.Dispose();
     }
 
     public async void Publish(IntegrationEvent @event)
@@ -64,7 +61,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             }
         };
 
-        var messageId = await _publisher.PublishAsync(message);
+        var messageId = await _connection.PublisherClient.PublishAsync(message);
 
         _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
     }
@@ -75,9 +72,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
 
-        if (!_subscriptionManager.HasSubscriptionsForEvent<T>())
-            RegisterSubscriptionClientMessageHandlerAsync<T>(eventName);
-
         _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
@@ -87,15 +81,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         return Regex.Replace(typeName, $"^(.+){INTEGRATION_EVENT_SUFFIX}$", "$1");
     }
-
-    private void RegisterSubscriptionClientMessageHandlerAsync<T>(string eventName) where T : IntegrationEvent
-    {
-        var subscriberClient = _persisterConnection.GetSubscriberClient(eventName);
-        subscriberClient.StartAsync(OnIncomingEvent<T>); // start listening in the background
-    }
-
-    private async Task<SubscriberClient.Reply> OnIncomingEvent<T>(PubsubMessage @event, CancellationToken _)
-        where T : IntegrationEvent
+    
+    private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
         var eventNameFromAttributes =
             $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{INTEGRATION_EVENT_SUFFIX}";
@@ -103,8 +90,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
         try
         {
-            if (!await ProcessEvent<T>(eventNameFromAttributes, eventData))
-                _logger.LogInformation($"The event with the MessageId '{@event.MessageId}' wasn't processed.");
+            await ProcessEvent(eventNameFromAttributes, eventData);
         }
         catch (Exception ex)
         {
