@@ -32,6 +32,8 @@ public class AdminConfiguration
     public class SwaggerUiConfiguration
     {
         [Required]
+        public bool Enabled { get; set; } = false;
+        [Required]
         public string TokenUrl { get; set; } = "";
     }
 
