@@ -25,8 +25,29 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 table: "OpenIddictApplications",
                 type: "nvarchar(20)",
                 maxLength: 20,
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
+
+            migrationBuilder.Sql(@"
+                UPDATE [Devices].[OpenIddictApplications]
+                SET TierId = (
+	                SELECT Id
+	                FROM [Devices].[Tiers]
+	                WHERE Name = 'Basic'
+                )
+                WHERE TierId = NULL
+            ");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "TierId",
+                table: "OpenIddictApplications",
+                type: "nvarchar(20)",
+                maxLength: 20,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(20)",
+                oldNullable: true);
         }
 
         /// <inheritdoc />

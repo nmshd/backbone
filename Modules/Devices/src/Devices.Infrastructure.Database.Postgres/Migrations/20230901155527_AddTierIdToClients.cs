@@ -25,8 +25,25 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "OpenIddictApplications",
                 type: "character varying(20)",
                 maxLength: 20,
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
+
+            migrationBuilder.Sql("""
+                UPDATE "Devices"."OpenIddictApplications"
+                SET "TierId" = (SELECT "Id" FROM "Devices"."Tiers" WHERE "Name" = 'Basic')
+                WHERE "TierId" IS NULL
+            """);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "TierId",
+                table: "OpenIddictApplications",
+                type: "character varying(20)",
+                maxLength: 20,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "character varying(20)",
+                oldNullable: true);
         }
 
         /// <inheritdoc />
