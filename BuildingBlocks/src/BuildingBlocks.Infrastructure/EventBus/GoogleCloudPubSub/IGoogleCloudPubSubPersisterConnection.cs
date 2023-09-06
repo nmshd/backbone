@@ -6,5 +6,5 @@ public interface IGoogleCloudPubSubPersisterConnection
     : IDisposable
 {
     PublisherClient PublisherClient { get; }
-    SubscriberClient GetSubscriberClient(string eventName);
+    SubscriberClient SubscriberClient { get; }
 }
