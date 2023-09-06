@@ -32,7 +32,7 @@
 .card-header {
     border-radius: 3px;
     padding: 15px;
-    background-color: #673ab7;
+    background-color: #17428d;
     position: relative;
     z-index: 1;
     margin: 15px 15px -50px 15px;
@@ -68,11 +68,11 @@
 }
 
 .details-expansion-panel-header {
-    background: #673ab7 !important;
+    background: #17428d !important;
 }
 
 .details-expansion-panel-header:hover {
-    background: #58319c !important;
+    background: #11337a !important;
 }
 .details-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
     border-radius: 4px 4px 0px 0px;
