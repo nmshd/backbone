@@ -81,7 +81,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         return Regex.Replace(typeName, $"^(.+){INTEGRATION_EVENT_SUFFIX}$", "$1");
     }
-    
+
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
         var eventNameFromAttributes =
@@ -125,11 +125,10 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
                 {
                     ContractResolver = new ContractResolverWithPrivates()
                 }) as IntegrationEvent)!;
-            
+
             var handleMethod = handler.GetType().GetMethod("Handle");
 
             await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
-            
         }
     }
 }

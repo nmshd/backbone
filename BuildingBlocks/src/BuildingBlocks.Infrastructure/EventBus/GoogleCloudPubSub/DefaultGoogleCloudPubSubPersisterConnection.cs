@@ -15,7 +15,7 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
     {
         var topicName = TopicName.FromProjectTopic(projectId, topicId);
         var gcpCredentials = connectionInfo.IsEmpty() ? GoogleCredential.GetApplicationDefault() : GoogleCredential.FromJson(connectionInfo);
-        
+
         PublisherClient = new PublisherClientBuilder
         {
             GoogleCredential = gcpCredentials,
