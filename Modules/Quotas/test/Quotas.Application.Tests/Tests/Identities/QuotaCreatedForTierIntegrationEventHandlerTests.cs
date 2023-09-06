@@ -28,7 +28,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         var identities = new List<Identity> { firstIdentity, secondIdentity };
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.FindWithTier(tierId, CancellationToken.None, true)).Returns(identities);
-        var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository, null);
+        var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
         await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tierId, tierQuotaDefinition.Id));
@@ -68,7 +68,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         ).MustHaveHappened();
     }
 
-    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService? metricStatusesService)
+    private static QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<QuotaCreatedForTierIntegrationEventHandler>>();
         return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());

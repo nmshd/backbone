@@ -35,7 +35,7 @@ public class HandlerTests
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(identitiesRepository, metricsRepository, null);
+        var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -61,7 +61,7 @@ public class HandlerTests
         var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(identitiesRepository, metricsRepository, null);
+        var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -78,7 +78,7 @@ public class HandlerTests
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(identitiesRepository, metricsRepository, null);
+        var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -115,7 +115,7 @@ public class HandlerTests
         ).MustHaveHappened();
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, IMetricStatusesService? metricStatusesService)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, IMetricStatusesService metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<Handler>>();
         return new Handler(identitiesRepository, logger, metricsRepository, metricStatusesService ?? A.Fake<IMetricStatusesService>());
