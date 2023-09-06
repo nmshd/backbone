@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Devices.Infrastructure.CompiledModels;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -145,5 +146,11 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder
+            .UseModel(DevicesDbContextModel.Instance);
     }
 }
