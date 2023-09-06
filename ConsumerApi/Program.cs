@@ -144,9 +144,9 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var swaggerUiConfiguration = app.Configuration.GetSection("SwaggerUi");
-    var isSwaggerEnabled = swaggerUiConfiguration.GetValue<bool>("Enabled");
-    if (isSwaggerEnabled && (app.Environment.IsLocal() || app.Environment.IsDevelopment()))
+    var backboneConfiguration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var isSwaggerEnabled = backboneConfiguration.SwaggerUi.Enabled;
+    if (isSwaggerEnabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
