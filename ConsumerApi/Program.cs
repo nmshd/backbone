@@ -110,8 +110,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment)
-        .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
+        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment);
+
+    if (parsedConfiguration.SwaggerUi.Enabled)
+        services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -142,7 +144,8 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
+    var backboneConfiguration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    if (backboneConfiguration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
