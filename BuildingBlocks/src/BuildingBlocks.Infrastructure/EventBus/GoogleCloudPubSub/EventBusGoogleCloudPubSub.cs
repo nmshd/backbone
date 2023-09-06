@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Autofac;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
@@ -103,39 +103,33 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         return SubscriberClient.Reply.Ack;
     }
 
-    private async Task<bool> ProcessEvent<T>(string eventName, string message) where T : IntegrationEvent
+    private async Task ProcessEvent(string eventName, string message)
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
-            return false;
+        {
+            _logger.LogWarning("No subscription for event: {EventName}", eventName);
+            return;
+        }
 
         await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler<T> handler)
+            if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
                 throw new Exception(
                     "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 
-            var integrationEvent = JsonConvert.DeserializeObject<T>(message,
+            var integrationEvent = (JsonConvert.DeserializeObject(message, subscription.EventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
-                })!;
+                }) as IntegrationEvent)!;
+            
+            var handleMethod = handler.GetType().GetMethod("Handle");
 
-            try
-            {
-                await handler.Handle(integrationEvent);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,
-                    "An error occurred while processing the integration event with id '{eventId}'.",
-                    integrationEvent.IntegrationEventId);
-                return false;
-            }
+            await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+            
         }
-
-        return true;
     }
 }
