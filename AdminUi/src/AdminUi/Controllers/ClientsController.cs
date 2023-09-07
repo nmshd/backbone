@@ -56,13 +56,13 @@ public class ClientsController : ApiControllerBase
         return Ok(changedClient);
     }
 
-    [HttpPatch("{clientId}/Update")]
+    [HttpPatch("{clientId}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateClientResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateClient([FromRoute] string clientId, [FromBody] UpdateClientRequest request, CancellationToken cancellationToken)
     {
-        var updatedClient = await _mediator.Send(new UpdateClientCommand(clientId, request.NewTierId), cancellationToken);
+        var updatedClient = await _mediator.Send(new UpdateClientCommand(clientId, request.DefaultTier), cancellationToken);
         return Ok(updatedClient);
     }
 
@@ -83,5 +83,5 @@ public class ChangeClientSecretRequest
 
 public class UpdateClientRequest
 {
-    public string NewTierId { get; set; }
+    public string DefaultTier { get; set; }
 }

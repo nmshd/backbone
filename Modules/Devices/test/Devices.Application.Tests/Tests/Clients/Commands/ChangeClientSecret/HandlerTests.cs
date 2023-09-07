@@ -15,7 +15,7 @@ public class HandlerTests
         {
             ClientId = "Some-client-id",
             ClientSecret = "Old-client-secret",
-            TierId = "Some-tier-id"
+            DefaultTier = "Some-tier-id"
         };
         var newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);

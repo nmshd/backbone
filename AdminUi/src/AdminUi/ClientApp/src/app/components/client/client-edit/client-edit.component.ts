@@ -26,7 +26,12 @@ export class ClientEditComponent {
     disabled: boolean;
     displayClientSecretWarning: boolean;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private clientService: ClientServiceService, private tierService: TierService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private clientService: ClientServiceService,
+        private tierService: TierService
+    ) {
         this.headerCreate = "Create Client";
         this.headerEdit = "Edit Client";
         this.headerDescriptionCreate = "Please fill the form below to create your Client";
@@ -77,7 +82,7 @@ export class ClientEditComponent {
                     this.client = {
                         clientId: data.result.clientId,
                         displayName: data.result.displayName!,
-                        tierId: data.result.tierId
+                        defaultTier: data.result.defaultTier
                     } as Client;
                 }
             },
@@ -144,16 +149,16 @@ export class ClientEditComponent {
     updateClient(): void {
         this.loading = true;
 
-        let newTierId = "";
+        let defaultTier = "";
         this.tierList.forEach((tier) => {
-            if (tier.id == this.client.tierId) {
-                newTierId = tier.id;
+            if (tier.id == this.client.defaultTier) {
+                defaultTier = tier.id;
                 return;
             }
         });
 
         let request = {
-            newTierId: newTierId
+            defaultTier: defaultTier
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
@@ -162,7 +167,7 @@ export class ClientEditComponent {
                     this.client = {
                         clientId: data.result.clientId,
                         displayName: data.result.displayName!,
-                        tierId: data.result.tierId
+                        defaultTier: data.result.defaultTier
                     } as Client;
 
                     this.snackBar.open("Successfully updated client.", "Dismiss", {

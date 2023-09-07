@@ -1,5 +1,5 @@
 ﻿namespace AdminUi.Tests.Integration.Models;
 public class UpdateClientRequest
 {
-    public string NewTierId { get; set; }
+    public string DefaultTier { get; set; }
 }

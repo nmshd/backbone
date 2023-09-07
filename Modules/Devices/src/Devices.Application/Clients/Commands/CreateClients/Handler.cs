@@ -27,9 +27,9 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
                 throw new ApplicationException(ApplicationErrors.Devices.ClientIdAlreadyExists());
         }
 
-        if (!string.IsNullOrEmpty(request.TierId))
+        if (!string.IsNullOrEmpty(request.DefaultTier))
         {
-            var tierIdResult = TierId.Create(request.TierId);
+            var tierIdResult = TierId.Create(request.DefaultTier);
             if (tierIdResult.IsFailure)
                 throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
 
@@ -38,16 +38,16 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         else
         {
             var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
-            request.TierId = basicTier.Id.Value;
+            request.DefaultTier = basicTier.Id.Value;
         }
 
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
-        var tierId = request.TierId;
+        var defaultTier = request.DefaultTier;
 
-        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, tierId, cancellationToken);
+        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, defaultTier, cancellationToken);
 
-        return new CreateClientResponse(clientId, displayName, clientSecret, tierId);
+        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTier);
     }
 }

@@ -62,14 +62,14 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     [Given(@"a Tier t")]
     public async Task GivenATier()
     {
-        var createTierQuotaRequest = new CreateTierRequest
+        var createTierRequest = new CreateTierRequest
         {
             Name = "TestTier_" + TestDataGenerator.GenerateString(12)
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierRequest);
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
@@ -152,17 +152,17 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/Update endpoint with the tier id t.Id")]
-    public async Task WhenAPatchRequestIsSentToTheClientsUpdateEndpointWithATierId()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the default tier t.Id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithATierId()
     {
-        var changeClientSecretRequest = new UpdateClientRequest()
+        var updateClientRequest = new UpdateClientRequest()
         {
-            NewTierId = _tierId
+            DefaultTier = _tierId
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
+        requestConfiguration.SetContent(updateClientRequest);
 
         _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
 
@@ -170,17 +170,17 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/Update endpoint with a non-existent tier id")]
-    public async Task WhenAPatchRequestIsSentToTheClientsUpdateEndpointWithAnInexistentTierId()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a non-existent default tier")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
-        var changeClientSecretRequest = new UpdateClientRequest()
+        var updateClientRequest = new UpdateClientRequest()
         {
-            NewTierId = "inexistent-tier-id"
+            DefaultTier = "inexistent-tier-id"
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
+        requestConfiguration.SetContent(updateClientRequest);
 
         _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
 
@@ -188,17 +188,17 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/Update endpoint")]
-    public async Task WhenAPatchRequestIsSentToTheClientsUpdateEndpointForAnInexistentClient()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
-        var changeClientSecretRequest = new UpdateClientRequest()
+        var updateClientRequest = new UpdateClientRequest()
         {
-            NewTierId = "new-tier-id"
+            DefaultTier = "new-tier-id"
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
+        requestConfiguration.SetContent(updateClientRequest);
 
         _updateClientResponse = await _clientsApi.UpdateClient("inexistentClientId", requestConfiguration);
 
@@ -240,8 +240,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse!.AssertStatusCodeIsSuccess();
         _updateClientResponse!.AssertContentTypeIs("application/json");
         _updateClientResponse!.AssertContentCompliesWithSchema();
-        _updateClientResponse!.Content.Result!.TierId.Should().NotBeNullOrEmpty();
-        _updateClientResponse!.Content.Result!.TierId.Should().Be(_tierId);
+        _updateClientResponse!.Content.Result!.DefaultTier.Should().NotBeNullOrEmpty();
+        _updateClientResponse!.Content.Result!.DefaultTier.Should().Be(_tierId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

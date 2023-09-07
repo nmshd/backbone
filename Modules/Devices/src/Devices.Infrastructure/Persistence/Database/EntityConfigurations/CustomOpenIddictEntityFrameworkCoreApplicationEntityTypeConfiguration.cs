@@ -9,7 +9,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfigurati
     public void Configure(EntityTypeBuilder<CustomOpenIddictEntityFrameworkCoreApplication> builder)
     {
         builder
-            .Property(x => x.TierId)
+            .Property(x => x.DefaultTier)
             .HasMaxLength(TierId.MAX_LENGTH);
     }
 }

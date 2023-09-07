@@ -1,8 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -28,7 +26,12 @@ export class ClientListComponent {
     selection = new SelectionModel<ClientDTO>(true, []);
     displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
 
-    constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar, private clientService: ClientServiceService) {
+    constructor(
+        private router: Router,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private clientService: ClientServiceService
+    ) {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
         this.clients = [];

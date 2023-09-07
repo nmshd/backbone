@@ -47,7 +47,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var tierId = TierId.Create(command.TierId).Value;
+        var tierId = TierId.Create(command.DefaultTier).Value;
         var tier = await _tiersRepository.FindById(tierId, cancellationToken) ?? throw new OperationFailedException(ApplicationErrors.Devices.InvalidTierId());
 
         var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, tier.Id, command.IdentityVersion);

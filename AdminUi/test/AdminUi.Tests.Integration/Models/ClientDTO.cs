@@ -4,5 +4,5 @@ public class ClientDTO
 {
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
-    public string TierId { get; set; }
+    public string DefaultTier { get; set; }
 }

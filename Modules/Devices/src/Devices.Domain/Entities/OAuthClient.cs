@@ -1,14 +1,14 @@
 ﻿namespace Backbone.Modules.Devices.Domain.Entities;
 public class OAuthClient
 {
-    public OAuthClient(string clientId, string displayName, string tierId)
+    public OAuthClient(string clientId, string displayName, string defaultTier)
     {
         ClientId = clientId;
         DisplayName = displayName;
-        TierId = tierId;
+        DefaultTier = defaultTier;
     }
 
     public string ClientId { get; }
     public string DisplayName { get; }
-    public string TierId { get; }
+    public string DefaultTier { get; }
 }

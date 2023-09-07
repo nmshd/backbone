@@ -16,18 +16,18 @@ public class HandlerTests
         {
             ClientId = "Some-client-id",
             ClientSecret = "Some-client-secret",
-            TierId = "Old-tier-id"
+            DefaultTier = "Old-tier-id"
         };
 
-        var newTier = new Tier(TierName.Create("new-tier-name").Value);
+        var newDefaultTier = new Tier(TierName.Create("new-default-tier-name").Value);
 
-        var command = new UpdateClientCommand(client.ClientId, newTier.Id);
+        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._)).Returns(client);
 
         var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.FindById(newTier.Id, A<CancellationToken>._)).Returns(newTier);
+        A.CallTo(() => tiersRepository.FindById(newDefaultTier.Id, A<CancellationToken>._)).Returns(newDefaultTier);
 
         var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
 
@@ -38,7 +38,7 @@ public class HandlerTests
         A.CallTo(() => oAuthClientsRepository.Update(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
                 c.ClientId == client.ClientId &&
                 c.ClientSecret == client.ClientSecret &&
-                c.TierId == newTier.Id)
+                c.DefaultTier == newDefaultTier.Id)
             , CancellationToken.None)
         ).MustHaveHappenedOnceExactly();
     }

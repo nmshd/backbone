@@ -21,7 +21,7 @@ public class ClientDetailsStepDefinitions : BaseStepDefinitions
         var createClientRequest = new CreateClientRequest
         {
             ClientId = string.Empty,
-            DisplayName = "a-client-display-name",
+            DisplayName = string.Empty,
             ClientSecret = string.Empty
         };
 

@@ -20,9 +20,9 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
     {
         var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken);
 
-        if (!string.IsNullOrEmpty(request.TierId))
+        if (!string.IsNullOrEmpty(request.DefaultTier))
         {
-            var tierIdResult = TierId.Create(request.TierId);
+            var tierIdResult = TierId.Create(request.DefaultTier);
             if (tierIdResult.IsFailure)
                 throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
 
@@ -31,10 +31,10 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         else
         {
             var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
-            request.TierId = basicTier.Id.Value;
+            request.DefaultTier = basicTier.Id.Value;
         }
 
-        client.TierId = request.TierId;
+        client.DefaultTier = request.DefaultTier;
 
         await _oAuthClientsRepository.Update(client, cancellationToken);
 

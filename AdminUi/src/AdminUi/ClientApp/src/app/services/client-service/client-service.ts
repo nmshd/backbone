@@ -39,21 +39,21 @@ export class ClientServiceService {
     }
 
     updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<ClientDTO>> {
-        return this.http.patch<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${clientId}/Update`, request);
+        return this.http.patch<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${clientId}`, request);
     }
 }
 
 export interface ClientDTO {
     clientId: string;
     displayName?: string;
-    tierId: string;
+    defaultTier: string;
 }
 
 export interface Client {
     clientId?: string;
     displayName: string;
     clientSecret?: string;
-    tierId?: string;
+    defaultTier: string;
 }
 
 export interface ChangeClientSecretRequest {
@@ -61,5 +61,5 @@ export interface ChangeClientSecretRequest {
 }
 
 export interface UpdateClientRequest {
-    newTierId?: string;
+    defaultTier: string;
 }

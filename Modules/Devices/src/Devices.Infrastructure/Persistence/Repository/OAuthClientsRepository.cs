@@ -21,7 +21,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken)
     {
-        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new OAuthClient(c.ClientId, c.DisplayName, c.TierId)), cancellationToken).ToListAsync(cancellationToken);
+        var clients = await _applicationManager.ListAsync(applications => applications.Select(c => new OAuthClient(c.ClientId, c.DisplayName, c.DefaultTier)), cancellationToken).ToListAsync(cancellationToken);
         return clients;
     }
 
@@ -36,33 +36,17 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return client != null;
     }
 
-    public async Task Add(string clientId, string displayName, string clientSecret, string tierId, CancellationToken cancellationToken)
+    public async Task Add(string clientId, string displayName, string clientSecret, string defaulTier, CancellationToken cancellationToken)
     {
         var application = new CustomOpenIddictEntityFrameworkCoreApplication()
         {
             ClientId = clientId,
             DisplayName = displayName,
-            TierId = tierId,
+            DefaultTier = defaulTier,
             Permissions = GetPermissions()
         };
 
         await _applicationManager.CreateAsync(application, clientSecret, cancellationToken);
-    }
-
-    public async Task Update(CustomOpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
-    {
-        await _applicationManager.UpdateAsync(client, cancellationToken);
-    }
-
-    public async Task Delete(string clientId, CancellationToken cancellationToken)
-    {
-        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        await _applicationManager.DeleteAsync(client, cancellationToken);
-    }
-
-    public async Task ChangeClientSecret(CustomOpenIddictEntityFrameworkCoreApplication client, string clientSecret, CancellationToken cancellationToken)
-    {
-        await _applicationManager.UpdateAsync(client, clientSecret, cancellationToken);
     }
 
     private static string GetPermissions()
@@ -91,5 +75,21 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         writer.Flush();
 
         return Encoding.UTF8.GetString(stream.ToArray());
+    }
+
+    public async Task Update(CustomOpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken)
+    {
+        await _applicationManager.UpdateAsync(client, cancellationToken);
+    }
+
+    public async Task Delete(string clientId, CancellationToken cancellationToken)
+    {
+        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        await _applicationManager.DeleteAsync(client, cancellationToken);
+    }
+
+    public async Task ChangeClientSecret(CustomOpenIddictEntityFrameworkCoreApplication client, string clientSecret, CancellationToken cancellationToken)
+    {
+        await _applicationManager.UpdateAsync(client, clientSecret, cancellationToken);
     }
 }

@@ -8,11 +8,11 @@ public class ChangeClientSecretResponse
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;
         ClientSecret = clientSecret;
-        TierId = client.TierId;
+        DefaultTier = client.DefaultTier;
     }
 
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
     public string ClientSecret { get; set; }
-    public string TierId { get; set; }
+    public string DefaultTier { get; set; }
 }
