@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -11,11 +12,10 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
-using Quotas.Application.Tests.Extensions;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
 public class HandlerTests
 {
     private readonly IEventBus _eventBus;
@@ -61,8 +61,8 @@ public class HandlerTests
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 10, QuotaPeriod.Year);
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 15, QuotaPeriod.Total);
 
         var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
 

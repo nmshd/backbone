@@ -1,4 +1,6 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -35,13 +37,15 @@ public class DirectPushService : IPushService
         }
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, CancellationToken cancellationToken)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
 
         if (registration != null)
         {
-            registration.Update(handle);
+            registration.Update(handle, appId);
+            pnsConnector.ValidateRegistration(registration);
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
 
@@ -49,7 +53,10 @@ public class DirectPushService : IPushService
         }
         else
         {
-            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle), cancellationToken);
+            registration = new PnsRegistration(address, deviceId, handle, appId);
+            pnsConnector.ValidateRegistration(registration);
+
+            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
 
             _logger.LogTrace("New device successfully registered.");
         }

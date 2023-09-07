@@ -27,6 +27,7 @@ public static class Dependencies
         services.AddTransient<TiersApi>();
         services.AddTransient<ClientsApi>();
         services.AddTransient<MetricsApi>();
+        services.AddTransient<LogsApi>();
 
         return services;
     }

@@ -1,11 +1,11 @@
 ﻿using System.Data;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -45,14 +45,14 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        ExecutionStrategy? executionStrategy = null;
+        ExecutionStrategy? executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
                 executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
                 break;
             case POSTGRES:
-                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll<string>(x => x.ToString()) : new List<string>();
+                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : new List<string>();
                 executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
                 break;
             default:
@@ -85,6 +85,38 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
     {
         return await RunInTransaction(func, null, isolationLevel);
+    }
+
+    public List<string> GetFcmAppIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
+    {
+        return GetAppIdsForWhichNoConfigurationExists("fcm", supportedAppIds);
+    }
+
+    public List<string> GetApnsBundleIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
+    {
+        return GetAppIdsForWhichNoConfigurationExists("apns", supportedAppIds);
+    }
+
+    private List<string> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
+    {
+        var query = PnsRegistrations.FromSqlRaw(
+            Database.IsNpgsql()
+                ? $""" 
+                    SELECT "AppId" 
+                    FROM "Devices"."PnsRegistrations" 
+                    WHERE "Handle" LIKE '{platform}%'
+                  """
+                : $""" 
+                    SELECT "AppId" 
+                    FROM [Devices].[PnsRegistrations] 
+                    WHERE Handle LIKE '{platform}%'
+                  """);
+
+        return query
+            .Where(x => !supportedAppIds.Contains(x.AppId))
+            .Select(x => x.AppId)
+            .Distinct()
+            .ToList();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

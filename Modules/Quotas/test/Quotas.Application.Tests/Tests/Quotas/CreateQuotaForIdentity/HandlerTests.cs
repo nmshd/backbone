@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
@@ -10,11 +12,10 @@ using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
 
 public class HandlerTests
 {
@@ -88,9 +89,35 @@ public class HandlerTests
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
+    [Fact]
+    public async Task Updates_metric_statuses_after_creating_quota_for_identity()
+    {
+        // Arrange
+        var metricKey = MetricKey.NumberOfSentMessages.Value;
+        var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+        var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
+        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
+
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+        var metricStatusesService = A.Fake<IMetricStatusesService>();
+        var handler = CreateHandler(identitiesRepository, metricsRepository, metricStatusesService);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
+            A<List<string>>.That.Matches(x => x.Contains(identityAddress.StringValue)),
+            A<List<string>>.That.Contains(metricKey),
+            A<CancellationToken>._)
+        ).MustHaveHappened();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, IMetricStatusesService metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<Handler>>();
-        return new Handler(identitiesRepository, logger, metricsRepository);
+        return new Handler(identitiesRepository, logger, metricsRepository, metricStatusesService ?? A.Fake<IMetricStatusesService>());
     }
 }

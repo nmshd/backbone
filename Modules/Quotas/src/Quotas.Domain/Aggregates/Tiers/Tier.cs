@@ -23,6 +23,9 @@ public class Tier
         if (max <= 0)
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
+        if (TierQuotaAlreadyExists(metricKey, period))
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
+
         var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         Quotas.Add(quotaDefinition);
 
@@ -39,5 +42,10 @@ public class Tier
         Quotas.Remove(quotaDefinition);
 
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
+    }
+
+    private bool TierQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
+    {
+        return Quotas.Any(q => q.MetricKey == metricKey && q.Period == period);
     }
 }

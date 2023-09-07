@@ -1,5 +1,6 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
