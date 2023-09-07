@@ -29,7 +29,7 @@ services:
     volumes:
       - ../setup-db:/app/setup-db
     command: >
-      bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -q \"CREATE DATABASE enmeshed\" && sleep 1 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -d enmeshed -i app/setup-db/setup-sqlserver.sql "
+      bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -i app/setup-db/setup-sqlserver.sql "
     depends_on:
       - test-database
 
