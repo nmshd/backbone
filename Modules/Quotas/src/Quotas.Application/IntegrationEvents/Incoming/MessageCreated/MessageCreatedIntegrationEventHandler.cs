@@ -5,9 +5,9 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<MessageCreatedIntegrationEvent>
 {
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public MessageCreatedIntegrationEventHandler(MetricStatusesService metricStatusesService)
+    public MessageCreatedIntegrationEventHandler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

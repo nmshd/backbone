@@ -20,7 +20,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
 
-        services.AddScoped<MetricStatusesService>();
+        services.AddScoped<IMetricStatusesService, MetricStatusesService>();
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         services.AddMetricCalculators();
