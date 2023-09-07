@@ -74,7 +74,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml up -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.mssql.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -87,7 +87,7 @@ jobs:
         run: npm run test:local:node:lokijs
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.mssql.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
@@ -96,7 +96,7 @@ jobs:
           path: |
             docker-log.txt
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml down
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.mssql.yml down
 
   cns-transport-test-postgresql:
     name: Run cns-transport Tests (on Postgres)
@@ -112,7 +112,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml up -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.postgres.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -125,7 +125,7 @@ jobs:
         run: npm run test:local:node:lokijs
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.postgres.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
@@ -134,7 +134,7 @@ jobs:
           path: |
             docker-log.txt
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml down
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml -f ./backbone/docker-compose/docker-compose.test.postgres.yml down
 
   build-helm-chart:
     name: Build Helm Chart
