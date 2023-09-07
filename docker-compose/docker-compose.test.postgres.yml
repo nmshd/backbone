@@ -8,19 +8,19 @@ services:
   test-admin-ui:
     environment:
       - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
+      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
       
       - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
+      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
       
       - Infrastructure__SqlDatabase__Provider=Postgres
-      - Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=adminUi;Password=Passw0rd;Port=5432
+      - Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=adminUi;Password=Passw0rd;Port=5432
       
   ### infrastructure ###
 
   test-database:
     container_name: bkb-postgres
-    hostname: postgresql
+    hostname: postgres
     image: postgres
     environment:
       - POSTGRES_PASSWORD=Passw0rd
@@ -39,7 +39,7 @@ services:
 
   test-seed-client:
     command: >
-      ./backbone client create -p Postgres -c "Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
+      ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
 
   test-seed-database:
     container_name: seed-postgres
@@ -47,7 +47,7 @@ services:
     environment:
       - PGPASSWORD=Passw0rd
     command: >
-      psql -h postgresql -U postgres -d enmeshed -f seed.sql
+      psql -h postgres -U postgres -d enmeshed -f seed.sql
     configs:
       - source: DockerEntrypointInitdb
         target: seed.sql
