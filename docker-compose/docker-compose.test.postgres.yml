@@ -1,40 +1,9 @@
 version: "3.3"
 services:
   test-consumer-api:
-    environment:
-      - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-      - Modules__Files__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=files;Password=Passw0rd;Port=5432
-      - Modules__Files__Infrastructure__SqlDatabase__Provider=Postgres
-
-      - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-      - Modules__Messages__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=messages;Password=Passw0rd;Port=5432
-      - Modules__Messages__Infrastructure__SqlDatabase__Provider=Postgres
-
-      - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-      - Modules__Relationships__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=relationships;Password=Passw0rd;Port=5432
-      - Modules__Relationships__Infrastructure__SqlDatabase__Provider=Postgres
-
-      - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-      - Modules__Synchronization__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=synchronization;Password=Passw0rd;Port=5432
-      - Modules__Synchronization__Infrastructure__SqlDatabase__Provider=Postgres
-
-      - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-      - Modules__Tokens__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=tokens;Password=Passw0rd;Port=5432
-      - Modules__Tokens__Infrastructure__SqlDatabase__Provider=Postgres
-
-      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
-
-      - Modules__Challenges__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Challenges__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=challenges;Password=Passw0rd;Port=5432
-
-      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
+    configs:
+      - source: ConsumerApiOverridePostrgesConfig
+        target: app/appsettings.override.json
 
   test-admin-ui:
     environment:
@@ -90,6 +59,8 @@ services:
 configs:
   DockerEntrypointInitdb:
     file: ../setup-db/setup-postgres.sql
+  ConsumerApiOverridePostgresConfig:
+    file: ../ConsumerApi/appsettings.override.pgsql.json
 
 networks:
   default:
