@@ -2,7 +2,7 @@ version: "3.3"
 services:
   test-consumer-api:
     configs:
-      - source: ConsumerApiOverridePostrgesConfig
+      - source: ConsumerApiOverridePostgresConfig
         target: app/appsettings.override.json
 
   test-admin-ui:
