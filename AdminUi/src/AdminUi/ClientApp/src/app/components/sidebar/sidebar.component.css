@@ -11,10 +11,8 @@
 }
 
 .active {
-    background-color: #673ab7;
-    box-shadow:
-        0 4px 20px 0 rgba(0, 0, 0, 0.14),
-        0 7px 10px -5px rgba(156, 39, 176, 0.4);
+    background-color: #17428d;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
 }
 
 .active span {

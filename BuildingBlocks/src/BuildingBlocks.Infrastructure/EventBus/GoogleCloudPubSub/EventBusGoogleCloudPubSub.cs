@@ -23,27 +23,24 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     private readonly ILifetimeScope _autofac;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
 
-    private readonly PublisherClient _publisher;
-
-    private readonly IGoogleCloudPubSubPersisterConnection _persisterConnection;
+    private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
 
-    public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection persisterConnection,
+    public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
         ILifetimeScope autofac)
     {
-        _persisterConnection = persisterConnection;
+        _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-
-        _publisher = _persisterConnection.PublisherClient;
+        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
     public void Dispose()
     {
         _subscriptionManager.Clear();
-        _persisterConnection.Dispose();
+        _connection.Dispose();
     }
 
     public async void Publish(IntegrationEvent @event)
@@ -64,7 +61,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             }
         };
 
-        var messageId = await _publisher.PublishAsync(message);
+        var messageId = await _connection.PublisherClient.PublishAsync(message);
 
         _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
     }
@@ -74,9 +71,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         where TH : IIntegrationEventHandler<T>
     {
         var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
-
-        if (!_subscriptionManager.HasSubscriptionsForEvent<T>())
-            RegisterSubscriptionClientMessageHandlerAsync<T>(eventName);
 
         _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
 
@@ -88,14 +82,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         return Regex.Replace(typeName, $"^(.+){INTEGRATION_EVENT_SUFFIX}$", "$1");
     }
 
-    private void RegisterSubscriptionClientMessageHandlerAsync<T>(string eventName) where T : IntegrationEvent
-    {
-        var subscriberClient = _persisterConnection.GetSubscriberClient(eventName);
-        subscriberClient.StartAsync(OnIncomingEvent<T>); // start listening in the background
-    }
-
-    private async Task<SubscriberClient.Reply> OnIncomingEvent<T>(PubsubMessage @event, CancellationToken _)
-        where T : IntegrationEvent
+    private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
         var eventNameFromAttributes =
             $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{INTEGRATION_EVENT_SUFFIX}";
@@ -103,8 +90,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
         try
         {
-            if (!await ProcessEvent<T>(eventNameFromAttributes, eventData))
-                _logger.LogInformation($"The event with the MessageId '{@event.MessageId}' wasn't processed.");
+            await ProcessEvent(eventNameFromAttributes, eventData);
         }
         catch (Exception ex)
         {
@@ -117,39 +103,32 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         return SubscriberClient.Reply.Ack;
     }
 
-    private async Task<bool> ProcessEvent<T>(string eventName, string message) where T : IntegrationEvent
+    private async Task ProcessEvent(string eventName, string message)
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
-            return false;
+        {
+            _logger.LogWarning("No subscription for event: {EventName}", eventName);
+            return;
+        }
 
         await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler<T> handler)
+            if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
                 throw new Exception(
                     "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 
-            var integrationEvent = JsonConvert.DeserializeObject<T>(message,
+            var integrationEvent = (JsonConvert.DeserializeObject(message, subscription.EventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
-                })!;
+                }) as IntegrationEvent)!;
 
-            try
-            {
-                await handler.Handle(integrationEvent);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,
-                    "An error occurred while processing the integration event with id '{eventId}'.",
-                    integrationEvent.IntegrationEventId);
-                return false;
-            }
+            var handleMethod = handler.GetType().GetMethod("Handle");
+
+            await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
         }
-
-        return true;
     }
 }
