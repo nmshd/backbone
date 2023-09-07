@@ -18,6 +18,11 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<bool> ExistsWithId(TierId tierId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

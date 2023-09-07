@@ -1,7 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -27,27 +26,20 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
                 throw new ApplicationException(ApplicationErrors.Devices.ClientIdAlreadyExists());
         }
 
-        if (!string.IsNullOrEmpty(request.DefaultTier))
-        {
-            var tierIdResult = TierId.Create(request.DefaultTier);
-            if (tierIdResult.IsFailure)
-                throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
+        var tierIdResult = TierId.Create(request.DefaultTier);
+        if (tierIdResult.IsFailure)
+            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
 
-            _ = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken) ?? throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
-        }
-        else
-        {
-            var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
-            request.DefaultTier = basicTier.Id.Value;
-        }
+        var tierExists = await _tiersRepository.ExistsWithId(tierIdResult.Value, cancellationToken);
+        if (!tierExists)
+            throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
 
         var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
-        var defaultTier = request.DefaultTier;
 
-        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, defaultTier, cancellationToken);
+        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, tierIdResult.Value, cancellationToken);
 
-        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTier);
+        return new CreateClientResponse(clientId, displayName, clientSecret, tierIdResult.Value);
     }
 }
