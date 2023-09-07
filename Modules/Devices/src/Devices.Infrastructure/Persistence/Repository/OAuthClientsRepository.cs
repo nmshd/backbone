@@ -60,6 +60,11 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         await _applicationManager.DeleteAsync(client, cancellationToken);
     }
 
+    public async Task ChangeClientSecret(CustomOpenIddictEntityFrameworkCoreApplication client, string clientSecret, CancellationToken cancellationToken)
+    {
+        await _applicationManager.UpdateAsync(client, clientSecret, cancellationToken);
+    }
+
     private static string GetPermissions()
     {
         var permissions = new List<string>()

@@ -16,10 +16,9 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
         var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken);
 
         var clientSecret = string.IsNullOrEmpty(request.NewSecret) ? PasswordGenerator.Generate(30) : request.NewSecret;
-        client.ClientSecret = clientSecret;
 
-        await _oAuthClientsRepository.Update(client, cancellationToken);
+        await _oAuthClientsRepository.ChangeClientSecret(client, clientSecret, cancellationToken);
 
-        return new ChangeClientSecretResponse(client);
+        return new ChangeClientSecretResponse(client, clientSecret);
     }
 }

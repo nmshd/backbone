@@ -10,5 +10,6 @@ public interface IOAuthClientsRepository
     Task<bool> Exists(string clientId, CancellationToken cancellationToken);
     Task Add(string clientId, string displayName, string clientSecret, string tierId, CancellationToken cancellationToken);
     Task Update(CustomOpenIddictEntityFrameworkCoreApplication client, CancellationToken cancellationToken);
+    Task ChangeClientSecret(CustomOpenIddictEntityFrameworkCoreApplication client, string clientSecret, CancellationToken cancellationToken);
     Task Delete(string clientId, CancellationToken cancellationToken);
 }

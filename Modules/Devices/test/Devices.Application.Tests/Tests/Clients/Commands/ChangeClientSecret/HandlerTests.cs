@@ -29,9 +29,8 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => oAuthClientsRepository.Update(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
-                c.ClientId == client.ClientId &&
-                c.ClientSecret == newClientSecret)
+        A.CallTo(() => oAuthClientsRepository.ChangeClientSecret(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
+                c.ClientId == client.ClientId), newClientSecret
             , CancellationToken.None)
         ).MustHaveHappenedOnceExactly();
     }
