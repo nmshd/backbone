@@ -8,6 +8,15 @@ $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
 $startupProject = "$repoRoot\ConsumerApi"
+$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+
+function CompileModelsAdminUi {
+    $cmdAdminUiDbContext = "dotnet ef dbcontext optimize --project $adminUiProject --context AdminUiDbContext --output-dir $repoRoot\AdminUi\src\AdminUi.Infrastructure\CompiledModels --namespace AdminUi.Infrastructure.CompiledModels"
+    $cmdDevicesDbContext = "dotnet ef dbcontext optimize --project $adminUiProject --context DevicesDbContext --output-dir $repoRoot\Modules\Devices\src\Devices.Infrastructure\CompiledModels --namespace Devices.Infrastructure.CompiledModels"
+    Write-Host "Compiling models for '$adminUiProject'..."
+    Invoke-Expression $cmdAdminUiDbContext
+    Invoke-Expression $cmdDevicesDbContext
+}
 
 function AddMigration {    
     param (
@@ -32,3 +41,5 @@ switch ($provider) {
         AddMigration "Postgres" 
     }
 }
+
+CompileModelsAdminUi
