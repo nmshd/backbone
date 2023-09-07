@@ -5,7 +5,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
 
-public class MetricStatusesService
+public class MetricStatusesService : IMetricStatusesService
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
@@ -43,4 +43,9 @@ public class MetricStatusesService
 
         return parsedMetricKeys;
     }
+}
+
+public interface IMetricStatusesService
+{
+    Task RecalculateMetricStatuses(List<string> identityAddresses, List<string> metrics, CancellationToken cancellationToken);
 }

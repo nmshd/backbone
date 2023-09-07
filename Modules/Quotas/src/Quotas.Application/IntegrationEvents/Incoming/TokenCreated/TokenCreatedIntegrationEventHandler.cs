@@ -6,9 +6,9 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TokenCr
 
 public class TokenCreatedIntegrationEventHandler : IIntegrationEventHandler<TokenCreatedIntegrationEvent>
 {
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public TokenCreatedIntegrationEventHandler(MetricStatusesService metricStatusesService)
+    public TokenCreatedIntegrationEventHandler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

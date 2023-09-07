@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
@@ -14,12 +15,14 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
     private readonly IMetricsRepository _metricsRepository;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository)
+    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository, IMetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
         _metricsRepository = metricsRepository;
+        _metricStatusesService = metricStatusesService;
     }
 
     public async Task<IndividualQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
@@ -37,6 +40,10 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _logger.LogTrace($"Successfully created Quota for Identity. Identity Address: '{identity.Address}'");
+
+        var identityAddresses = new List<string> { identity.Address };
+        var metrics = new List<string> { metric.Key.Value };
+        await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, cancellationToken);
 
         var response = new IndividualQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
         return response;

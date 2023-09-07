@@ -1,15 +1,16 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Quotas.Application.Tests.Tests.Identities;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
 public class QuotaCreatedForTierIntegrationEventHandlerTests
 {
@@ -18,11 +19,8 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
     {
         // Arrange
         var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
-        var tier = new Tier(tierId, "some-tier-name");
 
-        var max = 5;
-        var period = QuotaPeriod.Month;
-        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, period);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
 
         var firstIdentity = new Identity("some-identity-address-one", tierId);
@@ -30,11 +28,10 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         var identities = new List<Identity> { firstIdentity, secondIdentity };
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.FindWithTier(tierId, CancellationToken.None, true)).Returns(identities);
-
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tier.Id, tierQuotaDefinition.Id));
+        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>
@@ -43,9 +40,37 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         ).MustHaveHappened();
     }
 
-    private QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTierQuotaDefinitionsStubRepository tierQuotaDefinitions)
+    [Fact]
+    public async void Updates_metric_statuses_after_creating_tier_quota()
+    {
+        // Arrange
+        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
+
+        var firstIdentity = new Identity("some-identity-address-one", tierId);
+        var secondIdentity = new Identity("some-identity-address-two", tierId);
+        var identities = new List<Identity> { firstIdentity, secondIdentity };
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.FindWithTier(tierId, CancellationToken.None, true)).Returns(identities);
+        var metricStatusesService = A.Fake<IMetricStatusesService>();
+        var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository, metricStatusesService);
+
+        // Act
+        await handler.Handle(new QuotaCreatedForTierIntegrationEvent(tierId, tierQuotaDefinition.Id));
+
+        // Assert
+        A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
+            A<List<string>>.That.Matches(x => x.Count == identities.Count),
+            A<List<string>>.That.Contains(tierQuotaDefinition.MetricKey.Value),
+            A<CancellationToken>._)
+        ).MustHaveHappened();
+    }
+
+    private static QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<QuotaCreatedForTierIntegrationEventHandler>>();
-        return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger);
+        return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());
     }
 }
