@@ -38,6 +38,10 @@ public class TiersRepository : ITiersRepository
     {
         return await _dbContext.Identities.CountAsync(i => i.TierId == tier.Id, cancellationToken);
     }
+    public async Task<bool> ExistsWithId(TierId tierId, CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.AnyAsync(t => t.Id == tierId, cancellationToken);
+    }
 
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
