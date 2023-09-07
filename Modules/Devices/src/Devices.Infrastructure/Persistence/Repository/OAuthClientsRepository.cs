@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.OpenIddict;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -36,13 +37,13 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return client != null;
     }
 
-    public async Task Add(string clientId, string displayName, string clientSecret, string defaulTier, CancellationToken cancellationToken)
+    public async Task Add(string clientId, string displayName, string clientSecret, TierId tierId, CancellationToken cancellationToken)
     {
         var application = new CustomOpenIddictEntityFrameworkCoreApplication()
         {
             ClientId = clientId,
             DisplayName = displayName,
-            DefaultTier = defaulTier,
+            DefaultTier = tierId,
             Permissions = GetPermissions()
         };
 
