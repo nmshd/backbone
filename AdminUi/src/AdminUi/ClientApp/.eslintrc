@@ -1,0 +1,15 @@
+{
+    "ignorePatterns": ["/*", "!/src", "!/test"],
+    "extends": ["@js-soft/ts", "@js-soft/ts/mocha"],
+    "parserOptions": {
+        "project": ["tsconfig.json", "test/tsconfig.json"]
+    },
+    "rules": {
+        "jest/expect-expect": [
+            "error",
+            {
+                "assertFunctionNames": ["expect", "verify", "expectValid*", "*.expectThrows*"]
+            }
+        ]
+    }
+}
