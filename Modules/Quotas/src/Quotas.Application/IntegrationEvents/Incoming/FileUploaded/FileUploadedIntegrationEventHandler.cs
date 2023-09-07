@@ -6,9 +6,9 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUpl
 
 public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<FileUploadedIntegrationEvent>
 {
-    private readonly MetricStatusesService _metricStatusesService;
+    private readonly IMetricStatusesService _metricStatusesService;
 
-    public FileUploadedIntegrationEventHandler(MetricStatusesService metricStatusesService)
+    public FileUploadedIntegrationEventHandler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }
