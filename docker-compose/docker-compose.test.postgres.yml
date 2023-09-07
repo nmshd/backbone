@@ -36,10 +36,6 @@ services:
       - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
       - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
 
-  test-admin-ui:
-    depends_on:
-      test-seed-database-2:
-          condition: service_completed_successfully
 
     environment:
       - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
@@ -90,19 +86,6 @@ services:
       test-database:
         condition: service_healthy
 
-  test-seed-database-2:
-    container_name: seed-postgres-2
-    image: postgres
-    environment:
-      - PGPASSWORD=Passw0rd
-    configs:
-      - source: DockerEntrypointInitdb
-        target: seed.sql
-    command: >
-      psql -h postgresql -U postgres enmeshed -f seed.sql
-    depends_on:
-      test-consumer-api:
-        condition: service_healthy
 
 configs:
   DockerEntrypointInitdb:
