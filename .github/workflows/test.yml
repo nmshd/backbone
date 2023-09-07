@@ -74,7 +74,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml up test-consumer-api test-seed-mssql test-seed-client -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.mssql.yml -f ./backbone/docker-compose/docker-compose.test.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -112,7 +112,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml up test-consumer-api test-admin-ui test-seed-client -d
+        run: docker compose -f ./backbone/docker-compose/docker-compose.test.postgres.yml -f ./backbone/docker-compose/docker-compose.test.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
