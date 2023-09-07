@@ -36,7 +36,7 @@ services:
       - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
       - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
 
-
+  test-admin-ui:
     environment:
       - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
       - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgresql;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
