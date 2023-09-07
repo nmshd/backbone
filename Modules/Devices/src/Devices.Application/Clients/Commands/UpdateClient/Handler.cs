@@ -20,19 +20,13 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
     {
         var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken);
 
-        if (!string.IsNullOrEmpty(request.DefaultTier))
-        {
-            var tierIdResult = TierId.Create(request.DefaultTier);
-            if (tierIdResult.IsFailure)
-                throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
+        var tierIdResult = TierId.Create(request.DefaultTier);
+        if (tierIdResult.IsFailure)
+            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
 
-            _ = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken) ?? throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
-        }
-        else
-        {
-            var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
-            request.DefaultTier = basicTier.Id.Value;
-        }
+        var tierExists = await _tiersRepository.ExistsWithId(tierIdResult.Value, cancellationToken);
+        if (!tierExists)
+            throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
 
         client.DefaultTier = request.DefaultTier;
 
