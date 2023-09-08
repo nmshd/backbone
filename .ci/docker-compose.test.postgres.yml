@@ -60,7 +60,7 @@ configs:
   DockerEntrypointInitdb:
     file: ../setup-db/setup-postgres.sql
   ConsumerApiOverridePostgresConfig:
-    file: ../ConsumerApi/appsettings.override.pgsql.json
+    file: appsettings.override.postgres.json
 
 networks:
   default:
