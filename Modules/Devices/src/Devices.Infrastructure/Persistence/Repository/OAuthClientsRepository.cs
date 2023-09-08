@@ -26,7 +26,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return clients;
     }
 
-    public async Task<CustomOpenIddictEntityFrameworkCoreApplication> Find(string clientId, CancellationToken cancellationToken)
+    public async Task<CustomOpenIddictEntityFrameworkCoreApplication> Find(string clientId, CancellationToken cancellationToken, bool track = false)
     {
         return await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
     }

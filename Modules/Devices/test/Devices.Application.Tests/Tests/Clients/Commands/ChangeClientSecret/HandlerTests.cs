@@ -21,7 +21,7 @@ public class HandlerTests
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._)).Returns(client);
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, false)).Returns(client);
 
         var handler = CreateHandler(oAuthClientsRepository);
 

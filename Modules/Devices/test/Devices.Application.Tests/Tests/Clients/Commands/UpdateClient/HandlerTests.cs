@@ -24,7 +24,7 @@ public class HandlerTests
         var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._)).Returns(client);
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, true)).Returns(client);
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.FindById(newDefaultTier.Id, A<CancellationToken>._)).Returns(newDefaultTier);
