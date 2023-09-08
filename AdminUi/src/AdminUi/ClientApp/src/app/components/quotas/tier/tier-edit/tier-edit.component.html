@@ -17,7 +17,7 @@
                 </mat-form-field>
                 <mat-form-field class="full-width">
                     <mat-label>Name</mat-label>
-                    <input matInput required [(ngModel)]="tier.name" [disabled]="disabled" />
+                    <input matInput required [(ngModel)]="tier.name" [disabled]="disabled || editMode" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
             </div>
@@ -90,12 +90,8 @@
         </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">
-        <button *ngIf="editMode" mat-button color="warn" (click)="openConfirmationDialogTierDeletion()"
-            [disabled]="tier.name=='Basic'">Delete</button>
-        <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateTier()"
-            [disabled]="!validateTier() || true">Save</button>
-        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createTier()"
-            [disabled]="disabled || !validateTier()">Save</button>
+        <button *ngIf="editMode" mat-button color="warn" (click)="openConfirmationDialogTierDeletion()" [disabled]="tier.name == 'Basic'">Delete</button>
+        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createTier()" [disabled]="disabled || !validateTier()">Save</button>
         <button mat-raised-button routerLink="/tiers">Cancel</button>
     </div>
 </div>
