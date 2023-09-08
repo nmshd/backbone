@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Domain.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

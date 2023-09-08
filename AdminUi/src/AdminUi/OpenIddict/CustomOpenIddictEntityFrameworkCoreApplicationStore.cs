@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+﻿using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;

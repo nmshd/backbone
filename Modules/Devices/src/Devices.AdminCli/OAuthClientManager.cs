@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+﻿using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Enmeshed.BuildingBlocks.Domain;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
