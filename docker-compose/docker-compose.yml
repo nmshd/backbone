@@ -27,7 +27,6 @@ services:
       - rabbitmq
       - azure-storage-emulator
       - postgres
-      - pg-admin
     volumes:
       - ../:/app
 
@@ -66,6 +65,8 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    depends_on:
+      - pg-admin
 
   pg-admin:
     container_name: bkb-pgadmin
