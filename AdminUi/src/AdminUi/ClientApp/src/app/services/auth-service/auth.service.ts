@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { XSRFService } from "../xsrf-service/xsrf.service";
 
 @Injectable({
     providedIn: "root"
@@ -15,7 +16,7 @@ export class AuthService {
         return this.loggedIn.asObservable();
     }
 
-    constructor(private router: Router, private http: HttpClient) {
+    constructor(private router: Router, private http: HttpClient, private xsrfService: XSRFService) {
         this.apiUrl = environment.apiUrl;
     }
 
@@ -37,6 +38,7 @@ export class AuthService {
 
     login(apiKey: string): void {
         localStorage.setItem("api-key", apiKey);
+        this.xsrfService.loadAndStoreXSRFToken();
         this.loggedIn.next(true);
         this.router.navigate(["/"]);
     }
@@ -44,6 +46,7 @@ export class AuthService {
     logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
+        this.xsrfService.clearStoredToken();
         return this.router.navigate(["/login"]);
     }
 }
