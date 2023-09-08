@@ -9,7 +9,7 @@ public class HttpResponse<T>
     public bool IsSuccessStatusCode { get; set; }
     public string? ContentType { get; set; }
     public string? RawContent { get; set; }
-    public CookieCollection? Cookies { get; set; }
+    public IReadOnlyCollection<Cookie>? Cookies { get; set; }
 }
 
 public class HttpResponse
@@ -18,4 +18,10 @@ public class HttpResponse
     public bool IsSuccessStatusCode { get; set; }
     public string? ContentType { get; set; }
     public ErrorResponseContent? Content { get; set; }
+}
+
+public class Cookie
+{
+    public string Name { get; init; }
+    public string Value { get; init; }
 }

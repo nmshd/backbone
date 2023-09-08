@@ -125,7 +125,7 @@ public class BaseApi
             Content = restResponse.Data!,
             ContentType = restResponse.ContentType,
             RawContent = restResponse.Content,
-            Cookies = restResponse.Cookies
+            Cookies = restResponse.Cookies?.Select(it => new Models.Cookie() { Name = it.Name, Value = it.Value }).ToList().AsReadOnly()
         };
 
         return response;
