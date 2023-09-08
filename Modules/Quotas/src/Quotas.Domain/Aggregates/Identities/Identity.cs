@@ -29,7 +29,7 @@ public class Identity
     internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
     public string Address { get; }
-    public TierId TierId { get; }
+    public TierId TierId { get; private set; }
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
@@ -128,5 +128,15 @@ public class Identity
         var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
         var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
         return appliedQuotas;
+    }
+
+    public void ChangeTier(Tier newTier)
+    {
+        _tierQuotas.RemoveRange(0, _tierQuotas.Count());
+        TierId = newTier.Id;
+        foreach (var tierQuotaDefinition in newTier.Quotas)
+        {
+            AssignTierQuotaFromDefinition(tierQuotaDefinition);
+        }
     }
 }

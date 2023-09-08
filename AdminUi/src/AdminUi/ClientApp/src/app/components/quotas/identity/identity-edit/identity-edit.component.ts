@@ -134,6 +134,11 @@ export class IdentityEditComponent {
                         verticalPosition: "top",
                         horizontalPosition: "center"
                     });
+
+                    this.loading = true;
+                    setTimeout(() => {
+                        this.getIdentity();
+                    }, 1000);
                 },
                 error: (err: any) => {
                     this.loading = false;

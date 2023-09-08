@@ -174,14 +174,8 @@
             </mat-expansion-panel-header>
             <ng-template matExpansionPanelContent>
                 <br />
-                <!-- <mat-form-field class="pt-1">
-                    <mat-label>Tier</mat-label>
-                    <mat-select [(ngModel)]="tier">
-                        <mat-option *ngFor="let tier of tiers" [value]="tier">{{ tier.name }}</mat-option>
-                    </mat-select>
-                </mat-form-field> -->
                 <mat-chip-listbox aria-label="Fish selection">
-                    <mat-chip-option *ngFor="let t of tiers" [selected]="t == tier" (click)="tier = t">{{ t.name }} </mat-chip-option>
+                    <mat-chip-option *ngFor="let t of tiers" [selected]="t == tier" (click)="tier = t" [color]="t.name == 'Basic' ? 'accent' : ''">{{ t.name }} </mat-chip-option>
                 </mat-chip-listbox>
             </ng-template>
         </mat-expansion-panel>

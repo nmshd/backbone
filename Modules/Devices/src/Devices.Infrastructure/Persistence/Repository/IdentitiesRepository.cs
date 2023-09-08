@@ -78,4 +78,10 @@ public class IdentitiesRepository : IIdentitiesRepository
         _devices.Update(device);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        _identities.Update(identity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }
