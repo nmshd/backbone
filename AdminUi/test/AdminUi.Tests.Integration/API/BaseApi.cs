@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
+using FluentValidation.TestHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -14,8 +15,8 @@ public class BaseApi
     private readonly RestClient _client;
 
     protected const string ROUTE_PREFIX = "/api/v1";
-    private const string TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
-    private const string TOKEN_COOKIE_NAME = "X-XSRF-COOKIE";
+    private const string XSRF_TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
+    private const string XSRF_TOKEN_COOKIE_NAME = "X-XSRF-COOKIE";
 
     private string _xsrfToken = string.Empty;
     private string _xsrfCookie = string.Empty;
@@ -33,8 +34,8 @@ public class BaseApi
     private void LoadAndAddXSRFHeaders()
     {
         Task.Run(LoadXSRFTokensAsync).Wait();
-        _client.AddDefaultHeader(TOKEN_HEADER_NAME, _xsrfToken);
-        _client.AddDefaultHeader("Cookie", $"{TOKEN_COOKIE_NAME}={_xsrfCookie}");
+        _client.AddDefaultHeader(XSRF_TOKEN_HEADER_NAME, _xsrfToken);
+        _client.AddDefaultHeader("Cookie", $"{XSRF_TOKEN_COOKIE_NAME}={_xsrfCookie}");
     }
 
     private async Task LoadXSRFTokensAsync()
@@ -42,9 +43,13 @@ public class BaseApi
         var token = await Get<string>("/xsrf", new() { AcceptHeader = "text/plain" });
         if (token.RawContent != null && token.Cookies != null && token.Cookies.Count > 0)
         {
-            var cookie = token.Cookies.Single(c => c.Name == TOKEN_COOKIE_NAME);
+            var cookie = token.Cookies.Single(c => c.Name == XSRF_TOKEN_COOKIE_NAME);
             _xsrfCookie = cookie.Value;
             _xsrfToken = token.RawContent;
+        }
+        else
+        {
+            throw new ValidationTestException("Could not load XSRF tokens.");
         }
     }
 
