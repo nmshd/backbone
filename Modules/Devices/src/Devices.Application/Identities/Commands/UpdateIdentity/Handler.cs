@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
 
         var oldTier = await _tiersRepository.FindById(identity.TierId, cancellationToken);
         var newTier = await _tiersRepository.FindById(TierId.Create(request.TierId).Value, cancellationToken);
-        
+
         identity.TierId = newTier.Id;
         await _identitiesRepository.Update(identity, cancellationToken);
 
