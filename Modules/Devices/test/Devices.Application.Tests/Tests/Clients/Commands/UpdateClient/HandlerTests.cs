@@ -9,7 +9,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.Commands.Upda
 public class HandlerTests
 {
     [Fact]
-    public async Task Change_Client_Tier_Id()
+    public async Task Change_Default_Tier()
     {
         // Arrange
         var client = new CustomOpenIddictEntityFrameworkCoreApplication
