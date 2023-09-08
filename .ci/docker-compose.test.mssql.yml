@@ -1,8 +1,18 @@
 version: "3.3"
 services:
+  consumer-api:
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  admin-ui:
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
   ### infrastructure ###
 
-  test-database:
+  database:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -10,35 +20,28 @@ services:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-    volumes:
-      - mssql-server-volume:/var/opt/mssql
     ports:
       - 1433:1433
 
   ### seeds ###
 
-  test-seed-database:
+  seed-database:
     image: mcr.microsoft.com/mssql-tools
     volumes:
       - ../setup-db:/app/setup-db
     command: >
       bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -i app/setup-db/setup-sqlserver.sql "
     depends_on:
-      - test-database
+      - database
 
-  test-seed-client:
+  seed-client:
     command: >
       ./backbone client create -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
 
 configs:
-  AdminUiOverrideConfig:
-    file: ../AdminUi/src/AdminUi/appsettings.override.json
-  ConsumerApiOverrideConfig:
-    file: ../ConsumerApi/appsettings.override.json
+  Config:
+    file: appsettings.override.sqlserver.json
 
 networks:
   default:
     name: backbone
-
-volumes:
-  mssql-server-volume:

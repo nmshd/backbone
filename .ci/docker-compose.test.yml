@@ -1,35 +1,32 @@
 version: "3.3"
 services:
-  test-consumer-api:
+  consumer-api:
     container_name: consumer-api
     hostname: consumer-api
     build:
       context: ..
       dockerfile: ConsumerApi/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "5000:80"
     depends_on:
-      test-database:
+      database:
         condition: service_started
-      test-rabbitmq:
+      rabbitmq:
         condition: service_started
-      test-seed-database:
+      seed-database:
         condition: service_completed_successfully
-      test-azure-storage-emulator:
+      azure-storage-emulator:
         condition: service_started
-    configs:
-      - source: ConsumerApiOverrideConfig
-        target: app/appsettings.override.json
     healthcheck:
       test: ["CMD", "wget", "http://localhost/health"]
       interval: 5s
       timeout: 2s
       retries: 40
 
-  test-admin-ui:
+  admin-ui:
     container_name: admin-ui
     hostname: admin-ui
     build:
@@ -38,61 +35,39 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      test-database:
+      database:
         condition: service_started
-      test-rabbitmq:
+      rabbitmq:
         condition: service_started
-      test-consumer-api:
+      consumer-api:
         condition: service_healthy
-    configs:
-      - source: AdminUiOverrideConfig
-        target: app/appsettings.override.json
-    environment:
-      - Infrastructure__EventBus__ConnectionInfo=rabbitmq
 
   ### infrastructure ###
 
-  test-azure-storage-emulator:
+  azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite #replacement for Microsoft image, which only runs on windows; source: https://github.com/arafato/azurite
+    image: mcr.microsoft.com/azure-storage/azurite
     command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
     ports:
       - "10000:10000"
-    volumes:
-      - azure-storage-emulator-volume:/data
 
-  test-rabbitmq:
+  rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
     image: rabbitmq:3.7-management-alpine
     ports:
       - "5672:5672"
-      - "15672:15672" # mgmt plugin, "guest/guest"
-    volumes:
-      - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   ### seeds ###
 
-  test-seed-client:
+  seed-client:
     container_name: seed-client
     image: ghcr.io/nmshd/backbone-admin-cli:v2.0.0
     depends_on:
-      test-consumer-api:
+      consumer-api:
         condition: service_healthy
-
-configs:
-  AdminUiOverrideConfig:
-    file: ../AdminUi/src/AdminUi/appsettings.override.json
-  ConsumerApiOverrideConfig:
-    file: ../ConsumerApi/appsettings.override.json
 
 networks:
   default:
     name: backbone
-
-volumes:
-  rabbitmq-volume:
-  mssql-server-volume:
-  azure-storage-emulator-volume:
-  elastic_data:

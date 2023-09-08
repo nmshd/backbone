@@ -1,21 +1,24 @@
 version: "3.3"
 services:
-  test-consumer-api:
+  consumer-api:
     configs:
-      - source: ConsumerApiOverridePostgresConfig
+      - source: Config
+        target: app/appsettings.override.json
+
+  admin-ui:
+    configs:
+      - source: Config
         target: app/appsettings.override.json
 
   ### infrastructure ###
 
-  test-database:
+  database:
     container_name: bkb-postgres
     hostname: postgres
     image: postgres
     environment:
       - POSTGRES_PASSWORD=Passw0rd
       - POSTGRES_DB=enmeshed
-    volumes:
-      - postgresql-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
     healthcheck:
@@ -26,11 +29,7 @@ services:
 
   ### seeds ###
 
-  test-seed-client:
-    command: >
-      ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
-
-  test-seed-database:
+  seed-database:
     container_name: seed-postgres
     image: postgres
     environment:
@@ -38,21 +37,22 @@ services:
     command: >
       psql -h postgres -U postgres -d enmeshed -f seed.sql
     configs:
-      - source: DockerEntrypointInitdb
+      - source: SeedScript
         target: seed.sql
     depends_on:
-      test-database:
+      database:
         condition: service_healthy
 
+  seed-client:
+    command: >
+      ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
+
 configs:
-  DockerEntrypointInitdb:
+  SeedScript:
     file: ../setup-db/setup-postgres.sql
-  ConsumerApiOverridePostgresConfig:
+  Config:
     file: appsettings.override.postgres.json
 
 networks:
   default:
     name: backbone
-
-volumes:
-  postgresql-volume:
