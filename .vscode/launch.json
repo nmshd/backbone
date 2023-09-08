@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker .NET Attach (Preview)",
+            "name": "Attach to Consumer API (Docker)",
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
