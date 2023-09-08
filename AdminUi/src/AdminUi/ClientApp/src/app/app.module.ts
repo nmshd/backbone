@@ -5,10 +5,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { LoggerModule, NgxLoggerLevel, TOKEN_LOGGER_SERVER_SERVICE, TOKEN_LOGGER_WRITER_SERVICE } from "ngx-logger";
-
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { LayoutModule } from "@angular/cdk/layout";
+import { LoggerModule, NgxLoggerLevel, TOKEN_LOGGER_SERVER_SERVICE, TOKEN_LOGGER_WRITER_SERVICE } from "ngx-logger";
+
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -50,6 +50,7 @@ import { LoggerServerService } from "./services/logger-server-service/logger-ser
 import { LoggerWriterService } from "./services/logger-writer-service/logger-writer.service";
 import { SidebarService } from "./services/sidebar-service/sidebar.service";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
+import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
 
 @NgModule({
     declarations: [
@@ -124,7 +125,8 @@ import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
             provide: DATE_PIPE_DEFAULT_OPTIONS,
             useValue: { dateFormat: "dd.MM.yyyy HH:mm:ss" }
         },
-        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: XSRFInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]
 })
