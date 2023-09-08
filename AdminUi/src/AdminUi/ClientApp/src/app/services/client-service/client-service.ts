@@ -57,7 +57,7 @@ export interface Client {
 }
 
 export interface ChangeClientSecretRequest {
-    newSecret?: string;
+    newSecret: string;
 }
 
 export interface UpdateClientRequest {
