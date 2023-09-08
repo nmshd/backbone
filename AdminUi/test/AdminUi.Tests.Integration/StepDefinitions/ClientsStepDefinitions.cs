@@ -15,7 +15,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _clientSecret;
-    private string _tierId;
+    private string _tier1Id;
+    private string _tier2Id;
     private HttpResponse<List<ClientDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
@@ -29,7 +30,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _tiersApi = tiersApi;
         _clientId = string.Empty;
         _clientSecret = string.Empty;
-        _tierId = string.Empty;
+        _tier1Id = string.Empty;
+        _tier2Id = string.Empty;
     }
 
     [Given(@"a Client c")]
@@ -38,7 +40,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         var createClientRequest = new CreateClientRequest
         {
             ClientId = string.Empty,
-            DisplayName = "a-client-display-name",
+            DisplayName = string.Empty,
             ClientSecret = string.Empty
         };
 
@@ -59,8 +61,8 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _clientId = "some-non-existent-client-id";
     }
 
-    [Given(@"a Tier t")]
-    public async Task GivenATier()
+    [Given(@"a Tier t1")]
+    public async Task GivenATierT1()
     {
         var createTierRequest = new CreateTierRequest
         {
@@ -75,10 +77,54 @@ public class ClientsStepDefinitions : BaseStepDefinitions
 
         var actualStatusCode = (int)response.StatusCode;
         actualStatusCode.Should().Be(201);
-        _tierId = response.Content.Result!.Id;
+        _tier1Id = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
+    }
+
+    [Given(@"a Tier t2")]
+    public async Task GivenATierT2()
+    {
+        var createTierRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierRequest);
+
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tier2Id = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
+    }
+
+    [Given(@"a Client c with Tier t1")]
+    public async Task GivenAClientCWithTierT1()
+    {
+        var createClientRequest = new CreateClientRequest
+        {
+            ClientId = string.Empty,
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tier1Id
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createClientRequest);
+
+        var response = await _clientsApi.CreateClient(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _clientId = response.Content.Result!.ClientId;
     }
 
     [When(@"a DELETE request is sent to the /Clients endpoint")]
@@ -152,12 +198,12 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the default tier t.Id")]
-    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithATierId()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t2.Id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithTier2Id()
     {
         var updateClientRequest = new UpdateClientRequest()
         {
-            DefaultTier = _tierId
+            DefaultTier = _tier2Id
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -233,15 +279,28 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().NotBeNullOrEmpty();
     }
 
-    [Then(@"the response contains Client c with the new tier id")]
-    public void ThenTheResponseContainsAClientWithNewTierId()
+    [Then(@"the response contains Client c")]
+    public void ThenTheResponseContainsAClient()
     {
         _updateClientResponse!.AssertHasValue();
         _updateClientResponse!.AssertStatusCodeIsSuccess();
         _updateClientResponse!.AssertContentTypeIs("application/json");
         _updateClientResponse!.AssertContentCompliesWithSchema();
-        _updateClientResponse!.Content.Result!.DefaultTier.Should().NotBeNullOrEmpty();
-        _updateClientResponse!.Content.Result!.DefaultTier.Should().Be(_tierId);
+    }
+
+    [Then(@"the Client in the Backend has the new defaultTier")]
+    public async Task ThenTheClientInTheBackendHasNewDefaultTier()
+    {
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
+
+        response.AssertHasValue();
+        response.AssertStatusCodeIsSuccess();
+        response.AssertContentTypeIs("application/json");
+        response.AssertContentCompliesWithSchema();
+        response.Content.Result.DefaultTier.Should().Be(_tier2Id);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
