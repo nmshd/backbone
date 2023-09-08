@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -42,7 +42,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers", (string)null);
+                    b.ToTable("Tiers");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
@@ -197,8 +197,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Address");
 
-                    b.HasIndex("TierId");
-
                     b.ToTable("Identities");
                 });
 
@@ -209,6 +207,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<string>("AppId")
+                        .HasColumnType("text");
 
                     b.Property<string>("Handle")
                         .IsRequired()
@@ -582,13 +583,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("Identity");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
-                {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
-                        .WithMany()
-                        .HasForeignKey("TierId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

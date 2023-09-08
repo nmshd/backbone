@@ -1,13 +1,13 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FluentAssertions;
-using Quotas.Application.Tests.TestDoubles;
 using Xunit;
 
-namespace Quotas.Application.Tests.Tests.Tiers.GetTierById;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers.GetTierById;
 public class HandlerTests
 {
     [Fact]
@@ -54,7 +54,7 @@ public class HandlerTests
 
         tier.CreateQuota(metricWithTwoQuotas.Key, 1, QuotaPeriod.Day);
         tier.CreateQuota(metricWithOneQuota.Key, 1, QuotaPeriod.Day);
-        tier.CreateQuota(metricWithTwoQuotas.Key, 1, QuotaPeriod.Day);
+        tier.CreateQuota(metricWithTwoQuotas.Key, 5, QuotaPeriod.Week);
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(metrics);
@@ -81,8 +81,8 @@ public class HandlerTests
 
         result.Quotas.ElementAt(2).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
         result.Quotas.ElementAt(2).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
-        result.Quotas.ElementAt(2).Max.Should().Be(1);
-        result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Day);
+        result.Quotas.ElementAt(2).Max.Should().Be(5);
+        result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Week);
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)

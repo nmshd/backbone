@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,5 +11,6 @@ public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<P
         builder.Property(x => x.IdentityAddress).IsRequired();
         builder.Property(x => x.Handle).IsRequired();
         builder.Property(x => x.UpdatedAt);
+        builder.Property(x => x.AppId);
     }
 }

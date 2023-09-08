@@ -8,10 +8,12 @@
 
 .layout-content {
     padding: 1rem;
+    max-width: 1350px;
+    margin: auto;
 }
 
 .login-layout {
     display: flex;
     justify-content: center;
-    background: #673ab7;
+    background: #17428d;
 }

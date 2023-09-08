@@ -198,8 +198,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
-                    b.HasIndex("TierId");
-
                     b.ToTable("Identities");
                 });
 
@@ -210,6 +208,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
+
+                    b.Property<string>("AppId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Handle")
                         .IsRequired()
@@ -589,13 +590,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("Identity");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
-                {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
-                        .WithMany("Identities")
-                        .HasForeignKey("TierId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -669,11 +663,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("Application");
 
                     b.Navigation("Authorization");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
-                {
-                    b.Navigation("Identities");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>

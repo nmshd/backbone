@@ -36,6 +36,9 @@ public class Identity
         if (max <= 0)
             throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
+        if (IndividualQuotaAlreadyExists(metricKey, period))
+            throw new DomainException(DomainErrors.DuplicateQuota());
+
         var individualQuota = new IndividualQuota(metricKey, max, period, Address);
         _individualQuotas.Add(individualQuota);
 
@@ -76,6 +79,11 @@ public class Identity
             var metricCalculator = factory.CreateFor(metric);
             await UpdateMetricStatus(metric, metricCalculator, cancellationToken);
         }
+    }
+
+    private bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
+    {
+        return _individualQuotas.Any(q => q.MetricKey == metricKey && q.Period == period);
     }
 
     private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator,

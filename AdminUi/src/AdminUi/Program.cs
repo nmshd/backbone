@@ -61,11 +61,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddCustomAspNetCore(parsedConfiguration)
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
-        .AddCustomSwaggerWithUi()
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
         .AddHealthChecks();
+
+    if (parsedConfiguration.SwaggerUi.Enabled)
+        services.AddCustomSwaggerWithUi();
 
     services
         .AddOpenIddict()
@@ -114,7 +116,8 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Access-Control-Allow-Credentials", "true")
     );
 
-    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
+    var adminConfiguration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    if (adminConfiguration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;

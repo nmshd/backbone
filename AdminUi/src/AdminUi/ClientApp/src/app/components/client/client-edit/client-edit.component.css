@@ -29,7 +29,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: #c1c10f;
+    background-color: #f39e5f;
 }
 
 .client-secret-warning {
@@ -60,7 +60,7 @@
 .card-header {
     border-radius: 3px;
     padding: 15px;
-    background-color: #673ab7;
+    background-color: #17428d;
     position: relative;
     z-index: 1;
     margin: 15px 15px -50px 15px;

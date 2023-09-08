@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
     }
 
     public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : IModule, new()
+        where TModule : AbstractModule, new()
     {
         // Register assembly in MVC so it can find controllers of the module
         services.AddControllers().ConfigureApplicationPartManager(manager =>
@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
 
         module.ConfigureServices(services, moduleConfiguration);
 
-        services.AddSingleton<IModule>(module);
+        services.AddSingleton<AbstractModule>(module);
 
         return services;
     }

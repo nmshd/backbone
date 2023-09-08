@@ -8,7 +8,6 @@ public class EventBusConfiguration
     [RegularExpression("Azure|GoogleCloud|RabbitMQ")]
     public string Vendor { get; set; }
 
-    [Required]
     public string ConnectionInfo { get; set; }
 
     [Required]

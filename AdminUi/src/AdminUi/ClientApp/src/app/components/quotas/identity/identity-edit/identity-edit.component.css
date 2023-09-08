@@ -32,7 +32,7 @@
 .card-header {
     border-radius: 3px;
     padding: 15px;
-    background-color: #673ab7;
+    background-color: #17428d;
     position: relative;
     z-index: 1;
     margin: 15px 15px -50px 15px;
@@ -67,26 +67,26 @@
     margin: 0px 0px 0px 5px !important;
 }
 
-.quotas-expansion-panel-header {
-    background: #673ab7 !important;
+.details-expansion-panel-header {
+    background: #17428d !important;
 }
 
-.quotas-expansion-panel-header:hover {
-    background: #58319c !important;
+.details-expansion-panel-header:hover {
+    background: #11337a !important;
 }
-.quotas-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
+.details-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
     border-radius: 4px 4px 0px 0px;
 }
 
-.quotas-panel-header-title {
+.details-panel-header-title {
     color: white !important;
 }
 
-.quotas-panel-header-desc {
+.details-panel-header-desc {
     color: rgba(255, 255, 255, 0.54) !important;
 }
 
-:host ::ng-deep .quotas-expansion-panel-header > .mat-expansion-indicator::after {
+:host ::ng-deep .details-expansion-panel-header > .mat-expansion-indicator::after {
     color: white !important;
 }
 
@@ -95,6 +95,15 @@
 .mat-column-max,
 .mat-column-period {
     width: 25%;
+    word-break: break-all;
+}
+
+.mat-column-id,
+.mat-column-username,
+.mat-column-createdAt,
+.mat-column-lastLogin,
+.mat-column-createdByDevice {
+    width: 20%;
     word-break: break-all;
 }
 
@@ -129,7 +138,7 @@
     }
 
     .mat-mdc-table .mat-mdc-cell:before {
-        content: attr(data-label) ":";
+        content: attr(data-label);
         float: left;
         font-weight: 500;
     }

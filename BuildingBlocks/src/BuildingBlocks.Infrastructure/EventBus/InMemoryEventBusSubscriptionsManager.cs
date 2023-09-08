@@ -3,15 +3,13 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
 
-public partial class InMemoryEventBusSubscriptionsManager
+public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
 {
-    private readonly HashSet<Type> _eventTypes;
     private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
 
     public InMemoryEventBusSubscriptionsManager()
     {
         _handlers = new Dictionary<string, List<SubscriptionInfo>>();
-        _eventTypes = new HashSet<Type>();
     }
 
     public void Clear()
@@ -24,7 +22,6 @@ public partial class InMemoryEventBusSubscriptionsManager
         where TH : IIntegrationEventHandler<T>
     {
         DoAddSubscription(typeof(TH), typeof(T));
-        _eventTypes.Add(typeof(T));
     }
 
     public IEnumerable<SubscriptionInfo> GetHandlersForEvent<T>() where T : IntegrationEvent
@@ -70,5 +67,23 @@ public partial class InMemoryEventBusSubscriptionsManager
                 $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
 
         _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType, eventType));
+    }
+
+    public class SubscriptionInfo
+    {
+        private SubscriptionInfo(Type handlerType, Type eventType)
+        {
+            HandlerType = handlerType;
+            EventType = eventType;
+        }
+
+        public Type HandlerType { get; }
+
+        public Type EventType { get; }
+
+        public static SubscriptionInfo Typed(Type handlerType, Type eventType)
+        {
+            return new SubscriptionInfo(handlerType, eventType);
+        }
     }
 }

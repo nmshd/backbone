@@ -2,10 +2,7 @@
     color: #111111;
     background-color: #fff;
     border-radius: 5px;
-    box-shadow:
-        0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-        0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
 .dashboard-tile:hover {
@@ -37,7 +34,7 @@
     width: 100px;
     height: 100px;
     margin-top: 20px;
-    color: #673ab7;
+    color: #17428d;
 }
 
 .container {

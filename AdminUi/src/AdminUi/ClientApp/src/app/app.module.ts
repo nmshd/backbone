@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { LayoutModule } from "@angular/cdk/layout";
+import { LoggerModule, NgxLoggerLevel, TOKEN_LOGGER_SERVER_SERVICE, TOKEN_LOGGER_WRITER_SERVICE } from "ngx-logger";
+
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -27,6 +29,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
+import { environment } from "src/environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { ChangeSecretDialogComponent } from "./components/client/change-secret-dialog/change-secret-dialog.component";
@@ -43,6 +46,8 @@ import { ConfirmationDialogComponent } from "./components/shared/confirmation-di
 import { LoginComponent } from "./components/shared/login/login.component";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { TopbarComponent } from "./components/topbar/topbar.component";
+import { LoggerServerService } from "./services/logger-server-service/logger-server.service";
+import { LoggerWriterService } from "./services/logger-writer-service/logger-writer.service";
 import { SidebarService } from "./services/sidebar-service/sidebar.service";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
@@ -73,6 +78,24 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         BrowserAnimationsModule,
         ClipboardModule,
         HttpClientModule,
+        LoggerModule.forRoot(
+            {
+                serverLoggingUrl: environment.apiUrl + "/Logs",
+                level: environment.production ? NgxLoggerLevel.INFO : NgxLoggerLevel.TRACE,
+                serverLogLevel: NgxLoggerLevel.ERROR,
+                enableSourceMaps: true
+            },
+            {
+                writerProvider: {
+                    provide: TOKEN_LOGGER_WRITER_SERVICE,
+                    useClass: LoggerWriterService
+                },
+                serverProvider: {
+                    provide: TOKEN_LOGGER_SERVER_SERVICE,
+                    useClass: LoggerServerService
+                }
+            }
+        ),
         MatCardModule,
         MatToolbarModule,
         MatButtonModule,
@@ -101,7 +124,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
             useValue: { dateFormat: "dd.MM.yyyy HH:mm:ss" }
         },
         { provide: HTTP_INTERCEPTORS, useClass: ApiKeyInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: XSRFInterceptor, multi: true}
+        { provide: HTTP_INTERCEPTORS, useClass: XSRFInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]
 })
