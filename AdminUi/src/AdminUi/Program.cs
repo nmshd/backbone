@@ -108,7 +108,7 @@ static void Configure(WebApplication app)
 {
     app.UseForwardedHeaders();
 
-    var adminConfiguration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
 
     app.UseSecurityHeaders(policies =>
     {
@@ -118,11 +118,11 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny");
 
-        if (adminConfiguration.Cors.AccessControlAllowCredentials)
+        if (configuration.Cors.AccessControlAllowCredentials)
             policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
     });
 
-    if (adminConfiguration.SwaggerUi.Enabled)
+    if (configuration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
