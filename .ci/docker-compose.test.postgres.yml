@@ -5,17 +5,6 @@ services:
       - source: ConsumerApiOverridePostgresConfig
         target: app/appsettings.override.json
 
-  test-admin-ui:
-    environment:
-      - Modules__Devices__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Devices__Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432
-      
-      - Modules__Quotas__Infrastructure__SqlDatabase__Provider=Postgres
-      - Modules__Quotas__Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=quotas;Password=Passw0rd;Port=5432
-      
-      - Infrastructure__SqlDatabase__Provider=Postgres
-      - Infrastructure__SqlDatabase__ConnectionString=Server=postgres;Database=enmeshed;User Id=adminUi;Password=Passw0rd;Port=5432
-      
   ### infrastructure ###
 
   test-database:
@@ -54,7 +43,6 @@ services:
     depends_on:
       test-database:
         condition: service_healthy
-
 
 configs:
   DockerEntrypointInitdb:

@@ -9,21 +9,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
       - ASPNETCORE_URLS=http://0.0.0.0:80
-
-      - Modules__Files__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-
-      - Modules__Messages__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Messages__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-
-      - Modules__Relationships__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-
-      - Modules__Synchronization__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
-
-      - Modules__Tokens__Infrastructure__BlobStorage__CloudProvider=Azure
-      - Modules__Tokens__Infrastructure__BlobStorage__ConnectionInfo=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
     ports:
       - "5000:80"
     depends_on:
@@ -39,7 +24,7 @@ services:
       - source: ConsumerApiOverrideConfig
         target: app/appsettings.override.json
     healthcheck:
-      test: [ "CMD", "wget", "http://localhost/health" ]
+      test: ["CMD", "wget", "http://localhost/health"]
       interval: 5s
       timeout: 2s
       retries: 40
