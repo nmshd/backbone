@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.OpenIddict;
+using Backbone.Modules.Devices.Domain.Entities;
 using FakeItEasy;
 using Xunit;
 
@@ -11,12 +11,8 @@ public class HandlerTests
     public async Task Change_client_secret()
     {
         // Arrange
-        var client = new CustomOpenIddictEntityFrameworkCoreApplication
-        {
-            ClientId = "Some-client-id",
-            ClientSecret = "Old-client-secret",
-            DefaultTier = "Some-tier-id"
-        };
+        var client = new OAuthClient("some-client-id", string.Empty, string.Empty);
+
         var newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);
 
@@ -29,7 +25,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => oAuthClientsRepository.ChangeClientSecret(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
+        A.CallTo(() => oAuthClientsRepository.ChangeClientSecret(A<OAuthClient>.That.Matches(c =>
                 c.ClientId == client.ClientId), newClientSecret
             , CancellationToken.None)
         ).MustHaveHappenedOnceExactly();

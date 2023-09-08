@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.OpenIddict;
+using Backbone.Modules.Devices.Domain.Entities;
 using FakeItEasy;
 using Xunit;
 
@@ -12,14 +12,9 @@ public class HandlerTests
     public async Task Change_Default_Tier()
     {
         // Arrange
-        var client = new CustomOpenIddictEntityFrameworkCoreApplication
-        {
-            ClientId = "Some-client-id",
-            ClientSecret = "Some-client-secret",
-            DefaultTier = "Old-tier-id"
-        };
+        var client = new OAuthClient("some-client-id", string.Empty, string.Empty);
 
-        var newDefaultTier = new Tier(TierName.Create("new-default-tier-name").Value);
+        var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
         var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
 
@@ -35,9 +30,8 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => oAuthClientsRepository.Update(A<CustomOpenIddictEntityFrameworkCoreApplication>.That.Matches(c =>
+        A.CallTo(() => oAuthClientsRepository.Update(A<OAuthClient>.That.Matches(c =>
                 c.ClientId == client.ClientId &&
-                c.ClientSecret == client.ClientSecret &&
                 c.DefaultTier == newDefaultTier.Id)
             , CancellationToken.None)
         ).MustHaveHappenedOnceExactly();

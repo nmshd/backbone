@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 public class ChangeClientSecretResponse
 {
-    public ChangeClientSecretResponse(CustomOpenIddictEntityFrameworkCoreApplication client, string clientSecret)
+    public ChangeClientSecretResponse(OAuthClient client, string clientSecret)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;

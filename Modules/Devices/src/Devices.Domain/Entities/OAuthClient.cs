@@ -10,5 +10,5 @@ public class OAuthClient
 
     public string ClientId { get; }
     public string DisplayName { get; }
-    public string DefaultTier { get; }
+    public string DefaultTier { get; set; }
 }

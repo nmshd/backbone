@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Devices.Domain.OpenIddict;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 public class UpdateClientResponse
 {
-    public UpdateClientResponse(CustomOpenIddictEntityFrameworkCoreApplication client)
+    public UpdateClientResponse(OAuthClient client)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;
