@@ -1,8 +1,10 @@
-﻿namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+﻿using MediatR;
 
-public class CreateClientResponse
+namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
+
+public class CreateClientCommand : IRequest<CreateClientResponse>
 {
-    public CreateClientResponse(string clientId, string displayName, string clientSecret, string defaultTier)
+    public CreateClientCommand(string clientId, string displayName, string clientSecret, string defaultTier)
     {
         ClientId = clientId;
         DisplayName = displayName;
@@ -11,7 +13,10 @@ public class CreateClientResponse
     }
 
     public string ClientId { get; set; }
+
     public string DisplayName { get; set; }
+
     public string ClientSecret { get; set; }
+
     public string DefaultTier { get; set; }
 }

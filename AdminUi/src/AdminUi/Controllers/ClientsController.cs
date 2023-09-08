@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
-using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+using Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Clients.DTOs;

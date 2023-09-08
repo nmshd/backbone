@@ -4,7 +4,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 
 public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse>
 {

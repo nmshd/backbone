@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 public class CreateClientCommandValidator : AbstractValidator<CreateClientCommand>
 {
     public CreateClientCommandValidator()
