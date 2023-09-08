@@ -15,20 +15,20 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {
     private readonly ApplicationOptions _applicationOptions;
-    private readonly ITiersRepository _tiersRepository;
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identitiesRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository, IOAuthClientsRepository oAuthClientsRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
         _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
-        _tiersRepository = tiersRepository;
         _identitiesRepository = identitiesRepository;
+        _oAuthClientsRepository = oAuthClientsRepository;
     }
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
@@ -47,10 +47,11 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (existingIdentity != null)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var tierId = TierId.Create(command.DefaultTier).Value;
-        var tier = await _tiersRepository.FindById(tierId, cancellationToken) ?? throw new OperationFailedException(ApplicationErrors.Devices.InvalidTierId());
+        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken);
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, tier.Id, command.IdentityVersion);
+        var tierId = TierId.Create(client.DefaultTier).Value;
+
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, tierId, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
@@ -60,7 +61,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {tier.Name}");
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {tierId}");
 
         return new CreateIdentityResponse
         {
