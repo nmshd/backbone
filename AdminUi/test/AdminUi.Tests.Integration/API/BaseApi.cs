@@ -115,8 +115,7 @@ public class BaseApi
             Content = restResponse.Data!,
             ContentType = restResponse.ContentType,
             RawContent = restResponse.Content,
-            Cookies = restResponse.Cookies,
-            Headers = restResponse.Headers,
+            Cookies = restResponse.Cookies
         };
 
         return response;
