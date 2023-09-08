@@ -174,7 +174,7 @@ export class ClientEditComponent {
         if (!defaultTier) {
             let basicTier = this.tierList.find((tier) => tier.name == "Basic");
             if (basicTier) {
-                this.client.defaultTier = basicTier.id;
+                defaultTier = basicTier.id;
             } else {
                 this.snackBar.open("Basic Tier not found", "Dismiss", {
                     verticalPosition: "top",

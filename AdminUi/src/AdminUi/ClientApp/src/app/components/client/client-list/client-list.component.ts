@@ -24,7 +24,7 @@ export class ClientListComponent {
     pageIndex: number;
     loading = false;
     selection = new SelectionModel<ClientDTO>(true, []);
-    displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
+    displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "actions"];
 
     constructor(
         private router: Router,
@@ -162,5 +162,9 @@ export class ClientListComponent {
 
     editClient(clientId: string) {
         this.router.navigate([`/clients/` + clientId]);
+    }
+
+    goToTier(tierId: string) {
+        this.router.navigate([`/tiers/` + tierId]);
     }
 }

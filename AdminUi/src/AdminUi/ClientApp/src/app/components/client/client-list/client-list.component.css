@@ -10,6 +10,11 @@
     opacity: 0.4;
 }
 
+.tier-navigation {
+    text-decoration: underline;
+    color: blue;
+}
+
 .loading {
     display: flex;
     justify-content: center;

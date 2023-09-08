@@ -34,7 +34,7 @@
                 </mat-form-field>
                 <mat-form-field class="form-field">
                     <mat-label>Default Tier</mat-label>
-                    <mat-select [(ngModel)]="client.tierId" [disabled]="disabled">
+                    <mat-select [(ngModel)]="client.defaultTier" [disabled]="disabled">
                         <mat-option *ngFor="let tier of tierList" [value]="tier.id">
                             {{ tier.name }}
                         </mat-option>
