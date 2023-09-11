@@ -36,7 +36,7 @@ public class TierOfIdentityChangedIntegrationEventHandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomIdentityAddress(), oldTier.Id);
 
-        A.CallTo(()=>identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         var metricStatusesService = A.Fake<IMetricStatusesService>();
 
@@ -54,7 +54,7 @@ public class TierOfIdentityChangedIntegrationEventHandlerTests
         await handler.Handle(tierDeletedIntegrationEvent);
 
         // Assert
-        A.CallTo(metricStatusesService).Where(x=>x.Method.Name== nameof(metricStatusesService.RecalculateMetricStatuses)).WithAnyArguments().MustHaveHappened();
+        A.CallTo(metricStatusesService).Where(x => x.Method.Name == nameof(metricStatusesService.RecalculateMetricStatuses)).WithAnyArguments().MustHaveHappened();
         A.CallTo(() => identitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappened();
         identity.TierId.Should().Be(newTier.Id);
     }
