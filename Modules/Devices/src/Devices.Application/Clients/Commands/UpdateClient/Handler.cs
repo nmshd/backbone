@@ -22,11 +22,11 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
 
         var tierIdResult = TierId.Create(request.DefaultTier);
         if (tierIdResult.IsFailure)
-            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
+            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
         var tierExists = await _tiersRepository.ExistsWithId(tierIdResult.Value, cancellationToken);
         if (!tierExists)
-            throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
+            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
         client.DefaultTier = request.DefaultTier;
 

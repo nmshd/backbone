@@ -59,5 +59,10 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierIdInvalid", "The passed tier ID is not valid.");
         }
+
+        public static ApplicationError InvalidTierIdOrDoesNotExist()
+        {
+            return new ApplicationError("error.platform.validation.device.tierIdInvalidOrDoesNotExist", "The passed tier ID is not valid or the tier does not exist.");
+        }
     }
 }

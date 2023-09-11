@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.OpenIddict;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
     }
     public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
-        var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(CustomOpenIddictEntityFrameworkCoreApplication));
+        var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
         return new ClientDTO(client.ClientId, client.DisplayName, client.DefaultTier);
     }

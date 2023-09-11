@@ -15,6 +15,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _clientSecret;
+    private string _tierId;
     private string _tier1Id;
     private string _tier2Id;
     private HttpResponse<List<ClientDTO>>? _getClientsResponse;
@@ -30,35 +31,37 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _tiersApi = tiersApi;
         _clientId = string.Empty;
         _clientSecret = string.Empty;
+        _tierId = string.Empty;
         _tier1Id = string.Empty;
         _tier2Id = string.Empty;
-    }
-
-    [Given(@"a Client c")]
-    public async Task GivenAClientC()
-    {
-        var createClientRequest = new CreateClientRequest
-        {
-            ClientId = string.Empty,
-            DisplayName = string.Empty,
-            ClientSecret = string.Empty
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createClientRequest);
-
-        var response = await _clientsApi.CreateClient(requestConfiguration);
-
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
-        _clientId = response.Content.Result!.ClientId;
     }
 
     [Given(@"a non-existent Client c")]
     public void GivenANonExistentClientC()
     {
         _clientId = "some-non-existent-client-id";
+    }
+
+    [Given(@"a Tier t")]
+    public async Task GivenATierT()
+    {
+        var createTierRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierRequest);
+
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tierId = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
     }
 
     [Given(@"a Tier t1")]
@@ -103,6 +106,28 @@ public class ClientsStepDefinitions : BaseStepDefinitions
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
+    }
+
+    [Given(@"a Client c with Tier t")]
+    public async Task GivenAClientCWithTierT()
+    {
+        var createClientRequest = new CreateClientRequest
+        {
+            ClientId = string.Empty,
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tierId
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createClientRequest);
+
+        var response = await _clientsApi.CreateClient(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _clientId = response.Content.Result!.ClientId;
     }
 
     [Given(@"a Client c with Tier t1")]
@@ -216,7 +241,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a non-existent default tier")]
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -234,7 +259,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint")]
+    [When(@"a PATCH request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
         var updateClientRequest = new UpdateClientRequest()
