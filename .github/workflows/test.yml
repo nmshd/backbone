@@ -47,7 +47,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integrationTest.mssql.ts
+        run: ./.ci/integrationTest.mssql.sh
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml logs > docker-log.txt
@@ -68,7 +68,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integrationTest.pgsql.ts
+        run: ./.ci/integrationTest.pgsql.sh
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
