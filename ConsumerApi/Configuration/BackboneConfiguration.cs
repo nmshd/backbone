@@ -34,6 +34,8 @@ public class BackboneConfiguration
     {
         [Required]
         public bool Enabled { get; set; } = false;
+        
+        public string TokenUrl { get; set; } = "";
     }
 
     public class BackboneInfrastructureConfiguration
