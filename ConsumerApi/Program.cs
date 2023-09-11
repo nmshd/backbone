@@ -63,7 +63,7 @@ app
     .MigrateDbContext<DevicesDbContext>((context, sp) =>
     {
         var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
-        devicesDbContextSeed.SeedAsync(context).GetAwaiter().GetResult();
+        devicesDbContextSeed.SeedAsync(context).Wait();
     })
     .MigrateDbContext<FilesDbContext>()
     .MigrateDbContext<RelationshipsDbContext>()
