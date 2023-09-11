@@ -50,7 +50,7 @@ jobs:
         run: ./.ci/integrationTest.mssql.ts
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.mssql.yml logs > docker-log.txt
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
@@ -71,7 +71,7 @@ jobs:
         run: ./.ci/integrationTest.pgsql.ts
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
