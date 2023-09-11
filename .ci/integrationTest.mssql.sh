@@ -1,8 +1,14 @@
 #!/bin/bash
 set -e
 
-docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml up -d --build
+dockerCompose() {
+    docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml "$@"
+}
+
+dockerCompose down
+dockerCompose build
+dockerCompose up -d
 dotnet restore "Backbone.sln"
 dotnet build /property:WarningLevel=0 --no-restore "Backbone.sln"
 dotnet test --no-restore --no-build --filter "Category=Integration&TestCategory!~ignore" "Backbone.sln"
-docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml down
+# dockerCompose down
