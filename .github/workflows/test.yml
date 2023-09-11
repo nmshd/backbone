@@ -48,6 +48,16 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Run integration tests
         run: ./.ci/integrationTest.mssql.ts
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.mssql.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-mssql-docker-logs
+          path: |
+            docker-log.txt
 
   integration-test-postgresql:
     name: Run Integration Tests (on Postgres)
@@ -59,6 +69,16 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Run integration tests
         run: ./.ci/integrationTest.pgsql.ts
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-postgres-docker-logs
+          path: |
+            docker-log.txt
 
   cns-transport-test-mssql:
     name: Run cns-transport Tests (on MS SQL)
