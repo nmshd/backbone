@@ -130,7 +130,7 @@ export class IdentityEditComponent {
         if (this.tier && this.tier.id) {
             this.identityService.updateIdentityTier(this.identity, this.tier).subscribe({
                 next: () => {
-                    this.snackBar.open("Identity updated successfully", "Dismiss", {
+                    this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"
                     });
@@ -138,7 +138,7 @@ export class IdentityEditComponent {
                     this.loading = true;
                     setTimeout(() => {
                         this.getIdentity();
-                    }, 1000);
+                    }, 2000);
                 },
                 error: (err: any) => {
                     this.loading = false;
