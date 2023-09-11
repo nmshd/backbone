@@ -1,15 +1,5 @@
 version: "3.3"
 services:
-  consumer-api:
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
-  admin-ui:
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
   ### infrastructure ###
 
   database:
@@ -29,8 +19,7 @@ services:
     image: mcr.microsoft.com/mssql-tools
     volumes:
       - ../setup-db:/app/setup-db
-    command: >
-      bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -i app/setup-db/setup-sqlserver.sql "
+    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
     depends_on:
       - database
 

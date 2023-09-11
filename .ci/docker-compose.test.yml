@@ -25,6 +25,9 @@ services:
       interval: 5s
       timeout: 2s
       retries: 40
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
 
   admin-ui:
     container_name: admin-ui
@@ -41,6 +44,9 @@ services:
         condition: service_started
       consumer-api:
         condition: service_healthy
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
 
   ### infrastructure ###
 

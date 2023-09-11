@@ -1,15 +1,5 @@
 version: "3.3"
 services:
-  consumer-api:
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
-  admin-ui:
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
   ### infrastructure ###
 
   database:
@@ -30,15 +20,12 @@ services:
   ### seeds ###
 
   seed-database:
-    container_name: seed-postgres
     image: postgres
+    volumes:
+      - ../setup-db:/app/setup-db
     environment:
       - PGPASSWORD=Passw0rd
-    command: >
-      psql -h postgres -U postgres -d enmeshed -f seed.sql
-    configs:
-      - source: SeedScript
-        target: seed.sql
+    command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
     depends_on:
       database:
         condition: service_healthy
@@ -48,10 +35,10 @@ services:
       ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
 
 configs:
-  SeedScript:
-    file: ../setup-db/setup-postgres.sql
   Config:
     file: appsettings.override.postgres.json
+  SeedScript:
+    file: ../setup-db/setup-postgres.sql
 
 networks:
   default:
