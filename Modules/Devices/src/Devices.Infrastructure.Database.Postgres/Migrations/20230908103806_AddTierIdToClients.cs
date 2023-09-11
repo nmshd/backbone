@@ -25,25 +25,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "OpenIddictApplications",
                 type: "character varying(20)",
                 maxLength: 20,
-                nullable: true,
+                nullable: false,
                 defaultValue: "");
 
             migrationBuilder.Sql("""
                 UPDATE "Devices"."OpenIddictApplications"
                 SET "DefaultTier" = (SELECT "Id" FROM "Devices"."Tiers" WHERE "Name" = 'Basic')
-                WHERE "DefaultTier" IS NULL
+                WHERE "DefaultTier" = ''
             """);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "DefaultTier",
-                table: "OpenIddictApplications",
-                type: "character varying(20)",
-                maxLength: 20,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "character varying(20)",
-                oldNullable: true);
         }
 
         /// <inheritdoc />

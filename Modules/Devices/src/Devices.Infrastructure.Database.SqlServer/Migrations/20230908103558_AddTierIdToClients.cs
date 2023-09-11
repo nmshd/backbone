@@ -25,7 +25,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 table: "OpenIddictApplications",
                 type: "nvarchar(20)",
                 maxLength: 20,
-                nullable: true,
+                nullable: false,
                 defaultValue: "");
 
             migrationBuilder.Sql(@"
@@ -35,19 +35,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 	                FROM [Devices].[Tiers]
 	                WHERE Name = 'Basic'
                 )
-                WHERE DefaultTier = NULL
+                WHERE DefaultTier = ''
             ");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "DefaultTier",
-                table: "OpenIddictApplications",
-                type: "nvarchar(20)",
-                maxLength: 20,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(20)",
-                oldNullable: true);
         }
 
         /// <inheritdoc />
