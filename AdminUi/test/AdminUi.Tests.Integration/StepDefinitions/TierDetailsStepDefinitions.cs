@@ -38,7 +38,7 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
         _tierId = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
-        Thread.Sleep(2000);
+        Thread.Sleep(4000);
     }
 
     [When(@"a GET request is sent to the /Tiers/{t.id} endpoint")]
