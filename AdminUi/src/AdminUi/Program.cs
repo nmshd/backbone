@@ -110,15 +110,21 @@ static void Configure(WebApplication app)
 {
     app.UseForwardedHeaders();
 
+    var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+
     app.UseSecurityHeaders(policies =>
+    {
+
         policies
             .AddDefaultSecurityHeaders()
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
-            .AddCustomHeader("X-Frame-Options", "Deny")
-    );
+            .AddCustomHeader("X-Frame-Options", "Deny");
 
-    var adminConfiguration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
-    if (adminConfiguration.SwaggerUi.Enabled)
+        if (configuration.Cors.AccessControlAllowCredentials)
+            policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
+    });
+
+    if (configuration.SwaggerUi.Enabled)
     {
         app.UseSwagger().UseSwaggerUI();
         IdentityModelEventSource.ShowPII = true;
@@ -131,7 +137,6 @@ static void Configure(WebApplication app)
 
     app.UseAuthentication();
     app.UseAuthorization();
-
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
