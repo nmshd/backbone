@@ -1,6 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;

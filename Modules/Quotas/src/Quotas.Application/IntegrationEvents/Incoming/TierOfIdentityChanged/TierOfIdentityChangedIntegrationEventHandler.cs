@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
