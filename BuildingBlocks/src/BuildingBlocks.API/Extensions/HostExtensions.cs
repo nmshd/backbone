@@ -32,16 +32,9 @@ public static class HostExtensions
                     TimeSpan.FromSeconds(15)
                 });
 
-            retry.Execute(() =>
-            {
-                //if the sql server container is not created on run docker compose this
-                //migration can fail for network related exception. The retry options for DbContext only 
-                //apply to transient exceptions.
+            retry.Execute(context.Database.Migrate);
 
-                context.Database.Migrate();
-
-                seeder?.Invoke(context, services);
-            });
+            seeder?.Invoke(context, services);
 
             logger.LogInformation($"Migrated database associated with context {typeof(TContext).Name}");
         }
@@ -49,6 +42,7 @@ public static class HostExtensions
         {
             logger.LogError(ex,
                 $"An error occurred while migrating the database used on context {typeof(TContext).Name}");
+            throw;
         }
 
         return host;
