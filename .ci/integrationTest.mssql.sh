@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml up -d --build
 dotnet restore "Backbone.sln"
