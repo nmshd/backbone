@@ -79,7 +79,7 @@ jobs:
           path: docker-log.txt
 
   cns-transport-test-sqlserver:
-    name: Run cns-transport Tests (on SQL Server
+    name: Run cns-transport Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
