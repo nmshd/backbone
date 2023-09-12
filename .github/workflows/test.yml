@@ -56,8 +56,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: integration-test-sqlserver-docker-logs
-          path: |
-            docker-log.txt
+          path: docker-log.txt
 
   integration-test-postgres:
     name: Run Integration Tests (on Postgres)
@@ -77,8 +76,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: integration-test-postgres-docker-logs
-          path: |
-            docker-log.txt
+          path: docker-log.txt
 
   cns-transport-test-sqlserver:
     name: Run cns-transport Tests (on SQL Server
@@ -113,8 +111,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: cns-transport-test-sqlserver-docker-logs
-          path: |
-            docker-log.txt
+          path: docker-log.txt
       - name: Stop Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml down
 
@@ -151,8 +148,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: cns-transport-test-postgres-docker-logs
-          path: |
-            docker-log.txt
+          path: docker-log.txt
       - name: Stop Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml down
 
