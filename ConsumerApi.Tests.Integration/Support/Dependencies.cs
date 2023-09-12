@@ -21,12 +21,10 @@ public static class Dependencies
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
-        services.AddSingleton(new HttpClientFactory(GetWebApplicationFactory()));
+        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
         services.AddTransient<TokensApi>();
-        services.AddSingleton<ChallengesApi>();
+        services.AddTransient<ChallengesApi>();
 
         return services;
     }
-
-    private static CustomWebApplicationFactory<Program> GetWebApplicationFactory() => new();
 }
