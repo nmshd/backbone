@@ -34,8 +34,6 @@ public class AdminConfiguration
     {
         [Required]
         public bool Enabled { get; set; } = false;
-        [Required]
-        public string TokenUrl { get; set; } = "";
     }
 
     public class AdminInfrastructureConfiguration
