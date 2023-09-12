@@ -30,6 +30,7 @@ public class UserDataLoggingMiddleware
 
             using var disposable = LogContext.Push(enrichers);
         }
+        catch (Exception) { }
         finally
         {
             await _next.Invoke(context);
