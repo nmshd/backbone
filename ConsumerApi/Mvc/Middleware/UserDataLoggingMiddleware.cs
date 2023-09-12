@@ -28,7 +28,7 @@ public class UserDataLoggingMiddleware
                 new PropertyEnricher("identityAddress", identityAddress)
             };
 
-            LogContext.Push(enrichers);
+            using var disposable = LogContext.Push(enrichers);
         }
         finally
         {
