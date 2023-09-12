@@ -18,24 +18,16 @@ public class UserDataLoggingMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        try
-        {
-            var deviceId = _userContext.GetDeviceIdOrNull();
-            var identityAddress = _userContext.GetAddressOrNull();
-            
-            if (deviceId != null && identityAddress != null)
-            {
-                ILogEventEnricher[] enrichers =
-                {
-                    new PropertyEnricher("deviceId", deviceId),
-                    new PropertyEnricher("identityAddress", identityAddress)
-                };
+        var deviceId = _userContext.GetDeviceIdOrNull();
+        var identityAddress = _userContext.GetAddressOrNull();
 
-                using var _ = LogContext.Push(enrichers);
-            }
-        }
-        catch (Exception) { }
-        finally
+        ILogEventEnricher[] enrichers =
+        {
+            new PropertyEnricher("deviceId", deviceId?.StringValue),
+            new PropertyEnricher("identityAddress", identityAddress?.StringValue)
+        };
+
+        using (LogContext.Push(enrichers))
         {
             await _next.Invoke(context);
         }
