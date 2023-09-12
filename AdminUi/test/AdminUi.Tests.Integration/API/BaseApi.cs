@@ -37,7 +37,7 @@ public class BaseApi
 
     private async Task LoadXSRFTokensAsync()
     {
-        var token = await Get<string>("/xsrf", new() { AcceptHeader = "text/plain" });
+        var token = await Get<string>("/xsrf", new RequestConfiguration { AcceptHeader = "text/plain" });
         if (token is { RawContent: not null, Cookies.Count: > 0 })
         {
             var cookie = token.Cookies.Single(c => c.Name == XSRF_TOKEN_COOKIE_NAME);
@@ -110,7 +110,8 @@ public class BaseApi
 
         var httpResponse = await _httpClient.SendAsync(request);
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
-        var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
+        var responseData = requestConfiguration.AcceptHeader == "text/plain" ? new ResponseContent<T>() : JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
+        var hasCookies = httpResponse.Headers.TryGetValues("Set-Cookie", out var cookies);
 
         var response = new HttpResponse<T>
         {
@@ -118,9 +119,15 @@ public class BaseApi
             StatusCode = httpResponse.StatusCode,
             Content = responseData!,
             ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
-            RawContent = responseRawContent,
-            Cookies = httpResponse.Headers.GetValues("Set-Cookie")?.Select(it => new Models.Cookie() { Name = it, Value = it }).ToList().AsReadOnly()
+            RawContent = responseRawContent
         };
+
+        if (hasCookies)
+            response.Cookies = cookies?.Select(it =>
+            {
+                var test = it.Split('=', 2);
+                return new Models.Cookie { Name = test[0], Value = test[1] };
+            }).ToList().AsReadOnly();
 
         return response;
     }
