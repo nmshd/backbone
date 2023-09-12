@@ -22,19 +22,15 @@ public class UserDataLoggingMiddleware
         {
             var deviceId = _userContext.GetDeviceId();
             var identityAddress = _userContext.GetAddress();
-
             ILogEventEnricher[] enrichers =
             {
                 new PropertyEnricher("deviceId", deviceId),
                 new PropertyEnricher("identityAddress", identityAddress)
             };
 
-            using (LogContext.Push(enrichers))
-            {
-                await _next.Invoke(context);
-            }
+            LogContext.Push(enrichers);
         }
-        catch (Exception)
+        finally
         {
             await _next.Invoke(context);
         }
