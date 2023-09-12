@@ -26,7 +26,7 @@ public class EventBusConfiguration
     /// in milliseconds.
     /// </summary>
     public uint MinimumBackoff { get; set; } = 500;
-    
+
     /// <summary>
     /// in seconds.
     /// </summary>

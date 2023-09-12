@@ -26,7 +26,7 @@ public static class EventBusServiceCollectionExtensions
             case GOOGLE_CLOUD:
                 services.AddGoogleCloudPubSub(options =>
                 {
-                    LoadBasicBusOptions(configuration, options); 
+                    LoadBasicBusOptions(configuration, options);
                     options.ProjectId = configuration.GcpPubSubProjectId;
                     options.TopicName = configuration.GcpPubSubTopicName;
                     options.ConnectionInfo = configuration.ConnectionInfo;
