@@ -205,13 +205,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = Policy.Handle<Exception>()
-                .WaitAndRetry(
+                .WaitAndRetryAsync(
                     _pollyRetryCount,
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
                     (ex, _) => _logger.LogWarning(ex.ToString()))
-                .Wrap(Policy.Timeout(_maximumBackoff));
+                .WrapAsync(Policy.TimeoutAsync(_maximumBackoff));
 
-                await policy.Execute(async () => await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
+                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
         }
         else
