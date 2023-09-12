@@ -1,4 +1,6 @@
-﻿using Backbone.Modules.Devices.Application;
+﻿using AdminUi.Infrastructure.DTOs;
+using AdminUi.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
@@ -11,6 +13,7 @@ using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,15 +27,17 @@ namespace AdminUi.Controllers;
 [Authorize("ApiKey")]
 public class TiersController : ApiControllerBase
 {
+    private readonly AdminUiDbContext _adminUiDbContext;
     private readonly ApplicationOptions _options;
 
-    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
     {
+        _adminUiDbContext = adminUiDbContext;
         _options = options.Value;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListTiersResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TierOverview>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTiersAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
@@ -40,8 +45,8 @@ public class TiersController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var tiers = await _mediator.Send(new ListTiersQuery(paginationFilter), cancellationToken);
-        return Paged(tiers);
+        var tierOverviews = await _adminUiDbContext.TierOverviews.OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
+        return Paged(new PagedResponse<TierOverview>(tierOverviews.ItemsOnPage, paginationFilter, tierOverviews.TotalNumberOfItems));
     }
 
     [HttpGet("{tierId}")]
