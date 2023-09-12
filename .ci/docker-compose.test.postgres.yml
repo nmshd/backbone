@@ -37,8 +37,6 @@ services:
 configs:
   Config:
     file: appsettings.override.postgres.json
-  SeedScript:
-    file: ../setup-db/setup-postgres.sql
 
 networks:
   default:
