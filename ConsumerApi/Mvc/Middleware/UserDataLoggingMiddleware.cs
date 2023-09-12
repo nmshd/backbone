@@ -20,15 +20,19 @@ public class UserDataLoggingMiddleware
     {
         try
         {
-            var deviceId = _userContext.GetDeviceId();
-            var identityAddress = _userContext.GetAddress();
-            ILogEventEnricher[] enrichers =
+            var deviceId = _userContext.GetDeviceIdOrNull();
+            var identityAddress = _userContext.GetAddressOrNull();
+            
+            if (deviceId != null && identityAddress != null)
             {
-                new PropertyEnricher("deviceId", deviceId),
-                new PropertyEnricher("identityAddress", identityAddress)
-            };
+                ILogEventEnricher[] enrichers =
+                {
+                    new PropertyEnricher("deviceId", deviceId),
+                    new PropertyEnricher("identityAddress", identityAddress)
+                };
 
-            using var _ = LogContext.Push(enrichers);
+                using var _ = LogContext.Push(enrichers);
+            }
         }
         catch (Exception) { }
         finally
