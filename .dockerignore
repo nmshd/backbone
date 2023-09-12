@@ -23,5 +23,6 @@
 **/values.dev.yaml
 **/*.pfx
 **/appsettings.override.json
+**/appsettings.override.*.json
 LICENSE
 README.md
