@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Serilog.Context;
-using Serilog.Core.Enrichers;
 using Serilog.Core;
+using Serilog.Core.Enrichers;
 
 namespace ConsumerApi.Mvc.Middleware;
 
