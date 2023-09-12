@@ -33,7 +33,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, string? queueName = null,
-        int connectionRetryCount = 5, int pollyRetryCount = 5, int minimumBackoff = 500, int maximumBackoff = 120)
+        int connectionRetryCount = 5, int pollyRetryCount = 5, int minimumBackoff = 2, int maximumBackoff = 120)
     {
         _persistentConnection =
             persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -207,7 +207,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var policy = Policy.Handle<Exception>()
                 .WaitAndRetry(
                     _pollyRetryCount,
-                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
                     (ex, _) => _logger.LogWarning(ex.ToString()))
                 .Wrap(Policy.Timeout(_maximumBackoff));
 

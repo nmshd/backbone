@@ -20,15 +20,12 @@ public class EventBusConfiguration
     public string GcpPubSubProjectId { get; set; }
     public string GcpPubSubTopicName { get; set; }
 
+    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
     public int NumberOfRetries { get; set; } = 5;
 
-    /// <summary>
-    /// in milliseconds.
-    /// </summary>
-    public int MinimumBackoff { get; set; } = 500;
+    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
+    public int MinimumBackoff { get; set; } = 2;
 
-    /// <summary>
-    /// in seconds.
-    /// </summary>
+    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
     public int MaximumBackoff { get; set; } = 120;
 }
