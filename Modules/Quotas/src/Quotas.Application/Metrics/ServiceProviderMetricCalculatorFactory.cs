@@ -41,4 +41,10 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
         var calculator = _serviceProvider.GetRequiredService<UsedFileStorageSpaceMetricCalculator>();
         return calculator;
     }
+
+    protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
+    {
+        var calculator = _serviceProvider.GetRequiredService<NumberOfRelationshipTemplatesMetricCalculator>();
+        return calculator;
+    }
 }

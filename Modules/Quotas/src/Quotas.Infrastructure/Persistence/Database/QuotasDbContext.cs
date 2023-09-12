@@ -28,6 +28,9 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public DbSet<Token> Tokens { get; set; }
 
+    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

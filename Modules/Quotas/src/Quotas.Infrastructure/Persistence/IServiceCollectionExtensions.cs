@@ -56,6 +56,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<ITokensRepository, TokensRepository>();
+        services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
     }
 
