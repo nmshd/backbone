@@ -2,7 +2,7 @@
 set -e
 
 dockerCompose() {
-    docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml "$@"
+    docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml "$@"
 }
 
 dockerCompose down

@@ -3,8 +3,8 @@ services:
   ### infrastructure ###
 
   database:
-    container_name: bkb-mssql_server
-    hostname: ms-sql-server
+    container_name: bkb-sql_server
+    hostname: sqlserver
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
@@ -19,13 +19,13 @@ services:
     image: mcr.microsoft.com/mssql-tools
     volumes:
       - ../setup-db:/app/setup-db
-    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S ms-sql-server -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
+    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
     depends_on:
       - database
 
   seed-client:
     command: >
-      ./backbone client create -p SqlServer -c "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
+      ./backbone client create -p SqlServer -c "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
 
 configs:
   Config:

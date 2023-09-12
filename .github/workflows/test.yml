@@ -38,7 +38,7 @@ jobs:
       - name: Run tests
         run: ./.ci/test.ts
 
-  integration-test-mssql:
+  integration-test-sqlserver:
     name: Run Integration Tests (on MS SQL)
     runs-on: ubuntu-latest
     steps:
@@ -47,19 +47,19 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integrationTest.mssql.sh
+        run: ./.ci/integrationTest.sqlserver.sh
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.mssql.yml logs > docker-log.txt
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: integration-test-mssql-docker-logs
+          name: integration-test-sqlserver-docker-logs
           path: |
             docker-log.txt
 
-  integration-test-postgresql:
+  integration-test-postgres:
     name: Run Integration Tests (on Postgres)
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +68,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integrationTest.pgsql.sh
+        run: ./.ci/integrationTest.postgres.sh
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
@@ -80,7 +80,7 @@ jobs:
           path: |
             docker-log.txt
 
-  cns-transport-test-mssql:
+  cns-transport-test-sqlserver:
     name: Run cns-transport Tests (on MS SQL)
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +94,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.mssql.yml up -d
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -107,18 +107,18 @@ jobs:
         run: npm run test:local:node:lokijs
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.mssql.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: cns-transport-test-mssql-docker-logs
+          name: cns-transport-test-sqlserver-docker-logs
           path: |
             docker-log.txt
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.mssql.yml down
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml down
 
-  cns-transport-test-postgresql:
+  cns-transport-test-postgres:
     name: Run cns-transport Tests (on Postgres)
     runs-on: ubuntu-latest
     steps:
@@ -150,7 +150,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: cns-transport-test-postgresql-docker-logs
+          name: cns-transport-test-postgres-docker-logs
           path: |
             docker-log.txt
       - name: Stop Consumer API
