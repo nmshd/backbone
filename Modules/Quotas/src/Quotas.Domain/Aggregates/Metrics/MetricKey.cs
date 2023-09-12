@@ -7,10 +7,10 @@ public record MetricKey
 {
     public static MetricKey NumberOfSentMessages = new("NumberOfSentMessages");
     public static MetricKey NumberOfRelationships = new("NumberOfRelationships");
+    public static MetricKey NumberOfRelationshipTemplates = new("NumberOfRelationshipTemplates");
     public static MetricKey NumberOfFiles = new("NumberOfFiles");
     public static MetricKey NumberOfTokens = new("NumberOfTokens");
     public static MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
-    public static MetricKey NumberOfRelationshipTemplates = new("NumberOfRelationshipTemplates");
 
 
     private static readonly MetricKey[] SUPPORTED_METRIC_KEYS = {

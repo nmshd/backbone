@@ -20,6 +20,11 @@ public abstract class MetricCalculatorFactory
             return CreateNumberOfRelationshipsMetricCalculator();
         }
 
+        if (metricKey == MetricKey.NumberOfRelationshipTemplates)
+        {
+            return CreateNumberOfRelationshipTemplatesMetricCalculator();
+        }
+
         if (metricKey == MetricKey.NumberOfTokens)
         {
             return CreateNumberOfTokensMetricCalculator();
@@ -30,18 +35,13 @@ public abstract class MetricCalculatorFactory
             return CreateUsedFileStorageSpaceCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfRelationshipTemplates)
-        {
-            return CreateNumberOfRelationshipTemplatesMetricCalculator();
-        }
-
         throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
     }
 
     protected abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfRelationshipsMetricCalculator();
+    protected abstract IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfTokensMetricCalculator();
     protected abstract IMetricCalculator CreateUsedFileStorageSpaceCalculator();
-    protected abstract IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator();
 }

@@ -349,6 +349,10 @@ public class IdentityTests
         {
             return _calculator;
         }
+        protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
+        {
+            return _calculator;
+        }
 
         protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
         {
@@ -361,11 +365,6 @@ public class IdentityTests
         }
 
         protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
-        {
-            return _calculator;
-        }
-
-        protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
         {
             return _calculator;
         }
