@@ -7,7 +7,7 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
-        builder.ToTable(nameof(RelationshipTemplate) + "s", "RelationshipTemplates", x => x.ExcludeFromMigrations());
+        builder.ToTable(nameof(RelationshipTemplate) + "s", "Relationships", x => x.ExcludeFromMigrations());
         builder.HasNoKey();
     }
 }
