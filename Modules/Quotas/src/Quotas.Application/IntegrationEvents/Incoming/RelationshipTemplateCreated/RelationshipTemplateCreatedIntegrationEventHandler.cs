@@ -3,7 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
-internal class RelationshipTemplateCreatedIntegrationEventHandler : IIntegrationEventHandler<RelationshipTemplateCreatedIntegrationEvent>
+public class RelationshipTemplateCreatedIntegrationEventHandler : IIntegrationEventHandler<RelationshipTemplateCreatedIntegrationEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 

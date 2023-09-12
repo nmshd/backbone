@@ -4,7 +4,6 @@ using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FakeItEasy;
@@ -47,7 +46,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(RelationshipTemplateCreatedIntegrationEvent)))).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<RelationshipTemplateCreatedIntegrationEvent>._)).MustHaveHappened();
     }
 
     private Handler CreateHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository)

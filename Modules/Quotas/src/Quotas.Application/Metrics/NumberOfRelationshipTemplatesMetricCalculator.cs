@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Domain;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
-internal class NumberOfRelationshipTemplatesMetricCalculator : IMetricCalculator
+public class NumberOfRelationshipTemplatesMetricCalculator : IMetricCalculator
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
