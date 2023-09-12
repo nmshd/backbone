@@ -41,7 +41,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierId = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
-        Thread.Sleep(4000);
+        Thread.Sleep(2000);
     }
 
     [Given(@"a Tier t with a Quota q")]
@@ -67,7 +67,7 @@ public class TierQuotaStepDefinitions : BaseStepDefinitions
         _tierQuotaDefinitionId = response.Content.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier quota definition on the Quotas module
-        Thread.Sleep(4000);
+        Thread.Sleep(2000);
     }
 
     [When(@"a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
