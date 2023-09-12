@@ -1,13 +1,12 @@
 ﻿using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Options;
 
 namespace AdminUi.Tests.Integration.API;
 
 public class IdentitiesApi : BaseApi
 {
-    public IdentitiesApi(IOptions<HttpClientOptions> httpConfiguration, WebApplicationFactory<Program> factory) : base(httpConfiguration, factory) { }
+    public IdentitiesApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
     public async Task<HttpResponse<IdentitySummaryDTO>> GetIdentityByAddress(RequestConfiguration requestConfiguration, string identityAddress)
     {

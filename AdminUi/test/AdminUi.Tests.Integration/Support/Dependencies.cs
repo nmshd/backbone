@@ -1,6 +1,5 @@
 ﻿using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Configuration;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
@@ -24,7 +23,7 @@ public static class Dependencies
             config.GetSection("AdminUi:Http").Bind(options)
         );
 
-        services.AddSingleton(GetWebApplicationFactory());
+        services.AddSingleton(new HttpClientFactory(GetWebApplicationFactory()));
         services.AddTransient<IdentitiesApi>();
         services.AddTransient<TiersApi>();
         services.AddTransient<ClientsApi>();
@@ -34,5 +33,5 @@ public static class Dependencies
         return services;
     }
 
-    private static WebApplicationFactory<Program> GetWebApplicationFactory() => new();
+    private static CustomWebApplicationFactory<Program> GetWebApplicationFactory() => new();
 }

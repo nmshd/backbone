@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 using AdminUi.Tests.Integration.Configuration;
 using AdminUi.Tests.Integration.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using HttpResponse = AdminUi.Tests.Integration.Models.HttpResponse;
@@ -14,7 +13,7 @@ public class BaseApi
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly HttpClient _httpClient;
 
-    protected BaseApi(IOptions<HttpClientOptions> httpConfiguration, WebApplicationFactory<Program> factory)
+    protected BaseApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory)
     {
         _httpClient = factory.CreateClient();
         _httpClient.DefaultRequestHeaders.Add("X-API-KEY", httpConfiguration.Value.ApiKey);
