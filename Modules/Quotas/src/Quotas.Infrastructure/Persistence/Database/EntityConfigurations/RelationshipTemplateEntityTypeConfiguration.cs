@@ -8,6 +8,6 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
     public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
         builder.ToTable(nameof(RelationshipTemplate) + "s", "RelationshipTemplates", x => x.ExcludeFromMigrations());
-        builder.HasKey(x => x.Id);
+        builder.HasNoKey();
     }
 }
