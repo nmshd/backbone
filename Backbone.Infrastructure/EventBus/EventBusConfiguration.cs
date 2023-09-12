@@ -20,15 +20,15 @@ public class EventBusConfiguration
     public string GcpPubSubProjectId { get; set; }
     public string GcpPubSubTopicName { get; set; }
 
-    public uint NumberOfRetries { get; set; } = 5;
+    public int NumberOfRetries { get; set; } = 5;
 
     /// <summary>
     /// in milliseconds.
     /// </summary>
-    public uint MinimumBackoff { get; set; } = 500;
+    public int MinimumBackoff { get; set; } = 500;
 
     /// <summary>
     /// in seconds.
     /// </summary>
-    public uint MaximumBackoff { get; set; } = 120;
+    public int MaximumBackoff { get; set; } = 120;
 }

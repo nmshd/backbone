@@ -29,7 +29,7 @@ public static class RabbitMqServiceCollectionExtensions
 
             if (!string.IsNullOrEmpty(options.Password)) factory.Password = options.Password;
 
-            return new DefaultRabbitMqPersistentConnection(factory, logger, options.RetryCount);
+            return new DefaultRabbitMqPersistentConnection(factory, logger, options.ConnectionRetryCount);
         });
 
         services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
@@ -42,7 +42,7 @@ public static class RabbitMqServiceCollectionExtensions
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope,
-                eventBusSubscriptionsManager, subscriptionClientName, options.RetryCount);
+                eventBusSubscriptionsManager, subscriptionClientName, options.ConnectionRetryCount, options.NumberOfRetries, options.MinimumBackoff, options.MaximumBackoff);
         });
     }
 }
@@ -53,6 +53,6 @@ public class RabbitMqOptions : BasicBusOptions
     public string HostName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public int RetryCount { get; set; } = 5;
+    public int ConnectionRetryCount { get; set; } = 5;
 #pragma warning restore CS8618
 }

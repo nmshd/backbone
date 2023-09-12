@@ -22,7 +22,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly ILogger<EventBusRabbitMq> _logger;
 
     private readonly IRabbitMqPersistentConnection _persistentConnection;
-    private readonly int _retryCount;
+    private readonly int _connectionRetryCount;
+    private readonly int _pollyRetryCount;
+    private readonly int _minimumBackoff;
+    private readonly int _maximumBackoff;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
     private IModel _consumerChannel;
@@ -30,7 +33,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, string? queueName = null,
-        int retryCount = 5)
+        int connectionRetryCount = 5, int pollyRetryCount = 5, int minimumBackoff = 500, int maximumBackoff = 120)
     {
         _persistentConnection =
             persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -39,7 +42,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _queueName = queueName;
         _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
-        _retryCount = retryCount;
+        _connectionRetryCount = connectionRetryCount;
+        _pollyRetryCount = pollyRetryCount;
+        _minimumBackoff = minimumBackoff;
+        _maximumBackoff = maximumBackoff;
     }
 
     public void Dispose()
@@ -54,7 +60,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
-            .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            .WaitAndRetry(_connectionRetryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, _) => _logger.LogWarning(ex.ToString()));
 
         var eventName = @event.GetType().Name;
@@ -197,7 +203,15 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var handler = scope.ResolveOptional(subscription.HandlerType) ?? throw new Exception(
                         $"The handler type {subscription.HandlerType.FullName} is not registered in the dependency container.");
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-                await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+
+                var policy = Policy.Handle<Exception>()
+                .WaitAndRetry(
+                    _pollyRetryCount,
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (ex, _) => _logger.LogWarning(ex.ToString()))
+                .Wrap(Policy.Timeout(_maximumBackoff));
+
+                await policy.Execute(async () => await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
         }
         else

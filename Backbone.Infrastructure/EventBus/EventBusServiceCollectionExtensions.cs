@@ -39,7 +39,7 @@ public static class EventBusServiceCollectionExtensions
                     options.HostName = configuration.ConnectionInfo;
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
-                    options.RetryCount = configuration.ConnectionRetryCount;
+                    options.ConnectionRetryCount = configuration.ConnectionRetryCount;
                 });
                 break;
             case "":
