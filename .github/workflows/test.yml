@@ -39,7 +39,7 @@ jobs:
         run: ./.ci/test.ts
 
   integration-test-sqlserver:
-    name: Run Integration Tests (on MS SQL)
+    name: Run Integration Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -81,7 +81,7 @@ jobs:
             docker-log.txt
 
   cns-transport-test-sqlserver:
-    name: Run cns-transport Tests (on MS SQL)
+    name: Run cns-transport Tests (on SQL Server
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
