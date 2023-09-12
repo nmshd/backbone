@@ -30,10 +30,9 @@ public static class AzureServiceBusServiceCollectionExtensions
     }
 }
 
-public class ServiceBusOptions
+public class ServiceBusOptions : BasicBusOptions
 {
 #pragma warning disable CS8618
     public string ConnectionString { get; set; }
-    public string SubscriptionClientName { get; set; }
 #pragma warning restore CS8618
 }

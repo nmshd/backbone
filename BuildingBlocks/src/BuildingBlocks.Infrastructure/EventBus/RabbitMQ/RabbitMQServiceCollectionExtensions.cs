@@ -47,11 +47,10 @@ public static class RabbitMqServiceCollectionExtensions
     }
 }
 
-public class RabbitMqOptions
+public class RabbitMqOptions : BasicBusOptions
 {
 #pragma warning disable CS8618
     public string HostName { get; set; }
-    public string SubscriptionClientName { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     public int RetryCount { get; set; } = 5;

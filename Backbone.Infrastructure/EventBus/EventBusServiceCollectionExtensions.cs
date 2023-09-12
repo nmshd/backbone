@@ -1,4 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+﻿using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,26 +19,26 @@ public static class EventBusServiceCollectionExtensions
             case AZURE:
                 services.AddAzureServiceBus(options =>
                 {
+                    LoadBasicBusOptions(configuration, options);
                     options.ConnectionString = configuration.ConnectionInfo;
-                    options.SubscriptionClientName = configuration.SubscriptionClientName;
                 });
                 break;
             case GOOGLE_CLOUD:
                 services.AddGoogleCloudPubSub(options =>
                 {
+                    LoadBasicBusOptions(configuration, options); 
                     options.ProjectId = configuration.GcpPubSubProjectId;
                     options.TopicName = configuration.GcpPubSubTopicName;
-                    options.SubscriptionClientName = configuration.SubscriptionClientName;
                     options.ConnectionInfo = configuration.ConnectionInfo;
                 });
                 break;
             case RABBIT_MQ:
                 services.AddRabbitMq(options =>
                 {
+                    LoadBasicBusOptions(configuration, options);
                     options.HostName = configuration.ConnectionInfo;
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
-                    options.SubscriptionClientName = configuration.SubscriptionClientName;
                     options.RetryCount = configuration.ConnectionRetryCount;
                 });
                 break;
@@ -47,5 +48,13 @@ public static class EventBusServiceCollectionExtensions
                 throw new NotSupportedException(
                     $"{configuration.Vendor} is not a currently supported event bus vendor.");
         }
+    }
+
+    private static void LoadBasicBusOptions<T>(EventBusConfiguration configuration, T options) where T : BasicBusOptions
+    {
+        options.SubscriptionClientName = configuration.SubscriptionClientName;
+        options.NumberOfRetries = configuration.NumberOfRetries;
+        options.MinimumBackoff = configuration.MinimumBackoff;
+        options.MaximumBackoff = configuration.MaximumBackoff;
     }
 }
