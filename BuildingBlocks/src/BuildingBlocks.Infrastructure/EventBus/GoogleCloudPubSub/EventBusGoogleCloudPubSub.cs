@@ -7,6 +7,7 @@ using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
@@ -25,16 +26,22 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
+    private readonly int _pollyRetryCount;
+    private readonly int _minimumBackoff;
+    private readonly int _maximumBackoff;
 
     public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac)
+        ILifetimeScope autofac, int pollyRetryCount, int minimumBackoff, int maximumBackoff)
     {
         _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
         _connection.SubscriberClient.StartAsync(OnIncomingEvent);
+        _pollyRetryCount = pollyRetryCount;
+        _minimumBackoff = minimumBackoff;
+        _maximumBackoff = maximumBackoff;
     }
 
     public void Dispose()
@@ -128,7 +135,14 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
             var handleMethod = handler.GetType().GetMethod("Handle");
 
-            await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+            var policy = Policy.Handle<Exception>()
+            .WaitAndRetryAsync(
+                _pollyRetryCount,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
+                (ex, _) => _logger.LogWarning(ex.ToString()))
+            .WrapAsync(Policy.TimeoutAsync(_maximumBackoff));
+
+            await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
     }
 }

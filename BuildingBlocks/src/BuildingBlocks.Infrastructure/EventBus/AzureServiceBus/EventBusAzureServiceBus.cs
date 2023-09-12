@@ -7,6 +7,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -18,14 +19,18 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     private readonly ILifetimeScope _autofac;
     private readonly ILogger<EventBusAzureServiceBus> _logger;
     private readonly ServiceBusProcessor _processor;
+    private readonly int _pollyRetryCount;
     private readonly ServiceBusSender _sender;
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
     private readonly string _subscriptionName;
+    private readonly int _minimumBackoff;
+    private readonly int _maximumBackoff;
 
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
         ILifetimeScope autofac,
+        int pollyRetryCount, int minimumBackoff, int maximumBackoff,
         string subscriptionClientName)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -37,6 +42,10 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
         _processor =
             _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
+
+        _pollyRetryCount = pollyRetryCount;
+        _minimumBackoff = minimumBackoff;
+        _maximumBackoff = maximumBackoff;
 
         RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
     }
@@ -154,7 +163,14 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
             try
             {
-                await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+                var policy = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(
+                    _pollyRetryCount,
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
+                    (ex, _) => _logger.LogWarning(ex.ToString()))
+                .WrapAsync(Policy.TimeoutAsync(_maximumBackoff));
+
+                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
             catch (Exception ex)
             {
