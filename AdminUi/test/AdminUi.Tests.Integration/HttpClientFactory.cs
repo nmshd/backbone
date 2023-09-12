@@ -13,7 +13,7 @@ public class HttpClientFactory
 
     public HttpClient CreateClient()
     {
-        var baseAddress = Environment.GetEnvironmentVariable("BASE_ADDRESS");
+        var baseAddress = Environment.GetEnvironmentVariable("ADMIN_API_BASE_ADDRESS");
         return baseAddress.IsNullOrEmpty() ? _factory.CreateClient() : new HttpClient() { BaseAddress = new Uri(baseAddress!) };
     }
 }
