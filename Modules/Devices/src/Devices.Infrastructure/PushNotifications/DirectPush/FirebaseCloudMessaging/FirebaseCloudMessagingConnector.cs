@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -12,11 +13,14 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.F
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
+    private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
     private readonly DirectPnsCommunicationOptions.FcmOptions _options;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options)
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
+        ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
+        _logger = logger;
         _options = options.Value;
     }
 
@@ -45,6 +49,9 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 .SetTag(notificationId)
                 .SetTokens(pnsRegistrations.Handles.ToImmutableList())
                 .Build();
+
+            _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handles '{handle}'.", notificationContent.EventName, recipient,
+                string.Join(",", pnsRegistrations.Handles));
 
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
             await firebaseMessaging.SendMulticastAsync(message);
