@@ -25,7 +25,7 @@ public class HandlerTests
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { new(metricKey, "Number Of Sent Messages") });
-        var stubIdentityRepository = new FindWithTierIdentitiesStubRepository(new List<Identity> { new ("some-identity-address", tierId) });
+        var stubIdentityRepository = new FindWithTierIdentitiesStubRepository(new List<Identity> { new("some-identity-address", tierId) });
 
         var handler = CreateHandler(stubTiersRepository, stubMetricsRepository, stubIdentityRepository);
 
