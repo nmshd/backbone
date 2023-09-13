@@ -68,7 +68,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Command_fails_when_identity_is_missing()
+    public async void Fails_when_identity_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
