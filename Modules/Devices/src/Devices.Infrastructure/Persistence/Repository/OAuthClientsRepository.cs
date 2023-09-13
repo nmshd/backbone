@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -28,7 +29,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
         _cachedApplications = applications;
 
-        return applications.Select(client => new OAuthClient(client.ClientId!, client.DisplayName!, client.DefaultTier)).ToList();
+        return applications.Select(client => new OAuthClient(client.ClientId!, client.DisplayName!, TierId.Create(client.DefaultTier).Value)).ToList();
     }
 
     public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken, bool track = false)
@@ -45,7 +46,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             _cachedApplications.Add(application);
         }
 
-        return new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier);
+        return new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value);
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)

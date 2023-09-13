@@ -12,7 +12,7 @@ public class HandlerTests
     public async Task Change_Default_Tier()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, string.Empty);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate());
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 

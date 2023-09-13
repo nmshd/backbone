@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        client.DefaultTier = request.DefaultTier;
+        client.ChangeDefaultTier(tierIdResult.Value);
 
         await _oAuthClientsRepository.Update(client, cancellationToken);
 

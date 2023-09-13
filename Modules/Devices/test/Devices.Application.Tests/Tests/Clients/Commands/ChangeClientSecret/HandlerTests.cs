@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using FakeItEasy;
 using Xunit;
@@ -11,7 +12,7 @@ public class HandlerTests
     public async Task Change_client_secret()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, string.Empty);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate());
 
         var newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);
