@@ -96,7 +96,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Command_fails_when_tier_is_missing()
+    public async void Fails_when_tier_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
