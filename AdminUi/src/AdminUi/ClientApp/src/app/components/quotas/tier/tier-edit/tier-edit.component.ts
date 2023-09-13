@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
-import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { CreateTierResponse, Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { SelectionModel } from "@angular/cdk/collections";
@@ -31,7 +31,14 @@ export class TierEditComponent {
     tier: Tier;
     loading: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, private dialog: MatDialog, private tierService: TierService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private tierService: TierService,
+        private quotasService: QuotasService
+    ) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";
@@ -47,7 +54,8 @@ export class TierEditComponent {
         this.tier = {
             id: "",
             name: "",
-            quotas: []
+            quotas: [],
+            numberOfIdentities: 0
         } as Tier;
     }
 
@@ -98,10 +106,14 @@ export class TierEditComponent {
     createTier() {
         this.loading = true;
         this.tierService.createTier(this.tier).subscribe({
-            next: (data: HttpResponseEnvelope<Tier>) => {
+            next: (data: HttpResponseEnvelope<CreateTierResponse>) => {
                 if (data && data.result) {
-                    this.tier = data.result;
-                    this.tier.quotas = [];
+                    this.tier = {
+                        id: data.result.id,
+                        name: data.result.name,
+                        quotas: [],
+                        numberOfIdentities: 0
+                    } as Tier;
                 }
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
                     duration: 4000,

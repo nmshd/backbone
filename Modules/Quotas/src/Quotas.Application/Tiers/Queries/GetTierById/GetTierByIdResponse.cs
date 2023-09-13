@@ -5,5 +5,5 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 public class GetTierByIdResponse : TierDetailsDTO
 {
-    public GetTierByIdResponse(Tier tier, IEnumerable<Metric> metrics) : base(tier, metrics) { }
+    public GetTierByIdResponse(Tier tier, IEnumerable<Metric> metrics, int identitiesCount) : base(tier, metrics, identitiesCount) { }
 }
