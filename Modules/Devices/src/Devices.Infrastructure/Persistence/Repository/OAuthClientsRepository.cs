@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -55,7 +54,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return client != null;
     }
 
-    public async Task Add(string clientId, string displayName, string clientSecret, TierId tierId, CancellationToken cancellationToken)
+    public async Task Add(string clientId, string displayName, string newSecret, TierId tierId, CancellationToken cancellationToken)
     {
         var application = new CustomOpenIddictEntityFrameworkCoreApplication()
         {
@@ -65,7 +64,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             Permissions = GetPermissions()
         };
 
-        await _applicationManager.CreateAsync(application, clientSecret, cancellationToken);
+        await _applicationManager.CreateAsync(application, newSecret, cancellationToken);
     }
 
     private static string GetPermissions()
