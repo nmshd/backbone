@@ -12,18 +12,14 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.Sql("""
                 CREATE OR REPLACE VIEW "TierOverviews" AS
-                    SELECT 
-        	            TIERS."Id" AS "Id",
-        	            TIERS."Name" AS "Name",
-        	            IDENTITIES."NumberOfIdentities"
+                    SELECT
+                        TIERS."Id" AS "Id",
+                        TIERS."Name" AS "Name",
+                        COUNT (IDENTITIES."TierId") AS "NumberOfIdentities"
                     FROM "Devices"."Tiers" TIERS
-                    LEFT JOIN (
-        	            SELECT 
-        		            "TierId",
-        		            COUNT(*) AS "NumberOfIdentities"
-        	            FROM "Devices"."Identities"
-        	            GROUP BY "TierId"
-                    ) as IDENTITIES ON IDENTITIES."TierId" = TIERS."Id"
+                    LEFT JOIN "Devices"."Identities" IDENTITIES
+                    ON IDENTITIES."TierId" = TIERS."Id"
+                    GROUP BY TIERS."Id", TIERS."Name"
         """);
         }
 

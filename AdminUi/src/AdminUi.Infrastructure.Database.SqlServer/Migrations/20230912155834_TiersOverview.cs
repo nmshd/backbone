@@ -12,18 +12,14 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.Sql("""
                 CREATE OR ALTER VIEW TierOverviews AS
-                    SELECT 
-                        TIERS.Id,
-                        TIERS.Name,
-                        IDENTITIES.NumberOfIdentities
+                    SELECT
+        	            TIERS.Id,
+        	            TIERS.Name,
+        	            COUNT (IDENTITIES.TierId) AS NumberOfIdentities
                     FROM Devices.Tiers TIERS
-                    LEFT JOIN (
-                        SELECT
-        		            TierId,
-        		            COUNT(*) NumberOfIdentities
-                        FROM Devices.Identities
-                        GROUP BY TierId
-                    ) as IDENTITIES ON IDENTITIES.TierId = TIERS.Id
+                    LEFT JOIN Devices.Identities IDENTITIES
+                    ON IDENTITIES.TierId = TIERS.Id
+                    GROUP BY TIERS.Id, TIERS.Name
         """);
         }
 
