@@ -22,14 +22,14 @@ public class TierDetailsStepDefinitions : BaseStepDefinitions
     [Given(@"a Tier t")]
     public async Task GivenATier()
     {
-        var createTierQuotaRequest = new CreateTierRequest
+        var createTierRequest = new CreateTierRequest
         {
             Name = "TestTier_" + TestDataGenerator.GenerateString(12)
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createTierQuotaRequest);
+        requestConfiguration.SetContent(createTierRequest);
 
         var response = await _tiersApi.CreateTier(requestConfiguration);
 
