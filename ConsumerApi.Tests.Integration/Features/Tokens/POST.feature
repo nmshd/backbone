@@ -6,16 +6,18 @@ User creates a Token
 Scenario: Creating a Token as an authenticated user
 	Given the user is authenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key     | Value                                         |
-		| Content | {"content": "QQ==","expiresAt": "<tomorrow>"} |
+		| Key			| Value                                         |
+		| ContentType	| application/json								|
+		| Content		| {"content": "QQ==","expiresAt": "<tomorrow>"} |
 	Then the response status code is 201 (Created)
 	And the response contains a CreateTokenResponse
 
 Scenario: Creating a Token as an anonymous user
 	Given the user is unauthenticated
 	When a POST request is sent to the Tokens endpoint with
-		| Key     | Value                                         |
-		| Content | {"content": "QQ==","expiresAt": "<tomorrow>"} |
+		| Key			| Value											|
+		| ContentType	| application/json								|
+		| Content		| {"content": "QQ==","expiresAt": "<tomorrow>"} |
 	Then the response status code is 401 (Unauthorized)
 
 @ignore("skipping_due_to_required_backbone_changes")
