@@ -50,6 +50,7 @@ builder.Host
         .ReadFrom.Configuration(context.Configuration)
         .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
         .Enrich.WithDemystifiedStackTraces()
+        .Enrich.FromLogContext()
     )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -154,6 +155,8 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
+
+    app.UseMiddleware<UserDataLoggingMiddleware>();
 
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
