@@ -75,7 +75,7 @@ export class IdentityEditComponent {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
                 this.tiers = tiers.result;
-                this.tier = this.tiers.filter((t) => t.id === this.identity.tierId)[0];
+                this.tier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.originalTier = this.tier;
             }
         });
