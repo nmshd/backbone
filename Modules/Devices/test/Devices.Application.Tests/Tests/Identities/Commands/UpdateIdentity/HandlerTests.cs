@@ -1,4 +1,4 @@
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -37,6 +37,7 @@ public class HandlerTests
 
         // Assert
         result.TierId.Should().Be(newTier.Id);
+        A.CallTo(() => identitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
