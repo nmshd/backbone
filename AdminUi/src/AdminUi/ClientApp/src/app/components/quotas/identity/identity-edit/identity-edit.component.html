@@ -28,6 +28,14 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ identity.createdAt | date }}</span>
                     </mat-list-item>
+                    <mat-list-item class="auto-height">
+                        <span matListItemTitle>Tier</span>
+                        <span matListItemLine
+                            ><mat-chip-listbox aria-label="Tier selection">
+                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == tier" (click)="tier = t" [color]="t.name == 'Basic' ? 'accent' : ''">{{ t.name }} </mat-chip-option>
+                            </mat-chip-listbox>
+                        </span>
+                    </mat-list-item>
                 </mat-list>
             </div>
         </mat-card-content>
@@ -165,18 +173,6 @@
                         <td class="mat-cell no-data" [attr.colspan]="devicesTableDisplayedColumns.length">No devices found.</td>
                     </tr>
                 </table>
-            </ng-template>
-        </mat-expansion-panel>
-        <mat-expansion-panel class="details-expansion-panel">
-            <mat-expansion-panel-header class="details-expansion-panel-header">
-                <mat-panel-title class="details-panel-header-title"> Tier </mat-panel-title>
-                <mat-panel-description class="details-panel-header-desc"> View and change this Identity's Tier. </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ng-template matExpansionPanelContent>
-                <br />
-                <mat-chip-listbox aria-label="Fish selection">
-                    <mat-chip-option *ngFor="let t of tiers" [selected]="t == tier" (click)="tier = t" [color]="t.name == 'Basic' ? 'accent' : ''">{{ t.name }} </mat-chip-option>
-                </mat-chip-listbox>
             </ng-template>
         </mat-expansion-panel>
     </mat-accordion>
