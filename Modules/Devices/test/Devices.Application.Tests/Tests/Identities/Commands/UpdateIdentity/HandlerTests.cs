@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -27,8 +27,7 @@ public class HandlerTests
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
-        A.CallTo(() => tiersRepository.FindById(oldTier.Id, A<CancellationToken>._)).Returns(oldTier);
-        A.CallTo(() => tiersRepository.FindById(newTier.Id, A<CancellationToken>._)).Returns(newTier);
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
         var request = MakeRequest(newTier, identity);
@@ -54,8 +53,7 @@ public class HandlerTests
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
-        A.CallTo(() => tiersRepository.FindById(oldTier.Id, A<CancellationToken>._)).Returns(oldTier);
-        A.CallTo(() => tiersRepository.FindById(newTier.Id, A<CancellationToken>._)).Returns(newTier);
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
         var request = MakeRequest(newTier, identity);
@@ -80,8 +78,7 @@ public class HandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
-        A.CallTo(() => tiersRepository.FindById(oldTier.Id, A<CancellationToken>._)).Returns(oldTier);
-        A.CallTo(() => tiersRepository.FindById(newTier.Id, A<CancellationToken>._)).Returns(newTier);
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
         var request = MakeRequest(newTier, identity);

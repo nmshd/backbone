@@ -3,12 +3,9 @@ using AdminUi.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
-using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
@@ -16,7 +13,6 @@ using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +22,7 @@ using GetIdentityQueryDevices = Backbone.Modules.Devices.Application.Identities.
 using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityResponseDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
 using GetIdentityResponseQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
+using Identity = Backbone.Modules.Devices.Domain.Entities.Identity;
 
 namespace AdminUi.Controllers;
 
@@ -103,10 +100,10 @@ public class IdentitiesController : ApiControllerBase
     [HttpPut("{identityAddress}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutIdentityTierByAddress([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PutIdentityByAddress([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
-        await _mediator.Send<Backbone.Modules.Devices.Domain.Entities.Identity>(command, cancellationToken);
+        await _mediator.Send<Identity>(command, cancellationToken);
         return NoContent();
     }
 }

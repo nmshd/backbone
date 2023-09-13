@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using System.Linq;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -31,8 +32,10 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
 
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        var oldTier = await _tiersRepository.FindById(identity.TierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
-        var newTier = await _tiersRepository.FindById(newTierId.Value, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierId.Value }, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+
+        var oldTier = tiers.Single(t => t.Id == identity.TierId);
+        var newTier = tiers.Single(t => t.Id == newTierId.Value);
 
         identity.TierId = newTier.Id;
         await _identitiesRepository.Update(identity, cancellationToken);
