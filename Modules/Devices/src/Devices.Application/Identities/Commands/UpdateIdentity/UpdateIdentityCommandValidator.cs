@@ -7,5 +7,6 @@ public class UpdateIdentityCommandValidator : AbstractValidator<UpdateIdentityCo
     public UpdateIdentityCommandValidator()
     {
         RuleFor(c => c.Address).DetailedNotEmpty();
+        RuleFor(c => c.TierId).DetailedNotEmpty();
     }
 }
