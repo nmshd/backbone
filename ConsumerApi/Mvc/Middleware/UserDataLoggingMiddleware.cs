@@ -23,8 +23,8 @@ public class UserDataLoggingMiddleware
 
         ILogEventEnricher[] enrichers =
         {
-            new PropertyEnricher("deviceId", deviceId),
-            new PropertyEnricher("identityAddress", identityAddress)
+            new PropertyEnricher("deviceId", deviceId ?? ""),
+            new PropertyEnricher("identityAddress", identityAddress ?? "")
         };
 
         using (LogContext.Push(enrichers))
