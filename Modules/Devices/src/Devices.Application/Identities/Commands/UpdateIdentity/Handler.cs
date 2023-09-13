@@ -3,9 +3,9 @@ using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using MediatR;
+using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
