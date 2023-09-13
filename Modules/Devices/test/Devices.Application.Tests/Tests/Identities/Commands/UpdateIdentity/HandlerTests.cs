@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.U
 public class HandlerTests
 {
     [Fact]
-    public async void Command_runs_successfully()
+    public async void Command_runs_successfully_updates_identity()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -38,6 +38,32 @@ public class HandlerTests
 
         // Assert
         result.TierId.Should().Be(newTier.Id);
+    }
+
+    [Fact]
+    public async void Command_runs_successfully_publishes_IntegrationEvent()
+    {
+        // Arrange
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        var tiersRepository = A.Fake<ITiersRepository>();
+        var eventBus = A.Fake<IEventBus>();
+
+        var oldTier = new Tier(TierName.Create("Old tier").Value);
+        var newTier = new Tier(TierName.Create("New Tier").Value);
+
+        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
+
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => tiersRepository.FindById(oldTier.Id, A<CancellationToken>._)).Returns(oldTier);
+        A.CallTo(() => tiersRepository.FindById(newTier.Id, A<CancellationToken>._)).Returns(newTier);
+
+        var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
+        var request = MakeRequest(newTier, identity);
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
         A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustHaveHappened();
     }
 
