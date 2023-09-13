@@ -13,7 +13,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.IntegrationEvents.Tier
 public class TierOfIdentityChangedIntegrationEventHandlerTests
 {
     [Fact]
-    public async Task Handler_updates_identity_with_new_tier()
+    public async Task Updates_identity_with_new_tier()
     {
         // Arrange
         var tiersRepository = A.Fake<ITiersRepository>();
