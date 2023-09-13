@@ -33,8 +33,8 @@ export class IdentityEditComponent {
     identity: Identity;
     loading: boolean;
     tiers: Tier[];
+    updatedTier?: Tier;
     tier?: Tier;
-    originalTier?: Tier;
 
     constructor(
         private route: ActivatedRoute,
@@ -68,20 +68,20 @@ export class IdentityEditComponent {
             }
         });
 
-        this.getIdentity();
+        this.loadIdentityAndTier();
     }
 
-    getAdmissibleTiers() {
+    loadAdmissibleTiers() {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
                 this.tiers = tiers.result;
-                this.tier = this.tiers.find((t) => t.id === this.identity.tierId);
-                this.originalTier = this.tier;
+                this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
+                this.tier = this.updatedTier;
             }
         });
     }
 
-    getIdentity() {
+    loadIdentityAndTier() {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.identityService.getIdentityByAddress(this.identityAddress!).subscribe({
@@ -90,7 +90,7 @@ export class IdentityEditComponent {
                     this.identity = data.result;
                     this.groupQuotasByMetricForTable();
                     this.devicesTableData = this.identity.devices;
-                    this.getAdmissibleTiers();
+                    this.loadAdmissibleTiers();
                 }
             },
             complete: () => (this.loading = false),
@@ -105,8 +105,8 @@ export class IdentityEditComponent {
         });
     }
 
-    pendingChanges(): boolean {
-        return this.originalTier != this.tier;
+    hasPendingChanges(): boolean {
+        return this.tier != this.updatedTier;
     }
 
     groupQuotasByMetricForTable() {
@@ -127,16 +127,16 @@ export class IdentityEditComponent {
     }
 
     saveIdentity(): void {
-        if (this.tier && this.tier.id) {
+        if (this.updatedTier?.id) {
             this.loading = true;
-            this.identityService.updateIdentityTier(this.identity, this.tier.id).subscribe({
+            this.identityService.updateIdentity(this.identity, { tierId: this.updatedTier.id }).subscribe({
                 next: () => {
                     this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"
                     });
                     setTimeout(() => {
-                        this.getIdentity();
+                        this.loadIdentityAndTier();
                     }, 2000);
                 },
                 error: (err: any) => {
@@ -198,7 +198,7 @@ export class IdentityEditComponent {
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
             next: (data: HttpResponseEnvelope<IdentityQuota>) => {
                 if (data && data.result) {
-                    this.getIdentity();
+                    this.loadIdentityAndTier();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                         duration: 4000,
                         verticalPosition: "top",
@@ -247,7 +247,7 @@ export class IdentityEditComponent {
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
                 let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
-                this.getIdentity();
+                this.loadIdentityAndTier();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",

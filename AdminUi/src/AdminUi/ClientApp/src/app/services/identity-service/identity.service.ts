@@ -28,8 +28,8 @@ export class IdentityService {
         return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
     }
 
-    updateIdentityTier(identity: Identity, tierId: string) {
-        return this.http.put<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${identity.address}`, { tierId: tierId });
+    updateIdentity(identity: Identity, params: UpdateTierDTO) {
+        return this.http.put<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${identity.address}`, params);
     }
 }
 
@@ -66,4 +66,8 @@ export interface IdentityOverview {
     tierId: string;
     identityVersion: string;
     numberOfDevices: number;
+}
+
+export interface UpdateTierDTO {
+    tierId: string;
 }
