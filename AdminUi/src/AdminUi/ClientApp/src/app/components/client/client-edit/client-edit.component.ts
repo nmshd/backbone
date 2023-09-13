@@ -121,18 +121,17 @@ export class ClientEditComponent {
 
     createClient(): void {
         this.loading = true;
-        if (!this.client.defaultTier) {
-            let basicTier = this.tierList.find((tier) => tier.name == "Basic");
-            if (basicTier) {
-                this.client.defaultTier = basicTier.id;
-            } else {
-                this.snackBar.open("Basic Tier not found", "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
 
-                return;
-            }
+        let basicTier = this.tierList.find((tier) => tier.name == "Basic");
+        if (basicTier) {
+            this.client.defaultTier = basicTier.id;
+        } else {
+            this.snackBar.open("Basic Tier not found", "Dismiss", {
+                verticalPosition: "top",
+                horizontalPosition: "center"
+            });
+
+            return;
         }
 
         this.clientService.createClient(this.client).subscribe({
