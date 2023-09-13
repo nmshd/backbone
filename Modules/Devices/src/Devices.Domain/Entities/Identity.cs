@@ -33,4 +33,9 @@ public class Identity
     {
         return Devices.Count < 1;
     }
+
+    public void SetTier(TierId id)
+    {
+        TierId = id;
+    }
 }

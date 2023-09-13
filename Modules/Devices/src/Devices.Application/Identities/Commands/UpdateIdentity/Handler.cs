@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -37,7 +37,8 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
         var oldTier = tiers.Single(t => t.Id == identity.TierId);
         var newTier = tiers.Single(t => t.Id == newTierId.Value);
 
-        identity.TierId = newTier.Id;
+        identity.SetTier(newTier.Id);
+
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
