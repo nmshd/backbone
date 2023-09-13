@@ -5,7 +5,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 public class TierOfIdentityChangedIntegrationEvent : IntegrationEvent
 {
-
     public TierOfIdentityChangedIntegrationEvent(Identity identity, Tier oldTier, Tier newTier) : base($"{identity.Address}/TierOfIdentityChanged")
     {
         OldTier = oldTier.Id;
