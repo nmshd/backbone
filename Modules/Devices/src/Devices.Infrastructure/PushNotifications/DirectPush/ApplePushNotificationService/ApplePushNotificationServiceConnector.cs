@@ -46,6 +46,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
                 .SetNotificationId(notificationId)
                 .Build();
 
+            _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
+
             return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
         }).ToList();
 
