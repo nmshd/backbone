@@ -41,7 +41,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Command_runs_successfully_publishes_IntegrationEvent()
+    public async void Publishes_TierOfIdentityChangedIntegrationEvent()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
