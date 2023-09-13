@@ -32,10 +32,10 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
 
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierId.Value }, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierId.Value }, cancellationToken);
 
-        var oldTier = tiers.Single(t => t.Id == identity.TierId);
-        var newTier = tiers.Single(t => t.Id == newTierId.Value);
+        var oldTier = tiers.SingleOrDefault(t => t.Id == identity.TierId) ?? throw new NotFoundException(nameof(Tier));
+        var newTier = tiers.SingleOrDefault(t => t.Id == newTierId.Value) ?? throw new NotFoundException(nameof(Tier));
 
         identity.SetTier(newTier.Id);
 

@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -80,6 +81,7 @@ public class HandlerTests
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
+        A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._)).Returns((Identity)null);
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
         var request = MakeRequest(newTier, identity);
@@ -107,6 +109,7 @@ public class HandlerTests
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
         var request = MakeRequest(newTier, identity);
