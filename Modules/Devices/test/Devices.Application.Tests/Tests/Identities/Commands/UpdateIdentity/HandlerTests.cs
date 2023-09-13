@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.U
 public class HandlerTests
 {
     [Fact]
-    public async void Command_runs_successfully_updates_identity()
+    public async void Updates_the_identity_in_the_database()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
