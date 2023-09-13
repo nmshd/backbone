@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  ### infrastructure ###
+
+  database:
+    container_name: bkb-postgres
+    hostname: postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Passw0rd
+      - POSTGRES_DB=enmeshed
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ### seeds ###
+
+  seed-database:
+    image: postgres
+    volumes:
+      - ../setup-db:/app/setup-db
+    environment:
+      - PGPASSWORD=Passw0rd
+    command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
+    depends_on:
+      database:
+        condition: service_healthy
+
+  seed-client:
+    command: >
+      ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
+
+configs:
+  Config:
+    file: appsettings.override.postgres.json
+
+networks:
+  default:
+    name: backbone

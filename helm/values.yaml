@@ -221,59 +221,62 @@ global:
   configuration:
     authentication:
       jwtLifetimeInSeconds: 300
-      # JwtSigningCertificateSource - possible values: "config"/"file"
+      # jwtSigningCertificateSource - possible values: "config"/"file"
       jwtSigningCertificateSource: "config"
-      # JwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
+      # jwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
       jwtSigningCertificate: ""
     cors:
-      # AllowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
+      # allowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
       allowedOrigins: ""
-      # AllowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
+      # allowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
       exposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
     swaggerUi:
-      # TokenUrl - the URL from which the Swagger UI can obtain a JWT; it usually follows the pattern "<backbone-base-url>/connect/token"
+      # enabled - whether the Swagger UI should be enabled
+      enabled: false
+      # tokenUrl - the URL from which the Swagger UI can obtain a JWT; it usually follows the pattern "<backbone-base-url>/connect/token"
       tokenUrl: ""
     infrastructure:
       eventBus:
-        # Vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
+        # vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
         vendor: ""
-        # ConnectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
+        # connectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
         connectionInfo: ""
-        subscriptionClientName: "Backbone"
-        # RabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
+        # subscriptionClientName - the name of the subscription that should be used to receive events
+        subscriptionClientName: ""
+        # rabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQUsername: ""
-        # RabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
+        # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQPassword: ""
-        # ConnectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the Consumer API should retry to connect to the RabbitMQ service
+        # connectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the Consumer API should retry to connect to the RabbitMQ service
         connectionRetryCount: 5
-        # GcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
+        # gcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
         gcpPubSubProjectId: ""
-        # GcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
+        # gcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
         gcpPubSubTopicName: ""
     modules:
       challenges:
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
       devices:
         application:
-          # AddressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
+          # addressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
           addressPrefix: id1
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           pushNotifications:
-            # Provider - possible values: "AzureNotificationHub"/"Dummy"/"Direct"
+            # provider - possible values: "AzureNotificationHub"/"Dummy"/"Direct"
             provider: ""
             # azureNotificationHub:
             #   hubName: ""
@@ -310,112 +313,112 @@ global:
             #         serverType: ''
       files:
         application:
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            # cloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via environment variable
+            # connectionInfo - should be set via environment variable
             connectionInfo: ""
-            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
       messages:
         application:
-          # MaxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
+          # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
           maxNumberOfUnreceivedMessagesFromOneSender: 20
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            # cloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via environment variable
+            # connectionInfo - should be set via environment variable
             connectionInfo: ""
-            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
       quotas:
         application:
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
       relationships:
         application:
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            # cloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via environment variable
+            # connectionInfo - should be set via environment variable
             connectionInfo: ""
-            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
       synchronization:
         application:
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            # cloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via environment variable
+            # connectionInfo - should be set via environment variable
             connectionInfo: ""
-            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
       tokens:
         application:
-          # Pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
             maxPageSize: 200
         infrastructure:
           sqlDatabase:
-            # Provider - possible values: "Postgres"/"SqlServer"
+            # provider - possible values: "Postgres"/"SqlServer"
             provider: ""
-            # ConnectionString - should be set via environment variable
+            # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # CloudProvider - possible values: "GoogleCloud"/"Azure"
+            # cloudProvider - possible values: "GoogleCloud"/"Azure"
             cloudProvider: ""
-            # ConnectionInfo - should be set via environment variable
+            # connectionInfo - should be set via environment variable
             connectionInfo: ""
-            # ContainerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
+            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
     serilog:
       using:
@@ -431,4 +434,4 @@ global:
       writeTo:
         - name: Console
           args:
-            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss}|{Level} => CorrelationID:{CorrelationID} => RequestId:{RequestId} => RequestPath:{RequestPath}{NewLine}    {SourceContext}{NewLine}    {Message}{NewLine}{Exception}"
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff}|{Level} - CorrelationId:{CorrelationId} - RequestId:{RequestId} - RequestPath:{RequestPath} - Address:{identityAddress} - DeviceId:{deviceId} {NewLine}    {SourceContext}{NewLine}    {Message}{NewLine}{Exception}"
