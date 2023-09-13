@@ -1,10 +1,9 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
 using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
@@ -82,7 +81,11 @@ public class TierOfIdentityChangedIntegrationEventHandlerTests
         await handler.Handle(tierDeletedIntegrationEvent);
 
         // Assert
-        A.CallTo(metricStatusesService).Where(x => x.Method.Name == nameof(metricStatusesService.RecalculateMetricStatuses)).WithAnyArguments().MustHaveHappened();
+        A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
+            A<List<string>>.That.Contains(identity.Address),
+            A<List<MetricKey>>.That.IsSameSequenceAs(identity.MetricStatuses.Select(x => x.MetricKey)),
+            A<CancellationToken>._
+        )).MustHaveHappened();
     }
 
     private TierOfIdentityChangedIntegrationEventHandler CreateHandler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IMetricStatusesService metricStatusesService)
