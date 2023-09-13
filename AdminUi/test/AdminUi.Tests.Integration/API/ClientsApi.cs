@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace AdminUi.Tests.Integration.API;
 public class ClientsApi : BaseApi
 {
-    public ClientsApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
+    public ClientsApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
     public async Task<HttpResponse<List<ClientDTO>>> GetAllClients(RequestConfiguration requestConfiguration)
     {

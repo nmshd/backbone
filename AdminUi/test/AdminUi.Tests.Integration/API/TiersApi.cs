@@ -6,7 +6,7 @@ namespace AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {
-    public TiersApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
+    public TiersApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
     public async Task<HttpResponse<List<TierOverviewDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {

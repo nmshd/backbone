@@ -6,7 +6,7 @@ namespace AdminUi.Tests.Integration.API;
 
 public class IdentitiesApi : BaseApi
 {
-    public IdentitiesApi(IOptions<HttpClientOptions> httpConfiguration) : base(httpConfiguration) { }
+    public IdentitiesApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
     public async Task<HttpResponse<IdentitySummaryDTO>> GetIdentityByAddress(RequestConfiguration requestConfiguration, string identityAddress)
     {
