@@ -23,26 +23,33 @@ public class BaseApi
         _httpClient = factory.CreateClient();
         _httpClient.DefaultRequestHeaders.Add("X-API-KEY", httpConfiguration.Value.ApiKey);
 
-        LoadAndAddXSRFHeaders();
+        LoadAndAddXsrfHeaders();
 
         ServicePointManager.ServerCertificateValidationCallback += (_, _, _, _) => true;
     }
 
-    private void LoadAndAddXSRFHeaders()
+    private void LoadAndAddXsrfHeaders()
     {
-        Task.Run(LoadXSRFTokensAsync).Wait();
+        Task.Run(LoadXsrfTokensAsync).Wait();
         _httpClient.DefaultRequestHeaders.Add(XSRF_TOKEN_HEADER_NAME, _xsrfToken);
         _httpClient.DefaultRequestHeaders.Add("Cookie", $"{XSRF_TOKEN_COOKIE_NAME}={_xsrfCookie}");
     }
 
-    private async Task LoadXSRFTokensAsync()
+    private async Task LoadXsrfTokensAsync()
     {
-        var token = await Get<string>("/xsrf", new RequestConfiguration { AcceptHeader = "text/plain" });
-        if (token is { RawContent: not null, Cookies.Count: > 0 })
+        var request = new HttpRequestMessage(HttpMethod.Get, ROUTE_PREFIX + "/xsrf");
+        request.Headers.Add("Accept", "text/plain");
+
+        var httpResponse = await _httpClient.SendAsync(request);
+
+        if (httpResponse.Headers.TryGetValues("Set-Cookie", out var cookies))
         {
-            var cookie = token.Cookies.Single(c => c.Name == XSRF_TOKEN_COOKIE_NAME);
-            _xsrfCookie = cookie.Value;
-            _xsrfToken = token.RawContent;
+            _xsrfToken = await httpResponse.Content.ReadAsStringAsync();
+            _xsrfCookie = cookies.Select(it =>
+            {
+                var rawCookieHeader = it.Split('=', 2);
+                return new Models.Cookie { Name = rawCookieHeader[0], Value = rawCookieHeader[1] };
+            }).First(c => c.Name == XSRF_TOKEN_COOKIE_NAME).Value;
         }
         else
         {
@@ -110,8 +117,7 @@ public class BaseApi
 
         var httpResponse = await _httpClient.SendAsync(request);
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
-        var responseData = requestConfiguration.AcceptHeader == "text/plain" ? new ResponseContent<T>() : JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
-        var hasCookies = httpResponse.Headers.TryGetValues("Set-Cookie", out var cookies);
+        var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
 
         var response = new HttpResponse<T>
         {
@@ -121,13 +127,6 @@ public class BaseApi
             ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
             RawContent = responseRawContent
         };
-
-        if (hasCookies)
-            response.Cookies = cookies?.Select(it =>
-            {
-                var test = it.Split('=', 2);
-                return new Models.Cookie { Name = test[0], Value = test[1] };
-            }).ToList().AsReadOnly();
 
         return response;
     }
