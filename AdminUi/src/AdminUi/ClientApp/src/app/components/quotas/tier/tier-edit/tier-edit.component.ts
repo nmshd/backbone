@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
-import { CreateTierResponse, Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { SelectionModel } from "@angular/cdk/collections";
@@ -106,7 +106,7 @@ export class TierEditComponent {
     createTier() {
         this.loading = true;
         this.tierService.createTier(this.tier).subscribe({
-            next: (data: HttpResponseEnvelope<CreateTierResponse>) => {
+            next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = {
                         id: data.result.id,

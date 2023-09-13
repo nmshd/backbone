@@ -28,7 +28,7 @@ export class TierService {
         return this.http.get<HttpResponseEnvelope<Tier>>(this.apiUrl + `/${id}`);
     }
 
-    createTier(tier: Tier): Observable<HttpResponseEnvelope<CreateTierResponse>> {
+    createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
         return this.http.post<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
 
@@ -52,9 +52,4 @@ export interface TierOverview {
     id: string;
     name: string;
     numberOfIdentities: number;
-}
-
-export interface CreateTierResponse {
-    id: string;
-    name: string;
 }
