@@ -128,14 +128,13 @@ export class IdentityEditComponent {
 
     saveIdentity(): void {
         if (this.tier && this.tier.id) {
-            this.identityService.updateIdentityTier(this.identity, this.tier).subscribe({
+            this.loading = true;
+            this.identityService.updateIdentityTier(this.identity, this.tier.id).subscribe({
                 next: () => {
                     this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"
                     });
-
-                    this.loading = true;
                     setTimeout(() => {
                         this.getIdentity();
                     }, 2000);
