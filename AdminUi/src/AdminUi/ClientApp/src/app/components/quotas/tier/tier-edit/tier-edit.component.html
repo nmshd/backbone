@@ -23,7 +23,7 @@
             </div>
         </mat-card-content>
     </mat-card>
-    <mat-accordion *ngIf="editMode" class="tier-accordion">
+    <mat-accordion *ngIf="editMode" class="tier-accordion" [multi]="true">
         <mat-expansion-panel class="quotas-expansion-panel" [expanded]="true">
             <mat-expansion-panel-header class="quotas-expansion-panel-header">
                 <mat-panel-title class="quotas-panel-header-title">
