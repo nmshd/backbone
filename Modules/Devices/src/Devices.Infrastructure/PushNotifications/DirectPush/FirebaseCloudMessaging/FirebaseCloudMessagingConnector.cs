@@ -58,12 +58,8 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 string.Join(",", pnsRegistrations.Handles));
 
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
-            var tasks = firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.Handles));
-            for (var i = 0; i < 100; i++)
-            {
-                firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.Handles));
-            }
-            return tasks;
+
+            return firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.Handles));
         });
 
         await Task.WhenAll(tasks);
@@ -77,22 +73,21 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     private async Task HandleResponse(BatchResponse batchResponse, IReadOnlyList<string> devices)
     {
+        var devicesToDelete = new List<string>();
         for (var index = 0; index < batchResponse.Responses.Count; index++)
         {
             var response = batchResponse.Responses[index];
             if (!response.IsSuccess)
             {
-                _logger.LogDebug("Push notification failed for {device}: {responseMessage}", devices[index], response.Exception.Message);
-                //if (response.Exception.MessagingErrorCode is MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered)
-                //{
-                //    await _registrationRepository.Delete(devices, CancellationToken.None);
-                //}
-            }
-            else
-            {
-                _logger.LogDebug("Push notification successful for device {device}", devices[index]);
+                _logger.LogError("Push notification failed for {device}: {responseMessage}", devices[index], response.Exception.Message);
+                if (response.Exception.MessagingErrorCode is MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered)
+                {
+                    devicesToDelete.Add(devices[index]);
+                }
             }
         }
+
+        await _registrationRepository.Delete(devicesToDelete, CancellationToken.None);
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)
