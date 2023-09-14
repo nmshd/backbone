@@ -51,7 +51,7 @@ public class TierOfIdentityChangedIntegrationEventHandlerTests
     }
 
     [Fact]
-    public async Task Handler_creates_MetricStatuses()
+    public async Task Creates_MetricStatuses()
     {
         // Arrange
         var tiersRepository = A.Fake<ITiersRepository>();
@@ -90,7 +90,7 @@ public class TierOfIdentityChangedIntegrationEventHandlerTests
 
 
     [Fact]
-    public async Task Handler_clears_old_MetricStatuses()
+    public async Task Clears_old_MetricStatuses()
     {
         // Arrange
         var tiersRepository = A.Fake<ITiersRepository>();
