@@ -58,23 +58,6 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToView("IdentityOverviews", (string)null);
                 });
-
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("NumberOfIdentities")
-                        .HasColumnType("integer");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("TierOverviews", (string)null);
-                });
 #pragma warning restore 612, 618
         }
     }
