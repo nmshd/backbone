@@ -132,13 +132,14 @@ public class Identity
 
     public async Task ChangeTierAsync(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
     {
-        _tierQuotas.RemoveRange(0, _tierQuotas.Count());
+        _tierQuotas.RemoveAll(_ => true);
+        _metricStatuses.RemoveAll(_ => true);
+
         TierId = newTier.Id;
         foreach (var tierQuotaDefinition in newTier.Quotas)
         {
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
-
         var metricKeys = newTier.Quotas.Select(q => q.MetricKey);
         await UpdateMetricStatuses(metricKeys, metricCalculatorFactory, cancellationToken);
     }
