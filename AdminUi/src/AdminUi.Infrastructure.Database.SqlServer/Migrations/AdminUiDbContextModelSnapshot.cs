@@ -58,6 +58,23 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToView("IdentityOverviews", (string)null);
                 });
+
+            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfIdentities")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("TierOverviews", (string)null);
+                });
 #pragma warning restore 612, 618
         }
     }
