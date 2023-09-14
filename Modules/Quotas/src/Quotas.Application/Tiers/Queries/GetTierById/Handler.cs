@@ -24,9 +24,8 @@ public class Handler : IRequestHandler<GetTierByIdQuery, TierDetailsDTO>
         var metricsKeys = tier.Quotas.Select(q => q.MetricKey).Distinct();
         var metrics = await _metricsRepository.FindAllWithKeys(metricsKeys, cancellationToken);
 
-        var identities = await _identityRepository.FindWithTier(new TierId(request.Id), cancellationToken);
-        var identitiesCount = identities.Count();
+        var identitiesWithTierCount = (await _identityRepository.FindWithTier(new TierId(request.Id), cancellationToken)).Count();
 
-        return new TierDetailsDTO(tier, metrics, identitiesCount);
+        return new TierDetailsDTO(tier, metrics, identitiesWithTierCount);
     }
 }
