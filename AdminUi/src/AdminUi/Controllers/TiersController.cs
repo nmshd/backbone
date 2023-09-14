@@ -49,7 +49,7 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpGet("{tierId}")]
-    [ProducesResponseType(typeof(GetTierByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TierDetailsDTO), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
     {

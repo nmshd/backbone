@@ -1,9 +1,10 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
-public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
+public class Handler : IRequestHandler<GetTierByIdQuery, TierDetailsDTO>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly IMetricsRepository _metricsRepository;
@@ -16,7 +17,7 @@ public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
         _identityRepository = identityRepository;
     }
 
-    public async Task<GetTierByIdResponse> Handle(GetTierByIdQuery request, CancellationToken cancellationToken)
+    public async Task<TierDetailsDTO> Handle(GetTierByIdQuery request, CancellationToken cancellationToken)
     {
         var tier = await _tiersRepository.Find(request.Id, cancellationToken);
 
@@ -26,6 +27,6 @@ public class Handler : IRequestHandler<GetTierByIdQuery, GetTierByIdResponse>
         var identities = await _identityRepository.FindWithTier(new TierId(request.Id), cancellationToken);
         var identitiesCount = identities.Count();
 
-        return new GetTierByIdResponse(tier, metrics, identitiesCount);
+        return new TierDetailsDTO(tier, metrics, identitiesCount);
     }
 }
