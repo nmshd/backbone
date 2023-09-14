@@ -9,6 +9,7 @@ public class AdminUiDbContext : AbstractDbContextBase
     public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options) : base(options) { }
 
     public DbSet<IdentityOverview> IdentityOverviews { get; set; }
+    public DbSet<ClientOverview> ClientOverviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
