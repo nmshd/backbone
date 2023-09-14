@@ -46,6 +46,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
                 .SetNotificationId(notificationId)
                 .Build();
 
+            _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
+
             return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
         }).ToList();
 
@@ -58,7 +60,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task HandleResponse(HttpResponseMessage response, string device)
+    private async Task HandleResponse(HttpResponseMessage response, string handle)
     {
         if (response is { IsSuccessStatusCode: false })
         {
@@ -66,12 +68,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             if (!responseContent.IsNullOrEmpty())
             {
                 _logger.LogError(
-                    "The following error occurred while trying to send the notification for device {device}: {responseContent}",
-                    device, responseContent);
+                    "The following error occurred while trying to send the notification for handle '{handle}': '{responseContent}'",
+                    handle, responseContent);
             }
             else
             {
-                _logger.LogError("An unknown error occurred while trying to send the notification for device {device}.", device);
+                _logger.LogError("An unknown error occurred while trying to send the notification for handle '{handle}'.", handle);
             }
         }
     }
