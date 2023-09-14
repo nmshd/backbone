@@ -130,7 +130,7 @@ public class Identity
         return appliedQuotas;
     }
 
-    public void ChangeTier(Tier newTier)
+    public async Task ChangeTierAsync(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
     {
         _tierQuotas.RemoveRange(0, _tierQuotas.Count());
         TierId = newTier.Id;
@@ -138,5 +138,8 @@ public class Identity
         {
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
+
+        var metricKeys = newTier.Quotas.Select(q => q.MetricKey);
+        await UpdateMetricStatuses(metricKeys, metricCalculatorFactory, cancellationToken);
     }
 }
