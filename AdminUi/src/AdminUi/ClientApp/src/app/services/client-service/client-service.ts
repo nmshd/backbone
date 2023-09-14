@@ -14,12 +14,12 @@ export class ClientServiceService {
         this.apiUrl = environment.apiUrl + "/Clients";
     }
 
-    getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
+    getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(this.apiUrl, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl, httpOptions);
     }
 
     createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
@@ -35,9 +35,10 @@ export class ClientServiceService {
     }
 }
 
-export interface ClientDTO {
+export interface ClientOverview {
     clientId: string;
     displayName?: string;
+    numberOfIdentities: number;
 }
 
 export interface Client {

@@ -30,8 +30,8 @@ public class ClientsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
     {
-        var clients = await _adminUiDbContext.ClientOverviews.ToListAsync(cancellationToken);
-        return Ok(clients);
+        var clientOverviews = await _adminUiDbContext.ClientOverviews.ToListAsync(cancellationToken);
+        return Ok(clientOverviews);
     }
 
     [HttpPost]
