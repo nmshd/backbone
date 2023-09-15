@@ -14,17 +14,17 @@ export class LoggerWriterService extends NGXLoggerWriterService {
 
         switch (metadata.level) {
             case NgxLoggerLevel.WARN:
-                console.warn(`${metaString} ` + metadata.message, ...additional);
+                console.warn(`${metaString} ${  metadata.message}`, ...additional);
                 break;
             case NgxLoggerLevel.ERROR:
             case NgxLoggerLevel.FATAL:
-                console.error(`${metaString} ` + metadata.message, ...additional);
+                console.error(`${metaString} ${  metadata.message}`, ...additional);
                 break;
             case NgxLoggerLevel.INFO:
-                console.info(`${metaString} ` + metadata.message, ...additional);
+                console.info(`${metaString} ${  metadata.message}`, ...additional);
                 break;
             default:
-                console.log(`${metaString} ` + metadata.message, ...additional);
+                console.log(`${metaString} ${  metadata.message}`, ...additional);
         }
     }
 
@@ -34,20 +34,20 @@ export class LoggerWriterService extends NGXLoggerWriterService {
 
         switch (metadata.level) {
             case NgxLoggerLevel.WARN:
-                console.warn(`%c${metaString}` + metadata.message, `color:${color}`, ...additional);
+                console.warn(`%c${metaString}${  metadata.message}`, `color:${color}`, ...additional);
                 break;
             case NgxLoggerLevel.ERROR:
             case NgxLoggerLevel.FATAL:
-                console.error(`%c${metaString}` + metadata.message, `color:${color}`, ...additional);
+                console.error(`%c${metaString}${  metadata.message}`, `color:${color}`, ...additional);
                 break;
             case NgxLoggerLevel.INFO:
-                console.info(`%c${metaString}` + metadata.message, `color:${color}`, ...additional);
+                console.info(`%c${metaString}${  metadata.message}`, `color:${color}`, ...additional);
                 break;
             case NgxLoggerLevel.DEBUG:
-                console.debug(`%c${metaString}` + metadata.message, `color:${color}`, ...additional);
+                console.debug(`%c${metaString}${  metadata.message}`, `color:${color}`, ...additional);
                 break;
             default:
-                console.log(`%c${metaString}` + metadata.message, `color:${color}`, ...additional);
+                console.log(`%c${metaString}${  metadata.message}`, `color:${color}`, ...additional);
         }
     }
 }

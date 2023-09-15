@@ -13,7 +13,7 @@ export class LoggerServerService extends NGXLoggerServerService {
     constructor(
         httpBackend: HttpBackend,
         ngZone: NgZone,
-        private authService: AuthService
+        private readonly authService: AuthService
     ) {
         super(httpBackend, ngZone);
     }

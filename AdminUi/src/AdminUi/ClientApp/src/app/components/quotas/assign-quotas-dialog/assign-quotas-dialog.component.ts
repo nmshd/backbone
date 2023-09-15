@@ -23,9 +23,9 @@ export class AssignQuotasDialogComponent {
     loading: boolean;
 
     constructor(
-        private snackBar: MatSnackBar,
-        private quotasService: QuotasService,
-        private metricsService: MetricsService,
+        private readonly snackBar: MatSnackBar,
+        private readonly quotasService: QuotasService,
+        private readonly metricsService: MetricsService,
         public dialogRef: MatDialogRef<AssignQuotasDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -55,7 +55,7 @@ export class AssignQuotasDialogComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -69,7 +69,7 @@ export class AssignQuotasDialogComponent {
     }
 
     assignQuota() {
-        let quota: AssignQuotaData = {
+        const quota: AssignQuotaData = {
             metricKey: this.metric.key,
             max: this.max,
             period: this.period

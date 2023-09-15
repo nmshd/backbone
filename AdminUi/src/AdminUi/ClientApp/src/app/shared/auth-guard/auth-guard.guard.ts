@@ -8,8 +8,8 @@ import { AuthService } from "src/app/services/auth-service/auth.service";
 })
 export class AuthGuard {
     constructor(
-        private authService: AuthService,
-        private router: Router
+        private readonly authService: AuthService,
+        private readonly router: Router
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {

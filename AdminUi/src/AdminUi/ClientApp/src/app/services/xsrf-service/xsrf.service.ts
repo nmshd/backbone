@@ -8,7 +8,7 @@ import { environment } from "src/environments/environment";
 export class XSRFService {
     apiUrl: string;
 
-    constructor(private http: HttpClient) {
+    constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 

@@ -10,8 +10,8 @@ import { environment } from "src/environments/environment";
 })
 export class ClientServiceService {
     apiUrl: string;
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Clients";
+    constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl  }/Clients`;
     }
 
     getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientDTO>> {

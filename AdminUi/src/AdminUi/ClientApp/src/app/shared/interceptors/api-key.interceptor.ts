@@ -9,8 +9,8 @@ export class ApiKeyInterceptor implements HttpInterceptor {
     isLoggedIn$: Observable<boolean> | undefined;
 
     constructor(
-        private authService: AuthService,
-        private snackBar: MatSnackBar
+        private readonly authService: AuthService,
+        private readonly snackBar: MatSnackBar
     ) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

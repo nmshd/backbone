@@ -22,9 +22,9 @@ export class ClientEditComponent {
     displayClientSecretWarning: boolean;
 
     constructor(
-        private route: ActivatedRoute,
-        private snackBar: MatSnackBar,
-        private clientService: ClientServiceService
+        private readonly route: ActivatedRoute,
+        private readonly snackBar: MatSnackBar,
+        private readonly clientService: ClientServiceService
     ) {
         this.headerCreate = "Create Client";
         this.headerDescription = "Please fill the form below to create your Client";
@@ -77,7 +77,7 @@ export class ClientEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"

@@ -19,8 +19,8 @@ export class ChangeSecretDialogComponent {
     disabled: boolean;
 
     constructor(
-        private snackBar: MatSnackBar,
-        private clientService: ClientServiceService,
+        private readonly snackBar: MatSnackBar,
+        private readonly clientService: ClientServiceService,
         public dialogRef: MatDialogRef<ChangeSecretDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -45,7 +45,7 @@ export class ChangeSecretDialogComponent {
     changeSecret() {
         this.loading = true;
         this.disabled = true;
-        let request = {
+        const request = {
             newSecret: this.clientSecret
         } as ChangeClientSecretRequest;
 
@@ -66,7 +66,7 @@ export class ChangeSecretDialogComponent {
             error: (err: any) => {
                 this.loading = false;
                 this.disabled = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"

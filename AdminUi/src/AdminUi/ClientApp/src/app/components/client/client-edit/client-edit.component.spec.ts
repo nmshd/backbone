@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ClientEditComponent } from "./client-edit.component";
 
-describe("ClientEditComponent", () => {
+describe("ClientEditComponent", function() {
     let component: ClientEditComponent;
     let fixture: ComponentFixture<ClientEditComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
             declarations: [ClientEditComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("ClientEditComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should create", function() {
         expect(component).toBeTruthy();
     });
 });

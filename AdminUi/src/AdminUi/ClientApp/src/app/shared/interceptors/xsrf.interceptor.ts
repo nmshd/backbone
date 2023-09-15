@@ -5,7 +5,7 @@ import { XSRFService } from "src/app/services/xsrf-service/xsrf.service";
 
 @Injectable()
 export class XSRFInterceptor implements HttpInterceptor {
-    constructor(private xsrfService: XSRFService) {}
+    constructor(private readonly xsrfService: XSRFService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         return from(this.handle(req, next));

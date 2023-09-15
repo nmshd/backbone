@@ -32,12 +32,12 @@ export class TierEditComponent {
     loading: boolean;
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private dialog: MatDialog,
-        private tierService: TierService,
-        private quotasService: QuotasService
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly dialog: MatDialog,
+        private readonly tierService: TierService,
+        private readonly quotasService: QuotasService
     ) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
@@ -93,7 +93,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -121,7 +121,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -146,7 +146,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -163,7 +163,7 @@ export class TierEditComponent {
     }
 
     openAssignQuotaDialog() {
-        let dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
 
@@ -187,7 +187,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -197,12 +197,12 @@ export class TierEditComponent {
     }
 
     openConfirmationDialogQuotaDeletion() {
-        let confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
-        let confirmDialogMessage =
+        const confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
+        const confirmDialogMessage =
             this.selectionQuotas.selected.length > 1
                 ? `Are you sure you want to delete the ${this.selectionQuotas.selected.length} selected quotas?`
                 : "Are you sure you want to delete the selected quota?";
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -216,9 +216,9 @@ export class TierEditComponent {
     }
 
     openConfirmationDialogTierDeletion() {
-        let confirmDialogHeader = "Delete Tier";
-        let confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        const confirmDialogHeader = "Delete Tier";
+        const confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -237,7 +237,7 @@ export class TierEditComponent {
                 this.router.navigate(["/tiers"]);
             },
             error: (err: HttpErrorResponseWrapper) => {
-                let errorMessage = err.error.error.message;
+                const errorMessage = err.error.error.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -248,14 +248,14 @@ export class TierEditComponent {
 
     deleteQuota(): void {
         this.loading = true;
-        let observableBatch: Observable<any>[] = [];
+        const observableBatch: Observable<any>[] = [];
         this.selectionQuotas.selected.forEach((item) => {
             observableBatch.push(this.quotasService.deleteTierQuota(item.id, this.tier.id));
         });
 
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
-                let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
+                const successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
                 this.getTier();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
@@ -265,7 +265,7 @@ export class TierEditComponent {
             },
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"

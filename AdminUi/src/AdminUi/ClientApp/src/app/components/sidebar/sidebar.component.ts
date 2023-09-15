@@ -9,7 +9,7 @@ import { SidebarService } from "src/app/services/sidebar-service/sidebar.service
 export class SidebarComponent {
     sidebarOptions: SidebarOption[];
 
-    constructor(private sidebarService: SidebarService) {
+    constructor(private readonly sidebarService: SidebarService) {
         this.sidebarOptions = [];
     }
 

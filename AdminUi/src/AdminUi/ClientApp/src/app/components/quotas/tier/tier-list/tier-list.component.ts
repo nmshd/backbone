@@ -27,9 +27,9 @@ export class TierListComponent {
     displayedColumns: string[] = ["id", "name"];
 
     constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private tierService: TierService
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly tierService: TierService
     ) {
         this.header = "Tiers";
         this.headerDescription = "A list of existing Tiers";
@@ -63,7 +63,7 @@ export class TierListComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -79,10 +79,10 @@ export class TierListComponent {
     }
 
     addTier() {
-        this.router.navigate([`/tiers/create`]);
+        this.router.navigate(["/tiers/create"]);
     }
 
     editTier(tier: Tier) {
-        this.router.navigate([`/tiers/` + tier.id]);
+        this.router.navigate([`/tiers/${  tier.id}`]);
     }
 }

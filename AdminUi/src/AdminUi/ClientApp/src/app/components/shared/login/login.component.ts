@@ -14,9 +14,9 @@ export class LoginComponent implements OnInit {
     loading: boolean;
 
     constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private authService: AuthService
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly authService: AuthService
     ) {
         this.apiKey = "";
         this.loading = false;
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     login(): void {
         this.loading = true;
-        let apiKeyRequest: ValidateApiKeyRequest = {
+        const apiKeyRequest: ValidateApiKeyRequest = {
             apiKey: this.apiKey
         };
         this.authService.validateApiKey(apiKeyRequest).subscribe({

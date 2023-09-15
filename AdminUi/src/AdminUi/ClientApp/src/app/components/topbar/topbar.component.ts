@@ -9,8 +9,8 @@ import { SidebarService } from "src/app/services/sidebar-service/sidebar.service
 })
 export class TopbarComponent {
     constructor(
-        private sidebarService: SidebarService,
-        private authService: AuthService
+        private readonly sidebarService: SidebarService,
+        private readonly authService: AuthService
     ) {}
 
     toggleSidebar(): void {

@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { TierEditComponent } from "./tier-edit.component";
 
-describe("TierEditComponent", () => {
+describe("TierEditComponent", function() {
     let component: TierEditComponent;
     let fixture: ComponentFixture<TierEditComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
             declarations: [TierEditComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("TierEditComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should create", function() {
         expect(component).toBeTruthy();
     });
 });

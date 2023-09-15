@@ -29,10 +29,10 @@ export class ClientListComponent {
     displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
 
     constructor(
-        private router: Router,
-        private dialog: MatDialog,
-        private snackBar: MatSnackBar,
-        private clientService: ClientServiceService
+        private readonly router: Router,
+        private readonly dialog: MatDialog,
+        private readonly snackBar: MatSnackBar,
+        private readonly clientService: ClientServiceService
     ) {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
@@ -64,7 +64,7 @@ export class ClientListComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -84,14 +84,14 @@ export class ClientListComponent {
     }
 
     addClient(): void {
-        this.router.navigate([`/clients/create`]);
+        this.router.navigate(["/clients/create"]);
     }
 
     openConfirmationDialog() {
-        let confirmDialogHeader = this.selection.selected.length > 1 ? "Delete Clients" : "Delete Client";
-        let confirmDialogMessage =
+        const confirmDialogHeader = this.selection.selected.length > 1 ? "Delete Clients" : "Delete Client";
+        const confirmDialogMessage =
             this.selection.selected.length > 1 ? `Are you sure you want to delete the ${this.selection.selected.length} selected clients?` : "Are you sure you want to delete the selected client?";
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -106,14 +106,14 @@ export class ClientListComponent {
 
     deleteClient(): void {
         this.loading = true;
-        let observableBatch: Observable<any>[] = [];
+        const observableBatch: Observable<any>[] = [];
         this.selection.selected.forEach((item) => {
             observableBatch.push(this.clientService.deleteClient(item.clientId));
         });
 
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
-                let successMessage: string = this.selection.selected.length > 1 ? `Successfully deleted ${this.selection.selected.length} clients.` : "Successfully deleted 1 client.";
+                const successMessage: string = this.selection.selected.length > 1 ? `Successfully deleted ${this.selection.selected.length} clients.` : "Successfully deleted 1 client.";
                 this.getPagedData();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
@@ -123,7 +123,7 @@ export class ClientListComponent {
             },
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -155,7 +155,7 @@ export class ClientListComponent {
     }
 
     openChangeSecretDialog(clientId: any) {
-        let dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
+        const dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
             data: { clientId: clientId },
             minWidth: "50%",
             maxWidth: "100%"

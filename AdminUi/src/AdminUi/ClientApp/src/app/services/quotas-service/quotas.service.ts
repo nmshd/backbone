@@ -10,12 +10,12 @@ import { environment } from "src/environments/environment";
 export class QuotasService {
     apiUrl: string;
 
-    constructor(private http: HttpClient) {
+    constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
     getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(this.apiUrl + "/Metrics");
+        return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl  }/Metrics`);
     }
 
     getPeriods(): string[] {

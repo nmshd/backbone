@@ -11,7 +11,7 @@ export class DashboardComponent {
     breakpoint: number;
     dashboardOverviewPanels: DashboardOverviewPanel[];
 
-    constructor(private sidebarService: SidebarService) {
+    constructor(private readonly sidebarService: SidebarService) {
         this.header = "";
         this.breakpoint = window.innerWidth <= 1150 ? 1 : window.innerWidth <= 1700 ? 2 : 3;
         this.dashboardOverviewPanels = [];

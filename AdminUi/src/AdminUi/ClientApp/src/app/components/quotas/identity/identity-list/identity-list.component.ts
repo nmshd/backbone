@@ -27,9 +27,9 @@ export class IdentityListComponent {
     displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
     constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private identityService: IdentityService
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly identityService: IdentityService
     ) {
         this.header = "Identities";
         this.headerDescription = "A list of existing Identities";
@@ -63,7 +63,7 @@ export class IdentityListComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -79,10 +79,10 @@ export class IdentityListComponent {
     }
 
     editIdentity(identityAddress: string) {
-        this.router.navigate([`/identities/` + identityAddress]);
+        this.router.navigate([`/identities/${  identityAddress}`]);
     }
 
     goToTier(tierId: string) {
-        this.router.navigate([`/tiers/` + tierId]);
+        this.router.navigate([`/tiers/${  tierId}`]);
     }
 }

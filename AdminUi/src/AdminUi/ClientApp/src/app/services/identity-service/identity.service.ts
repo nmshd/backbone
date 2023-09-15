@@ -12,8 +12,8 @@ import { Quota } from "../quotas-service/quotas.service";
 export class IdentityService {
     apiUrl: string;
 
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Identities";
+    constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl  }/Identities`;
     }
 
     getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
@@ -25,7 +25,7 @@ export class IdentityService {
     }
 
     getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
-        return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
+        return this.http.get<HttpResponseEnvelope<Identity>>(`${this.apiUrl  }/${address}`);
     }
 }
 

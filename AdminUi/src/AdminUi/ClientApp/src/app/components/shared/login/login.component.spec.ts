@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { LoginComponent } from "./login.component";
 
-describe("LoginComponent", () => {
+describe("LoginComponent", function() {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
             declarations: [LoginComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("LoginComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should create", function() {
         expect(component).toBeTruthy();
     });
 });

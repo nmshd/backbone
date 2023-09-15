@@ -9,7 +9,7 @@ import { XSRFService } from "../xsrf-service/xsrf.service";
     providedIn: "root"
 })
 export class AuthService {
-    private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasApiKey());
+    private readonly loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasApiKey());
     apiUrl: string;
 
     get isLoggedIn() {
@@ -17,9 +17,9 @@ export class AuthService {
     }
 
     constructor(
-        private router: Router,
-        private http: HttpClient,
-        private xsrfService: XSRFService
+        private readonly router: Router,
+        private readonly http: HttpClient,
+        private readonly xsrfService: XSRFService
     ) {
         this.apiUrl = environment.apiUrl;
     }

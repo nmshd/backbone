@@ -12,8 +12,8 @@ import { TierQuota } from "../quotas-service/quotas.service";
 export class TierService {
     apiUrl: string;
 
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Tiers";
+    constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl  }/Tiers`;
     }
 
     getTiers(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<Tier>> {
@@ -25,7 +25,7 @@ export class TierService {
     }
 
     getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-        return this.http.get<HttpResponseEnvelope<Tier>>(this.apiUrl + `/${id}`);
+        return this.http.get<HttpResponseEnvelope<Tier>>(`${this.apiUrl  }/${id}`);
     }
 
     createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
@@ -37,7 +37,7 @@ export class TierService {
     }
 
     deleteTierById(id: string): Observable<void> {
-        return this.http.delete<void>(this.apiUrl + `/${id}`);
+        return this.http.delete<void>(`${this.apiUrl  }/${id}`);
     }
 }
 

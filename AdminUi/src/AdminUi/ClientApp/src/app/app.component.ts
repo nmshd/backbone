@@ -15,10 +15,10 @@ export class AppComponent implements OnInit {
     isLoggedIn$?: Observable<boolean>;
 
     constructor(
-        private sidebarService: SidebarService,
-        private authService: AuthService,
-        private snackBar: MatSnackBar,
-        private xsrfService: XSRFService
+        private readonly sidebarService: SidebarService,
+        private readonly authService: AuthService,
+        private readonly snackBar: MatSnackBar,
+        private readonly xsrfService: XSRFService
     ) {}
 
     ngOnInit() {
