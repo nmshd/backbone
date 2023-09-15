@@ -80,7 +80,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         HttpClientModule,
         LoggerModule.forRoot(
             {
-                serverLoggingUrl: `${environment.apiUrl  }/Logs`,
+                serverLoggingUrl: `${environment.apiUrl}/Logs`,
                 level: environment.production ? NgxLoggerLevel.INFO : NgxLoggerLevel.TRACE,
                 serverLogLevel: NgxLoggerLevel.ERROR,
                 enableSourceMaps: true
