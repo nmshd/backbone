@@ -47,11 +47,11 @@ export class AuthService {
         await this.router.navigate(["/"]);
     }
 
-    public logout(): Promise<boolean> {
+    public async logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
         this.xsrfService.clearStoredToken();
-        return this.router.navigate(["/login"]);
+        return await this.router.navigate(["/login"]);
     }
 }
 

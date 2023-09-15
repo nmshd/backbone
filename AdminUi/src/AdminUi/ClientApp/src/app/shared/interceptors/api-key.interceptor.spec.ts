@@ -2,14 +2,15 @@ import { TestBed } from "@angular/core/testing";
 
 import { ApiKeyInterceptor } from "./api-key.interceptor";
 
-describe("ApiKeyInterceptor", function() {
-    beforeEach(function() { return TestBed.configureTestingModule({
+describe("ApiKeyInterceptor", function () {
+    beforeEach(function () {
+        return TestBed.configureTestingModule({
             providers: [ApiKeyInterceptor]
-        }); }
-    );
+        });
+    });
 
-    it("should be created", function() {
+    it("should be created", async function () {
         const interceptor: ApiKeyInterceptor = TestBed.inject(ApiKeyInterceptor);
-        expect(interceptor).toBeTruthy();
+        await expect(interceptor).toBeTruthy();
     });
 });

@@ -52,6 +52,7 @@ export class IdentityEditComponent {
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
+        this.identity.quotas = [];
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
     }
 
@@ -218,7 +219,7 @@ export class IdentityEditComponent {
     public isAllSelected(): boolean {
         if (this.loading) return false;
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.deleteable).length : 0;
+        const numRows = this.identity.quotas.filter((i) => i.deleteable).length;
         return numSelected === numRows;
     }
 

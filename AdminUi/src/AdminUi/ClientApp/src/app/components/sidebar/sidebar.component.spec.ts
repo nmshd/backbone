@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SidebarComponent } from "./sidebar.component";
 
-describe("SidebarComponent", function() {
+describe("SidebarComponent", function () {
     let component: SidebarComponent;
     let fixture: ComponentFixture<SidebarComponent>;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [SidebarComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("SidebarComponent", function() {
         fixture.detectChanges();
     });
 
-    it("should create", function() {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });

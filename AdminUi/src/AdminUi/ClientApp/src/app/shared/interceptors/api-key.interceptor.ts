@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Observable, catchError, throwError } from "rxjs";
+import { Observable, catchError, from, throwError } from "rxjs";
 import { AuthService } from "src/app/services/auth-service/auth.service";
 
 @Injectable()
@@ -20,11 +20,15 @@ export class ApiKeyInterceptor implements HttpInterceptor {
             request = request.clone({
                 headers: request.headers.delete("skip")
             });
-        } else if (this.isLoggedIn$ && this.authService.getApiKey() !== null) {
-            request = request.clone({
-                setHeaders: {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    "X-API-KEY": this.authService.getApiKey()!
+        } else {
+            this.isLoggedIn$.subscribe((isLoggedIn) => {
+                if (isLoggedIn && this.authService.getApiKey() !== null) {
+                    request = request.clone({
+                        setHeaders: {
+                            // eslint-disable-next-line @typescript-eslint/naming-convention
+                            "X-API-KEY": this.authService.getApiKey()!
+                        }
+                    });
                 }
             });
         }
@@ -33,12 +37,14 @@ export class ApiKeyInterceptor implements HttpInterceptor {
             catchError((err) => {
                 const isUnauthorized = err && err.status === 401;
                 if (isUnauthorized) {
-                    this.authService.logout().then((_) => {
-                        this.snackBar.open("You are currently not authenticated. Please sign in.", "Dismiss", {
-                            verticalPosition: "top",
-                            horizontalPosition: "center"
-                        });
-                    });
+                    from(
+                        this.authService.logout().then((_) => {
+                            this.snackBar.open("You are currently not authenticated. Please sign in.", "Dismiss", {
+                                verticalPosition: "top",
+                                horizontalPosition: "center"
+                            });
+                        })
+                    );
                     err = err.error?.message || err.statusText;
                 }
 

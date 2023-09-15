@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AssignQuotasDialogComponent } from "./assign-quotas-dialog.component";
 
-describe("AssignQuotasDialogComponent", function() {
+describe("AssignQuotasDialogComponent", function () {
     let component: AssignQuotasDialogComponent;
     let fixture: ComponentFixture<AssignQuotasDialogComponent>;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [AssignQuotasDialogComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("AssignQuotasDialogComponent", function() {
         fixture.detectChanges();
     });
 
-    it("should create", function() {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });
