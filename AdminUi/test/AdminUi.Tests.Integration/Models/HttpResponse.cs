@@ -18,3 +18,9 @@ public class HttpResponse
     public string? ContentType { get; set; }
     public ErrorResponseContent? Content { get; set; }
 }
+
+public class Cookie
+{
+    public string Name { get; init; }
+    public string Value { get; init; }
+}

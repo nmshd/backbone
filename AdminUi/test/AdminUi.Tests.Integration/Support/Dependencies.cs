@@ -23,6 +23,7 @@ public static class Dependencies
             config.GetSection("AdminUi:Http").Bind(options)
         );
 
+        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
         services.AddTransient<IdentitiesApi>();
         services.AddTransient<TiersApi>();
         services.AddTransient<ClientsApi>();
