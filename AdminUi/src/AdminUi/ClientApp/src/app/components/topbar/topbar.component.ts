@@ -17,7 +17,7 @@ export class TopbarComponent {
         this.sidebarService.toggle();
     }
 
-    public logout(): void {
-        this.authService.logout();
+    public async logout(): Promise<boolean> {
+        return await this.authService.logout();
     }
 }

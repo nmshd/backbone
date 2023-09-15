@@ -131,7 +131,7 @@ export class IdentityEditComponent {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: any) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
             if (result) {
                 this.createIdentityQuota(result);
             }

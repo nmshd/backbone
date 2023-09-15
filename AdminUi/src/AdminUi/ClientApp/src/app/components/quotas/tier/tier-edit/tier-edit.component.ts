@@ -49,7 +49,6 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.tier = {} as Tier;
         this.disabled = false;
         this.tier = {
             id: "",
@@ -150,7 +149,7 @@ export class TierEditComponent {
     }
 
     public validateTier(): boolean {
-        if (this.tier && this.tier.name && this.tier.name.length > 0) {
+        if (this.tier.name.length > 0) {
             return true;
         }
         return false;
@@ -161,7 +160,7 @@ export class TierEditComponent {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
             if (result) {
                 this.createTierQuota(result);
             }
@@ -225,8 +224,8 @@ export class TierEditComponent {
 
     public deleteTier(): void {
         this.tierService.deleteTierById(this.tierId!).subscribe({
-            next: (_) => {
-                this.router.navigate(["/tiers"]);
+            next: async (_) => {
+                await this.router.navigate(["/tiers"]);
             },
             error: (err: HttpErrorResponseWrapper) => {
                 const errorMessage = err.error.error.message;

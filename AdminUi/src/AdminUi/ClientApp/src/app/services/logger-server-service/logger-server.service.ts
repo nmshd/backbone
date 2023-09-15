@@ -23,6 +23,7 @@ export class LoggerServerService extends NGXLoggerServerService {
         if (this.isLoggedIn$) {
             httpRequest = httpRequest.clone({
                 setHeaders: {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     "X-API-KEY": this.authService.getApiKey()!
                 }
             });
@@ -31,7 +32,7 @@ export class LoggerServerService extends NGXLoggerServerService {
         return httpRequest;
     }
 
-    protected override customiseRequestBody(metadata: INGXLoggerMetadata) {
+    protected override customiseRequestBody(metadata: INGXLoggerMetadata): LoggerRequest {
         let messageTemplate: string = metadata.message;
         for (let i = 0; i < metadata.additional!.length; i++) {
             messageTemplate = messageTemplate.replace(new RegExp("(?<!%)%[dsj]"), `{${i}}`);

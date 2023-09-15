@@ -76,11 +76,11 @@ export class IdentityListComponent {
         this.getPagedData();
     }
 
-    public editIdentity(identityAddress: string): void {
-        this.router.navigate([`/identities/${identityAddress}`]);
+    public async editIdentity(identityAddress: string): Promise<void> {
+        await this.router.navigate([`/identities/${identityAddress}`]);
     }
 
-    public goToTier(tierId: string): void {
-        this.router.navigate([`/tiers/${tierId}`]);
+    public async goToTier(tierId: string): Promise<void> {
+        await this.router.navigate([`/tiers/${tierId}`]);
     }
 }

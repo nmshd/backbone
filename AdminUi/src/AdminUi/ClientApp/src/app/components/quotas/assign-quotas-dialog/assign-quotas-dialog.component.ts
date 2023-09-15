@@ -13,9 +13,9 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 export class AssignQuotasDialogComponent {
     public header: string;
 
-    public metric!: any;
-    public max: number;
-    public period!: string;
+    public metric: Metric | undefined;
+    public max: number | null;
+    public period: string | undefined;
 
     public metrics: any;
     public periods: string[];
@@ -68,16 +68,16 @@ export class AssignQuotasDialogComponent {
 
     public assignQuota(): void {
         const quota: AssignQuotaData = {
-            metricKey: this.metric.key,
-            max: this.max,
-            period: this.period
+            metricKey: this.metric!.key,
+            max: this.max!,
+            period: this.period!
         };
 
         this.dialogRef.close(quota);
     }
 
     public isValid(): boolean {
-        return this.metric != null && this.period != null && this.max != null;
+        return this.metric !== undefined && this.period !== undefined && this.max !== null;
     }
 }
 

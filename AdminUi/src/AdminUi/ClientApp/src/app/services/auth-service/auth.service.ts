@@ -40,11 +40,11 @@ export class AuthService {
         return this.http.post<ValidateApiKeyResponse>(`${this.apiUrl}/ValidateApiKey`, apiKeyRequest, { headers: { skip: "true" } });
     }
 
-    public login(apiKey: string): void {
+    public async login(apiKey: string): Promise<void> {
         localStorage.setItem("api-key", apiKey);
         this.xsrfService.loadAndStoreXSRFToken();
         this.loggedIn.next(true);
-        this.router.navigate(["/"]);
+        await this.router.navigate(["/"]);
     }
 
     public logout(): Promise<boolean> {

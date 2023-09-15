@@ -76,11 +76,11 @@ export class TierListComponent {
         this.getPagedData();
     }
 
-    public addTier(): void {
-        this.router.navigate(["/tiers/create"]);
+    public async addTier(): Promise<void> {
+        await this.router.navigate(["/tiers/create"]);
     }
 
-    public editTier(tier: Tier): void {
-        this.router.navigate([`/tiers/${tier.id}`]);
+    public async editTier(tier: Tier): Promise<void> {
+        await this.router.navigate([`/tiers/${tier.id}`]);
     }
 }

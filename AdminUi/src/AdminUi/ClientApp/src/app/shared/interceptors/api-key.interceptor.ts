@@ -23,6 +23,7 @@ export class ApiKeyInterceptor implements HttpInterceptor {
         } else if (this.isLoggedIn$ && this.authService.getApiKey() !== null) {
             request = request.clone({
                 setHeaders: {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     "X-API-KEY": this.authService.getApiKey()!
                 }
             });

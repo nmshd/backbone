@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
         this.loading = false;
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         if (this.authService.isCurrentlyLoggedIn()) {
-            this.router.navigate(["/"]);
+            await this.router.navigate(["/"]);
         }
     }
 
@@ -33,9 +33,9 @@ export class LoginComponent implements OnInit {
             apiKey: this.apiKey
         };
         this.authService.validateApiKey(apiKeyRequest).subscribe({
-            next: (response: ValidateApiKeyResponse) => {
+            next: async (response: ValidateApiKeyResponse) => {
                 if (response.isValid) {
-                    this.authService.login(this.apiKey);
+                    await this.authService.login(this.apiKey);
                 } else {
                     this.snackBar.open("Invalid API Key.", "Dismiss", {
                         verticalPosition: "top",

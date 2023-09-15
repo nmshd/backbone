@@ -17,6 +17,7 @@ export class XSRFInterceptor implements HttpInterceptor {
         req = req.clone({
             withCredentials: true,
             setHeaders: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "X-XSRF-TOKEN": token
             }
         });

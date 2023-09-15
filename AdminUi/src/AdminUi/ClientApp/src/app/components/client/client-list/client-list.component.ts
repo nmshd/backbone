@@ -79,8 +79,8 @@ export class ClientListComponent {
         return new Date(date).toLocaleDateString();
     }
 
-    public addClient(): void {
-        this.router.navigate(["/clients/create"]);
+    public async addClient(): Promise<void> {
+        await this.router.navigate(["/clients/create"]);
     }
 
     public openConfirmationDialog(): void {
