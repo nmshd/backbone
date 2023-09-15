@@ -143,3 +143,5 @@ static void Configure(WebApplication app)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 }
+
+public partial class Program { }
