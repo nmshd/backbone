@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
@@ -7,6 +8,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -16,13 +18,15 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
+    private readonly IPnsRegistrationRepository _registrationRepository;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        ILogger<ApplePushNotificationServiceConnector> logger)
+        ILogger<ApplePushNotificationServiceConnector> logger, IPnsRegistrationRepository registrationRepository)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
         _logger = logger;
+        _registrationRepository = registrationRepository;
         _options = options.Value;
     }
 
@@ -48,7 +52,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
             _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
 
-            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
+            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, pnsRegistration));
         }).ToList();
 
         await Task.WhenAll(tasks);
@@ -60,20 +64,23 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task HandleResponse(HttpResponseMessage response, string handle)
+    private async Task HandleResponse(HttpResponseMessage response, PnsRegistration registration)
     {
         if (response is { IsSuccessStatusCode: false })
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            if (!responseContent.IsNullOrEmpty())
+            var responseContent = JsonConvert.DeserializeObject<ErrorResponse>(await response.Content.ReadAsStringAsync());
+            if (!responseContent.Reason.IsNullOrEmpty())
             {
                 _logger.LogError(
-                    "The following error occurred while trying to send the notification for handle '{handle}': '{responseContent}'",
-                    handle, responseContent);
+                    "The following error occurred while trying to send the notification for deviceId '{deviceId}': '{error}'",
+                    registration.DeviceId, responseContent.Reason);
+
+                if (responseContent.Reason == "Unregistered")
+                    await _registrationRepository.Delete(registration, CancellationToken.None);
             }
             else
             {
-                _logger.LogError("An unknown error occurred while trying to send the notification for handle '{handle}'.", handle);
+                _logger.LogError("An unknown error occurred while trying to send the notification for deviceId '{deviceId}'.", registration.DeviceId);
             }
         }
     }
@@ -102,6 +109,11 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             }
         }
     }
+}
+
+public class ErrorResponse
+{
+    public string Reason { get; set; }
 }
 
 public static class TypeExtensions

@@ -33,6 +33,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         var registrationsByAppId = registrations.GroupBy(r => r.AppId)
             .Select(r => new
             {
+                DeviceIds = r.Select(pnsRegistration => pnsRegistration.DeviceId).ToList(),
                 AppId = r.Key,
                 Handles = r.Select(pnsRegistration =>
                 {
@@ -59,7 +60,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
 
-            return firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.Handles));
+            return firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.DeviceIds));
         });
 
         await Task.WhenAll(tasks);
@@ -71,9 +72,9 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
     }
 
-    private async Task HandleResponse(BatchResponse batchResponse, IReadOnlyList<string> devices)
+    private async Task HandleResponse(BatchResponse batchResponse, IReadOnlyList<DeviceId> devices)
     {
-        var devicesToDelete = new List<string>();
+        var devicesToDelete = new List<DeviceId>();
         for (var index = 0; index < batchResponse.Responses.Count; index++)
         {
             var response = batchResponse.Responses[index];
