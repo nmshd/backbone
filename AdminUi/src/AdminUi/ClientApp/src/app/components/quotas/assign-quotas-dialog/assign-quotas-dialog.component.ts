@@ -77,7 +77,7 @@ export class AssignQuotasDialogComponent {
     }
 
     public isValid(): boolean {
-        return this.metric !== null && this.period !== null && this.max !== null;
+        return this.metric != null && this.period != null && this.max != null;
     }
 }
 

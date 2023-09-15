@@ -162,7 +162,9 @@ export class TierEditComponent {
         });
 
         dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
-            this.createTierQuota(result);
+            if (result) {
+                this.createTierQuota(result);
+            }
         });
     }
 
