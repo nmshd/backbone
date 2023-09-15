@@ -32,7 +32,13 @@ export class IdentityEditComponent {
     identity: Identity;
     loading: boolean;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private identityService: IdentityService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private identityService: IdentityService,
+        private quotasService: QuotasService
+    ) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";

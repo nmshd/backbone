@@ -14,7 +14,12 @@ export class AppComponent implements OnInit {
     title = "AdminUI";
     isLoggedIn$?: Observable<boolean>;
 
-    constructor(private sidebarService: SidebarService, private authService: AuthService, private snackBar: MatSnackBar, private xsrfService: XSRFService) {}
+    constructor(
+        private sidebarService: SidebarService,
+        private authService: AuthService,
+        private snackBar: MatSnackBar,
+        private xsrfService: XSRFService
+    ) {}
 
     ngOnInit() {
         this.isLoggedIn$ = this.authService.isLoggedIn;

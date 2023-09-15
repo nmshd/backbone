@@ -26,7 +26,11 @@ export class IdentityListComponent {
 
     displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
-    constructor(private router: Router, private snackBar: MatSnackBar, private identityService: IdentityService) {
+    constructor(
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private identityService: IdentityService
+    ) {
         this.header = "Identities";
         this.headerDescription = "A list of existing Identities";
 

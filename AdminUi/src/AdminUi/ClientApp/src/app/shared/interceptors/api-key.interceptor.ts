@@ -8,7 +8,10 @@ import { AuthService } from "src/app/services/auth-service/auth.service";
 export class ApiKeyInterceptor implements HttpInterceptor {
     isLoggedIn$: Observable<boolean> | undefined;
 
-    constructor(private authService: AuthService, private snackBar: MatSnackBar) {}
+    constructor(
+        private authService: AuthService,
+        private snackBar: MatSnackBar
+    ) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.isLoggedIn$ = this.authService.isLoggedIn;
