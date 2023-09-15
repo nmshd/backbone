@@ -11,34 +11,34 @@ import { XSRFService } from "./services/xsrf-service/xsrf.service";
     styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-    title = "AdminUI";
-    isLoggedIn$?: Observable<boolean>;
+    public title = "AdminUI";
+    public isLoggedIn$?: Observable<boolean>;
 
-    constructor(
+    public constructor(
         private readonly sidebarService: SidebarService,
         private readonly authService: AuthService,
         private readonly snackBar: MatSnackBar,
         private readonly xsrfService: XSRFService
     ) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.isLoggedIn$ = this.authService.isLoggedIn;
         this.xsrfService.loadAndStoreXSRFToken();
     }
 
-    closeSidebar() {
+    public closeSidebar(): void {
         this.sidebarService.close();
     }
 
-    isSidebarOpen(): boolean {
+    public isSidebarOpen(): boolean {
         return this.sidebarService.isOpen();
     }
 
-    isMobile(): boolean {
+    public isMobile(): boolean {
         return this.sidebarService.isMobile();
     }
 
-    changeOfRoute(): void {
+    public changeOfRoute(): void {
         this.snackBar.dismiss();
     }
 }

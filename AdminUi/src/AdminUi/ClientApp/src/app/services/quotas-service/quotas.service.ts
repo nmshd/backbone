@@ -8,33 +8,33 @@ import { environment } from "src/environments/environment";
     providedIn: "root"
 })
 export class QuotasService {
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    constructor(private readonly http: HttpClient) {
+    public constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
-    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl  }/Metrics`);
+    public getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
+        return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl}/Metrics`);
     }
 
-    getPeriods(): string[] {
+    public getPeriods(): string[] {
         return ["Hour", "Day", "Week", "Month", "Year"];
     }
 
-    createTierQuota(request: CreateQuotaForTierRequest, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {
+    public createTierQuota(request: CreateQuotaForTierRequest, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {
         return this.http.post<HttpResponseEnvelope<TierQuota>>(`${this.apiUrl}/Tiers/${tierId}/Quotas`, request);
     }
 
-    createIdentityQuota(request: CreateQuotaForIdentityRequest, identityAddress: string): Observable<HttpResponseEnvelope<IdentityQuota>> {
+    public createIdentityQuota(request: CreateQuotaForIdentityRequest, identityAddress: string): Observable<HttpResponseEnvelope<IdentityQuota>> {
         return this.http.post<HttpResponseEnvelope<IdentityQuota>>(`${this.apiUrl}/Identities/${identityAddress}/Quotas`, request);
     }
 
-    deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
+    public deleteTierQuota(quotaId: string, tierId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Tiers/${tierId}/Quotas/${quotaId}`);
     }
 
-    deleteIdentityQuota(quotaId: string, identityAddress: string): Observable<any> {
+    public deleteIdentityQuota(quotaId: string, identityAddress: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/Identities/${identityAddress}/Quotas/${quotaId}`);
     }
 }

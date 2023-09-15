@@ -11,18 +11,18 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./assign-quotas-dialog.component.css"]
 })
 export class AssignQuotasDialogComponent {
-    header: string;
+    public header: string;
 
-    metric!: any;
-    max: number;
-    period!: string;
+    public metric!: any;
+    public max: number;
+    public period!: string;
 
-    metrics: any;
-    periods: string[];
+    public metrics: any;
+    public periods: string[];
 
-    loading: boolean;
+    public loading: boolean;
 
-    constructor(
+    public constructor(
         private readonly snackBar: MatSnackBar,
         private readonly quotasService: QuotasService,
         private readonly metricsService: MetricsService,
@@ -39,18 +39,16 @@ export class AssignQuotasDialogComponent {
         this.loading = true;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.getMetrics();
         this.getPeriods();
     }
 
-    getMetrics() {
+    public getMetrics(): void {
         this.loading = true;
         this.metricsService.getMetrics().subscribe({
             next: (data: HttpResponseEnvelope<Metric>) => {
-                if (data && data.result) {
-                    this.metrics = data.result;
-                }
+                this.metrics = data.result;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -64,11 +62,11 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    getPeriods() {
+    public getPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
 
-    assignQuota() {
+    public assignQuota(): void {
         const quota: AssignQuotaData = {
             metricKey: this.metric.key,
             max: this.max,
@@ -78,8 +76,8 @@ export class AssignQuotasDialogComponent {
         this.dialogRef.close(quota);
     }
 
-    isValid(): boolean {
-        return this.metric != null && this.period != null && this.max != null;
+    public isValid(): boolean {
+        return this.metric !== null && this.period !== null && this.max !== null;
     }
 }
 

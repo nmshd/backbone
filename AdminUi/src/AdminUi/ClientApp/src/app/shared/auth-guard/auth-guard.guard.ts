@@ -7,12 +7,12 @@ import { AuthService } from "src/app/services/auth-service/auth.service";
     providedIn: "root"
 })
 export class AuthGuard {
-    constructor(
+    public constructor(
         private readonly authService: AuthService,
         private readonly router: Router
     ) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         return this.authService.isLoggedIn.pipe(
             take(1),
             map((isLoggedIn: boolean) => {

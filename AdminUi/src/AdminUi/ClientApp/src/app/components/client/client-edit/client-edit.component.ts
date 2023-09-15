@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Client } from "src/app/services/client-service/client-service";
-import { ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientServiceService, Client } from "src/app/services/client-service/client-service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
@@ -11,17 +10,17 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./client-edit.component.css"]
 })
 export class ClientEditComponent {
-    showPassword: boolean;
-    headerCreate: string;
-    headerDescription: string;
-    clientId?: string;
-    editMode: boolean;
-    client: Client;
-    loading: boolean;
-    disabled: boolean;
-    displayClientSecretWarning: boolean;
+    public showPassword: boolean;
+    public headerCreate: string;
+    public headerDescription: string;
+    public clientId?: string;
+    public editMode: boolean;
+    public client: Client;
+    public loading: boolean;
+    public disabled: boolean;
+    public displayClientSecretWarning: boolean;
 
-    constructor(
+    public constructor(
         private readonly route: ActivatedRoute,
         private readonly snackBar: MatSnackBar,
         private readonly clientService: ClientServiceService
@@ -40,7 +39,7 @@ export class ClientEditComponent {
         } as Client;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params["id"]) {
                 this.clientId = params["id"];
@@ -49,7 +48,7 @@ export class ClientEditComponent {
         this.initClient();
     }
 
-    initClient(): void {
+    public initClient(): void {
         this.client = {
             clientId: "",
             displayName: "",
@@ -59,13 +58,11 @@ export class ClientEditComponent {
         this.loading = false;
     }
 
-    createClient(): void {
+    public createClient(): void {
         this.loading = true;
         this.clientService.createClient(this.client).subscribe({
             next: (data: HttpResponseEnvelope<Client>) => {
-                if (data && data.result) {
-                    this.client = data.result;
-                }
+                this.client = data.result;
                 this.displayClientSecretWarning = true;
                 this.disabled = true;
                 this.snackBar.open("Successfully added client.", "Dismiss", {
@@ -86,7 +83,7 @@ export class ClientEditComponent {
         });
     }
 
-    togglePasswordVisibility(): void {
+    public togglePasswordVisibility(): void {
         this.showPassword = !this.showPassword;
     }
 }

@@ -17,21 +17,21 @@ import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrap
     styleUrls: ["./tier-edit.component.css"]
 })
 export class TierEditComponent {
-    headerEdit: string;
-    headerCreate: string;
-    headerDescriptionEdit: string;
-    headerDescriptionCreate: string;
-    headerQuotas: string;
-    headerQuotasDescription: string;
-    selectionQuotas: SelectionModel<TierQuota>;
-    quotasTableDisplayedColumns: string[];
-    tierId?: string;
-    disabled: boolean;
-    editMode: boolean;
-    tier: Tier;
-    loading: boolean;
+    public headerEdit: string;
+    public headerCreate: string;
+    public headerDescriptionEdit: string;
+    public headerDescriptionCreate: string;
+    public headerQuotas: string;
+    public headerQuotasDescription: string;
+    public selectionQuotas: SelectionModel<TierQuota>;
+    public quotasTableDisplayedColumns: string[];
+    public tierId?: string;
+    public disabled: boolean;
+    public editMode: boolean;
+    public tier: Tier;
+    public loading: boolean;
 
-    constructor(
+    public constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly snackBar: MatSnackBar,
@@ -58,7 +58,7 @@ export class TierEditComponent {
         } as Tier;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params["id"]) {
                 this.tierId = params["id"];
@@ -73,7 +73,7 @@ export class TierEditComponent {
         }
     }
 
-    initTier() {
+    public initTier(): void {
         this.tier = {
             name: ""
         } as Tier;
@@ -81,14 +81,12 @@ export class TierEditComponent {
         this.loading = false;
     }
 
-    getTier() {
+    public getTier(): void {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<TierQuota>(true, []);
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                }
+                this.tier = data.result;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -102,14 +100,12 @@ export class TierEditComponent {
         });
     }
 
-    createTier() {
+    public createTier(): void {
         this.loading = true;
         this.tierService.createTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                    this.tier.quotas = [];
-                }
+                this.tier = data.result;
+                this.tier.quotas = [];
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
@@ -130,18 +126,16 @@ export class TierEditComponent {
         });
     }
 
-    updateTier() {
+    public updateTier(): void {
         this.loading = true;
         this.tierService.updateTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                    this.snackBar.open("Successfully updated tier.", "Dismiss", {
-                        duration: 4000,
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
+                this.tier = data.result;
+                this.snackBar.open("Successfully updated tier.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -155,34 +149,30 @@ export class TierEditComponent {
         });
     }
 
-    validateTier(): boolean {
+    public validateTier(): boolean {
         if (this.tier && this.tier.name && this.tier.name.length > 0) {
             return true;
         }
         return false;
     }
 
-    openAssignQuotaDialog() {
+    public openAssignQuotaDialog(): void {
         const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
 
         dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
-            if (result) {
-                this.createTierQuota(result);
-            }
+            this.createTierQuota(result);
         });
     }
 
-    createTierQuota(quota: AssignQuotaData) {
+    public createTierQuota(quota: AssignQuotaData): void {
         this.loading = true;
         this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
             next: (data: HttpResponseEnvelope<TierQuota>) => {
-                if (data && data.result) {
-                    this.snackBar.open("Successfully assigned quota.", "Dismiss");
-                    this.tier.quotas.push(data.result);
-                    this.tier.quotas = [...this.tier.quotas];
-                }
+                this.snackBar.open("Successfully assigned quota.", "Dismiss");
+                this.tier.quotas.push(data.result);
+                this.tier.quotas = [...this.tier.quotas];
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -196,7 +186,7 @@ export class TierEditComponent {
         });
     }
 
-    openConfirmationDialogQuotaDeletion() {
+    public openConfirmationDialogQuotaDeletion(): void {
         const confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
         const confirmDialogMessage =
             this.selectionQuotas.selected.length > 1
@@ -215,7 +205,7 @@ export class TierEditComponent {
         });
     }
 
-    openConfirmationDialogTierDeletion() {
+    public openConfirmationDialogTierDeletion(): void {
         const confirmDialogHeader = "Delete Tier";
         const confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -231,7 +221,7 @@ export class TierEditComponent {
         });
     }
 
-    deleteTier(): void {
+    public deleteTier(): void {
         this.tierService.deleteTierById(this.tierId!).subscribe({
             next: (_) => {
                 this.router.navigate(["/tiers"]);
@@ -246,7 +236,7 @@ export class TierEditComponent {
         });
     }
 
-    deleteQuota(): void {
+    public deleteQuota(): void {
         this.loading = true;
         const observableBatch: Observable<any>[] = [];
         this.selectionQuotas.selected.forEach((item) => {
@@ -274,13 +264,13 @@ export class TierEditComponent {
         });
     }
 
-    isAllSelected() {
+    public isAllSelected(): boolean {
         const numSelected = this.selectionQuotas.selected.length;
         const numRows = this.tier.quotas.length;
         return numSelected === numRows;
     }
 
-    toggleAllRowsQuotas() {
+    public toggleAllRowsQuotas(): void {
         if (this.isAllSelected()) {
             this.selectionQuotas.clear();
             return;
@@ -289,7 +279,7 @@ export class TierEditComponent {
         this.selectionQuotas.select(...this.tier.quotas);
     }
 
-    checkboxLabelQuotas(index?: number, row?: TierQuota): string {
+    public checkboxLabelQuotas(index?: number, row?: TierQuota): string {
         if (!row || !index) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }

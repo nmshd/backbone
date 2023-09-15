@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { AuthService, ValidateApiKeyRequest, ValidateApiKeyResponse } from "src/app/services/auth-service/auth.service";
-import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
     selector: "app-login",
@@ -10,10 +9,10 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
-    apiKey: string;
-    loading: boolean;
+    public apiKey: string;
+    public loading: boolean;
 
-    constructor(
+    public constructor(
         private readonly router: Router,
         private readonly snackBar: MatSnackBar,
         private readonly authService: AuthService
@@ -22,13 +21,13 @@ export class LoginComponent implements OnInit {
         this.loading = false;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         if (this.authService.isCurrentlyLoggedIn()) {
             this.router.navigate(["/"]);
         }
     }
 
-    login(): void {
+    public login(): void {
         this.loading = true;
         const apiKeyRequest: ValidateApiKeyRequest = {
             apiKey: this.apiKey

@@ -1,8 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -17,18 +15,18 @@ import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secr
     styleUrls: ["./client-list.component.css"]
 })
 export class ClientListComponent {
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
-    header: string;
-    headerDescription: string;
-    clients: ClientDTO[];
-    totalRecords: number;
-    pageSize: number;
-    pageIndex: number;
-    loading = false;
-    selection = new SelectionModel<ClientDTO>(true, []);
-    displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
+    @ViewChild(MatPaginator) public paginator!: MatPaginator;
+    public header: string;
+    public headerDescription: string;
+    public clients: ClientDTO[];
+    public totalRecords: number;
+    public pageSize: number;
+    public pageIndex: number;
+    public loading = false;
+    public selection = new SelectionModel<ClientDTO>(true, []);
+    public displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
 
-    constructor(
+    public constructor(
         private readonly router: Router,
         private readonly dialog: MatDialog,
         private readonly snackBar: MatSnackBar,
@@ -43,22 +41,20 @@ export class ClientListComponent {
         this.loading = true;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.getPagedData();
     }
 
-    getPagedData() {
+    public getPagedData(): void {
         this.loading = true;
         this.selection = new SelectionModel<ClientDTO>(true, []);
         this.clientService.getClients(this.pageIndex, this.pageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
-                if (data) {
-                    this.clients = data.result;
-                    if (data.pagination) {
-                        this.totalRecords = data.pagination.totalRecords!;
-                    } else {
-                        this.totalRecords = data.result.length;
-                    }
+                this.clients = data.result;
+                if (data.pagination) {
+                    this.totalRecords = data.pagination.totalRecords!;
+                } else {
+                    this.totalRecords = data.result.length;
                 }
             },
             complete: () => (this.loading = false),
@@ -73,21 +69,21 @@ export class ClientListComponent {
         });
     }
 
-    pageChangeEvent(event: PageEvent): void {
+    public pageChangeEvent(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
         this.getPagedData();
     }
 
-    dateConvert(date: any): string {
+    public dateConvert(date: any): string {
         return new Date(date).toLocaleDateString();
     }
 
-    addClient(): void {
+    public addClient(): void {
         this.router.navigate(["/clients/create"]);
     }
 
-    openConfirmationDialog() {
+    public openConfirmationDialog(): void {
         const confirmDialogHeader = this.selection.selected.length > 1 ? "Delete Clients" : "Delete Client";
         const confirmDialogMessage =
             this.selection.selected.length > 1 ? `Are you sure you want to delete the ${this.selection.selected.length} selected clients?` : "Are you sure you want to delete the selected client?";
@@ -104,7 +100,7 @@ export class ClientListComponent {
         });
     }
 
-    deleteClient(): void {
+    public deleteClient(): void {
         this.loading = true;
         const observableBatch: Observable<any>[] = [];
         this.selection.selected.forEach((item) => {
@@ -132,13 +128,13 @@ export class ClientListComponent {
         });
     }
 
-    isAllSelected() {
+    public isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
         const numRows = this.clients.length;
         return numSelected === numRows;
     }
 
-    toggleAllRows() {
+    public toggleAllRows(): void {
         if (this.isAllSelected()) {
             this.selection.clear();
             return;
@@ -147,15 +143,15 @@ export class ClientListComponent {
         this.selection.select(...this.clients);
     }
 
-    checkboxLabel(index?: number, row?: ClientDTO): string {
+    public checkboxLabel(index?: number, row?: ClientDTO): string {
         if (!row || !index) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selection.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
     }
 
-    openChangeSecretDialog(clientId: any) {
-        const dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
+    public openChangeSecretDialog(clientId: any): void {
+        this.dialog.open(ChangeSecretDialogComponent, {
             data: { clientId: clientId },
             minWidth: "50%",
             maxWidth: "100%"

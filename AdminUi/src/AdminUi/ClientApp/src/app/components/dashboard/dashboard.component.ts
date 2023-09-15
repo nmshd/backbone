@@ -7,17 +7,17 @@ import { SidebarService } from "src/app/services/sidebar-service/sidebar.service
     styleUrls: ["./dashboard.component.css"]
 })
 export class DashboardComponent {
-    header: string;
-    breakpoint: number;
-    dashboardOverviewPanels: DashboardOverviewPanel[];
+    public header: string;
+    public breakpoint: number;
+    public dashboardOverviewPanels: DashboardOverviewPanel[];
 
-    constructor(private readonly sidebarService: SidebarService) {
+    public constructor(private readonly sidebarService: SidebarService) {
         this.header = "";
         this.breakpoint = window.innerWidth <= 1150 ? 1 : window.innerWidth <= 1700 ? 2 : 3;
         this.dashboardOverviewPanels = [];
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.header = "Dashboard";
         this.dashboardOverviewPanels = [
             {
@@ -44,11 +44,11 @@ export class DashboardComponent {
         ];
     }
 
-    onResize(event: any): void {
+    public onResize(): void {
         this.breakpoint = window.innerWidth <= 1150 ? 1 : window.innerWidth <= 1700 ? 2 : 3;
     }
 
-    isMobile(): boolean {
+    public isMobile(): boolean {
         return this.sidebarService.isMobile();
     }
 }

@@ -8,14 +8,14 @@ import { environment } from "src/environments/environment";
     providedIn: "root"
 })
 export class MetricsService {
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    constructor(private readonly http: HttpClient) {
+    public constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
-    getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
-        return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl  }/Metrics`);
+    public getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
+        return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl}/Metrics`);
     }
 }
 

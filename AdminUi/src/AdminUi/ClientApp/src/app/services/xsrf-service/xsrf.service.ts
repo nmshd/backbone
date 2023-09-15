@@ -6,13 +6,13 @@ import { environment } from "src/environments/environment";
     providedIn: "root"
 })
 export class XSRFService {
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    constructor(private readonly http: HttpClient) {
+    public constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
     }
 
-    loadAndStoreXSRFToken(): void {
+    public loadAndStoreXSRFToken(): void {
         this.http.get(`${this.apiUrl}/xsrf`, { responseType: "text" }).subscribe({
             next: (token) => {
                 localStorage.setItem("xsrf-token", token);
@@ -20,11 +20,11 @@ export class XSRFService {
         });
     }
 
-    getStoredToken(): string {
+    public getStoredToken(): string {
         return localStorage.getItem("xsrf-token") ?? "";
     }
 
-    clearStoredToken(): void {
+    public clearStoredToken(): void {
         localStorage.removeItem("xsrf-token");
     }
 }

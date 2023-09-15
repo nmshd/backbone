@@ -7,13 +7,13 @@ import { SidebarService } from "src/app/services/sidebar-service/sidebar.service
     styleUrls: ["./sidebar.component.css"]
 })
 export class SidebarComponent {
-    sidebarOptions: SidebarOption[];
+    public sidebarOptions: SidebarOption[];
 
-    constructor(private readonly sidebarService: SidebarService) {
+    public constructor(private readonly sidebarService: SidebarService) {
         this.sidebarOptions = [];
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.sidebarOptions = [
             {
                 routerLink: "/dashboard",
@@ -38,7 +38,7 @@ export class SidebarComponent {
         ];
     }
 
-    isMobile(): boolean {
+    public isMobile(): boolean {
         return this.sidebarService.isMobile();
     }
 }

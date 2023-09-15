@@ -11,22 +11,22 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
     styleUrls: ["./identity-list.component.css"]
 })
 export class IdentityListComponent {
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatPaginator) public paginator!: MatPaginator;
 
-    header: string;
-    headerDescription: string;
+    public header: string;
+    public headerDescription: string;
 
-    identities: IdentityOverview[];
+    public identities: IdentityOverview[];
 
-    totalRecords: number;
-    pageSize: number;
-    pageIndex: number;
+    public totalRecords: number;
+    public pageSize: number;
+    public pageIndex: number;
 
-    loading = false;
+    public loading = false;
 
-    displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
+    public displayedColumns: string[] = ["address", "tierName", "createdWithClient", "numberOfDevices", "createdAt", "lastLoginAt", "datawalletVersion", "identityVersion"];
 
-    constructor(
+    public constructor(
         private readonly router: Router,
         private readonly snackBar: MatSnackBar,
         private readonly identityService: IdentityService
@@ -43,21 +43,19 @@ export class IdentityListComponent {
         this.loading = true;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.getPagedData();
     }
 
-    getPagedData() {
+    public getPagedData(): void {
         this.loading = true;
         this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<IdentityOverview>) => {
-                if (data) {
-                    this.identities = data.result;
-                    if (data.pagination) {
-                        this.totalRecords = data.pagination.totalRecords!;
-                    } else {
-                        this.totalRecords = data.result.length;
-                    }
+                this.identities = data.result;
+                if (data.pagination) {
+                    this.totalRecords = data.pagination.totalRecords!;
+                } else {
+                    this.totalRecords = data.result.length;
                 }
             },
             complete: () => (this.loading = false),
@@ -72,17 +70,17 @@ export class IdentityListComponent {
         });
     }
 
-    pageChangeEvent(event: PageEvent) {
+    public pageChangeEvent(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
         this.getPagedData();
     }
 
-    editIdentity(identityAddress: string) {
-        this.router.navigate([`/identities/${  identityAddress}`]);
+    public editIdentity(identityAddress: string): void {
+        this.router.navigate([`/identities/${identityAddress}`]);
     }
 
-    goToTier(tierId: string) {
-        this.router.navigate([`/tiers/${  tierId}`]);
+    public goToTier(tierId: string): void {
+        this.router.navigate([`/tiers/${tierId}`]);
     }
 }

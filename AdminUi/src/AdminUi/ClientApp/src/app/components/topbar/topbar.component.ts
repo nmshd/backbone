@@ -8,16 +8,16 @@ import { SidebarService } from "src/app/services/sidebar-service/sidebar.service
     styleUrls: ["./topbar.component.css"]
 })
 export class TopbarComponent {
-    constructor(
+    public constructor(
         private readonly sidebarService: SidebarService,
         private readonly authService: AuthService
     ) {}
 
-    toggleSidebar(): void {
+    public toggleSidebar(): void {
         this.sidebarService.toggle();
     }
 
-    logout(): void {
+    public logout(): void {
         this.authService.logout();
     }
 }

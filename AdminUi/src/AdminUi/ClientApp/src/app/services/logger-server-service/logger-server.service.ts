@@ -8,9 +8,9 @@ import { Observable } from "rxjs";
     providedIn: "root"
 })
 export class LoggerServerService extends NGXLoggerServerService {
-    isLoggedIn$: Observable<boolean> | undefined;
+    private isLoggedIn$: Observable<boolean> | undefined;
 
-    constructor(
+    public constructor(
         httpBackend: HttpBackend,
         ngZone: NgZone,
         private readonly authService: AuthService

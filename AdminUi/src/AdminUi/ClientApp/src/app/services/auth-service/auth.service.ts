@@ -10,13 +10,13 @@ import { XSRFService } from "../xsrf-service/xsrf.service";
 })
 export class AuthService {
     private readonly loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasApiKey());
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    get isLoggedIn() {
+    public get isLoggedIn(): Observable<boolean> {
         return this.loggedIn.asObservable();
     }
 
-    constructor(
+    public constructor(
         private readonly router: Router,
         private readonly http: HttpClient,
         private readonly xsrfService: XSRFService
@@ -24,30 +24,30 @@ export class AuthService {
         this.apiUrl = environment.apiUrl;
     }
 
-    isCurrentlyLoggedIn(): boolean {
+    public isCurrentlyLoggedIn(): boolean {
         return this.loggedIn.value;
     }
 
-    hasApiKey(): boolean {
+    public hasApiKey(): boolean {
         return !!localStorage.getItem("api-key");
     }
 
-    getApiKey(): string | null {
+    public getApiKey(): string | null {
         return localStorage.getItem("api-key");
     }
 
-    validateApiKey(apiKeyRequest: ValidateApiKeyRequest): Observable<ValidateApiKeyResponse> {
+    public validateApiKey(apiKeyRequest: ValidateApiKeyRequest): Observable<ValidateApiKeyResponse> {
         return this.http.post<ValidateApiKeyResponse>(`${this.apiUrl}/ValidateApiKey`, apiKeyRequest, { headers: { skip: "true" } });
     }
 
-    login(apiKey: string): void {
+    public login(apiKey: string): void {
         localStorage.setItem("api-key", apiKey);
         this.xsrfService.loadAndStoreXSRFToken();
         this.loggedIn.next(true);
         this.router.navigate(["/"]);
     }
 
-    logout(): Promise<boolean> {
+    public logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
         this.xsrfService.clearStoredToken();

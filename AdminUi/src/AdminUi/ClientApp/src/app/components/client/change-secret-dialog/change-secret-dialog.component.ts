@@ -10,15 +10,15 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./change-secret-dialog.component.css"]
 })
 export class ChangeSecretDialogComponent {
-    header: string;
-    clientId: string;
-    clientSecret: string;
-    showSecret: boolean;
-    displayClientSecretWarning: boolean;
-    loading: boolean;
-    disabled: boolean;
+    public header: string;
+    public clientId: string;
+    public clientSecret: string;
+    public showSecret: boolean;
+    public displayClientSecretWarning: boolean;
+    public loading: boolean;
+    public disabled: boolean;
 
-    constructor(
+    public constructor(
         private readonly snackBar: MatSnackBar,
         private readonly clientService: ClientServiceService,
         public dialogRef: MatDialogRef<ChangeSecretDialogComponent>,
@@ -33,7 +33,7 @@ export class ChangeSecretDialogComponent {
         this.disabled = false;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.loading = false;
         this.clientId = this.data.clientId;
 
@@ -42,7 +42,7 @@ export class ChangeSecretDialogComponent {
         }
     }
 
-    changeSecret() {
+    public changeSecret(): void {
         this.loading = true;
         this.disabled = true;
         const request = {
@@ -51,9 +51,7 @@ export class ChangeSecretDialogComponent {
 
         this.clientService.changeClientSecret(this.clientId, request).subscribe({
             next: (data: HttpResponseEnvelope<Client>) => {
-                if (data && data.result) {
-                    this.clientSecret = data.result.clientSecret!;
-                }
+                this.clientSecret = data.result.clientSecret!;
                 this.displayClientSecretWarning = true;
                 this.disabled = true;
                 this.snackBar.open("Successfully changed client secret.", "Dismiss", {
@@ -75,7 +73,7 @@ export class ChangeSecretDialogComponent {
         });
     }
 
-    togglePasswordVisibility(): void {
+    public togglePasswordVisibility(): void {
         this.showSecret = !this.showSecret;
     }
 }

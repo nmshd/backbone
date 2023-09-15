@@ -6,21 +6,21 @@ import { AuthService } from "src/app/services/auth-service/auth.service";
 
 @Injectable()
 export class ApiKeyInterceptor implements HttpInterceptor {
-    isLoggedIn$: Observable<boolean> | undefined;
+    private isLoggedIn$: Observable<boolean> | undefined;
 
-    constructor(
+    public constructor(
         private readonly authService: AuthService,
         private readonly snackBar: MatSnackBar
     ) {}
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.isLoggedIn$ = this.authService.isLoggedIn;
         const skipIntercept = request.headers.has("skip");
         if (skipIntercept) {
             request = request.clone({
                 headers: request.headers.delete("skip")
             });
-        } else if (this.isLoggedIn$ && this.authService.getApiKey() != null) {
+        } else if (this.isLoggedIn$ && this.authService.getApiKey() !== null) {
             request = request.clone({
                 setHeaders: {
                     "X-API-KEY": this.authService.getApiKey()!
