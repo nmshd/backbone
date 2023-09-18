@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
 using Backbone.Modules.Relationships.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
@@ -11,12 +13,14 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
+    private readonly IEventBus _eventBus;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext, IMapper mapper)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
         _mapper = mapper;
+        _eventBus = eventBus;
     }
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
@@ -30,6 +34,14 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
+        PublishIntegrationEvent(template);
+
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
+    }
+
+    private void PublishIntegrationEvent(RelationshipTemplate template)
+    {
+        var evt = new RelationshipTemplateCreatedIntegrationEvent(template);
+        _eventBus.Publish(evt);
     }
 }
