@@ -23,7 +23,7 @@
             </div>
         </mat-card-content>
     </mat-card>
-    <mat-accordion *ngIf="editMode" class="tier-accordion">
+    <mat-accordion *ngIf="editMode" class="tier-accordion" [multi]="true">
         <mat-expansion-panel class="quotas-expansion-panel" [expanded]="true">
             <mat-expansion-panel-header class="quotas-expansion-panel-header">
                 <mat-panel-title class="quotas-panel-header-title">
@@ -64,19 +64,19 @@
                 </ng-container>
                 <ng-container matColumnDef="metricName">
                     <th mat-header-cell *matHeaderCellDef>Metric Name</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Metric Name">
+                    <td mat-cell *matCellDef="let Quota" data-label="Metric Name:">
                         {{ Quota.metric.displayName }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="max">
                     <th mat-header-cell *matHeaderCellDef>Max</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Max">
+                    <td mat-cell *matCellDef="let Quota" data-label="Max:">
                         {{ Quota.max }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="period">
                     <th mat-header-cell *matHeaderCellDef>Period</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Period">
+                    <td mat-cell *matCellDef="let Quota" data-label="Period:">
                         {{ Quota.period }}
                     </td>
                 </ng-container>
