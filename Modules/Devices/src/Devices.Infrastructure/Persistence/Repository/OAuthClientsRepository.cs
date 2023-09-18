@@ -14,36 +14,50 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 public class OAuthClientsRepository : IOAuthClientsRepository
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
-    private List<CustomOpenIddictEntityFrameworkCoreApplication> _cachedApplications;
+    private Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication> _trackedApplications;
 
     public OAuthClientsRepository(OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
         _applicationManager = applicationManager;
-        _cachedApplications = new List<CustomOpenIddictEntityFrameworkCoreApplication>();
+        _trackedApplications = new Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication>();
     }
 
-    public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken)
+    public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken, bool track = false)
     {
         var applications = await _applicationManager.ListAsync(cancellationToken: cancellationToken).ToListAsync(cancellationToken);
 
-        _cachedApplications = applications;
+        var oAuthClients = new List<OAuthClient>();
 
-        return applications.Select(client => new OAuthClient(client.ClientId!, client.DisplayName!, TierId.Create(client.DefaultTier).Value)).ToList();
+        if (track)
+        {
+            foreach (var application in applications)
+            {
+                _trackedApplications[application.ClientId!] = application;
+                oAuthClients.Add(new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value));
+            }
+        }
+        else
+        {
+            oAuthClients.AddRange(applications.Select(application => new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value)));
+        }
+
+        return oAuthClients;
     }
 
     public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken, bool track = false)
     {
-        var application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
+        {
+            return new OAuthClient(trackedApplication.ClientId!, trackedApplication.DisplayName!, TierId.Create(trackedApplication.DefaultTier).Value);
+        }
 
-        var cachedApplicationIndex = _cachedApplications.FindIndex(cachedApplication => cachedApplication.ClientId == clientId);
-        if (cachedApplicationIndex != -1)
-        {
-            _cachedApplications[cachedApplicationIndex] = application;
-        }
-        else
-        {
-            _cachedApplications.Add(application);
-        }
+        var application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
+
+        if (application == null)
+            return null;
+        
+        if(track)
+            _trackedApplications[clientId] = application;
 
         return new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value);
     }
@@ -97,44 +111,30 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Update(OAuthClient client, CancellationToken cancellationToken)
     {
-        var cachedApplication = _cachedApplications.FirstOrDefault(ca => ca.ClientId == client.ClientId);
-        if (cachedApplication != null)
+        if (!_trackedApplications.TryGetValue(client.ClientId, out var application))
         {
-            cachedApplication.DefaultTier = client.DefaultTier;
-            await _applicationManager.UpdateAsync(cachedApplication, cancellationToken);
-            return;
+            application = await _applicationManager.FindByClientIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         }
-
-        var application = await _applicationManager.FindByIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         application.DefaultTier = client.DefaultTier;
         await _applicationManager.UpdateAsync(application, cancellationToken);
     }
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)
     {
-        var cachedApplication = _cachedApplications.FirstOrDefault(ca => ca.ClientId == clientId);
-        if (cachedApplication != null)
+        if (!_trackedApplications.TryGetValue(clientId, out var application))
         {
-            await _applicationManager.DeleteAsync(cachedApplication, cancellationToken);
-            _cachedApplications.Remove(cachedApplication);
-            return;
+            application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         }
-
-        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        await _applicationManager.DeleteAsync(client, cancellationToken);
+        await _applicationManager.DeleteAsync(application, cancellationToken);
+        _trackedApplications.Remove(clientId);
     }
 
     public async Task ChangeClientSecret(OAuthClient client, string clientSecret, CancellationToken cancellationToken)
     {
-        var cachedApplication = _cachedApplications.FirstOrDefault(ca => ca.ClientId == client.ClientId);
-        if (cachedApplication != null)
+        if (!_trackedApplications.TryGetValue(client.ClientId, out var application))
         {
-            await _applicationManager.UpdateAsync(cachedApplication, clientSecret, cancellationToken);
-            _cachedApplications.Remove(cachedApplication);
-            return;
+            application = await _applicationManager.FindByClientIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         }
-
-        var application = await _applicationManager.FindByIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         await _applicationManager.UpdateAsync(application, clientSecret, cancellationToken);
     }
 }
