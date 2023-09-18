@@ -16,9 +16,7 @@
             </ng-container>
             <ng-container matColumnDef="tierName">
                 <th mat-header-cell *matHeaderCellDef>Tier</th>
-                <td mat-cell *matCellDef="let identity" data-label="TierName" (click)="goToTier(identity.tierId)" class="tier-navigation">
-                    {{ identity.tierName }}
-                </td>
+                <td mat-cell *matCellDef="let identity" data-label="TierName" (click)="goToTier(identity.tierId)" class="tier-navigation">{{ identity.tierName }}</td>
             </ng-container>
             <ng-container matColumnDef="createdWithClient">
                 <th mat-header-cell *matHeaderCellDef>Created with Client</th>
