@@ -30,6 +30,12 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
         return calculator;
     }
 
+    protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
+    {
+        var calculator = _serviceProvider.GetRequiredService<NumberOfRelationshipTemplatesMetricCalculator>();
+        return calculator;
+    }
+
     protected override IMetricCalculator CreateNumberOfTokensMetricCalculator()
     {
         var calculator = _serviceProvider.GetRequiredService<NumberOfTokensMetricCalculator>();
