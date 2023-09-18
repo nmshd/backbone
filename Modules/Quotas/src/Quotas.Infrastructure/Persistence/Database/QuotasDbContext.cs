@@ -30,7 +30,6 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public DbSet<Token> Tokens { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
