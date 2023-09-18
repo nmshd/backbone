@@ -13,7 +13,7 @@
 		<PackageReference Include="FluentValidation" Version="11.7.1" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.3" />
-		<PackageReference Include="OpenIddict.Core" Version="[4.4.0]" />
+		<PackageReference Include="OpenIddict.Core" Version="[4.8.0]" />
 		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="[4.4.0]" />
 	</ItemGroup>
 
