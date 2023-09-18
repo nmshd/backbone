@@ -55,7 +55,8 @@ export class TierEditComponent {
             id: "",
             name: "",
             quotas: [],
-            numberOfIdentities: 0
+            numberOfIdentities: 0,
+            deleteable: true
         } as Tier;
     }
 
@@ -89,6 +90,7 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
+                    this.tier.name == "Basic" || this.tier.numberOfIdentities > 0 ? (this.tier.deleteable = false) : (this.tier.deleteable = true);
                 }
             },
             complete: () => (this.loading = false),
@@ -112,7 +114,8 @@ export class TierEditComponent {
                         id: data.result.id,
                         name: data.result.name,
                         quotas: [],
-                        numberOfIdentities: 0
+                        numberOfIdentities: 0,
+                        deleteable: true
                     } as Tier;
                 }
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
