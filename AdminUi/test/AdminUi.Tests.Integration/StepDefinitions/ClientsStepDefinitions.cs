@@ -13,7 +13,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private readonly ClientsApi _clientsApi;
     private string _clientId;
     private string _clientSecret;
-    private HttpResponse<List<ClientDTO>>? _getClientsResponse;
+    private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
     private HttpResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;

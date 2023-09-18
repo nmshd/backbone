@@ -7,9 +7,9 @@ public class ClientsApi : BaseApi
 {
     public ClientsApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
-    public async Task<HttpResponse<List<ClientDTO>>> GetAllClients(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<List<ClientOverviewDTO>>> GetAllClients(RequestConfiguration requestConfiguration)
     {
-        return await Get<List<ClientDTO>>("/Clients", requestConfiguration);
+        return await Get<List<ClientOverviewDTO>>("/Clients", requestConfiguration);
     }
 
     public async Task<HttpResponse> DeleteClient(string clientId, RequestConfiguration requestConfiguration)
