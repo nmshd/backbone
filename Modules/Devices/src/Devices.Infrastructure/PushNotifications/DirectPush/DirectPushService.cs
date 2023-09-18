@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
 
@@ -56,9 +57,15 @@ public class DirectPushService : IPushService
             registration = new PnsRegistration(address, deviceId, handle, appId);
             pnsConnector.ValidateRegistration(registration);
 
-            await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
-
-            _logger.LogTrace("New device successfully registered.");
+            try
+            {
+                await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
+                _logger.LogTrace("New device successfully registered.");
+            }
+            catch (InfrastructureException exception)
+            {
+                _logger.LogInformation(exception.Message);
+            }
         }
     }
 }
