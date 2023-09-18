@@ -20,6 +20,11 @@ public abstract class MetricCalculatorFactory
             return CreateNumberOfRelationshipsMetricCalculator();
         }
 
+        if (metricKey == MetricKey.NumberOfRelationshipTemplates)
+        {
+            return CreateNumberOfRelationshipTemplatesMetricCalculator();
+        }
+
         if (metricKey == MetricKey.NumberOfTokens)
         {
             return CreateNumberOfTokensMetricCalculator();
@@ -36,6 +41,7 @@ public abstract class MetricCalculatorFactory
     protected abstract IMetricCalculator CreateNumberOfFilesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfSentMessagesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfRelationshipsMetricCalculator();
+    protected abstract IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfTokensMetricCalculator();
     protected abstract IMetricCalculator CreateUsedFileStorageSpaceCalculator();
 }
