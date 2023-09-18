@@ -3,7 +3,7 @@
 process.env.FORCE_COLOR = 3;
 
 await $`npm ci`;
-await nothrow($`npx eslint --ext ts ./src`);
-await nothrow($`npx prettier --check .`);
-await nothrow($`npx license-check`);
-await nothrow($`npx better-npm-audit audit`);
+await $`npx eslint --ext ts ./src`;
+await $`npx prettier --check .`;
+await $`npx license-check`;
+await $`npx better-npm-audit audit`;
