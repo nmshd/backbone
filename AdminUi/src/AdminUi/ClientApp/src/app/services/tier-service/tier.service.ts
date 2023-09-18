@@ -45,7 +45,6 @@ export interface Tier {
     id: string;
     name: string;
     quotas: TierQuota[];
-    numberOfIdentities: number;
     deleteable: boolean;
 }
 

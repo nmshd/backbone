@@ -20,10 +20,6 @@
                     <input matInput required [(ngModel)]="tier.name" [disabled]="disabled || editMode" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
-                <mat-form-field *ngIf="editMode" class="full-width">
-                    <mat-label>Number of Identities</mat-label>
-                    <input matInput [(ngModel)]="tier.numberOfIdentities" disabled />
-                </mat-form-field>
             </div>
         </mat-card-content>
     </mat-card>

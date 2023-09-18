@@ -49,13 +49,11 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.tier = {} as Tier;
         this.disabled = false;
         this.tier = {
             id: "",
             name: "",
             quotas: [],
-            numberOfIdentities: 0,
             deleteable: true
         } as Tier;
     }
@@ -90,7 +88,7 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.tier.name == "Basic" || this.tier.numberOfIdentities > 0 ? (this.tier.deleteable = false) : (this.tier.deleteable = true);
+                    this.tier.name == "Basic" ? (this.tier.deleteable = false) : (this.tier.deleteable = true);
                 }
             },
             complete: () => (this.loading = false),

@@ -4,7 +4,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 namespace Backbone.Modules.Quotas.Application.DTOs;
 public class TierDetailsDTO
 {
-    public TierDetailsDTO(Tier tier, IEnumerable<Metric> metrics, int identitiesCount)
+    public TierDetailsDTO(Tier tier, IEnumerable<Metric> metrics)
     {
         Id = tier.Id;
         Name = tier.Name;
@@ -16,11 +16,9 @@ public class TierDetailsDTO
                 q.Period
             )
         );
-        NumberOfIdentities = identitiesCount;
     }
 
     public string Id { get; set; }
     public string Name { get; set; }
     public IEnumerable<TierQuotaDefinitionDTO> Quotas { get; set; }
-    public int NumberOfIdentities { get; set; }
 }

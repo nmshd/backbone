@@ -25,9 +25,8 @@ public class HandlerTests
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { new(metricKey, "Number Of Sent Messages") });
-        var stubIdentityRepository = new FindWithTierIdentitiesStubRepository(new List<Identity> { new("some-identity-address", tierId) });
 
-        var handler = CreateHandler(stubTiersRepository, stubMetricsRepository, stubIdentityRepository);
+        var handler = CreateHandler(stubTiersRepository, stubMetricsRepository);
 
         // Act
         var result = await handler.Handle(new GetTierByIdQuery(tierId), CancellationToken.None);
@@ -36,7 +35,6 @@ public class HandlerTests
         result.Id.Should().Be(tierId);
         result.Name.Should().Be(tierName);
         result.Quotas.Should().HaveCount(1);
-        result.NumberOfIdentities.Should().Be(1);
 
         result.Quotas.First().Max.Should().Be(max);
         result.Quotas.First().Period.Should().Be(period);
@@ -60,9 +58,8 @@ public class HandlerTests
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(metrics);
-        var stubIdentityRepository = new FindWithTierIdentitiesStubRepository(new List<Identity> { new("some-identity-address", tierId) });
 
-        var handler = CreateHandler(stubTiersRepository, stubMetricsRepository, stubIdentityRepository);
+        var handler = CreateHandler(stubTiersRepository, stubMetricsRepository);
 
         // Act
         var result = await handler.Handle(new GetTierByIdQuery(tierId), CancellationToken.None);
@@ -71,7 +68,6 @@ public class HandlerTests
         result.Id.Should().Be(tierId);
         result.Name.Should().Be(tierName);
         result.Quotas.Should().HaveCount(3);
-        result.NumberOfIdentities.Should().Be(1);
 
         result.Quotas.ElementAt(0).Metric.Key.Should().Be(metricWithTwoQuotas.Key.Value);
         result.Quotas.ElementAt(0).Metric.DisplayName.Should().Be(metricWithTwoQuotas.DisplayName);
@@ -89,8 +85,8 @@ public class HandlerTests
         result.Quotas.ElementAt(2).Period.Should().Be(QuotaPeriod.Week);
     }
 
-    private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository, IIdentitiesRepository identitiesRepository)
+    private Handler CreateHandler(ITiersRepository tiersRepository, IMetricsRepository metricsRepository)
     {
-        return new Handler(tiersRepository, metricsRepository, identitiesRepository);
+        return new Handler(tiersRepository, metricsRepository);
     }
 }
