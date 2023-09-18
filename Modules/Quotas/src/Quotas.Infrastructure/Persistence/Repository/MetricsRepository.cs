@@ -14,6 +14,7 @@ public class MetricsRepository : IMetricsRepository
         {
             new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
             new(MetricKey.NumberOfRelationships, "Number of Relationships"),
+            new(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
             new(MetricKey.NumberOfFiles, "Number of Files"),
             new(MetricKey.NumberOfTokens, "Number of Tokens"),
             new(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)")
