@@ -18,7 +18,6 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
-    private readonly IPnsRegistrationRepository _registrationRepository;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
         ILogger<ApplePushNotificationServiceConnector> logger, IPnsRegistrationRepository registrationRepository)
@@ -26,17 +25,16 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
         _logger = logger;
-        _registrationRepository = registrationRepository;
         _options = options.Value;
     }
 
-    public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<List<SendResult>> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        var tasks = registrations.Select(pnsRegistration =>
+        var tasks = registrations.Select(async pnsRegistration =>
         {
             ValidateRegistration(pnsRegistration);
             var handle = pnsRegistration.Handle.Value;
@@ -52,10 +50,11 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
             _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
 
-            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, pnsRegistration));
+            var response = await _httpClient.SendAsync(request);
+            return await MapResponse(response, pnsRegistration);
         }).ToList();
 
-        await Task.WhenAll(tasks);
+        return (await Task.WhenAll(tasks)).ToList();
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -64,25 +63,21 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task HandleResponse(HttpResponseMessage response, PnsRegistration registration)
+    private async Task<SendResult> MapResponse(HttpResponseMessage response, PnsRegistration registration)
     {
-        if (response is { IsSuccessStatusCode: false })
-        {
-            var responseContent = JsonConvert.DeserializeObject<ErrorResponse>(await response.Content.ReadAsStringAsync());
-            if (!responseContent.Reason.IsNullOrEmpty())
-            {
-                _logger.LogError(
-                    "The following error occurred while trying to send the notification for deviceId '{deviceId}': '{error}'",
-                    registration.DeviceId, responseContent.Reason);
+        if (response.IsSuccessStatusCode) return SendResult.Success();
 
-                if (responseContent.Reason == "Unregistered")
-                    await _registrationRepository.Delete(registration, CancellationToken.None);
-            }
-            else
+        var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+        string reason = responseContent.reason;
+        if (!reason.IsNullOrEmpty())
+        {
+            if (reason == "Unregistered")
             {
-                _logger.LogError("An unknown error occurred while trying to send the notification for deviceId '{deviceId}'.", registration.DeviceId);
+                return SendResult.Failure(registration.DeviceId, SendResult.FailureReason.InvalidHandle);
             }
         }
+
+        return SendResult.Failure(registration.DeviceId, SendResult.FailureReason.Unexpected, responseContent.Reason);
     }
 
     private static int GetNotificationId(object pushNotification)
@@ -109,11 +104,6 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             }
         }
     }
-}
-
-public class ErrorResponse
-{
-    public string Reason { get; set; }
 }
 
 public static class TypeExtensions

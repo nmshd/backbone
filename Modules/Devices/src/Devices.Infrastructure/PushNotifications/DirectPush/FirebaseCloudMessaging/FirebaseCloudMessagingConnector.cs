@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Reflection;
 using System.Text.Json;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
@@ -17,18 +16,16 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
     private readonly DirectPnsCommunicationOptions.FcmOptions _options;
-    private readonly IPnsRegistrationRepository _registrationRepository;
 
     public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
-        ILogger<FirebaseCloudMessagingConnector> logger, IPnsRegistrationRepository registrationRepository)
+        ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
         _logger = logger;
-        _registrationRepository = registrationRepository;
         _options = options.Value;
     }
 
-    public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<List<SendResult>> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var registrationsByAppId = registrations.GroupBy(r => r.AppId)
             .Select(r => new
@@ -42,7 +39,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 }).ToList()
             });
 
-        var tasks = registrationsByAppId.Select(pnsRegistrations =>
+        var tasks = registrationsByAppId.Select(async pnsRegistrations =>
         {
             var (notificationTitle, notificationBody) = GetNotificationText(notification);
             var notificationId = GetNotificationId(notification);
@@ -59,11 +56,11 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 string.Join(",", pnsRegistrations.Handles));
 
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
-
-            return firebaseMessaging.SendMulticastAsync(message).ContinueWith(async t => HandleResponse(await t, pnsRegistrations.DeviceIds));
+            var response = await firebaseMessaging.SendMulticastAsync(message);
+            return MapResponse(response, pnsRegistrations.DeviceIds);
         });
 
-        await Task.WhenAll(tasks);
+        return (await Task.WhenAll(tasks)).ToList().SelectMany(list => list).ToList();
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -72,23 +69,26 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
     }
 
-    private async Task HandleResponse(BatchResponse batchResponse, IReadOnlyList<DeviceId> devices)
+    private List<SendResult> MapResponse(BatchResponse batchResponse, IReadOnlyList<DeviceId> devices)
     {
-        var devicesToDelete = new List<DeviceId>();
+        var sendResults = new List<SendResult>();
         for (var index = 0; index < batchResponse.Responses.Count; index++)
         {
             var response = batchResponse.Responses[index];
-            if (!response.IsSuccess)
+            var deviceId = devices[index];
+            if (response.IsSuccess)
             {
-                _logger.LogError("Push notification failed for {device}: {responseMessage}", devices[index], response.Exception.Message);
-                if (response.Exception.MessagingErrorCode is MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered)
-                {
-                    devicesToDelete.Add(devices[index]);
-                }
+                sendResults.Add(SendResult.Success());
+            }
+            else
+            {
+                sendResults.Add(response.Exception.MessagingErrorCode is MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered
+                    ? SendResult.Failure(deviceId, SendResult.FailureReason.InvalidHandle)
+                    : SendResult.Failure(deviceId, SendResult.FailureReason.Unexpected, response.Exception.Message));
             }
         }
 
-        await _registrationRepository.Delete(devicesToDelete, CancellationToken.None);
+        return sendResults;
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)

@@ -6,17 +6,20 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+
 public class DirectPushService : IPushService
 {
     private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;
     private readonly PnsConnectorFactory _pnsConnectorFactory;
+    private readonly IPnsRegistrationRepository _registrationRepository;
 
-    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger)
+    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger, IPnsRegistrationRepository registrationRepository)
     {
         _pnsRegistrationRepository = pnsRegistrationRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
+        _registrationRepository = registrationRepository;
     }
 
     public async Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
@@ -31,9 +34,29 @@ public class DirectPushService : IPushService
 
             var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
-            await pnsConnector.Send(group, recipient, notification);
+            var sendResults = await pnsConnector.Send(group, recipient, notification);
+            await ParseNotificationResponses(sendResults);
 
             _logger.LogTrace($"Successfully sent push notifications to identity '{recipient}' on platform '{Enum.GetName(platform)}'");
+        }
+    }
+
+    private async Task ParseNotificationResponses(IEnumerable<SendResult> sendResults)
+    {
+        foreach (var sendResult in sendResults.Where(sendResult => sendResult.IsFailure))
+        {
+            switch (sendResult.Error.Reason)
+            {
+                case SendResult.FailureReason.InvalidHandle:
+                    _logger.LogInformation("Deleting device {deviceId} since handle is no longer valid.", sendResult.Error.DeviceId);
+                    await _registrationRepository.Delete(sendResult.Error.DeviceId, CancellationToken.None);
+                    break;
+                case SendResult.FailureReason.Unexpected:
+                    _logger.LogError(
+                        "The following error occurred while trying to send the notification for deviceId '{deviceId}': '{error}'",
+                        sendResult.Error.DeviceId, sendResult.Error.Message);
+                    break;
+            }
         }
     }
 

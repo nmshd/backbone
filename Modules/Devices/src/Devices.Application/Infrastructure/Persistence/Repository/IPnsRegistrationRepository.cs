@@ -9,6 +9,5 @@ public interface IPnsRegistrationRepository
     Task Update(PnsRegistration registration, CancellationToken cancellationToken);
     Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<PnsRegistration> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
-    Task Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken);
-    Task Delete(PnsRegistration registration, CancellationToken cancellationToken);
+    Task Delete(DeviceId deviceId, CancellationToken cancellationToken);
 }
