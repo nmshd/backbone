@@ -62,7 +62,7 @@ public class DirectPushService : IPushService
                 await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
                 _logger.LogTrace("New device successfully registered.");
             }
-            catch (InfrastructureException exception)
+            catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
             {
                 _logger.LogInformation(exception.Message);
             }
