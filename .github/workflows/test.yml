@@ -14,10 +14,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Run Checks
-        run: bash AdminUi/src/AdminUi/ClientApp/.ci/runChecks.sh
+        working-directory: AdminUi/src/AdminUi/ClientApp
+        run: bash .ci/runChecks.sh
 
   check-formatting:
     runs-on: ubuntu-latest
