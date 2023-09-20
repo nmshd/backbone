@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Checks
-        run: bash ./.ci/runAdminUiChecks.sh
+        run: ./.ci/runAdminUiChecks.sh
 
   check-formatting:
     runs-on: ubuntu-latest
