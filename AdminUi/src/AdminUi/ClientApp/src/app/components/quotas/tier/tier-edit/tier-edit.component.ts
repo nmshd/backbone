@@ -88,7 +88,7 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
-                    this.tier.name == "Basic" ? (this.tier.deleteable = false) : (this.tier.deleteable = true);
+                    this.tier.deleteable = this.tier.name == "Basic";
                 }
             },
             complete: () => (this.loading = false),
