@@ -1,6 +1,5 @@
-.mat-column-address,
-.mat-column-clientId,
-.mat-column-publicKey {
+.mat-column-name,
+.mat-column-numberOfIdentities {
     width: 50%;
     word-break: break-all;
 }
