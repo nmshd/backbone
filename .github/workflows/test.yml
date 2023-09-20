@@ -10,7 +10,7 @@ on:
 jobs:
   run-adminUi-checks:
     runs-on: ubuntu-latest
-    name: AdminUi Run Checks
+    name: Run Admin Ui Checks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
