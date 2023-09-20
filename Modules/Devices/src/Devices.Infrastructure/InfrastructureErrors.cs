@@ -11,9 +11,9 @@ public static class InfrastructureErrors
             $"The given app id is not supported. Supported app ids are: {supportedAppIdsString}.");
     }
 
-    public static InfrastructureError ConcurrentDeviceRegistrationCreationViolatesPrimaryKeyConstraint(string deviceId)
+    public static InfrastructureError UniqueKeyViolation(string key = "")
     {
-        return new InfrastructureError("error.platform.concurrentDeviceRegistrationCreation",
-            $"Device registration with id {deviceId} already created.");
+        return new InfrastructureError("error.platform.uniqueKeyViolation",
+            $"Entity with key {key} already exists");
     }
 }

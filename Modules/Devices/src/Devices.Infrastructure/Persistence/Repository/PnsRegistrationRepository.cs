@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -30,8 +30,8 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
         }
         catch (DbUpdateException exception)
         {
-            if (exception.GetBaseException() is SqlException { Number: 2627 }) // violation in unique key index
-                throw new InfrastructureException(InfrastructureErrors.ConcurrentDeviceRegistrationCreationViolatesPrimaryKeyConstraint(registration.DeviceId));
+            if (exception.HasReason(DbUpdateExceptionReason.UniqueKeyViolation))
+                throw new InfrastructureException(InfrastructureErrors.UniqueKeyViolation(registration.DeviceId));
         }
     }
 
