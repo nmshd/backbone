@@ -14,6 +14,6 @@ public static class InfrastructureErrors
     public static InfrastructureError UniqueKeyViolation(string key = "")
     {
         return new InfrastructureError("error.platform.uniqueKeyViolation",
-            $"Entity with key {key} already exists");
+            $"Entity with key '{key}' already exists");
     }
 }
