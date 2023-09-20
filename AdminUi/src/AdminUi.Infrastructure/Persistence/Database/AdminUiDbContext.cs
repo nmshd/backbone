@@ -11,6 +11,8 @@ public class AdminUiDbContext : AbstractDbContextBase
 
     public DbSet<IdentityOverview> IdentityOverviews { get; set; }
 
+    public DbSet<TierOverview> TierOverviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
