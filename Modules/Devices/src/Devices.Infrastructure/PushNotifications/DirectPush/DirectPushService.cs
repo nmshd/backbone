@@ -35,29 +35,35 @@ public class DirectPushService : IPushService
             var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
             var sendResults = await pnsConnector.Send(group, recipient, notification);
-            await ParseNotificationResponses(sendResults);
-
-            _logger.LogTrace($"Successfully sent push notifications to identity '{recipient}' on platform '{Enum.GetName(platform)}'");
+            await HandleNotificationResponses(sendResults);
         }
     }
 
-    private async Task ParseNotificationResponses(IEnumerable<SendResult> sendResults)
+    private async Task HandleNotificationResponses(SendResults sendResults)
     {
-        foreach (var sendResult in sendResults.Where(sendResult => sendResult.IsFailure))
+        var devicesIdsToDelete = new List<DeviceId>();
+        foreach (var sendResult in sendResults.Failures)
         {
             switch (sendResult.Error.Reason)
             {
-                case SendResult.FailureReason.InvalidHandle:
-                    _logger.LogInformation("Deleting device {deviceId} since handle is no longer valid.", sendResult.Error.DeviceId);
-                    await _registrationRepository.Delete(sendResult.Error.DeviceId, CancellationToken.None);
+                case SendResult.ErrorReason.InvalidHandle:
+                    _logger.LogInformation("Deleting device {deviceId} since handle is no longer valid.", sendResult.DeviceId);
+                    devicesIdsToDelete.Add(sendResult.DeviceId);
+
                     break;
-                case SendResult.FailureReason.Unexpected:
+                case SendResult.ErrorReason.Unexpected:
                     _logger.LogError(
                         "The following error occurred while trying to send the notification for deviceId '{deviceId}': '{error}'",
-                        sendResult.Error.DeviceId, sendResult.Error.Message);
+                        sendResult.DeviceId, sendResult.Error.Message);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Reason '{sendResult.Error.Reason}' not supported");
             }
         }
+
+        await _registrationRepository.Delete(devicesIdsToDelete, CancellationToken.None);
+
+        _logger.LogTrace("Successfully sent push notifications to devices '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
     public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)

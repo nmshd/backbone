@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -28,12 +27,13 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<List<SendResult>> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
+        var sendResults = new SendResults();
         var tasks = registrations.Select(async pnsRegistration =>
         {
             ValidateRegistration(pnsRegistration);
@@ -51,10 +51,11 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
 
             var response = await _httpClient.SendAsync(request);
-            return await MapResponse(response, pnsRegistration);
+            await MapResponse(response, pnsRegistration, sendResults);
         }).ToList();
 
-        return (await Task.WhenAll(tasks)).ToList();
+        await Task.WhenAll(tasks);
+        return sendResults;
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -63,21 +64,18 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task<SendResult> MapResponse(HttpResponseMessage response, PnsRegistration registration)
+    private async Task MapResponse(HttpResponseMessage response, PnsRegistration registration, SendResults sendResults)
     {
-        if (response.IsSuccessStatusCode) return SendResult.Success();
-
-        var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-        string reason = responseContent.reason;
-        if (!reason.IsNullOrEmpty())
+        if (response.IsSuccessStatusCode)
+            sendResults.AddSuccess(registration.DeviceId);
+        else
         {
-            if (reason == "Unregistered")
-            {
-                return SendResult.Failure(registration.DeviceId, SendResult.FailureReason.InvalidHandle);
-            }
+            var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+            if (responseContent.reason == "Unregistered")
+                sendResults.AddFailure(registration.DeviceId, SendResult.ErrorReason.InvalidHandle);
+            else
+                sendResults.AddFailure(registration.DeviceId, SendResult.ErrorReason.Unexpected, responseContent.Reason);
         }
-
-        return SendResult.Failure(registration.DeviceId, SendResult.FailureReason.Unexpected, responseContent.Reason);
     }
 
     private static int GetNotificationId(object pushNotification)

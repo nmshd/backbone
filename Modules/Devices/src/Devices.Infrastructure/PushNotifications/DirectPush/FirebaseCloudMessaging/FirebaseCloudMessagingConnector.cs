@@ -25,7 +25,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<List<SendResult>> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var registrationsByAppId = registrations.GroupBy(r => r.AppId)
             .Select(r => new
@@ -39,6 +39,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 }).ToList()
             });
 
+        var sendResults = new SendResults();
         var tasks = registrationsByAppId.Select(async pnsRegistrations =>
         {
             var (notificationTitle, notificationBody) = GetNotificationText(notification);
@@ -57,10 +58,11 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
             var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(pnsRegistrations.AppId);
             var response = await firebaseMessaging.SendMulticastAsync(message);
-            return MapResponse(response, pnsRegistrations.DeviceIds);
+            return MapResponse(response, pnsRegistrations.DeviceIds, sendResults);
         });
 
-        return (await Task.WhenAll(tasks)).ToList().SelectMany(list => list).ToList();
+        await Task.WhenAll(tasks);
+        return sendResults;
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -69,22 +71,27 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
     }
 
-    private List<SendResult> MapResponse(BatchResponse batchResponse, IReadOnlyList<DeviceId> devices)
+    private SendResults MapResponse(BatchResponse batchResponse, IReadOnlyList<DeviceId> devices, SendResults sendResults)
     {
-        var sendResults = new List<SendResult>();
         for (var index = 0; index < batchResponse.Responses.Count; index++)
         {
             var response = batchResponse.Responses[index];
             var deviceId = devices[index];
             if (response.IsSuccess)
             {
-                sendResults.Add(SendResult.Success());
+                sendResults.AddSuccess(deviceId);
             }
             else
             {
-                sendResults.Add(response.Exception.MessagingErrorCode is MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered
-                    ? SendResult.Failure(deviceId, SendResult.FailureReason.InvalidHandle)
-                    : SendResult.Failure(deviceId, SendResult.FailureReason.Unexpected, response.Exception.Message));
+                switch (response.Exception.MessagingErrorCode)
+                {
+                    case MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered:
+                        sendResults.AddFailure(deviceId, SendResult.ErrorReason.InvalidHandle);
+                        break;
+                    default:
+                        sendResults.AddFailure(deviceId, SendResult.ErrorReason.Unexpected, response.Exception.Message);
+                        break;
+                }
             }
         }
 

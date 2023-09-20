@@ -5,6 +5,6 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public interface IPnsConnector
 {
-    Task<List<SendResult>> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification);
+    Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification);
     void ValidateRegistration(PnsRegistration registration);
 }
