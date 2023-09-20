@@ -51,13 +51,11 @@ export class TierListComponent {
         this.loading = true;
         this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
-                if (data) {
-                    this.tiers = data.result;
-                    if (data.pagination) {
-                        this.totalRecords = data.pagination.totalRecords!;
-                    } else {
-                        this.totalRecords = data.result.length;
-                    }
+                this.tiers = data.result;
+                if (data.pagination) {
+                    this.totalRecords = data.pagination.totalRecords!;
+                } else {
+                    this.totalRecords = data.result.length;
                 }
             },
             complete: () => (this.loading = false),
