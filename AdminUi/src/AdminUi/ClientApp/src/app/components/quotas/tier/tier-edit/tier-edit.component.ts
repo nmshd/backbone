@@ -31,7 +31,14 @@ export class TierEditComponent {
     tier: Tier;
     loading: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, private dialog: MatDialog, private tierService: TierService, private quotasService: QuotasService) {
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private tierService: TierService,
+        private quotasService: QuotasService
+    ) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";
@@ -42,12 +49,12 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.tier = {} as Tier;
         this.disabled = false;
         this.tier = {
             id: "",
             name: "",
-            quotas: []
+            quotas: [],
+            isDeletable: false
         } as Tier;
     }
 
@@ -81,6 +88,7 @@ export class TierEditComponent {
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
                     this.tier = data.result;
+                    this.tier.isDeletable = this.tier.name != "Basic";
                 }
             },
             complete: () => (this.loading = false),
@@ -100,8 +108,13 @@ export class TierEditComponent {
         this.tierService.createTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 if (data && data.result) {
-                    this.tier = data.result;
-                    this.tier.quotas = [];
+                    this.tier = {
+                        id: data.result.id,
+                        name: data.result.name,
+                        quotas: [],
+                        numberOfIdentities: 0,
+                        isDeletable: true
+                    } as Tier;
                 }
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
                     duration: 4000,
