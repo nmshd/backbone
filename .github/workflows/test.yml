@@ -15,8 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Checks
-        working-directory: AdminUi/src/AdminUi/ClientApp
-        run: bash .ci/runChecks.sh
+        run: bash .ci/runAdminUiChecks.sh
 
   check-formatting:
     runs-on: ubuntu-latest
