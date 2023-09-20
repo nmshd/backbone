@@ -53,7 +53,8 @@ export class TierEditComponent {
         this.tier = {
             id: "",
             name: "",
-            quotas: []
+            quotas: [],
+            isDeletable: false
         } as Tier;
     }
 
@@ -85,7 +86,10 @@ export class TierEditComponent {
         this.selectionQuotas = new SelectionModel<TierQuota>(true, []);
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                this.tier = data.result;
+                if (data && data.result) {
+                    this.tier = data.result;
+                    this.tier.isDeletable = this.tier.name != "Basic";
+                }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -103,8 +107,15 @@ export class TierEditComponent {
         this.loading = true;
         this.tierService.createTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                this.tier = data.result;
-                this.tier.quotas = [];
+                if (data && data.result) {
+                    this.tier = {
+                        id: data.result.id,
+                        name: data.result.name,
+                        quotas: [],
+                        numberOfIdentities: 0,
+                        isDeletable: true
+                    } as Tier;
+                }
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
