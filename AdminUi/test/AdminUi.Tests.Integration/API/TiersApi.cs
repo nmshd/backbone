@@ -8,9 +8,9 @@ public class TiersApi : BaseApi
 {
     public TiersApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
-    public async Task<HttpResponse<List<TierDTO>>> GetTiers(RequestConfiguration requestConfiguration)
+    public async Task<HttpResponse<List<TierOverviewDTO>>> GetTiers(RequestConfiguration requestConfiguration)
     {
-        return await Get<List<TierDTO>>("/Tiers", requestConfiguration);
+        return await Get<List<TierOverviewDTO>>("/Tiers", requestConfiguration);
     }
 
     public async Task<HttpResponse<TierDetailsDTO>> GetTierById(RequestConfiguration requestConfiguration, string tierId)
