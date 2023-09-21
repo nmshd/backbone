@@ -2,15 +2,15 @@ import { TestBed } from "@angular/core/testing";
 
 import { LoggerServerService } from "./logger-server.service";
 
-describe("LoggerServerService", () => {
+describe("LoggerServerService", function () {
     let service: LoggerServerService;
 
-    beforeEach(() => {
+    beforeEach(function () {
         TestBed.configureTestingModule({});
         service = TestBed.inject(LoggerServerService);
     });
 
-    it("should be created", () => {
-        expect(service).toBeTruthy();
+    it("should be created", async function () {
+        await expect(service).toBeTruthy();
     });
 });

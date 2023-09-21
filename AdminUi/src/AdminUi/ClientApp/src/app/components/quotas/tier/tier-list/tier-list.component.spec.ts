@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { TierListComponent } from "./tier-list.component";
 
-describe("TierListComponent", () => {
+describe("TierListComponent", function () {
     let component: TierListComponent;
     let fixture: ComponentFixture<TierListComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [TierListComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("TierListComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });
