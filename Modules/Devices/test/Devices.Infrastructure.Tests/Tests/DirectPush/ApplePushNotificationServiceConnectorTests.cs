@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -55,8 +56,9 @@ public class ApplePushNotificationServiceConnectorTests
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
+        var pnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger, pnsRegistrationRepository);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)
