@@ -1,7 +1,7 @@
 set -e
 set -x
 
-INITIAL_DIR=$pwd
+INITIAL_DIR=$(pwd)
 cd AdminUi/src/AdminUi/ClientApp
 npm ci
 npx eslint --ext ts ./src
