@@ -2,15 +2,15 @@ import { TestBed } from "@angular/core/testing";
 
 import { SidebarService } from "./sidebar.service";
 
-describe("SidebarService", () => {
+describe("SidebarService", function () {
     let service: SidebarService;
 
-    beforeEach(() => {
+    beforeEach(function () {
         TestBed.configureTestingModule({});
         service = TestBed.inject(SidebarService);
     });
 
-    it("should be created", () => {
-        expect(service).toBeTruthy();
+    it("should be created", async function () {
+        await expect(service).toBeTruthy();
     });
 });
