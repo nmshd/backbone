@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -42,19 +43,19 @@ public class DirectPushService : IPushService
 
     private async Task HandleNotificationResponses(SendResults sendResults)
     {
-        var devicesIdsToDelete = new List<DeviceId>();
+        var deviceIdsToDelete = new List<DeviceId>();
         foreach (var sendResult in sendResults.Failures)
         {
             switch (sendResult.Error.Reason)
             {
-                case SendResult.ErrorReason.InvalidHandle:
-                    _logger.LogInformation("Deleting device {deviceId} since handle is no longer valid.", sendResult.DeviceId);
-                    devicesIdsToDelete.Add(sendResult.DeviceId);
+                case ErrorReason.InvalidHandle:
+                    _logger.LogInformation("Deleting device registration for '{deviceId}' since handle is no longer valid.", sendResult.DeviceId);
+                    deviceIdsToDelete.Add(sendResult.DeviceId);
 
                     break;
-                case SendResult.ErrorReason.Unexpected:
+                case ErrorReason.Unexpected:
                     _logger.LogError(
-                        "The following error occurred while trying to send the notification for deviceId '{deviceId}': '{error}'",
+                        "The following error occurred while trying to send the notification for '{deviceId}': '{error}'",
                         sendResult.DeviceId, sendResult.Error.Message);
                     break;
                 default:
@@ -62,9 +63,9 @@ public class DirectPushService : IPushService
             }
         }
 
-        await _registrationRepository.Delete(devicesIdsToDelete, CancellationToken.None);
+        await _registrationRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
-        _logger.LogTrace("Successfully sent push notifications to devices '{devicesIds}'.", string.Join(", ", sendResults.Successes));
+        _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
     public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)

@@ -3,6 +3,7 @@ using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -72,9 +73,9 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         {
             var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
             if (responseContent.reason == "Unregistered")
-                sendResults.AddFailure(registration.DeviceId, SendResult.ErrorReason.InvalidHandle);
+                sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
             else
-                sendResults.AddFailure(registration.DeviceId, SendResult.ErrorReason.Unexpected, responseContent.Reason);
+                sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
         }
     }
 

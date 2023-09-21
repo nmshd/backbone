@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FirebaseAdmin.Messaging;
@@ -86,10 +87,10 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
                 switch (response.Exception.MessagingErrorCode)
                 {
                     case MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered:
-                        sendResults.AddFailure(deviceId, SendResult.ErrorReason.InvalidHandle);
+                        sendResults.AddFailure(deviceId, ErrorReason.InvalidHandle);
                         break;
                     default:
-                        sendResults.AddFailure(deviceId, SendResult.ErrorReason.Unexpected, response.Exception.Message);
+                        sendResults.AddFailure(deviceId, ErrorReason.Unexpected, response.Exception.Message);
                         break;
                 }
             }
