@@ -8,7 +8,7 @@ export class SidebarService {
     private extended: boolean;
     private mobile: boolean;
 
-    constructor(breakpointObserver: BreakpointObserver) {
+    public constructor(breakpointObserver: BreakpointObserver) {
         this.mobile = false;
 
         breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).subscribe((result) => {
@@ -22,15 +22,15 @@ export class SidebarService {
         this.extended = !this.isMobile();
     }
 
-    public open() {
+    public open(): void {
         this.extended = true;
     }
 
-    public close() {
+    public close(): void {
         this.extended = false;
     }
 
-    public toggle() {
+    public toggle(): void {
         this.extended = !this.extended;
     }
 

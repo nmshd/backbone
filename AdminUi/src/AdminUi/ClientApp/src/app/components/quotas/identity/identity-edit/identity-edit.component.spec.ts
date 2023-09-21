@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { IdentityEditComponent } from "./identity-edit.component";
 
-describe("IdentityEditComponent", () => {
+describe("IdentityEditComponent", function () {
     let component: IdentityEditComponent;
     let fixture: ComponentFixture<IdentityEditComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [IdentityEditComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("IdentityEditComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });

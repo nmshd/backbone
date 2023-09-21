@@ -9,45 +9,49 @@ import { XSRFService } from "../xsrf-service/xsrf.service";
     providedIn: "root"
 })
 export class AuthService {
-    private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasApiKey());
-    apiUrl: string;
+    private readonly loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasApiKey());
+    private readonly apiUrl: string;
 
-    get isLoggedIn() {
+    public get isLoggedIn(): Observable<boolean> {
         return this.loggedIn.asObservable();
     }
 
-    constructor(private router: Router, private http: HttpClient, private xsrfService: XSRFService) {
+    public constructor(
+        private readonly router: Router,
+        private readonly http: HttpClient,
+        private readonly xsrfService: XSRFService
+    ) {
         this.apiUrl = environment.apiUrl;
     }
 
-    isCurrentlyLoggedIn(): boolean {
+    public isCurrentlyLoggedIn(): boolean {
         return this.loggedIn.value;
     }
 
-    hasApiKey(): boolean {
+    public hasApiKey(): boolean {
         return !!localStorage.getItem("api-key");
     }
 
-    getApiKey(): string | null {
+    public getApiKey(): string | null {
         return localStorage.getItem("api-key");
     }
 
-    validateApiKey(apiKeyRequest: ValidateApiKeyRequest): Observable<ValidateApiKeyResponse> {
+    public validateApiKey(apiKeyRequest: ValidateApiKeyRequest): Observable<ValidateApiKeyResponse> {
         return this.http.post<ValidateApiKeyResponse>(`${this.apiUrl}/ValidateApiKey`, apiKeyRequest, { headers: { skip: "true" } });
     }
 
-    login(apiKey: string): void {
+    public async login(apiKey: string): Promise<void> {
         localStorage.setItem("api-key", apiKey);
         this.xsrfService.loadAndStoreXSRFToken();
         this.loggedIn.next(true);
-        this.router.navigate(["/"]);
+        await this.router.navigate(["/"]);
     }
 
-    logout(): Promise<boolean> {
+    public async logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
         this.loggedIn.next(false);
         this.xsrfService.clearStoredToken();
-        return this.router.navigate(["/login"]);
+        return await this.router.navigate(["/login"]);
     }
 }
 
