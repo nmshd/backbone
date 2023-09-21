@@ -11,25 +11,25 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
     styleUrls: ["./tier-list.component.css"]
 })
 export class TierListComponent {
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatPaginator) public paginator!: MatPaginator;
 
-    header: string;
-    headerDescription: string;
+    public header: string;
+    public headerDescription: string;
 
-    tiers: TierOverview[];
+    public tiers: TierOverview[];
 
-    totalRecords: number;
-    pageSize: number;
-    pageIndex: number;
+    public totalRecords: number;
+    public pageSize: number;
+    public pageIndex: number;
 
-    loading = false;
+    public loading = false;
 
-    displayedColumns: string[] = ["name", "numberOfIdentities"];
+    public displayedColumns: string[] = ["name", "numberOfIdentities"];
 
-    constructor(
-        private router: Router,
-        private snackBar: MatSnackBar,
-        private tierService: TierService
+    public constructor(
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly tierService: TierService
     ) {
         this.header = "Tiers";
         this.headerDescription = "A list of existing Tiers";
@@ -43,27 +43,25 @@ export class TierListComponent {
         this.loading = true;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.getPagedData();
     }
 
-    getPagedData() {
+    public getPagedData(): void {
         this.loading = true;
         this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
-                if (data) {
-                    this.tiers = data.result;
-                    if (data.pagination) {
-                        this.totalRecords = data.pagination.totalRecords!;
-                    } else {
-                        this.totalRecords = data.result.length;
-                    }
+                this.tiers = data.result;
+                if (data.pagination) {
+                    this.totalRecords = data.pagination.totalRecords!;
+                } else {
+                    this.totalRecords = data.result.length;
                 }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -72,17 +70,17 @@ export class TierListComponent {
         });
     }
 
-    pageChangeEvent(event: PageEvent) {
+    public pageChangeEvent(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
         this.getPagedData();
     }
 
-    addTier() {
-        this.router.navigate([`/tiers/create`]);
+    public async addTier(): Promise<void> {
+        await this.router.navigate(["/tiers/create"]);
     }
 
-    editTier(tier: Tier) {
-        this.router.navigate([`/tiers/` + tier.id]);
+    public async editTier(tier: Tier): Promise<void> {
+        await this.router.navigate([`/tiers/${tier.id}`]);
     }
 }

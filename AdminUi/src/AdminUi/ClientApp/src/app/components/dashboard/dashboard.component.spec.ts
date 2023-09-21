@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { DashboardComponent } from "./dashboard.component";
 
-describe("DashboardComponent", () => {
+describe("DashboardComponent", function () {
     let component: DashboardComponent;
     let fixture: ComponentFixture<DashboardComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [DashboardComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("DashboardComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });

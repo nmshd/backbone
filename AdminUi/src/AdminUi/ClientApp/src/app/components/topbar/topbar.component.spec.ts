@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { TopbarComponent } from "./topbar.component";
 
-describe("TopbarComponent", () => {
+describe("TopbarComponent", function () {
     let component: TopbarComponent;
     let fixture: ComponentFixture<TopbarComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             declarations: [TopbarComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("TopbarComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });
