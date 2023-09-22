@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
@@ -14,6 +16,8 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
     public async Task<ChangeClientSecretResponse> Handle(ChangeClientSecretCommand request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken);
+        if (client == null)
+            throw new NotFoundException(nameof(OAuthClient));
 
         var clientSecret = string.IsNullOrEmpty(request.NewSecret) ? PasswordGenerator.Generate(30) : request.NewSecret;
 
