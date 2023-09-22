@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Client, ClientDTO, UpdateClientRequest } from "src/app/services/client-service/client-service";
-import { ClientServiceService } from "src/app/services/client-service/client-service";
+import { Client, ClientDTO, UpdateClientRequest, ClientServiceService } from "src/app/services/client-service/client-service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
@@ -13,24 +12,24 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
     styleUrls: ["./client-edit.component.css"]
 })
 export class ClientEditComponent {
-    headerEdit: string;
-    headerCreate: string;
-    headerDescriptionEdit: string;
-    headerDescriptionCreate: string;
-    showPassword: boolean;
-    clientId?: string;
-    editMode: boolean;
-    client: Client;
-    tierList: Tier[];
-    loading: boolean;
-    disabled: boolean;
-    displayClientSecretWarning: boolean;
+    public headerEdit: string;
+    public headerCreate: string;
+    public headerDescriptionEdit: string;
+    public headerDescriptionCreate: string;
+    public showPassword: boolean;
+    public clientId?: string;
+    public editMode: boolean;
+    public client: Client;
+    public tierList: Tier[];
+    public loading: boolean;
+    public disabled: boolean;
+    public displayClientSecretWarning: boolean;
 
-    constructor(
-        private route: ActivatedRoute,
-        private snackBar: MatSnackBar,
-        private clientService: ClientServiceService,
-        private tierService: TierService
+    public constructor(
+        private readonly route: ActivatedRoute,
+        private readonly snackBar: MatSnackBar,
+        private readonly clientService: ClientServiceService,
+        private readonly tierService: TierService
     ) {
         this.headerCreate = "Create Client";
         this.headerEdit = "Edit Client";
@@ -49,7 +48,7 @@ export class ClientEditComponent {
         this.tierList = [];
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params["id"]) {
                 this.clientId = params["id"];
@@ -66,7 +65,7 @@ export class ClientEditComponent {
         this.getTiers();
     }
 
-    initClient(): void {
+    public initClient(): void {
         this.client = {
             clientId: "",
             displayName: "",
@@ -74,22 +73,20 @@ export class ClientEditComponent {
         } as Client;
     }
 
-    getClient() {
+    public getClient(): void {
         this.loading = true;
         this.clientService.getClientById(this.clientId!).subscribe({
             next: (data: HttpResponseEnvelope<ClientDTO>) => {
-                if (data && data.result) {
-                    this.client = {
-                        clientId: data.result.clientId,
-                        displayName: data.result.displayName!,
-                        defaultTier: data.result.defaultTier
-                    } as Client;
-                }
+                this.client = {
+                    clientId: data.result.clientId,
+                    displayName: data.result.displayName!,
+                    defaultTier: data.result.defaultTier
+                } as Client;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -98,19 +95,17 @@ export class ClientEditComponent {
         });
     }
 
-    getTiers(): void {
+    public getTiers(): void {
         this.loading = true;
         this.tierList = [];
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tierList = data.result;
-                }
+                this.tierList = data.result;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -119,10 +114,10 @@ export class ClientEditComponent {
         });
     }
 
-    createClient(): void {
+    public createClient(): void {
         this.loading = true;
 
-        let basicTier = this.tierList.find((tier) => tier.name == "Basic");
+        const basicTier = this.tierList.find((tier) => tier.name === "Basic");
         if (basicTier) {
             this.client.defaultTier = basicTier.id;
         } else {
@@ -136,9 +131,7 @@ export class ClientEditComponent {
 
         this.clientService.createClient(this.client).subscribe({
             next: (data: HttpResponseEnvelope<Client>) => {
-                if (data && data.result) {
-                    this.client = data.result;
-                }
+                this.client = data.result;
                 this.displayClientSecretWarning = true;
                 this.disabled = true;
                 this.snackBar.open("Successfully added client.", "Dismiss", {
@@ -150,7 +143,7 @@ export class ClientEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -159,11 +152,11 @@ export class ClientEditComponent {
         });
     }
 
-    updateClient(): void {
+    public updateClient(): void {
         this.loading = true;
 
         if (!this.client.defaultTier) {
-            let basicTier = this.tierList.find((tier) => tier.name == "Basic");
+            const basicTier = this.tierList.find((tier) => tier.name === "Basic");
             if (basicTier) {
                 this.client.defaultTier = basicTier.id;
             } else {
@@ -176,30 +169,28 @@ export class ClientEditComponent {
             }
         }
 
-        let request = {
+        const request = {
             defaultTier: this.client.defaultTier
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
             next: (data: HttpResponseEnvelope<ClientDTO>) => {
-                if (data && data.result) {
-                    this.client = {
-                        clientId: data.result.clientId,
-                        displayName: data.result.displayName!,
-                        defaultTier: data.result.defaultTier
-                    } as Client;
+                this.client = {
+                    clientId: data.result.clientId,
+                    displayName: data.result.displayName!,
+                    defaultTier: data.result.defaultTier
+                } as Client;
 
-                    this.snackBar.open("Successfully updated client.", "Dismiss", {
-                        duration: 4000,
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
+                this.snackBar.open("Successfully updated client.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -208,7 +199,7 @@ export class ClientEditComponent {
         });
     }
 
-    togglePasswordVisibility(): void {
+    public togglePasswordVisibility(): void {
         this.showPassword = !this.showPassword;
     }
 }

@@ -17,21 +17,28 @@ import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrap
     styleUrls: ["./tier-edit.component.css"]
 })
 export class TierEditComponent {
-    headerEdit: string;
-    headerCreate: string;
-    headerDescriptionEdit: string;
-    headerDescriptionCreate: string;
-    headerQuotas: string;
-    headerQuotasDescription: string;
-    selectionQuotas: SelectionModel<TierQuota>;
-    quotasTableDisplayedColumns: string[];
-    tierId?: string;
-    disabled: boolean;
-    editMode: boolean;
-    tier: Tier;
-    loading: boolean;
+    public headerEdit: string;
+    public headerCreate: string;
+    public headerDescriptionEdit: string;
+    public headerDescriptionCreate: string;
+    public headerQuotas: string;
+    public headerQuotasDescription: string;
+    public selectionQuotas: SelectionModel<TierQuota>;
+    public quotasTableDisplayedColumns: string[];
+    public tierId?: string;
+    public disabled: boolean;
+    public editMode: boolean;
+    public tier: Tier;
+    public loading: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar, private dialog: MatDialog, private tierService: TierService, private quotasService: QuotasService) {
+    public constructor(
+        private readonly route: ActivatedRoute,
+        private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
+        private readonly dialog: MatDialog,
+        private readonly tierService: TierService,
+        private readonly quotasService: QuotasService
+    ) {
         this.headerEdit = "Edit Tier";
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";
@@ -42,16 +49,16 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.tier = {} as Tier;
         this.disabled = false;
         this.tier = {
             id: "",
             name: "",
-            quotas: []
+            quotas: [],
+            isDeletable: false
         } as Tier;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params["id"]) {
                 this.tierId = params["id"];
@@ -66,7 +73,7 @@ export class TierEditComponent {
         }
     }
 
-    initTier() {
+    public initTier(): void {
         this.tier = {
             name: ""
         } as Tier;
@@ -74,19 +81,18 @@ export class TierEditComponent {
         this.loading = false;
     }
 
-    getTier() {
+    public getTier(): void {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<TierQuota>(true, []);
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                }
+                this.tier = data.result;
+                this.tier.isDeletable = this.tier.name !== "Basic";
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -95,14 +101,18 @@ export class TierEditComponent {
         });
     }
 
-    createTier() {
+    public createTier(): void {
         this.loading = true;
         this.tierService.createTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                    this.tier.quotas = [];
-                }
+                this.tier = {
+                    id: data.result.id,
+                    name: data.result.name,
+                    quotas: [],
+                    numberOfIdentities: 0,
+                    isDeletable: true
+                } as Tier;
+
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
@@ -114,7 +124,7 @@ export class TierEditComponent {
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -123,23 +133,21 @@ export class TierEditComponent {
         });
     }
 
-    updateTier() {
+    public updateTier(): void {
         this.loading = true;
         this.tierService.updateTier(this.tier).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
-                if (data && data.result) {
-                    this.tier = data.result;
-                    this.snackBar.open("Successfully updated tier.", "Dismiss", {
-                        duration: 4000,
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
+                this.tier = data.result;
+                this.snackBar.open("Successfully updated tier.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -148,39 +156,37 @@ export class TierEditComponent {
         });
     }
 
-    validateTier(): boolean {
-        if (this.tier && this.tier.name && this.tier.name.length > 0) {
+    public validateTier(): boolean {
+        if (this.tier.name.length > 0) {
             return true;
         }
         return false;
     }
 
-    openAssignQuotaDialog() {
-        let dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+    public openAssignQuotaDialog(): void {
+        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
             if (result) {
                 this.createTierQuota(result);
             }
         });
     }
 
-    createTierQuota(quota: AssignQuotaData) {
+    public createTierQuota(quota: AssignQuotaData): void {
         this.loading = true;
         this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
             next: (data: HttpResponseEnvelope<TierQuota>) => {
-                if (data && data.result) {
-                    this.snackBar.open("Successfully assigned quota.", "Dismiss");
-                    this.tier.quotas.push(data.result);
-                    this.tier.quotas = [...this.tier.quotas];
-                }
+                this.snackBar.open("Successfully assigned quota.", "Dismiss");
+                this.tier.quotas.push(data.result);
+                this.tier.quotas = [...this.tier.quotas];
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -189,13 +195,13 @@ export class TierEditComponent {
         });
     }
 
-    openConfirmationDialogQuotaDeletion() {
-        let confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
-        let confirmDialogMessage =
+    public openConfirmationDialogQuotaDeletion(): void {
+        const confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
+        const confirmDialogMessage =
             this.selectionQuotas.selected.length > 1
                 ? `Are you sure you want to delete the ${this.selectionQuotas.selected.length} selected quotas?`
                 : "Are you sure you want to delete the selected quota?";
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -208,10 +214,10 @@ export class TierEditComponent {
         });
     }
 
-    openConfirmationDialogTierDeletion() {
-        let confirmDialogHeader = "Delete Tier";
-        let confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    public openConfirmationDialogTierDeletion(): void {
+        const confirmDialogHeader = "Delete Tier";
+        const confirmDialogMessage = `Are you sure you want to delete the ${this.tier.name} tier?`;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -224,13 +230,13 @@ export class TierEditComponent {
         });
     }
 
-    deleteTier(): void {
+    public deleteTier(): void {
         this.tierService.deleteTierById(this.tierId!).subscribe({
-            next: (_) => {
-                this.router.navigate(["/tiers"]);
+            next: async (_) => {
+                await this.router.navigate(["/tiers"]);
             },
             error: (err: HttpErrorResponseWrapper) => {
-                let errorMessage = err.error.error.message;
+                const errorMessage = err.error.error.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -239,16 +245,16 @@ export class TierEditComponent {
         });
     }
 
-    deleteQuota(): void {
+    public deleteQuota(): void {
         this.loading = true;
-        let observableBatch: Observable<any>[] = [];
+        const observableBatch: Observable<any>[] = [];
         this.selectionQuotas.selected.forEach((item) => {
             observableBatch.push(this.quotasService.deleteTierQuota(item.id, this.tier.id));
         });
 
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
-                let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
+                const successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
                 this.getTier();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
@@ -258,7 +264,7 @@ export class TierEditComponent {
             },
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -267,13 +273,13 @@ export class TierEditComponent {
         });
     }
 
-    isAllSelected() {
+    public isAllSelected(): boolean {
         const numSelected = this.selectionQuotas.selected.length;
         const numRows = this.tier.quotas.length;
         return numSelected === numRows;
     }
 
-    toggleAllRowsQuotas() {
+    public toggleAllRowsQuotas(): void {
         if (this.isAllSelected()) {
             this.selectionQuotas.clear();
             return;
@@ -282,7 +288,7 @@ export class TierEditComponent {
         this.selectionQuotas.select(...this.tier.quotas);
     }
 
-    checkboxLabelQuotas(index?: number, row?: TierQuota): string {
+    public checkboxLabelQuotas(index?: number, row?: TierQuota): string {
         if (!row || !index) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }

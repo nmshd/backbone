@@ -8,6 +8,15 @@ on:
       - "**"
 
 jobs:
+  run-adminUi-checks:
+    runs-on: ubuntu-latest
+    name: Run Admin UI Checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Checks
+        run: ./.ci/runAdminUiChecks.sh
+
   check-formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
@@ -63,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
@@ -120,11 +129,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: backbone
       - name: Checkout cns-transport repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: nmshd/cns-transport
           path: cns-transport
