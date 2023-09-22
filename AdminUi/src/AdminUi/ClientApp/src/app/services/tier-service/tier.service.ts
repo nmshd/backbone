@@ -16,7 +16,7 @@ export class TierService {
         this.apiUrl = `${environment.apiUrl}/Tiers`;
     }
 
-    public getTiers(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<TierOverview>> {
+    public getTiers(pageNumber?: number, pageSize?: number): Observable<PagedHttpResponseEnvelope<TierOverview>> {
         const httpOptions = {
             params: new HttpParams()
         };

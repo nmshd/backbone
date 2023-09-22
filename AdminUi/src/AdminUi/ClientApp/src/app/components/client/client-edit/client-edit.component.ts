@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { Client, ClientDTO, UpdateClientRequest, ClientServiceService } from "src/app/services/client-service/client-service";
-import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
@@ -20,7 +20,7 @@ export class ClientEditComponent {
     public clientId?: string;
     public editMode: boolean;
     public client: Client;
-    public tierList: Tier[];
+    public tierList: TierOverview[];
     public loading: boolean;
     public disabled: boolean;
     public displayClientSecretWarning: boolean;
@@ -99,7 +99,7 @@ export class ClientEditComponent {
         this.loading = true;
         this.tierList = [];
         this.tierService.getTiers().subscribe({
-            next: (data: PagedHttpResponseEnvelope<Tier>) => {
+            next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tierList = data.result;
             },
             complete: () => (this.loading = false),
@@ -117,16 +117,18 @@ export class ClientEditComponent {
     public createClient(): void {
         this.loading = true;
 
-        const basicTier = this.tierList.find((tier) => tier.name === "Basic");
-        if (basicTier) {
-            this.client.defaultTier = basicTier.id;
-        } else {
-            this.snackBar.open("Basic Tier not found", "Dismiss", {
-                verticalPosition: "top",
-                horizontalPosition: "center"
-            });
+        if (!this.client.defaultTier) {
+            const basicTier = this.tierList.find((tier) => tier.name === "Basic");
+            if (basicTier) {
+                this.client.defaultTier = basicTier.id;
+            } else {
+                this.snackBar.open("Basic Tier not found", "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
 
-            return;
+                return;
+            }
         }
 
         this.clientService.createClient(this.client).subscribe({
