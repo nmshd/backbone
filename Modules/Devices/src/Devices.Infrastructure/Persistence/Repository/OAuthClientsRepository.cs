@@ -55,8 +55,8 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
         if (application == null)
             return null;
-        
-        if(track)
+
+        if (track)
             _trackedApplications[clientId] = application;
 
         return new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier);
