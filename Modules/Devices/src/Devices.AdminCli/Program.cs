@@ -1,21 +1,23 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
+using Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
+using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.Tooling.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.AdminCli;
 
 public class Program
 {
-    private const string SQL_SERVER = "SqlServer";
-    private const string SQL_SERVER_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.SqlServer";
-    private const string POSTGRES = "Postgres";
-    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Devices.Infrastructure.Database.Postgres";
-
     private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS =
         new() { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
@@ -31,22 +33,17 @@ public class Program
 
         DB_PROVIDER_OPTION.AddAlias("--dbProvider");
         DB_PROVIDER_OPTION.SetDefaultValueFactory(GetDbProviderFromEnvVar);
-        DB_PROVIDER_OPTION.AddValidator(result =>
-        {
-            result.ErrorMessage = ValidateProvider(result.GetValueOrDefault<string>());
-        });
+        DB_PROVIDER_OPTION.AddValidator(result => { result.ErrorMessage = ValidateProvider(result.GetValueOrDefault<string>()); });
 
         DB_CONNECTION_STRING_OPTION.AddAlias("--dbConnectionString");
         DB_CONNECTION_STRING_OPTION.SetDefaultValueFactory(GetDbConnectionStringFromEnvVar);
-        DB_CONNECTION_STRING_OPTION.AddValidator(result =>
-        {
-            result.ErrorMessage = ValidateDbConnectionString(result.GetValueOrDefault<string>());
-        });
+        DB_CONNECTION_STRING_OPTION.AddValidator(result => { result.ErrorMessage = ValidateDbConnectionString(result.GetValueOrDefault<string>()); });
 
         rootCommand.AddOption(DB_CONNECTION_STRING_OPTION);
         rootCommand.AddOption(DB_PROVIDER_OPTION);
 
         rootCommand.AddCommand(ClientCommand);
+
         await rootCommand.InvokeAsync(args);
     }
 
@@ -88,15 +85,14 @@ public class Program
                 IsRequired = false,
                 Description = "The clientSecret of the OAuth client. Default: a randomly generated string."
             };
-
+            
             command.AddOption(DB_PROVIDER_OPTION);
             command.AddOption(DB_CONNECTION_STRING_OPTION);
             command.AddOption(clientId);
             command.AddOption(displayName);
             command.AddOption(clientSecret);
 
-            command.SetHandler(CreateClient, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientId, displayName,
-                clientSecret);
+            command.SetHandler(CreateClient, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientId, displayName, clientSecret);
 
             return command;
         }
@@ -139,44 +135,45 @@ public class Program
             command.AddArgument(clientIds);
 
             command.SetHandler(DeleteClients, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientIds);
-
+            
             return command;
         }
     }
 
-    private static async Task CreateClient(string? dbProvider, string? dbConnectionString, string? clientId,
+    private static async Task CreateClient(string dbProvider, string dbConnectionString, string? clientId,
         string? displayName, string? clientSecret)
     {
-        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+        var mediator = GetService<IMediator>(dbProvider, dbConnectionString);
+        
+        var response = await mediator.Send(new CreateClientCommand(clientId, displayName, clientSecret, "does-not-work-yet"), CancellationToken.None);
 
-        var createdClient = await oAuthClientManager.Create(clientId, displayName, clientSecret);
-
-        Console.WriteLine(JsonSerializer.Serialize(createdClient, JSON_SERIALIZER_OPTIONS));
+        Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");
     }
 
-    private static async Task ListClients(string? dbProvider, string? dbConnectionString)
+    private static async Task ListClients(string dbProvider, string dbConnectionString)
     {
-        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+        var mediator = GetService<IMediator>(dbProvider, dbConnectionString);
 
-        var clients = oAuthClientManager.GetAll();
+        var response = await mediator.Send(new ListClientsQuery(), CancellationToken.None);
+
         Console.WriteLine("The following clients are configured:");
 
-        await foreach (var client in clients)
+        foreach (var client in response)
         {
             Console.WriteLine(JsonSerializer.Serialize(client, JSON_SERIALIZER_OPTIONS));
         }
     }
 
-    private static async Task DeleteClients(string? dbProvider, string? dbConnectionString, string[] clientIds)
+    private static async Task DeleteClients(string dbProvider, string dbConnectionString, string[] clientIds)
     {
-        var oAuthClientManager = GetOAuthClientManager(dbProvider!, dbConnectionString!);
+        var mediator = GetService<IMediator>(dbProvider, dbConnectionString);
 
         foreach (var clientId in clientIds)
         {
             try
             {
-                await oAuthClientManager.Delete(clientId);
+                await mediator.Send(new DeleteClientCommand(clientId), CancellationToken.None);
                 Console.WriteLine($"Successfully deleted client '{clientId}'");
             }
             catch (Exception ex)
@@ -186,47 +183,17 @@ public class Program
         }
     }
 
-    private static OAuthClientManager GetOAuthClientManager(string dbProvider, string dbConnectionString)
+    private static T GetService<T>(string dbProvider, string dbConnectionString) where T : notnull
     {
-        var services = new ServiceCollection();
-        ConfigureServices(services,
-            new ApplicationConfiguration { Provider = dbProvider, DbConnectionString = dbConnectionString });
+        var services = ConfigureServices(dbProvider, dbConnectionString);
 
         var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetRequiredService<OAuthClientManager>();
+        return serviceProvider.GetRequiredService<T>();
     }
 
-    private static void ConfigureServices(IServiceCollection services,
-        ApplicationConfiguration applicationConfiguration)
+    private static IServiceCollection ConfigureServices(string dbProvider, string dbConnectionString)
     {
-        switch (applicationConfiguration.Provider)
-        {
-            case SQL_SERVER:
-                services.AddDbContext<DevicesDbContext>(options =>
-                {
-                    options.UseSqlServer(applicationConfiguration.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly(SQL_SERVER_MIGRATIONS_ASSEMBLY);
-                    });
-
-                    options.UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
-                });
-                break;
-            case POSTGRES:
-                services.AddDbContext<DevicesDbContext>(options =>
-                {
-                    options.UseNpgsql(applicationConfiguration.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                    });
-
-                    options.UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
-                });
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {applicationConfiguration.Provider}");
-        }
-
+        var services = new ServiceCollection();
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<DevicesDbContext>();
@@ -238,11 +205,22 @@ public class Program
                 options
                     .UseEntityFrameworkCore()
                     .UseDbContext<DevicesDbContext>()
-                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
+                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
+                        CustomOpenIddictEntityFrameworkCoreToken, string>();
             });
 
+        services.AddApplication();
+
+        services.AddSingleton<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+
         services.AddLogging();
-        services.AddTransient<OAuthClientManager>();
+        services.AddDatabase(options =>
+        {
+            options.Provider = dbProvider;
+            options.ConnectionString = dbConnectionString;
+        });
+
+        return services;
     }
 
     private static string? ValidateDbConnectionString(string? connectionString)
@@ -278,10 +256,4 @@ public class Program
 
         return connectionString;
     }
-}
-
-public class ApplicationConfiguration
-{
-    public string DbConnectionString { get; set; } = null!;
-    public string Provider { get; set; } = null!;
 }
