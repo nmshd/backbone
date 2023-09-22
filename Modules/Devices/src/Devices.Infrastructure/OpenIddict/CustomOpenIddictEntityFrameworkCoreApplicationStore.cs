@@ -1,12 +1,11 @@
-﻿using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.EntityFrameworkCore;
 
-namespace AdminUi.OpenIddict;
+namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 
 public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
     OpenIddictEntityFrameworkCoreApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreToken, DevicesDbContext, string>

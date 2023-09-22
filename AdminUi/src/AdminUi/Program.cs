@@ -4,7 +4,6 @@ using AdminUi.Configuration;
 using AdminUi.Extensions;
 using AdminUi.Infrastructure.Persistence;
 using AdminUi.Infrastructure.Persistence.Database;
-using AdminUi.OpenIddict;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
