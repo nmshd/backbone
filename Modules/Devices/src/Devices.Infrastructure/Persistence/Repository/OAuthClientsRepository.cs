@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Core;
-using static System.Net.Mime.MediaTypeNames;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -15,7 +14,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 public class OAuthClientsRepository : IOAuthClientsRepository
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
-    private Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication> _trackedApplications;
+    private readonly Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication> _trackedApplications;
 
     public OAuthClientsRepository(OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
