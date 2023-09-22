@@ -1,6 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Domain.Errors;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
@@ -15,8 +13,13 @@ public class Tier
     public TierId Id { get; }
     public TierName Name { get; }
 
-    public DomainError? CanBeDeleted(int identitiesCount)
+    public DomainError? CanBeDeleted(int clientsCount, int identitiesCount)
     {
+        if (clientsCount > 0)
+        {
+            return DomainErrors.CannotDeleteUsedDefaultTier(clientsCount);
+        }
+
         if (identitiesCount > 0)
         {
             return DomainErrors.CannotDeleteUsedTier(identitiesCount);

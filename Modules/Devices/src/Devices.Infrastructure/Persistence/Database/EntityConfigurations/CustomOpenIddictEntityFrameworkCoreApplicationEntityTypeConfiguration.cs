@@ -13,7 +13,8 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfigurati
             .HasMaxLength(TierId.MAX_LENGTH)
             .IsRequired();
 
-        builder.
-            HasOne<Tier>().WithMany().HasForeignKey(x => x.DefaultTier);
+        builder
+            .HasOne<Tier>().WithMany().HasForeignKey(x => x.DefaultTier)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

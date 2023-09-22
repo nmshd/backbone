@@ -1,13 +1,14 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
-using Dapper;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Core;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
@@ -15,11 +16,13 @@ public class TiersRepository : ITiersRepository
 {
     private readonly DbSet<Tier> _tiersDbSet;
     private readonly DevicesDbContext _dbContext;
+    private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
-    public TiersRepository(DevicesDbContext dbContext)
+    public TiersRepository(DevicesDbContext dbContext, OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
         _dbContext = dbContext;
         _tiersDbSet = dbContext.Set<Tier>();
+        _applicationManager = applicationManager;
     }
 
     public async Task AddAsync(Tier tier, CancellationToken cancellationToken)
@@ -38,6 +41,12 @@ public class TiersRepository : ITiersRepository
     {
         return await _dbContext.Identities.CountAsync(i => i.TierId == tier.Id, cancellationToken);
     }
+
+    public async Task<int> GetNumberOfClientsWithDefaultTier(Tier tier, CancellationToken cancellationToken)
+    {
+        return (int)await _applicationManager.CountAsync(clients => clients.Where(client => client.DefaultTier == tier.Id), cancellationToken);
+    }
+
     public async Task<bool> ExistsWithId(TierId tierId, CancellationToken cancellationToken)
     {
         return await _tiersDbSet.AnyAsync(t => t.Id == tierId, cancellationToken);
