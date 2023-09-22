@@ -117,18 +117,9 @@ export class ClientEditComponent {
     public createClient(): void {
         this.loading = true;
 
-        if (!this.client.defaultTier) {
-            const basicTier = this.tierList.find((tier) => tier.name === "Basic");
-            if (basicTier) {
-                this.client.defaultTier = basicTier.id;
-            } else {
-                this.snackBar.open("Basic Tier not found", "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-
-                return;
-            }
+        if (!this.setDefaultTier()) {
+            this.loading = false;
+            return;
         }
 
         this.clientService.createClient(this.client).subscribe({
@@ -157,18 +148,9 @@ export class ClientEditComponent {
     public updateClient(): void {
         this.loading = true;
 
-        if (!this.client.defaultTier) {
-            const basicTier = this.tierList.find((tier) => tier.name === "Basic");
-            if (basicTier) {
-                this.client.defaultTier = basicTier.id;
-            } else {
-                this.snackBar.open("Basic Tier not found", "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-
-                return;
-            }
+        if (!this.setDefaultTier()) {
+            this.loading = false;
+            return;
         }
 
         const request = {
@@ -199,6 +181,22 @@ export class ClientEditComponent {
                 });
             }
         });
+    }
+
+    public setDefaultTier(): boolean {
+        if (!this.client.defaultTier) {
+            const basicTier = this.tierList.find((tier) => tier.name === "Basic");
+            if (basicTier) {
+                this.client.defaultTier = basicTier.id;
+            } else {
+                this.snackBar.open("Basic Tier not found", "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+                return false;
+            }
+        }
+        return true;
     }
 
     public togglePasswordVisibility(): void {
