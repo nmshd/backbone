@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using AdminUi.Authentication;
 using AdminUi.Configuration;
+using AdminUi.Infrastructure.DTOs;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Enmeshed.BuildingBlocks.API;
@@ -9,6 +10,8 @@ using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 
 namespace AdminUi.Extensions;
 
@@ -162,6 +165,17 @@ public static class IServiceCollectionExtensions
         services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen();
+
+        return services;
+    }
+
+    public static IServiceCollection AddOData(this IServiceCollection services)
+    {
+        ODataModelBuilder builder = new ODataConventionModelBuilder();
+        builder.EntitySet<IdentityOverview>("Identities")
+            .EntityType.HasKey(identity => identity.Address);
+        services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy()
+            .AddRouteComponents("odata", builder.GetEdmModel()));
 
         return services;
     }

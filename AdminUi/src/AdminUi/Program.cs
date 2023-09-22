@@ -14,6 +14,7 @@ using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
@@ -59,6 +60,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
+        .AddOData()
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
