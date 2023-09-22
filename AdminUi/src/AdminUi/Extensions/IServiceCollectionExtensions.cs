@@ -171,9 +171,13 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddOData(this IServiceCollection services)
     {
-        ODataModelBuilder builder = new ODataConventionModelBuilder();
+        var builder = new ODataConventionModelBuilder()
+            .EnableLowerCamelCase();
+
         builder.EntitySet<IdentityOverview>("Identities")
             .EntityType.HasKey(identity => identity.Address);
+
+
         services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy()
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
