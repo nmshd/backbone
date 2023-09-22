@@ -162,18 +162,10 @@ export class ClientEditComponent {
     updateClient(): void {
         this.loading = true;
 
-        let defaultTier = "";
-        this.tierList.forEach((tier) => {
-            if (tier.id == this.client.defaultTier) {
-                defaultTier = tier.id;
-                return;
-            }
-        });
-
-        if (!defaultTier) {
+        if (!this.client.defaultTier) {
             let basicTier = this.tierList.find((tier) => tier.name == "Basic");
             if (basicTier) {
-                defaultTier = basicTier.id;
+                this.client.defaultTier = basicTier.id;
             } else {
                 this.snackBar.open("Basic Tier not found", "Dismiss", {
                     verticalPosition: "top",
@@ -185,7 +177,7 @@ export class ClientEditComponent {
         }
 
         let request = {
-            defaultTier: defaultTier
+            defaultTier: this.client.defaultTier
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
