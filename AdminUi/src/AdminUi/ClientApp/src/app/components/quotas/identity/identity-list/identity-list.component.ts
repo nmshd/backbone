@@ -3,7 +3,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { IdentityOverview, IdentityService } from "src/app/services/identity-service/identity.service";
-import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+import { ODataResponse } from "src/app/utils/odata-response";
 
 @Component({
     selector: "app-identity-list",
@@ -50,13 +50,10 @@ export class IdentityListComponent {
     public getPagedData(): void {
         this.loading = true;
         this.identityService.getIdentities(this.pageIndex, this.pageSize).subscribe({
-            next: (data: PagedHttpResponseEnvelope<IdentityOverview>) => {
-                this.identities = data.result;
-                if (data.pagination) {
-                    this.totalRecords = data.pagination.totalRecords!;
-                } else {
-                    this.totalRecords = data.result.length;
-                }
+            next: (data: ODataResponse<IdentityOverview[]>) => {
+                this.identities = data.value;
+                console.log(this.identities[0].createdAt);
+                this.totalRecords = data.value.length;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {

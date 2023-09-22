@@ -5,23 +5,26 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
+import { ODataResponse } from "src/app/utils/odata-response";
 
 @Injectable({
     providedIn: "root"
 })
 export class IdentityService {
     private readonly apiUrl: string;
+    private readonly odataUrl: string;
 
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Identities`;
+        this.odataUrl = `${environment.odataUrl}/Identities`;
     }
 
-    public getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
+    public getIdentities(pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(this.apiUrl, httpOptions);
+        return this.http.get<ODataResponse<IdentityOverview[]>>(this.odataUrl, httpOptions);
     }
 
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
