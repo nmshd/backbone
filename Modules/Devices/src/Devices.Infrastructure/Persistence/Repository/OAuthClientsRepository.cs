@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Core;
+using static System.Net.Mime.MediaTypeNames;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -33,12 +34,12 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             foreach (var application in applications)
             {
                 _trackedApplications[application.ClientId!] = application;
-                oAuthClients.Add(new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value));
+                oAuthClients.Add(new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier));
             }
         }
         else
         {
-            oAuthClients.AddRange(applications.Select(application => new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value)));
+            oAuthClients.AddRange(applications.Select(application => new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier)));
         }
 
         return oAuthClients;
@@ -48,7 +49,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
-            return new OAuthClient(trackedApplication.ClientId!, trackedApplication.DisplayName!, TierId.Create(trackedApplication.DefaultTier).Value);
+            return new OAuthClient(trackedApplication.ClientId!, trackedApplication.DisplayName!, trackedApplication.DefaultTier);
         }
 
         var application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
@@ -59,7 +60,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         if(track)
             _trackedApplications[clientId] = application;
 
-        return new OAuthClient(application.ClientId!, application.DisplayName!, TierId.Create(application.DefaultTier).Value);
+        return new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier);
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
