@@ -87,7 +87,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.LogTrace($"Successfully published event with id '{@event.IntegrationEventId}'.");
+            _logger.LogTrace("Successfully published event with id '{integrationEventId}'.", @event.IntegrationEventId);
         });
     }
 
@@ -108,7 +108,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
         if (containsKey)
         {
-            _logger.LogInformation($"The messaging entity {eventName} already exists.");
+            _logger.LogInformation("The messaging entity {eventName} already exists.", eventName);
             return;
         }
 

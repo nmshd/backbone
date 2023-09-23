@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 
     public async Task Handle(DeleteQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogTrace($"Deleting individual quota with id: '{request.IndividualQuotaId}'.");
+        _logger.LogTrace("Deleting individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
 
         var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -33,6 +33,6 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.LogTrace($"Successfully deleted individual quota with id: '{request.IndividualQuotaId}'.");
+        _logger.LogTrace("Successfully deleted individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
     }
 }

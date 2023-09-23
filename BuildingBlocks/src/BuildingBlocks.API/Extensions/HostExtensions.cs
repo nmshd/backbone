@@ -22,7 +22,7 @@ public static class HostExtensions
 
         try
         {
-            logger.LogInformation($"Migrating database associated with context {typeof(TContext).Name}");
+            logger.LogInformation("Migrating database associated with context {context}", typeof(TContext).Name);
 
             var retry = Policy.Handle<SqlException>()
                 .WaitAndRetry(new[]
@@ -36,12 +36,12 @@ public static class HostExtensions
 
             seeder?.Invoke(context, services);
 
-            logger.LogInformation($"Migrated database associated with context {typeof(TContext).Name}");
+            logger.LogInformation("Migrated database associated with context {context}", typeof(TContext).Name);
         }
         catch (Exception ex)
         {
             logger.LogError(ex,
-                $"An error occurred while migrating the database used on context {typeof(TContext).Name}");
+                "An error occurred while migrating the database used on context {context}", typeof(TContext).Name);
             throw;
         }
 
