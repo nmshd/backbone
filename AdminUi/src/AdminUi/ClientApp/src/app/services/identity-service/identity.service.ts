@@ -28,7 +28,7 @@ export class IdentityService {
         return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
     }
 
-    updateIdentity(identity: Identity, params: UpdateTierDTO) {
+    updateIdentity(identity: Identity, params: UpdateTierRequest) {
         return this.http.put<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${identity.address}`, params);
     }
 }
@@ -68,6 +68,6 @@ export interface IdentityOverview {
     numberOfDevices: number;
 }
 
-export interface UpdateTierDTO {
+export interface UpdateTierRequest {
     tierId: string;
 }
