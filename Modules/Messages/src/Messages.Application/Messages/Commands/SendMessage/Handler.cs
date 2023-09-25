@@ -81,7 +81,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {
                 _logger.LogInformation(
-                    "Sending message aborted. Recipient {recipient} already has {numberOfUnreceivedMessagesFromActiveIdentity} unreceived messages from sender {sender}, which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).", 
+                    "Sending message aborted. Recipient {recipient} already has {numberOfUnreceivedMessagesFromActiveIdentity} unreceived messages from sender {sender}, which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).",
                     recipientDto.Address, numberOfUnreceivedMessagesFromActiveIdentity, sender, _options.MaxNumberOfUnreceivedMessagesFromOneSender);
 
                 throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
