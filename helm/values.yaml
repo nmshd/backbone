@@ -45,6 +45,9 @@ consumerapi:
     parentRefName: ""
     # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
     parentRefNamespace: ""
+    # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
+    parentRefSectionName: ""
+    # hostnames - the hostnames the Consumer API should be reachable under
     hostnames: []
 
   ingress:
