@@ -68,7 +68,7 @@ export class IdentityEditComponent {
             }
         });
 
-        this.loadIdentityAndTier();
+        this.loadIdentityAndTiers();
     }
 
     loadAdmissibleTiers() {
@@ -81,7 +81,7 @@ export class IdentityEditComponent {
         });
     }
 
-    loadIdentityAndTier() {
+    loadIdentityAndTiers() {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.identityService.getIdentityByAddress(this.identityAddress!).subscribe({
@@ -136,7 +136,7 @@ export class IdentityEditComponent {
                         horizontalPosition: "center"
                     });
                     setTimeout(() => {
-                        this.loadIdentityAndTier();
+                        this.loadIdentityAndTiers();
                     }, 2000);
                 },
                 error: (err: any) => {
@@ -198,7 +198,7 @@ export class IdentityEditComponent {
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
             next: (data: HttpResponseEnvelope<IdentityQuota>) => {
                 if (data && data.result) {
-                    this.loadIdentityAndTier();
+                    this.loadIdentityAndTiers();
                     this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                         duration: 4000,
                         verticalPosition: "top",
@@ -247,7 +247,7 @@ export class IdentityEditComponent {
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
                 let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
-                this.loadIdentityAndTier();
+                this.loadIdentityAndTiers();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
