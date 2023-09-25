@@ -37,7 +37,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
 
     public async Task<byte[]> FindAsync(string folder, string blobId)
     {
-        _logger.LogTrace("Reading blob with id {blobId}...", blobId);
+        _logger.LogTrace("Reading blob with id '{blobId}'...", blobId);
 
         var container = _containerClientFactory.GetContainerClient(folder);
         try
@@ -47,7 +47,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             await blob.DownloadToAsync(stream);
             stream.Position = 0;
 
-            _logger.LogTrace("Found blob with id {blobId}.", blobId);
+            _logger.LogTrace("Found blob with id '{blobId}'.", blobId);
 
             return stream.ToArray();
         }
@@ -90,7 +90,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
 
     private async Task UploadChangedBlobs()
     {
-        _logger.LogTrace("Uploading {changedBlobsCount} changed blobs...", _changedBlobs.Count);
+        _logger.LogTrace("Uploading '{changedBlobsCount}' changed blobs...", _changedBlobs.Count);
 
         var changedBlobs = new Dictionary<BlobClient, byte[]>(_changedBlobs);
         foreach (var (cloudBlockBlob, bytes) in changedBlobs)
@@ -112,7 +112,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
 
     private async Task DeleteRemovedBlobs()
     {
-        _logger.LogTrace("Deleting {changedBlobsCount} blobs...", _changedBlobs.Count);
+        _logger.LogTrace("Deleting '{changedBlobsCount}' blobs...", _changedBlobs.Count);
 
         var blobsToDelete = new List<BlobClient>(_removedBlobs);
 
@@ -124,7 +124,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError("There was an error deleting the blob with id {cloudBlockBlobName}. {ex}", cloudBlockBlob.Name, ex);
+                _logger.LogError("There was an error deleting the blob with id '{cloudBlockBlobName}'. {ex}", cloudBlockBlob.Name, ex);
                 throw new NotFoundException();
             }
 

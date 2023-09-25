@@ -20,7 +20,7 @@ public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierC
         var tier = new Tier(new TierId(integrationEvent.Id), integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created tier. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.LogTrace("Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
     }
 }
 

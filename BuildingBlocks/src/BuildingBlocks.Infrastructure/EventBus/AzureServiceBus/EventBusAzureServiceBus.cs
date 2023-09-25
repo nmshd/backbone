@@ -93,10 +93,10 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
             catch (ServiceBusException)
             {
-                _logger.LogInformation("The messaging entity {eventName} already exists.", eventName);
+                _logger.LogInformation("The messaging entity '{eventName}' already exists.", eventName);
             }
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
     }

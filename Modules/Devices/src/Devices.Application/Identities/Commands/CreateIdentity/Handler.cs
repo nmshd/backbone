@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.AddressPrefix);
 
-        _logger.LogTrace("Address created. Result: {address}", address);
+        _logger.LogTrace("Address created. Result: '{address}'", address);
 
         var existingIdentity = await _identitiesRepository.FindByAddress(address, cancellationToken);
 
@@ -54,11 +54,11 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.LogTrace("Identity created. Address: {address}, Device ID: {deviceId}, Username: {userName}", newIdentity.Address, user.DeviceId, user.UserName);
+        _logger.LogTrace("Identity created. Address: '{address}', Device ID: {deviceId}, Username: {userName}", newIdentity.Address, user.DeviceId, user.UserName);
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace("Successfully published IdentityCreatedIntegrationEvent. Identity Address: {address}, Tier: {tierName}", newIdentity.Address, basicTier.Name);
+        _logger.LogTrace("Successfully published IdentityCreatedIntegrationEvent. Identity Address: '{address}', Tier: {tierName}", newIdentity.Address, basicTier.Name);
 
         return new CreateIdentityResponse
         {

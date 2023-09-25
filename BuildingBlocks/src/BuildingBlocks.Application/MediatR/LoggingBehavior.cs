@@ -28,7 +28,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
     private void Before()
     {
-        _logger.LogTrace("Handling {name}", typeof(TRequest).Name);
+        _logger.LogTrace("Handling '{name}'", typeof(TRequest).Name);
         _watch = Stopwatch.StartNew();
     }
 

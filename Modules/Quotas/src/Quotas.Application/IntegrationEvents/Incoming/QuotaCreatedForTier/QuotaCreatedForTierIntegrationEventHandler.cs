@@ -31,7 +31,7 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
 
         if (!identitiesWithTier.Any())
         {
-            _logger.LogTrace("No identities found with tier ID: {tierId}", @event.TierId);
+            _logger.LogTrace("No identities found with tier ID: '{tierId}'", @event.TierId);
             return;
         }
 
