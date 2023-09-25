@@ -20,12 +20,17 @@ public class EventBusConfiguration
     public string GcpPubSubProjectId { get; set; }
     public string GcpPubSubTopicName { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
-    public int NumberOfRetries { get; set; } = 5;
+    public HandlerRetryBehavior HandlerRetryBehavior { get; set; }
+}
 
-    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
-    public int MinimumBackoff { get; set; } = 2;
+public class HandlerRetryBehavior
+{
+    [Range(1, int.MaxValue)]
+    public int NumberOfRetries { get; set; }
 
-    [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
-    public int MaximumBackoff { get; set; } = 120;
+    [Range(1, int.MaxValue)]
+    public int MinimumBackoff { get; set; }
+
+    [Range(1, int.MaxValue)]
+    public int MaximumBackoff { get; set; }
 }

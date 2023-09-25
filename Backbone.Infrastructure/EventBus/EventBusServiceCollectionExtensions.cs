@@ -53,8 +53,8 @@ public static class EventBusServiceCollectionExtensions
     private static void LoadBasicBusOptions<T>(EventBusConfiguration configuration, T options) where T : BasicBusOptions
     {
         options.SubscriptionClientName = configuration.SubscriptionClientName;
-        options.NumberOfRetries = configuration.NumberOfRetries;
-        options.MinimumBackoff = configuration.MinimumBackoff;
-        options.MaximumBackoff = configuration.MaximumBackoff;
+        options.NumberOfRetries = configuration.HandlerRetryBehavior.NumberOfRetries;
+        options.MinimumBackoff = configuration.HandlerRetryBehavior.MinimumBackoff;
+        options.MaximumBackoff = configuration.HandlerRetryBehavior.MaximumBackoff;
     }
 }
