@@ -1,5 +1,4 @@
-﻿using AdminUi.Infrastructure.CompiledModels;
-using AdminUi.Infrastructure.DTOs;
+﻿using AdminUi.Infrastructure.DTOs;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,11 +17,5 @@ public class AdminUiDbContext : AbstractDbContextBase
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(AdminUiDbContext).Assembly);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder
-            .UseModel(AdminUiDbContextModel.Instance);
     }
 }
