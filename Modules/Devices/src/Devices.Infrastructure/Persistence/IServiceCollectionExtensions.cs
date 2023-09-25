@@ -2,7 +2,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,7 +28,9 @@ public static class IServiceCollectionExtensions
                         sqlOptions.CommandTimeout(20);
                         sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    }).UseOpenIddict()
+                    })
+                        .UseModel(CompiledModels.SqlServer.DevicesDbContextModel.Instance)
+                        .UseOpenIddict()
                 );
                 break;
             case POSTGRES:
@@ -39,7 +40,9 @@ public static class IServiceCollectionExtensions
                         sqlOptions.CommandTimeout(20);
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    }).UseOpenIddict()
+                    })
+                        .UseModel(CompiledModels.Postgres.DevicesDbContextModel.Instance)
+                        .UseOpenIddict()
 
                 );
                 break;
