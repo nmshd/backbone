@@ -1,10 +1,13 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+
 public class PnsRegistrationRepository : IPnsRegistrationRepository
 {
     private readonly DbSet<PnsRegistration> _registrations;
@@ -20,8 +23,16 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
 
     public async Task Add(PnsRegistration registration, CancellationToken cancellationToken)
     {
-        await _registrations.AddAsync(registration, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _registrations.AddAsync(registration, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception)
+        {
+            if (exception.HasReason(DbUpdateExceptionReason.UniqueKeyViolation))
+                throw new InfrastructureException(InfrastructureErrors.UniqueKeyViolation(registration.DeviceId));
+        }
     }
 
     public async Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
@@ -34,6 +45,11 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
+    }
+
+    public async Task Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken)
+    {
+        await _registrations.Where(x => deviceIds.Contains(x.DeviceId)).ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)

@@ -1,6 +1,7 @@
 {
     "name": "adminui",
     "version": "0.0.0",
+    "license": "MIT",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --port 44480",
@@ -37,6 +38,8 @@
         "@angular-devkit/build-angular": "^15.1.6",
         "@angular/cli": "^15.1.6",
         "@angular/compiler-cli": "^15.1.5",
+        "@js-soft/eslint-config-ts": "^1.6.3",
+        "@js-soft/license-check": "^1.0.6",
         "@types/jasmine": "~4.3.1",
         "@types/jasminewd2": "~2.0.10",
         "@types/node": "^18.14.0",
@@ -47,6 +50,7 @@
         "karma-coverage": "~2.2.0",
         "karma-jasmine": "~5.1.0",
         "karma-jasmine-html-reporter": "^2.0.0",
+        "prettier": "^3.0.2",
         "typescript": "~4.9.5"
     },
     "overrides": {

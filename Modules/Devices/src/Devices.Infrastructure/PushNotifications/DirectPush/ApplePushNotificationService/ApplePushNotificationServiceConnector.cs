@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -18,7 +20,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        ILogger<ApplePushNotificationServiceConnector> logger)
+        ILogger<ApplePushNotificationServiceConnector> logger, IPnsRegistrationRepository registrationRepository)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
@@ -26,13 +28,14 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(recipient, notification);
 
-        var tasks = registrations.Select(pnsRegistration =>
+        var sendResults = new SendResults();
+        var tasks = registrations.Select(async pnsRegistration =>
         {
             ValidateRegistration(pnsRegistration);
             var handle = pnsRegistration.Handle.Value;
@@ -48,10 +51,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
             _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
 
-            return _httpClient.SendAsync(request).ContinueWith(async t => HandleResponse(await t, handle));
+            var response = await _httpClient.SendAsync(request);
+            await MapResponse(response, pnsRegistration, sendResults);
         }).ToList();
 
         await Task.WhenAll(tasks);
+        return sendResults;
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -60,21 +65,17 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task HandleResponse(HttpResponseMessage response, string handle)
+    private async Task MapResponse(HttpResponseMessage response, PnsRegistration registration, SendResults sendResults)
     {
-        if (response is { IsSuccessStatusCode: false })
+        if (response.IsSuccessStatusCode)
+            sendResults.AddSuccess(registration.DeviceId);
+        else
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            if (!responseContent.IsNullOrEmpty())
-            {
-                _logger.LogError(
-                    "The following error occurred while trying to send the notification for handle '{handle}': '{responseContent}'",
-                    handle, responseContent);
-            }
+            var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+            if (responseContent.reason == "Unregistered")
+                sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
             else
-            {
-                _logger.LogError("An unknown error occurred while trying to send the notification for handle '{handle}'.", handle);
-            }
+                sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
         }
     }
 

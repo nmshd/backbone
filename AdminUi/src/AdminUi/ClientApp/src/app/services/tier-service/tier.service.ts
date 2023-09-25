@@ -10,34 +10,34 @@ import { TierQuota } from "../quotas-service/quotas.service";
     providedIn: "root"
 })
 export class TierService {
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Tiers";
+    public constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl}/Tiers`;
     }
 
-    getTiers(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<Tier>> {
+    public getTiers(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<TierOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
 
-        return this.http.get<PagedHttpResponseEnvelope<Tier>>(this.apiUrl, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<TierOverview>>(this.apiUrl, httpOptions);
     }
 
-    getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-        return this.http.get<HttpResponseEnvelope<Tier>>(this.apiUrl + `/${id}`);
+    public getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
+        return this.http.get<HttpResponseEnvelope<Tier>>(`${this.apiUrl}/${id}`);
     }
 
-    createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
+    public createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
         return this.http.post<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
 
-    updateTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
+    public updateTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
         return this.http.put<HttpResponseEnvelope<Tier>>(this.apiUrl, tier);
     }
 
-    deleteTierById(id: string): Observable<void> {
-        return this.http.delete<void>(this.apiUrl + `/${id}`);
+    public deleteTierById(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 }
 
@@ -45,4 +45,11 @@ export interface Tier {
     id: string;
     name: string;
     quotas: TierQuota[];
+    isDeletable: boolean;
+}
+
+export interface TierOverview {
+    id: string;
+    name: string;
+    numberOfIdentities: number;
 }
