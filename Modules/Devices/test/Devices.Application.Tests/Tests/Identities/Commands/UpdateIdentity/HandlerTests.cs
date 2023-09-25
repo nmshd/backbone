@@ -147,7 +147,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
-        A.CallTo(()=>eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
+        A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
     }
 
     private static UpdateIdentityCommand MakeRequest(Tier newTier, Identity identity)
