@@ -256,6 +256,11 @@ global:
         gcpPubSubProjectId: ""
         # gcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
         gcpPubSubTopicName: ""
+      sqlDatabase:
+        # provider - possible values: "Postgres"/"SqlServer"
+        provider: ""
+        # connectionString - should be set via environment variable
+        connectionString: ""
     modules:
       challenges:
         infrastructure:
