@@ -13,5 +13,5 @@ public interface ITiersRepository
     Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken);
     Task Remove(Tier tier);
     Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken);
-    Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tiers, CancellationToken cancellationToken);
+    Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> ids, CancellationToken cancellationToken);
 }
