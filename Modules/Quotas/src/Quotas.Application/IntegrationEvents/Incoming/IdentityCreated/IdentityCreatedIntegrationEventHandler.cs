@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
@@ -10,13 +11,15 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
+    private readonly MetricCalculatorFactory _metricCalculatorFactory;
     private readonly ILogger<IdentityCreatedIntegrationEventHandler> _logger;
 
-    public IdentityCreatedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, ILogger<IdentityCreatedIntegrationEventHandler> logger, ITiersRepository tiersRepository)
+    public IdentityCreatedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, ILogger<IdentityCreatedIntegrationEventHandler> logger, ITiersRepository tiersRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
         _tiersRepository = tiersRepository;
+        _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task Handle(IdentityCreatedIntegrationEvent integrationEvent)
@@ -32,10 +35,13 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
             identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
 
+        await identity.UpdateMetricStatuses(tier.Quotas.Select(q => q.MetricKey), _metricCalculatorFactory, CancellationToken.None);
+
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
         _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
 
         _logger.LogTrace($"{tier.Quotas.Count} Tier Quotas created for Identity: {identity.Address} ");
+
     }
 }
