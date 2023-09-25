@@ -9,7 +9,7 @@ using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
-public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
+public class Handler : IRequestHandler<UpdateIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
         _eventBus = eventBus;
     }
 
-    public async Task<Identity> Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
         var newTierIdResult = TierId.Create(request.TierId);
         if (!newTierIdResult.IsSuccess)
@@ -37,12 +37,11 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
         var oldTier = tiers.Single(t => t.Id == identity.TierId);
         var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
-        identity.ChangeTier(newTier.Id);
-
-        await _identitiesRepository.Update(identity, cancellationToken);
-
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
-
-        return identity;
+        if(oldTier != newTier)
+        {
+            identity.ChangeTier(newTier.Id);
+            await _identitiesRepository.Update(identity, cancellationToken);
+            _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
+        }
     }
 }
