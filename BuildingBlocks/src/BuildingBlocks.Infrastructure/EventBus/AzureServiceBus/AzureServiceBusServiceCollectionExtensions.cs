@@ -25,7 +25,7 @@ public static class AzureServiceBusServiceCollectionExtensions
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusAzureServiceBus(serviceBusPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope, options.NumberOfRetries, options.MinimumBackoff, options.MaximumBackoff, options.SubscriptionClientName);
+                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior, options.SubscriptionClientName);
         });
     }
 }

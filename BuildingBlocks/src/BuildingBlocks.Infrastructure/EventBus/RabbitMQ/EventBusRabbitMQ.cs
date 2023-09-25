@@ -23,17 +23,15 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private readonly IRabbitMqPersistentConnection _persistentConnection;
     private readonly int _connectionRetryCount;
-    private readonly int _pollyRetryCount;
-    private readonly int _minimumBackoff;
-    private readonly int _maximumBackoff;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
     private IModel _consumerChannel;
     private readonly string? _queueName;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, string? queueName = null,
-        int connectionRetryCount = 5, int pollyRetryCount = 5, int minimumBackoff = 2, int maximumBackoff = 120)
+        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
+        int connectionRetryCount = 5)
     {
         _persistentConnection =
             persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -43,9 +41,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
-        _pollyRetryCount = pollyRetryCount;
-        _minimumBackoff = minimumBackoff;
-        _maximumBackoff = maximumBackoff;
+        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -205,11 +201,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = Policy.Handle<Exception>()
-                .WaitAndRetryAsync(
-                    _pollyRetryCount,
-                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
-                    (ex, _) => _logger.LogWarning(ex.ToString()))
-                .WrapAsync(Policy.TimeoutAsync(_maximumBackoff));
+                    .WaitAndRetryAsync(
+                        _handlerRetryBehavior.NumberOfRetries,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Max(Math.Pow(_handlerRetryBehavior.MinimumBackoff, retryAttempt), _handlerRetryBehavior.MaximumBackoff)),
+                        (ex, _) => _logger.LogWarning(ex.ToString()))
+                    .WrapAsync(Policy.TimeoutAsync(_handlerRetryBehavior.MaximumBackoff));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }

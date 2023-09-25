@@ -26,22 +26,18 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
-    private readonly int _pollyRetryCount;
-    private readonly int _minimumBackoff;
-    private readonly int _maximumBackoff;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
 
     public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac, int pollyRetryCount, int minimumBackoff, int maximumBackoff)
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior)
     {
         _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
         _connection.SubscriberClient.StartAsync(OnIncomingEvent);
-        _pollyRetryCount = pollyRetryCount;
-        _minimumBackoff = minimumBackoff;
-        _maximumBackoff = maximumBackoff;
+        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -136,11 +132,11 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             var handleMethod = handler.GetType().GetMethod("Handle");
 
             var policy = Policy.Handle<Exception>()
-            .WaitAndRetryAsync(
-                _pollyRetryCount,
-                retryAttempt => TimeSpan.FromSeconds(Math.Pow(_minimumBackoff, retryAttempt)),
-                (ex, _) => _logger.LogWarning(ex.ToString()))
-            .WrapAsync(Policy.TimeoutAsync(_maximumBackoff));
+                .WaitAndRetryAsync(
+                    _handlerRetryBehavior.NumberOfRetries,
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(_handlerRetryBehavior.MinimumBackoff, retryAttempt)),
+                    (ex, _) => _logger.LogWarning(ex.ToString()))
+                .WrapAsync(Policy.TimeoutAsync(_handlerRetryBehavior.MaximumBackoff));
 
             await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }

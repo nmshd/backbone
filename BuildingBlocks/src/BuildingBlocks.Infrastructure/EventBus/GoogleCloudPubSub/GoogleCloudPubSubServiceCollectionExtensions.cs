@@ -25,7 +25,7 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusGoogleCloudPubSub(googleCloudPubSubPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope, options.NumberOfRetries, options.MinimumBackoff, options.MaximumBackoff);
+                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior);
         });
     }
 }
