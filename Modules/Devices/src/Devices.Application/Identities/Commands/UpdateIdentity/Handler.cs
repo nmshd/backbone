@@ -24,20 +24,20 @@ public class Handler : IRequestHandler<UpdateIdentityCommand, Identity>
 
     public async Task<Identity> Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
-        var newTierId = TierId.Create(request.TierId);
-        if (!newTierId.IsSuccess)
+        var newTierIdResult = TierId.Create(request.TierId);
+        if (!newTierIdResult.IsSuccess)
         {
-            throw new ApplicationException(new ApplicationError(newTierId.Error.Code, newTierId.Error.Message));
+            throw new ApplicationException(new ApplicationError(newTierIdResult.Error.Code, newTierIdResult.Error.Message));
         }
 
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierId.Value }, cancellationToken);
+        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
 
-        var oldTier = tiers.SingleOrDefault(t => t.Id == identity.TierId) ?? throw new NotFoundException(nameof(Tier));
-        var newTier = tiers.SingleOrDefault(t => t.Id == newTierId.Value) ?? throw new NotFoundException(nameof(Tier));
+        var oldTier = tiers.Single(t => t.Id == identity.TierId);
+        var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
-        identity.SetTier(newTier.Id);
+        identity.ChangeTier(newTier.Id);
 
         await _identitiesRepository.Update(identity, cancellationToken);
 

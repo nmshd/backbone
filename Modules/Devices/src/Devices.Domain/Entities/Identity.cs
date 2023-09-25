@@ -34,7 +34,7 @@ public class Identity
         return Devices.Count < 1;
     }
 
-    public void SetTier(TierId id)
+    public void ChangeTier(TierId id)
     {
         TierId = id;
     }
