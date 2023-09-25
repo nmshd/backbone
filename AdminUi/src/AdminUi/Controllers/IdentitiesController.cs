@@ -100,7 +100,7 @@ public class IdentitiesController : ApiControllerBase
     [HttpPut("{identityAddress}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PutIdentityByAddress([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
         await _mediator.Send<Identity>(command, cancellationToken);
