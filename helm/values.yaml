@@ -45,6 +45,9 @@ consumerapi:
     parentRefName: ""
     # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
     parentRefNamespace: ""
+    # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
+    parentRefSectionName: ""
+    # hostnames - the hostnames the Consumer API should be reachable under
     hostnames: []
 
   ingress:
@@ -253,6 +256,11 @@ global:
         gcpPubSubProjectId: ""
         # gcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
         gcpPubSubTopicName: ""
+      sqlDatabase:
+        # provider - possible values: "Postgres"/"SqlServer"
+        provider: ""
+        # connectionString - should be set via environment variable
+        connectionString: ""
     modules:
       challenges:
         infrastructure:
