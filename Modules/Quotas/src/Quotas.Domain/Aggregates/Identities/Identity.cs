@@ -132,6 +132,11 @@ public class Identity
 
     public async Task ChangeTier(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
     {
+        if (TierId == newTier.Id)
+        {
+            throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
+        }
+
         _tierQuotas.Clear();
         _metricStatuses.Clear();
 
@@ -140,7 +145,7 @@ public class Identity
         {
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
-        var metricKeys = newTier.Quotas.Select(q => q.MetricKey);
+        var metricKeys = newTier.Quotas.Select(q => q.MetricKey).Distinct();
         await UpdateMetricStatuses(metricKeys, metricCalculatorFactory, cancellationToken);
     }
 }

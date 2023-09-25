@@ -37,11 +37,8 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
         var oldTier = tiers.Single(t => t.Id == identity.TierId);
         var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
-        if (oldTier != newTier)
-        {
-            identity.ChangeTier(newTier.Id);
-            await _identitiesRepository.Update(identity, cancellationToken);
-            _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
-        }
+        identity.ChangeTier(newTier.Id);
+        await _identitiesRepository.Update(identity, cancellationToken);
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
     }
 }

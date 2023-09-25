@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.UnitTestTools.Extensions;
 using FakeItEasy;
@@ -143,9 +144,10 @@ public class HandlerTests
         var request = MakeRequest(newTier, identity);
 
         // Act
-        await handler.Handle(request, CancellationToken.None);
+        var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
+        acting.Should().AwaitThrowAsync<DomainException>();
         A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
         A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
     }

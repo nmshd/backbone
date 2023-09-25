@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
@@ -57,6 +58,7 @@ public class IdentityCreatedIntegrationEventHandlerTests
     private IdentityCreatedIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
     {
         var logger = A.Fake<ILogger<IdentityCreatedIntegrationEventHandler>>();
-        return new IdentityCreatedIntegrationEventHandler(identities, logger, tiers);
+        var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
+        return new IdentityCreatedIntegrationEventHandler(identities, logger, tiers, metricCalculatorFactory);
     }
 }

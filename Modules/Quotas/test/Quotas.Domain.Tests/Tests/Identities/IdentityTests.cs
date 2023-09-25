@@ -321,6 +321,21 @@ public class IdentityTests
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
     }
 
+    [Fact]
+    public async Task Updates_identity_with_new_tier()
+    {
+        // Arrange
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identity = new Identity(identityAddress, new TierId("tier-id"));
+        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+
+        // Act
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+
+        // Assert
+
+    }
+
     private class MetricCalculatorFactoryStub : MetricCalculatorFactory
     {
         private readonly MetricCalculatorStub _calculator;

@@ -40,7 +40,7 @@ public class Identity
     {
         if (TierId == id)
         {
-            throw new DomainException(DomainErrors.NewAndOldParametersMatch("TierId"));
+            throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
         }
 
         TierId = id;
