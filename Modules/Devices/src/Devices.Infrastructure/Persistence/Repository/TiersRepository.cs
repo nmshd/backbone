@@ -14,26 +14,33 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class TiersRepository : ITiersRepository
 {
-    private readonly DbSet<Tier> _tiersDbSet;
+    private readonly IQueryable<Tier> _readonlyTiers;
+    private readonly DbSet<Tier> _tiers;
     private readonly DevicesDbContext _dbContext;
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
     public TiersRepository(DevicesDbContext dbContext, OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
     {
         _dbContext = dbContext;
-        _tiersDbSet = dbContext.Set<Tier>();
+        _tiers = dbContext.Set<Tier>();
+        _readonlyTiers = dbContext.Set<Tier>().AsNoTracking();
         _applicationManager = applicationManager;
     }
 
     public async Task AddAsync(Tier tier, CancellationToken cancellationToken)
     {
-        await _tiersDbSet.AddAsync(tier, cancellationToken);
+        await _tiers.AddAsync(tier, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken);
+    }
+    
     public async Task Remove(Tier tier)
     {
-        _tiersDbSet.Remove(tier);
+        _tiers.Remove(tier);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -49,28 +56,28 @@ public class TiersRepository : ITiersRepository
 
     public async Task<bool> ExistsWithId(TierId tierId, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.AnyAsync(t => t.Id == tierId, cancellationToken);
+        return await _tiers.AnyAsync(t => t.Id == tierId, cancellationToken);
     }
 
     public async Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.AnyAsync(t => t.Name == tierName, cancellationToken);
+        return await _tiers.AnyAsync(t => t.Name == tierName, cancellationToken);
     }
 
     public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        var paginationResult = await _tiersDbSet
+        var paginationResult = await _tiers
             .OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
         return paginationResult;
     }
 
     public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        return await _tiers.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
     public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
     {
-        return await _tiersDbSet.GetBasicTier(cancellationToken);
+        return await _tiers.GetBasicTier(cancellationToken);
     }
 }

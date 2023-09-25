@@ -38,6 +38,11 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

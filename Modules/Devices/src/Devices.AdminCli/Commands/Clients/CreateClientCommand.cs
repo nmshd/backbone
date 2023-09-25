@@ -26,10 +26,10 @@ public class CreateClientCommand : AdminCliDbCommand
             Description = "The clientSecret of the OAuth client. Default: a randomly generated string."
         };
 
-        var defaultTierId = new Option<string>("--defaultTierId")
+        var defaultTierId = new Option<string>("--defaultTier")
         {
             IsRequired = true,
-            Description = "The id of the Tier that should be assigned to all Identities created with this OAuth client."
+            Description = "The id or name of the Tier that should be assigned to all Identities created with this OAuth client."
         };
 
         AddOption(clientId);
@@ -42,11 +42,11 @@ public class CreateClientCommand : AdminCliDbCommand
     }
 
     private async Task CreateClient(string dbProvider, string dbConnectionString, string? clientId,
-        string? displayName, string? clientSecret, string defaultTierId)
+        string? displayName, string? clientSecret, string defaultTier)
     {
         var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
 
-        var response = await mediator.Send(new Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTierId), CancellationToken.None);
+        var response = await mediator.Send(new Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier), CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");

@@ -19,27 +19,46 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
 
     public async Task<CreateClientResponse> Handle(CreateClientCommand request, CancellationToken cancellationToken)
     {
+        await EnsureClientIdDoesNotExist(request, cancellationToken);
+
+        var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
+        var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
+        var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
+        var defaultTierId = await GetTierId(request.DefaultTier, cancellationToken);
+
+        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, defaultTierId, cancellationToken);
+
+        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTierId);
+    }
+
+    private async Task EnsureClientIdDoesNotExist(CreateClientCommand request, CancellationToken cancellationToken)
+    {
         if (!string.IsNullOrEmpty(request.ClientId))
         {
             var clientExists = await _oAuthClientsRepository.Exists(request.ClientId, cancellationToken);
             if (clientExists)
                 throw new ApplicationException(ApplicationErrors.Devices.ClientIdAlreadyExists());
         }
+    }
 
-        var tierIdResult = TierId.Create(request.DefaultTier);
+    private async Task<TierId> GetTierId(string defaultTier, CancellationToken cancellationToken)
+    {
+        var tierNameResult = TierName.Create(defaultTier);
+        if (tierNameResult.IsSuccess)
+        {
+            var tier = await _tiersRepository.FindByName(tierNameResult.Value, cancellationToken);
+            if (tier != null)
+                return tier.Id;
+        }
+
+        var tierIdResult = TierId.Create(defaultTier);
         if (tierIdResult.IsFailure)
-            throw new ApplicationException(ApplicationErrors.Devices.InvalidTierId());
+            throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
 
         var tierExists = await _tiersRepository.ExistsWithId(tierIdResult.Value, cancellationToken);
         if (!tierExists)
             throw new ApplicationException(GenericApplicationErrors.NotFound(nameof(Tier)));
 
-        var clientSecret = string.IsNullOrEmpty(request.ClientSecret) ? PasswordGenerator.Generate(30) : request.ClientSecret;
-        var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
-        var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
-
-        await _oAuthClientsRepository.Add(clientId, displayName, clientSecret, tierIdResult.Value, cancellationToken);
-
-        return new CreateClientResponse(clientId, displayName, clientSecret, tierIdResult.Value);
+        return tierIdResult.Value;
     }
 }
