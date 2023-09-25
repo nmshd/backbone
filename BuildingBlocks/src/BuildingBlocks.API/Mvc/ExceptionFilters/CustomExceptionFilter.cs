@@ -52,7 +52,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             case ApplicationException applicationException:
                 _logger.LogInformation(
-                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(ApplicationException), applicationException.Code, applicationException.Message, applicationException.Message);
+                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(ApplicationException), applicationException.Code, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
