@@ -1,4 +1,4 @@
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -121,6 +121,33 @@ public class HandlerTests
         var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
         exception.Message.Should().StartWith("Tier");
         exception.Code.Should().Be("error.platform.recordNotFound");
+    }
+
+    [Fact]
+    public async void Does_nothing_when_tiers_are_the_same()
+    {
+        // Arrange
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        var tiersRepository = A.Fake<ITiersRepository>();
+        var eventBus = A.Fake<IEventBus>();
+
+        var oldTier = new Tier(TierName.Create("Tier name").Value);
+        var newTier = oldTier;
+
+        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
+
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
+
+        var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
+        var request = MakeRequest(newTier, identity);
+
+        // Act
+        await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
+        A.CallTo(()=>eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
     }
 
     private static UpdateIdentityCommand MakeRequest(Tier newTier, Identity identity)
