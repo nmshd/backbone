@@ -130,10 +130,10 @@ public class Identity
         return appliedQuotas;
     }
 
-    public async Task ChangeTierAsync(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
+    public async Task ChangeTier(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
     {
-        _tierQuotas.RemoveAll(_ => true);
-        _metricStatuses.RemoveAll(_ => true);
+        _tierQuotas.Clear();
+        _metricStatuses.Clear();
 
         TierId = newTier.Id;
         foreach (var tierQuotaDefinition in newTier.Quotas)
