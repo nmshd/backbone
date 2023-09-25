@@ -31,8 +31,9 @@ services:
         condition: service_healthy
 
   seed-client:
-    command: >
-      ./backbone client create -p Postgres -c "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432" --clientId test --clientSecret test
+    environment:
+      Database__Provider: Postgres
+      Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
 
 configs:
   Config:
