@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 
@@ -28,9 +27,11 @@ public class Handler : IRequestHandler<DeleteTierCommand>
 
         var tier = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken);
 
+        var clientsCount = await _tiersRepository.GetNumberOfClientsWithDefaultTier(tier, cancellationToken);
+
         var identitiesCount = await _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, cancellationToken);
 
-        var deletionError = tier.CanBeDeleted(identitiesCount);
+        var deletionError = tier.CanBeDeleted(clientsCount, identitiesCount);
 
         if (deletionError != null)
         {

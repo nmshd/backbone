@@ -9,7 +9,6 @@ public class HttpResponse<T>
     public bool IsSuccessStatusCode { get; set; }
     public string? ContentType { get; set; }
     public string? RawContent { get; set; }
-    public IReadOnlyCollection<Cookie>? Cookies { get; set; }
 }
 
 public class HttpResponse

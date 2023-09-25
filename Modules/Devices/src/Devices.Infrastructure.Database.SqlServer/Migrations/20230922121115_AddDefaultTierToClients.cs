@@ -5,7 +5,7 @@
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTierIdToClients : Migration
+    public partial class AddDefaultTierToClients : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,10 +23,25 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "DefaultTier",
                 table: "OpenIddictApplications",
-                type: "nvarchar(20)",
+                type: "char(20)",
+                unicode: false,
+                fixedLength: true,
                 maxLength: 20,
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpenIddictApplications_DefaultTier",
+                table: "OpenIddictApplications",
+                column: "DefaultTier");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                table: "OpenIddictApplications",
+                column: "DefaultTier",
+                principalTable: "Tiers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.Sql(@"
                 UPDATE [Devices].[OpenIddictApplications]
@@ -42,6 +57,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                table: "OpenIddictApplications");
+
+            migrationBuilder.DropIndex(
+                name: "IX_OpenIddictApplications_DefaultTier",
+                table: "OpenIddictApplications");
+
             migrationBuilder.DropColumn(
                 name: "DefaultTier",
                 table: "OpenIddictApplications");

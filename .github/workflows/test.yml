@@ -8,6 +8,15 @@ on:
       - "**"
 
 jobs:
+  run-adminUi-checks:
+    runs-on: ubuntu-latest
+    name: Run Admin UI Checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Checks
+        run: ./.ci/runAdminUiChecks.sh
+
   check-formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
@@ -38,8 +47,8 @@ jobs:
       - name: Run tests
         run: ./.ci/test.ts
 
-  integration-test:
-    name: Run Integration Tests
+  integration-test-sqlserver:
+    name: Run Integration Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,10 +56,39 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./.ci/integrationTest.ts
+        run: ./.ci/integrationTest.sqlserver.sh
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-sqlserver-docker-logs
+          path: docker-log.txt
 
-  cns-transport-test:
-    name: Run cns-transport Tests
+  integration-test-postgres:
+    name: Run Integration Tests (on Postgres)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Run integration tests
+        run: ./.ci/integrationTest.postgres.sh
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-postgres-docker-logs
+          path: docker-log.txt
+
+  cns-transport-test-sqlserver:
+    name: Run cns-transport Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
@@ -63,7 +101,7 @@ jobs:
           repository: nmshd/cns-transport
           path: cns-transport
       - name: Run Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml up test-consumer-api test-seed-mssql test-seed-client -d
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
       - name: Install cns-transport dependencies
         working-directory: ./cns-transport
         run: npm install
@@ -74,8 +112,54 @@ jobs:
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
         run: npm run test:local:node:lokijs
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cns-transport-test-sqlserver-docker-logs
+          path: docker-log.txt
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/docker-compose/docker-compose.test.yml down
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml down
+
+  cns-transport-test-postgres:
+    name: Run cns-transport Tests (on Postgres)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout backbone repository
+        uses: actions/checkout@v4
+        with:
+          path: backbone
+      - name: Checkout cns-transport repository
+        uses: actions/checkout@v4
+        with:
+          repository: nmshd/cns-transport
+          path: cns-transport
+      - name: Run Consumer API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d
+      - name: Install cns-transport dependencies
+        working-directory: ./cns-transport
+        run: npm install
+      - name: Run cns-transport Tests
+        working-directory: ./cns-transport
+        env:
+          NMSHD_TEST_BASEURL: http://localhost:5000
+          NMSHD_TEST_CLIENTID: test
+          NMSHD_TEST_CLIENTSECRET: test
+        run: npm run test:local:node:lokijs
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cns-transport-test-postgres-docker-logs
+          path: docker-log.txt
+      - name: Stop Consumer API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml down
 
   build-helm-chart:
     name: Build Helm Chart

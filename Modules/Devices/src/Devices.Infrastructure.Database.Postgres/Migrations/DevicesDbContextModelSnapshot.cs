@@ -234,7 +234,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("Identities");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -259,7 +259,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("DefaultTier")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("text");
@@ -291,10 +293,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("ClientId")
                         .IsUnique();
 
+                    b.HasIndex("DefaultTier");
+
                     b.ToTable("OpenIddictApplications", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -336,7 +340,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("OpenIddictAuthorizations", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -377,7 +381,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("OpenIddictScopes", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -591,22 +595,31 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Navigation("Identity");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("DefaultTier")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
                         .WithMany("Authorizations")
                         .HasForeignKey("ApplicationId");
 
                     b.Navigation("Application");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
                         .WithMany("Tokens")
                         .HasForeignKey("ApplicationId");
 
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
                         .WithMany("Tokens")
                         .HasForeignKey("AuthorizationId");
 
@@ -677,14 +690,14 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Navigation("Devices");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
                     b.Navigation("Authorizations");
 
                     b.Navigation("Tokens");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
                 {
                     b.Navigation("Tokens");
                 });

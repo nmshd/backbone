@@ -43,6 +43,11 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<int> GetNumberOfClientsWithDefaultTier(Tier tier, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<int> GetNumberOfIdentitiesAssignedToTier(Tier tier, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

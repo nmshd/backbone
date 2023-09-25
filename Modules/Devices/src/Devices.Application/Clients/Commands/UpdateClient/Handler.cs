@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
@@ -19,6 +20,8 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
     public async Task<UpdateClientResponse> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken, track: true);
+        if (client == null)
+            throw new NotFoundException(nameof(OAuthClient));
 
         var tierIdResult = TierId.Create(request.DefaultTier);
         if (tierIdResult.IsFailure)
@@ -28,7 +31,7 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        client.DefaultTier = request.DefaultTier;
+        client.ChangeDefaultTier(tierIdResult.Value);
 
         await _oAuthClientsRepository.Update(client, cancellationToken);
 

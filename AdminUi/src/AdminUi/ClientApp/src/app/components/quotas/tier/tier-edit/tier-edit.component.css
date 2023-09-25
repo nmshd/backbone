@@ -125,7 +125,7 @@
     }
 
     .mat-mdc-table .mat-mdc-cell:before {
-        content: attr(data-label) ":";
+        content: attr(data-label);
         float: left;
         font-weight: 500;
     }

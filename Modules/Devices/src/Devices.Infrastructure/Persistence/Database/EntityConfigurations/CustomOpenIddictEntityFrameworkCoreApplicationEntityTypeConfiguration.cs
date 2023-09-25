@@ -10,6 +10,11 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfigurati
     {
         builder
             .Property(x => x.DefaultTier)
-            .HasMaxLength(TierId.MAX_LENGTH);
+            .HasMaxLength(TierId.MAX_LENGTH)
+            .IsRequired();
+
+        builder
+            .HasOne<Tier>().WithMany().HasForeignKey(x => x.DefaultTier)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -50,6 +50,7 @@ builder.Host
         .ReadFrom.Configuration(context.Configuration)
         .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
         .Enrich.WithDemystifiedStackTraces()
+        .Enrich.FromLogContext()
     )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -155,6 +156,8 @@ static void Configure(WebApplication app)
 
     app.UseAuthentication().UseAuthorization();
 
+    app.UseMiddleware<UserDataLoggingMiddleware>();
+
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {
@@ -190,3 +193,5 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddCommandLine(strings);
     webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
+
+public partial class Program { }

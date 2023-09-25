@@ -6,9 +6,9 @@ import { Component } from "@angular/core";
     styleUrls: ["./page-not-found.component.css"]
 })
 export class PageNotFoundComponent {
-    error: ErrorInfo;
+    public error: ErrorInfo;
 
-    constructor() {
+    public constructor() {
         this.error = {
             code: 0,
             title: "",
@@ -16,7 +16,7 @@ export class PageNotFoundComponent {
         };
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.error = {
             code: 404,
             title: "Page not found",

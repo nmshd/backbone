@@ -12,7 +12,7 @@ public class CanBeDeletedTests
         var tier = new Tier(TierName.BASIC_DEFAULT_NAME);
 
         // Act
-        var result = tier.CanBeDeleted(identitiesCount: 0);
+        var result = tier.CanBeDeleted(clientsCount: 0, identitiesCount: 0);
 
         // Assert
         result.Should().NotBeNull();
@@ -26,10 +26,24 @@ public class CanBeDeletedTests
         var tier = new Tier(TierName.Create("tier-name").Value);
 
         // Act
-        var result = tier.CanBeDeleted(identitiesCount: 1);
+        var result = tier.CanBeDeleted(clientsCount: 0, identitiesCount: 1);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedTier(1));
+    }
+
+    [Fact]
+    public void Tier_with_related_clients_cannot_be_deleted()
+    {
+        // Arrange
+        var tier = new Tier(TierName.Create("tier-name").Value);
+
+        // Act
+        var result = tier.CanBeDeleted(clientsCount: 1, identitiesCount: 0);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedDefaultTier(1));
     }
 }

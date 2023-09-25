@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20230908103558_AddTierIdToClients")]
-    partial class AddTierIdToClients
+    [Migration("20230922121115_AddDefaultTierToClients")]
+    partial class AddDefaultTierToClients
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,7 +238,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Identities");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -263,7 +263,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DefaultTier")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -296,10 +298,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsUnique()
                         .HasFilter("[ClientId] IS NOT NULL");
 
+                    b.HasIndex("DefaultTier");
+
                     b.ToTable("OpenIddictApplications", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +345,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("OpenIddictAuthorizations", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -383,7 +387,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("OpenIddictScopes", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -599,22 +603,31 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("Identity");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("DefaultTier")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
                         .WithMany("Authorizations")
                         .HasForeignKey("ApplicationId");
 
                     b.Navigation("Application");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
                         .WithMany("Tokens")
                         .HasForeignKey("ApplicationId");
 
-                    b.HasOne("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
                         .WithMany("Tokens")
                         .HasForeignKey("AuthorizationId");
 
@@ -685,14 +698,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("Devices");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
                     b.Navigation("Authorizations");
 
                     b.Navigation("Tokens");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
                 {
                     b.Navigation("Tokens");
                 });

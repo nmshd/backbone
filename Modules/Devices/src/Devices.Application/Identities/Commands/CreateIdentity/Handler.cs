@@ -49,9 +49,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken);
 
-        var tierId = TierId.Create(client.DefaultTier).Value;
-
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, tierId, command.IdentityVersion);
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
@@ -61,7 +59,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {tierId}");
+        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: '{newIdentity.Address}', Tier: '{client.DefaultTier}'");
 
         return new CreateIdentityResponse
         {

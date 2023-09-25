@@ -11,21 +11,21 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./assign-quotas-dialog.component.css"]
 })
 export class AssignQuotasDialogComponent {
-    header: string;
+    public header: string;
 
-    metric!: any;
-    max: number;
-    period!: string;
+    public metric: Metric | undefined;
+    public max: number | null;
+    public period: string | undefined;
 
-    metrics: any;
-    periods: string[];
+    public metrics: any;
+    public periods: string[];
 
-    loading: boolean;
+    public loading: boolean;
 
-    constructor(
-        private snackBar: MatSnackBar,
-        private quotasService: QuotasService,
-        private metricsService: MetricsService,
+    public constructor(
+        private readonly snackBar: MatSnackBar,
+        private readonly quotasService: QuotasService,
+        private readonly metricsService: MetricsService,
         public dialogRef: MatDialogRef<AssignQuotasDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -39,23 +39,21 @@ export class AssignQuotasDialogComponent {
         this.loading = true;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.getMetrics();
         this.getPeriods();
     }
 
-    getMetrics() {
+    public getMetrics(): void {
         this.loading = true;
         this.metricsService.getMetrics().subscribe({
             next: (data: HttpResponseEnvelope<Metric>) => {
-                if (data && data.result) {
-                    this.metrics = data.result;
-                }
+                this.metrics = data.result;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -64,22 +62,22 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    getPeriods() {
+    public getPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
 
-    assignQuota() {
-        let quota: AssignQuotaData = {
-            metricKey: this.metric.key,
-            max: this.max,
-            period: this.period
+    public assignQuota(): void {
+        const quota: AssignQuotaData = {
+            metricKey: this.metric!.key,
+            max: this.max!,
+            period: this.period!
         };
 
         this.dialogRef.close(quota);
     }
 
-    isValid(): boolean {
-        return this.metric != null && this.period != null && this.max != null;
+    public isValid(): boolean {
+        return this.metric !== undefined && this.period !== undefined && this.max !== null;
     }
 }
 
