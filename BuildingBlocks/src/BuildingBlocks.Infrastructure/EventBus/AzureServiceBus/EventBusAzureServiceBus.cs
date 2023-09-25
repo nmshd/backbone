@@ -114,7 +114,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                     await args.CompleteMessageAsync(args.Message);
                 else
                     _logger.LogInformation(
-                        $"The event with the MessageId '{args.Message.MessageId}' wasn't processed and will therefore not be completed.");
+                        "The event with the MessageId '{messageId}' wasn't processed and will therefore not be completed.", args.Message.MessageId);
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;

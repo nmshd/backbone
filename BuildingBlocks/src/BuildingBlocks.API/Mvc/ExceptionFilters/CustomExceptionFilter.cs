@@ -42,7 +42,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             case InfrastructureException infrastructureException:
                 _logger.LogInformation(
-                    $"An {nameof(InfrastructureException)} occurred. Error Code: {infrastructureException.Code}. Error message: {infrastructureException.Message}");
+                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(InfrastructureException), infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -52,7 +52,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             case ApplicationException applicationException:
                 _logger.LogInformation(
-                    $"An {nameof(ApplicationException)} occurred. Error Code: {applicationException.Code}. Error message: {applicationException.Message}");
+                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(ApplicationException), applicationException.Code, applicationException.Message, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
@@ -62,7 +62,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             case DomainException domainException:
                 _logger.LogInformation(
-                    $"A {nameof(DomainException)} occurred. Error Code: {domainException.Code}. Error message: {domainException.Message}");
+                    "A '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(DomainException), domainException.Code, domainException.Message);
 
                 httpError = CreateHttpErrorForDomainException(domainException);
 
@@ -71,7 +71,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             case BadHttpRequestException _:
                 _logger.LogInformation(
-                    $"{ERROR_CODE_REQUEST_BODY_TOO_LARGE}: The body of the request is too large.");
+                    "'{error_code}': The body of the request is too large.", ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
                     ERROR_CODE_REQUEST_BODY_TOO_LARGE,
@@ -84,7 +84,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             default:
                 _logger.LogError(context.Exception,
-                    $"Unexpected Error while processing request to {context.HttpContext.Request.GetUri()}");
+                    "Unexpected Error while processing request to '{uri}'", context.HttpContext.Request.GetUri());
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
