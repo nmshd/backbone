@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -34,10 +34,10 @@ public class HandlerTests
         var request = MakeRequest(newTier, identity);
 
         // Act
-        var result = await handler.Handle(request, CancellationToken.None);
+        await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.TierId.Should().Be(newTier.Id);
+        identity.TierId.Should().Be(newTier.Id);
         A.CallTo(() => identitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
@@ -61,7 +61,7 @@ public class HandlerTests
         var request = MakeRequest(newTier, identity);
 
         // Act
-        var result = await handler.Handle(request, CancellationToken.None);
+        await handler.Handle(request, CancellationToken.None);
 
         // Assert
         A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustHaveHappened();

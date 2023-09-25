@@ -103,7 +103,7 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
-        await _mediator.Send<Identity>(command, cancellationToken);
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 }
