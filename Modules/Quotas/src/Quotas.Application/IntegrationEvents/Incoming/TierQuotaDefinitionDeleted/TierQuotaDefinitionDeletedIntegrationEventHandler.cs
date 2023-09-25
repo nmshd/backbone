@@ -21,7 +21,7 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
     public async Task Handle(TierQuotaDefinitionDeletedIntegrationEvent @event)
     {
-        _logger.LogTrace("Handling '{tierQuotaDefinitionDeletedIntegrationEvent}' ... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
+        _logger.LogTrace("Handling '{eventName}' ... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
 
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
