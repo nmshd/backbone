@@ -28,8 +28,8 @@ export class IdentityService {
         return this.http.get<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${address}`);
     }
 
-    updateIdentity(identity: Identity, params: UpdateTierRequest) {
-        return this.http.put<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${identity.address}`, params);
+    public updateIdentity(identity: Identity, params: UpdateTierRequest) : Observable<HttpResponseEnvelope<Identity>> {
+        return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
 }
 

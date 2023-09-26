@@ -7,7 +7,7 @@ import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
-import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
@@ -32,9 +32,9 @@ export class IdentityEditComponent {
     public disabled: boolean;
     public identity: Identity;
     public loading: boolean;
-    public tiers: Tier[];
-    public updatedTier?: Tier;
-    public tier?: Tier;
+    public tiers: TierOverview[];
+    public updatedTier?: TierOverview;
+    public tier?: TierOverview;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -72,7 +72,7 @@ export class IdentityEditComponent {
         this.loadIdentityAndTiers();
     }
 
-    public loadAdmissibleTiers() {
+    public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
                 this.tiers = tiers.result;
@@ -87,12 +87,10 @@ export class IdentityEditComponent {
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.identityService.getIdentityByAddress(this.identityAddress!).subscribe({
             next: (data: HttpResponseEnvelope<Identity>) => {
-                if (data && data.result) {
-                    this.identity = data.result;
-                    this.groupQuotasByMetricForTable();
-                    this.devicesTableData = this.identity.devices;
-                    this.loadAdmissibleTiers();
-                }
+                this.identity = data.result;
+                this.groupQuotasByMetricForTable();
+                this.devicesTableData = this.identity.devices;
+                this.loadAdmissibleTiers();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -107,7 +105,7 @@ export class IdentityEditComponent {
     }
 
     public hasPendingChanges(): boolean {
-        return this.tier != this.updatedTier;
+        return this.tier !== this.updatedTier;
     }
 
     public groupQuotasByMetricForTable(): void {
@@ -142,7 +140,7 @@ export class IdentityEditComponent {
                 },
                 error: (err: any) => {
                     this.loading = false;
-                    let errorMessage = err.error?.error?.message ?? err.message;
+                    const errorMessage = err.error?.error?.message ?? err.message;
                     this.snackBar.open(errorMessage, "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"
@@ -153,7 +151,7 @@ export class IdentityEditComponent {
     }
 
     public iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
-        if (quotas.length == 0) return [];
+        if (quotas.length === 0) return [];
 
         if (quotas[0].metric.key === metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
@@ -197,15 +195,13 @@ export class IdentityEditComponent {
         } as CreateQuotaForIdentityRequest;
 
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
-            next: (data: HttpResponseEnvelope<IdentityQuota>) => {
-                if (data && data.result) {
-                    this.loadIdentityAndTiers();
-                    this.snackBar.open("Successfully assigned quota.", "Dismiss", {
-                        duration: 4000,
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
+            next: (_: HttpResponseEnvelope<IdentityQuota>) => {
+                this.loadIdentityAndTiers();
+                this.snackBar.open("Successfully assigned quota.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
