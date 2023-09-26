@@ -30,10 +30,4 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.usedTierCannotBeDeleted",
             $"A Tier cannot be deleted if there are Identities assigned to it ({numberOfAssignedIdentities}) found");
     }
-
-    public static DomainError NewAndOldParametersMatch(string nameOfParameter)
-    {
-        return new DomainError("error.platform.validation.newAndOldMatch",
-            $"The new {nameOfParameter} and the old {nameOfParameter} cannot be the same.");
-    }
 }
