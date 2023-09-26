@@ -44,7 +44,12 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         {
             var blob = container.GetBlobClient(blobId);
             var stream = new MemoryStream();
-            await blob.DownloadToAsync(stream);
+
+            await _logger.TraceTime(async () =>
+            {
+                await blob.DownloadToAsync(stream);
+            }, nameof(blob.DownloadToAsync));
+            
             stream.Position = 0;
 
             _logger.LogTrace("Found blob with id '{blobId}'.", blobId);
@@ -67,7 +72,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
                 .GetBlobsAsync(prefix: prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
-            return Task.FromResult(blobs);
+            return _logger.TraceTimeAsyncEnumeration(blobs, nameof(FindAllAsync));
         }
         catch (Exception ex)
         {
@@ -95,10 +100,17 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         var changedBlobs = new Dictionary<BlobClient, byte[]>(_changedBlobs);
         foreach (var (cloudBlockBlob, bytes) in changedBlobs)
         {
-            await using var memoryStream = new MemoryStream(bytes);
+            // await using var memoryStream = new MemoryStream(bytes);
+
+            var memoryStream = await _logger.TraceTime(async () => new MemoryStream(bytes), nameof(MemoryStream));
+            
             try
             {
-                await cloudBlockBlob.UploadAsync(memoryStream);
+                await _logger.TraceTime(async () =>
+                {
+                    await cloudBlockBlob.UploadAsync(memoryStream);
+                }, nameof(cloudBlockBlob.UploadAsync));
+                
                 _changedBlobs.Remove(cloudBlockBlob);
             }
             catch (RequestFailedException ex)
@@ -119,7 +131,11 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         foreach (var cloudBlockBlob in blobsToDelete)
             try
             {
-                await cloudBlockBlob.DeleteAsync();
+                await _logger.TraceTime(async () =>
+                {
+                    await cloudBlockBlob.DeleteAsync();
+                }, nameof(cloudBlockBlob.DeleteAsync));
+                
                 _removedBlobs.Remove(cloudBlockBlob);
             }
             catch (Exception ex)

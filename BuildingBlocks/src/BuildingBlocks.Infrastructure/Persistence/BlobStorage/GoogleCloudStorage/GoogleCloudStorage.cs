@@ -45,7 +45,12 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         try
         {
             var stream = new MemoryStream();
-            await _storageClient.DownloadObjectAsync(folder, blobId, stream);
+
+            await _logger.TraceTime(async () =>
+            {
+                await _storageClient.DownloadObjectAsync(folder, blobId, stream);
+            }, nameof(FindAsync));
+
             stream.Position = 0;
             _logger.LogTrace("Found blob with key '{blobId}'.", blobId);
 
@@ -68,7 +73,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
                 .ListObjectsAsync(folder, prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
-            return Task.FromResult(blobs);
+            return _logger.TraceTimeAsyncEnumeration(blobs, nameof(FindAllAsync));
         }
         catch (Exception ex)
         {
@@ -102,13 +107,17 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         {
             await EnsureKeyDoesNotExist(blob.Folder, blob.Name);
 
-            await using var memoryStream = new MemoryStream(blob.Content);
+            var memoryStream = await _logger.TraceTime(async () => new MemoryStream(blob.Content), nameof(MemoryStream));
 
             try
             {
                 _logger.LogTrace("Uploading blob with key '{blobName}'...", blob.Name);
-                await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null,
-                    memoryStream);
+
+                await _logger.TraceTime(async () =>
+                {
+                    await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null, memoryStream);
+                }, nameof(_storageClient.UploadObjectAsync));
+
                 _logger.LogTrace("Upload of blob with key '{blobName}' was successful.", blob.Name);
             }
             catch (Exception ex)
@@ -127,7 +136,11 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         try
         {
-            await _storageClient.GetObjectAsync(folder, key);
+            await _logger.TraceTime(async () =>
+            {
+                await _storageClient.GetObjectAsync(folder, key);
+            }, nameof(_storageClient.GetObjectAsync));
+            
             _logger.LogError("The blob with the given key already exists.");
             throw new BlobAlreadyExistsException(key);
         }
@@ -149,7 +162,11 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         foreach (var blob in blobsToDelete)
             try
             {
-                await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
+                await _logger.TraceTime(async () =>
+                {
+                    await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
+                }, nameof(_storageClient.DeleteObjectAsync));
+                
                 _removedBlobs.Remove(blob);
             }
             catch (Exception ex)
