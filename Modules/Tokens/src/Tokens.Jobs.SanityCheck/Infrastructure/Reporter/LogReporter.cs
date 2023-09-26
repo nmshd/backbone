@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for token id: {databaseId}", databaseId);
+            _logger.LogError("no blob found for token id: '{databaseId}'", databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: {blobId}", blobId);
+            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
         }
     }
 

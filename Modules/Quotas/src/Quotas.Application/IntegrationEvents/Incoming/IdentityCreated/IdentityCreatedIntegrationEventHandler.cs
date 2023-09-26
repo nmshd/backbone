@@ -34,8 +34,8 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.LogTrace($"Successfully created identity. Identity Address: {identity.Address}, Tier ID: {identity.TierId}");
+        _logger.LogTrace("Successfully created identity. Identity Address: '{address}', Tier ID: {tierId}", identity.Address, identity.TierId);
 
-        _logger.LogTrace($"{tier.Quotas.Count} Tier Quotas created for Identity: {identity.Address} ");
+        _logger.LogTrace("'{quotasCount}' Tier Quotas created for Identity: {identityAddress} ", tier.Quotas.Count, identity.Address);
     }
 }

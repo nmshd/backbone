@@ -16,13 +16,13 @@ public class DummyPushService : IPushService
 
     public Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Sending push notification to '{recipient}'.");
+        _logger.LogInformation("Sending push notification to '{recipient}'.", recipient);
         return Task.CompletedTask;
     }
 
     public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Registering for push notifications of Identity '{address}' and device '{deviceId}.");
+        _logger.LogInformation("Registering for push notifications of Identity '{address}' and device '{deviceId}.", address, deviceId);
         return Task.CompletedTask;
     }
 }
