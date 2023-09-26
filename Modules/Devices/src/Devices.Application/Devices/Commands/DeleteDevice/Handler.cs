@@ -39,6 +39,6 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         await _identitiesRepository.Update(device, cancellationToken);
 
-        _logger.LogTrace($"Successfully marked device with id '{request.DeviceId}' as deleted.");
+        _logger.LogTrace("Successfully marked device with id '{deviceId}' as deleted.", request.DeviceId);
     }
 }

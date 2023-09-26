@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.LogTrace($"Successfully created Quota for Identity. Identity Address: '{identity.Address}'");
+        _logger.LogTrace("Successfully created Quota for Identity. Identity Address: '{identityAddress}'", identity.Address);
 
         var identityAddresses = new List<string> { identity.Address };
         var metrics = new List<string> { metric.Key.Value };

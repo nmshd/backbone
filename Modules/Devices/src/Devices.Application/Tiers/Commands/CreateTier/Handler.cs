@@ -33,11 +33,11 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         await _tierRepository.AddAsync(tier, cancellationToken);
 
-        _logger.LogTrace($"Successfully created tier. Tier ID: {tier.Id.Value}, Tier Name: {tier.Name.Value}");
+        _logger.LogTrace("Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id.Value, tier.Name.Value);
 
         _eventBus.Publish(new TierCreatedIntegrationEvent(tier));
 
-        _logger.LogTrace($"Successfully published TierCreatedIntegrationEvent. Tier ID: {tier.Id.Value}, Tier Name: {tier.Name.Value}");
+        _logger.LogTrace("Successfully published TierCreatedIntegrationEvent. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id.Value, tier.Name.Value);
 
         return new CreateTierResponse(tier.Id, tier.Name);
     }
