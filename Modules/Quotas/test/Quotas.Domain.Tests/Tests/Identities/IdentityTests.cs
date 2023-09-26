@@ -322,7 +322,7 @@ public class IdentityTests
     }
 
     [Fact]
-    public async Task Updates_identity_with_new_tier()
+    public async Task Changing_Tier_updates_identity_with_new_tier()
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
@@ -333,7 +333,69 @@ public class IdentityTests
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
 
         // Assert
+        identity.TierId.Should().Be(newTier.Id);
+    }
 
+    [Fact]
+    public async Task Changing_Tier_creates_MetricStatuses()
+    {
+        // Arrange
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identity = new Identity(identityAddress, new TierId("tier-id"));
+        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        newTier.Quotas.Add(new(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
+
+        // Act
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+
+        // Assert
+        identity.MetricStatuses.Should().HaveCount(1);
+        identity.MetricStatuses.First().MetricKey.Should().Be(newTier.Quotas.First().MetricKey);
+    }
+
+    [Fact]
+    public async Task Changing_Tier_clear_old_MetricStatuses()
+    {
+        // Arrange
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var oldTier = new Tier(new("old-tier-id"), "old-tier");
+        oldTier.Quotas.Add(new(MetricKey.NumberOfTokens, 5, QuotaPeriod.Day));
+
+        var newTier = new Tier(new("new-tier-id"), "new-tier");
+        newTier.Quotas.Add(new(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
+
+        var identity = new Identity(identityAddress, oldTier.Id);
+
+        identity.AssignTierQuotaFromDefinition(oldTier.Quotas.First());
+        await identity.UpdateAllMetricStatuses(new MetricCalculatorFactoryStub(1), CancellationToken.None);
+
+        identity.MetricStatuses.Should().HaveCount(1);
+        identity.MetricStatuses.First().MetricKey.Should().Be(oldTier.Quotas.First().MetricKey);
+
+        // Act
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+
+        // Assert
+        identity.MetricStatuses.Should().HaveCount(1);
+        identity.MetricStatuses.First().MetricKey.Should().Be(newTier.Quotas.First().MetricKey);
+    }
+
+    [Fact]
+    public async Task Changing_Tier_fails_when_old_and_new_tiers_match()
+    {
+        // Arrange
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var oldTier = new Tier(new TierId("tier-id"), "Old Tier");
+        var newTier = oldTier;
+        var identity = new Identity(identityAddress, oldTier.Id);
+
+        // Act
+        var acting = async () => await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+
+        // Assert
+        var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
+        exception.Code.Should().Be("error.platform.validation.newAndOldMatch");
     }
 
     private class MetricCalculatorFactoryStub : MetricCalculatorFactory
