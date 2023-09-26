@@ -100,8 +100,6 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         var changedBlobs = new Dictionary<BlobClient, byte[]>(_changedBlobs);
         foreach (var (cloudBlockBlob, bytes) in changedBlobs)
         {
-            // await using var memoryStream = new MemoryStream(bytes);
-
             var memoryStream = await _logger.TraceTime(async () => new MemoryStream(bytes), nameof(MemoryStream));
             
             try
