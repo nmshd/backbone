@@ -17,7 +17,7 @@ public class TraceIdMiddleware
     {
         context.Response.OnStarting(() =>
         {
-            var traceId = Activity.Current?.Id ?? context.TraceIdentifier;
+            var traceId = context.TraceIdentifier;
             context.Response.Headers[RESPONSE_HEADER_TRACE_ID] = traceId;
             return Task.CompletedTask;
         });
