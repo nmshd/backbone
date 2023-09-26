@@ -8,9 +8,11 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
@@ -32,14 +34,16 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private Datawallet _datawallet;
     private DatawalletModification[] _modifications;
     private PushDatawalletModificationsResponse _response;
+    private readonly ILogger<Handler> _logger;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus, ILogger<Handler> logger)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
         _eventBus = eventBus;
+        _logger = logger;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -138,7 +142,11 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
         try
         {
-            await _dbContext.SaveChangesAsync(_cancellationToken);
+            await _logger.TraceTime(async () =>
+            {
+                await _dbContext.SaveChangesAsync(_cancellationToken);
+                Console.WriteLine("OBSERVED_METHOD:: " + nameof(_dbContext.SaveChangesAsync));
+            }, nameof(_dbContext.SaveChangesAsync));
         }
         catch (DbUpdateException ex)
         {
