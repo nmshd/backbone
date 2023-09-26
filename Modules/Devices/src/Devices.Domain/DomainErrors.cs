@@ -25,15 +25,10 @@ public static class DomainErrors
             string.IsNullOrEmpty(reason) ? $"The Basic Tier cannot be deleted {formattedReason}." : reason);
     }
 
-    public static DomainError CannotDeleteUsedTier(int numberOfAssignedIdentities)
+    public static DomainError CannotDeleteUsedTier(string reason = "")
     {
+        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.device.usedTierCannotBeDeleted",
-            $"A Tier cannot be deleted if there are Identities assigned to it ({numberOfAssignedIdentities}) found");
-    }
-
-    public static DomainError CannotDeleteUsedDefaultTier(int numberOfDefaultTiers)
-    {
-        return new DomainError("error.platform.validation.device.usedDefaultTierCannotBeDeleted",
-            $"A Tier cannot be deleted if it is the Default Tier of a Client ({numberOfDefaultTiers}) found");
+            string.IsNullOrEmpty(reason) ? $"The Tier cannot be deleted {formattedReason}" : reason);
     }
 }

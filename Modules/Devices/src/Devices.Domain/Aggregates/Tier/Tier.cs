@@ -17,12 +17,12 @@ public class Tier
     {
         if (clientsCount > 0)
         {
-            return DomainErrors.CannotDeleteUsedDefaultTier(clientsCount);
+            return DomainErrors.CannotDeleteUsedTier($"The Tier is used as the default Tier by one or more clients. A Tier cannot be deleted if it is the default Tier of a Client ({clientsCount} found).");
         }
 
         if (identitiesCount > 0)
         {
-            return DomainErrors.CannotDeleteUsedTier(identitiesCount);
+            return DomainErrors.CannotDeleteUsedTier($"The Tier is assigned to one or more Identities. A Tier cannot be deleted if there are Identities assigned to it ({identitiesCount} found).");
         }
 
         if (IsBasicTier())
