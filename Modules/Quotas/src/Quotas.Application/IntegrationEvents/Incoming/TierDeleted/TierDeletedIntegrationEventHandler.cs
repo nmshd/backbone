@@ -20,7 +20,7 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
 
         await _tiersRepository.RemoveById(tier.Id);
 
-        _logger.LogTrace($"Successfully deleted tier. Tier ID: {tier.Id}, Tier Name: {tier.Name}");
+        _logger.LogTrace("Successfully deleted tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
     }
 }
 

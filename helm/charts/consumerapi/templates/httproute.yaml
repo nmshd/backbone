@@ -9,6 +9,7 @@ spec:
   parentRefs:
     - name: {{ .Values.httpRoute.parentRefName }}
       namespace: {{ .Values.httpRoute.parentRefNamespace }}
+      sectionName: {{ .Values.httpRoute.parentRefSectionName }}
   {{- with .Values.httpRoute.hostnames }}
   hostnames:
     {{- toYaml . | nindent 4 }}
