@@ -75,7 +75,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
     }
@@ -110,7 +110,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
         {
-            _logger.LogWarning("No subscription for event: {EventName}", eventName);
+            _logger.LogWarning("No subscription for event: '{EventName}'", eventName);
             return;
         }
 
