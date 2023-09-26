@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
 
     public async Task<ChangeClientSecretResponse> Handle(ChangeClientSecretCommand request, CancellationToken cancellationToken)
     {
-        var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var clientSecret = string.IsNullOrEmpty(request.NewSecret) ? PasswordGenerator.Generate(30) : request.NewSecret;
 
