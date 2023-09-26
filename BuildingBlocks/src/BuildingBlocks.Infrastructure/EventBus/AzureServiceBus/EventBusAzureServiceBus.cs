@@ -63,11 +63,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             Subject = eventName
         };
 
-        _logger.LogTrace($"Sending integration event with id '{message.MessageId}'...");
+        _logger.LogTrace("Sending integration event with id '{MessageId}'...", message.MessageId);
 
         await _sender.SendMessageAsync(message);
 
-        _logger.LogTrace($"Successfully sent integration event with id '{message.MessageId}'.");
+        _logger.LogTrace("Successfully sent integration event with id '{MessageId}'.", message.MessageId);
     }
 
     public void Subscribe<T, TH>()
@@ -93,10 +93,10 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
             catch (ServiceBusException)
             {
-                _logger.LogInformation($"The messaging entity {eventName} already exists.");
+                _logger.LogInformation("The messaging entity '{eventName}' already exists.", eventName);
             }
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
     }
@@ -114,7 +114,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                     await args.CompleteMessageAsync(args.Message);
                 else
                     _logger.LogInformation(
-                        $"The event with the MessageId '{args.Message.MessageId}' wasn't processed and will therefore not be completed.");
+                        "The event with the MessageId '{messageId}' wasn't processed and will therefore not be completed.", args.Message.MessageId);
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
