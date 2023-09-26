@@ -28,7 +28,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
     private void Before()
     {
-        _logger.LogTrace($"Handling {typeof(TRequest).Name}");
+        _logger.LogTrace("Handling '{name}'", typeof(TRequest).Name);
         _watch = Stopwatch.StartNew();
     }
 
@@ -36,9 +36,8 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     {
         _watch!.Stop();
 
-        var message = $"Handled {typeof(TRequest).Name} ({_watch.ElapsedMilliseconds} ms)";
         var logLevel = _watch.ElapsedMilliseconds < 1000 ? LogLevel.Information : LogLevel.Warning;
 
-        _logger.Log(logLevel, EVENT_ID_EXECUTION_TIME, message);
+        _logger.Log(logLevel, EVENT_ID_EXECUTION_TIME, "Handled '{requestName}' ('{timeElapsed}' ms)", typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
 }

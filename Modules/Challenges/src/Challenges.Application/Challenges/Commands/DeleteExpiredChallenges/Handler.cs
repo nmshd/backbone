@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
         var deletedChallengesCount = await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
 
-        _logger.LogInformation($"Deletion of {deletedChallengesCount} challenges successful.");
+        _logger.LogInformation("Deletion of '{deletedChallengesCount}' challenges successful.", deletedChallengesCount);
 
         var response = new DeleteExpiredChallengesResponse(deletedChallengesCount);
 
