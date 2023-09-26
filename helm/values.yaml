@@ -429,17 +429,13 @@ global:
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
     serilog:
-      using:
-        - Serilog.Sinks.ApplicationInsights
       minimumLevel:
         default: Information
       enrich:
         - FromLogContext
-        - WithMachineName
         - WithProcessId
         - WithThreadId
-        - WithEnvironmentName
       writeTo:
         - name: Console
           args:
-            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff}|{Level} - CorrelationId:{CorrelationId} - RequestId:{RequestId} - RequestPath:{RequestPath} - Address:{identityAddress} - DeviceId:{deviceId} {NewLine}    {SourceContext}{NewLine}    {Message}{NewLine}{Exception}"
+            formatter: "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
