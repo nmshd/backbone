@@ -81,6 +81,12 @@ public class Identity
         }
     }
 
+    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory,CancellationToken cancellationToken)
+    {
+        var metricKeys = _tierQuotas.Select(q => q.MetricKey).Union(_individualQuotas.Select(q => q.MetricKey)).Distinct();
+        await UpdateMetricStatuses(metricKeys, factory, cancellationToken);
+    }
+
     private bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
     {
         return _individualQuotas.Any(q => q.MetricKey == metricKey && q.Period == period);
@@ -145,7 +151,7 @@ public class Identity
         {
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
-        var metricKeys = newTier.Quotas.Select(q => q.MetricKey).Distinct();
-        await UpdateMetricStatuses(metricKeys, metricCalculatorFactory, cancellationToken);
+        
+        await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
     }
 }
