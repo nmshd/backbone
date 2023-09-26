@@ -43,11 +43,11 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.LogTrace("Successfully created assigned Quota to Tier. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.LogTrace("Successfully created assigned Quota to Tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
 
         _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
 
-        _logger.LogTrace("Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: {tierId}, Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.LogTrace("Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
 
         var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric), result.Value.Max, result.Value.Period);
         return response;

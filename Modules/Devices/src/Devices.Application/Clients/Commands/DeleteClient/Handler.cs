@@ -17,10 +17,10 @@ public class Handler : IRequestHandler<DeleteClientCommand>
 
     public async Task Handle(DeleteClientCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogTrace($"Deleting client with id: '{request.ClientId}'.");
+        _logger.LogTrace("Deleting client with id: '{clientId}'.", request.ClientId);
 
         await _oAuthClientsRepository.Delete(request.ClientId, cancellationToken);
 
-        _logger.LogTrace($"Successfully deleted client with id '{request.ClientId}'.");
+        _logger.LogTrace("Successfully deleted client with id '{clientId}'.", request.ClientId);
     }
 }

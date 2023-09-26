@@ -37,7 +37,7 @@ public class TiersRepository : ITiersRepository
     {
         return await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken);
     }
-    
+
     public async Task Remove(Tier tier)
     {
         _tiers.Remove(tier);

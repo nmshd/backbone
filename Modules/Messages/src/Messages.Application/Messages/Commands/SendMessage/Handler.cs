@@ -72,7 +72,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
             if (idOfRelationshipBetweenSenderAndRecipient == null)
             {
-                _logger.LogInformation($"Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipientDto.Address}).");
+                _logger.LogInformation("Sending message aborted. There is no relationship between sender ('{sender}') and recipient ({recipient}).", sender, recipientDto.Address);
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
@@ -80,7 +80,10 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
             {
-                _logger.LogInformation($"Sending message aborted. Recipient {recipientDto.Address} already has {numberOfUnreceivedMessagesFromActiveIdentity} unreceived messages from sender {sender}, which is more than the maximum ({_options.MaxNumberOfUnreceivedMessagesFromOneSender}).");
+                _logger.LogInformation(
+                    "Sending message aborted. Recipient {recipient} already has {numberOfUnreceivedMessagesFromActiveIdentity} unreceived messages from sender {sender}, which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).",
+                    recipientDto.Address, numberOfUnreceivedMessagesFromActiveIdentity, sender, _options.MaxNumberOfUnreceivedMessagesFromOneSender);
+
                 throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
             }
 
