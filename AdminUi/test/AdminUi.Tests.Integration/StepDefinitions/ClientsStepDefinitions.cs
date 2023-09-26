@@ -277,6 +277,24 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t.Id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithTierId()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = _tierId
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
