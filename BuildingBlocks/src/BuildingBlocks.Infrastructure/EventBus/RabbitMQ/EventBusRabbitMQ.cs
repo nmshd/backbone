@@ -200,12 +200,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                         $"The handler type {subscription.HandlerType.FullName} is not registered in the dependency container.");
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
-                var policy = Policy.Handle<Exception>()
-                    .WaitAndRetryAsync(
-                        _handlerRetryBehavior.NumberOfRetries,
-                        retryAttempt => TimeSpan.FromSeconds(Math.Max(Math.Pow(_handlerRetryBehavior.MinimumBackoff, retryAttempt), _handlerRetryBehavior.MaximumBackoff)),
-                        (ex, _) => _logger.LogWarning(ex.ToString()))
-                    .WrapAsync(Policy.TimeoutAsync(_handlerRetryBehavior.MaximumBackoff));
+                var policy = PollyPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventType.Name,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }

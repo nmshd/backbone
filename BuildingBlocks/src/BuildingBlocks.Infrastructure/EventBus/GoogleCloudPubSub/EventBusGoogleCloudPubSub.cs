@@ -131,12 +131,14 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
             var handleMethod = handler.GetType().GetMethod("Handle");
 
-            var policy = Policy.Handle<Exception>()
-                .WaitAndRetryAsync(
-                    _handlerRetryBehavior.NumberOfRetries,
-                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(_handlerRetryBehavior.MinimumBackoff, retryAttempt)),
-                    (ex, _) => _logger.LogWarning(ex.ToString()))
-                .WrapAsync(Policy.TimeoutAsync(_handlerRetryBehavior.MaximumBackoff));
+            var policy = PollyPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventName,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
 
             await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
