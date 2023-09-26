@@ -81,7 +81,7 @@ public class Identity
         }
     }
 
-    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory,CancellationToken cancellationToken)
+    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, CancellationToken cancellationToken)
     {
         var metricKeys = _tierQuotas.Select(q => q.MetricKey).Union(_individualQuotas.Select(q => q.MetricKey)).Distinct();
         await UpdateMetricStatuses(metricKeys, factory, cancellationToken);
@@ -151,7 +151,7 @@ public class Identity
         {
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
-        
+
         await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
     }
 }
