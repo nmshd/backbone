@@ -2,13 +2,13 @@
 
 namespace ConsumerApi.Mvc.Middleware;
 
-public class RequestIdMiddleware
+public class TraceIdMiddleware
 {
     private const string RESPONSE_HEADER_TRACE_ID = "X-Trace-Id";
 
     private readonly RequestDelegate _next;
 
-    public RequestIdMiddleware(RequestDelegate next)
+    public TraceIdMiddleware(RequestDelegate next)
     {
         _next = next;
     }
