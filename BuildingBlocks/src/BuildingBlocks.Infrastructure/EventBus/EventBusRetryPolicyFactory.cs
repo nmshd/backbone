@@ -2,7 +2,7 @@
 using Polly.Retry;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-internal class PollyPolicyFactory
+internal class EventBusRetryPolicyFactory
 {
     static internal AsyncRetryPolicy Create(HandlerRetryBehavior handlerRetryBehavior, Action<Exception, TimeSpan> onRetry)
     {

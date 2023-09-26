@@ -131,7 +131,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
             var handleMethod = handler.GetType().GetMethod("Handle");
 
-            var policy = PollyPolicyFactory.Create(
+            var policy = EventBusRetryPolicyFactory.Create(
                     _handlerRetryBehavior,
                     (ex, _) => _logger.LogWarning(
                         "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",

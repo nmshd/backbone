@@ -200,7 +200,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                         $"The handler type {subscription.HandlerType.FullName} is not registered in the dependency container.");
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
-                var policy = PollyPolicyFactory.Create(
+                var policy = EventBusRetryPolicyFactory.Create(
                     _handlerRetryBehavior,
                     (ex, _) => _logger.LogWarning(
                         "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
