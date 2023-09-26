@@ -17,7 +17,7 @@ public class OAuthClient
 
     public DomainError? ChangeDefaultTier(TierId newDefaultTier)
     {
-        if (DefaultTier == newDefaultTier) 
+        if (DefaultTier == newDefaultTier)
             return DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided Default Tier.");
 
         DefaultTier = newDefaultTier;
