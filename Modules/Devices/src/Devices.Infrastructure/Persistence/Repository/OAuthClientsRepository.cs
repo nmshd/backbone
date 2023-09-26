@@ -26,20 +26,10 @@ public class OAuthClientsRepository : IOAuthClientsRepository
     {
         var applications = await _applicationManager.ListAsync(cancellationToken: cancellationToken).ToListAsync(cancellationToken);
 
-        var oAuthClients = new List<OAuthClient>();
-
         if (track)
-        {
-            foreach (var application in applications)
-            {
-                _trackedApplications[application.ClientId!] = application;
-                oAuthClients.Add(new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier));
-            }
-        }
-        else
-        {
-            oAuthClients.AddRange(applications.Select(application => new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier)));
-        }
+            Track(applications);
+
+        var oAuthClients = applications.Select(a => a.ToModel());
 
         return oAuthClients;
     }
@@ -48,18 +38,15 @@ public class OAuthClientsRepository : IOAuthClientsRepository
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
-            return new OAuthClient(trackedApplication.ClientId!, trackedApplication.DisplayName!, trackedApplication.DefaultTier);
+            return trackedApplication.ToModel();
         }
 
         var application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
 
-        if (application == null)
-            return null;
-
         if (track)
-            _trackedApplications[clientId] = application;
+            Track(application);
 
-        return new OAuthClient(application.ClientId!, application.DisplayName!, application.DefaultTier);
+        return application?.ToModel();
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
@@ -68,22 +55,22 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return client != null;
     }
 
-    public async Task Add(string clientId, string displayName, string newSecret, TierId tierId, CancellationToken cancellationToken)
+    public async Task Add(OAuthClient client, string secret, CancellationToken cancellationToken)
     {
-        var application = new CustomOpenIddictEntityFrameworkCoreApplication()
+        var application = new CustomOpenIddictEntityFrameworkCoreApplication
         {
-            ClientId = clientId,
-            DisplayName = displayName,
-            DefaultTier = tierId,
+            ClientId = client.ClientId,
+            DisplayName = client.DisplayName,
+            DefaultTier = client.DefaultTier,
             Permissions = GetPermissions()
         };
 
-        await _applicationManager.CreateAsync(application, newSecret, cancellationToken);
+        await _applicationManager.CreateAsync(application, secret, cancellationToken);
     }
 
     private static string GetPermissions()
     {
-        var permissions = new List<string>()
+        var permissions = new List<string>
         {
             Permissions.Endpoints.Token,
             Permissions.GrantTypes.Password
@@ -111,30 +98,47 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Update(OAuthClient client, CancellationToken cancellationToken)
     {
-        if (!_trackedApplications.TryGetValue(client.ClientId, out var application))
-        {
-            application = await _applicationManager.FindByClientIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        }
-        application.DefaultTier = client.DefaultTier;
+        var application = await FindApplication(client.ClientId, cancellationToken);
+
+        application.UpdateFromModel(client);
         await _applicationManager.UpdateAsync(application, cancellationToken);
     }
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)
     {
-        if (!_trackedApplications.TryGetValue(clientId, out var application))
-        {
-            application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        }
+        var application = await FindApplication(clientId, cancellationToken);
+
         await _applicationManager.DeleteAsync(application, cancellationToken);
         _trackedApplications.Remove(clientId);
     }
 
     public async Task ChangeClientSecret(OAuthClient client, string clientSecret, CancellationToken cancellationToken)
     {
-        if (!_trackedApplications.TryGetValue(client.ClientId, out var application))
-        {
-            application = await _applicationManager.FindByClientIdAsync(client.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        }
+        var application = await FindApplication(client.ClientId, cancellationToken);
+
         await _applicationManager.UpdateAsync(application, clientSecret, cancellationToken);
+    }
+
+    private async Task<CustomOpenIddictEntityFrameworkCoreApplication> FindApplication(string clientId, CancellationToken cancellationToken)
+    {
+        if (!_trackedApplications.TryGetValue(clientId, out var application))
+        {
+            application = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        }
+
+        return application;
+    }
+
+    private void Track(IEnumerable<CustomOpenIddictEntityFrameworkCoreApplication> applications)
+    {
+        foreach (var application in applications)
+        {
+            Track(application);
+        }
+    }
+
+    private void Track(CustomOpenIddictEntityFrameworkCoreApplication application)
+    {
+        _trackedApplications[application.ClientId!] = application;
     }
 }
