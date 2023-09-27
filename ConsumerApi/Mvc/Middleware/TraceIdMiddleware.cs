@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ConsumerApi.Mvc.Middleware;
+﻿namespace ConsumerApi.Mvc.Middleware;
 
 public class TraceIdMiddleware
 {
