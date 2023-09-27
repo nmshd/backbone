@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens", "Quotas")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
@@ -7,30 +7,58 @@ Param(
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$startupProject = "$repoRoot\ConsumerApi"
 $adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
-
-function CompileModelsAdminUi {
-    $cmdAdminUiDbContext = "dotnet ef dbcontext optimize --project $adminUiProject --context AdminUiDbContext --output-dir $repoRoot\AdminUi\src\AdminUi.Infrastructure\CompiledModels --namespace AdminUi.Infrastructure.CompiledModels"
-    $cmdDevicesDbContext = "dotnet ef dbcontext optimize --project $adminUiProject --context DevicesDbContext --output-dir $repoRoot\Modules\Devices\src\Devices.Infrastructure\CompiledModels --namespace Devices.Infrastructure.CompiledModels"
-    Write-Host "Compiling models for '$adminUiProject'..."
-    Invoke-Expression $cmdAdminUiDbContext
-    Invoke-Expression $cmdDevicesDbContext
-}
+$consumerApiProject = "$repoRoot\ConsumerApi"
 
 function AddMigration {    
     param (
         $provider
     )
 
-    New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+    switch($moduleName){
+        "AdminUi" {
+            New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-    $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $migrationProject = "$repoRoot\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $startupProject = $adminUiProject
+        }
+        Default {
+            New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+
+            $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $startupProject = $consumerApiProject
+        }
+    }
 
     $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName -- --environment $environment"
-    
+
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
+    CompileModels $provider
+}
+
+function CompileModels {
+    param (
+        $provider
+    )
+
+    switch($moduleName){
+        "AdminUi" {
+            $optimizationProject = $adminUiProject
+            $outputDir = "$repoRoot\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
+            $namespace = "$moduleName.Infrastructure.CompiledModels.$provider"
+        }
+        Default {
+            $optimizationProject = $consumerApiProject
+            $outputDir = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
+            $namespace = "Backbone.Modules.$moduleName.Infrastructure.CompiledModels.$provider"
+        }
+    }
+
+    $cmdOptimizeDbContext = "dotnet ef dbcontext optimize --project '$optimizationProject' --context $dbContextName --output-dir $outputDir --namespace $namespace"
+
+    Write-Host "Compiling '$provider' models for '$moduleName'..."
+    Invoke-Expression $cmdOptimizeDbContext
 }
 
 switch ($provider) {
@@ -41,5 +69,3 @@ switch ($provider) {
         AddMigration "Postgres" 
     }
 }
-
-CompileModelsAdminUi
