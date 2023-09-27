@@ -1,22 +1,32 @@
 Param(
-    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
-$startupProject = "$repoRoot\ConsumerApi"
 $dbContextName = "${moduleName}DbContext"
+$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+$consumerApiProject = "$repoRoot\ConsumerApi"
 
 function UpdateLocalDatabase {    
     param (
         $provider
     )
 
-    $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+    switch($moduleName){
+        "AdminUi"{
+            New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-    New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+            $migrationProject = "$repoRoot\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+        }
+        Default {
+            New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+
+            $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+        }
+    }
 
     $moduleNameLowercase = $moduleName.ToLower()
     switch ($provider) {
