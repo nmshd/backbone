@@ -24,13 +24,13 @@ public class UserDataLoggingMiddleware
         var deviceId = _userContext.GetDeviceIdOrNull();
         var identityAddress = _userContext.GetAddressOrNull();
 
-        List<ILogEventEnricher> enrichers = new ()
+        List<ILogEventEnricher> enrichers = new()
         {
             new PropertyEnricher("deviceId", deviceId ?? ""),
             new PropertyEnricher("identityAddress", identityAddress ?? "")
         };
 
-        if(deviceId is null || identityAddress is null)
+        if (deviceId is null || identityAddress is null)
         {
             enrichers.Add(new PropertyEnricher("username", context.GetOpenIddictServerRequest()?.Username));
         }
