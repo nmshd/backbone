@@ -1,7 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore;
-using Microsoft.Extensions.Azure;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Core.Enrichers;
