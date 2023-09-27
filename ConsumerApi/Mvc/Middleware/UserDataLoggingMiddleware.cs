@@ -1,4 +1,5 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Microsoft.AspNetCore;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Core.Enrichers;
@@ -20,11 +21,13 @@ public class UserDataLoggingMiddleware
     {
         var deviceId = _userContext.GetDeviceIdOrNull();
         var identityAddress = _userContext.GetAddressOrNull();
+        var username = _userContext.GetUsernameOrNull() ?? context.GetOpenIddictServerRequest()?.Username;
 
         ILogEventEnricher[] enrichers =
         {
             new PropertyEnricher("deviceId", deviceId ?? ""),
-            new PropertyEnricher("identityAddress", identityAddress ?? "")
+            new PropertyEnricher("identityAddress", identityAddress ?? ""),
+            new PropertyEnricher("username", username ?? "")
         };
 
         using (LogContext.Push(enrichers))
