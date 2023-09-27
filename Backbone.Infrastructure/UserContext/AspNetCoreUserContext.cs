@@ -59,6 +59,17 @@ public class AspNetCoreUserContext : IUserContext
         return userId;
     }
 
+    public string GetUsername()
+    {
+        return GetUsernameOrNull() ?? throw new NotFoundException();
+    }
+
+    public string GetUsernameOrNull()
+    {
+        var username = _context.HttpContext.User.Identities.First().Name;
+        return username;
+    }
+
     public IEnumerable<string> GetRoles()
     {
         var rolesClaim = _context.HttpContext.User.FindFirstValue(ClaimTypes.Role);
