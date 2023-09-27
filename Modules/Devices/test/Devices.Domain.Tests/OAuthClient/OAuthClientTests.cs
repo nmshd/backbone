@@ -13,10 +13,10 @@ public class OAuthClientTests
         var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId);
 
         // Act
-        var result = client.ChangeDefaultTier(tierId);
+        var error = client.ChangeDefaultTier(tierId);
 
         // Assert
-        result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided Default Tier."));
+        error.Should().NotBeNull();
+        error.Should().BeEquivalentTo(DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided Default Tier."));
     }
 }
