@@ -20,11 +20,13 @@ function UpdateLocalDatabase {
             New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
             $migrationProject = "$repoRoot\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $startupProject = $adminUiProject
         }
         Default {
             New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
             $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $startupProject = $consumerApiProject
         }
     }
 
