@@ -3,7 +3,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.OAuthClient;
-public class OAuthClientChangeDefaultTier
+public class OAuthClientTests
 {
     [Fact]
     public void Default_tier_cannot_be_changed_to_same_tier()
