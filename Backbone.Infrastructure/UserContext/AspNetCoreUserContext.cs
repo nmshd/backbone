@@ -12,6 +12,7 @@ public class AspNetCoreUserContext : IUserContext
     private const string ADDRESS_CLAIM = "address";
     private const string DEVICE_ID_CLAIM = "device_id";
     private const string USER_ID_CLAIM = "sub";
+    private const string USERNAME_CLAIM = "name";
     private const string SUBSCRIPTION_PLAN_CLAIM = "subscription_plan";
     private readonly IHttpContextAccessor _context;
 
@@ -66,7 +67,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public string GetUsernameOrNull()
     {
-        var username = _context.HttpContext.User.Identities.First().Name;
+        var username = _context.HttpContext.User.FindFirstValue(USERNAME_CLAIM);
         return username;
     }
 
