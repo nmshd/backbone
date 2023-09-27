@@ -13,6 +13,9 @@ public interface IUserContext
     string GetUserId();
     string? GetUserIdOrNull();
 
+    string GetUsername();
+    string? GetUsernameOrNull();
+
     IEnumerable<string> GetRoles();
     SubscriptionPlan GetSubscriptionPlan();
 }
