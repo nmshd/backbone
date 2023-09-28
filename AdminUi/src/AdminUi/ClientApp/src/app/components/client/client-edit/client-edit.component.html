@@ -48,8 +48,8 @@
         </mat-card-content>
     </mat-card>
     <div class="action-buttons">
-        <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateClient()" [disabled]="disabled">Save</button>
-        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createClient()" [disabled]="disabled">Save</button>
+        <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateClient()" [disabled]="!canSaveClient() || disabled">Save</button>
+        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createClient()" [disabled]="!canSaveClient() || disabled">Save</button>
         <button mat-raised-button routerLink="/clients">Cancel</button>
     </div>
 </div>

@@ -101,9 +101,6 @@ export class ClientEditComponent {
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tierList = data.result;
-                if (!this.editMode) {
-                    this.client.defaultTier = this.getDefaultTier();
-                }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -180,18 +177,8 @@ export class ClientEditComponent {
         this.showPassword = !this.showPassword;
     }
 
-    private getDefaultTier(): string {
-        const basicTier = this.tierList.find((tier) => tier.name === "Basic");
-        if (basicTier) {
-            return basicTier.id;
-        }
-
-        this.snackBar.open("Basic Tier not found", "Dismiss", {
-            verticalPosition: "top",
-            horizontalPosition: "center"
-        });
-
-        this.disabled = true;
-        return "";
+    public canSaveClient(): boolean {
+        if (!this.client.defaultTier) return false;
+        return true;
     }
 }
