@@ -30,7 +30,7 @@ public class CanBeDeletedTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedTier(1));
+        result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedTier($"The Tier is assigned to one or more Identities. A Tier cannot be deleted if there are Identities assigned to it ({1} found)."));
     }
 
     [Fact]
@@ -44,6 +44,6 @@ public class CanBeDeletedTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedDefaultTier(1));
+        result.Should().BeEquivalentTo(DomainErrors.CannotDeleteUsedTier($"The Tier is used as the default Tier by one or more clients. A Tier cannot be deleted if it is the default Tier of a Client ({1} found)."));
     }
 }

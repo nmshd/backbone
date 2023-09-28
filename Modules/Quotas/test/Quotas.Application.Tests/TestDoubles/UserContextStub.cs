@@ -44,4 +44,14 @@ internal class UserContextStub : IUserContext
     {
         throw new NotImplementedException();
     }
+
+    public string GetUsername()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetUsernameOrNull()
+    {
+        throw new NotImplementedException();
+    }
 }

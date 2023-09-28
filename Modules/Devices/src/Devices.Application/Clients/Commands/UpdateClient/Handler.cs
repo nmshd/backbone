@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -29,7 +30,9 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        client.ChangeDefaultTier(tierIdResult.Value);
+        var changeError = client.ChangeDefaultTier(tierIdResult.Value);
+        if (changeError != null)
+            throw new DomainException(changeError);
 
         await _oAuthClientsRepository.Update(client, cancellationToken);
 

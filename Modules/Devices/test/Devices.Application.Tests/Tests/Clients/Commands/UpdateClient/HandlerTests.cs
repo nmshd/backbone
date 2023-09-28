@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Application.Tests.Extensions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.BuildingBlocks.Domain;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -89,6 +90,32 @@ public class HandlerTests
 
         // Assert
         await acting.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task Cannot_change_Default_Tier_If_ChangeDefaultTier_returns_an_error()
+    {
+        // Arrange
+        var defaultTier = new Tier(TierName.Create("some-default-tier").Value);
+
+        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id);
+
+        var command = new UpdateClientCommand(client.ClientId, defaultTier.Id);
+
+        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.ExistsWithId(defaultTier.Id, A<CancellationToken>._)).Returns(true);
+
+        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+
+        // Act
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<DomainException>();
+        A.CallTo(() => oAuthClientsRepository.Update(client, A<CancellationToken>._)).MustNotHaveHappened();
     }
 
     private Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
