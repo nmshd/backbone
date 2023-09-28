@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
+using Serilog.Settings.Configuration;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -33,7 +37,14 @@ builder.WebHost
 LoadConfiguration(builder, args);
 
 builder.Host
-    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+    .UseSerilog((context, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+        .Enrich.WithDemystifiedStackTraces()
+        .Enrich.FromLogContext()
+        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+            .WithDefaultDestructurers()
+            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
@@ -113,7 +124,6 @@ static void Configure(WebApplication app)
 
     app.UseSecurityHeaders(policies =>
     {
-
         policies
             .AddDefaultSecurityHeaders()
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
@@ -145,4 +155,6 @@ static void Configure(WebApplication app)
     });
 }
 
-public partial class Program { }
+public partial class Program
+{
+}
