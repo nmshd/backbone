@@ -36,6 +36,6 @@ public static class DomainErrors
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.device.clientDefaultTierCannotBeChanged",
-            string.IsNullOrEmpty(reason) ? $"The Clients Default Tier cannot be changed {formattedReason}" : reason);
+            string.IsNullOrEmpty(reason) ? $"The Client's Default Tier cannot be changed {formattedReason}" : reason);
     }
 }

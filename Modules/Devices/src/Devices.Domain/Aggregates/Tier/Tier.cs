@@ -22,7 +22,7 @@ public class Tier
 
         if (identitiesCount > 0)
         {
-            return DomainErrors.CannotDeleteUsedTier($"The Tier is assigned to one or more Identities. A Tier cannot be deleted if there are Identities assigned to it ({identitiesCount} found).");
+            return DomainErrors.CannotDeleteUsedTier($"The Tier is assigned to one or more Identities. A Tier cannot be deleted if it is assigned to an Identity ({identitiesCount} found).");
         }
 
         if (IsBasicTier())
