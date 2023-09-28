@@ -42,13 +42,14 @@ public class IdentityTests
         identity.TierQuotas.First().MetricKey.Should().Be(tierQuotaDefinition1.MetricKey);
         identity.TierQuotas.First().Max.Should().Be(tierQuotaDefinition1.Max);
         identity.TierQuotas.First().Period.Should().Be(tierQuotaDefinition1.Period);
+
         identity.TierQuotas.Second().MetricKey.Should().Be(tierQuotaDefinition2.MetricKey);
         identity.TierQuotas.Second().Max.Should().Be(tierQuotaDefinition2.Max);
         identity.TierQuotas.Second().Period.Should().Be(tierQuotaDefinition2.Period);
     }
 
     [Fact]
-    public void Can_delete_individual_quota_by_id()
+    public void Can_delete_individual_quota()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
@@ -62,7 +63,7 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Can_delete_individual_quota_by_id_with_multiple_quotas()
+    public void Can_delete_individual_quota_with_multiple_quotas()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
@@ -343,7 +344,7 @@ public class IdentityTests
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var identity = new Identity(identityAddress, new TierId("tier-id"));
         var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
-        newTier.Quotas.Add(new(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
 
         // Act
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
@@ -359,11 +360,11 @@ public class IdentityTests
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var oldTier = new Tier(new("old-tier-id"), "old-tier");
-        oldTier.Quotas.Add(new(MetricKey.NumberOfTokens, 5, QuotaPeriod.Day));
+        var oldTier = new Tier(new TierId("old-tier-id"), "old-tier");
+        oldTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfTokens, 5, QuotaPeriod.Day));
 
-        var newTier = new Tier(new("new-tier-id"), "new-tier");
-        newTier.Quotas.Add(new(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
+        var newTier = new Tier(new TierId("new-tier-id"), "new-tier");
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfFiles, 5, QuotaPeriod.Day));
 
         var identity = new Identity(identityAddress, oldTier.Id);
 
@@ -382,16 +383,15 @@ public class IdentityTests
     }
 
     [Fact]
-    public async Task Changing_Tier_fails_when_old_and_new_tiers_match()
+    public void Changing_Tier_fails_when_old_and_new_tiers_match()
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var oldTier = new Tier(new TierId("tier-id"), "Old Tier");
-        var newTier = oldTier;
         var identity = new Identity(identityAddress, oldTier.Id);
 
         // Act
-        var acting = async () => await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+        var acting = async () => await identity.ChangeTier(oldTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
