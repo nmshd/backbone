@@ -21,7 +21,6 @@ public class HandlerTests
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var tiersRepository = A.Fake<ITiersRepository>();
-        var eventBus = A.Fake<IEventBus>();
 
         var oldTier = new Tier(TierName.Create("Old tier").Value);
         var newTier = new Tier(TierName.Create("New Tier").Value);
@@ -31,8 +30,8 @@ public class HandlerTests
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
-        var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
-        var request = MakeRequest(newTier, identity);
+        var handler = CreateHandler(identitiesRepository, tiersRepository);
+        var request = BuildRequest(newTier, identity);
 
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -59,7 +58,7 @@ public class HandlerTests
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
-        var request = MakeRequest(newTier, identity);
+        var request = BuildRequest(newTier, identity);
 
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -69,12 +68,11 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_when_identity_does_not_exist()
+    public void Fails_when_identity_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var tiersRepository = A.Fake<ITiersRepository>();
-        var eventBus = A.Fake<IEventBus>();
 
         var oldTier = new Tier(TierName.Create("Tier name").Value);
         var newTier = new Tier(TierName.Create("Tier name").Value);
@@ -84,11 +82,11 @@ public class HandlerTests
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
         A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._)).Returns((Identity)null);
 
-        var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
-        var request = MakeRequest(newTier, identity);
+        var handler = CreateHandler(identitiesRepository, tiersRepository);
+        var request = BuildRequest(newTier, identity);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(request, CancellationToken.None);
+        var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
@@ -97,12 +95,11 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_when_tier_does_not_exist()
+    public void Fails_when_tier_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var tiersRepository = A.Fake<ITiersRepository>();
-        var eventBus = A.Fake<IEventBus>();
 
         var oldTier = new Tier(TierName.Create("Tier name").Value);
         var newTier = new Tier(TierName.Create("Tier name").Value);
@@ -112,11 +109,11 @@ public class HandlerTests
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
 
-        var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
-        var request = MakeRequest(newTier, identity);
+        var handler = CreateHandler(identitiesRepository, tiersRepository);
+        var request = BuildRequest(newTier, identity);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(request, CancellationToken.None);
+        var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
@@ -125,23 +122,22 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Does_nothing_when_tiers_are_the_same()
+    public void Does_nothing_when_tiers_are_the_same()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var tiersRepository = A.Fake<ITiersRepository>();
         var eventBus = A.Fake<IEventBus>();
 
-        var oldTier = new Tier(TierName.Create("Tier name").Value);
-        var newTier = oldTier;
+        var oldAndNewTier = new Tier(TierName.Create("Tier name").Value);
 
-        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
+        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldAndNewTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
-        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldAndNewTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
-        var request = MakeRequest(newTier, identity);
+        var request = BuildRequest(oldAndNewTier, identity);
 
         // Act
         var acting = async () => await handler.Handle(request, CancellationToken.None);
@@ -152,16 +148,21 @@ public class HandlerTests
         A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
     }
 
-    private static UpdateIdentityCommand MakeRequest(Tier newTier, Identity identity)
+    private static UpdateIdentityCommand BuildRequest(Tier newTier, Identity identity)
     {
-        return new()
+        return new UpdateIdentityCommand
         {
-            Address = identity.Address,
-            TierId = newTier.Id
+            Address = identity.Address.StringValue,
+            TierId = newTier.Id.Value
         };
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IEventBus eventBus)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository)
+    {
+        return CreateHandler(identitiesRepository, tiersRepository, A.Fake<IEventBus>());
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IEventBus eventBus)
     {
         return new Handler(identitiesRepository, tiersRepository, eventBus);
     }
