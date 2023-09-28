@@ -23,13 +23,14 @@ public class Identity
     }
     private Identity() { }
 
+    public string Address { get; }
+    public TierId TierId { get; private set; }
+
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
+
     public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
     public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
     internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
-
-    public string Address { get; }
-    public TierId TierId { get; private set; }
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
@@ -125,11 +126,10 @@ public class Identity
 
     private IEnumerable<Quota> GetAppliedQuotasForMetric(MetricKey metric)
     {
-        var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric);
+        var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric).ToArray();
+
         if (!allQuotasOfMetric.Any())
-        {
             return Enumerable.Empty<Quota>();
-        }
 
         var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
         var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();
@@ -139,9 +139,7 @@ public class Identity
     public async Task ChangeTier(Tier newTier, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
     {
         if (TierId == newTier.Id)
-        {
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
-        }
 
         _tierQuotas.Clear();
         _metricStatuses.Clear();
