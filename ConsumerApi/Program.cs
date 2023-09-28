@@ -34,6 +34,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
+using Serilog.Settings.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
@@ -51,6 +55,9 @@ builder.Host
         .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
         .Enrich.WithDemystifiedStackTraces()
         .Enrich.FromLogContext()
+        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+            .WithDefaultDestructurers()
+            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
     )
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -194,4 +201,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
 
-public partial class Program { }
+public partial class Program
+{
+}
