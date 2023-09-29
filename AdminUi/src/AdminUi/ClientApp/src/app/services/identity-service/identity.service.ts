@@ -27,6 +27,10 @@ export class IdentityService {
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.get<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${address}`);
     }
+
+    public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
+        return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
+    }
 }
 
 export interface Identity {
@@ -37,6 +41,7 @@ export interface Identity {
     identityVersion: string;
     quotas: Quota[];
     devices: Device[];
+    tierId: string;
 }
 
 export interface Device {
@@ -61,4 +66,8 @@ export interface IdentityOverview {
     tierId: string;
     identityVersion: string;
     numberOfDevices: number;
+}
+
+export interface UpdateTierRequest {
+    tierId: string;
 }

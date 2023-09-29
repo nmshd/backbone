@@ -1,4 +1,4 @@
-import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
+import { CommonModule, DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -60,6 +60,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         SidebarComponent,
         TopbarComponent,
         IdentityListComponent,
+        IdentityEditComponent,
         TierListComponent,
         TierEditComponent,
         ClientListComponent,
@@ -74,6 +75,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         FormsModule,
         ReactiveFormsModule,
         BrowserModule,
+        CommonModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         ClipboardModule,
