@@ -1,15 +1,11 @@
 ﻿using AdminUi.Infrastructure.DTOs;
 using AdminUi.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
-using Backbone.Modules.Devices.Application.Clients.Commands.CreateClients;
-using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
-﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
-using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;

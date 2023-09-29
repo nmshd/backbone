@@ -2,7 +2,7 @@
 .mat-column-displayName,
 .mat-column-defaultTier,
 .mat-column-numberOfIdentities {
-    width: 25%;
+    width: 20%;
     word-break: break-all;
 }
 
