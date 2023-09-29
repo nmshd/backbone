@@ -52,6 +52,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_identity);
     }
 }
