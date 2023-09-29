@@ -83,6 +83,6 @@ public class TiersRepository : ITiersRepository
 
     public async Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tierIds, CancellationToken cancellationToken)
     {
-        return await _tiers.Where(t => tierIds.Contains(t.Id)).ToListAsync(cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        return await _tiers.Where(t => tierIds.Contains(t.Id)).ToListAsync(cancellationToken);
     }
 }
