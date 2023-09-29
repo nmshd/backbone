@@ -27,7 +27,7 @@ public class HandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
-        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
@@ -54,7 +54,7 @@ public class HandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
-        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
@@ -80,7 +80,7 @@ public class HandlerTests
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
-        A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._)).Returns((Identity)null);
+        A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
         var request = BuildRequest(newTier, identity);
@@ -106,7 +106,7 @@ public class HandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
-        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
@@ -133,7 +133,7 @@ public class HandlerTests
 
         var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldAndNewTier.Id, 1);
 
-        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldAndNewTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository, eventBus);
