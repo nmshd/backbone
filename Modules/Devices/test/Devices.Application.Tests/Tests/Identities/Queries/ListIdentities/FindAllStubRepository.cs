@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
+
 public class FindAllStubRepository : IIdentitiesRepository
 {
     private readonly DbPaginationResult<Identity> _identities;
@@ -33,7 +34,7 @@ public class FindAllStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
-    
+
     public Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();

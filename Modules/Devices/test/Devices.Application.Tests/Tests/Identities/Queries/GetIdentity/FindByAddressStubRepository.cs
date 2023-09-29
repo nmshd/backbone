@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+
 public class FindByAddressStubRepository : IIdentitiesRepository
 {
     private readonly Identity _identity;
@@ -33,7 +34,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
-    
+
     public Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
