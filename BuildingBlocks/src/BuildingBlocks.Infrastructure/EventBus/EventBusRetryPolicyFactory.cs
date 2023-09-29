@@ -9,7 +9,7 @@ internal class EventBusRetryPolicyFactory
         return Policy.Handle<Exception>()
             .WaitAndRetryAsync(
                 handlerRetryBehavior.NumberOfRetries,
-                retryAttempt => TimeSpan.FromSeconds(Math.Max(Math.Pow(handlerRetryBehavior.MinimumBackoff, retryAttempt), handlerRetryBehavior.MaximumBackoff)),
+                retryAttempt => TimeSpan.FromSeconds(Math.Min(Math.Pow(handlerRetryBehavior.MinimumBackoff, retryAttempt), handlerRetryBehavior.MaximumBackoff)),
                 onRetry);
     }
 }
