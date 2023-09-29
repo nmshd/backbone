@@ -60,4 +60,9 @@ public class TiersRepository : ITiersRepository
     {
         return await _tiersDbSet.GetBasicTier(cancellationToken);
     }
+
+    public async Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tierIds, CancellationToken cancellationToken)
+    {
+        return await _tiersDbSet.Where(t => tierIds.Contains(t.Id)).ToListAsync(cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+    }
 }
