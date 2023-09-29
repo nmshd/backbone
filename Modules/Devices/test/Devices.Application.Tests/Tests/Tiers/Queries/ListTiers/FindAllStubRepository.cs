@@ -42,7 +42,7 @@ public class FindAllStubRepository : ITiersRepository
     {
         throw new NotImplementedException();
     }
-    
+
     public Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tiers, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
