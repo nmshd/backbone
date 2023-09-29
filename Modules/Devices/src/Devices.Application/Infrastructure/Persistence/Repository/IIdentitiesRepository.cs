@@ -9,9 +9,11 @@ public interface IIdentitiesRepository
 {
     #region Identities
     Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task Update(Identity identity, CancellationToken cancellationToken);
 #nullable enable
-    Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken);
+    Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
 #nullable disable
+    Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
     #endregion
 
     #region Users
