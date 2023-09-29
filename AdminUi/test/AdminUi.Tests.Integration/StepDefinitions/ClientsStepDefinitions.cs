@@ -1,6 +1,7 @@
 using AdminUi.Tests.Integration.API;
 using AdminUi.Tests.Integration.Extensions;
 using AdminUi.Tests.Integration.Models;
+using Enmeshed.UnitTestTools.Data;
 
 namespace AdminUi.Tests.Integration.StepDefinitions;
 
@@ -11,29 +12,111 @@ namespace AdminUi.Tests.Integration.StepDefinitions;
 public class ClientsStepDefinitions : BaseStepDefinitions
 {
     private readonly ClientsApi _clientsApi;
+    private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _clientSecret;
+    private string _tierId;
+    private string _tier1Id;
+    private string _tier2Id;
     private HttpResponse<List<ClientDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
     private HttpResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
+    private HttpResponse<UpdateClientResponse>? _updateClientResponse;
     private HttpResponse? _deleteResponse;
 
-    public ClientsStepDefinitions(ClientsApi clientsApi)
+    public ClientsStepDefinitions(ClientsApi clientsApi, TiersApi tiersApi)
     {
         _clientsApi = clientsApi;
+        _tiersApi = tiersApi;
         _clientId = string.Empty;
         _clientSecret = string.Empty;
+        _tierId = string.Empty;
+        _tier1Id = string.Empty;
+        _tier2Id = string.Empty;
     }
 
-    [Given(@"a Client c")]
-    public async Task GivenAClientC()
+    [Given(@"a non-existent Client c")]
+    public void GivenANonExistentClientC()
+    {
+        _clientId = "some-non-existent-client-id";
+    }
+
+    [Given(@"a Tier t")]
+    public async Task GivenATierT()
+    {
+        var createTierRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierRequest);
+
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tierId = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
+    }
+
+    [Given(@"a Tier t1")]
+    public async Task GivenATierT1()
+    {
+        var createTierRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierRequest);
+
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tier1Id = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
+    }
+
+    [Given(@"a Tier t2")]
+    public async Task GivenATierT2()
+    {
+        var createTierRequest = new CreateTierRequest
+        {
+            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createTierRequest);
+
+        var response = await _tiersApi.CreateTier(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _tier2Id = response.Content.Result!.Id;
+
+        // allow the event queue to trigger the creation of this tier on the Quotas module
+        Thread.Sleep(2000);
+    }
+
+    [Given(@"a Client c with Tier t")]
+    public async Task GivenAClientCWithTierT()
     {
         var createClientRequest = new CreateClientRequest
         {
             ClientId = string.Empty,
-            DisplayName = "a-client-display-name",
-            ClientSecret = string.Empty
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tierId
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -47,10 +130,26 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _clientId = response.Content.Result!.ClientId;
     }
 
-    [Given(@"a non-existent Client c")]
-    public void GivenANonExistentClientC()
+    [Given(@"a Client c with Tier t1")]
+    public async Task GivenAClientCWithTierT1()
     {
-        _clientId = "some-non-existent-client-id";
+        var createClientRequest = new CreateClientRequest
+        {
+            ClientId = string.Empty,
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tier1Id
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createClientRequest);
+
+        var response = await _clientsApi.CreateClient(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _clientId = response.Content.Result!.ClientId;
     }
 
     [When(@"a DELETE request is sent to the /Clients endpoint")]
@@ -124,6 +223,78 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t2.Id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithTier2Id()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = _tier2Id
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = "inexistent-tier-id"
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = "new-tier-id"
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient("inexistentClientId", requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t.Id")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithTierId()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = _tierId
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
@@ -149,6 +320,30 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse!.AssertContentTypeIs("application/json");
         _changeClientSecretResponse!.AssertContentCompliesWithSchema();
         _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().NotBeNullOrEmpty();
+    }
+
+    [Then(@"the response contains Client c")]
+    public void ThenTheResponseContainsAClient()
+    {
+        _updateClientResponse!.AssertHasValue();
+        _updateClientResponse!.AssertStatusCodeIsSuccess();
+        _updateClientResponse!.AssertContentTypeIs("application/json");
+        _updateClientResponse!.AssertContentCompliesWithSchema();
+    }
+
+    [Then(@"the Client in the Backend has the new defaultTier")]
+    public async Task ThenTheClientInTheBackendHasNewDefaultTier()
+    {
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
+
+        response.AssertHasValue();
+        response.AssertStatusCodeIsSuccess();
+        response.AssertContentTypeIs("application/json");
+        response.AssertContentCompliesWithSchema();
+        response.Content.Result.DefaultTier.Should().Be(_tier2Id);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
@@ -181,6 +376,12 @@ public class ClientsStepDefinitions : BaseStepDefinitions
         if (_deleteResponse != null)
         {
             var actualStatusCode = (int)_deleteResponse.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_updateClientResponse != null)
+        {
+            var actualStatusCode = (int)_updateClientResponse.StatusCode;
             actualStatusCode.Should().Be(expectedStatusCode);
         }
     }
@@ -217,6 +418,12 @@ public class ClientsStepDefinitions : BaseStepDefinitions
             _deleteResponse.Content.Should().NotBeNull();
             _deleteResponse.Content!.Error.Should().NotBeNull();
             _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
+        }
+
+        if (_updateClientResponse != null)
+        {
+            _updateClientResponse!.Content.Error.Should().NotBeNull();
+            _updateClientResponse.Content.Error!.Code.Should().Be(errorCode);
         }
     }
 }

@@ -24,7 +24,7 @@ export class ClientListComponent {
     public pageIndex: number;
     public loading = false;
     public selection = new SelectionModel<ClientDTO>(true, []);
-    public displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
+    public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "actions"];
 
     public constructor(
         private readonly router: Router,
@@ -156,5 +156,13 @@ export class ClientListComponent {
             minWidth: "50%",
             maxWidth: "100%"
         });
+    }
+
+    public async editClient(clientId: string): Promise<void> {
+        await this.router.navigate([`/clients/${clientId}`]);
+    }
+
+    public async goToTier(tierId: string): Promise<void> {
+        await this.router.navigate([`/tiers/${tierId}`]);
     }
 }
