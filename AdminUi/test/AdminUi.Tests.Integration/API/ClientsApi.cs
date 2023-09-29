@@ -12,6 +12,11 @@ public class ClientsApi : BaseApi
         return await Get<List<ClientDTO>>("/Clients", requestConfiguration);
     }
 
+    public async Task<HttpResponse<ClientDTO>> GetClient(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Get<ClientDTO>($"/Clients/{clientId}", requestConfiguration);
+    }
+
     public async Task<HttpResponse> DeleteClient(string clientId, RequestConfiguration requestConfiguration)
     {
         return await Delete($"/Clients/{clientId}", requestConfiguration);
@@ -25,5 +30,10 @@ public class ClientsApi : BaseApi
     public async Task<HttpResponse<ChangeClientSecretResponse>> ChangeClientSecret(string clientId, RequestConfiguration requestConfiguration)
     {
         return await Patch<ChangeClientSecretResponse>($"/Clients/{clientId}/ChangeSecret", requestConfiguration);
+    }
+
+    public async Task<HttpResponse<UpdateClientResponse>> UpdateClient(string clientId, RequestConfiguration requestConfiguration)
+    {
+        return await Patch<UpdateClientResponse>($"/Clients/{clientId}", requestConfiguration);
     }
 }

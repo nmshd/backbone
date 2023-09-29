@@ -18,6 +18,11 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<bool> ExistsWithId(TierId tierId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> ExistsWithName(TierName tierName, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
@@ -33,12 +38,22 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
+    public Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tiers, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetNumberOfClientsWithDefaultTier(Tier tier, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
