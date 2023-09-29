@@ -37,8 +37,10 @@ public class HandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        identity.TierId.Should().Be(newTier.Id);
-        A.CallTo(() => identitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => identitiesRepository.Update(
+            A<Identity>.That.Matches(i => i.TierId == newTier.Id),
+            A<CancellationToken>._
+        )).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
