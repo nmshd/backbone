@@ -9,12 +9,16 @@ import { environment } from "src/environments/environment";
     providedIn: "root"
 })
 export class ClientServiceService {
-    apiUrl: string;
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Clients";
+    private readonly apiUrl: string;
+    public constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl}/Clients`;
     }
 
-    getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
+    public getClientById(id: string): Observable<HttpResponseEnvelope<ClientDTO>> {
+        return this.http.get<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${id}`);
+    }
+
+    public getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
@@ -22,22 +26,27 @@ export class ClientServiceService {
         return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl, httpOptions);
     }
 
-    createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
+    public createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
         return this.http.post<HttpResponseEnvelope<Client>>(this.apiUrl, client);
     }
 
-    deleteClient(clientId: string): Observable<any> {
+    public deleteClient(clientId: string): Observable<any> {
         return this.http.delete<HttpResponseEnvelope<any>>(`${this.apiUrl}/${clientId}`);
     }
 
-    changeClientSecret(clientId: string, request: ChangeClientSecretRequest): Observable<HttpResponseEnvelope<Client>> {
+    public changeClientSecret(clientId: string, request: ChangeClientSecretRequest): Observable<HttpResponseEnvelope<Client>> {
         return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}/ChangeSecret`, request);
+    }
+
+    public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<ClientDTO>> {
+        return this.http.patch<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${clientId}`, request);
     }
 }
 
 export interface ClientOverview {
     clientId: string;
     displayName?: string;
+    defaultTier: string;
     numberOfIdentities: number;
 }
 
@@ -45,8 +54,13 @@ export interface Client {
     clientId?: string;
     displayName: string;
     clientSecret?: string;
+    defaultTier: string;
 }
 
 export interface ChangeClientSecretRequest {
-    newSecret?: string;
+    newSecret: string;
+}
+
+export interface UpdateClientRequest {
+    defaultTier: string;
 }

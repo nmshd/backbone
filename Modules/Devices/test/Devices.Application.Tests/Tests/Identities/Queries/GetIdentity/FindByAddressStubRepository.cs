@@ -5,6 +5,7 @@ using Enmeshed.BuildingBlocks.Application.Pagination;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+
 public class FindByAddressStubRepository : IIdentitiesRepository
 {
     private readonly Identity _identity;
@@ -12,6 +13,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     public FindByAddressStubRepository(Identity identity)
     {
         _identity = identity;
+    }
+
+    public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public Task AddUser(ApplicationUser user, string password)
@@ -29,11 +35,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(_identity);
-    }
-
     public Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
@@ -42,5 +43,15 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     public Task Update(Device device, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    public Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
+    {
+        return Task.FromResult(_identity);
     }
 }

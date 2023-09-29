@@ -1,22 +1,23 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { from, lastValueFrom } from "rxjs";
+import { Observable, from, lastValueFrom } from "rxjs";
 import { XSRFService } from "src/app/services/xsrf-service/xsrf.service";
 
 @Injectable()
 export class XSRFInterceptor implements HttpInterceptor {
-    constructor(private xsrfService: XSRFService) {}
+    public constructor(private readonly xsrfService: XSRFService) {}
 
-    intercept(req: HttpRequest<any>, next: HttpHandler) {
+    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return from(this.handle(req, next));
     }
 
-    async handle(req: HttpRequest<any>, next: HttpHandler) {
+    public async handle(req: HttpRequest<any>, next: HttpHandler): Promise<HttpEvent<any>> {
         const token = this.xsrfService.getStoredToken();
 
         req = req.clone({
             withCredentials: true,
             setHeaders: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "X-XSRF-TOKEN": token
             }
         });

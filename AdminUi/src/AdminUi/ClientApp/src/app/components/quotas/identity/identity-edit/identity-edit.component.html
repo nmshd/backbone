@@ -28,11 +28,21 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ identity.createdAt | date }}</span>
                     </mat-list-item>
+                    <mat-list-item class="auto-height">
+                        <span matListItemTitle>Tier</span>
+                        <span matListItemLine
+                            ><mat-chip-listbox aria-label="Tier selection">
+                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [color]="t.name == 'Basic' ? 'accent' : ''"
+                                    >{{ t.name }}
+                                </mat-chip-option>
+                            </mat-chip-listbox>
+                        </span>
+                    </mat-list-item>
                 </mat-list>
             </div>
         </mat-card-content>
     </mat-card>
-    <mat-accordion class="identity-accordion">
+    <mat-accordion class="identity-accordion" [multi]="true">
         <mat-expansion-panel class="details-expansion-panel" [expanded]="true">
             <mat-expansion-panel-header class="details-expansion-panel-header">
                 <mat-panel-title class="details-panel-header-title">
@@ -168,4 +178,8 @@
             </ng-template>
         </mat-expansion-panel>
     </mat-accordion>
+    <div class="action-buttons">
+        <button mat-raised-button [disabled]="!hasPendingChanges()" (click)="saveIdentity()" color="primary">Save</button>
+        <button mat-raised-button routerLink="/identities">Cancel</button>
+    </div>
 </div>

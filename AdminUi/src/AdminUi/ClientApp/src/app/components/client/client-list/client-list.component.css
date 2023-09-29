@@ -1,14 +1,19 @@
-.mat-column-address,
 .mat-column-clientId,
-.mat-column-publicKey,
+.mat-column-displayName,
+.mat-column-defaultTier,
 .mat-column-numberOfIdentities {
-    width: 20%;
+    width: 25%;
     word-break: break-all;
 }
 
 .disabled-container {
     pointer-events: none;
     opacity: 0.4;
+}
+
+.tier-navigation {
+    text-decoration: underline;
+    color: blue;
 }
 
 .loading {
@@ -24,6 +29,11 @@
 
 .no-data {
     padding: 25px;
+}
+
+.mat-mdc-row:hover {
+    background-color: #ddd !important;
+    cursor: pointer;
 }
 
 .card-header {

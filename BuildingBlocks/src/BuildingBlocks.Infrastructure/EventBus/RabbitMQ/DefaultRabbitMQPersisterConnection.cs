@@ -77,7 +77,7 @@ public class DefaultRabbitMqPersistentConnection
             _connection!.ConnectionBlocked += OnConnectionBlocked;
 
             _logger.LogInformation(
-                $"RabbitMQ persistent connection acquired a connection {_connection.Endpoint.HostName} and is subscribed to failure events");
+                "RabbitMQ persistent connection acquired a connection '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
 
             return true;
         }

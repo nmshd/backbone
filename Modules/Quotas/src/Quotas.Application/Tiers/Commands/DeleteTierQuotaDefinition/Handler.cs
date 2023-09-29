@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
     public async Task Handle(DeleteTierQuotaDefinitionCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogTrace($"Deleting tier quota definition with id: '{request.TierQuotaDefinitionId}'.");
+        _logger.LogTrace("Deleting tier quota definition with id: '{tierQuotaDefinitionId}'.", request.TierQuotaDefinitionId);
 
         var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 
@@ -33,10 +33,11 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.LogTrace($"Successfully deleted tier quota definition with id: '{request.TierQuotaDefinitionId}'.");
+        _logger.LogTrace("Successfully deleted tier quota definition with id: '{tierQuotaDefinitionId}'.", request.TierQuotaDefinitionId);
 
         _eventBus.Publish(new TierQuotaDefinitionDeletedIntegrationEvent(tier.Id, request.TierQuotaDefinitionId));
 
-        _logger.LogTrace($"Successfully published '{nameof(TierQuotaDefinitionDeletedIntegrationEvent)}' with id: '{request.TierQuotaDefinitionId}' and tier id: '{request.TierId}'");
+        _logger.LogTrace("Successfully published '{tierQuotaDefinitionDeletedIntegrationEvent}' with id: '{tierQuotaDefinitionId}' and tier id: '{tierId}'",
+            nameof(TierQuotaDefinitionDeletedIntegrationEvent), request.TierQuotaDefinitionId, request.TierId);
     }
 }
