@@ -16,7 +16,6 @@ public class OAuthClientTests
         var error = client.ChangeDefaultTier(tierId);
 
         // Assert
-        error.Should().NotBeNull();
         error.Should().BeEquivalentTo(DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided Default Tier."));
     }
 }
