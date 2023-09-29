@@ -18,10 +18,16 @@ public class MetricStatusesService : IMetricStatusesService
 
     public async Task RecalculateMetricStatuses(List<string> identityAddresses, List<string> metrics, CancellationToken cancellationToken)
     {
+        var parsedMetrics = ParseMetricKeys(metrics);
+        await RecalculateMetricStatuses(identityAddresses, parsedMetrics.ToList(), cancellationToken);
+    }
+
+    public async Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, CancellationToken cancellationToken)
+    {
         var identities = await _identitiesRepository.FindByAddresses(identityAddresses, cancellationToken, track: true);
         foreach (var identity in identities)
         {
-            await identity.UpdateMetricStatuses(ParseMetricKeys(metrics), _metricCalculatorFactory, cancellationToken);
+            await identity.UpdateMetricStatuses(metrics, _metricCalculatorFactory, cancellationToken);
         }
 
         await _identitiesRepository.Update(identities, cancellationToken);
@@ -48,4 +54,5 @@ public class MetricStatusesService : IMetricStatusesService
 public interface IMetricStatusesService
 {
     Task RecalculateMetricStatuses(List<string> identityAddresses, List<string> metrics, CancellationToken cancellationToken);
+    Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, CancellationToken cancellationToken);
 }

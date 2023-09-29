@@ -2,6 +2,7 @@
 using AdminUi.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
@@ -21,6 +22,7 @@ using GetIdentityQueryDevices = Backbone.Modules.Devices.Application.Identities.
 using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityResponseDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
 using GetIdentityResponseQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
+using Identity = Backbone.Modules.Devices.Domain.Entities.Identity;
 
 namespace AdminUi.Controllers;
 
@@ -94,6 +96,16 @@ public class IdentitiesController : ApiControllerBase
 
         return Ok(response);
     }
+
+    [HttpPut("{identityAddress}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
+        await _mediator.Send(command, cancellationToken);
+        return NoContent();
+    }
 }
 
 public class CreateQuotaForIdentityRequest
@@ -101,6 +113,10 @@ public class CreateQuotaForIdentityRequest
     public string MetricKey { get; set; }
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
+}
+public class UpdateIdentityTierRequest
+{
+    public string TierId { get; set; }
 }
 
 public class GetIdentityResponse

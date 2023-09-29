@@ -27,4 +27,10 @@ public static class GenericDomainErrors
         return new DomainError("error.platform.validation.invalidId",
             string.IsNullOrEmpty(reason) ? $"The ID contains invalid characters {formattedReason}." : reason);
     }
+
+    public static DomainError NewAndOldParametersMatch(string nameOfParameter)
+    {
+        return new DomainError("error.platform.validation.newAndOldMatch",
+            $"The new {nameOfParameter} and the old {nameOfParameter} cannot be the same.");
+    }
 }
