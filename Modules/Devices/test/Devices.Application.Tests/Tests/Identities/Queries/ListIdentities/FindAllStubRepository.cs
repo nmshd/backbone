@@ -14,6 +14,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         _identities = identities;
     }
 
+    public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task AddUser(ApplicationUser user, string password)
     {
         throw new NotImplementedException();
@@ -28,12 +33,7 @@ public class FindAllStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
-
-    public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
@@ -45,6 +45,11 @@ public class FindAllStubRepository : IIdentitiesRepository
     }
 
     public Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
