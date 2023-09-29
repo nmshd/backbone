@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
             throw new ApplicationException(new ApplicationError(newTierIdResult.Error.Code, newTierIdResult.Error.Message));
         }
 
-        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
         var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
 
