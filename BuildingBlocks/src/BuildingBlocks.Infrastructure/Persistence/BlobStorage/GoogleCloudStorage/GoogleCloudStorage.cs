@@ -140,7 +140,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             {
                 await _storageClient.GetObjectAsync(folder, key);
             }, nameof(_storageClient.GetObjectAsync));
-            
+
             _logger.LogError("The blob with the given key already exists.");
             throw new BlobAlreadyExistsException(key);
         }
@@ -166,7 +166,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
                 {
                     await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
                 }, nameof(_storageClient.DeleteObjectAsync));
-                
+
                 _removedBlobs.Remove(blob);
             }
             catch (Exception ex)

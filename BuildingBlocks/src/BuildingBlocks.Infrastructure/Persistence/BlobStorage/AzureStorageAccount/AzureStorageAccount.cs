@@ -49,7 +49,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             {
                 await blob.DownloadToAsync(stream);
             }, nameof(blob.DownloadToAsync));
-            
+
             stream.Position = 0;
 
             _logger.LogTrace("Found blob with id '{blobId}'.", blobId);
@@ -101,14 +101,14 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         foreach (var (cloudBlockBlob, bytes) in changedBlobs)
         {
             var memoryStream = await _logger.TraceTime(async () => new MemoryStream(bytes), nameof(MemoryStream));
-            
+
             try
             {
                 await _logger.TraceTime(async () =>
                 {
                     await cloudBlockBlob.UploadAsync(memoryStream);
                 }, nameof(cloudBlockBlob.UploadAsync));
-                
+
                 _changedBlobs.Remove(cloudBlockBlob);
             }
             catch (RequestFailedException ex)
@@ -133,7 +133,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
                 {
                     await cloudBlockBlob.DeleteAsync();
                 }, nameof(cloudBlockBlob.DeleteAsync));
-                
+
                 _removedBlobs.Remove(cloudBlockBlob);
             }
             catch (Exception ex)
