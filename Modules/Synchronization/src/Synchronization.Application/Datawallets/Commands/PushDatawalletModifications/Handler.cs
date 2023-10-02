@@ -145,7 +145,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             await _logger.TraceTime(async () =>
             {
                 await _dbContext.SaveChangesAsync(_cancellationToken);
-                Console.WriteLine("OBSERVED_METHOD:: " + nameof(_dbContext.SaveChangesAsync));
             }, nameof(_dbContext.SaveChangesAsync));
         }
         catch (DbUpdateException ex)
