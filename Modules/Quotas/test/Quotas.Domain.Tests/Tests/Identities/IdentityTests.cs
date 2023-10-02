@@ -2,6 +2,7 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;
@@ -11,8 +12,10 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
-public class IdentityTests
+public class IdentityTests : IDisposable
 {
+    #region Creation
+
     [Fact]
     public void Can_create_identity_with_valid_properties()
     {
@@ -24,11 +27,34 @@ public class IdentityTests
         identity.TierId.Should().Be(new TierId("some-tier-id"));
     }
 
+    #endregion
+
+    #region CreateIndividualQuota
+
+    [Fact]
+    public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
+    {
+        // Arrange
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var identity = CreateIdentity();
+        identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Act
+        var acting = () => identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
+    }
+
+    #endregion
+
+    #region AssignTierQuotaFromDefinition
+
     [Fact]
     public void Can_assign_tier_quota_from_definition_to_identity()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.UsedFileStorageSpace, 2, QuotaPeriod.Hour);
 
@@ -42,16 +68,21 @@ public class IdentityTests
         identity.TierQuotas.First().MetricKey.Should().Be(tierQuotaDefinition1.MetricKey);
         identity.TierQuotas.First().Max.Should().Be(tierQuotaDefinition1.Max);
         identity.TierQuotas.First().Period.Should().Be(tierQuotaDefinition1.Period);
+
         identity.TierQuotas.Second().MetricKey.Should().Be(tierQuotaDefinition2.MetricKey);
         identity.TierQuotas.Second().Max.Should().Be(tierQuotaDefinition2.Max);
         identity.TierQuotas.Second().Period.Should().Be(tierQuotaDefinition2.Period);
     }
 
+    #endregion
+
+    #region DeleteIndividualQuota
+
     [Fact]
-    public void Can_delete_individual_quota_by_id()
+    public void Deleting_individual_Quota()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         var createdQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
 
         // Act
@@ -62,7 +93,7 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Can_delete_individual_quota_by_id_with_multiple_quotas()
+    public void Deleting_individual_Quota_only_deletes_Quota_with_given_id()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
@@ -81,7 +112,7 @@ public class IdentityTests
     public void Trying_to_delete_inexistent_individual_quota_throws_DomainException()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
 
         // Act
         var result = identity.DeleteIndividualQuota(QuotaId.Generate());
@@ -92,12 +123,15 @@ public class IdentityTests
         result.Error.Message.Should().StartWith("IndividualQuota");
     }
 
+    #endregion
+
+    #region DeleteTierQuotaFromDefinitionId
 
     [Fact]
-    public void Can_delete_tier_quota_by_definition_id()
+    public void Deleting_Tier_Quota_by_definition_id()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
 
@@ -109,7 +143,7 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Can_delete_tier_quota_by_definition_id_with_multiple_quotas()
+    public void Deleting_Tier_Quota_by_definition_id_only_deletes_Quota_with_given_definition_id()
     {
         // Arrange
         var identity = new Identity("some-address", new TierId("some-tier-id"));
@@ -127,10 +161,10 @@ public class IdentityTests
     }
 
     [Fact]
-    public void Trying_to_delete_inexistent_quota_throws_DomainException()
+    public void Trying_to_delete_Tier_Quota_with_inexistent_definition_id_throws_DomainException()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
 
         // Act
         var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.Create("TQDsomeInexistentIdx").Value);
@@ -139,11 +173,15 @@ public class IdentityTests
         acting.Should().Throw<DomainException>();
     }
 
+    #endregion
+
+    #region UpdateMetricStatuses
+
     [Fact]
     public async Task Updating_a_non_existing_MetricStatus_creates_a_MetricStatus()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
 
@@ -161,7 +199,7 @@ public class IdentityTests
     public async Task Updating_a_non_existing_MetricStatus_with_no_corresponding_quotas_sets_exhaustion_date_to_null()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
 
         // Act
         await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub());
@@ -176,7 +214,7 @@ public class IdentityTests
     public async Task Updating_an_existing_MetricStatus_with_no_corresponding_quotas_sets_exhaustion_date_to_null()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub());
 
         // Act
@@ -210,7 +248,7 @@ public class IdentityTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
 
@@ -239,7 +277,7 @@ public class IdentityTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
 
@@ -251,7 +289,7 @@ public class IdentityTests
 
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
-        identity = new Identity("some-address", new TierId("some-tier-id"));
+        identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
 
@@ -270,7 +308,7 @@ public class IdentityTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
 
@@ -291,7 +329,7 @@ public class IdentityTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
 
         // first update; the Quota is exhausted
@@ -305,69 +343,154 @@ public class IdentityTests
         identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
     }
 
+    #endregion
+
+    #region ChangeTier
+
     [Fact]
-    public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
+    public async Task Changing_Tier_updates_identity_with_new_tier()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages;
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var identity = new Identity(identityAddress, new TierId("tier-id"));
-        identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
 
         // Act
-        var acting = () => identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
+        identity.TierId.Should().Be(newTier.Id);
     }
 
-    private class MetricCalculatorFactoryStub : MetricCalculatorFactory
+    /**
+     * If the old Tier has a Quota the new Tier does not have, it should be removed.
+     * If the new Tier has a Quota the old Tier does not have, it should be added.
+     * If the new Tier has a Quota the old Tier has as well, it should be kept.
+     */
+    [Fact]
+    public async Task Changing_Tier_removes_old_TierQuotas_and_adds_new_ones()
     {
-        private readonly MetricCalculatorStub _calculator;
+        // Arrange
+        var identity = CreateIdentity();
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfRelationships, 1);
 
-        public MetricCalculatorFactoryStub()
-        {
-            _calculator = new MetricCalculatorStub(0);
-        }
+        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        newTier.CreateQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        newTier.CreateQuota(MetricKey.NumberOfRelationships, 1, QuotaPeriod.Day);
 
-        public MetricCalculatorFactoryStub(int newUsage)
-        {
-            _calculator = new MetricCalculatorStub(newUsage);
-        }
+        // Act
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(1), CancellationToken.None);
 
-        public MetricCalculatorFactoryStub(MetricCalculatorStub calculator)
-        {
-            _calculator = calculator;
-        }
+        // Assert
+        identity.TierQuotas.Should().HaveCount(2);
+        identity.TierQuotas.Should()
+            .Contain(q => q.MetricKey == MetricKey.NumberOfSentMessages)
+            .And.Contain(q => q.MetricKey == MetricKey.NumberOfRelationships);
+    }
 
-        protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
-        {
-            return _calculator;
-        }
+    /**
+     * - If the old Tier had an exhausted MetricStatus due to a TierQuota, and the new Tier has more
+     *   TierQuota on the same MetricStatus, the MetricStatus after changing the Tier should be unexhausted
+     * - If the old Tier had an unexhausted MetricStatus, and the new Tier has less
+     *   TierQuota on the same MetricStatus, the MetricStatus after changing the Tier should be unexhausted
+     */
+    [Fact]
+    public async Task Changing_Tier_updates_MetricStatuses()
+    {
+        // Arrange
+        var identity = CreateIdentity();
+        await identity.AddExhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfSentMessages, 3);
 
-        protected override IMetricCalculator CreateNumberOfRelationshipsMetricCalculator()
-        {
-            return _calculator;
-        }
-        protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
-        {
-            return _calculator;
-        }
+        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfFiles, 3, QuotaPeriod.Day));
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
 
-        protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
-        {
-            return _calculator;
-        }
+        // Act
+        await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(2), CancellationToken.None);
 
-        protected override IMetricCalculator CreateNumberOfTokensMetricCalculator()
-        {
-            return _calculator;
-        }
+        // Assert
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.Unexhausted);
+    }
 
-        protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
-        {
-            return _calculator;
-        }
+    [Fact]
+    public void Changing_Tier_fails_when_old_and_new_tier_match()
+    {
+        // Arrange
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var oldTier = new Tier(new TierId("tier-id"), "Old Tier");
+        var identity = new Identity(identityAddress, oldTier.Id);
+
+        // Act
+        var acting = async () => await identity.ChangeTier(oldTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
+
+        // Assert
+        var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
+        exception.Code.Should().Be("error.platform.validation.newAndOldMatch");
+    }
+
+    #endregion
+
+    private static Identity CreateIdentity()
+    {
+        return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), new TierId("tier-id"));
+    }
+
+    public void Dispose()
+    {
+        SystemTime.Reset();
+    }
+}
+
+public class MetricCalculatorFactoryStub : MetricCalculatorFactory
+{
+    private readonly MetricCalculatorStub _calculator;
+
+    public MetricCalculatorFactoryStub()
+    {
+        _calculator = new MetricCalculatorStub(0);
+    }
+
+    public MetricCalculatorFactoryStub(int newUsage)
+    {
+        _calculator = new MetricCalculatorStub(newUsage);
+    }
+
+    public MetricCalculatorFactoryStub(MetricCalculatorStub calculator)
+    {
+        _calculator = calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfRelationshipsMetricCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfTokensMetricCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
+    {
+        return _calculator;
     }
 }
 
@@ -393,4 +516,23 @@ public static class IdentityExtensions
         await identity.UpdateMetricStatuses(metrics, factory, CancellationToken.None);
     }
 
+    public static async Task AddUnexhaustedTierQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
+    {
+        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(0));
+    }
+
+    public static async Task AddUnexhaustedIndividualQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
+    {
+        identity.CreateIndividualQuota(metricKey, max, QuotaPeriod.Day);
+        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(0));
+    }
+
+    public static async Task AddExhaustedTierQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
+    {
+        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
+        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(max));
+    }
 }

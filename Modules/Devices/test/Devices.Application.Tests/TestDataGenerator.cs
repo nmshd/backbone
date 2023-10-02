@@ -26,7 +26,7 @@ public static class TestDataGenerator
 
     public static TierId CreateRandomTierId()
     {
-        return TierId.New();
+        return TierId.Generate();
     }
 
     public static Identity CreateIdentity()
