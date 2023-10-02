@@ -72,7 +72,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
                 .GetBlobsAsync(prefix: prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
-            return _logger.TraceTimeAsyncEnumeration(blobs, nameof(FindAllAsync));
+            return Task.FromResult(blobs);
         }
         catch (Exception ex)
         {

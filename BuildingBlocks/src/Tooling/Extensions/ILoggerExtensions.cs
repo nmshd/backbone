@@ -45,28 +45,4 @@ public static class ILoggerExtensions
             logger.LogDebug(EVENT_ID_EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
-
-    public static async Task<IAsyncEnumerable<T>> TraceTimeAsyncEnumeration<T>(this ILogger logger, IAsyncEnumerable<T> source, string? actionName = null)
-    {
-        if (Environment.GetEnvironmentVariable(DEBUG_PERFORMANCE_ENV_VAR).IsNullOrEmpty())
-            return source;
-
-        var results = new List<T>();
-        var watch = Stopwatch.StartNew();
-        try
-        {
-            await foreach (var item in source)
-            {
-                results.Add(item);
-            }
-        }
-        finally
-        {
-            watch.Stop();
-            logger.LogDebug(EVENT_ID_EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Enumeration", watch.ElapsedMilliseconds);
-        }
-
-        return results.ToAsyncEnumerable();
-    }
-
 }

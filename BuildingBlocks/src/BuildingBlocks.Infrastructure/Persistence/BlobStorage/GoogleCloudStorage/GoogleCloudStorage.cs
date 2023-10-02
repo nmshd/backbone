@@ -73,7 +73,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
                 .ListObjectsAsync(folder, prefix)
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
-            return _logger.TraceTimeAsyncEnumeration(blobs, nameof(FindAllAsync));
+            return Task.FromResult(blobs);
         }
         catch (Exception ex)
         {
