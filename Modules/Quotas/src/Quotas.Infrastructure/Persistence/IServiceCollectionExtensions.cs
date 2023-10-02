@@ -51,7 +51,6 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IMessagesRepository, MessagesRepository>();
         services.AddTransient<IFilesRepository, FilesRepository>();
         services.AddTransient<IMetricsRepository, MetricsRepository>();
-        services.AddTransient<IMetricStatusesRepository, MetricStatusesRepository>();
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
