@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
@@ -31,6 +32,9 @@ public static class IServiceCollectionExtensions
                         sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                     })
+                    .AddInterceptors(new SaveChangesTimeInterceptor(
+                        services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
+                    ))
                 );
                 break;
             case POSTGRES:
@@ -41,7 +45,9 @@ public static class IServiceCollectionExtensions
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                     })
-
+                    .AddInterceptors(new SaveChangesTimeInterceptor(
+                        services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
+                    ))
                 );
                 break;
             default:
