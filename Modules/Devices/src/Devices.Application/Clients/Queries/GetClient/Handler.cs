@@ -17,6 +17,6 @@ public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
     {
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
-        return new ClientDTO(client.ClientId, client.DisplayName, client.DefaultTier);
+        return new ClientDTO(client.ClientId, client.DisplayName, client.DefaultTier, client.CreatedAt);
     }
 }

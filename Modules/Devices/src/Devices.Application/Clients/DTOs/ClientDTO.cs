@@ -6,14 +6,16 @@ namespace Backbone.Modules.Devices.Application.Clients.DTOs;
 
 public class ClientDTO : IMapTo<OAuthClient>
 {
-    public ClientDTO(string clientId, string displayName, TierId defaultTier)
+    public ClientDTO(string clientId, string displayName, TierId defaultTier, DateTime createdAt)
     {
         ClientId = clientId;
         DisplayName = displayName;
         DefaultTier = defaultTier;
+        CreatedAt = createdAt;
     }
 
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
