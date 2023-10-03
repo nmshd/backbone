@@ -14,6 +14,9 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfigurati
             .IsRequired();
 
         builder
+            .Property(x => x.CreatedAt);
+
+        builder
             .HasOne<Tier>().WithMany().HasForeignKey(x => x.DefaultTier)
             .OnDelete(DeleteBehavior.Restrict);
     }

@@ -8,10 +8,12 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
     CustomOpenIddictEntityFrameworkCoreToken>
 {
     public TierId DefaultTier { get; set; }
+    
+    public DateTime CreatedAt { get; set; }
 
     public OAuthClient ToModel()
     {
-        return new OAuthClient(ClientId!, DisplayName!, DefaultTier);
+        return new OAuthClient(ClientId!, DisplayName!, DefaultTier, CreatedAt);
     }
 
     public void UpdateFromModel(OAuthClient client)
