@@ -26,12 +26,13 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
         var defaultTierId = await GetTierId(request.DefaultTier, cancellationToken);
+        var createdAt = DateTime.UtcNow;
 
-        var client = new OAuthClient(clientId, displayName, defaultTierId);
+        var client = new OAuthClient(clientId, displayName, defaultTierId, createdAt);
 
         await _oAuthClientsRepository.Add(client, clientSecret, cancellationToken);
 
-        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTierId);
+        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTierId, createdAt);
     }
 
     private async Task EnsureClientIdDoesNotExist(CreateClientCommand request, CancellationToken cancellationToken)
