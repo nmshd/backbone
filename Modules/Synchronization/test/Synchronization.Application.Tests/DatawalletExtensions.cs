@@ -7,7 +7,7 @@ public static class DatawalletExtensions
 {
     public static DatawalletModification AddModification(this Datawallet datawallet, AddModificationParameters parameters)
     {
-        return datawallet.AddModification(parameters.Type, parameters.DatawalletVersion, parameters.Collection, parameters.ObjectIdentifier, parameters.PayloadCategory, parameters.EncryptedPayload, parameters.CreatedByDevice);
+        return datawallet.AddModification(parameters.Type, parameters.DatawalletVersion, parameters.Collection, parameters.ObjectIdentifier, parameters.PayloadCategory, parameters.EncryptedPayload, parameters.CreatedByDevice, parameters.BlobName);
     }
 
     public class AddModificationParameters
@@ -19,5 +19,6 @@ public static class DatawalletExtensions
         public DatawalletModificationType Type { get; init; } = DatawalletModificationType.Create;
         public byte[] EncryptedPayload { get; init; } = TestDataGenerator.CreateRandomBytes();
         public Datawallet.DatawalletVersion DatawalletVersion { get; init; } = new(1);
+        public string BlobName { get; init; } = "blob-name";
     }
 }
