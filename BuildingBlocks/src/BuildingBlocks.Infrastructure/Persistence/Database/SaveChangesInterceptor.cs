@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Enmeshed.Tooling.Extensions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+
+namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class SaveChangesTimeInterceptor : SaveChangesInterceptor
 {
@@ -26,7 +29,7 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
         CancellationToken cancellationToken = default)
     {
         _stopwatch.Stop();
-        _logger.LogInformation($"SaveChangesAsync took {_stopwatch.ElapsedMilliseconds} ms.");
+        _logger.LogInformation(LogEventIds.EXECUTION_TIME, "'SaveChangesAsync' took {elapsedMilliseconds} ms.", _stopwatch.ElapsedMilliseconds);
         return await base.SavedChangesAsync(eventData, result, cancellationToken);
     }
 }
