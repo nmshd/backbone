@@ -64,7 +64,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
         var paginationResult = Database.IsNpgsql()
             ? await DatawalletModifications
-            .FromSqlInterpolated($@"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ""ObjectIdentifier"", ""Type"", ""PayloadCategory"" ORDER BY ""Index"" DESC) AS rank FROM ""Synchronization"".""DatawalletModifications"" m1 WHERE ""CreatedBy"" = {activeIdentityParam} AND ""Index"" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
+            .FromSqlInterpolated($"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1""")
             .AsNoTracking()
             .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
             : await DatawalletModifications
