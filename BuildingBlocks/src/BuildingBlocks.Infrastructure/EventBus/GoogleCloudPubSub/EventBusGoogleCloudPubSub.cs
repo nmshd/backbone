@@ -7,6 +7,7 @@ using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
@@ -25,16 +26,18 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
 
     public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac)
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior)
     {
         _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
         _connection.SubscriberClient.StartAsync(OnIncomingEvent);
+        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -128,7 +131,16 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
             var handleMethod = handler.GetType().GetMethod("Handle");
 
-            await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+            var policy = EventBusRetryPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventName,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
+
+            await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
     }
 }

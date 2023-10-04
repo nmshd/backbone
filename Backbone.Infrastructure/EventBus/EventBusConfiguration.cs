@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.Infrastructure.EventBus;
 
@@ -19,4 +20,6 @@ public class EventBusConfiguration
 
     public string GcpPubSubProjectId { get; set; }
     public string GcpPubSubTopicName { get; set; }
+
+    public HandlerRetryBehavior HandlerRetryBehavior { get; set; }
 }
