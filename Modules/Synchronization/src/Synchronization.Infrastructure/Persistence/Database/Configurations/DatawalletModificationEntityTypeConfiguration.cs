@@ -22,6 +22,7 @@ public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfigur
         builder.Property(x => x.ObjectIdentifier).HasMaxLength(100);
         builder.Property(x => x.PayloadCategory).HasMaxLength(50);
         builder.Property(x => x.Type);
+        builder.Property(x => x.BlobReference);
 
         builder.Ignore(x => x.EncryptedPayload);
     }

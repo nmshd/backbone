@@ -17,12 +17,12 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Datawallet", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -49,13 +49,17 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("Datawallets");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.DatawalletModification", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
+
+                    b.Property<string>("BlobReference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Collection")
                         .IsRequired()
@@ -116,7 +120,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("DatawalletModifications");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -167,7 +171,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("ExternalEvents");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.SyncError", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -204,7 +208,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("SyncErrors");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.SyncRun", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -256,50 +260,50 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("SyncRuns");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.DatawalletModification", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>
                 {
-                    b.HasOne("Synchronization.Domain.Entities.Datawallet", "Datawallet")
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
                         .HasForeignKey("DatawalletId");
 
                     b.Navigation("Datawallet");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
-                    b.HasOne("Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
                         .HasForeignKey("SyncRunId");
 
                     b.Navigation("SyncRun");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.SyncError", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
                 {
-                    b.HasOne("Synchronization.Domain.Entities.Sync.ExternalEvent", null)
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", null)
                         .WithMany("Errors")
                         .HasForeignKey("ExternalEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Synchronization.Domain.Entities.Sync.SyncRun", null)
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", null)
                         .WithMany("Errors")
                         .HasForeignKey("SyncRunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Datawallet", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>
                 {
                     b.Navigation("Modifications");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
                     b.Navigation("Errors");
                 });
 
-            modelBuilder.Entity("Synchronization.Domain.Entities.Sync.SyncRun", b =>
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
                 {
                     b.Navigation("Errors");
 
