@@ -35,8 +35,41 @@ $primary-palette: (
     )
 );
 
+$accent-palette: (
+    50: #e37b27,
+    100: #e37b27,
+    200: #e37b27,
+    300: #e37b27,
+    400: #e37b27,
+    500: #e37b27,
+    600: #e37b27,
+    700: #e37b27,
+    800: #e37b27,
+    900: #e37b27,
+    A100: #e37b27,
+    A200: #e37b27,
+    A400: #e37b27,
+    A700: #e37b27,
+    contrast: (
+        50: #ffffff,
+        100: #ffffff,
+        200: #ffffff,
+        300: #ffffff,
+        400: #ffffff,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #ffffff,
+        A200: #ffffff,
+        A400: #ffffff,
+        A700: #ffffff
+    )
+);
+
 $my-primary: mat.define-palette($primary-palette, 500);
-$my-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$my-accent: mat.define-palette($accent-palette, 500);
 
 $my-theme: mat.define-light-theme(
     (
