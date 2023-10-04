@@ -8,7 +8,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
     CustomOpenIddictEntityFrameworkCoreToken>
 {
     public TierId DefaultTier { get; set; }
-    
+
     public DateTime CreatedAt { get; set; }
 
     public OAuthClient ToModel()
