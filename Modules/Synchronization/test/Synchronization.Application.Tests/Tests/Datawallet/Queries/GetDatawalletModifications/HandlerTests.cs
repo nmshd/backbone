@@ -351,7 +351,7 @@ public class HandlerTests
 
     private static Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
     {
-        return new BDomain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
+        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
     }
 
     private static Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
