@@ -8,9 +8,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling.Extensions;
-using Google.Apis.Logging;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
@@ -19,17 +17,15 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IBlobStorage _blobStorage;
-    private readonly ILogger<Handler> _logger;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly BlobOptions _blobOptions;
 
-    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, ILogger<Handler> logger)
+    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
-        _logger = logger;
         _blobOptions = blobOptions.Value;
         _activeIdentity = userContext.GetAddress();
     }

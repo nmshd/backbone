@@ -6,9 +6,8 @@ namespace Backbone.Modules.Synchronization.Domain.Entities;
 public class DatawalletModification
 {
 #pragma warning disable CS8618
-    private DatawalletModification(string blobReference)
+    private DatawalletModification()
     {
-        BlobReference = blobReference;
     }
 #pragma warning restore CS8618
 

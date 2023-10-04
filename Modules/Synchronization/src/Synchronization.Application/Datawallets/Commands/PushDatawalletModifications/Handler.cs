@@ -90,7 +90,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private async Task CreateModifications()
     {
-        var blobName = Guid.NewGuid().ToString("N"); ;
+        var blobName = Guid.NewGuid().ToString("N");
 
         var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
 
@@ -112,7 +112,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             modificationDto.ObjectIdentifier,
             modificationDto.PayloadCategory,
             modificationDto.EncryptedPayload,
-            _activeDevice, blobReference
+            _activeDevice, 
+            blobReference
         );
     }
 

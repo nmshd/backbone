@@ -138,7 +138,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (!modifications.Any())
             return new List<DatawalletModification>();
 
-        var blobName = Guid.NewGuid().ToString("N"); ;
+        var blobName = Guid.NewGuid().ToString("N");
 
         var newModifications = new List<DatawalletModification>();
         var payloads = new Dictionary<long, byte[]>();
