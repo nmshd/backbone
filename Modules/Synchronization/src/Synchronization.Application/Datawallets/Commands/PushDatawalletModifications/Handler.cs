@@ -90,7 +90,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private async Task CreateModifications()
     {
-        var blobName = Guid.NewGuid().ToString();
+        var blobName = Guid.NewGuid().ToString("N"); ;
 
         var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
 
