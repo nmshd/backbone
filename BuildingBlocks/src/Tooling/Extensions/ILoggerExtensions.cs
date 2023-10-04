@@ -6,12 +6,11 @@ namespace Microsoft.Extensions.Logging;
 
 public static class ILoggerExtensions
 {
-    private const string DEBUG_PERFORMANCE_ENV_VAR = "DEBUG_PERFORMANCE";
     private static readonly EventId EVENT_ID_EXECUTION_TIME = new(1000, "ExecutionTime");
 
     public static async Task TraceTime(this ILogger logger, Func<Task> action, string? actionName = null)
     {
-        if (Environment.GetEnvironmentVariable(DEBUG_PERFORMANCE_ENV_VAR).IsNullOrEmpty())
+        if (!EnvironmentVariables.DEBUG_PERFORMANCE)
         {
             await action();
             return;
@@ -31,7 +30,7 @@ public static class ILoggerExtensions
 
     public static async Task<T> TraceTime<T>(this ILogger logger, Func<Task<T>> action, string? actionName = null)
     {
-        if (Environment.GetEnvironmentVariable(DEBUG_PERFORMANCE_ENV_VAR).IsNullOrEmpty())
+        if (!EnvironmentVariables.DEBUG_PERFORMANCE)
             return await action();
 
         var watch = Stopwatch.StartNew();
