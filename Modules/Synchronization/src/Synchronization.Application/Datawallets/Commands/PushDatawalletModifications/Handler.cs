@@ -112,7 +112,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             modificationDto.ObjectIdentifier,
             modificationDto.PayloadCategory,
             modificationDto.EncryptedPayload,
-            _activeDevice, 
+            _activeDevice,
             blobReference
         );
     }
