@@ -57,6 +57,13 @@ BEGIN
 END
 IF NOT EXISTS(SELECT *
 FROM sys.server_principals
+WHERE name = 'readonly')
+BEGIN
+	CREATE LOGIN readonly WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "readonly" created' ;
+END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
 WHERE name = 'adminUi')
 BEGIN
 	CREATE LOGIN adminUi WITH PASSWORD = 'Passw0rd'
@@ -218,12 +225,19 @@ END
 
 IF NOT EXISTS (SELECT *
 FROM sys.database_principals
+WHERE name = 'readonly')
+BEGIN
+	CREATE USER readonly FOR LOGIN readonly
+	PRINT 'User "readonly" created' ;
+END
+
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
 WHERE name = 'adminUi')
 BEGIN
 	CREATE USER adminUi FOR LOGIN adminUi WITH DEFAULT_SCHEMA = AdminUi
 	PRINT 'User "adminUi" created' ;
 END
-
 GO
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -271,5 +285,15 @@ GRANT SELECT ON SCHEMA::Tokens TO adminUi
 GRANT SELECT ON SCHEMA::Quotas TO adminUi
 GRANT CREATE VIEW TO adminUi
 GRANT SELECT ON SCHEMA::Tokens TO quotas
+
+GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Synchronization TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Messages TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Devices TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Tokens TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Files TO readonly;
+GRANT SELECT, REFERENCES ON SCHEMA::Quotas TO readonly;
+
 PRINT 'Finished changing authorizations' ;
 GO

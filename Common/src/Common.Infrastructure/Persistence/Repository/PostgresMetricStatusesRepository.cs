@@ -10,9 +10,9 @@ public class PostgresMetricStatusesRepository : IMetricStatusesRepository
 {
     private const string QUERY = """SELECT * FROM "MetricStatuses" WHERE "Owner" = @identityAddress AND "MetricKey" = ANY(@keys)""";
 
-    private readonly MetricStatusesRepositoryOptions _options;
+    private readonly DapperRepositoryOptions _options;
 
-    public PostgresMetricStatusesRepository(IOptions<MetricStatusesRepositoryOptions> options)
+    public PostgresMetricStatusesRepository(IOptions<DapperRepositoryOptions> options)
     {
         _options = options.Value;
     }

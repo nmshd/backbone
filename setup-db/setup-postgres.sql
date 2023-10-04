@@ -128,6 +128,16 @@ BEGIN
 END
 $$;
 
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'readonly') THEN
+      CREATE USER "readonly" WITH password 'Passw0rd';
+      RAISE NOTICE 'User "readonly" created';
+   END IF;
+END
+$$;
+
 ALTER USER challenges SET search_path TO "Challenges";
 ALTER USER devices SET search_path TO "Devices";
 ALTER USER files SET search_path TO "Files";
@@ -207,6 +217,38 @@ ALTER DEFAULT PRIVILEGES FOR ROLE quotas IN SCHEMA "Quotas" GRANT SELECT ON TABL
 GRANT USAGE ON SCHEMA "Tokens" TO quotas;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO quotas;
 ALTER DEFAULT PRIVILEGES FOR ROLE tokens IN SCHEMA "Tokens" GRANT SELECT ON TABLES TO quotas;
+
+GRANT USAGE ON SCHEMA "Challenges" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Challenges" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE challenges IN SCHEMA "Challenges" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Synchronization" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Synchronization" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE synchronization IN SCHEMA "Synchronization" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Messages" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Messages" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE messages IN SCHEMA "Messages" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Devices" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Devices" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE devices IN SCHEMA "Devices" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Tokens" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE tokens IN SCHEMA "Tokens" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Relationships" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Relationships" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE relationships IN SCHEMA "Relationships" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Files" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Files" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE files IN SCHEMA "Files" GRANT SELECT ON TABLES TO readonly;
+
+GRANT USAGE ON SCHEMA "Quotas" TO "readonly";
+GRANT SELECT ON ALL TABLES IN SCHEMA "Quotas" TO "readonly";
+ALTER DEFAULT PRVILEGES FOR ROLE quotas IN SCHEMA "Quotas" GRANT SELECT ON TABLES TO readonly;
 
 
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
