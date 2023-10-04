@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,9 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task<uint> Count(IdentityAddress sender, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var count = await _readOnlyMessages.CountAsync(m => m.CreatedBy == sender.StringValue, cancellationToken);
+        var count = await _readOnlyMessages
+            .CreatedInInterval(createdAtFrom, createdAtTo)
+            .CountAsync(m => m.CreatedBy == sender.StringValue, cancellationToken);
         return (uint)count;
     }
 }
