@@ -47,7 +47,7 @@ public class MessagesRepositoryTests
         await _messagesArrangeContext.SaveChangesAsync();
 
         var repository = new MessagesRepository(_actContext);
-        var quotaPeriod = QuotaPeriod.Hour;
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
@@ -74,7 +74,7 @@ public class MessagesRepositoryTests
         await _messagesArrangeContext.SaveChangesAsync();
 
         var repository = new MessagesRepository(_actContext);
-        var quotaPeriod = QuotaPeriod.Month;
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Month;
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
@@ -96,7 +96,7 @@ public class MessagesRepositoryTests
         await _messagesArrangeContext.SaveChangesAsync();
 
         var repository = new MessagesRepository(_actContext);
-        var quotaPeriod = QuotaPeriod.Total;
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Total;
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
@@ -119,7 +119,7 @@ public class MessagesRepositoryTests
         await _messagesArrangeContext.SaveChangesAsync();
 
         var repository = new MessagesRepository(_actContext);
-        var quotaPeriod = QuotaPeriod.Total;
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Total;
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
@@ -128,7 +128,7 @@ public class MessagesRepositoryTests
         count.Should().Be(2);
     }
 
-    private MessageEntity CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
+    private static MessageEntity CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
     {
         return new(
             identityAddress,
