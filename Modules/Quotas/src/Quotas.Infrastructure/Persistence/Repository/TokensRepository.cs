@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,9 @@ public class TokensRepository : ITokensRepository
 
     public async Task<uint> Count(IdentityAddress createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var tokensCount = await _tokensReadOnly.CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
+        var tokensCount = await _tokensReadOnly
+            .CreatedInInterval(createdAtFrom, createdAtTo)
+            .CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
         return (uint)tokensCount;
     }
 }
