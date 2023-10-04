@@ -367,6 +367,6 @@ public class HandlerTests
 
         var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
-        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions, A.Fake<ILogger<Handler>>());
+        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions);
     }
 }
