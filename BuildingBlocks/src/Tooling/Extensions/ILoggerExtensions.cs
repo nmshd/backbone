@@ -6,8 +6,6 @@ namespace Microsoft.Extensions.Logging;
 
 public static class ILoggerExtensions
 {
-    private static readonly EventId EVENT_ID_EXECUTION_TIME = new(1000, "ExecutionTime");
-
     public static async Task TraceTime(this ILogger logger, Func<Task> action, string? actionName = null)
     {
         if (!EnvironmentVariables.DEBUG_PERFORMANCE)
@@ -24,7 +22,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(EVENT_ID_EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.LogDebug(LogEventIds.EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 
@@ -41,7 +39,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(EVENT_ID_EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.LogDebug(LogEventIds.EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 }
