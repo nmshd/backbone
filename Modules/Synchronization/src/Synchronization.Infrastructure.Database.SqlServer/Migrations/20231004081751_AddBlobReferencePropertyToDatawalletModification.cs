@@ -13,7 +13,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             migrationBuilder.AddColumn<string>(
                 name: "BlobReference",
                 table: "DatawalletModifications",
-                type: "nvarchar(max)",
+                type: "char(32)",
+                unicode: false,
+                fixedLength: true,
+                maxLength: 32,
                 nullable: false,
                 defaultValue: "");
         }

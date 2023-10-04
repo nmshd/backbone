@@ -59,7 +59,10 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("BlobReference")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(32)
+                        .IsUnicode(false)
+                        .HasColumnType("character(32)")
+                        .IsFixedLength();
 
                     b.Property<string>("Collection")
                         .IsRequired()
