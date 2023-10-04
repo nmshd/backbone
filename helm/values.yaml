@@ -428,14 +428,7 @@ global:
             connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
             containerName: ""
-    serilog:
+    logging:
       minimumLevel:
-        default: Information
-      enrich:
-        - FromLogContext
-        - WithProcessId
-        - WithThreadId
-      writeTo:
-        - name: Console
-          args:
-            formatter: "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
+        default: Error
+        
