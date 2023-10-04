@@ -11,15 +11,29 @@
                 <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
             </div>
             <div class="form-details">
-                <mat-form-field class="form-field">
+                <mat-list *ngIf="editMode">
+                    <mat-list-item>
+                        <span matListItemTitle>Client Id</span>
+                        <span matListItemLine>{{ client.clientId }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Display Name</span>
+                        <span matListItemLine>{{ client.displayName }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Created At</span>
+                        <span matListItemLine>{{ client.createdAt | date }}</span>
+                    </mat-list-item>
+                </mat-list>
+                <mat-form-field class="form-field" *ngIf="!editMode">
                     <mat-label>Client Id</mat-label>
                     <input matInput [(ngModel)]="client.clientId" [disabled]="disabled || editMode" />
-                    <mat-hint *ngIf="!editMode">A Client ID will be generated if this field is left blank.</mat-hint>
+                    <mat-hint>A Client ID will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
-                <mat-form-field class="form-field">
+                <mat-form-field class="form-field" *ngIf="!editMode">
                     <mat-label>Display Name</mat-label>
                     <input matInput [(ngModel)]="client.displayName" [disabled]="disabled || editMode" />
-                    <mat-hint *ngIf="!editMode">Client ID will be used as a Display Name if no value is provided.</mat-hint>
+                    <mat-hint>Client ID will be used as a Display Name if no value is provided.</mat-hint>
                 </mat-form-field>
                 <mat-form-field class="form-field" *ngIf="!editMode">
                     <mat-label>Client Secret</mat-label>
