@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,29 +27,39 @@ public static class IServiceCollectionExtensions
         {
             case SQLSERVER:
                 services.AddDbContext<SynchronizationDbContext>(dbContextOptions =>
+                {
                     dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(20);
                         sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                    .AddInterceptors(new SaveChangesTimeInterceptor(
-                        services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
-                    ))
-                );
+                    });
+
+                    if (EnvironmentVariables.DEBUG_PERFORMANCE)
+                    {
+                        dbContextOptions.AddInterceptors(new SaveChangesTimeInterceptor(
+                            services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
+                        ));
+                    }
+                });
                 break;
             case POSTGRES:
                 services.AddDbContext<SynchronizationDbContext>(dbContextOptions =>
+                {
                     dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(20);
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                    .AddInterceptors(new SaveChangesTimeInterceptor(
-                        services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
-                    ))
-                );
+                    });
+
+                    if (EnvironmentVariables.DEBUG_PERFORMANCE)
+                    {
+                        dbContextOptions.AddInterceptors(new SaveChangesTimeInterceptor(
+                            services.BuildServiceProvider().GetRequiredService<ILogger<SaveChangesTimeInterceptor>>()
+                        ));
+                    }
+                });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");
