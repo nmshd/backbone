@@ -43,7 +43,7 @@ public class HandlerTests
     public async Task Parallel_push_leads_to_an_error_for_one_call()
     {
         var arrangeContext = CreateDbContext();
-        arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
+        arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
 
         // By adding a save-delay to one of the calls, we can ensure that the second one will finish first, and therefore the first one
         // will definitely run into an error regarding the duplicate database index.

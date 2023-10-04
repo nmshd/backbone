@@ -82,6 +82,6 @@ public class DatawalletTests
 
     private static DatawalletModification AddModificationToDatawallet(Datawallet datawallet)
     {
-        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(), TestDataGenerator.CreateRandomDeviceId());
+        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(), TestDataGenerator.CreateRandomDeviceId(), "aBlobName");
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
@@ -15,7 +16,8 @@ using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
-public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, FinalizeExternalEventSyncSyncRunResponse>, IRequestHandler<FinalizeDatawalletVersionUpgradeSyncRunCommand, FinalizeDatawalletVersionUpgradeSyncRunResponse>
+public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, FinalizeExternalEventSyncSyncRunResponse>,
+    IRequestHandler<FinalizeDatawalletVersionUpgradeSyncRunCommand, FinalizeDatawalletVersionUpgradeSyncRunResponse>
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
@@ -136,7 +138,10 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (!modifications.Any())
             return new List<DatawalletModification>();
 
+        var blobName = Guid.NewGuid().ToString("N");
+
         var newModifications = new List<DatawalletModification>();
+        var payloads = new Dictionary<long, byte[]>();
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
@@ -146,13 +151,16 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
                 modificationDto.ObjectIdentifier,
                 modificationDto.PayloadCategory,
                 modificationDto.EncryptedPayload,
-                _activeDevice);
-
-            if (newModification.EncryptedPayload != null)
-                _blobStorage.Add(_blobOptions.RootFolder, newModification.Id, newModification.EncryptedPayload);
+                _activeDevice,
+                blobName);
 
             newModifications.Add(newModification);
+
+            if (newModification.EncryptedPayload != null)
+                payloads.Add(newModification.Index, modificationDto.EncryptedPayload);
         }
+
+        _blobStorage.Add(_blobOptions.RootFolder, blobName, JsonSerializer.SerializeToUtf8Bytes(payloads));
 
         return newModifications;
     }
