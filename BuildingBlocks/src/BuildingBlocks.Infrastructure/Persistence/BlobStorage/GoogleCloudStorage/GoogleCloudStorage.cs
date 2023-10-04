@@ -107,17 +107,13 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         {
             await EnsureKeyDoesNotExist(blob.Folder, blob.Name);
 
-            var memoryStream = await _logger.TraceTime(async () => new MemoryStream(blob.Content), nameof(MemoryStream));
+            await using var memoryStream = new MemoryStream(blob.Content);
 
             try
             {
                 _logger.LogTrace("Uploading blob with key '{blobName}'...", blob.Name);
-
-                await _logger.TraceTime(async () =>
-                {
-                    await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null, memoryStream);
-                }, nameof(_storageClient.UploadObjectAsync));
-
+                await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null,
+                    memoryStream);
                 _logger.LogTrace("Upload of blob with key '{blobName}' was successful.", blob.Name);
             }
             catch (Exception ex)
@@ -162,11 +158,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         foreach (var blob in blobsToDelete)
             try
             {
-                await _logger.TraceTime(async () =>
-                {
-                    await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
-                }, nameof(_storageClient.DeleteObjectAsync));
-
+                await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
                 _removedBlobs.Remove(blob);
             }
             catch (Exception ex)

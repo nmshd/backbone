@@ -100,15 +100,10 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         var changedBlobs = new Dictionary<BlobClient, byte[]>(_changedBlobs);
         foreach (var (cloudBlockBlob, bytes) in changedBlobs)
         {
-            var memoryStream = await _logger.TraceTime(async () => new MemoryStream(bytes), nameof(MemoryStream));
-
+            await using var memoryStream = new MemoryStream(bytes);
             try
             {
-                await _logger.TraceTime(async () =>
-                {
-                    await cloudBlockBlob.UploadAsync(memoryStream);
-                }, nameof(cloudBlockBlob.UploadAsync));
-
+                await cloudBlockBlob.UploadAsync(memoryStream);
                 _changedBlobs.Remove(cloudBlockBlob);
             }
             catch (RequestFailedException ex)
@@ -129,11 +124,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         foreach (var cloudBlockBlob in blobsToDelete)
             try
             {
-                await _logger.TraceTime(async () =>
-                {
-                    await cloudBlockBlob.DeleteAsync();
-                }, nameof(cloudBlockBlob.DeleteAsync));
-
+                await cloudBlockBlob.DeleteAsync();
                 _removedBlobs.Remove(cloudBlockBlob);
             }
             catch (Exception ex)
