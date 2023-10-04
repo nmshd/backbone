@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +31,7 @@ public static class IServiceCollectionExtensions
                         sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                     })
-                );
+                ).AddDebugPerformanceInterceptor();
                 break;
             case POSTGRES:
                 services.AddDbContext<QuotasDbContext>(dbContextOptions =>
@@ -40,8 +41,7 @@ public static class IServiceCollectionExtensions
                         sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                         sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                     })
-
-                );
+                ).AddDebugPerformanceInterceptor();
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");
