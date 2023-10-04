@@ -163,7 +163,7 @@ public class EventBusFactory : IDisposable
         var persisterConnection = new DefaultGoogleCloudPubSubPersisterConnection(PROJECT_ID, TOPIC_NAME,
             subscriptionNamePrefix, CONNECTION_INFO);
         var eventBusClient = new EventBusGoogleCloudPubSub(persisterConnection, _logger,
-            eventBusSubscriptionsManager, lifeTimeScope);
+            eventBusSubscriptionsManager, lifeTimeScope, new HandlerRetryBehavior() { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
 
         var instance = new Instance(autofacServiceProvider, eventBusClient, persisterConnection);
         _instances.Add(instance);
