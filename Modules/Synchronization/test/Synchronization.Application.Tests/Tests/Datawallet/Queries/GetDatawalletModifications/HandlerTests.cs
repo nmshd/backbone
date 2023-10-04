@@ -11,6 +11,7 @@ using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 
@@ -348,14 +349,14 @@ public class HandlerTests
         result.Should().HaveCount(2);
     }
 
-    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
+    private static Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
     {
-        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
+        return new BDomain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
     }
 
-    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
+    private static Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
     {
-        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), owner);
+        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), owner);
     }
 
 
@@ -366,6 +367,6 @@ public class HandlerTests
 
         var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
 
-        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions);
+        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions, A.Fake<ILogger<Handler>>());
     }
 }
