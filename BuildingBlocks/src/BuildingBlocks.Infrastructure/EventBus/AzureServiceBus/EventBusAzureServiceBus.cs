@@ -7,6 +7,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -18,6 +19,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     private readonly ILifetimeScope _autofac;
     private readonly ILogger<EventBusAzureServiceBus> _logger;
     private readonly ServiceBusProcessor _processor;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly ServiceBusSender _sender;
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
@@ -26,6 +28,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
         ILifetimeScope autofac,
+        HandlerRetryBehavior handlerRetryBehavior,
         string subscriptionClientName)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -37,6 +40,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
         _processor =
             _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
+
+        _handlerRetryBehavior = handlerRetryBehavior;
 
         RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
     }
@@ -157,7 +162,16 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
             try
             {
-                await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+                var policy = EventBusRetryPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventType.Name,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
+
+                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
             catch (Exception ex)
             {
