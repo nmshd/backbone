@@ -63,7 +63,6 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
             }
             catch (NotFoundException)
             {
-                _logger.LogWarning("Blob with reference '{blobReference}' not found.", r);
                 throw new Exception($"Blob with reference '{r}' not found.");
             }
         }));
