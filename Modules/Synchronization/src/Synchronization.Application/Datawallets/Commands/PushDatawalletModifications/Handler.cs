@@ -34,16 +34,14 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private Datawallet _datawallet;
     private DatawalletModification[] _modifications;
     private PushDatawalletModificationsResponse _response;
-    private readonly ILogger<Handler> _logger;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus, ILogger<Handler> logger)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _blobStorage = blobStorage;
         _blobOptions = blobOptions.Value;
         _eventBus = eventBus;
-        _logger = logger;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -142,10 +140,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
         try
         {
-            await _logger.TraceTime(async () =>
-            {
-                await _dbContext.SaveChangesAsync(_cancellationToken);
-            }, nameof(_dbContext.SaveChangesAsync));
+            await _dbContext.SaveChangesAsync(_cancellationToken);
         }
         catch (DbUpdateException ex)
         {
