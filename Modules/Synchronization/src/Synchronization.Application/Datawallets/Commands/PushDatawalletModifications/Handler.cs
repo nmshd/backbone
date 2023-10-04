@@ -102,7 +102,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _modifications = modificationsArray;
     }
 
-    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto)
+    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
         return _datawallet.AddModification(
             _mapper.Map<DatawalletModificationType>(modificationDto.Type),
@@ -111,7 +111,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             modificationDto.ObjectIdentifier,
             modificationDto.PayloadCategory,
             modificationDto.EncryptedPayload,
-            _activeDevice
+            _activeDevice,
+            blobReference
         );
     }
 
