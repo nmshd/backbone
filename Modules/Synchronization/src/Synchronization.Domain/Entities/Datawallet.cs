@@ -31,21 +31,16 @@ public class Datawallet
         Version = targetVersion;
     }
 
-    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice)
+    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         if (datawalletVersionOfModification > Version)
             throw new DomainException(DomainErrors.Datawallet.DatawalletVersionOfModificationTooHigh(Version, datawalletVersionOfModification));
 
         var indexOfNewModification = Modifications.Count > 0 ? Modifications.Max(m => m.Index) + 1 : 0;
-        var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload, createdByDevice);
+
+        var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload, createdByDevice, blobReference);
         Modifications.Add(newModification);
         return newModification;
-    }
-
-    public DatawalletModification AddModification(DatawalletModification modification)
-    {
-        Modifications.Add(modification);
-        return modification;
     }
 
     public class DatawalletVersion : SimpleValueObject<ushort>
