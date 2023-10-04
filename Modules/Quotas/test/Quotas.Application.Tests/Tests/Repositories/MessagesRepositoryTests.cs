@@ -38,9 +38,9 @@ public class MessagesRepositoryTests
     public async void Counts_entities_within_timeframe_hour_quotaPeriod()
     {
         // Arrange
-        var messages = new List<MessageEntity>() { 
-            CreateMessage(DateTime.Now, _identityAddress1), 
-            CreateMessage(YESTERDAY, _identityAddress1), 
+        var messages = new List<MessageEntity>() {
+            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
         };
         await _messagesArrangeContext.Messages.AddRangeAsync(messages);
