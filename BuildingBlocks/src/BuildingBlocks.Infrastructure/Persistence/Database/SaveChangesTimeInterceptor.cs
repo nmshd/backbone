@@ -1,4 +1,5 @@
-﻿using Enmeshed.Tooling.Extensions;
+﻿using System.Diagnostics;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
@@ -7,7 +8,7 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 public class SaveChangesTimeInterceptor : SaveChangesInterceptor
 {
     private readonly ILogger<SaveChangesTimeInterceptor> _logger;
-    private System.Diagnostics.Stopwatch _stopwatch;
+    private Stopwatch _stopwatch;
 
     public SaveChangesTimeInterceptor(ILogger<SaveChangesTimeInterceptor> logger)
     {
@@ -19,7 +20,7 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
         InterceptionResult<int> result,
         CancellationToken cancellationToken = default)
     {
-        _stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        _stopwatch = Stopwatch.StartNew();
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
