@@ -34,7 +34,7 @@ public static class IServiceCollectionExtensions
             case SQLSERVER:
                 services
                     .AddSaveChangesTimeInterceptor()
-                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions)=>
+                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions) =>
                         {
                             dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                             {

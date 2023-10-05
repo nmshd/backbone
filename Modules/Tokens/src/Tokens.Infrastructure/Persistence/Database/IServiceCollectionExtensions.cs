@@ -27,7 +27,7 @@ public static class IServiceCollectionExtensions
             case SQLSERVER:
                 services
                     .AddSaveChangesTimeInterceptor()
-                    .AddDbContext<TokensDbContext>((provider, dbContextOptions)=>
+                    .AddDbContext<TokensDbContext>((provider, dbContextOptions) =>
                         {
                             dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                             {
