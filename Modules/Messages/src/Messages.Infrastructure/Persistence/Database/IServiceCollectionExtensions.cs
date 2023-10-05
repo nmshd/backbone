@@ -1,5 +1,6 @@
 ﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -24,24 +25,30 @@ public static class IServiceCollectionExtensions
         switch (options.Provider)
         {
             case SQLSERVER:
-                services.AddDbContext<MessagesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                services
+                    .AddSaveChangesTimeInterceptor()
+                    .AddDbContext<MessagesDbContext>((provider, dbContextOptions) =>
                     {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                ).AddDebugPerformanceInterceptor();
+                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             case POSTGRES:
-                services.AddDbContext<MessagesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                services
+                    .AddSaveChangesTimeInterceptor()
+                    .AddDbContext<MessagesDbContext>((provider, dbContextOptions) =>
                     {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                ).AddDebugPerformanceInterceptor();
+                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");

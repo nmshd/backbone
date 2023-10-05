@@ -1,6 +1,7 @@
 ﻿using AdminUi.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminUi.Infrastructure.Persistence;
@@ -31,24 +32,30 @@ public static class IServiceCollectionExtensions
         switch (options.Provider)
         {
             case SQLSERVER:
-                services.AddDbContext<AdminUiDbContext>(dbContextOptions =>
-                    dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                ).AddDebugPerformanceInterceptor();
+                services
+                    .AddSaveChangesTimeInterceptor()
+                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions)=>
+                        {
+                            dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
+                            {
+                                sqlOptions.CommandTimeout(20);
+                                sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                        });
                 break;
             case POSTGRES:
-                services.AddDbContext<AdminUiDbContext>(dbContextOptions =>
-                    dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                ).AddDebugPerformanceInterceptor();
+                services
+                    .AddSaveChangesTimeInterceptor()
+                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions) =>
+                        {
+                            dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
+                            {
+                                sqlOptions.CommandTimeout(20);
+                                sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                        });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");
