@@ -27,29 +27,29 @@ public static class IServiceCollectionExtensions
         {
             case SQLSERVER:
                 services
-                    .AddSaveChangesTimeInterceptor()
                     .AddDbContext<FilesDbContext>((provider, dbContextOptions) =>
+                    {
+                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                         {
-                            dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
-                            {
-                                sqlOptions.CommandTimeout(20);
-                                sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
+                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             case POSTGRES:
                 services
-                    .AddSaveChangesTimeInterceptor()
                     .AddDbContext<FilesDbContext>((provider, dbContextOptions) =>
+                    {
+                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
                         {
-                            dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
-                            {
-                                sqlOptions.CommandTimeout(20);
-                                sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            }).AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
+                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-public static class DbContextOptionsBuilderExtensions
+public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddSaveChangesTimeInterceptor(this IServiceCollection services)
     {

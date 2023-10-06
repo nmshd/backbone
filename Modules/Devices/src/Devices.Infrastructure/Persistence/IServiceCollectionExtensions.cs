@@ -26,41 +26,48 @@ public static class IServiceCollectionExtensions
         {
             case SQLSERVER:
                 services
-                    .AddSaveChangesTimeInterceptor()
                     .AddDbContext<DevicesDbContext>((provider, dbContextOptions) =>
+                    {
+                        dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
-                            dbContextOptions
-                                .UseSqlServer(options.ConnectionString, sqlOptions =>
-                                    {
-                                        sqlOptions.CommandTimeout(20);
-                                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                                    })
-                                .UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
-                                    CustomOpenIddictEntityFrameworkCoreToken, string>()
-                                .AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
+
+                        dbContextOptions.UseOpenIddict<
+                            CustomOpenIddictEntityFrameworkCoreApplication,
+                            CustomOpenIddictEntityFrameworkCoreAuthorization,
+                            CustomOpenIddictEntityFrameworkCoreScope,
+                            CustomOpenIddictEntityFrameworkCoreToken,
+                            string>();
+
+                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             case POSTGRES:
                 services
-                    .AddSaveChangesTimeInterceptor()
                     .AddDbContext<DevicesDbContext>((provider, dbContextOptions) =>
+                    {
+                        dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
-                            dbContextOptions
-                                .UseNpgsql(options.ConnectionString, sqlOptions =>
-                                    {
-                                        sqlOptions.CommandTimeout(20);
-                                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                                    })
-                                .UseOpenIddict<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
-                                    CustomOpenIddictEntityFrameworkCoreToken, string>()
-                                .AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
+
+                        dbContextOptions.UseOpenIddict<
+                            CustomOpenIddictEntityFrameworkCoreApplication,
+                            CustomOpenIddictEntityFrameworkCoreAuthorization,
+                            CustomOpenIddictEntityFrameworkCoreScope,
+                            CustomOpenIddictEntityFrameworkCoreToken,
+                            string>();
+
+                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
+                    });
                 break;
             default:
                 throw new Exception($"Unsupported database provider: {options.Provider}");
-
         }
 
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
