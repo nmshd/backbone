@@ -94,7 +94,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     public async Task SaveAsync()
     {
         await _logger.TraceTime(async () => UploadChangedBlobs(), nameof(UploadChangedBlobs));
-        await DeleteRemovedBlobs();
+        await _logger.TraceTime(async () => await DeleteRemovedBlobs(), nameof(DeleteRemovedBlobs));
     }
 
     private async Task UploadChangedBlobs()

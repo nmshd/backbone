@@ -84,7 +84,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
     public async Task SaveAsync()
     {
         await _logger.TraceTime(async () => UploadChangedBlobs(), nameof(UploadChangedBlobs));
-        await DeleteRemovedBlobs();
+        await _logger.TraceTime(async () => await DeleteRemovedBlobs(), nameof(DeleteRemovedBlobs));
     }
 
     public void Dispose()
