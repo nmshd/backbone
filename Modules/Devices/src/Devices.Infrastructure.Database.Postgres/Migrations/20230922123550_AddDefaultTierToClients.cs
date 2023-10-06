@@ -35,6 +35,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "OpenIddictApplications",
                 column: "DefaultTier");
 
+            migrationBuilder.Sql("""
+                                     UPDATE "Devices"."OpenIddictApplications"
+                                     SET "DefaultTier" = (SELECT "Id" FROM "Devices"."Tiers" WHERE "Name" = 'Basic')
+                                     WHERE "DefaultTier" = ''
+                                 """);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_OpenIddictApplications_Tiers_DefaultTier",
                 table: "OpenIddictApplications",
@@ -42,12 +48,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.Sql("""
-                UPDATE "Devices"."OpenIddictApplications"
-                SET "DefaultTier" = (SELECT "Id" FROM "Devices"."Tiers" WHERE "Name" = 'Basic')
-                WHERE "DefaultTier" = ''
-            """);
         }
 
         /// <inheritdoc />
