@@ -10,8 +10,8 @@
             <div *ngIf="loading" class="loading">
                 <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
             </div>
-            <div class="form-details">
-                <mat-list *ngIf="editMode">
+            <div class="update-form-details" *ngIf="editMode">
+                <mat-list>
                     <mat-list-item>
                         <span matListItemTitle>Client Id</span>
                         <span matListItemLine>{{ client.clientId }}</span>
@@ -24,18 +24,30 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ client.createdAt | date }}</span>
                     </mat-list-item>
+                    <mat-list-item class="auto-height">
+                        <span matListItemTitle>Default Tier</span>
+                        <span matListItemLine>
+                            <mat-chip-listbox aria-label="Default Tier selection" selectable="false" [disabled]="disabled">
+                                <mat-chip-option *ngFor="let t of tierList" [selected]="t.id == client.defaultTier" (click)="client.defaultTier = t.id" [color]="t.name == 'Basic' ? 'accent' : ''">
+                                    {{ t.name }}
+                                </mat-chip-option>
+                            </mat-chip-listbox>
+                        </span>
+                    </mat-list-item>
                 </mat-list>
-                <mat-form-field class="form-field" *ngIf="!editMode">
+            </div>
+            <div class="create-form-details" *ngIf="!editMode">
+                <mat-form-field class="form-field">
                     <mat-label>Client Id</mat-label>
                     <input matInput [(ngModel)]="client.clientId" [disabled]="disabled || editMode" />
                     <mat-hint>A Client ID will be generated if this field is left blank.</mat-hint>
                 </mat-form-field>
-                <mat-form-field class="form-field" *ngIf="!editMode">
+                <mat-form-field class="form-field">
                     <mat-label>Display Name</mat-label>
                     <input matInput [(ngModel)]="client.displayName" [disabled]="disabled || editMode" />
                     <mat-hint>Client ID will be used as a Display Name if no value is provided.</mat-hint>
                 </mat-form-field>
-                <mat-form-field class="form-field" *ngIf="!editMode">
+                <mat-form-field class="form-field">
                     <mat-label>Client Secret</mat-label>
                     <input [type]="showPassword ? 'text' : 'password'" matInput [(ngModel)]="client.clientSecret" [disabled]="disabled" />
                     <button matSuffix mat-icon-button (click)="togglePasswordVisibility()" style="cursor: pointer">
