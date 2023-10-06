@@ -12,6 +12,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -58,6 +59,8 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddSaveChangesTimeInterceptor();
+
     services.AddSingleton<ApiKeyValidator>();
 
     services

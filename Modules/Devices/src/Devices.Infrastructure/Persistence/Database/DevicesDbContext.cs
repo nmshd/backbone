@@ -6,17 +6,21 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
+    private readonly IServiceProvider _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -25,6 +29,12 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
     {
+    }
+
+    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
+        : base(options)
+    {
+        _serviceProvider = serviceProvider;
     }
 
     public DbSet<Identity> Identities { get; set; }
@@ -40,6 +50,12 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
         return Set<T>().AsNoTracking();
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
+            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
     public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,

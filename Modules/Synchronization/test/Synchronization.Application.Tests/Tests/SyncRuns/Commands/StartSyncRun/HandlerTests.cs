@@ -31,7 +31,7 @@ public class HandlerTests
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
 
-        var setupContext = new SynchronizationDbContext(_dbOptions);
+        var setupContext = new SynchronizationDbContext(_dbOptions, A.Fake<IServiceProvider>());
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
 
@@ -233,7 +233,7 @@ public class HandlerTests
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions);
+        return new SynchronizationDbContext(_dbOptions, A.Fake<IServiceProvider>());
     }
 
     private Handler CreateHandlerWithDelayedSave(TimeSpan delay)

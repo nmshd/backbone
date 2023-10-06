@@ -26,7 +26,7 @@ public static class IServiceCollectionExtensions
         {
             case SQLSERVER:
                 services
-                    .AddDbContext<DevicesDbContext>((provider, dbContextOptions) =>
+                    .AddDbContext<DevicesDbContext>(dbContextOptions =>
                     {
                         dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
@@ -42,12 +42,11 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
 
-                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
                     });
                 break;
             case POSTGRES:
                 services
-                    .AddDbContext<DevicesDbContext>((provider, dbContextOptions) =>
+                    .AddDbContext<DevicesDbContext>(dbContextOptions =>
                     {
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
@@ -63,7 +62,6 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
 
-                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
                     });
                 break;
             default:

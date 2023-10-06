@@ -33,7 +33,7 @@ public static class IServiceCollectionExtensions
         {
             case SQLSERVER:
                 services
-                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions) =>
+                    .AddDbContext<AdminUiDbContext>(dbContextOptions =>
                     {
                         dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
@@ -41,12 +41,11 @@ public static class IServiceCollectionExtensions
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
-                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
                     });
                 break;
             case POSTGRES:
                 services
-                    .AddDbContext<AdminUiDbContext>((provider, dbContextOptions) =>
+                    .AddDbContext<AdminUiDbContext>(dbContextOptions =>
                     {
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
@@ -54,7 +53,6 @@ public static class IServiceCollectionExtensions
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         }); 
-                        dbContextOptions.AddInterceptors(provider.GetRequiredService<SaveChangesTimeInterceptor>());
                     });
                 break;
             default:

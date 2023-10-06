@@ -2,14 +2,17 @@
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Enmeshed.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class AbstractDbContextBase : DbContext, IDbContext
 {
+    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -19,8 +22,9 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
     }
 
-    protected AbstractDbContextBase(DbContextOptions options) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider = null) : base(options)
     {
+        _serviceProvider = serviceProvider;
     }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
@@ -28,10 +32,15 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return Set<T>().AsNoTracking();
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
+            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
+    }
+
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-
         ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
