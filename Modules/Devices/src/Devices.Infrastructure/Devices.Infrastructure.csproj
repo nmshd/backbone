@@ -24,8 +24,11 @@
         <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+        <!-- CAUTION: Do not upgrade 'Npgsql.EntityFrameworkCore.PostgreSQL' to 7.0.11, because there is an error regarding __EFMigrationHistory tables introduces with the fix of the following GitHub issue: https://github.com/npgsql/efcore.pg/issues/2787 -->
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[7.0.4]" />
+        <!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
         <PackageReference Include="OpenIddict.AspNetCore" Version="[4.3.0]" />
+        <!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="[4.3.0]" />
         <PackageReference Include="Polly" Version="7.2.4" />
         <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
