@@ -22,32 +22,26 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        switch (options.Provider)
-        {
-            case SQLSERVER:
-                services
-                    .AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    {
+        services
+            .AddDbContext<DevicesDbContext>(dbContextOptions =>
+            {
+                switch (options.Provider)
+                {
+                    case SQLSERVER:
                         dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
-
                         dbContextOptions.UseOpenIddict<
                             CustomOpenIddictEntityFrameworkCoreApplication,
                             CustomOpenIddictEntityFrameworkCoreAuthorization,
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-
-                    });
-                break;
-            case POSTGRES:
-                services
-                    .AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    {
+                        break;
+                    case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
@@ -61,13 +55,11 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-
-                    });
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {options.Provider}");
-        }
-
+                        break;
+                    default:
+                        throw new Exception($"Unsupported database provider: {options.Provider}");
+                }
+            });
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
 
         services.AddRepositories();

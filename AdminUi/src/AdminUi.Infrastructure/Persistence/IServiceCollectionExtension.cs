@@ -29,49 +29,45 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        switch (options.Provider)
-        {
-            case SQLSERVER:
-                services
-                    .AddDbContext<AdminUiDbContext>(dbContextOptions =>
-                    {
+        services
+            .AddDbContext<AdminUiDbContext>(dbContextOptions =>
+            {
+                switch (options.Provider)
+                {
+                    case SQLSERVER:
                         dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                         });
-                    });
-                break;
-            case POSTGRES:
-                services
-                    .AddDbContext<AdminUiDbContext>(dbContextOptions =>
-                    {
+                        break;
+                    case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }); 
-                    });
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {options.Provider}");
-        }
+                        });
+                        break;
+                    default:
+                        throw new Exception($"Unsupported database provider: {options.Provider}");
+                }
+            });
 
         return services;
     }
-}
 
-public class DbOptions
-{
-    public string Provider { get; set; }
-    public string ConnectionString { get; set; }
-    public RetryOptions RetryOptions { get; set; } = new();
-}
+    public class DbOptions
+    {
+        public string Provider { get; set; }
+        public string ConnectionString { get; set; }
+        public RetryOptions RetryOptions { get; set; } = new();
+    }
 
-public class RetryOptions
-{
-    public byte MaxRetryCount { get; set; } = 15;
-    public int MaxRetryDelayInSeconds { get; set; } = 30;
+    public class RetryOptions
+    {
+        public byte MaxRetryCount { get; set; } = 15;
+        public int MaxRetryDelayInSeconds { get; set; } = 30;
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using AdminUi.Configuration;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 namespace AdminUi.Extensions;
 
