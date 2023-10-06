@@ -64,7 +64,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         };
 
         var messageId = await _logger.TraceTime(
-            async () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
+            () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
 
         _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
     }

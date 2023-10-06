@@ -47,9 +47,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             var stream = new MemoryStream();
 
             await _logger.TraceTime(async () =>
-            {
-                await _storageClient.DownloadObjectAsync(folder, blobId, stream);
-            }, nameof(FindAsync));
+                await _storageClient.DownloadObjectAsync(folder, blobId, stream), nameof(FindAsync));
 
             stream.Position = 0;
             _logger.LogTrace("Found blob with key '{blobId}'.", blobId);
@@ -93,8 +91,8 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
 
     public async Task SaveAsync()
     {
-        await _logger.TraceTime(async () => UploadChangedBlobs(), nameof(UploadChangedBlobs));
-        await _logger.TraceTime(async () => await DeleteRemovedBlobs(), nameof(DeleteRemovedBlobs));
+        await _logger.TraceTime(UploadChangedBlobs, nameof(UploadChangedBlobs));
+        await _logger.TraceTime(DeleteRemovedBlobs, nameof(DeleteRemovedBlobs));
     }
 
     private async Task UploadChangedBlobs()
@@ -133,9 +131,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         try
         {
             await _logger.TraceTime(async () =>
-            {
-                await _storageClient.GetObjectAsync(folder, key);
-            }, nameof(_storageClient.GetObjectAsync));
+                await _storageClient.GetObjectAsync(folder, key), nameof(_storageClient.GetObjectAsync));
 
             _logger.LogError("The blob with the given key already exists.");
             throw new BlobAlreadyExistsException(key);
@@ -172,5 +168,6 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     }
 
     private record ChangedBlob(string Folder, string Name, byte[] Content);
+
     private record RemovedBlob(string Folder, string Name);
 }

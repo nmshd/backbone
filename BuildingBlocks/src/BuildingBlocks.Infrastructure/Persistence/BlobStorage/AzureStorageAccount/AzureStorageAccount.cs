@@ -46,9 +46,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             var stream = new MemoryStream();
 
             await _logger.TraceTime(async () =>
-            {
-                await blob.DownloadToAsync(stream);
-            }, nameof(blob.DownloadToAsync));
+                await blob.DownloadToAsync(stream), nameof(blob.DownloadToAsync));
 
             stream.Position = 0;
 
