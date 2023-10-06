@@ -23,12 +23,6 @@ public class ChallengesDbContext : AbstractDbContextBase
         builder.ApplyConfigurationsFromAssembly(typeof(ChallengesDbContext).Assembly);
     }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    base.OnConfiguring(optionsBuilder);
-    //    optionsBuilder.UseSqlServer();
-    //}
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
