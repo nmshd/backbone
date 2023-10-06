@@ -19,6 +19,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="[4.3.0]" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
