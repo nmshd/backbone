@@ -12,9 +12,12 @@
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="FluentValidation" Version="11.7.1" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.3" />
-		<PackageReference Include="OpenIddict.Core" Version="[4.4.0]" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="[4.4.0]" />
+		<!-- CAUTION: Do not upgrade 'Microsoft.IdentityModel.Tokens' to 7.*, because it will not be compatible with the pinned OpenIddict version of 4.3.0 anymore -->
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="[6.32.3]" />
+		<!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
+		<PackageReference Include="OpenIddict.Core" Version="[4.3.0]" />
+		<!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
+		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="[4.3.0]" />
 	</ItemGroup>
 
 	<ItemGroup>
