@@ -106,7 +106,8 @@
                             "sourceMap": true,
                             "namedChunks": false,
                             "extractLicenses": true,
-                            "vendorChunk": true
+                            "vendorChunk": true,
+                            "buildOptimizer": true
                         },
                         "production": {
                             "optimization": true,
@@ -114,14 +115,14 @@
                             "sourceMap": true,
                             "namedChunks": false,
                             "extractLicenses": true,
-                            "vendorChunk": false
+                            "vendorChunk": false,
+                            "buildOptimizer": true
                         }
                     }
                 }
             }
         }
     },
-    "defaultProject": "AdminUi",
     "cli": {
         "analytics": false
     }
