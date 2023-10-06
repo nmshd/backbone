@@ -7,7 +7,6 @@ using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 

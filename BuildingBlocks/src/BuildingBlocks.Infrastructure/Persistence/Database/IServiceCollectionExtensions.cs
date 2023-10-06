@@ -1,5 +1,4 @@
 ﻿using Enmeshed.Tooling.Extensions;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

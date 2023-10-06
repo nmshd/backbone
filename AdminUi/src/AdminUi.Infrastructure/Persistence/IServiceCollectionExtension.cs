@@ -1,7 +1,5 @@
 ﻿using AdminUi.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminUi.Infrastructure.Persistence;

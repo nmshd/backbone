@@ -7,7 +7,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 

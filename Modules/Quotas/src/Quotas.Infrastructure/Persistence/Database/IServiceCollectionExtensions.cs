@@ -2,9 +2,7 @@
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;

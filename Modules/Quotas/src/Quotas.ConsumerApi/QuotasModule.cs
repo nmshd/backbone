@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application;
 using Backbone.Modules.Quotas.Application.Extensions;
-using Backbone.Modules.Quotas.Infrastructure.Persistence;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
