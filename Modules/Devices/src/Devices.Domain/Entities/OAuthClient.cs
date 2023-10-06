@@ -15,7 +15,7 @@ public class OAuthClient
     public string ClientId { get; }
     public string DisplayName { get; }
     public TierId DefaultTier { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; }
 
     public DomainError? ChangeDefaultTier(TierId newDefaultTier)
     {
