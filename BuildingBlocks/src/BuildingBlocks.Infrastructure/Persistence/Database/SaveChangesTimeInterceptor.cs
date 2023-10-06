@@ -30,7 +30,7 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
         CancellationToken cancellationToken = default)
     {
         _stopwatch.Stop();
-        _logger.LogInformation(LogEventIds.EXECUTION_TIME, "'SaveChangesAsync' took {elapsedMilliseconds} ms.", _stopwatch.ElapsedMilliseconds);
+        _logger.LogDebug(LogEventIds.EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", "SaveChangesAsync", _stopwatch.ElapsedMilliseconds);
         return await base.SavedChangesAsync(eventData, result, cancellationToken);
     }
 }
