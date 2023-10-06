@@ -69,7 +69,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
         _logger.LogTrace("Sending integration event with id '{MessageId}'...", message.MessageId);
 
-        await _logger.TraceTime(async () => 
+        await _logger.TraceTime(async () =>
             await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
 
         _logger.LogTrace("Successfully sent integration event with id '{MessageId}'.", message.MessageId);
