@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,9 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
     public async Task<uint> Count(IdentityAddress createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
-        var relationshipTemplatesCount = await _readOnlyTemplates.CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
+        var relationshipTemplatesCount = await _readOnlyTemplates
+            .CreatedInInterval(createdAtFrom, createdAtTo)
+            .CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
         return (uint)relationshipTemplatesCount;
     }
 }
