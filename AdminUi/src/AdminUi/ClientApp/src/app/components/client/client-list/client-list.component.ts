@@ -24,7 +24,7 @@ export class ClientListComponent {
     public pageIndex: number;
     public loading = false;
     public selection = new SelectionModel<ClientDTO>(true, []);
-    public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "actions"];
+    public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "createdAt", "actions"];
 
     public constructor(
         private readonly router: Router,
