@@ -118,10 +118,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             return;
         }
 
-        if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
-
-        _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
-
         using var channel = _persistentConnection.CreateModel();
         channel.QueueBind(_queueName,
             BROKER_NAME,
