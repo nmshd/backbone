@@ -63,6 +63,19 @@ public class AzureNotificationHubPushService : IPushService
         }
     }
 
+    public async Task DeleteRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
+    {
+        Console.WriteLine("AzureNotificationHubPushService :: DeleteRegistration");
+
+        var installation = await _notificationHubClient.GetInstallationAsync(deviceId, cancellationToken);
+
+        if (installation != null)
+        {
+            await _notificationHubClient.DeleteInstallationAsync(deviceId, cancellationToken);
+            _logger.LogInformation("Unregistering from push notifications of Identity '{address}' and device '{deviceId}.", address, deviceId);
+        }
+    }
+
     private static (string Title, string Body) GetNotificationText(object pushNotification)
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();

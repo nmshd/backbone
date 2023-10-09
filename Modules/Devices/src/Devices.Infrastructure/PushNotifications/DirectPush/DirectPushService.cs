@@ -98,4 +98,28 @@ public class DirectPushService : IPushService
             }
         }
     }
+
+    public async Task DeleteRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
+    {
+        Console.WriteLine("DirectPushService :: DeleteRegistration");
+
+        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+
+        if (registration != null)
+        {
+            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+        }
+        else
+        {
+            try
+            {
+                await _pnsRegistrationRepository.Delete(new List<DeviceId>{ deviceId }, cancellationToken);
+                _logger.LogTrace("Device '{deviceId}' successfully deleted.");
+            }
+            catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
+            {
+                _logger.LogInformation(exception.Message);
+            }
+        }
+    }
 }
