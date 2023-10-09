@@ -12,6 +12,8 @@ public class ChallengesDbContext : AbstractDbContextBase
 
     public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options) : base(options) { }
 
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+
     public virtual DbSet<Challenge> Challenges { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -20,12 +22,6 @@ public class ChallengesDbContext : AbstractDbContextBase
 
         builder.ApplyConfigurationsFromAssembly(typeof(ChallengesDbContext).Assembly);
     }
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    base.OnConfiguring(optionsBuilder);
-    //    optionsBuilder.UseSqlServer();
-    //}
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
