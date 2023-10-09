@@ -14,20 +14,20 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {
     private readonly ApplicationOptions _applicationOptions;
-    private readonly ITiersRepository _tiersRepository;
     private readonly IIdentitiesRepository _identitiesRepository;
+    private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, ITiersRepository tiersRepository, IIdentitiesRepository identitiesRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository, IOAuthClientsRepository oAuthClientsRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
         _eventBus = eventBus;
         _applicationOptions = applicationOptions.Value;
-        _tiersRepository = tiersRepository;
         _identitiesRepository = identitiesRepository;
+        _oAuthClientsRepository = oAuthClientsRepository;
     }
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
@@ -39,26 +39,26 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.AddressPrefix);
 
-        _logger.LogTrace($"Address created. Result: {address}");
+        _logger.LogTrace("Address created. Result: '{address}'", address);
 
-        var existingIdentity = await _identitiesRepository.FindByAddress(address, cancellationToken);
+        var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
 
-        if (existingIdentity != null)
+        if (addressAlreadyExists)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
+        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken);
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, basicTier.Id, command.IdentityVersion);
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.LogTrace($"Identity created. Address: {newIdentity.Address}, Device ID: {user.DeviceId}, Username: {user.UserName}");
+        _logger.LogTrace("Identity created. Address: '{address}', Device ID: {deviceId}, Username: {userName}", newIdentity.Address, user.DeviceId, user.UserName);
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
-        _logger.LogTrace($"Successfully published IdentityCreatedIntegrationEvent. Identity Address: {newIdentity.Address}, Tier: {basicTier.Name}");
+        _logger.LogTrace("Successfully published IdentityCreatedIntegrationEvent. Identity Address: '{address}', Tier Id: {tierId}", newIdentity.Address, client.DefaultTier);
 
         return new CreateIdentityResponse
         {

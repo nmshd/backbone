@@ -17,7 +17,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -171,6 +171,9 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("From")
                         .IsRequired()
                         .HasColumnType("text");
@@ -185,6 +188,21 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("RelationshipTemplates", "Relationships", t =>
                         {
                             t.ExcludeFromMigrations();
                         });

@@ -59,7 +59,7 @@ public class AzureNotificationHubPushService : IPushService
 
             await _notificationHubClient.SendNotificationAsync(notification, GetNotificationTags(recipient), cancellationToken);
 
-            _logger.LogTrace($"Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification.ToJson()}");
+            _logger.LogTrace("Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification}", recipient, notificationPlatform, notification.ToJson());
         }
     }
 

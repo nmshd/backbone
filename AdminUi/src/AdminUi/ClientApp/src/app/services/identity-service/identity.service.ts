@@ -10,13 +10,13 @@ import { Quota } from "../quotas-service/quotas.service";
     providedIn: "root"
 })
 export class IdentityService {
-    apiUrl: string;
+    private readonly apiUrl: string;
 
-    constructor(private http: HttpClient) {
-        this.apiUrl = environment.apiUrl + "/Identities";
+    public constructor(private readonly http: HttpClient) {
+        this.apiUrl = `${environment.apiUrl}/Identities`;
     }
 
-    getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
+    public getIdentities(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<IdentityOverview>> {
         const httpOptions = {
             params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
         };
@@ -24,8 +24,12 @@ export class IdentityService {
         return this.http.get<PagedHttpResponseEnvelope<IdentityOverview>>(this.apiUrl, httpOptions);
     }
 
-    getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
-        return this.http.get<HttpResponseEnvelope<Identity>>(this.apiUrl + `/${address}`);
+    public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
+        return this.http.get<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${address}`);
+    }
+
+    public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
+        return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
 }
 
@@ -37,6 +41,7 @@ export interface Identity {
     identityVersion: string;
     quotas: Quota[];
     devices: Device[];
+    tierId: string;
 }
 
 export interface Device {
@@ -61,4 +66,8 @@ export interface IdentityOverview {
     tierId: string;
     identityVersion: string;
     numberOfDevices: number;
+}
+
+export interface UpdateTierRequest {
+    tierId: string;
 }

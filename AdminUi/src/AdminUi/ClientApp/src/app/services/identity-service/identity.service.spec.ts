@@ -2,15 +2,15 @@ import { TestBed } from "@angular/core/testing";
 
 import { IdentityService } from "./identity.service";
 
-describe("IdentityServiceService", () => {
+describe("IdentityServiceService", function () {
     let service: IdentityService;
 
-    beforeEach(() => {
+    beforeEach(function () {
         TestBed.configureTestingModule({});
         service = TestBed.inject(IdentityService);
     });
 
-    it("should be created", () => {
-        expect(service).toBeTruthy();
+    it("should be created", async function () {
+        await expect(service).toBeTruthy();
     });
 });

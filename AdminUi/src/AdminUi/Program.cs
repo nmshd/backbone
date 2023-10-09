@@ -4,19 +4,23 @@ using AdminUi.Configuration;
 using AdminUi.Extensions;
 using AdminUi.Infrastructure.Persistence;
 using AdminUi.Infrastructure.Persistence.Database;
-using AdminUi.OpenIddict;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
+using Serilog.Settings.Configuration;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -33,7 +37,14 @@ builder.WebHost
 LoadConfiguration(builder, args);
 
 builder.Host
-    .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+    .UseSerilog((context, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+        .Enrich.WithDemystifiedStackTraces()
+        .Enrich.FromLogContext()
+        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+            .WithDefaultDestructurers()
+            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
     .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
@@ -47,6 +58,8 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddSaveChangesTimeInterceptor();
+
     services.AddSingleton<ApiKeyValidator>();
 
     services
@@ -75,7 +88,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         {
             options
                 .UseEntityFrameworkCore()
-                .UseDbContext<DevicesDbContext>();
+                .UseDbContext<DevicesDbContext>()
+                .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
@@ -112,7 +126,6 @@ static void Configure(WebApplication app)
 
     app.UseSecurityHeaders(policies =>
     {
-
         policies
             .AddDefaultSecurityHeaders()
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
@@ -142,4 +155,8 @@ static void Configure(WebApplication app)
     {
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
+}
+
+public partial class Program
+{
 }

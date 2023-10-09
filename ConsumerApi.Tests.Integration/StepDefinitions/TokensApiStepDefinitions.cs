@@ -48,6 +48,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.SupplementWith(_requestConfiguration);
         requestConfiguration.Authenticate = true;
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
+        requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
         response.AssertStatusCodeIsSuccess();
@@ -72,6 +73,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.AuthenticationParameters.Username = "USRb";
         requestConfiguration.AuthenticationParameters.Password = "b";
         requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
+        requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
         response.AssertStatusCodeIsSuccess();
@@ -94,7 +96,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
 
             var requestConfiguration = new RequestConfiguration
             {
-                Content = JsonConvert.SerializeObject(createTokenRequest)
+                Content = JsonConvert.SerializeObject(createTokenRequest),
+                ContentType = "application/json"
             };
             requestConfiguration.SupplementWith(_requestConfiguration);
             var response = await _tokensApi.CreateToken(requestConfiguration);
@@ -179,7 +182,8 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = new RequestConfiguration
         {
-            Content = JsonConvert.SerializeObject(createTokenRequest)
+            Content = JsonConvert.SerializeObject(createTokenRequest),
+            ContentType = "application/json"
         };
 
         requestConfiguration.SupplementWith(_requestConfiguration);

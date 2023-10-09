@@ -40,21 +40,24 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
 
     public async Task<byte[]> FindAsync(string folder, string blobId)
     {
-        _logger.LogTrace($"Reading blob with key {blobId}...");
+        _logger.LogTrace("Reading blob with key '{blobId}'...", blobId);
 
         try
         {
             var stream = new MemoryStream();
-            await _storageClient.DownloadObjectAsync(folder, blobId, stream);
+
+            await _logger.TraceTime(async () =>
+                await _storageClient.DownloadObjectAsync(folder, blobId, stream), nameof(FindAsync));
+
             stream.Position = 0;
-            _logger.LogTrace($"Found blob with key {blobId}.");
+            _logger.LogTrace("Found blob with key '{blobId}'.", blobId);
 
             return stream.ToArray();
         }
         catch (Exception ex)
         {
             EliminateNotFound(ex, blobId);
-            _logger.LogError($"There was an error downloading the blob with key {blobId}.", ex);
+            _logger.LogError("There was an error downloading the blob with key '{blobId}'. {ex}", blobId, ex);
             throw;
         }
     }
@@ -81,20 +84,20 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         if (ex is GoogleApiException { HttpStatusCode: HttpStatusCode.NotFound })
         {
-            _logger.LogError($"A blob with key {blobId} was not found.");
+            _logger.LogError("A blob with key '{blobId}' was not found.", blobId);
             throw new NotFoundException("Blob", ex);
         }
     }
 
     public async Task SaveAsync()
     {
-        await UploadChangedBlobs();
-        await DeleteRemovedBlobs();
+        await _logger.TraceTime(UploadChangedBlobs, nameof(UploadChangedBlobs));
+        await _logger.TraceTime(DeleteRemovedBlobs, nameof(DeleteRemovedBlobs));
     }
 
     private async Task UploadChangedBlobs()
     {
-        _logger.LogTrace($"Uploading {_changedBlobs.Count} changed blobs...");
+        _logger.LogTrace("Uploading '{changedBlobsCount}' changed blobs...", _changedBlobs.Count);
 
         var changedBlobs = new List<ChangedBlob>(_changedBlobs);
 
@@ -106,14 +109,14 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
 
             try
             {
-                _logger.LogTrace($"Uploading blob with key {blob.Name}...");
+                _logger.LogTrace("Uploading blob with key '{blobName}'...", blob.Name);
                 await _storageClient.UploadObjectAsync(blob.Folder, blob.Name, null,
                     memoryStream);
-                _logger.LogTrace($"Upload of blob with key {blob.Name} was successful.");
+                _logger.LogTrace("Upload of blob with key '{blobName}' was successful.", blob.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"There was an error uploading the blob with key {blob.Name}.", ex);
+                _logger.LogError("There was an error uploading the blob with key '{blobName}'. {ex}", blob.Name, ex);
                 throw;
             }
             finally
@@ -127,7 +130,9 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         try
         {
-            await _storageClient.GetObjectAsync(folder, key);
+            await _logger.TraceTime(async () =>
+                await _storageClient.GetObjectAsync(folder, key), nameof(_storageClient.GetObjectAsync));
+
             _logger.LogError("The blob with the given key already exists.");
             throw new BlobAlreadyExistsException(key);
         }
@@ -142,7 +147,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
 
     private async Task DeleteRemovedBlobs()
     {
-        _logger.LogTrace($"Deleting {_changedBlobs.Count} blobs...");
+        _logger.LogTrace("Deleting '{changedBlobsCount}' blobs...", _changedBlobs.Count);
 
         var blobsToDelete = new List<RemovedBlob>(_removedBlobs);
 
@@ -155,7 +160,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             catch (Exception ex)
             {
                 EliminateNotFound(ex, blob.Name);
-                _logger.LogError($"There was an error deleting the blob with key {blob}.", ex);
+                _logger.LogError("There was an error deleting the blob with key '{blobKey}'. {ex}", blob, ex);
                 throw;
             }
 
@@ -163,5 +168,6 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     }
 
     private record ChangedBlob(string Folder, string Name, byte[] Content);
+
     private record RemovedBlob(string Folder, string Name);
 }

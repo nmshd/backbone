@@ -10,6 +10,10 @@
     opacity: 0.4;
 }
 
+.mat-column-address {
+    width: 26.5em;
+}
+
 .tier-navigation {
     text-decoration: underline;
     color: blue;

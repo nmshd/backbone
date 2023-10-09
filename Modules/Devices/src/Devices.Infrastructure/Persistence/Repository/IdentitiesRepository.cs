@@ -39,11 +39,17 @@ public class IdentitiesRepository : IIdentitiesRepository
         return paginationResult;
     }
 
-    public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken)
+    public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return await _readonlyIdentities
+        return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
             .FirstWithAddressOrDefault(address, cancellationToken);
+    }
+
+    public async Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        return await _readonlyIdentities
+            .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
     public async Task AddUser(ApplicationUser user, string password)
@@ -76,6 +82,12 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(Device device, CancellationToken cancellationToken)
     {
         _devices.Update(device);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Update(Identity identity, CancellationToken cancellationToken)
+    {
+        _identities.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

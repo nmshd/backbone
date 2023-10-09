@@ -1,19 +1,22 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using ConsumerApi.Tests.Integration.Models;
-using Microsoft.AspNetCore.Http;
-using RestSharp;
+using Enmeshed.BuildingBlocks.API;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ConsumerApi.Tests.Integration.API;
 
 public class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
-    private readonly RestClient _client;
+    private readonly HttpClient _httpClient;
     private static AccessTokenResponse? _accessTokenResponse;
 
-    protected BaseApi(RestClient client)
+    protected BaseApi(HttpClientFactory factory)
     {
-        _client = client;
+        _httpClient = factory.CreateClient();
 
         ServicePointManager.ServerCertificateValidationCallback +=
                 (sender, cert, chain, sslPolicyErrors) => true;
@@ -21,45 +24,44 @@ public class BaseApi
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        return await ExecuteRequest<T>(Method.Get, endpoint, requestConfiguration);
+        return await ExecuteRequest<T>(HttpMethod.Get, endpoint, requestConfiguration);
     }
 
     protected async Task<HttpResponse<T>> Post<T>(string endpoint, RequestConfiguration requestConfiguration)
     {
-        return await ExecuteRequest<T>(Method.Post, endpoint, requestConfiguration);
+        return await ExecuteRequest<T>(HttpMethod.Post, endpoint, requestConfiguration);
     }
 
-    private async Task<HttpResponse<T>> ExecuteRequest<T>(Method method, string endpoint, RequestConfiguration requestConfiguration)
+    private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
-        var request = new RestRequest(new PathString(ROUTE_PREFIX).Add(endpoint).Value, method);
+        var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
-            request.AddBody(requestConfiguration.Content);
-
-        if (!string.IsNullOrEmpty(requestConfiguration.ContentType))
-            request.AddHeader("Content-Type", requestConfiguration.ContentType);
+            request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
 
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
-            request.AddHeader("Accept", requestConfiguration.AcceptHeader);
+            request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
 
         if (requestConfiguration.Authenticate)
         {
             var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
-            request.AddHeader("Authorization", $"Bearer {tokenResponse.AccessToken}");
+            request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
         }
 
-        var response = await _client.ExecuteAsync<ResponseContent<T>>(request);
+        var httpResponse = await _httpClient.SendAsync(request);
+        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+        var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
 
-        var result = new HttpResponse<T>
+        var response = new HttpResponse<T>
         {
-            IsSuccessStatusCode = response.IsSuccessStatusCode,
-            StatusCode = response.StatusCode,
-            Content = response.Data!,
-            ContentType = response.ContentType,
-            RawContent = response.Content
+            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
+            StatusCode = httpResponse.StatusCode,
+            Content = responseData!,
+            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
+            RawContent = responseRawContent
         };
 
-        return result;
+        return response;
     }
 
     private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
@@ -69,23 +71,26 @@ public class BaseApi
             return _accessTokenResponse;
         }
 
-        var request = new RestRequest("/connect/token", Method.Post);
-
-        request.AddParameter("grant_type", authenticationParams.GrantType);
-        request.AddParameter("username", authenticationParams.Username);
-        request.AddParameter("password", authenticationParams.Password);
-        request.AddParameter("client_id", authenticationParams.ClientId);
-        request.AddParameter("client_secret", authenticationParams.ClientSecret);
-
-        var response = await _client.ExecuteAsync<AccessTokenResponse>(request);
-
-        if (!response.IsSuccessStatusCode)
+        var form = new Dictionary<string, string>()
         {
-            var errorMessage = response.ErrorMessage?.ToString() ?? "Unknown error occurred when requesting an access token.";
-            throw new AccessTokenRequestException(response.StatusCode, errorMessage);
+            { "grant_type", authenticationParams.GrantType },
+            { "username", authenticationParams.Username },
+            { "password", authenticationParams.Password },
+            { "client_id", authenticationParams.ClientId },
+            { "client_secret",  authenticationParams.ClientSecret }
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/connect/token") { Content = new FormUrlEncodedContent(form) };
+        var httpResponse = await _httpClient.SendAsync(request);
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorMessage = httpResponse.Content.ReadAsAsync<HttpError>()?.Result.Message ?? "Unknown error occurred when requesting an access token.";
+            throw new AccessTokenRequestException(httpResponse.StatusCode, errorMessage);
         }
 
-        _accessTokenResponse = response.Data!;
+        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+        _accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(responseRawContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
         return _accessTokenResponse;
     }

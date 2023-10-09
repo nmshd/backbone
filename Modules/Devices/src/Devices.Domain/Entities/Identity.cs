@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
@@ -32,5 +34,15 @@ public class Identity
     public bool IsNew()
     {
         return Devices.Count < 1;
+    }
+
+    public void ChangeTier(TierId id)
+    {
+        if (TierId == id)
+        {
+            throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
+        }
+
+        TierId = id;
     }
 }

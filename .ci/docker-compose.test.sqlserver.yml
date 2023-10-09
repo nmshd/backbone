@@ -1,0 +1,37 @@
+version: "3.3"
+services:
+  ### infrastructure ###
+
+  database:
+    container_name: bkb-sql_server-test
+    hostname: sqlserver
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    ports:
+      - 1433:1433
+
+  ### seeds ###
+
+  seed-database:
+    image: mcr.microsoft.com/mssql-tools
+    volumes:
+      - ../setup-db:/app/setup-db
+    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
+    depends_on:
+      - database
+
+  seed-client:
+    environment:
+      Database__Provider: SqlServer
+      Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+
+configs:
+  Config:
+    file: appsettings.override.sqlserver.json
+
+networks:
+  default:
+    name: backbone
