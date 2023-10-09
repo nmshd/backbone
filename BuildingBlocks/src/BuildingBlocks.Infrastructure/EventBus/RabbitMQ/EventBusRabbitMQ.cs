@@ -28,6 +28,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private IModel _consumerChannel;
     private readonly string? _queueName;
+    private EventingBasicConsumer? _consumer;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
@@ -38,6 +39,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _queueName = queueName;
+        _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
         _handlerRetryBehavior = handlerRetryBehavior;
@@ -51,7 +53,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public void StartConsuming()
     {
-        _consumerChannel = CreateConsumerChannel();
+        _consumerChannel.BasicConsume(_queueName, false, _consumer);
     }
 
     public void Publish(IntegrationEvent @event)
@@ -118,6 +120,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             return;
         }
 
+        if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
+
+        _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
+
         using var channel = _persistentConnection.CreateModel();
         channel.QueueBind(_queueName,
             BROKER_NAME,
@@ -143,8 +149,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             false,
             null);
 
-        var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += async (_, eventArgs) =>
+        _consumer = new EventingBasicConsumer(channel);
+        _consumer.Received += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
@@ -164,8 +170,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             }
         };
 
-        channel.BasicConsume(_queueName, false, consumer);
-
         channel.CallbackException += (_, ea) =>
         {
             _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel");
@@ -184,7 +188,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
             await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
-
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {
