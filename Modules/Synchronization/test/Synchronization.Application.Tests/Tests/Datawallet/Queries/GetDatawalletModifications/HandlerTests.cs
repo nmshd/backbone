@@ -11,7 +11,6 @@ using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 

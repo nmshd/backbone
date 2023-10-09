@@ -11,6 +11,8 @@ public class TokensDbContext : AbstractDbContextBase
 
     public TokensDbContext(DbContextOptions<TokensDbContext> options) : base(options) { }
 
+    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+
     public virtual DbSet<Token> Tokens { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
