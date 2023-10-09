@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -17,7 +18,7 @@ public class HandlerTests
     public async Task Change_Default_Tier()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate());
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
@@ -46,7 +47,7 @@ public class HandlerTests
     public async Task Change_Default_Tier_With_Inexistent_Tier()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate());
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
@@ -71,7 +72,7 @@ public class HandlerTests
     public async Task Change_Default_Tier_Of_Inexistent_Client()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate());
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
@@ -98,7 +99,7 @@ public class HandlerTests
         // Arrange
         var defaultTier = new Tier(TierName.Create("some-default-tier").Value);
 
-        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id);
+        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id, SystemTime.UtcNow);
 
         var command = new UpdateClientCommand(client.ClientId, defaultTier.Id);
 
