@@ -181,7 +181,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
         }
 
-
         return true;
     }
 }
