@@ -184,6 +184,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
             await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {

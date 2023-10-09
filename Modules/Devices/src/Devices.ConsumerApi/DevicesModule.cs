@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -8,10 +7,8 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.Crypto.Abstractions;
 using Enmeshed.Crypto.Implementations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

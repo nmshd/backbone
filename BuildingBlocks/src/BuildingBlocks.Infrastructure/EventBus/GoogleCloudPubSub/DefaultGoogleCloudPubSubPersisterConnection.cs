@@ -2,7 +2,6 @@
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
-using Grpc.Core;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 

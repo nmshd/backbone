@@ -2,7 +2,6 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;

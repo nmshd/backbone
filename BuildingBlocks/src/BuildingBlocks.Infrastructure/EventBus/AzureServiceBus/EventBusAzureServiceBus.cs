@@ -7,7 +7,6 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -68,7 +67,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
         _logger.LogTrace("Sending integration event with id '{MessageId}'...", message.MessageId);
 
-        await _sender.SendMessageAsync(message);
+        await _logger.TraceTime(async () =>
+            await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
 
         _logger.LogTrace("Successfully sent integration event with id '{MessageId}'.", message.MessageId);
     }
