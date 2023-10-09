@@ -38,13 +38,17 @@
     padding: 10px;
 }
 
-.form-details {
+.update-form-details,
+.create-form-details {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-width: 150px;
-    max-width: 500px;
     width: 100%;
+}
+
+.create-form-details-form-fields {
+    max-width: 500px;
 }
 
 .form-field {
@@ -73,4 +77,8 @@
 
 .header-description {
     color: #fff;
+}
+
+.auto-height {
+    height: auto;
 }

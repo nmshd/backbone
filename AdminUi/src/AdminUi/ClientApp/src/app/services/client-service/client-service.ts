@@ -47,6 +47,7 @@ export interface ClientDTO {
     clientId: string;
     displayName?: string;
     defaultTier: string;
+    createdAt: Date;
 }
 
 export interface Client {
@@ -54,6 +55,7 @@ export interface Client {
     displayName: string;
     clientSecret?: string;
     defaultTier: string;
+    createdAt: Date;
 }
 
 export interface ChangeClientSecretRequest {

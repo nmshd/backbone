@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Clients.DTOs;
+﻿using AutoMapper;
+using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -7,16 +8,19 @@ using MediatR;
 namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
+    private readonly IMapper _mapper;
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
 
-    public Handler(IOAuthClientsRepository oAuthClientsRepository)
+    public Handler(IMapper mapper, IOAuthClientsRepository oAuthClientsRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
+        _mapper = mapper;
     }
     public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        var clientDTO = _mapper.Map<ClientDTO>(client);
 
-        return new ClientDTO(client.ClientId, client.DisplayName, client.DefaultTier);
+        return clientDTO;
     }
 }

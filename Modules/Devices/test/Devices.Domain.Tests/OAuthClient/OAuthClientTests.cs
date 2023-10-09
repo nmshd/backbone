@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Enmeshed.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -10,7 +11,7 @@ public class OAuthClientTests
     {
         // Arrange
         var tierId = TierId.Generate();
-        var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId);
+        var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow);
 
         // Act
         var error = client.ChangeDefaultTier(tierId);
