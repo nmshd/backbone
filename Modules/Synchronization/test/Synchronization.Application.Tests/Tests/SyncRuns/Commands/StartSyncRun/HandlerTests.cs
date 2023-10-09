@@ -31,7 +31,7 @@ public class HandlerTests
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
 
-        var setupContext = new SynchronizationDbContext(_dbOptions, A.Fake<IServiceProvider>());
+        var setupContext = new SynchronizationDbContext(_dbOptions);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
 
