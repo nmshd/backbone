@@ -1,17 +1,18 @@
 .mat-column-clientId,
 .mat-column-displayName,
-.mat-column-defaultTier {
-    width: 20%;
+.mat-column-defaultTier,
+.mat-column-createdAt {
+    width: 15%;
     word-break: break-all;
 }
 
 .mat-column-actions {
-    width: 25%;
+    width: 20%;
     word-break: break-all;
 }
 
 .mat-column-numberOfIdentities {
-    width: 15%;
+    width: 10%;
     word-break: break-all;
 }
 

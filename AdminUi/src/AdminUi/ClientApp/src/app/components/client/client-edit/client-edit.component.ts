@@ -80,7 +80,8 @@ export class ClientEditComponent {
                 this.client = {
                     clientId: data.result.clientId,
                     displayName: data.result.displayName,
-                    defaultTier: data.result.defaultTier
+                    defaultTier: data.result.defaultTier,
+                    createdAt: data.result.createdAt
                 } as Client;
             },
             complete: () => (this.loading = false),
@@ -152,7 +153,8 @@ export class ClientEditComponent {
                 this.client = {
                     clientId: data.result.clientId,
                     displayName: data.result.displayName,
-                    defaultTier: data.result.defaultTier
+                    defaultTier: data.result.defaultTier,
+                    createdAt: data.result.createdAt
                 } as Client;
 
                 this.snackBar.open("Successfully updated client.", "Dismiss", {

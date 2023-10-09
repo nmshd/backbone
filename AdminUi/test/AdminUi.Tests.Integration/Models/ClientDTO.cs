@@ -5,4 +5,5 @@ public class ClientDTO
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

@@ -47,6 +47,7 @@ export interface ClientOverview {
     clientId: string;
     displayName?: string;
     defaultTier: string;
+    createdAt: Date;
     numberOfIdentities: number;
 }
 
@@ -55,6 +56,7 @@ export interface Client {
     displayName: string;
     clientSecret?: string;
     defaultTier: string;
+    createdAt: Date;
 }
 
 export interface ChangeClientSecretRequest {
