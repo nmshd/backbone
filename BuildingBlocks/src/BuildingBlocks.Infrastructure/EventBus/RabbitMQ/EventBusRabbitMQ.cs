@@ -53,7 +53,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public void StartConsuming()
     {
-        _consumerChannel.BasicConsume(_queueName, false, _consumer);
+        if(_consumer != null)
+        {
+            _consumerChannel.BasicConsume(_queueName, false, _consumer);
+        }
     }
 
     public void Publish(IntegrationEvent @event)
