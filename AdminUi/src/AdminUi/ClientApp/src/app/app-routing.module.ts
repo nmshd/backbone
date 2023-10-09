@@ -22,6 +22,7 @@ const routes: Routes = [
     { path: "tiers/:id", component: TierEditComponent, canActivate: [AuthGuard] },
     { path: "clients", component: ClientListComponent, canActivate: [AuthGuard] },
     { path: "clients/create", component: ClientEditComponent, canActivate: [AuthGuard] },
+    { path: "clients/:id", component: ClientEditComponent, canActivate: [AuthGuard] },
     { path: "**", component: PageNotFoundComponent }
 ];
 

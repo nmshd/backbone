@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
