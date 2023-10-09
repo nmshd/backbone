@@ -44,7 +44,10 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         {
             var blob = container.GetBlobClient(blobId);
             var stream = new MemoryStream();
-            await blob.DownloadToAsync(stream);
+
+            await _logger.TraceTime(async () =>
+                await blob.DownloadToAsync(stream), nameof(blob.DownloadToAsync));
+
             stream.Position = 0;
 
             _logger.LogTrace("Found blob with id '{blobId}'.", blobId);
@@ -78,8 +81,8 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
 
     public async Task SaveAsync()
     {
-        await UploadChangedBlobs();
-        await DeleteRemovedBlobs();
+        await _logger.TraceTime(UploadChangedBlobs, nameof(UploadChangedBlobs));
+        await _logger.TraceTime(DeleteRemovedBlobs, nameof(DeleteRemovedBlobs));
     }
 
     public void Dispose()

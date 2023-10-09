@@ -3,7 +3,7 @@ services:
   ### infrastructure ###
 
   database:
-    container_name: bkb-postgres
+    container_name: bkb-postgres-test
     hostname: postgres
     image: postgres
     environment:
