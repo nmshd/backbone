@@ -22,7 +22,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 
@@ -39,7 +39,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "'{action}' took {elapsedMilliseconds} ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 }
