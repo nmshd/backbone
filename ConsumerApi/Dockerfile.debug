@@ -3,4 +3,4 @@ EXPOSE 80
 
 WORKDIR /app
 
-ENTRYPOINT ["dotnet", "run", "--project", "ConsumerApi/ConsumerApi.csproj"]
+ENTRYPOINT ["dotnet", "watch", "--non-interactive", "--project", "ConsumerApi/ConsumerApi.csproj"]
