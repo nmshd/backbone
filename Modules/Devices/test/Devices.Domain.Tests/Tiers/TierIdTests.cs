@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Devices.Domain.Tests;
-using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using FluentAssertions;
 using Xunit;
 

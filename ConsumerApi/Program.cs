@@ -25,6 +25,7 @@ using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Extensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using MediatR;
@@ -90,6 +91,8 @@ app.Run();
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddSaveChangesTimeInterceptor();
+
     services
         .AddModule<ChallengesModule>(configuration)
         .AddModule<DevicesModule>(configuration)

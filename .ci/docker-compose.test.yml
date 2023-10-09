@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   consumer-api:
-    container_name: consumer-api
+    container_name: consumer-api-test
     hostname: consumer-api
     build:
       context: ..
@@ -30,7 +30,7 @@ services:
         target: app/appsettings.override.json
 
   admin-ui:
-    container_name: admin-ui
+    container_name: admin-ui-test
     hostname: admin-ui
     build:
       context: ..
@@ -51,7 +51,7 @@ services:
   ### infrastructure ###
 
   azure-storage-emulator:
-    container_name: azure-storage-emulator
+    container_name: azure-storage-emulator-test
     hostname: azurite
     image: mcr.microsoft.com/azure-storage/azurite
     command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
@@ -59,7 +59,7 @@ services:
       - "10000:10000"
 
   rabbitmq:
-    container_name: bkb-rabbitmq
+    container_name: bkb-rabbitmq-test
     hostname: rabbitmq
     image: rabbitmq:3.7-management-alpine
     ports:
@@ -68,7 +68,7 @@ services:
   ### seeds ###
 
   seed-client:
-    container_name: seed-client
+    container_name: seed-client-test
     image: ghcr.io/nmshd/backbone-admin-cli:v2.2.0
     depends_on:
       consumer-api:

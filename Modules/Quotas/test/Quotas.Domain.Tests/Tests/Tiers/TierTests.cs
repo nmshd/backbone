@@ -1,7 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.UnitTestTools.Data;
 using Enmeshed.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;

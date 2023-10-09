@@ -22,7 +22,6 @@ using GetIdentityQueryDevices = Backbone.Modules.Devices.Application.Identities.
 using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityResponseDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
 using GetIdentityResponseQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
-using Identity = Backbone.Modules.Devices.Domain.Entities.Identity;
 
 namespace AdminUi.Controllers;
 

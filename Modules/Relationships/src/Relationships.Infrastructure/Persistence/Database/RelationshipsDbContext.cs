@@ -12,6 +12,8 @@ public class RelationshipsDbContext : AbstractDbContextBase
 
     public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options) : base(options) { }
 
+    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<RelationshipChange> RelationshipChanges { get; set; }
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }

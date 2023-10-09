@@ -7,7 +7,6 @@ using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 
 namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
@@ -64,7 +63,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             }
         };
 
-        var messageId = await _connection.PublisherClient.PublishAsync(message);
+        var messageId = await _logger.TraceTime(
+            () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
 
         _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
     }
