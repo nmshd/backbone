@@ -46,16 +46,6 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
             });
-        services
-            .AddDbContext<SynchronizationDbContext>(dbContextOptions =>
-            {
-                dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
-                {
-                    sqlOptions.CommandTimeout(20);
-                    sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                    sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                });
-            });
 
         services.AddScoped<ISynchronizationDbContext, SynchronizationDbContext>();
     }
