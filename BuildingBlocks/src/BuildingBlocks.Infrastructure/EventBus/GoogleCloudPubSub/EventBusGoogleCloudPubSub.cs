@@ -36,7 +36,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
         _handlerRetryBehavior = handlerRetryBehavior;
     }
 
@@ -78,6 +77,11 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
+    }
+
+    public void StartConsuming()
+    {
+        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
     private static string RemoveIntegrationEventSuffix(string typeName)

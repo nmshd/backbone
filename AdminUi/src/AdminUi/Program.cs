@@ -11,6 +11,7 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
+using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -153,6 +154,9 @@ static void Configure(WebApplication app)
     {
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
+
+    var eventBus = app.Services.GetRequiredService<IEventBus>();
+    eventBus.StartConsuming();
 }
 
 public partial class Program

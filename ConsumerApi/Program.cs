@@ -178,6 +178,8 @@ static void Configure(WebApplication app)
     {
         module.ConfigureEventBus(eventBus);
     }
+
+    eventBus.StartConsuming();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

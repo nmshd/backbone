@@ -38,7 +38,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _queueName = queueName;
-        _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
         _handlerRetryBehavior = handlerRetryBehavior;
@@ -48,6 +47,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         _consumerChannel.Dispose();
         _subsManager.Clear();
+    }
+
+    public void StartConsuming()
+    {
+        _consumerChannel = CreateConsumerChannel();
     }
 
     public void Publish(IntegrationEvent @event)
