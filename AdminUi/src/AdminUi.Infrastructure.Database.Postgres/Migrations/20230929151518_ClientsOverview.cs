@@ -17,11 +17,12 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         CLIENTS."DisplayName" AS "DisplayName",
                         CLIENTS."DefaultTier" AS "DefaultTier",
                         CLIENTS."CreatedAt" AS "CreatedAt",
-                        COUNT (IDENTITIES."ClientId") AS "NumberOfIdentities"
+                        (
+        		            SELECT COUNT("ClientId") 
+        		            FROM "Devices"."Identities"
+        		            WHERE "ClientId" = CLIENTS."ClientId"
+        	            ) AS "NumberOfIdentities"
                     FROM "Devices"."OpenIddictApplications" CLIENTS
-                    LEFT JOIN "Devices"."Identities" IDENTITIES
-                    ON IDENTITIES."ClientId" = CLIENTS."ClientId"
-                    GROUP BY CLIENTS."ClientId", CLIENTS."DisplayName", CLIENTS."DefaultTier", CLIENTS."CreatedAt"
         """);
         }
 
