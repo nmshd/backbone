@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
-		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[6.0.2]" />
+		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[7.1.0]" />
 		<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="FluentValidation" Version="11.7.1" />
