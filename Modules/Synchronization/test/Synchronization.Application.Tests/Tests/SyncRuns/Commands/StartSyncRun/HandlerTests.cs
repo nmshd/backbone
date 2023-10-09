@@ -233,7 +233,7 @@ public class HandlerTests
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions, A.Fake<IServiceProvider>());
+        return new SynchronizationDbContext(_dbOptions);
     }
 
     private Handler CreateHandlerWithDelayedSave(TimeSpan delay)
