@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Enmeshed.Tooling;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -26,13 +27,12 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         var clientId = string.IsNullOrEmpty(request.ClientId) ? ClientIdGenerator.Generate() : request.ClientId;
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
         var defaultTierId = await GetTierId(request.DefaultTier, cancellationToken);
-        var createdAt = DateTime.UtcNow;
 
-        var client = new OAuthClient(clientId, displayName, defaultTierId, createdAt);
+        var client = new OAuthClient(clientId, displayName, defaultTierId, SystemTime.UtcNow);
 
         await _oAuthClientsRepository.Add(client, clientSecret, cancellationToken);
 
-        return new CreateClientResponse(clientId, displayName, clientSecret, defaultTierId, createdAt);
+        return new CreateClientResponse(client, clientSecret);
     }
 
     private async Task EnsureClientIdDoesNotExist(CreateClientCommand request, CancellationToken cancellationToken)
