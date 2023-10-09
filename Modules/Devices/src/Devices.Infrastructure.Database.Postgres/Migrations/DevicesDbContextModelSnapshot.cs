@@ -256,6 +256,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("DefaultTier")
                         .IsRequired()
                         .HasMaxLength(20)

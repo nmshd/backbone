@@ -1,17 +1,21 @@
-﻿namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
+﻿using Backbone.Modules.Devices.Domain.Entities;
+
+namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 
 public class CreateClientResponse
 {
-    public CreateClientResponse(string clientId, string displayName, string clientSecret, string defaultTier)
+    public CreateClientResponse(OAuthClient client, string clientSecret)
     {
-        ClientId = clientId;
-        DisplayName = displayName;
+        ClientId = client.ClientId;
+        DisplayName = client.DisplayName;
         ClientSecret = clientSecret;
-        DefaultTier = defaultTier;
+        DefaultTier = client.DefaultTier;
+        CreatedAt = client.CreatedAt;
     }
 
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
     public string ClientSecret { get; set; }
     public string DefaultTier { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
