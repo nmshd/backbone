@@ -113,7 +113,7 @@ public class DirectPushService : IPushService
         {
             try
             {
-                await _pnsRegistrationRepository.Delete(new List<DeviceId>{ deviceId }, cancellationToken);
+                await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
                 _logger.LogTrace("Device '{deviceId}' successfully deleted.");
             }
             catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
