@@ -14,7 +14,11 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {
+    public QuotasDbContext() : base() { }
+
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options) { }
+
+    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
     public DbSet<Identity> Identities { get; set; }
 
