@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
+﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
+using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -20,6 +21,15 @@ public class PushNotificationsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(request, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UnregisterForPushNotifications(DeleteDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
         return NoContent();
