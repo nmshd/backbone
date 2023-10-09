@@ -1,7 +1,8 @@
 .mat-column-clientId,
 .mat-column-displayName,
-.mat-column-defaultTier {
-    width: 25%;
+.mat-column-defaultTier,
+.mat-column-createdAt {
+    width: 20%;
     word-break: break-all;
 }
 
