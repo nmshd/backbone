@@ -1,9 +1,32 @@
 .mat-column-clientId,
-.mat-column-displayName,
-.mat-column-defaultTier,
-.mat-column-createdAt {
+.mat-column-displayName {
     width: 20%;
     word-break: break-all;
+}
+
+.mat-column-defaultTier {
+    width: 15%;
+    word-break: break-all;
+}
+
+.mat-column-numberOfIdentities {
+    width: 10%;
+    word-break: normal;
+}
+
+.mat-column-createdAt {
+    width: 15%;
+    word-break: normal;
+}
+
+.mat-column-actions {
+    width: 20%;
+    word-break: normal;
+}
+
+.actions-button {
+    min-height: 36px;
+    height: auto;
 }
 
 .disabled-container {
