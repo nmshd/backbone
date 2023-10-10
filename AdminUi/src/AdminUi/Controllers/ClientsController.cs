@@ -1,16 +1,18 @@
-﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
+﻿using AdminUi.Infrastructure.DTOs;
+using AdminUi.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
-using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminUi.Controllers;
 
@@ -18,15 +20,20 @@ namespace AdminUi.Controllers;
 [Authorize("ApiKey")]
 public class ClientsController : ApiControllerBase
 {
-    public ClientsController(IMediator mediator) : base(mediator) { }
+    private readonly AdminUiDbContext _adminUiDbContext;
+
+    public ClientsController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
+    {
+        _adminUiDbContext = adminUiDbContext;
+    }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListClientsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClientOverview>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
     {
-        var clients = await _mediator.Send(new ListClientsQuery(), cancellationToken);
-        return Ok(clients);
+        var clientOverviews = await _adminUiDbContext.ClientOverviews.ToListAsync(cancellationToken);
+        return Ok(clientOverviews);
     }
 
     [HttpGet("{id}")]

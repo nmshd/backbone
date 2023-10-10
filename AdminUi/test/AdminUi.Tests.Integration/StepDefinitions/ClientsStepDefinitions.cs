@@ -18,7 +18,7 @@ public class ClientsStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private string _tier1Id;
     private string _tier2Id;
-    private HttpResponse<List<ClientDTO>>? _getClientsResponse;
+    private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
     private HttpResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
