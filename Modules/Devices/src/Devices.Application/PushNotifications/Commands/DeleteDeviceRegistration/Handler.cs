@@ -4,7 +4,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
-internal class Handler : IRequestHandler<DeleteDeviceRegistrationCommand, Unit>
+internal class Handler : IRequestHandler<DeleteDeviceRegistrationCommand>
 {
     private readonly IPushService _pushService;
     private readonly DeviceId _activeDevice;
@@ -12,14 +12,12 @@ internal class Handler : IRequestHandler<DeleteDeviceRegistrationCommand, Unit>
     public Handler(IPushService pushService, IUserContext userContext)
     {
         _pushService = pushService;
-        userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
 
 
-    public async Task<Unit> Handle(DeleteDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         await _pushService.DeleteRegistration(_activeDevice, cancellationToken);
-        return Unit.Value;
     }
 }
