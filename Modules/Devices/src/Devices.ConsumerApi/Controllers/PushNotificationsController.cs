@@ -28,10 +28,9 @@ public class PushNotificationsController : ApiControllerBase
 
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UnregisterForPushNotifications(DeleteDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UnregisterForPushNotifications(CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
+        await _mediator.Send(new DeleteDeviceRegistrationCommand(), cancellationToken);
         return NoContent();
     }
 
