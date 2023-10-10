@@ -32,15 +32,5 @@
                 <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">No tiers found.</td>
             </tr>
         </table>
-        <mat-paginator
-            *ngIf="!loading"
-            (page)="pageChangeEvent($event)"
-            [length]="totalRecords"
-            [pageSize]="pageSize"
-            [pageIndex]="pageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of tiers">
-        </mat-paginator>
     </mat-card-content>
 </mat-card>
