@@ -12,9 +12,11 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
     {
         partial void Initialize()
         {
+            var clientOverview = ClientOverviewEntityType.Create(this);
             var identityOverview = IdentityOverviewEntityType.Create(this);
             var tierOverview = TierOverviewEntityType.Create(this);
 
+            ClientOverviewEntityType.CreateAnnotations(clientOverview);
             IdentityOverviewEntityType.CreateAnnotations(identityOverview);
             TierOverviewEntityType.CreateAnnotations(tierOverview);
 
