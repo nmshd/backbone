@@ -28,7 +28,7 @@ public class PushNotificationsController : ApiControllerBase
 
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UnregisterForPushNotifications(CancellationToken cancellationToken)
+    public async Task<IActionResult> UnregisterFromPushNotifications(CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteDeviceRegistrationCommand(), cancellationToken);
         return NoContent();
