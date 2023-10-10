@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Client, ClientDTO, UpdateClientRequest, ClientServiceService } from "src/app/services/client-service/client-service";
+import { Client, UpdateClientRequest, ClientServiceService } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
@@ -76,10 +76,10 @@ export class ClientEditComponent {
     public getClient(): void {
         this.loading = true;
         this.clientService.getClientById(this.clientId!).subscribe({
-            next: (data: HttpResponseEnvelope<ClientDTO>) => {
+            next: (data: HttpResponseEnvelope<Client>) => {
                 this.client = {
                     clientId: data.result.clientId,
-                    displayName: data.result.displayName!,
+                    displayName: data.result.displayName,
                     defaultTier: data.result.defaultTier,
                     createdAt: data.result.createdAt
                 } as Client;
@@ -149,10 +149,10 @@ export class ClientEditComponent {
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
-            next: (data: HttpResponseEnvelope<ClientDTO>) => {
+            next: (data: HttpResponseEnvelope<Client>) => {
                 this.client = {
                     clientId: data.result.clientId,
-                    displayName: data.result.displayName!,
+                    displayName: data.result.displayName,
                     defaultTier: data.result.defaultTier,
                     createdAt: data.result.createdAt
                 } as Client;
