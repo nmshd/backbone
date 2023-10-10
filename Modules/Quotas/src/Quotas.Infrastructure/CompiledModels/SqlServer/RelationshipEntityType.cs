@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
@@ -25,6 +26,14 @@ namespace Backbone.Modules.Quotas.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(Relationship).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var createdAt = runtimeEntityType.AddProperty(
+                "CreatedAt",
+                typeof(DateTime),
+                propertyInfo: typeof(Relationship).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Relationship).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueConverter: new DateTimeValueConverter());
+            createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var from = runtimeEntityType.AddProperty(
                 "From",

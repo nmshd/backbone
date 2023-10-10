@@ -34,6 +34,16 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var blobReference = runtimeEntityType.AddProperty(
+                "BlobReference",
+                typeof(string),
+                propertyInfo: typeof(DatawalletModification).GetProperty("BlobReference", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(DatawalletModification).GetField("<BlobReference>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 32,
+                unicode: false);
+            blobReference.AddAnnotation("Relational:IsFixedLength", true);
+            blobReference.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var collection = runtimeEntityType.AddProperty(
                 "Collection",
                 typeof(string),

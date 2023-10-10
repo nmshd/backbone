@@ -18,28 +18,29 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             var challenge = ChallengeEntityType.Create(this);
             var device = DeviceEntityType.Create(this);
             var identity = IdentityEntityType.Create(this);
+            var customOpenIddictEntityFrameworkCoreApplication = CustomOpenIddictEntityFrameworkCoreApplicationEntityType.Create(this);
+            var customOpenIddictEntityFrameworkCoreAuthorization = CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.Create(this);
+            var customOpenIddictEntityFrameworkCoreScope = CustomOpenIddictEntityFrameworkCoreScopeEntityType.Create(this);
+            var customOpenIddictEntityFrameworkCoreToken = CustomOpenIddictEntityFrameworkCoreTokenEntityType.Create(this);
             var identityRole = IdentityRoleEntityType.Create(this);
             var identityRoleClaim = IdentityRoleClaimEntityType.Create(this);
             var identityUserClaim = IdentityUserClaimEntityType.Create(this);
             var identityUserLogin = IdentityUserLoginEntityType.Create(this);
             var identityUserRole = IdentityUserRoleEntityType.Create(this);
             var identityUserToken = IdentityUserTokenEntityType.Create(this);
-            var openIddictEntityFrameworkCoreApplication = OpenIddictEntityFrameworkCoreApplicationEntityType.Create(this);
-            var openIddictEntityFrameworkCoreAuthorization = OpenIddictEntityFrameworkCoreAuthorizationEntityType.Create(this);
-            var openIddictEntityFrameworkCoreScope = OpenIddictEntityFrameworkCoreScopeEntityType.Create(this);
-            var openIddictEntityFrameworkCoreToken = OpenIddictEntityFrameworkCoreTokenEntityType.Create(this);
 
             ApplicationUserEntityType.CreateForeignKey1(applicationUser, device);
             DeviceEntityType.CreateForeignKey1(device, identity);
+            CustomOpenIddictEntityFrameworkCoreApplicationEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreApplication, tier);
+            CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreAuthorization, customOpenIddictEntityFrameworkCoreApplication);
+            CustomOpenIddictEntityFrameworkCoreTokenEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreToken, customOpenIddictEntityFrameworkCoreApplication);
+            CustomOpenIddictEntityFrameworkCoreTokenEntityType.CreateForeignKey2(customOpenIddictEntityFrameworkCoreToken, customOpenIddictEntityFrameworkCoreAuthorization);
             IdentityRoleClaimEntityType.CreateForeignKey1(identityRoleClaim, identityRole);
             IdentityUserClaimEntityType.CreateForeignKey1(identityUserClaim, applicationUser);
             IdentityUserLoginEntityType.CreateForeignKey1(identityUserLogin, applicationUser);
             IdentityUserRoleEntityType.CreateForeignKey1(identityUserRole, identityRole);
             IdentityUserRoleEntityType.CreateForeignKey2(identityUserRole, applicationUser);
             IdentityUserTokenEntityType.CreateForeignKey1(identityUserToken, applicationUser);
-            OpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateForeignKey1(openIddictEntityFrameworkCoreAuthorization, openIddictEntityFrameworkCoreApplication);
-            OpenIddictEntityFrameworkCoreTokenEntityType.CreateForeignKey1(openIddictEntityFrameworkCoreToken, openIddictEntityFrameworkCoreApplication);
-            OpenIddictEntityFrameworkCoreTokenEntityType.CreateForeignKey2(openIddictEntityFrameworkCoreToken, openIddictEntityFrameworkCoreAuthorization);
 
             PnsRegistrationEntityType.CreateAnnotations(pnsRegistration);
             TierEntityType.CreateAnnotations(tier);
@@ -47,18 +48,18 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             ChallengeEntityType.CreateAnnotations(challenge);
             DeviceEntityType.CreateAnnotations(device);
             IdentityEntityType.CreateAnnotations(identity);
+            CustomOpenIddictEntityFrameworkCoreApplicationEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreApplication);
+            CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreAuthorization);
+            CustomOpenIddictEntityFrameworkCoreScopeEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreScope);
+            CustomOpenIddictEntityFrameworkCoreTokenEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreToken);
             IdentityRoleEntityType.CreateAnnotations(identityRole);
             IdentityRoleClaimEntityType.CreateAnnotations(identityRoleClaim);
             IdentityUserClaimEntityType.CreateAnnotations(identityUserClaim);
             IdentityUserLoginEntityType.CreateAnnotations(identityUserLogin);
             IdentityUserRoleEntityType.CreateAnnotations(identityUserRole);
             IdentityUserTokenEntityType.CreateAnnotations(identityUserToken);
-            OpenIddictEntityFrameworkCoreApplicationEntityType.CreateAnnotations(openIddictEntityFrameworkCoreApplication);
-            OpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateAnnotations(openIddictEntityFrameworkCoreAuthorization);
-            OpenIddictEntityFrameworkCoreScopeEntityType.CreateAnnotations(openIddictEntityFrameworkCoreScope);
-            OpenIddictEntityFrameworkCoreTokenEntityType.CreateAnnotations(openIddictEntityFrameworkCoreToken);
 
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }

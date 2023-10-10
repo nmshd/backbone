@@ -29,7 +29,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
             SyncErrorEntityType.CreateAnnotations(syncError);
             SyncRunEntityType.CreateAnnotations(syncRun);
 
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }

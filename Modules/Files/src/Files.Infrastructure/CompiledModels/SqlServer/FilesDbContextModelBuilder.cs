@@ -16,7 +16,7 @@ namespace Backbone.Modules.Files.Infrastructure.CompiledModels.SqlServer
 
             FileEntityType.CreateAnnotations(file);
 
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }

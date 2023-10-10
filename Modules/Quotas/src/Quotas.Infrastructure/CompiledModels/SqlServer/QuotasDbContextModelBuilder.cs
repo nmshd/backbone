@@ -43,7 +43,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.CompiledModels.SqlServer
             TierQuotaDefinitionEntityType.CreateAnnotations(tierQuotaDefinition);
             TokenEntityType.CreateAnnotations(token);
 
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }
