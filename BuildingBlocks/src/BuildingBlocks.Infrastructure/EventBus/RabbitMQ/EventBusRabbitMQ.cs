@@ -53,10 +53,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public void StartConsuming()
     {
-        if(_consumer != null)
+        if (_consumer is null)
         {
-            _consumerChannel.BasicConsume(_queueName, false, _consumer);
+            throw new Exception("Cannnot start consuming without a consumer set.");
         }
+        
+        _consumerChannel.BasicConsume(_queueName, false, _consumer);
     }
 
     public void Publish(IntegrationEvent @event)
