@@ -156,9 +156,6 @@ static void Configure(WebApplication app)
     {
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
-
-    var eventBus = app.Services.GetRequiredService<IEventBus>();
-    eventBus.StartConsuming();
 }
 
 public partial class Program
