@@ -22,7 +22,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.ExecutedAction(actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 
@@ -39,7 +39,22 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.ExecutedAction(actionName ?? "Action", watch.ElapsedMilliseconds);
         }
+    }
+}
+
+file static class Logs
+{
+    private static readonly Action<ILogger, string, long, Exception> EXECUTED_ACTION =
+        LoggerMessage.Define<string, long>(
+            LogLevel.Debug,
+            LogEventIds.EXECUTION_TIME,
+            "Executed '{action}' in {elapsedMilliseconds}ms."
+        );
+
+    public static void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds)
+    {
+        EXECUTED_ACTION(logger, actionName, elapsedMilliseconds, default!);
     }
 }

@@ -8,7 +8,7 @@ namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 public class SaveChangesTimeInterceptor : SaveChangesInterceptor
 {
     private readonly ILogger<SaveChangesTimeInterceptor> _logger;
-    private Stopwatch _stopwatch;
+    private Stopwatch? _stopwatch;
 
     public SaveChangesTimeInterceptor(ILogger<SaveChangesTimeInterceptor> logger)
     {
@@ -29,8 +29,23 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
         int result,
         CancellationToken cancellationToken = default)
     {
-        _stopwatch.Stop();
-        _logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", "SaveChangesAsync", _stopwatch.ElapsedMilliseconds);
+        _stopwatch!.Stop();
+        _logger.ExecutedAction("SaveChangesAsync", _stopwatch.ElapsedMilliseconds);
         return await base.SavedChangesAsync(eventData, result, cancellationToken);
+    }
+}
+
+file static class Logs
+{
+    private static readonly Action<ILogger, string, long, Exception> EXECUTED_ACTION =
+        LoggerMessage.Define<string, long>(
+            LogLevel.Debug,
+            LogEventIds.EXECUTION_TIME,
+            "Executed '{action}' in {elapsedMilliseconds}ms."
+        );
+
+    public static void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds)
+    {
+        EXECUTED_ACTION(logger, actionName, elapsedMilliseconds, default!);
     }
 }

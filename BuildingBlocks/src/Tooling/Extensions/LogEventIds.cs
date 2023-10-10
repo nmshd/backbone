@@ -3,5 +3,5 @@
 namespace Enmeshed.Tooling.Extensions;
 public static class LogEventIds
 {
-    public static readonly EventId EXECUTION_TIME = new(1000, "ExecutionTime");
+    public static readonly EventId EXECUTION_TIME = new(293800, "ExecutionTime");
 }
