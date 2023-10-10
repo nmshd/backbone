@@ -27,6 +27,7 @@
         "bootstrap": "^5.2.3",
         "jquery": "^3.6.3",
         "ngx-logger": "^5.0.12",
+        "odata-filter-builder": "^1.0.0",
         "oidc-client": "^1.11.5",
         "popper.js": "^1.16.0",
         "run-script-os": "^1.1.6",

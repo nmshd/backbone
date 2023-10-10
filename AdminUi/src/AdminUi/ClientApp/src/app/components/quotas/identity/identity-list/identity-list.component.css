@@ -1,8 +1,25 @@
 .mat-column-address,
+.mat-column-address-filter,
 .mat-column-clientId,
 .mat-column-publicKey {
     width: 25%;
     word-break: break-all;
+}
+
+.mat-column-createdAt,
+.mat-column-created-at-filter,
+.mat-column-last-login-filter,
+.mat-column-lastLoginAt {
+    max-width: 300px;
+}
+
+.mat-column-number-of-devices-filter,
+.mat-column-numberOfDevices,
+.mat-column-identity-version-filter,
+.mat-column-identityVersion,
+.mat-column-datawallet-version-filter,
+.mat-column-datawalletVersion {
+    max-width: 150px;
 }
 
 .disabled-container {
@@ -47,6 +64,13 @@
     z-index: 1;
     margin: 15px 15px -50px 15px;
 }
+
+.filter-cell {
+    display: flex; 
+    justify-content: space-between;
+}
+
+
 
 .header-description {
     color: #fff;
