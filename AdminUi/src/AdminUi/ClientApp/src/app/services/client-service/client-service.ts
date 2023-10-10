@@ -46,7 +46,8 @@ export class ClientServiceService {
 export interface ClientOverview {
     clientId: string;
     displayName?: string;
-    defaultTier: string;
+    defaultTierId: string;
+    defaultTierName: string;
     createdAt: Date;
     numberOfIdentities: number;
 }
