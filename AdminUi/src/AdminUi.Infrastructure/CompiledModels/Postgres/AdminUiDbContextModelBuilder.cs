@@ -13,9 +13,11 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
     {
         partial void Initialize()
         {
+            var clientOverview = ClientOverviewEntityType.Create(this);
             var identityOverview = IdentityOverviewEntityType.Create(this);
             var tierOverview = TierOverviewEntityType.Create(this);
 
+            ClientOverviewEntityType.CreateAnnotations(clientOverview);
             IdentityOverviewEntityType.CreateAnnotations(identityOverview);
             TierOverviewEntityType.CreateAnnotations(tierOverview);
 
