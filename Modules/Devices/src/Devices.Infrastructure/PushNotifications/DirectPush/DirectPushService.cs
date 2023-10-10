@@ -110,7 +110,7 @@ public class DirectPushService : IPushService
         else
         {
             await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
-            _logger.LogInformation("Unregistering from push notifications for device '{deviceId}.", deviceId);
+            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
         }
     }
 }
