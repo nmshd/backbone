@@ -103,14 +103,14 @@ public class DirectPushService : IPushService
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
 
-        if (registration != null)
+        if (registration == null)
         {
             _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
         }
         else
         {
             await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
-            _logger.LogTrace("Device '{deviceId}' successfully deleted.", deviceId);
+            _logger.LogInformation("Device '{deviceId}' successfully deleted.", deviceId);
         }
     }
 }
