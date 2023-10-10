@@ -74,7 +74,7 @@ public class AzureNotificationHubPushService : IPushService
         else
         {
             await _notificationHubClient.DeleteInstallationAsync(deviceId, cancellationToken);
-            _logger.LogInformation("Unregistering from push notifications for device '{deviceId}.", deviceId);
+            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
         }
     }
 
