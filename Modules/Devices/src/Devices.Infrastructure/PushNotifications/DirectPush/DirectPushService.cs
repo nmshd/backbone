@@ -99,10 +99,8 @@ public class DirectPushService : IPushService
         }
     }
 
-    public async Task DeleteRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
+    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
     {
-        Console.WriteLine("DirectPushService :: DeleteRegistration");
-
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
 
         if (registration != null)
@@ -111,15 +109,8 @@ public class DirectPushService : IPushService
         }
         else
         {
-            try
-            {
-                await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
-                _logger.LogTrace("Device '{deviceId}' successfully deleted.", deviceId);
-            }
-            catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
-            {
-                _logger.LogInformation(exception.Message);
-            }
+            await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+            _logger.LogTrace("Device '{deviceId}' successfully deleted.", deviceId);
         }
     }
 }
