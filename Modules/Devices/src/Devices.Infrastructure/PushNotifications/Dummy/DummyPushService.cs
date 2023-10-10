@@ -25,4 +25,10 @@ public class DummyPushService : IPushService
         _logger.LogInformation("Registering for push notifications of Identity '{address}' and device '{deviceId}.", address, deviceId);
         return Task.CompletedTask;
     }
+
+    public Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Unregistering from push notifications with device '{deviceId}.", deviceId);
+        return Task.CompletedTask;
+    }
 }
