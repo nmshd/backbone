@@ -18,6 +18,12 @@ Share your feedback with the Enmeshed team by contributing to the [discussions](
 
 Contribution to this project is highly appreciated. Head over to our [contribution guide](https://github.com/nmshd/.github/blob/main/CONTRIBUTING.md) to learn more.
 
+## Development
+
+### Logging
+
+TODO: describe how to generate event ids (min: 100,000, max: 999,999)
+
 ## License
 
 [MIT](LICENSE)
