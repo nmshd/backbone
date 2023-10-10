@@ -18,7 +18,7 @@ namespace Backbone.Modules.Files.Infrastructure.CompiledModels.Postgres
             FileEntityType.CreateAnnotations(file);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
         }
     }

@@ -20,7 +20,7 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
             TierOverviewEntityType.CreateAnnotations(tierOverview);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "7.0.10");
+            AddAnnotation("ProductVersion", "7.0.11");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
         }
     }

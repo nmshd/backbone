@@ -33,6 +33,15 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.Postgre
                 valueConverter: new DatawalletModificationIdEntityFrameworkValueConverter());
             id.AddAnnotation("Relational:IsFixedLength", true);
 
+            var blobReference = runtimeEntityType.AddProperty(
+                "BlobReference",
+                typeof(string),
+                propertyInfo: typeof(DatawalletModification).GetProperty("BlobReference", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(DatawalletModification).GetField("<BlobReference>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 32,
+                unicode: false);
+            blobReference.AddAnnotation("Relational:IsFixedLength", true);
+
             var collection = runtimeEntityType.AddProperty(
                 "Collection",
                 typeof(string),
