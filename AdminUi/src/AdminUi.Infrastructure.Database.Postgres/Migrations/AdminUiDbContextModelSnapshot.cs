@@ -22,6 +22,28 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+                {
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DefaultTier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("NumberOfIdentities")
+                        .HasColumnType("integer");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("ClientOverviews", (string)null);
+                });
+
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")
