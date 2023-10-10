@@ -63,6 +63,21 @@ public class AzureNotificationHubPushService : IPushService
         }
     }
 
+    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        var installationExists = await _notificationHubClient.InstallationExistsAsync(deviceId, cancellationToken);
+
+        if (!installationExists)
+        {
+            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+        }
+        else
+        {
+            await _notificationHubClient.DeleteInstallationAsync(deviceId, cancellationToken);
+            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
+        }
+    }
+
     private static (string Title, string Body) GetNotificationText(object pushNotification)
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();

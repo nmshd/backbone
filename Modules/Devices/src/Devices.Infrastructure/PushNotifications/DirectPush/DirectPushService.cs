@@ -98,4 +98,19 @@ public class DirectPushService : IPushService
             }
         }
     }
+
+    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+
+        if (registration == null)
+        {
+            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+        }
+        else
+        {
+            await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
+        }
+    }
 }
