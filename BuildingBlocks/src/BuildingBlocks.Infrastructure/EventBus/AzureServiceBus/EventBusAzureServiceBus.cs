@@ -41,8 +41,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
 
         _handlerRetryBehavior = handlerRetryBehavior;
-
-        RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
     }
 
     public void Dispose()
@@ -104,6 +102,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
+    }
+
+    public void StartConsuming()
+    {
+        RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
     }
 
     private async Task RegisterSubscriptionClientMessageHandlerAsync()
@@ -177,7 +180,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 return false;
             }
         }
-
 
         return true;
     }
