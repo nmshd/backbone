@@ -74,7 +74,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError("There was an error listing all the blobs.", ex);
+            _logger.ErrorListingAllTheBlobs(ex);
             throw;
         }
     }
@@ -127,10 +127,37 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError("There was an error deleting the blob with id '{cloudBlockBlobName}'. {ex}", cloudBlockBlob.Name, ex);
+                _logger.ErrorDeletingTheBlob(cloudBlockBlob.Name, ex);
                 throw new NotFoundException();
             }
 
         _logger.LogTrace("Deletion successful.");
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, Exception> ERROR_LISTING_ALL_THE_BLOBS =
+        LoggerMessage.Define(
+            LogLevel.Error,
+            new EventId(516591, "AzureStorageAccount.ErrorListingAllTheBlobs"),
+            "There was an error listing all the blobs."
+        );
+
+    private static readonly Action<ILogger, string, Exception, Exception> ERROR_DELETING_THE_BLOB =
+        LoggerMessage.Define<string, Exception>(
+            LogLevel.Error,
+            new EventId(645028, "AzureStorageAccount.ErrorDeletingTheBlob"),
+            "There was an error deleting the blob with id '{cloudBlockBlobName}'. {ex}"
+        );
+
+    public static void ErrorListingAllTheBlobs(this ILogger logger, Exception e)
+    {
+        ERROR_LISTING_ALL_THE_BLOBS(logger, e);
+    }
+
+    public static void ErrorDeletingTheBlob(this ILogger logger, string cloudBlockBlobName, Exception e)
+    {
+        ERROR_DELETING_THE_BLOB(logger, cloudBlockBlobName, e, default!);
     }
 }
