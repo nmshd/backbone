@@ -41,8 +41,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         switch (context.Exception)
         {
             case InfrastructureException infrastructureException:
-                _logger.LogInformation(
-                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(InfrastructureException), infrastructureException.Code, infrastructureException.Message);
+                _logger.InfrastructureException(
+                    infrastructureException, infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -51,8 +51,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case ApplicationException applicationException:
-                _logger.LogInformation(
-                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(ApplicationException), applicationException.Code, applicationException.Message);
+                _logger.ApplicationException(
+                    applicationException, applicationException.Code, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
@@ -60,9 +60,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                     (int)GetStatusCodeForApplicationException(applicationException);
 
                 break;
+
             case DomainException domainException:
-                _logger.LogInformation(
-                    "A '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(DomainException), domainException.Code, domainException.Message);
+                _logger.DomainException(domainException, domainException.Code, domainException.Message);
 
                 httpError = CreateHttpErrorForDomainException(domainException);
 
@@ -70,8 +70,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case BadHttpRequestException _:
-                _logger.LogInformation(
-                    "'{error_code}': The body of the request is too large.", ERROR_CODE_REQUEST_BODY_TOO_LARGE);
+                _logger.RequestBodyTooLarge(ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
                     ERROR_CODE_REQUEST_BODY_TOO_LARGE,
@@ -83,8 +82,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             default:
-                _logger.LogError(context.Exception,
-                    "Unexpected Error while processing request to '{uri}'", context.HttpContext.Request.GetUri());
+                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetUri(), context.Exception);
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
@@ -216,5 +214,74 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
         return
             Regex.Matches(exception.StackTrace, "at .+").Select(m => m.Value.Trim());
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, InfrastructureException, string, string, Exception> INFRASTRUCTURE_EXCEPTION =
+        LoggerMessage.Define<InfrastructureException, string, string>(
+            LogLevel.Information,
+            new EventId(560507, "ExceptionFilter.InfrastructureException"),
+            "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
+        );
+
+    private static readonly Action<ILogger, ApplicationException, string, string, Exception> APPLICATION_EXCEPTION =
+        LoggerMessage.Define<ApplicationException, string, string>(
+            LogLevel.Information,
+            new EventId(437832, "ExceptionFilter.ApplicationException"),
+            "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
+        );
+
+    private static readonly Action<ILogger, DomainException, string, string, Exception> DOMAIN_EXCEPTION =
+        LoggerMessage.Define<DomainException, string, string>(
+            LogLevel.Information,
+            new EventId(505278, "ExceptionFilter.DomainException"),
+            "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> REQUEST_BODY_TOO_LARGE =
+        LoggerMessage.Define<string>(
+            LogLevel.Information,
+            new EventId(938218, "ExceptionFilter.RequestBodyTooLarge"),
+            "'{error_code}': The body of the request is too large."
+        );
+
+    private static readonly Action<ILogger, Uri, Exception> ERROR_WHILE_PROCESSING_REQUEST_TO_URI =
+        LoggerMessage.Define<Uri>(
+            LogLevel.Error,
+            new EventId(259125, "ExceptionFilter.ErrorWhileProcessingRequestToUri"),
+            "Unexpected Error while processing request to '{uri}'."
+        );
+
+
+    public static void InfrastructureException(
+        this ILogger logger, InfrastructureException infrastructureException, string errorCode, string errorMessage)
+    {
+        INFRASTRUCTURE_EXCEPTION(logger, infrastructureException, errorCode, errorMessage, default!);
+    }
+
+    public static void ApplicationException(
+        this ILogger logger, ApplicationException applicationException, string errorCode, string errorMessage)
+    {
+        APPLICATION_EXCEPTION(logger, applicationException, errorCode, errorMessage, default!);
+    }
+
+    public static void DomainException(
+        this ILogger logger, DomainException domainException, string errorCode, string errorMessage)
+    {
+        DOMAIN_EXCEPTION(logger, domainException, errorCode, errorMessage, default!);
+    }
+
+    public static void RequestBodyTooLarge(
+        this ILogger logger, string errorCode)
+    {
+        REQUEST_BODY_TOO_LARGE(logger, errorCode, default!);
+    }
+
+    public static void ErrorWhileProcessingRequestToUri(
+        this ILogger logger, Uri uri, Exception e)
+    {
+        ERROR_WHILE_PROCESSING_REQUEST_TO_URI(logger, uri, e);
     }
 }
