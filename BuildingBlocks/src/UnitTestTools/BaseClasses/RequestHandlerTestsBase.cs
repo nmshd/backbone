@@ -11,7 +11,7 @@ public abstract class RequestHandlerTestsBase<TDbContext> : AbstractTestsBase wh
 
     protected RequestHandlerTestsBase()
     {
-        (_arrangeContext, _assertionContext, _actContext, _) = FakeDbContextFactory.CreateDbContexts<TDbContext>();
+        (_arrangeContext, _assertionContext, _actContext) = FakeDbContextFactory.CreateDbContexts<TDbContext>();
     }
 
     protected TEntity AddToDatabase<TEntity>(TEntity entity) where TEntity : class

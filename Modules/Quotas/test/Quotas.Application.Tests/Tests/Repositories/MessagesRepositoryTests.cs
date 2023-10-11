@@ -30,8 +30,9 @@ public class MessagesRepositoryTests
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        (_messagesArrangeContext, _, _, var connection) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>();
-        (_, _, _actContext, _) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
+        var connection = FakeDbContextFactory.CreateDbConnection();
+        (_messagesArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>(connection);
+        (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
     }
 
     [Fact]
