@@ -215,7 +215,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
 file static class LoggerExtensions
 {
-    // TODO-Nikola: review after Timo gets back to me
     private static readonly Action<ILogger, string, Exception> SOCKET_EXCEPTION =
         LoggerMessage.Define<string>(
             LogLevel.Warning,

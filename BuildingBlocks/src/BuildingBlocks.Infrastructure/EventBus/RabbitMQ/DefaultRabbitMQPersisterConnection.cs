@@ -108,7 +108,6 @@ public class DefaultRabbitMqPersistentConnection
 
 file static class LoggerExtensions
 {
-    // TODO-Nikola: review after Timo gets back to me
     private static readonly Action<ILogger, string, Exception> BROKER_UNREACHABLE_EXCEPTION =
         LoggerMessage.Define<string>(
             LogLevel.Warning,
