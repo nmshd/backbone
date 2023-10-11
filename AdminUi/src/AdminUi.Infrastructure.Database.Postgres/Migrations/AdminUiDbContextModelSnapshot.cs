@@ -17,7 +17,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -28,14 +28,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DefaultTierId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("DefaultTierName")
+                    b.Property<string>("DefaultTier")
                         .IsRequired()
                         .HasColumnType("text");
 
