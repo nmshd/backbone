@@ -57,6 +57,11 @@ public class EventBusInMemory : IEventBus
     {
         _subscriptions.Add(new Subscription(typeof(T), typeof(TH)));
     }
+
+    public void StartConsuming()
+    {
+        // publish pending
+    }
 }
 
 public class ContractResolverWithPrivates : CamelCasePropertyNamesContractResolver
