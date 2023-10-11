@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Autofac;
+using Azure.Messaging.ServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
@@ -66,7 +67,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         var messageId = await _logger.TraceTime(
             () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
 
-        _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
+        _logger.EventWasNotProcessed(messageId);
     }
 
     public void Subscribe<T, TH>()
@@ -97,8 +98,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "ERROR handling message: {ExceptionMessage} - Context: {@ExceptionSource}",
-                ex.Message, ex.Source);
+            _logger.ErrorHandlingMessage(ex);
             return SubscriberClient.Reply.Nack;
         }
 
@@ -110,7 +110,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
         {
-            _logger.LogWarning("No subscription for event: '{EventName}'", eventName);
+            _logger.NoSubscriptionForEvent(eventName);
             return;
         }
 
@@ -132,15 +132,59 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             var handleMethod = handler.GetType().GetMethod("Handle");
 
             var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior,
-                    (ex, _) => _logger.LogWarning(
-                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
-                        eventName,
-                        ex.Message,
-                        ex.StackTrace)
-                    );
+                _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!, ex));
 
             await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, string, Exception> SENDING_INTEGRATION_EVENT =
+        LoggerMessage.Define<string>(
+            LogLevel.Debug,
+            new EventId(830408, "EventBusGoogleCloudPubSub.SendingIntegrationEvent"),
+            "Successfully sent integration event with id '{messageId}'."
+        );
+
+    private static readonly Action<ILogger, string, string, Exception> ERROR_HANDLING_MESSAGE =
+        LoggerMessage.Define<string, string>(
+            LogLevel.Error,
+            new EventId(949322, "EventBusAzureServiceBus.ErrorHandlingMessage"),
+            "ERROR handling message: '{exceptionMessage}' - Context: '{@exceptionSource}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_SUBSCRIPTION_FOR_EVENT =
+        LoggerMessage.Define<string>(
+            LogLevel.Warning,
+            new EventId(341537, "EventBusAzureServiceBus.NoSubscriptionForEvent"),
+            "No subscription for event: '{eventName}'."
+        );
+
+    private static readonly Action<ILogger, string, string, string, Exception> ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE =
+        LoggerMessage.Define<string, string, string>(
+            LogLevel.Warning,
+            new EventId(726744, "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerType"),
+            "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
+        );
+
+    public static void EventWasNotProcessed(this ILogger logger, string messageId)
+    {
+        SENDING_INTEGRATION_EVENT(logger, messageId, default!);
+    }
+
+    public static void ErrorHandlingMessage(this ILogger logger, Exception e)
+    {
+        ERROR_HANDLING_MESSAGE(logger, e.Message, e.Source!, e);
+    }
+    public static void NoSubscriptionForEvent(this ILogger logger, string eventName)
+    {
+        NO_SUBSCRIPTION_FOR_EVENT(logger, eventName, default!);
+    }
+
+    public static void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace, Exception e)
+    {
+        ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE(logger, eventHandlerType, errorMessage, stackTrace, e);
     }
 }
