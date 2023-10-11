@@ -151,21 +151,21 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, string, Exception> ERROR_HANDLING_MESSAGE =
         LoggerMessage.Define<string, string>(
             LogLevel.Error,
-            new EventId(949322, "EventBusAzureServiceBus.ErrorHandlingMessage"),
+            new EventId(712382, "EventBusGoogleCloudPubSub.ErrorHandlingMessage"),
             "ERROR handling message: '{exceptionMessage}' - Context: '{@exceptionSource}'."
         );
 
     private static readonly Action<ILogger, string, Exception> NO_SUBSCRIPTION_FOR_EVENT =
         LoggerMessage.Define<string>(
             LogLevel.Warning,
-            new EventId(341537, "EventBusAzureServiceBus.NoSubscriptionForEvent"),
+            new EventId(590747, "EventBusGoogleCloudPubSub.NoSubscriptionForEvent"),
             "No subscription for event: '{eventName}'."
         );
 
     private static readonly Action<ILogger, string, string, string, Exception> ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE =
         LoggerMessage.Define<string, string, string>(
             LogLevel.Warning,
-            new EventId(726744, "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerType"),
+            new EventId(304842, "EventBusGoogleCloudPubSub.ErrorWhileExecutingEventHandlerType"),
             "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
         );
 
