@@ -161,7 +161,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             try
             {
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex.Message, ex.StackTrace, ex));
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex.Message, ex.StackTrace!, ex));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
