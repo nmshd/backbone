@@ -30,7 +30,8 @@ public static class FakeDbContextFactory
         return (arrangeContext, assertionContext, actContext);
     }
 
-    public static SqliteConnection CreateDbConnection() {
+    public static SqliteConnection CreateDbConnection()
+    {
         return new SqliteConnection("DataSource=:memory:");
     }
 }
