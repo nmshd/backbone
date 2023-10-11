@@ -56,16 +56,17 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
-            .WaitAndRetry(_connectionRetryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.LogWarning(ex.ToString()));
+            .WaitAndRetry(_connectionRetryCount,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (ex, _) => _logger.SocketException(ex.Message, ex));
 
         var eventName = @event.GetType().Name;
 
-        _logger.LogTrace("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.IntegrationEventId, eventName);
+        _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.IntegrationEventId, eventName);
 
         _persistentConnection.CreateModel().ExchangeDeclare(BROKER_NAME, "direct");
 
-        _logger.LogTrace("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.IntegrationEventId);
+        _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.IntegrationEventId);
 
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -76,7 +77,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         policy.Execute(() =>
         {
-            _logger.LogTrace("Publishing event to RabbitMQ: '{EventId}'", @event.IntegrationEventId);
+            _logger.LogDebug("Publishing event to RabbitMQ: '{EventId}'", @event.IntegrationEventId);
 
             using var channel = _persistentConnection.CreateModel();
             var properties = channel.CreateBasicProperties();
@@ -89,7 +90,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.LogTrace("Successfully published event with id '{integrationEventId}'.", @event.IntegrationEventId);
+            _logger.IntegrationEventId(@event.IntegrationEventId);
         });
     }
 
@@ -130,7 +131,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
-        _logger.LogTrace("Creating RabbitMQ consumer channel");
+        _logger.LogInformation("Creating RabbitMQ consumer channel");
 
         var channel = _persistentConnection.CreateModel();
 
@@ -156,11 +157,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
-
                 channel.BasicReject(eventArgs.DeliveryTag, true);
 
-                _logger.LogError(ex,
-                    $"An error occurred while processing the integration event of type '{eventName}'.");
+                _logger.ErrorWhileProcessingIntegrationEvent(eventName, ex);
             }
         };
 
@@ -179,7 +178,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private async Task ProcessEvent(string eventName, string message)
     {
-        _logger.LogTrace("Processing RabbitMQ event: '{EventName}'", eventName);
+        _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
@@ -202,20 +201,77 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior,
-                    (ex, _) => _logger.LogWarning(
-                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
-                        eventType.Name,
-                        ex.Message,
-                        ex.StackTrace)
-                    );
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!, ex));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
         }
         else
         {
-            _logger.LogWarning("No subscription for RabbitMQ event: '{EventName}'", eventName);
+            _logger.NoSubscriptionForEvent(eventName);
         }
+    }
+}
+
+file static class LoggerExtensions
+{
+    // TODO-Nikola: review after Timo gets back to me
+    private static readonly Action<ILogger, string, Exception> SOCKET_EXCEPTION =
+        LoggerMessage.Define<string>(
+            LogLevel.Warning,
+            new EventId(411326, "EventBusRabbitMQ.SocketException"),
+            "{exceptionString}"
+        );
+
+    private static readonly Action<ILogger, string, Exception> PUBLISHED_INTEGERATION_EVENT =
+        LoggerMessage.Define<string>(
+            LogLevel.Debug,
+            new EventId(585231, "EventBusRabbitMQ.PublishedIntegrationEvent"),
+            "Successfully published event with id '{integrationEventId}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> ERROR_WHILE_PROCESSING_INTEGRATION_EVENT =
+        LoggerMessage.Define<string>(
+            LogLevel.Error,
+            new EventId(702822, "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent"),
+            "An error occurred while processing the integration event of type '{eventName}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_SUBSCRIPTION_FOR_EVENT =
+        LoggerMessage.Define<string>(
+            LogLevel.Warning,
+            new EventId(980768, "EventBusRabbitMQ.NoSubscriptionForEvent"),
+            "No subscription for event: '{eventName}'."
+        );
+
+    private static readonly Action<ILogger, string, string, string, Exception> ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE =
+        LoggerMessage.Define<string, string, string>(
+            LogLevel.Warning,
+            new EventId(288394, "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType"),
+            "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
+        );
+
+    public static void SocketException(this ILogger logger, string exceptionString, Exception e)
+    {
+        SOCKET_EXCEPTION(logger, exceptionString, e);
+    }
+
+    public static void IntegrationEventId(this ILogger logger, string integrationEventId)
+    {
+        PUBLISHED_INTEGERATION_EVENT(logger, integrationEventId, default!);
+    }
+
+    public static void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception e)
+    {
+        ERROR_WHILE_PROCESSING_INTEGRATION_EVENT(logger, eventName, e);
+    }
+    public static void NoSubscriptionForEvent(this ILogger logger, string eventName)
+    {
+        NO_SUBSCRIPTION_FOR_EVENT(logger, eventName, default!);
+    }
+
+    public static void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace, Exception e)
+    {
+        ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE(logger, eventHandlerType, errorMessage, stackTrace, e);
     }
 }
