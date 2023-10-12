@@ -25,7 +25,7 @@ public class Message : IIdentifiable<MessageId>
 
     public MessageId Id { get; }
 
-    public DateTime CreatedAt { get; internal set; }
+    public DateTime CreatedAt { get; set; }
     public IdentityAddress CreatedBy { get; }
     public DeviceId CreatedByDevice { get; }
 

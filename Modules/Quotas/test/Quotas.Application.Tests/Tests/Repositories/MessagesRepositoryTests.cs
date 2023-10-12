@@ -10,7 +10,6 @@ using Enmeshed.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
-using MessageEntity = Backbone.Modules.Messages.Domain.Entities.Message;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
 public class MessagesRepositoryTests
@@ -36,10 +35,10 @@ public class MessagesRepositoryTests
     }
 
     [Fact]
-    public async void Counts_entities_within_timeframe_hour_quotaPeriod()
+    public async Task Counts_entities_within_timeframe_hour_quotaPeriod()
     {
         // Arrange
-        var messages = new List<MessageEntity>() {
+        var messages = new List<Message>() {
             CreateMessage(DateTime.Now, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
@@ -58,13 +57,13 @@ public class MessagesRepositoryTests
     }
 
     [Fact]
-    public async void Counts_entities_within_timeframe_month_quotaPeriod()
+    public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
         var halfOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
         SystemTime.Set(halfOfMonth);
 
-        var messages = new List<MessageEntity>() {
+        var messages = new List<Message>() {
             CreateMessage(DateTime.Now, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
@@ -85,10 +84,10 @@ public class MessagesRepositoryTests
     }
 
     [Fact]
-    public async void Counts_entities_total_quotaPeriod()
+    public async Task Counts_entities_total_quotaPeriod()
     {
         // Arrange
-        var messages = new List<MessageEntity>() {
+        var messages = new List<Message>() {
             CreateMessage(DateTime.Now, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
@@ -106,12 +105,11 @@ public class MessagesRepositoryTests
         count.Should().Be(3);
     }
 
-
     [Fact]
-    public async void Counts_entities_only_for_requested_identityAddress()
+    public async Task Counts_entities_only_for_requested_identityAddress()
     {
         // Arrange
-        var messages = new List<MessageEntity>() {
+        var messages = new List<Message>() {
             CreateMessage(DateTime.Now, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
             CreateMessage(NEXT_YEAR, _identityAddress1)
@@ -129,18 +127,21 @@ public class MessagesRepositoryTests
         count.Should().Be(2);
     }
 
-    private static MessageEntity CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
+    private static Message CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
     {
-        return new(
+        SystemTime.Set(createdAt);
+
+        var message = new Message(
             identityAddress,
             DeviceId.New(),
             null,
             Array.Empty<byte>(),
             new List<Attachment>(),
             new List<RecipientInformation>()
-            )
-        {
-            CreatedAt = createdAt
-        };
+            );
+        
+        SystemTime.Reset();
+
+        return message;
     }
 }
