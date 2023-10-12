@@ -139,7 +139,7 @@ public class MessagesRepositoryTests
             new List<Attachment>(),
             new List<RecipientInformation>()
             );
-        
+
         SystemTime.Reset();
 
         return message;
