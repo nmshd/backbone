@@ -11,7 +11,7 @@ public class TierQuotaEntityTypeConfiguration : IEntityTypeConfiguration<TierQuo
         builder.HasKey(x => x.Id);
         builder.ToTable($"{nameof(TierQuota)}s");
         builder.Ignore(x => x.Weight);
-        builder.HasOne(x => x._definition).WithMany().OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Definition).WithMany().OnDelete(DeleteBehavior.Cascade);
         builder.Property("_definitionId").HasColumnName("DefinitionId");
         builder.Ignore(x => x.DefinitionId);
     }
