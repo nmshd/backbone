@@ -3,6 +3,8 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.BuildingBlocks.Application.Extensions;
+using Enmeshed.BuildingBlocks.Domain;
+using Enmeshed.BuildingBlocks.Domain.Errors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -50,7 +52,11 @@ public class TiersRepository : ITiersRepository
 
     public async Task RemoveTierQuotaDefinitionById(string id)
     {
-        await _tierQuotaDefinitions.Where(t => t.Id == id).ExecuteDeleteAsync();
+        var deletedCount = await _tierQuotaDefinitions.Where(t => t.Id == id).ExecuteDeleteAsync();
+        if (deletedCount == 0)
+        {
+            throw new DomainException(GenericDomainErrors.NotFound("Tier Quota Definition"));
+        }
     }
 
     public async Task RemoveById(TierId tierId)
