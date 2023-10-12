@@ -19,7 +19,7 @@ function UpdateLocalDatabase {
         "AdminUi"{
             New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-            $migrationProject = "$repoRoot\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $migrationProject = "$repoRoot\AdminUi\src\AdminUi.Infrastructure.Database.$provider"
             $startupProject = $adminUiProject
         }
         Default {
