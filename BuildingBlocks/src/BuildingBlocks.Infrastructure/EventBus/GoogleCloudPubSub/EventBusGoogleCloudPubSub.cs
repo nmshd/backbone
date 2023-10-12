@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using Autofac;
-using Azure.Messaging.ServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
