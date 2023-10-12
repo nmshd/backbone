@@ -44,18 +44,18 @@ function CompileModels {
 
     switch($moduleName){
         "AdminUi" {
-            $optimizationProject = $adminUiProject
+            $startupProject = $adminUiProject
             $outputDir = "$repoRoot\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
             $namespace = "$moduleName.Infrastructure.CompiledModels.$provider"
         }
         Default {
-            $optimizationProject = $consumerApiProject
+            $startupProject = $consumerApiProject
             $outputDir = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
             $namespace = "Backbone.Modules.$moduleName.Infrastructure.CompiledModels.$provider"
         }
     }
 
-    $cmdOptimizeDbContext = "dotnet ef dbcontext optimize --project '$optimizationProject' --context $dbContextName --output-dir $outputDir --namespace $namespace"
+    $cmdOptimizeDbContext = "dotnet ef dbcontext optimize --project '$startupProject' --context $dbContextName --output-dir $outputDir --namespace $namespace"
 
     Write-Host "Compiling '$provider' models for '$moduleName'..."
     Invoke-Expression $cmdOptimizeDbContext
