@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -39,7 +40,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.LogTrace("Successfully created device. Device ID: '{deviceId}', User ID: {userId}, Username: {userName}", user.DeviceId, user.Id, user.UserName);
+        _logger.CreatedDevice(user.DeviceId, user.Id, user.UserName);
 
         return new RegisterDeviceResponse
         {
@@ -107,5 +108,20 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
         JsonSerializerOptions options)
     {
         JsonSerializer.Serialize(writer, value, options);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, DeviceId, string, string, Exception> CREATED_DEVICE =
+        LoggerMessage.Define<DeviceId, string, string>(
+            LogLevel.Information,
+            new EventId(219823, "RegisterDevice.Handler.CreatedDevice"),
+            "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'."
+        );
+
+    public static void CreatedDevice(this ILogger logger, DeviceId deviceId, string userId, string userName)
+    {
+        CREATED_DEVICE(logger, deviceId, userId, userName, default!);
     }
 }
