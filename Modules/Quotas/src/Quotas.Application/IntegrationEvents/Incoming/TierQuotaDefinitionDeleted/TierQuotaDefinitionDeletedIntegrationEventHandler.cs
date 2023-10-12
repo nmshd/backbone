@@ -16,6 +16,7 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
     public TierQuotaDefinitionDeletedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, IMetricStatusesService metricStatusesService, ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> logger)
     {
         _metricStatusesService = metricStatusesService;
+        _identitiesRepository = identitiesRepository;
         _logger = logger;
     }
 
@@ -26,7 +27,7 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
         var identitiesOfTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None);
 
         await _metricStatusesService.RecalculateMetricStatuses(
-            identitiesOfTier.Select(i => i.TierId.ToString()).ToList(),
+            identitiesOfTier.Select(i => i.Address).ToList(),
             MetricKey.GetSupportedMetricKeyValues().ToList(),
             CancellationToken.None
         );
