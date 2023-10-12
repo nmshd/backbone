@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Reflection.Metadata;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Google;
@@ -178,35 +177,35 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception, Exception> ERROR_DOWNLOADING_THE_BLOB_WITH_KEY =
         LoggerMessage.Define<string, Exception>(
             LogLevel.Error,
-            new EventId(000000, "GoogleCloudStorage.ErrorDownloadingTheBlobWithKey"),
+            new EventId(997942, "GoogleCloudStorage.ErrorDownloadingTheBlobWithKey"),
             "There was an error downloading the blob with key '{blobId}'. {ex}"
         );
 
     private static readonly Action<ILogger, Exception> ERROR_LISTING_ALL_THE_BLOBS =
         LoggerMessage.Define(
             LogLevel.Error,
-            new EventId(000000, "GoogleCloudStorage.ErrorListingAllTheBlobs"),
+            new EventId(998879, "GoogleCloudStorage.ErrorListingAllTheBlobs"),
             "There was an error listing all the blobs."
         );
 
     private static readonly Action<ILogger, string, Exception, Exception> ERROR_UPLOADING_THE_BLOB_WITH_NAME =
         LoggerMessage.Define<string, Exception>(
             LogLevel.Error,
-            new EventId(000000, "GoogleCloudStorage.ErrorUploadingTheBlobWithName"),
+            new EventId(166344, "GoogleCloudStorage.ErrorUploadingTheBlobWithName"),
             "There was an error uploading the blob with name '{blobName}'. {ex}"
         );
 
     private static readonly Action<ILogger, Exception> ERROR_BLOB_WITH_THE_KEY_EXISTS =
         LoggerMessage.Define(
             LogLevel.Error,
-            new EventId(000000, "GoogleCloudStorage.ErrorBlobWithTheKeyExists"),
+            new EventId(358892, "GoogleCloudStorage.ErrorBlobWithTheKeyExists"),
             "The blob with the given key already exists."
         );
 
     private static readonly Action<ILogger, string, Exception, Exception> ERROR_DELETING_THE_BLOB_WITH_NAME =
         LoggerMessage.Define<string, Exception>(
             LogLevel.Error,
-            new EventId(000000, "GoogleCloudStorage.ErrorDeletingTheBlobWithName"),
+            new EventId(304533, "GoogleCloudStorage.ErrorDeletingTheBlobWithName"),
             "There was an error downloading the blob with name '{blobName}'. {ex}"
         );
 
