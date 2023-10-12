@@ -1,5 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
@@ -8,14 +10,12 @@ namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuo
 public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEventHandler<TierQuotaDefinitionDeletedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly ITiersRepository _tiersRepository;
+    private readonly IMetricStatusesService _metricStatusesService;
     private readonly ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> _logger;
 
-    public TierQuotaDefinitionDeletedIntegrationEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> logger)
+    public TierQuotaDefinitionDeletedIntegrationEventHandler(IIdentitiesRepository identitiesRepository, IMetricStatusesService metricStatusesService, ILogger<TierQuotaDefinitionDeletedIntegrationEventHandler> logger)
     {
-        _identitiesRepository = identitiesRepository;
-        _tiersRepository = tiersRepository;
+        _metricStatusesService = metricStatusesService;
         _logger = logger;
     }
 
@@ -23,22 +23,13 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
     {
         _logger.LogTrace("Handling '{eventName}' ... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
 
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
+        var identitiesOfTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None);
 
-        if (!identitiesWithTier.Any())
-        {
-            _logger.LogTrace("No identities found with tier ID: '{tierId}'", @event.TierId);
-            return;
-        }
-
-        var tierQuotaDefinition = await _tiersRepository.FindTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None, true);
-
-        foreach (var identity in identitiesWithTier)
-        {
-            identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition.Id);
-        }
-
-        await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
+        await _metricStatusesService.RecalculateMetricStatuses(
+            identitiesOfTier.Select(i => i.TierId.ToString()).ToList(),
+            MetricKey.GetSupportedMetricKeyValues().ToList(),
+            CancellationToken.None
+        );
 
         _logger.LogTrace("Successfully deleted quotas for Identities.");
     }
