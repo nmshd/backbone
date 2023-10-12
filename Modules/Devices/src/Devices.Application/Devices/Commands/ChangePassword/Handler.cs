@@ -33,6 +33,21 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         if (!changePasswordResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
-        _logger.LogTrace("Successfully changed password for device with id '{activeDevice}'.", _activeDevice);
+        _logger.ChangedPasswordForDeviceWithId(_activeDevice);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, DeviceId, Exception> CHANGED_PASSWORD_FOR_DEVICE_WITH_ID =
+        LoggerMessage.Define<DeviceId>(
+            LogLevel.Information,
+            new EventId(277894, "ChangePassword.Handler.ChangedPasswordForDeviceWithId"),
+            "Successfully changed password for device with id '{activeDevice}'."
+        );
+
+    public static void ChangedPasswordForDeviceWithId(this ILogger logger, DeviceId activeDevice)
+    {
+        CHANGED_PASSWORD_FOR_DEVICE_WITH_ID(logger, activeDevice, default!);
     }
 }
