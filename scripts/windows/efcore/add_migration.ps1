@@ -34,31 +34,8 @@ function AddMigration {
 
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
-    CompileModels $provider
-}
 
-function CompileModels {
-    param (
-        $provider
-    )
-
-    switch($moduleName){
-        "AdminUi" {
-            $startupProject = $adminUiProject
-            $outputDir = "$repoRoot\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
-            $namespace = "$moduleName.Infrastructure.CompiledModels.$provider"
-        }
-        Default {
-            $startupProject = $consumerApiProject
-            $outputDir = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure\CompiledModels\$provider"
-            $namespace = "Backbone.Modules.$moduleName.Infrastructure.CompiledModels.$provider"
-        }
-    }
-
-    $cmdOptimizeDbContext = "dotnet ef dbcontext optimize --project '$startupProject' --context $dbContextName --output-dir $outputDir --namespace $namespace"
-
-    Write-Host "Compiling '$provider' models for '$moduleName'..."
-    Invoke-Expression $cmdOptimizeDbContext
+    & $PSScriptRoot/compile_models.ps1 $moduleName $provider
 }
 
 switch ($provider) {
