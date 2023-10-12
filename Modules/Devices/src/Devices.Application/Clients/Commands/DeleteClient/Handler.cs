@@ -21,6 +21,21 @@ public class Handler : IRequestHandler<DeleteClientCommand>
 
         await _oAuthClientsRepository.Delete(request.ClientId, cancellationToken);
 
-        _logger.LogTrace("Successfully deleted client with id '{clientId}'.", request.ClientId);
+        _logger.DeletedClientWithId(request.ClientId);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, string, Exception> DELETED_CLIENT_WITH_ID =
+        LoggerMessage.Define<string>(
+            LogLevel.Information,
+            new EventId(418943, "DeleteClient.Handler.DeletedClientWithId"),
+            "Successfully deleted client with id '{clientId}'."
+        );
+
+    public static void DeletedClientWithId(this ILogger logger, string clientId)
+    {
+        DELETED_CLIENT_WITH_ID(logger, clientId, default!);
     }
 }
