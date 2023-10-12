@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection.Metadata;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Google;
@@ -57,7 +58,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         catch (Exception ex)
         {
             EliminateNotFound(ex, blobId);
-            _logger.LogError("There was an error downloading the blob with key '{blobId}'. {ex}", blobId, ex);
+            _logger.ErrorDownloadingTheBlobWithKey(blobId, ex);
             throw;
         }
     }
@@ -75,7 +76,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError("There was an error listing all the blobs.", ex);
+            _logger.ErrorListingAllTheBlobs(ex);
             throw;
         }
     }
@@ -116,7 +117,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError("There was an error uploading the blob with key '{blobName}'. {ex}", blob.Name, ex);
+                _logger.ErrorUploadingTheBlobWithName(blob.Name, ex);
                 throw;
             }
             finally
@@ -133,7 +134,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             await _logger.TraceTime(async () =>
                 await _storageClient.GetObjectAsync(folder, key), nameof(_storageClient.GetObjectAsync));
 
-            _logger.LogError("The blob with the given key already exists.");
+            _logger.ErrorBlobWithTheKeyExists();
             throw new BlobAlreadyExistsException(key);
         }
         catch (GoogleApiException ex)
@@ -160,7 +161,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             catch (Exception ex)
             {
                 EliminateNotFound(ex, blob.Name);
-                _logger.LogError("There was an error deleting the blob with key '{blobKey}'. {ex}", blob, ex);
+                _logger.ErrorDeletingTheBlobWithName(blob.Name, ex);
                 throw;
             }
 
@@ -170,4 +171,67 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     private record ChangedBlob(string Folder, string Name, byte[] Content);
 
     private record RemovedBlob(string Folder, string Name);
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, string, Exception, Exception> ERROR_DOWNLOADING_THE_BLOB_WITH_KEY =
+        LoggerMessage.Define<string, Exception>(
+            LogLevel.Error,
+            new EventId(000000, "GoogleCloudStorage.ErrorDownloadingTheBlobWithKey"),
+            "There was an error downloading the blob with key '{blobId}'. {ex}"
+        );
+
+    private static readonly Action<ILogger, Exception> ERROR_LISTING_ALL_THE_BLOBS =
+        LoggerMessage.Define(
+            LogLevel.Error,
+            new EventId(000000, "GoogleCloudStorage.ErrorListingAllTheBlobs"),
+            "There was an error listing all the blobs."
+        );
+
+    private static readonly Action<ILogger, string, Exception, Exception> ERROR_UPLOADING_THE_BLOB_WITH_NAME =
+        LoggerMessage.Define<string, Exception>(
+            LogLevel.Error,
+            new EventId(000000, "GoogleCloudStorage.ErrorUploadingTheBlobWithName"),
+            "There was an error uploading the blob with name '{blobName}'. {ex}"
+        );
+
+    private static readonly Action<ILogger, Exception> ERROR_BLOB_WITH_THE_KEY_EXISTS =
+        LoggerMessage.Define(
+            LogLevel.Error,
+            new EventId(000000, "GoogleCloudStorage.ErrorBlobWithTheKeyExists"),
+            "The blob with the given key already exists."
+        );
+
+    private static readonly Action<ILogger, string, Exception, Exception> ERROR_DELETING_THE_BLOB_WITH_NAME =
+        LoggerMessage.Define<string, Exception>(
+            LogLevel.Error,
+            new EventId(000000, "GoogleCloudStorage.ErrorDeletingTheBlobWithName"),
+            "There was an error downloading the blob with name '{blobName}'. {ex}"
+        );
+
+    public static void ErrorDownloadingTheBlobWithKey(this ILogger logger, string blobId, Exception e)
+    {
+        ERROR_DOWNLOADING_THE_BLOB_WITH_KEY(logger, blobId, e, e);
+    }
+
+    public static void ErrorListingAllTheBlobs(this ILogger logger, Exception e)
+    {
+        ERROR_LISTING_ALL_THE_BLOBS(logger, e);
+    }
+
+    public static void ErrorUploadingTheBlobWithName(this ILogger logger, string blobName, Exception e)
+    {
+        ERROR_UPLOADING_THE_BLOB_WITH_NAME(logger, blobName, e, e);
+    }
+
+    public static void ErrorBlobWithTheKeyExists(this ILogger logger)
+    {
+        ERROR_BLOB_WITH_THE_KEY_EXISTS(logger, default!);
+    }
+
+    public static void ErrorDeletingTheBlobWithName(this ILogger logger, string blobName, Exception e)
+    {
+        ERROR_DELETING_THE_BLOB_WITH_NAME(logger, blobName, e, e);
+    }
 }
