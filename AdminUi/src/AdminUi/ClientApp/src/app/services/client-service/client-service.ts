@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
+import { TierDTO } from "../tier-service/tier.service";
 
 @Injectable({
     providedIn: "root"
@@ -46,8 +47,7 @@ export class ClientServiceService {
 export interface ClientOverview {
     clientId: string;
     displayName?: string;
-    defaultTierId: string;
-    defaultTierName: string;
+    defaultTier: TierDTO;
     createdAt: Date;
     numberOfIdentities: number;
 }

@@ -55,3 +55,8 @@ export interface TierOverview {
     name: string;
     numberOfIdentities: number;
 }
+
+export interface TierDTO {
+    id: string;
+    name: string;
+}
