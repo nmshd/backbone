@@ -39,7 +39,7 @@ public class AzureNotificationHubPushService : IPushService
 
         await _notificationHubClient.CreateOrUpdateInstallationAsync(installation, cancellationToken);
 
-        _logger.LogTrace("New device successfully registered.");
+        _logger.DeviceRegistered();
     }
 
     public async Task SendNotification(IdentityAddress recipient, object pushNotification, CancellationToken cancellationToken)
@@ -58,8 +58,6 @@ public class AzureNotificationHubPushService : IPushService
                 .Build();
 
             await _notificationHubClient.SendNotificationAsync(notification, GetNotificationTags(recipient), cancellationToken);
-
-            _logger.LogTrace("Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification}", recipient, notificationPlatform, notification.ToJson());
         }
     }
 
@@ -74,7 +72,7 @@ public class AzureNotificationHubPushService : IPushService
         else
         {
             await _notificationHubClient.DeleteInstallationAsync(deviceId, cancellationToken);
-            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
+            _logger.DeviceUnregistered(deviceId);
         }
     }
 
@@ -115,5 +113,32 @@ public static class NotificationExtensions
     public static string ToJson(this Notification notification)
     {
         return JsonSerializer.Serialize(notification, SERIALIZER_OPTIONS);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, Exception> DEVICE_REGISTERED =
+        LoggerMessage.Define(
+            LogLevel.Information,
+            new EventId(585563, "AzureNotificationHubPushService.DeviceRegistered"),
+            "New device successfully registered."
+        );
+
+    private static readonly Action<ILogger, DeviceId, Exception> DEVICE_UNREGISTERED =
+        LoggerMessage.Define<DeviceId>(
+            LogLevel.Information,
+            new EventId(767782, "AzureNotificationHubPushService.DeviceUnregistered"),
+            "Unregistered device '{deviceId}' from push notifications."
+        );
+
+    public static void DeviceRegistered(this ILogger logger)
+    {
+        DEVICE_REGISTERED(logger, default!);
+    }
+
+    public static void DeviceUnregistered(this ILogger logger, DeviceId deviceId)
+    {
+        DEVICE_UNREGISTERED(logger, deviceId, default!);
     }
 }
