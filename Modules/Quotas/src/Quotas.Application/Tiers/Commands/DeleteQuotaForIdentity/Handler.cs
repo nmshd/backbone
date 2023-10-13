@@ -33,6 +33,21 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.LogTrace("Successfully deleted individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
+        _logger.DeletedQuota(request.IndividualQuotaId);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, string, Exception> DELETED_QUOTA =
+        LoggerMessage.Define<string>(
+            LogLevel.Information,
+            new EventId(247156, "DeleteQuotaForIdentity.Handler.DeletedQuota"),
+            "Successfully deleted individual quota with id: '{individualQuotaId}'."
+        );
+
+    public static void DeletedQuota(this ILogger logger, string IndividualQuotaId)
+    {
+        DELETED_QUOTA(logger, IndividualQuotaId, default!);
     }
 }
