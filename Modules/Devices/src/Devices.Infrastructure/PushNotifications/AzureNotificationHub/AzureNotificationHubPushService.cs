@@ -59,7 +59,22 @@ public class AzureNotificationHubPushService : IPushService
 
             await _notificationHubClient.SendNotificationAsync(notification, GetNotificationTags(recipient), cancellationToken);
 
-            _logger.LogTrace($"Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification.ToJson()}");
+            _logger.LogTrace("Successfully sent push notification to identity '{recipient}' on platform '{notificationPlatform}': {notification}", recipient, notificationPlatform, notification.ToJson());
+        }
+    }
+
+    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        var installationExists = await _notificationHubClient.InstallationExistsAsync(deviceId, cancellationToken);
+
+        if (!installationExists)
+        {
+            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+        }
+        else
+        {
+            await _notificationHubClient.DeleteInstallationAsync(deviceId, cancellationToken);
+            _logger.LogInformation("Unregistered device '{deviceId} from push notifications.", deviceId);
         }
     }
 

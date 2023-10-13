@@ -22,6 +22,28 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+                {
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DefaultTier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfIdentities")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("ClientOverviews", (string)null);
+                });
+
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")

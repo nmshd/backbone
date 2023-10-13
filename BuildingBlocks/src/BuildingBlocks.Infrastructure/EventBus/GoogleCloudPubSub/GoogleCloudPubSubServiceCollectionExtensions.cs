@@ -25,17 +25,16 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusGoogleCloudPubSub(googleCloudPubSubPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope);
+                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior);
         });
     }
 }
 
-public class GoogleCloudPubSubOptions
+public class GoogleCloudPubSubOptions : BasicBusOptions
 {
 #pragma warning disable CS8618
     public string ProjectId { get; set; }
     public string TopicName { get; set; }
-    public string SubscriptionClientName { get; set; }
     public string ConnectionInfo { get; set; }
 #pragma warning restore CS8618
 }

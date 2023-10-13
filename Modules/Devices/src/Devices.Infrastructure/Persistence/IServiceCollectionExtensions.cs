@@ -1,8 +1,8 @@
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,34 +20,45 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        switch (options.Provider)
-        {
-            case SQLSERVER:
-                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    }).UseOpenIddict()
-                );
-                break;
-            case POSTGRES:
-                services.AddDbContext<DevicesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    }).UseOpenIddict()
-
-                );
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {options.Provider}");
-
-        }
-
+        services
+            .AddDbContext<DevicesDbContext>(dbContextOptions =>
+            {
+                switch (options.Provider)
+                {
+                    case SQLSERVER:
+                        dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        });
+                        dbContextOptions.UseOpenIddict<
+                            CustomOpenIddictEntityFrameworkCoreApplication,
+                            CustomOpenIddictEntityFrameworkCoreAuthorization,
+                            CustomOpenIddictEntityFrameworkCoreScope,
+                            CustomOpenIddictEntityFrameworkCoreToken,
+                            string>();
+                        dbContextOptions.UseModel(CompiledModels.SqlServer.DevicesDbContextModel.Instance);
+                        break;
+                    case POSTGRES:
+                        dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        });
+                        dbContextOptions.UseOpenIddict<
+                            CustomOpenIddictEntityFrameworkCoreApplication,
+                            CustomOpenIddictEntityFrameworkCoreAuthorization,
+                            CustomOpenIddictEntityFrameworkCoreScope,
+                            CustomOpenIddictEntityFrameworkCoreToken,
+                            string>();
+                        dbContextOptions.UseModel(CompiledModels.Postgres.DevicesDbContextModel.Instance);
+                        break;
+                    default:
+                        throw new Exception($"Unsupported database provider: {options.Provider}");
+                }
+            });
         services.AddScoped<IDevicesDbContext, DevicesDbContext>();
 
         services.AddRepositories();

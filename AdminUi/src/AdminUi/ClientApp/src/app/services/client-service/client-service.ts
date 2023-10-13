@@ -14,8 +14,12 @@ export class ClientServiceService {
         this.apiUrl = `${environment.apiUrl}/Clients`;
     }
 
-    public getClients(): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
-        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(this.apiUrl);
+    public getClientById(id: string): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.get<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${id}`);
+    }
+
+    public getClients(): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
+        return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl);
     }
 
     public createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
@@ -29,19 +33,32 @@ export class ClientServiceService {
     public changeClientSecret(clientId: string, request: ChangeClientSecretRequest): Observable<HttpResponseEnvelope<Client>> {
         return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}/ChangeSecret`, request);
     }
+
+    public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
+    }
 }
 
-export interface ClientDTO {
+export interface ClientOverview {
     clientId: string;
     displayName: string;
+    defaultTier: string;
+    createdAt: Date;
+    numberOfIdentities: number;
 }
 
 export interface Client {
     clientId?: string;
     displayName: string;
     clientSecret?: string;
+    defaultTier: string;
+    createdAt: Date;
 }
 
 export interface ChangeClientSecretRequest {
-    newSecret?: string;
+    newSecret: string;
+}
+
+export interface UpdateClientRequest {
+    defaultTier: string;
 }

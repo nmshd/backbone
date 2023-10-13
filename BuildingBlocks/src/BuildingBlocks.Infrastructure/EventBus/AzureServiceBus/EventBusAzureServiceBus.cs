@@ -18,6 +18,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     private readonly ILifetimeScope _autofac;
     private readonly ILogger<EventBusAzureServiceBus> _logger;
     private readonly ServiceBusProcessor _processor;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly ServiceBusSender _sender;
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
@@ -26,6 +27,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
         ILifetimeScope autofac,
+        HandlerRetryBehavior handlerRetryBehavior,
         string subscriptionClientName)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -38,7 +40,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _processor =
             _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
 
-        RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
+        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -63,11 +65,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             Subject = eventName
         };
 
-        _logger.LogTrace($"Sending integration event with id '{message.MessageId}'...");
+        _logger.LogTrace("Sending integration event with id '{MessageId}'...", message.MessageId);
 
-        await _sender.SendMessageAsync(message);
+        await _logger.TraceTime(async () =>
+            await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
 
-        _logger.LogTrace($"Successfully sent integration event with id '{message.MessageId}'.");
+        _logger.LogTrace("Successfully sent integration event with id '{MessageId}'.", message.MessageId);
     }
 
     public void Subscribe<T, TH>()
@@ -93,12 +96,17 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
             catch (ServiceBusException)
             {
-                _logger.LogInformation($"The messaging entity {eventName} already exists.");
+                _logger.LogInformation("The messaging entity '{eventName}' already exists.", eventName);
             }
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
+    }
+
+    public void StartConsuming()
+    {
+        RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
     }
 
     private async Task RegisterSubscriptionClientMessageHandlerAsync()
@@ -114,7 +122,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                     await args.CompleteMessageAsync(args.Message);
                 else
                     _logger.LogInformation(
-                        $"The event with the MessageId '{args.Message.MessageId}' wasn't processed and will therefore not be completed.");
+                        "The event with the MessageId '{messageId}' wasn't processed and will therefore not be completed.", args.Message.MessageId);
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
@@ -154,7 +162,16 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
             try
             {
-                await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+                var policy = EventBusRetryPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventType.Name,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
+
+                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
             catch (Exception ex)
             {
@@ -163,7 +180,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 return false;
             }
         }
-
 
         return true;
     }

@@ -151,6 +151,10 @@ export class IdentityService {
 
         return filterParameter;
     }
+
+    public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
+        return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
+    }
 }
 
 export interface Identity {
@@ -161,6 +165,7 @@ export interface Identity {
     identityVersion: string;
     quotas: Quota[];
     devices: Device[];
+    tierId: string;
 }
 
 export interface Device {
@@ -196,4 +201,8 @@ export interface IdentityOverviewFilter {
     lastLoginAt: DateFilter;
     datawalletVersion: NumberFilter;
     identityVersion: NumberFilter;
+}
+
+export interface UpdateTierRequest {
+    tierId: string;
 }

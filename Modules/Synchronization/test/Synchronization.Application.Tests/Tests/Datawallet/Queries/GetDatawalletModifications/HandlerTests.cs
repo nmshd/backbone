@@ -348,14 +348,14 @@ public class HandlerTests
         result.Should().HaveCount(2);
     }
 
-    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
+    private static Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)
     {
-        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
+        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(version), ACTIVE_IDENTITY);
     }
 
-    private static Backbone.Modules.Synchronization.Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
+    private static Domain.Entities.Datawallet CreateDatawalletFor(IdentityAddress owner)
     {
-        return new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), owner);
+        return new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), owner);
     }
 
 

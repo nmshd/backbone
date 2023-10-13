@@ -4,7 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { ClientDTO, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
@@ -19,13 +19,13 @@ export class ClientListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
     public header: string;
     public headerDescription: string;
-    public clients: ClientDTO[];
-    public serverClients: ClientDTO[];
+    public clients: ClientOverview[];
+    public serverClients: ClientOverview[];
     public loading = false;
-    public selection = new SelectionModel<ClientDTO>(true, []);
-    public displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
     public clientIdFilter: string;
     public displayNameFilter: string;
+    public selection = new SelectionModel<ClientOverview>(true, []);
+    public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "numberOfIdentities", "createdAt", "actions"];
 
     public constructor(
         private readonly router: Router,
@@ -48,9 +48,9 @@ export class ClientListComponent {
 
     public getPagedData(): void {
         this.loading = true;
-        this.selection = new SelectionModel<ClientDTO>(true, []);
+        this.selection = new SelectionModel<ClientOverview>(true, []);
         this.clientService.getClients().subscribe({
-            next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
+            next: (data: PagedHttpResponseEnvelope<ClientOverview>) => {
                 this.clients = data.result;
                 this.serverClients = data.result;
             },
@@ -160,7 +160,7 @@ export class ClientListComponent {
         this.selection.select(...this.clients);
     }
 
-    public checkboxLabel(index?: number, row?: ClientDTO): string {
+    public checkboxLabel(index?: number, row?: ClientOverview): string {
         if (!row || !index) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
@@ -173,5 +173,13 @@ export class ClientListComponent {
             minWidth: "50%",
             maxWidth: "100%"
         });
+    }
+
+    public async editClient(clientId: string): Promise<void> {
+        await this.router.navigate([`/clients/${clientId}`]);
+    }
+
+    public async goToTier(tierId: string): Promise<void> {
+        await this.router.navigate([`/tiers/${tierId}`]);
     }
 }

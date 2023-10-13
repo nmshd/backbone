@@ -25,16 +25,17 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
+    private readonly HandlerRetryBehavior _handlerRetryBehavior;
 
     public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac)
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior)
     {
         _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
+        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -61,7 +62,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             }
         };
 
-        var messageId = await _connection.PublisherClient.PublishAsync(message);
+        var messageId = await _logger.TraceTime(
+            () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
 
         _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
     }
@@ -72,9 +74,14 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
+    }
+
+    public void StartConsuming()
+    {
+        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
     private static string RemoveIntegrationEventSuffix(string typeName)
@@ -107,7 +114,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
         {
-            _logger.LogWarning("No subscription for event: {EventName}", eventName);
+            _logger.LogWarning("No subscription for event: '{EventName}'", eventName);
             return;
         }
 
@@ -128,7 +135,16 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
             var handleMethod = handler.GetType().GetMethod("Handle");
 
-            await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+            var policy = EventBusRetryPolicyFactory.Create(
+                    _handlerRetryBehavior,
+                    (ex, _) => _logger.LogWarning(
+                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
+                        eventName,
+                        ex.Message,
+                        ex.StackTrace)
+                    );
+
+            await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
     }
 }
