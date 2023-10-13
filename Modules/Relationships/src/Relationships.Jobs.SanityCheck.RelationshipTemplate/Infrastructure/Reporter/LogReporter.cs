@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for relationship template id: '{databaseId}'", databaseId);
+            _logger.NoBlobForRelationshipTemplateId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -37,5 +37,32 @@ public class LogReporter : IReporter
     public void ReportOrphanedDatabaseId(RelationshipTemplateId id)
     {
         _databaseIds.Add(id);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, RelationshipTemplateId, Exception> NO_BLOB_FOR_RELATIONSHIP_TEMPLATE_ID =
+        LoggerMessage.Define<RelationshipTemplateId>(
+            LogLevel.Error,
+            new EventId(231727, "Relationships.SanityCheck.NoBlobForRelationshipTemplateId"),
+            "No blob found for relationship template id: '{databaseId}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
+        LoggerMessage.Define<string>(
+            LogLevel.Error,
+            new EventId(232800, "Messages.SanityCheck.NoDatabaseEntryForBlobId"),
+            "No database entry found for blob id: '{blobId}'."
+        );
+
+    public static void NoBlobForRelationshipTemplateId(this ILogger logger, RelationshipTemplateId relationshipTemplateId)
+    {
+        NO_BLOB_FOR_RELATIONSHIP_TEMPLATE_ID(logger, relationshipTemplateId, default!);
+    }
+
+    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
+    {
+        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
     }
 }
