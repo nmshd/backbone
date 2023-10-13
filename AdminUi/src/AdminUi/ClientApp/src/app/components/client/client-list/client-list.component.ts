@@ -9,6 +9,7 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
 import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
+import { Sort } from "@angular/material/sort";
 @Component({
     selector: "app-client-list",
     templateUrl: "./client-list.component.html",
@@ -19,12 +20,12 @@ export class ClientListComponent {
     public header: string;
     public headerDescription: string;
     public clients: ClientDTO[];
-    public totalRecords: number;
-    public pageSize: number;
-    public pageIndex: number;
+    public serverClients: ClientDTO[];
     public loading = false;
     public selection = new SelectionModel<ClientDTO>(true, []);
     public displayedColumns: string[] = ["select", "clientId", "displayName", "actions"];
+    public clientIdFilter: string;
+    public displayNameFilter: string;
 
     public constructor(
         private readonly router: Router,
@@ -35,9 +36,9 @@ export class ClientListComponent {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
         this.clients = [];
-        this.totalRecords = 0;
-        this.pageSize = 10;
-        this.pageIndex = 0;
+        this.serverClients = [];
+        this.clientIdFilter = "";
+        this.displayNameFilter = "";
         this.loading = true;
     }
 
@@ -48,14 +49,10 @@ export class ClientListComponent {
     public getPagedData(): void {
         this.loading = true;
         this.selection = new SelectionModel<ClientDTO>(true, []);
-        this.clientService.getClients(this.pageIndex, this.pageSize).subscribe({
+        this.clientService.getClients().subscribe({
             next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
                 this.clients = data.result;
-                if (data.pagination) {
-                    this.totalRecords = data.pagination.totalRecords!;
-                } else {
-                    this.totalRecords = data.result.length;
-                }
+                this.serverClients = data.result;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -69,14 +66,34 @@ export class ClientListComponent {
         });
     }
 
-    public pageChangeEvent(event: PageEvent): void {
-        this.pageIndex = event.pageIndex;
-        this.pageSize = event.pageSize;
-        this.getPagedData();
+    public filterClients(): void {
+        this.loading = true;
+        this.clients = this.serverClients.filter((c) => c.clientId.indexOf(this.clientIdFilter) != -1 && c.clientId.indexOf(this.displayNameFilter) != -1);
+        this.loading = false;
     }
 
-    public dateConvert(date: any): string {
-        return new Date(date).toLocaleDateString();
+    public clearFilter(filter: string): void {
+        switch (filter) {
+            case "clientId":
+                this.clientIdFilter = "";
+                break;
+            case "displayName":
+                this.displayNameFilter = "";
+                break;
+        }
+
+        this.filterClients();
+    }
+
+    public onTableSort(sort: Sort): void {
+        switch (sort.active) {
+            case "clientId":
+                this.clients = this.clients.sort((a, b) => (a.clientId > b.clientId ? 1 : b.clientId > a.clientId ? -1 : 0));
+                break;
+            case "displayName":
+                this.clients = this.clients.sort((a, b) => (a.displayName > b.displayName ? 1 : b.displayName > a.displayName ? -1 : 0));
+                break;
+        }
     }
 
     public async addClient(): Promise<void> {

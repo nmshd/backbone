@@ -10,6 +10,7 @@
     padding: 1rem;
     min-width: 1350px;
     margin: auto;
+    width: fit-content;
 }
 
 .login-layout {

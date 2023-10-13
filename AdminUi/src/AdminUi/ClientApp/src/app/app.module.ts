@@ -53,6 +53,7 @@ import { LoggerWriterService } from "./services/logger-writer-service/logger-wri
 import { SidebarService } from "./services/sidebar-service/sidebar.service";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
     declarations: [
@@ -106,6 +107,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         MatDatepickerModule,
         MatNativeDateModule,
         MatCheckboxModule,
+        MatSortModule,
         MatListModule,
         MatGridListModule,
         MatTableModule,
