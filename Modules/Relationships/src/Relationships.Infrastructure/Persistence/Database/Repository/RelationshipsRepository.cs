@@ -172,7 +172,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
         catch (BlobAlreadyExistsException ex)
         {
-            _logger.LogError(ex, "There was an error while trying to save the content of the RelationshipChange with the id {id}. The name of the blob was {name}.", latestChange.Id, ex.BlobName);
+            _logger.LogError(latestChange.Id, ex.BlobName, ex);
         }
     }
 
@@ -194,5 +194,20 @@ public class RelationshipsRepository : IRelationshipsRepository
     private async Task FillContentOfChanges(IEnumerable<RelationshipChange> changes)
     {
         await Task.WhenAll(changes.Select(FillContentOfChange).ToArray());
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, RelationshipChangeId, string, Exception> ERROR_TRYING_TO_SAVE_RELATIONSHIP_CHANGE =
+        LoggerMessage.Define<RelationshipChangeId, string>(
+            LogLevel.Error,
+            new EventId(664861, "RelationshipsRepository.ErrorTryingToSaveRelationshipChange"),
+            "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'."
+        );
+
+    public static void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name, Exception e)
+    {
+        ERROR_TRYING_TO_SAVE_RELATIONSHIP_CHANGE(logger, id, name, e);
     }
 }
