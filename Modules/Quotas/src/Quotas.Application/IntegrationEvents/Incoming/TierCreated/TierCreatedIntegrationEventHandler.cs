@@ -20,7 +20,21 @@ public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierC
         var tier = new Tier(new TierId(integrationEvent.Id), integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.TierCreated(tier.Id, tier.Name);
     }
 }
 
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, TierId, string, Exception> TIER_CREATED =
+        LoggerMessage.Define<TierId, string>(
+            LogLevel.Information,
+            new EventId(151788, "TierCreatedIntegrationEventHandler.TierCreated"),
+            "Successfully created tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
+        );
+
+    public static void TierCreated(this ILogger logger, TierId tierId, string name)
+    {
+        TIER_CREATED(logger, tierId, name, default!);
+    }
+}
