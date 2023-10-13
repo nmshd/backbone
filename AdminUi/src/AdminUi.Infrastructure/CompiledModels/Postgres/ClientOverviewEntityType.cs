@@ -23,7 +23,8 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 "ClientId",
                 typeof(string),
                 propertyInfo: typeof(ClientOverview).GetProperty("ClientId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ClientOverview).GetField("<ClientId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(ClientOverview).GetField("<ClientId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                afterSaveBehavior: PropertySaveBehavior.Throw);
 
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
@@ -31,12 +32,6 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 propertyInfo: typeof(ClientOverview).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClientOverview).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
-
-            var defaultTier = runtimeEntityType.AddProperty(
-                "DefaultTier",
-                typeof(string),
-                propertyInfo: typeof(ClientOverview).GetProperty("DefaultTier", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(ClientOverview).GetField("<DefaultTier>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var displayName = runtimeEntityType.AddProperty(
                 "DisplayName",
@@ -49,6 +44,10 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 typeof(int),
                 propertyInfo: typeof(ClientOverview).GetProperty("NumberOfIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClientOverview).GetField("<NumberOfIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var key = runtimeEntityType.AddKey(
+                new[] { clientId });
+            runtimeEntityType.SetPrimaryKey(key);
 
             return runtimeEntityType;
         }
