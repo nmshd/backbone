@@ -21,13 +21,13 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
     public async Task Handle(TierQuotaDefinitionDeletedIntegrationEvent @event)
     {
-        _logger.LogTrace("Handling '{eventName}' ... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
+        _logger.LogTrace("Handling '{eventName}'... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
 
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
-            _logger.LogTrace("No identities found with tier ID: '{tierId}'", @event.TierId);
+            _logger.LogTrace("No identities found with tier ID: '{tierId}'.", @event.TierId);
             return;
         }
 
@@ -40,6 +40,21 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully deleted quotas for Identities.");
+        _logger.DeletedQuotasForIdentities();
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, Exception> DELETED_QUOTAS_FOR_IDENTITIES =
+        LoggerMessage.Define(
+            LogLevel.Information,
+            new EventId(942996, "TierQuotaDefinitionDeletedIntegrationEventHandler.DeletedQuotasForIdentities"),
+            "Successfully deleted quotas for Identities."
+        );
+
+    public static void DeletedQuotasForIdentities(this ILogger logger)
+    {
+        DELETED_QUOTAS_FOR_IDENTITIES(logger, default!);
     }
 }
