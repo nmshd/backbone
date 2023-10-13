@@ -93,7 +93,7 @@ export class IdentityListComponent {
     }
 
     public getClients(): void {
-        this.clientService.getClients(this.pageIndex, this.pageSize).subscribe({
+        this.clientService.getClients().subscribe({
             next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
                 this.clients = data.result;
             },
@@ -140,5 +140,61 @@ export class IdentityListComponent {
 
     public async goToTier(tierId: string): Promise<void> {
         await this.router.navigate([`/tiers/${tierId}`]);
+    }
+
+    public onFilterChange(filter: string): void {
+        switch (filter) {
+            case "address":
+                if (this.filter.address!.length > 2) this.getIdentities();
+                break;
+            case "tier":
+            case "client":
+                this.getIdentities();
+                break;
+            case "numberOfDevices":
+                if (
+                    (this.filter.numberOfDevices.operator != null && this.filter.numberOfDevices.operator != "" && this.filter.numberOfDevices.value != null) ||
+                    (this.filter.numberOfDevices.operator == null && this.filter.numberOfDevices.value == null)
+                )
+                    this.getIdentities();
+                break;
+            case "createdAt":
+                if (this.filter.createdAt.operator != null && this.filter.createdAt.operator != "" && this.filter.createdAt.value != null) this.getIdentities();
+                break;
+            case "lastLoginAt":
+                if (this.filter.lastLoginAt.operator != null && this.filter.lastLoginAt.operator != "" && this.filter.lastLoginAt.value != null) this.getIdentities();
+                break;
+            case "datawalletVersion":
+                if (
+                    (this.filter.datawalletVersion.operator != null && this.filter.datawalletVersion.operator != "" && this.filter.datawalletVersion.value != null) ||
+                    (this.filter.datawalletVersion.operator == null && this.filter.datawalletVersion.value == null)
+                )
+                    this.getIdentities();
+                break;
+            case "identityVersion":
+                if (
+                    (this.filter.identityVersion.operator != null && this.filter.identityVersion.operator != "" && this.filter.identityVersion.value != null) ||
+                    (this.filter.identityVersion.operator == null && this.filter.identityVersion.value == null)
+                )
+                    this.getIdentities();
+                break;
+        }
+    }
+
+    public clearFilter(filter: string): void {
+        switch (filter) {
+            case "address":
+                this.filter.address = "";
+                this.getIdentities();
+                break;
+            case "createdAt":
+                this.filter.createdAt.value = undefined;
+                if (this.filter.createdAt.operator != null) this.getIdentities();
+                break;
+            case "lastLoginAt":
+                this.filter.lastLoginAt.value = undefined;
+                if (this.filter.lastLoginAt.operator != null) this.getIdentities();
+                break;
+        }
     }
 }

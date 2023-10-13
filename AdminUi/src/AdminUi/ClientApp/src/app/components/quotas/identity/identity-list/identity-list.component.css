@@ -10,7 +10,14 @@
 .mat-column-created-at-filter,
 .mat-column-last-login-filter,
 .mat-column-lastLoginAt {
-    max-width: 300px;
+    max-width: 330px;
+}
+
+.mat-column-tier-filter,
+.mat-column-tierName,
+.mat-column-createdWithClient,
+.mat-column-client-filter {
+    max-width: 230px;
 }
 
 .mat-column-number-of-devices-filter,
@@ -19,12 +26,16 @@
 .mat-column-identityVersion,
 .mat-column-datawallet-version-filter,
 .mat-column-datawalletVersion {
-    max-width: 150px;
+    max-width: 200px;
 }
 
 .disabled-container {
     pointer-events: none;
     opacity: 0.4;
+}
+
+.inline-action-buttons ::ng-deep .mat-mdc-form-field-icon-suffix {
+    display: inherit;
 }
 
 .mat-column-address {

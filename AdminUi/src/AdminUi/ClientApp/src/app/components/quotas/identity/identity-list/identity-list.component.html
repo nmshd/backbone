@@ -2,8 +2,8 @@
     <h2 class="header-title">{{ header }}</h2>
     <p class="header-description">{{ headerDescription }}</p>
 </div>
-<mat-card [ngClass]="{ 'disabled-container': loading }">
-    <mat-card-content style="min-height: 400px">
+<mat-card [ngClass]="{ 'disabled-container': loading }" style="width: fit-content">
+    <mat-card-content style="min-height: 400px; min-width: 1350px">
         <div *ngIf="loading" class="loading">
             <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
         </div>
@@ -57,8 +57,8 @@
             <ng-container matColumnDef="address-filter">
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <mat-form-field style="width: 100%">
-                        <input matInput type="text" [(ngModel)]="filter.address" (change)="getIdentities()" />
-                        <button *ngIf="filter.address" matSuffix mat-icon-button aria-label="Clear" (click)="filter.address = ''">
+                        <input matInput type="text" [(ngModel)]="filter.address" (input)="onFilterChange('address')" />
+                        <button *ngIf="filter.address" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('address')">
                             <mat-icon>close</mat-icon>
                         </button>
                     </mat-form-field>
@@ -68,7 +68,7 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <mat-form-field>
                         <mat-label>Tiers</mat-label>
-                        <mat-select multiple [(ngModel)]="filter.tiers" (selectionChange)="getIdentities()">
+                        <mat-select multiple [(ngModel)]="filter.tiers" (selectionChange)="onFilterChange('tiers')">
                             <mat-option *ngFor="let tier of tiers" [value]="tier.id">{{ tier.name }}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -78,7 +78,7 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <mat-form-field>
                         <mat-label>Clients</mat-label>
-                        <mat-select multiple [(ngModel)]="filter.clients" (selectionChange)="getIdentities()">
+                        <mat-select multiple [(ngModel)]="filter.clients" (selectionChange)="onFilterChange('clients')">
                             <mat-option *ngFor="let client of clients" [value]="client.clientId">{{ client.displayName }}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -88,12 +88,13 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <div class="filter-cell">
                         <mat-form-field style="width: 45%">
-                            <mat-select [(ngModel)]="filter.numberOfDevices.operator" (selectionChange)="getIdentities()">
+                            <mat-select [(ngModel)]="filter.numberOfDevices.operator" (selectionChange)="onFilterChange('numberOfDevices')">
+                                <mat-option></mat-option>
                                 <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field style="width: 45%">
-                            <input matInput type="number" [(ngModel)]="filter.numberOfDevices.value" (change)="getIdentities()" />
+                            <input matInput type="number" [(ngModel)]="filter.numberOfDevices.value" (change)="onFilterChange('numberOfDevices')" (input)="onFilterChange('numberOfDevices')" />
                         </mat-form-field>
                     </div>
                 </th>
@@ -102,14 +103,18 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <div class="filter-cell">
                         <mat-form-field style="width: 20%">
-                            <mat-select [(ngModel)]="filter.createdAt.operator" (selectionChange)="getIdentities()">
+                            <mat-select [(ngModel)]="filter.createdAt.operator" (selectionChange)="onFilterChange('createdAt')">
+                                <mat-option></mat-option>
                                 <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field style="width: 70%">
+                        <mat-form-field style="width: 70%" class="inline-action-buttons">
                             <mat-label>Choose a date</mat-label>
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.createdAt.value" (change)="getIdentities()" />
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.createdAt.value" (dateChange)="onFilterChange('createdAt')" />
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <button *ngIf="filter.createdAt.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('createdAt')">
+                                <mat-icon>close</mat-icon>
+                            </button>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
@@ -119,14 +124,18 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <div class="filter-cell">
                         <mat-form-field style="width: 20%">
-                            <mat-select [(ngModel)]="filter.lastLoginAt.operator">
+                            <mat-select [(ngModel)]="filter.lastLoginAt.operator" (selectionChange)="onFilterChange('lastLoginAt')">
+                                <mat-option></mat-option>
                                 <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field style="width: 70%">
+                        <mat-form-field style="width: 70%" class="inline-action-buttons">
                             <mat-label>Choose a date</mat-label>
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.lastLoginAt.value" />
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.lastLoginAt.value" (dateChange)="onFilterChange('lastLoginAt')" />
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <button *ngIf="filter.lastLoginAt.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('lastLoginAt')">
+                                <mat-icon>close</mat-icon>
+                            </button>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
@@ -136,12 +145,13 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <div class="filter-cell">
                         <mat-form-field style="width: 45%">
-                            <mat-select [(ngModel)]="filter.datawalletVersion.operator" (selectionChange)="getIdentities()">
+                            <mat-select [(ngModel)]="filter.datawalletVersion.operator" (selectionChange)="onFilterChange('datawalletVersion')">
+                                <mat-option></mat-option>
                                 <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field style="width: 45%">
-                            <input matInput type="number" [(ngModel)]="filter.datawalletVersion.value" (change)="getIdentities()" />
+                            <input matInput type="number" [(ngModel)]="filter.datawalletVersion.value" (change)="onFilterChange('datawalletVersion')" (input)="onFilterChange('datawalletVersion')" />
                         </mat-form-field>
                     </div>
                 </th>
@@ -150,12 +160,13 @@
                 <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
                     <div class="filter-cell">
                         <mat-form-field style="width: 45%">
-                            <mat-select [(ngModel)]="filter.identityVersion.operator" (selectionChange)="getIdentities()">
+                            <mat-select [(ngModel)]="filter.identityVersion.operator" (selectionChange)="onFilterChange('identityVersion')">
+                                <mat-option></mat-option>
                                 <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field style="width: 45%">
-                            <input matInput type="number" [(ngModel)]="filter.identityVersion.value" (change)="getIdentities()" />
+                            <input matInput type="number" [(ngModel)]="filter.identityVersion.value" (change)="onFilterChange('identityVersion')" (input)="onFilterChange('identityVersion')" />
                         </mat-form-field>
                     </div>
                 </th>
