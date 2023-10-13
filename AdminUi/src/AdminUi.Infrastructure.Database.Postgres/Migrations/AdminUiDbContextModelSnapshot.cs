@@ -17,7 +17,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -25,10 +25,12 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
                 {
                     b.Property<string>("ClientId")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("DefaultTier")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -36,8 +38,6 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<int>("NumberOfIdentities")
                         .HasColumnType("integer");
-
-                    b.HasKey("ClientId");
 
                     b.ToTable((string)null);
 
@@ -96,36 +96,6 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("TierOverviews", (string)null);
-                });
-
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
-                {
-                    b.OwnsOne("AdminUi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
-                        {
-                            b1.Property<string>("ClientOverviewClientId")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Id")
-                                .HasColumnType("text")
-                                .HasColumnName("DefaultTierId");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("DefaultTierName");
-
-                            b1.HasKey("ClientOverviewClientId");
-
-                            b1.ToTable((string)null);
-
-                            b1.ToView("ClientOverviews");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ClientOverviewClientId");
-                        });
-
-                    b.Navigation("DefaultTier")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
