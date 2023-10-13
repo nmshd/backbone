@@ -172,7 +172,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
         catch (BlobAlreadyExistsException ex)
         {
-            _logger.LogError(latestChange.Id, ex.BlobName, ex);
+            _logger.ErrorTryingToSaveRelationshipChange(latestChange.Id, ex.BlobName, ex);
         }
     }
 
