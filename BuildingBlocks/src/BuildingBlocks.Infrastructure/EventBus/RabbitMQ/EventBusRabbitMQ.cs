@@ -28,6 +28,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private IModel _consumerChannel;
     private readonly string? _queueName;
+    private EventingBasicConsumer? _consumer;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
@@ -48,6 +49,16 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         _consumerChannel.Dispose();
         _subsManager.Clear();
+    }
+
+    public void StartConsuming()
+    {
+        if (_consumer is null)
+        {
+            throw new Exception("Cannnot start consuming without a consumer set.");
+        }
+
+        _consumerChannel.BasicConsume(_queueName, false, _consumer);
     }
 
     public void Publish(IntegrationEvent @event)
@@ -144,8 +155,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             false,
             null);
 
-        var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += async (_, eventArgs) =>
+        _consumer = new EventingBasicConsumer(channel);
+        _consumer.Received += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
@@ -162,8 +173,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 _logger.ErrorWhileProcessingIntegrationEvent(eventName, ex);
             }
         };
-
-        channel.BasicConsume(_queueName, false, consumer);
 
         channel.CallbackException += (_, ea) =>
         {
@@ -183,7 +192,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
             await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
-
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {

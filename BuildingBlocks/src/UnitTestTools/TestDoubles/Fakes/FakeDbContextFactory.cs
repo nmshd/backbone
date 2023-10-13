@@ -1,14 +1,16 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Enmeshed.UnitTestTools.TestDoubles.Fakes;
 
 public static class FakeDbContextFactory
 {
     public static (TContext arrangeContext, TContext assertionContext, TContext actContext)
-        CreateDbContexts<TContext>() where TContext : DbContext
+        CreateDbContexts<TContext>(SqliteConnection? connection = null) where TContext : DbContext
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
+        connection ??= CreateDbConnection();
         connection.Open();
 
         var options = new DbContextOptionsBuilder<TContext>()
@@ -26,5 +28,10 @@ public static class FakeDbContextFactory
         var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
 
         return (arrangeContext, assertionContext, actContext);
+    }
+
+    public static SqliteConnection CreateDbConnection()
+    {
+        return new SqliteConnection("DataSource=:memory:");
     }
 }
