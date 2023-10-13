@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for relationship change id: '{databaseId}'", databaseId);
+            _logger.NoBlobForRelationshipChangeId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -37,5 +37,32 @@ public class LogReporter : IReporter
     public void ReportOrphanedDatabaseId(RelationshipChangeId id)
     {
         _databaseIds.Add(id);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, RelationshipChangeId, Exception> NO_BLOB_FOR_RELATIONSHIP_CHANGE_ID =
+        LoggerMessage.Define<RelationshipChangeId>(
+            LogLevel.Error,
+            new EventId(349287, "Relationships.SanityCheck.NoBlobForRelationshipChangeId"),
+            "No blob found for relationship change id: '{databaseId}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
+        LoggerMessage.Define<string>(
+            LogLevel.Error,
+            new EventId(429922, "Messages.SanityCheck.NoDatabaseEntryForBlobId"),
+            "No database entry found for blob id: '{blobId}'."
+        );
+
+    public static void NoBlobForRelationshipChangeId(this ILogger logger, RelationshipChangeId relationshipChangeId)
+    {
+        NO_BLOB_FOR_RELATIONSHIP_CHANGE_ID(logger, relationshipChangeId, default!);
+    }
+
+    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
+    {
+        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
     }
 }
