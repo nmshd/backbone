@@ -36,9 +36,6 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     private void After()
     {
         _watch!.Stop();
-
-        var logLevel = _watch.ElapsedMilliseconds < 1000 ? LogLevel.Information : LogLevel.Warning;
-
         _logger.HandleRequest(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
 }
