@@ -46,8 +46,8 @@ file static class LoggerExtensions
             "Successfully deleted individual quota with id: '{individualQuotaId}'."
         );
 
-    public static void DeletedQuota(this ILogger logger, string IndividualQuotaId)
+    public static void DeletedQuota(this ILogger logger, string individualQuotaId)
     {
-        DELETED_QUOTA(logger, IndividualQuotaId, default!);
+        DELETED_QUOTA(logger, individualQuotaId, default!);
     }
 }
