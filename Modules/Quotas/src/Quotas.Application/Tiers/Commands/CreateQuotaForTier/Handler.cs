@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
@@ -26,7 +27,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
     public async Task<TierQuotaDefinitionDTO> Handle(CreateQuotaForTierCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handling CreateQuotaForTierCommand ...");
+        _logger.LogTrace("Handling CreateQuotaForTierCommand ...");
 
         var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true);
 
@@ -43,13 +44,26 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.LogTrace("Successfully created assigned Quota to Tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.CreatedQuotaToTier(tier.Id, tier.Name);
 
         _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
 
-        _logger.LogTrace("Successfully published QuotaCreatedForTierIntegrationEvent. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
-
         var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric), result.Value.Max, result.Value.Period);
         return response;
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, TierId, string, Exception> CREATED_QUOTA_TO_TIER =
+        LoggerMessage.Define<TierId, string>(
+            LogLevel.Information,
+            new EventId(346835, "CreateQuotaForTier.Handler.CreatedQuotaToTier"),
+            "Successfully created Quota to Tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
+        );
+
+    public static void CreatedQuotaToTier(this ILogger logger, TierId tierId, string identityAddress)
+    {
+        CREATED_QUOTA_TO_TIER(logger, tierId, identityAddress, default!);
     }
 }
