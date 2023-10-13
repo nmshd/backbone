@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for datawallet modification id: '{databaseId}'", databaseId);
+            _logger.NoBlobForDatawalletModificationId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -37,5 +37,32 @@ public class LogReporter : IReporter
     public void ReportOrphanedDatabaseId(DatawalletModificationId id)
     {
         _databaseIds.Add(id);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, DatawalletModificationId, Exception> NO_BLOB_FOR_DATAWALLET_MODIFICATION_ID =
+        LoggerMessage.Define<DatawalletModificationId>(
+            LogLevel.Error,
+            new EventId(525684, "Synchronization.SanityCheck.NoBlobForDatawalletModificationId"),
+            "No blob found for datawallet modification id: '{databaseId}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
+        LoggerMessage.Define<string>(
+            LogLevel.Error,
+            new EventId(560290, "Synchronization.SanityCheck.NoDatabaseEntryForBlobId"),
+            "No database entry found for blob id: '{blobId}'."
+        );
+
+    public static void NoBlobForDatawalletModificationId(this ILogger logger, DatawalletModificationId datawalletModificationId)
+    {
+        NO_BLOB_FOR_DATAWALLET_MODIFICATION_ID(logger, datawalletModificationId, default!);
+    }
+
+    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
+    {
+        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
     }
 }
