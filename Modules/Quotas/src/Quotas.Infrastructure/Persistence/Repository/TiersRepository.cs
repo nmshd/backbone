@@ -50,15 +50,6 @@ public class TiersRepository : ITiersRepository
         return tierQuotaDefinition;
     }
 
-    public async Task RemoveTierQuotaDefinitionById(string id)
-    {
-        var deletedCount = await _tierQuotaDefinitions.Where(t => t.Id == id).ExecuteDeleteAsync();
-        if (deletedCount == 0)
-        {
-            throw new DomainException(GenericDomainErrors.NotFound("Tier Quota Definition"));
-        }
-    }
-
     public async Task RemoveById(TierId tierId)
     {
         await _tiers.Where(t => t.Id == tierId).ExecuteDeleteAsync();
