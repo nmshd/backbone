@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for token id: '{databaseId}'", databaseId);
+            _logger.NoBlobForTokenId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -37,5 +37,32 @@ public class LogReporter : IReporter
     public void ReportOrphanedDatabaseId(TokenId id)
     {
         _databaseIds.Add(id);
+    }
+}
+
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, TokenId, Exception> NO_BLOB_FOR_TOKEN_ID =
+        LoggerMessage.Define<TokenId>(
+            LogLevel.Error,
+            new EventId(826083, "Tokens.SanityCheck.NoBlobForTokenId"),
+            "No blob found for token id: '{tokenId}'."
+        );
+
+    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
+        LoggerMessage.Define<string>(
+            LogLevel.Error,
+            new EventId(271286, "Tokens.SanityCheck.NoDatabaseEntryForBlobId"),
+            "No database entry found for blob id: '{blobId}'."
+        );
+
+    public static void NoBlobForTokenId(this ILogger logger, TokenId tokenId)
+    {
+        NO_BLOB_FOR_TOKEN_ID(logger, tokenId, default!);
+    }
+
+    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
+    {
+        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
     }
 }
