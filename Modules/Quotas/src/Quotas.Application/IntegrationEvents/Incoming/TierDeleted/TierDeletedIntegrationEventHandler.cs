@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +21,21 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
 
         await _tiersRepository.RemoveById(tier.Id);
 
-        _logger.LogTrace("Successfully deleted tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.TierDeleted(tier.Id, tier.Name);
     }
 }
 
+file static class LoggerExtensions
+{
+    private static readonly Action<ILogger, TierId, string, Exception> TIER_DELETED =
+        LoggerMessage.Define<TierId, string>(
+            LogLevel.Information,
+            new EventId(582359, "TierDeletedIntegrationEventHandler.TierDeleted"),
+            "Successfully deleted tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
+        );
+
+    public static void TierDeleted(this ILogger logger, TierId tierId, string name)
+    {
+        TIER_DELETED(logger, tierId, name, default!);
+    }
+}
