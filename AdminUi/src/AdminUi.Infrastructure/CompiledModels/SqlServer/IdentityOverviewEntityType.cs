@@ -23,7 +23,8 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 "Address",
                 typeof(string),
                 propertyInfo: typeof(IdentityOverview).GetProperty("Address", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<Address>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(IdentityOverview).GetField("<Address>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                afterSaveBehavior: PropertySaveBehavior.Throw);
             address.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdAt = runtimeEntityType.AddProperty(
@@ -74,19 +75,9 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 nullable: true);
             numberOfDevices.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
-            var tierId = runtimeEntityType.AddProperty(
-                "TierId",
-                typeof(string),
-                propertyInfo: typeof(IdentityOverview).GetProperty("TierId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<TierId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            tierId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
-
-            var tierName = runtimeEntityType.AddProperty(
-                "TierName",
-                typeof(string),
-                propertyInfo: typeof(IdentityOverview).GetProperty("TierName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<TierName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-            tierName.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+            var key = runtimeEntityType.AddKey(
+                new[] { address });
+            runtimeEntityType.SetPrimaryKey(key);
 
             return runtimeEntityType;
         }
