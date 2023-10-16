@@ -22,7 +22,7 @@ export class IdentityService {
     }
 
     public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
-        var paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
+        let paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
         return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}`);
     }
 
@@ -31,23 +31,23 @@ export class IdentityService {
     }
 
     private buildODataFilter(filter: IdentityOverviewFilter, paginationFilter: string): string {
-        var odataFilter = ODataFilterBuilder();
+        let odataFilter = ODataFilterBuilder();
 
-        if (filter.address != null && filter.address != "") odataFilter.contains("address", filter.address);
+        if (filter.address !== null && filter.address !== "") odataFilter.contains("address", filter.address!);
 
-        if (filter.tiers != null && filter.tiers.length > 0) {
-            filter.tiers.forEach((tier) => {
+        if (filter.tiers !== null && filter.tiers!.length > 0) {
+            filter.tiers!.forEach((tier) => {
                 odataFilter.eq("tierId", tier);
             });
         }
 
-        if (filter.clients != null && filter.clients.length > 0) {
-            filter.clients.forEach((client) => {
+        if (filter.clients !== null && filter.clients!.length > 0) {
+            filter.clients!.forEach((client) => {
                 odataFilter.eq("createdWithClient", client);
             });
         }
 
-        if (filter.createdAt.operator != null && filter.createdAt.value != null) {
+        if (filter.createdAt.operator !== null && filter.createdAt.value !== null) {
             switch (filter.createdAt.operator) {
                 case ">":
                     odataFilter.gt("createdAt", filter.createdAt.value);
@@ -67,7 +67,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.lastLoginAt.operator != null && filter.lastLoginAt.value != null) {
+        if (filter.lastLoginAt.operator !== null && filter.lastLoginAt.value !== null) {
             switch (filter.lastLoginAt.operator) {
                 case ">":
                     odataFilter.gt("lastLoginAt", filter.lastLoginAt.value);
@@ -87,7 +87,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.numberOfDevices.operator != null && filter.numberOfDevices.value != null) {
+        if (filter.numberOfDevices.operator !== null && filter.numberOfDevices.value !== null) {
             switch (filter.numberOfDevices.operator) {
                 case ">":
                     odataFilter.gt("numberOfDevices", filter.numberOfDevices.value);
@@ -107,7 +107,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.datawalletVersion.operator != null && filter.datawalletVersion.value != null) {
+        if (filter.datawalletVersion.operator !== null && filter.datawalletVersion.value !== null) {
             switch (filter.datawalletVersion.operator) {
                 case ">":
                     odataFilter.gt("datawalletVersion", filter.datawalletVersion.value);
@@ -127,7 +127,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.identityVersion.operator != null && filter.identityVersion.value != null) {
+        if (filter.identityVersion.operator !== null && filter.identityVersion.value !== null) {
             switch (filter.identityVersion.operator) {
                 case ">":
                     odataFilter.gt("identityVersion", filter.identityVersion.value);
@@ -148,7 +148,7 @@ export class IdentityService {
         }
 
         let filterParameter = "";
-        if (odataFilter.toString() != "") filterParameter = `?$filter=${odataFilter.toString()}`;
+        if (odataFilter.toString() !== "") filterParameter = `?$filter=${odataFilter.toString()}`;
         if (filterParameter == "") {
             filterParameter += `?${paginationFilter}`;
         } else {

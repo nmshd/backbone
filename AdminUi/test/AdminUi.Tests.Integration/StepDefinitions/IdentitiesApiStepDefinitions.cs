@@ -10,7 +10,7 @@ namespace AdminUi.Tests.Integration.StepDefinitions;
 public class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
-    private HttpResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
+    private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
     private HttpResponse<IdentitySummaryDTO>? _identityResponse;
     private string _existingIdentity;
 
@@ -29,7 +29,9 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews(_requestConfiguration);
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.IsODataRequest = true;
+        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews(requestConfiguration);
         _identityOverviewsResponse.Should().NotBeNull();
         _identityOverviewsResponse!.Content.Should().NotBeNull();
     }
@@ -53,8 +55,8 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
-        _identityOverviewsResponse!.Content.Result.Should().NotBeNull();
-        _identityOverviewsResponse!.Content.Result.Should().NotBeNullOrEmpty();
+        _identityOverviewsResponse!.Content.Value.Should().NotBeNull();
+        _identityOverviewsResponse!.Content.Value.Should().NotBeNullOrEmpty();
         _identityOverviewsResponse!.AssertContentTypeIs("application/json");
         _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
