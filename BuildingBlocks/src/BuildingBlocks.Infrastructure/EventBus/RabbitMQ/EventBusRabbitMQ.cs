@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using Autofac;
+using Azure.Messaging.ServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
@@ -69,7 +70,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .WaitAndRetry(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.SocketException(ex.Message, ex));
+                (ex, _) => _logger.SocketException(ex));
 
         var eventName = @event.GetType().Name;
 
@@ -101,7 +102,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.IntegrationEventId(@event.IntegrationEventId);
+            _logger.PublishedIntegrationEvent(@event.IntegrationEventId);
         });
     }
 
@@ -258,20 +259,16 @@ file static class LoggerExtensions
             "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
         );
 
-    public static void SocketException(this ILogger logger, string exceptionString, Exception e)
+    public static void SocketException(this ILogger logger, Exception e)
     {
-        SOCKET_EXCEPTION(logger, exceptionString, e);
+        SOCKET_EXCEPTION(logger, e.Message, e);
     }
 
-    public static void IntegrationEventId(this ILogger logger, string integrationEventId)
+    public static void PublishedIntegrationEvent(this ILogger logger, string integrationEventId)
     {
         PUBLISHED_INTEGERATION_EVENT(logger, integrationEventId, default!);
     }
 
-    public static void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception e)
-    {
-        ERROR_WHILE_PROCESSING_INTEGRATION_EVENT(logger, eventName, e);
-    }
     public static void NoSubscriptionForEvent(this ILogger logger, string eventName)
     {
         NO_SUBSCRIPTION_FOR_EVENT(logger, eventName, default!);
@@ -280,5 +277,10 @@ file static class LoggerExtensions
     public static void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace, Exception e)
     {
         ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE(logger, eventHandlerType, errorMessage, stackTrace, e);
+    }
+
+    public static void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception e)
+    {
+        ERROR_WHILE_PROCESSING_INTEGRATION_EVENT(logger, eventName, e);
     }
 }
