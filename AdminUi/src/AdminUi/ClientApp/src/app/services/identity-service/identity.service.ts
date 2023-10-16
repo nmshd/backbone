@@ -22,14 +22,15 @@ export class IdentityService {
     }
 
     public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
-        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter)}`);
+        var paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
+        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}`);
     }
 
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.get<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${address}`);
     }
 
-    private buildODataFilter(filter: IdentityOverviewFilter): string {
+    private buildODataFilter(filter: IdentityOverviewFilter, paginationFilter: string): string {
         var odataFilter = ODataFilterBuilder();
 
         if (filter.address != null && filter.address != "") odataFilter.contains("address", filter.address);
@@ -148,6 +149,11 @@ export class IdentityService {
 
         let filterParameter = "";
         if (odataFilter.toString() != "") filterParameter = `?$filter=${odataFilter.toString()}`;
+        if (filterParameter == "") {
+            filterParameter += `?${paginationFilter}`;
+        } else {
+            filterParameter += `&${paginationFilter}`;
+        }
 
         return filterParameter;
     }

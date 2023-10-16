@@ -178,7 +178,7 @@ public static class IServiceCollectionExtensions
             .EntityType.HasKey(identity => identity.Address);
 
 
-        services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy()
+        services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
         return services;
