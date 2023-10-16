@@ -45,14 +45,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, long, Exception> HANDLED_REQUEST_WARNING =
         LoggerMessage.Define<string, long>(
             LogLevel.Warning,
-            new EventId(724322, "LoggingBehavior.HandleRequest"),
+            new EventId(724322, "LoggingBehavior.HandledRequestInformation"),
             "Handled '{requestName}' ('{timeElapsed}' ms)."
         );
 
     private static readonly Action<ILogger, string, long, Exception> HANDLED_REQUEST_INFORMATION =
         LoggerMessage.Define<string, long>(
             LogLevel.Information,
-            new EventId(724322, "LoggingBehavior.HandleRequest"),
+            new EventId(724322, "LoggingBehavior.HandledRequestInformation"),
             "Handled '{requestName}' ('{timeElapsed}' ms)."
         );
 
