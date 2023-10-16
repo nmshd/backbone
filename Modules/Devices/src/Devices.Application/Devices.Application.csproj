@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -14,8 +14,8 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
 		<!-- CAUTION: Do not upgrade 'Microsoft.IdentityModel.Tokens' to 7.*, because it will not be compatible with the pinned OpenIddict version of 4.3.0 anymore -->
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.2" />
-		<PackageReference Include="OpenIddict.Core" Version="[4.9.0]" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="[4.9.0]" />
+		<PackageReference Include="OpenIddict.Core" Version="4.9.0" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="4.9.0" />
 	</ItemGroup>
 
 	<ItemGroup>
