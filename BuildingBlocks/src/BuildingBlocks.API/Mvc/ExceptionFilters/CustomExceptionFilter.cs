@@ -42,7 +42,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         {
             case InfrastructureException infrastructureException:
                 _logger.InfrastructureException(
-                    infrastructureException, infrastructureException.Code, infrastructureException.Message);
+                    infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -219,8 +219,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
 file static class LoggerExtensions
 {
-    private static readonly Action<ILogger, InfrastructureException, string, string, Exception> INFRASTRUCTURE_EXCEPTION =
-        LoggerMessage.Define<InfrastructureException, string, string>(
+    private static readonly Action<ILogger, string, string, string, Exception> INFRASTRUCTURE_EXCEPTION =
+        LoggerMessage.Define<string, string, string>(
             LogLevel.Information,
             new EventId(560507, "ExceptionFilter.InfrastructureException"),
             "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
@@ -256,9 +256,9 @@ file static class LoggerExtensions
 
 
     public static void InfrastructureException(
-        this ILogger logger, InfrastructureException infrastructureException, string errorCode, string errorMessage)
+        this ILogger logger, string errorCode, string errorMessage)
     {
-        INFRASTRUCTURE_EXCEPTION(logger, infrastructureException, errorCode, errorMessage, default!);
+        INFRASTRUCTURE_EXCEPTION(logger, nameof(InfrastructureException), errorCode, errorMessage, default!);
     }
 
     public static void ApplicationException(
