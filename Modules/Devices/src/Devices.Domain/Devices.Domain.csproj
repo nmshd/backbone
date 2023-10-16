@@ -10,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
-		<PackageReference Include="CSharpFunctionalExtensions" Version="2.40.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.40.3" />
 	</ItemGroup>
 
 	<ItemGroup>
