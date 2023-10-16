@@ -137,14 +137,14 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
 
 file static class LoggerExtensions
 {
-    private static readonly Action<ILogger, Exception> ERROR_LISTING_ALL_THE_BLOBS =
+    private static readonly Action<ILogger, Exception> ERROR_LISTING_ALL_BLOBS =
         LoggerMessage.Define(
             LogLevel.Error,
             new EventId(516591, "AzureStorageAccount.ErrorListingAllBlobs"),
             "There was an error listing all blobs."
         );
 
-    private static readonly Action<ILogger, string, Exception, Exception> ERROR_DELETING_THE_BLOB =
+    private static readonly Action<ILogger, string, Exception, Exception> ERROR_DELETING_BLOB =
         LoggerMessage.Define<string, Exception>(
             LogLevel.Error,
             new EventId(645028, "AzureStorageAccount.ErrorDeletingBlob"),
@@ -153,11 +153,11 @@ file static class LoggerExtensions
 
     public static void ErrorListingAllBlobs(this ILogger logger, Exception e)
     {
-        ERROR_LISTING_ALL_THE_BLOBS(logger, e);
+        ERROR_LISTING_ALL_BLOBS(logger, e);
     }
 
     public static void ErrorDeletingBlob(this ILogger logger, string cloudBlockBlobName, Exception e)
     {
-        ERROR_DELETING_THE_BLOB(logger, cloudBlockBlobName, e, default!);
+        ERROR_DELETING_BLOB(logger, cloudBlockBlobName, e, default!);
     }
 }
