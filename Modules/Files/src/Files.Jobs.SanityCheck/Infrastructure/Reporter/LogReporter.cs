@@ -45,14 +45,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, FileId, Exception> NO_BLOB_FOR_FILE_ID =
         LoggerMessage.Define<FileId>(
             LogLevel.Error,
-            new EventId(629592, "Files.SanityCheck.NoBlobForFileId"),
+            new EventId(629592, "Files.LogReporter.NoBlobForFileId"),
             "No blob found for file id: '{databaseId}'."
         );
 
     private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
         LoggerMessage.Define<string>(
             LogLevel.Error,
-            new EventId(487180, "Files.SanityCheck.NoDatabaseEntryForBlobId"),
+            new EventId(487180, "Files.LogReporter.NoDatabaseEntryForBlobId"),
             "No database entry found for blob id: '{blobId}'."
         );
 

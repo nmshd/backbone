@@ -202,7 +202,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, RelationshipChangeId, string, Exception> ERROR_TRYING_TO_SAVE_RELATIONSHIP_CHANGE =
         LoggerMessage.Define<RelationshipChangeId, string>(
             LogLevel.Error,
-            new EventId(664861, "RelationshipsRepository.ErrorTryingToSaveRelationshipChange"),
+            new EventId(664861, "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange"),
             "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'."
         );
 

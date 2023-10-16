@@ -44,7 +44,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception> DELETED_TIER_QUOTA =
         LoggerMessage.Define<string>(
             LogLevel.Information,
-            new EventId(519284, "DeletedTierQuota"),
+            new EventId(519284, "Quotas.DeletedTierQuota"),
             "Successfully deleted tier quota definition with id: '{tierQuotaDefinitionId}'."
         );
 

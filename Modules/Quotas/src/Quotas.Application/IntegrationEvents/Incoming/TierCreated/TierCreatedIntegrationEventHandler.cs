@@ -29,7 +29,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, TierId, string, Exception> TIER_CREATED =
         LoggerMessage.Define<TierId, string>(
             LogLevel.Information,
-            new EventId(151788, "TierCreatedIntegrationEventHandler.TierCreated"),
+            new EventId(151788, "Quotas.TierCreatedIntegrationEventHandler.TierCreated"),
             "Successfully created tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
         );
 

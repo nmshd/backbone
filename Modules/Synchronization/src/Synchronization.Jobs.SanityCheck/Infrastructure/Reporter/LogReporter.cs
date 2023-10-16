@@ -45,14 +45,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, DatawalletModificationId, Exception> NO_BLOB_FOR_DATAWALLET_MODIFICATION_ID =
         LoggerMessage.Define<DatawalletModificationId>(
             LogLevel.Error,
-            new EventId(525684, "Synchronization.SanityCheck.NoBlobForDatawalletModificationId"),
+            new EventId(525684, "Synchronization.LogReporter.NoBlobForDatawalletModificationId"),
             "No blob found for datawallet modification id: '{databaseId}'."
         );
 
     private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
         LoggerMessage.Define<string>(
             LogLevel.Error,
-            new EventId(560290, "Synchronization.SanityCheck.NoDatabaseEntryForBlobId"),
+            new EventId(560290, "Synchronization.LogReporter.NoDatabaseEntryForBlobId"),
             "No database entry found for blob id: '{blobId}'."
         );
 

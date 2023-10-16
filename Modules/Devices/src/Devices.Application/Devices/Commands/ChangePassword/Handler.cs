@@ -42,7 +42,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, DeviceId, Exception> CHANGED_PASSWORD_FOR_DEVICE_WITH_ID =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
-            new EventId(277894, "ChangedPasswordForDeviceWithId"),
+            new EventId(277894, "Devices.ChangedPasswordForDeviceWithId"),
             "Successfully changed password for device with id '{activeDevice}'."
         );
 

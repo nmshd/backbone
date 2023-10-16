@@ -42,7 +42,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception> DELETED_QUOTA =
         LoggerMessage.Define<string>(
             LogLevel.Information,
-            new EventId(247156, "DeleteQuota"),
+            new EventId(247156, "Quotas.DeleteQuota"),
             "Successfully deleted individual quota with id: '{individualQuotaId}'."
         );
 

@@ -48,7 +48,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, TierId, Exception> IDENTITY_CREATED =
         LoggerMessage.Define<string, TierId>(
             LogLevel.Information,
-            new EventId(811934, "IdentityCreatedIntegrationEventHandler.IdentityCreated"),
+            new EventId(811934, "Quotas.IdentityCreatedIntegrationEventHandler.IdentityCreated"),
             "Successfully created identity. Identity Address: '{address}', Tier ID: '{tierId}'."
         );
 

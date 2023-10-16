@@ -49,7 +49,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, DeviceId, Exception> MARK_DEVICE_WITH_ID_AS_DELETED =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
-            new EventId(776010, "MarkDeviceWithIdAsDeleted"),
+            new EventId(776010, "Devices.MarkDeviceWithIdAsDeleted"),
             "Successfully marked device with id '{deviceId}' as deleted."
         );
 

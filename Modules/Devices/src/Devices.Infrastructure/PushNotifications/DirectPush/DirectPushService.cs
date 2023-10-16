@@ -119,21 +119,21 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, DeviceId, Exception> DELETING_DEVICE_REGISTRATION =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
-            new EventId(950845, "DirectPushService.DeletingDeviceRegistration"),
+            new EventId(950845, "Devices.DirectPushService.DeletingDeviceRegistration"),
             "Deleting device registration for '{deviceId}' since handle is no longer valid."
         );
 
     private static readonly Action<ILogger, DeviceId, string, Exception> ERROR_WHILE_TRYING_TO_SEND_NOTIFICATION =
         LoggerMessage.Define<DeviceId, string>(
             LogLevel.Error,
-            new EventId(624412, "DirectPushService.ErrorWhileTryingToSendNotification"),
+            new EventId(624412, "Devices.DirectPushService.ErrorWhileTryingToSendNotification"),
             "The following error occurred while trying to send the notification for '{deviceId}': '{error}'."
         );
 
     private static readonly Action<ILogger, DeviceId, Exception> UNREGISTERED_DEVICE =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
-            new EventId(628738, "DirectPushService.UnregisteredDevice"),
+            new EventId(628738, "Devices.DirectPushService.UnregisteredDevice"),
             "Unregistered device '{deviceId} from push notifications."
         );
 

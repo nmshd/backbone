@@ -45,14 +45,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, RelationshipChangeId, Exception> NO_BLOB_FOR_RELATIONSHIP_CHANGE_ID =
         LoggerMessage.Define<RelationshipChangeId>(
             LogLevel.Error,
-            new EventId(349287, "Relationships.SanityCheck.NoBlobForRelationshipChangeId"),
+            new EventId(349287, "Relationships.LogReporter.NoBlobForRelationshipChangeId"),
             "No blob found for relationship change id: '{databaseId}'."
         );
 
     private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
         LoggerMessage.Define<string>(
             LogLevel.Error,
-            new EventId(429922, "Messages.SanityCheck.NoDatabaseEntryForBlobId"),
+            new EventId(429922, "Relationships.LogReporter.NoDatabaseEntryForBlobId"),
             "No database entry found for blob id: '{blobId}'."
         );
 

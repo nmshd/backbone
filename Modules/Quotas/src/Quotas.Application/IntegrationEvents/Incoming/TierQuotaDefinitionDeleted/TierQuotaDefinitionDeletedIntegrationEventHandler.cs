@@ -49,7 +49,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, Exception> DELETED_QUOTAS_FOR_IDENTITIES =
         LoggerMessage.Define(
             LogLevel.Information,
-            new EventId(942996, "TierQuotaDefinitionDeletedIntegrationEventHandler.DeletedQuotasForIdentities"),
+            new EventId(942996, "Quotas.TierQuotaDefinitionDeletedIntegrationEventHandler.DeletedQuotasForIdentities"),
             "Successfully deleted quotas for Identities."
         );
 

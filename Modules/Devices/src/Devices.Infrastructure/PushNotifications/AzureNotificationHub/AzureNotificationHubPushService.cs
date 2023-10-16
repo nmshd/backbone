@@ -121,14 +121,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, Exception> DEVICE_REGISTERED =
         LoggerMessage.Define(
             LogLevel.Information,
-            new EventId(585563, "AzureNotificationHubPushService.DeviceRegistered"),
+            new EventId(585563, "Devices.AzureNotificationHubPushService.DeviceRegistered"),
             "New device successfully registered."
         );
 
     private static readonly Action<ILogger, DeviceId, Exception> DEVICE_UNREGISTERED =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
-            new EventId(767782, "AzureNotificationHubPushService.DeviceUnregistered"),
+            new EventId(767782, "Devices.AzureNotificationHubPushService.DeviceUnregistered"),
             "Unregistered device '{deviceId}' from push notifications."
         );
 

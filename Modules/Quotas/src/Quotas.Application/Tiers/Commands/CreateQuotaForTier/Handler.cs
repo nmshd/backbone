@@ -58,7 +58,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, TierId, string, Exception> CREATED_QUOTA_FOR_TIER =
         LoggerMessage.Define<TierId, string>(
             LogLevel.Information,
-            new EventId(346835, "CreatedQuotaForTier"),
+            new EventId(346835, "Quotas.CreatedQuotaForTier"),
             "Successfully created Quota for Tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
         );
 

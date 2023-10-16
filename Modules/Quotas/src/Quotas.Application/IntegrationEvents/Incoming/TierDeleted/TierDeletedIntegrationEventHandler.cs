@@ -30,7 +30,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, TierId, string, Exception> TIER_DELETED =
         LoggerMessage.Define<TierId, string>(
             LogLevel.Information,
-            new EventId(582359, "TierDeletedIntegrationEventHandler.TierDeleted"),
+            new EventId(582359, "Quotas.TierDeletedIntegrationEventHandler.TierDeleted"),
             "Successfully deleted tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
         );
 

@@ -46,7 +46,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, string, Exception> CREATED_TIER =
         LoggerMessage.Define<string, string>(
             LogLevel.Information,
-            new EventId(383136, "CreatedTier"),
+            new EventId(383136, "Devices.CreatedTier"),
             "Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}"
         );
 
