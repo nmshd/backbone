@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.API.Extensions;
@@ -41,8 +42,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         switch (context.Exception)
         {
             case InfrastructureException infrastructureException:
-                _logger.InfrastructureException(
-                    infrastructureException.Code, infrastructureException.Message);
+                _logger.InvalidUserInput(infrastructureException, infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -51,8 +51,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case ApplicationException applicationException:
-                _logger.ApplicationException(
-                    applicationException, applicationException.Code, applicationException.Message);
+                _logger.InvalidUserInput(applicationException, applicationException.Code, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
@@ -62,7 +61,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
 
             case DomainException domainException:
-                _logger.DomainException(domainException, domainException.Code, domainException.Message);
+                _logger.InvalidUserInput(domainException, domainException.Code, domainException.Message);
 
                 httpError = CreateHttpErrorForDomainException(domainException);
 
@@ -219,24 +218,10 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
 file static class LoggerExtensions
 {
-    private static readonly Action<ILogger, string, string, string, Exception> INFRASTRUCTURE_EXCEPTION =
+    private static readonly Action<ILogger, string, string, string, Exception> INVALID_USER_INPUT =
         LoggerMessage.Define<string, string, string>(
             LogLevel.Information,
-            new EventId(560507, "ExceptionFilter.InfrastructureException"),
-            "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
-        );
-
-    private static readonly Action<ILogger, ApplicationException, string, string, Exception> APPLICATION_EXCEPTION =
-        LoggerMessage.Define<ApplicationException, string, string>(
-            LogLevel.Information,
-            new EventId(437832, "ExceptionFilter.ApplicationException"),
-            "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
-        );
-
-    private static readonly Action<ILogger, DomainException, string, string, Exception> DOMAIN_EXCEPTION =
-        LoggerMessage.Define<DomainException, string, string>(
-            LogLevel.Information,
-            new EventId(505278, "ExceptionFilter.DomainException"),
+            new EventId(799306, "ExceptionFilter.InvalidUserInput"),
             "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'."
         );
 
@@ -254,23 +239,10 @@ file static class LoggerExtensions
             "Unexpected Error while processing request to '{uri}'."
         );
 
-
-    public static void InfrastructureException(
-        this ILogger logger, string errorCode, string errorMessage)
+    public static void InvalidUserInput(
+        this ILogger logger, Exception e, string errorCode, string errorMessage)
     {
-        INFRASTRUCTURE_EXCEPTION(logger, nameof(InfrastructureException), errorCode, errorMessage, default!);
-    }
-
-    public static void ApplicationException(
-        this ILogger logger, ApplicationException applicationException, string errorCode, string errorMessage)
-    {
-        APPLICATION_EXCEPTION(logger, applicationException, errorCode, errorMessage, default!);
-    }
-
-    public static void DomainException(
-        this ILogger logger, DomainException domainException, string errorCode, string errorMessage)
-    {
-        DOMAIN_EXCEPTION(logger, domainException, errorCode, errorMessage, default!);
+        INVALID_USER_INPUT(logger, nameof(e.GetType), errorCode, errorMessage, default!);
     }
 
     public static void RequestBodyTooLarge(
