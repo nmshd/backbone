@@ -1,16 +1,16 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Sort } from "@angular/material/sort";
+import { MatTable } from "@angular/material/table";
 import { Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { Observable, forkJoin } from "rxjs";
 import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
-import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
 import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
-import { MatTable } from "@angular/material/table";
-import { Sort } from "@angular/material/sort";
 @Component({
     selector: "app-client-list",
     templateUrl: "./client-list.component.html",

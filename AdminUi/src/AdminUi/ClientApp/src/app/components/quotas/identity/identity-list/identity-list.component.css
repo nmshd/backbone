@@ -77,11 +77,9 @@
 }
 
 .filter-cell {
-    display: flex; 
+    display: flex;
     justify-content: space-between;
 }
-
-
 
 .header-description {
     color: #fff;
