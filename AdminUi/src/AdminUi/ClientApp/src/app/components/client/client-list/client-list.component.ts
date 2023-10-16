@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Router } from "@angular/router";
@@ -9,6 +9,7 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
 import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
+import { MatTable } from "@angular/material/table";
 import { Sort } from "@angular/material/sort";
 @Component({
     selector: "app-client-list",
@@ -17,6 +18,7 @@ import { Sort } from "@angular/material/sort";
 })
 export class ClientListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
+    @ViewChild(MatTable) table!: MatTable<any>;
     public header: string;
     public headerDescription: string;
     public clients: ClientOverview[];
@@ -88,12 +90,22 @@ export class ClientListComponent {
     public onTableSort(sort: Sort): void {
         switch (sort.active) {
             case "clientId":
-                this.clients = this.clients.sort((a, b) => (a.clientId > b.clientId ? 1 : b.clientId > a.clientId ? -1 : 0));
+                if (sort.direction.toString() == "desc") {
+                    this.clients.sort((a, b) => a.clientId.toLowerCase().localeCompare(b.clientId.toLowerCase()));
+                } else {
+                    this.clients.sort((a, b) => a.clientId.toLowerCase().localeCompare(b.clientId.toLowerCase())).reverse();
+                }
                 break;
             case "displayName":
-                this.clients = this.clients.sort((a, b) => (a.displayName > b.displayName ? 1 : b.displayName > a.displayName ? -1 : 0));
+                if (sort.direction.toString() == "desc") {
+                    this.clients.sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase()));
+                } else {
+                    this.clients.sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase())).reverse();
+                }
                 break;
         }
+
+        this.table.renderRows();
     }
 
     public async addClient(): Promise<void> {
