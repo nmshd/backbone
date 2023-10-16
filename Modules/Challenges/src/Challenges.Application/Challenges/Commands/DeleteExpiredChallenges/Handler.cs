@@ -38,14 +38,14 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, Exception> CANCELLATION_REQUESTED =
         LoggerMessage.Define(
             LogLevel.Debug,
-            new EventId(599235, "Enmeshed.Challenges.Application.DeleteExpiredChallenges.Handler.CancellationRequested"),
+            new EventId(599235, "Challenges.Application.DeleteExpiredChallenges.CancellationRequested"),
             "Cancellation was requested. Stopping execution..."
         );
 
     private static readonly Action<ILogger, int, Exception> DELETION_SUCCESSFUL =
         LoggerMessage.Define<int>(
             LogLevel.Debug,
-            new EventId(916630, ".DeleteExpiredChallenges.Handler.DeletionSuccessful"),
+            new EventId(916630, "Challenges.Application.DeleteExpiredChallenges.DeletionSuccessful"),
             "Deletion of '{deletedChallengesCount}' challenges successful."
         );
 
