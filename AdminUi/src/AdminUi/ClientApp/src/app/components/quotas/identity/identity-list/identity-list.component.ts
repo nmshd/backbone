@@ -2,7 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { ClientDTO, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { ODataResponse } from "src/app/utils/odata-response";
@@ -43,7 +43,7 @@ export class IdentityListComponent {
     public filter: IdentityOverviewFilter;
     public addressFilter: string;
     public tiers: TierOverview[];
-    public clients: ClientDTO[];
+    public clients: ClientOverview[];
 
     public constructor(
         private readonly router: Router,
@@ -94,7 +94,7 @@ export class IdentityListComponent {
 
     public getClients(): void {
         this.clientService.getClients().subscribe({
-            next: (data: PagedHttpResponseEnvelope<ClientDTO>) => {
+            next: (data: PagedHttpResponseEnvelope<ClientOverview>) => {
                 this.clients = data.result;
             },
             complete: () => (this.loading = false),
