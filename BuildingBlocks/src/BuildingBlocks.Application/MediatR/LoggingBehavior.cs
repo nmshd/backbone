@@ -36,7 +36,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     private void After()
     {
         _watch!.Stop();
-        _logger.HandleRequest(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
+        _logger.HandledMediatorRequest(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
 }
 
@@ -56,7 +56,7 @@ file static class LoggerExtensions
             "Handled '{requestName}' ('{timeElapsed}' ms)."
         );
 
-    public static void HandleRequest(this ILogger logger, string requestName, long timeElapsed)
+    public static void HandledMediatorRequest(this ILogger logger, string requestName, long timeElapsed)
     {
         if (timeElapsed > 1000)
             HANDLED_REQUEST_WARNING(logger, requestName, timeElapsed, default!);
