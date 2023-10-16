@@ -37,9 +37,9 @@ public class GoogleCloudPubSubTests : IDisposable
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
-    public void One_subscriber_for_one_event()
+    public async Task One_subscriber_for_one_event()
     {
-        Task.Delay(30.Seconds()).GetAwaiter().GetResult();
+        await Task.Delay(30.Seconds());
 
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
@@ -52,9 +52,9 @@ public class GoogleCloudPubSubTests : IDisposable
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
-    public void Subscribe_to_the_same_event_twice_with_the_same_subscriber()
+    public async Task Subscribe_to_the_same_event_twice_with_the_same_subscriber()
     {
-        Task.Delay(30.Seconds()).GetAwaiter().GetResult();
+        await Task.Delay(30.Seconds());
 
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
@@ -69,9 +69,9 @@ public class GoogleCloudPubSubTests : IDisposable
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
-    public void Two_subscribers_for_the_same_event_both_receive_the_event()
+    public async Task Two_subscribers_for_the_same_event_both_receive_the_event()
     {
-        Task.Delay(30.Seconds()).GetAwaiter().GetResult();
+        await Task.Delay(30.Seconds());
 
         var subscriber1 = _factory.CreateEventBus("subscription1");
         var subscriber2 = _factory.CreateEventBus("subscription2");
@@ -114,9 +114,9 @@ public class GoogleCloudPubSubTests : IDisposable
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
-    public void The_correct_event_handler_is_called_when_multiple_subscriptions_exist()
+    public async Task The_correct_event_handler_is_called_when_multiple_subscriptions_exist()
     {
-        Task.Delay(30.Seconds()).GetAwaiter().GetResult();
+        await Task.Delay(30.Seconds());
 
         var subscriber1 = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
@@ -163,7 +163,7 @@ public class EventBusFactory : IDisposable
         var persisterConnection = new DefaultGoogleCloudPubSubPersisterConnection(PROJECT_ID, TOPIC_NAME,
             subscriptionNamePrefix, CONNECTION_INFO);
         var eventBusClient = new EventBusGoogleCloudPubSub(persisterConnection, _logger,
-            eventBusSubscriptionsManager, lifeTimeScope);
+            eventBusSubscriptionsManager, lifeTimeScope, new HandlerRetryBehavior() { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
 
         var instance = new Instance(autofacServiceProvider, eventBusClient, persisterConnection);
         _instances.Add(instance);

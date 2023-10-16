@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet('Challenges', 'Devices', 'Files', "Messages", "Relationships", "Synchronization", "Tokens", "Quotas")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
@@ -7,21 +7,35 @@ Param(
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$startupProject = "$repoRoot\ConsumerApi"
+$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+$consumerApiProject = "$repoRoot\ConsumerApi"
 
 function AddMigration {    
     param (
         $provider
     )
 
-    New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+    switch($moduleName){
+        "AdminUi" {
+            New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-    $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $migrationProject = "$repoRoot\AdminUi\src\AdminUi.Infrastructure.Database.$provider"
+            $startupProject = $adminUiProject
+        }
+        Default {
+            New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+
+            $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
+            $startupProject = $consumerApiProject
+        }
+    }
 
     $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName -- --environment $environment"
-    
+
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
+
+    & $PSScriptRoot/compile_models.ps1 $moduleName $provider
 }
 
 switch ($provider) {

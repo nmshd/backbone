@@ -6,10 +6,12 @@ namespace Backbone.Modules.Synchronization.Domain.Entities;
 public class DatawalletModification
 {
 #pragma warning disable CS8618
-    private DatawalletModification() { }
+    private DatawalletModification()
+    {
+    }
 #pragma warning restore CS8618
 
-    public DatawalletModification(Datawallet datawallet, Datawallet.DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice)
+    public DatawalletModification(Datawallet datawallet, Datawallet.DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         Id = DatawalletModificationId.New();
 
@@ -26,6 +28,7 @@ public class DatawalletModification
 
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice;
+        BlobReference = blobReference;
     }
 
     public DatawalletModificationId Id { get; }
@@ -40,6 +43,7 @@ public class DatawalletModification
     public string Collection { get; }
     public DatawalletModificationType Type { get; }
     public byte[]? EncryptedPayload { get; }
+    public string BlobReference { get; }
 }
 
 public enum DatawalletModificationType

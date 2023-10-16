@@ -17,21 +17,17 @@ public record TierId : StronglyTypedId
 
     public static TierId Generate()
     {
-        var value = PREFIX + StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new TierId(value);
+        var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        return new TierId(PREFIX + randomPart);
     }
 
     public static Result<TierId, DomainError> Create(string value)
     {
-        var validationResult = UTILS.Validate(value);
-        if (validationResult != null)
-            return Result.Failure<TierId, DomainError>(validationResult);
-        return Result.Success<TierId, DomainError>(new TierId(value));
-    }
+        var validationError = UTILS.Validate(value);
 
-    public static TierId New()
-    {
-        var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new TierId(PREFIX + randomPart);
+        if (validationError != null)
+            return Result.Failure<TierId, DomainError>(validationError);
+
+        return Result.Success<TierId, DomainError>(new TierId(value));
     }
 }

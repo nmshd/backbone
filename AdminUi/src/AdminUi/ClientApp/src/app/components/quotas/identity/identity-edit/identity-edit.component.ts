@@ -7,6 +7,7 @@ import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
@@ -16,23 +17,33 @@ import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quota
     styleUrls: ["./identity-edit.component.css"]
 })
 export class IdentityEditComponent {
-    header: string;
-    headerDescription: string;
-    headerQuotas: string;
-    headerQuotasDescription: string;
-    headerDevices: string;
-    headerDevicesDescription: string;
-    selectionQuotas: SelectionModel<IdentityQuota>;
-    quotasTableDisplayedColumns: string[];
-    quotasTableData: (Quota | MetricGroup)[];
-    devicesTableDisplayedColumns: string[];
-    devicesTableData: Device[];
-    identityAddress?: string;
-    disabled: boolean;
-    identity: Identity;
-    loading: boolean;
+    public header: string;
+    public headerDescription: string;
+    public headerQuotas: string;
+    public headerQuotasDescription: string;
+    public headerDevices: string;
+    public headerDevicesDescription: string;
+    public selectionQuotas: SelectionModel<IdentityQuota>;
+    public quotasTableDisplayedColumns: string[];
+    public quotasTableData: (Quota | MetricGroup)[];
+    public devicesTableDisplayedColumns: string[];
+    public devicesTableData: Device[];
+    public identityAddress?: string;
+    public disabled: boolean;
+    public identity: Identity;
+    public loading: boolean;
+    public tiers: TierOverview[];
+    public updatedTier?: TierOverview;
+    public tier?: TierOverview;
 
-    constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog, private identityService: IdentityService, private quotasService: QuotasService) {
+    public constructor(
+        private readonly route: ActivatedRoute,
+        private readonly snackBar: MatSnackBar,
+        private readonly dialog: MatDialog,
+        private readonly identityService: IdentityService,
+        private readonly quotasService: QuotasService,
+        private readonly tierService: TierService
+    ) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
         this.headerQuotas = "Quotas";
@@ -46,34 +57,45 @@ export class IdentityEditComponent {
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
+        this.identity.quotas = [];
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
+        this.tiers = [];
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             if (params["address"]) {
                 this.identityAddress = params["address"];
             }
         });
 
-        this.getIdentity();
+        this.loadIdentityAndTiers();
     }
 
-    getIdentity() {
+    public loadAdmissibleTiers(): void {
+        this.tierService.getTiers().subscribe({
+            next: (tiers) => {
+                this.tiers = tiers.result;
+                this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
+                this.tier = this.updatedTier;
+            }
+        });
+    }
+
+    public loadIdentityAndTiers(): void {
         this.loading = true;
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.identityService.getIdentityByAddress(this.identityAddress!).subscribe({
             next: (data: HttpResponseEnvelope<Identity>) => {
-                if (data && data.result) {
-                    this.identity = data.result;
-                    this.groupQuotasByMetricForTable();
-                    this.devicesTableData = this.identity.devices;
-                }
+                this.identity = data.result;
+                this.groupQuotasByMetricForTable();
+                this.devicesTableData = this.identity.devices;
+                this.loadAdmissibleTiers();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -82,13 +104,17 @@ export class IdentityEditComponent {
         });
     }
 
-    groupQuotasByMetricForTable() {
+    public hasPendingChanges(): boolean {
+        return this.tier !== this.updatedTier;
+    }
+
+    public groupQuotasByMetricForTable(): void {
         let quotas = [...this.identity.quotas];
         this.quotasTableData = [];
 
         quotas.sort((a, b) => a.metric.key.localeCompare(b.metric.key) || a.source.localeCompare(b.source));
         while (quotas.length > 0) {
-            let metricGroup = {
+            const metricGroup = {
                 metric: quotas[0].metric,
                 isGroup: true,
                 tierDisabled: false
@@ -99,16 +125,41 @@ export class IdentityEditComponent {
         }
     }
 
-    iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
-        if (quotas.length == 0) return [];
+    public saveIdentity(): void {
+        if (this.updatedTier?.id) {
+            this.loading = true;
+            this.identityService.updateIdentity(this.identity, { tierId: this.updatedTier.id }).subscribe({
+                next: () => {
+                    this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
+                    });
+                    setTimeout(() => {
+                        this.loadIdentityAndTiers();
+                    }, 2000);
+                },
+                error: (err: any) => {
+                    this.loading = false;
+                    const errorMessage = err.error?.error?.message ?? err.message;
+                    this.snackBar.open(errorMessage, "Dismiss", {
+                        verticalPosition: "top",
+                        horizontalPosition: "center"
+                    });
+                }
+            });
+        }
+    }
 
-        if (quotas[0].metric.key == metricGroup.metric.key) {
+    public iterateQuotasByMetricGroup(quotas: Quota[], metricGroup: MetricGroup): Quota[] {
+        if (quotas.length === 0) return [];
+
+        if (quotas[0].metric.key === metricGroup.metric.key) {
             this.quotasTableData.push(quotas[0]);
-            if (quotas[0].source == "Individual") {
+            if (quotas[0].source === "Individual") {
                 metricGroup.tierDisabled = true;
                 quotas[0].deleteable = true;
             }
-            if (quotas[0].source == "Tier") {
+            if (quotas[0].source === "Tier") {
                 quotas[0].disabled = metricGroup.tierDisabled;
                 quotas[0].deleteable = false;
             }
@@ -118,23 +169,23 @@ export class IdentityEditComponent {
         return quotas;
     }
 
-    isGroup(index: any, item: any): boolean {
+    public isGroup(index: any, item: any): boolean {
         return item.isGroup;
     }
 
-    openAssignQuotaDialog() {
-        let dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+    public openAssignQuotaDialog(): void {
+        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
 
-        dialogRef.afterClosed().subscribe((result: any) => {
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
             if (result) {
                 this.createIdentityQuota(result);
             }
         });
     }
 
-    createIdentityQuota(quotaData: AssignQuotaData) {
+    public createIdentityQuota(quotaData: AssignQuotaData): void {
         this.loading = true;
 
         const createQuotaRequest = {
@@ -144,20 +195,18 @@ export class IdentityEditComponent {
         } as CreateQuotaForIdentityRequest;
 
         this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
-            next: (data: HttpResponseEnvelope<IdentityQuota>) => {
-                if (data && data.result) {
-                    this.getIdentity();
-                    this.snackBar.open("Successfully assigned quota.", "Dismiss", {
-                        duration: 4000,
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
+            next: (_: HttpResponseEnvelope<IdentityQuota>) => {
+                this.loadIdentityAndTiers();
+                this.snackBar.open("Successfully assigned quota.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -166,13 +215,13 @@ export class IdentityEditComponent {
         });
     }
 
-    openConfirmationDialogQuotaDeletion() {
-        let confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
-        let confirmDialogMessage =
+    public openConfirmationDialogQuotaDeletion(): void {
+        const confirmDialogHeader = this.selectionQuotas.selected.length > 1 ? "Delete Quotas" : "Delete Quota";
+        const confirmDialogMessage =
             this.selectionQuotas.selected.length > 1
                 ? `Are you sure you want to delete the ${this.selectionQuotas.selected.length} selected quotas?`
                 : "Are you sure you want to delete the selected quota?";
-        let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             minWidth: "40%",
             disableClose: true,
             data: { header: confirmDialogHeader, message: confirmDialogMessage }
@@ -185,17 +234,17 @@ export class IdentityEditComponent {
         });
     }
 
-    deleteQuota(): void {
+    public deleteQuota(): void {
         this.loading = true;
-        let observableBatch: Observable<any>[] = [];
+        const observableBatch: Observable<any>[] = [];
         this.selectionQuotas.selected.forEach((item) => {
             observableBatch.push(this.quotasService.deleteIdentityQuota(item.id, this.identity.address));
         });
 
         forkJoin(observableBatch).subscribe({
             next: (_: any) => {
-                let successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
-                this.getIdentity();
+                const successMessage: string = this.selectionQuotas.selected.length > 1 ? `Successfully deleted ${this.selectionQuotas.selected.length} quotas.` : "Successfully deleted 1 quota.";
+                this.loadIdentityAndTiers();
                 this.snackBar.open(successMessage, "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
@@ -204,7 +253,7 @@ export class IdentityEditComponent {
             },
             error: (err: any) => {
                 this.loading = false;
-                let errorMessage = err.error?.error?.message ?? err.message;
+                const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
                     horizontalPosition: "center"
@@ -213,14 +262,14 @@ export class IdentityEditComponent {
         });
     }
 
-    isAllSelected() {
+    public isAllSelected(): boolean {
         if (this.loading) return false;
         const numSelected = this.selectionQuotas.selected.length;
-        const numRows = this.identity.quotas ? this.identity.quotas.filter((i) => i.deleteable).length : 0;
+        const numRows = this.identity.quotas.filter((i) => i.deleteable).length;
         return numSelected === numRows;
     }
 
-    toggleAllRowsQuotas() {
+    public toggleAllRowsQuotas(): void {
         if (this.isAllSelected()) {
             this.selectionQuotas.clear();
             return;
@@ -228,7 +277,7 @@ export class IdentityEditComponent {
         this.selectionQuotas.select(...this.identity.quotas.filter((i) => i.deleteable));
     }
 
-    checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {
+    public checkboxLabelQuotas(index?: number, row?: IdentityQuota): string {
         if (!row || !index) {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }

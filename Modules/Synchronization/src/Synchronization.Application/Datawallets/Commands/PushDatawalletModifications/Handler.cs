@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
@@ -8,6 +8,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.BuildingBlocks.Application.Extensions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -89,18 +90,20 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private async Task CreateModifications()
     {
-        var newModifications = _request.Modifications.Select(CreateModification);
+        var blobName = Guid.NewGuid().ToString("N");
+
+        var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
 
         _dbContext.Set<Datawallet>().Update(_datawallet);
 
         var modificationsArray = newModifications.ToArray();
 
-        await Save(modificationsArray);
+        await Save(modificationsArray, blobName);
 
         _modifications = modificationsArray;
     }
 
-    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto)
+    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
         return _datawallet.AddModification(
             _mapper.Map<DatawalletModificationType>(modificationDto.Type),
@@ -109,7 +112,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             modificationDto.ObjectIdentifier,
             modificationDto.PayloadCategory,
             modificationDto.EncryptedPayload,
-            _activeDevice
+            _activeDevice,
+            blobReference
         );
     }
 
@@ -125,14 +129,17 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _response = new PushDatawalletModificationsResponse { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
     }
 
-    private async Task Save(DatawalletModification[] modifications)
+    private async Task Save(DatawalletModification[] modifications, string blobName)
     {
         await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications, _cancellationToken);
-        foreach (var newModification in modifications)
-        {
-            if (newModification.EncryptedPayload != null)
-                _blobStorage.Add(_blobOptions.RootFolder, newModification.Id, newModification.EncryptedPayload);
-        }
+
+        var payloads = modifications
+            .Where(newModification => newModification.EncryptedPayload != null)
+            .ToDictionary(m => m.Index, m => m.EncryptedPayload);
+
+        var blobContent = JsonSerializer.SerializeToUtf8Bytes(payloads);
+
+        _blobStorage.Add(_blobOptions.RootFolder, blobName, blobContent);
 
         await _blobStorage.SaveAsync();
 

@@ -18,33 +18,31 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions?.Invoke(options);
 
-        switch (options.Provider)
-        {
-            case SQLSERVER:
-                services.AddDbContext<ChallengesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-                );
-                break;
-            case POSTGRES:
-                services.AddDbContext<ChallengesDbContext>(dbContextOptions =>
-                    dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(20);
-                        sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                        sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                    })
-
-                );
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {options.Provider}");
-
-        }
+        services
+            .AddDbContext<ChallengesDbContext>(dbContextOptions =>
+            {
+                switch (options.Provider)
+                {
+                    case SQLSERVER:
+                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        }).UseModel(CompiledModels.SqlServer.ChallengesDbContextModel.Instance);
+                        break;
+                    case POSTGRES:
+                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                        }).UseModel(CompiledModels.Postgres.ChallengesDbContextModel.Instance);
+                        break;
+                    default:
+                        throw new Exception($"Unsupported database provider: {options.Provider}");
+                }
+            });
 
         services.AddScoped<IChallengesRepository, ChallengesRepository>();
     }

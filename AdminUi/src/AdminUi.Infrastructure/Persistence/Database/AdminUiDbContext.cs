@@ -6,9 +6,23 @@ namespace AdminUi.Infrastructure.Persistence.Database;
 
 public class AdminUiDbContext : AbstractDbContextBase
 {
-    public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options) : base(options) { }
+    public AdminUiDbContext()
+    {
+    }
+
+    public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options) : base(options)
+    {
+    }
+
+    public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
     public DbSet<IdentityOverview> IdentityOverviews { get; set; }
+
+    public DbSet<TierOverview> TierOverviews { get; set; }
+
+    public DbSet<ClientOverview> ClientOverviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

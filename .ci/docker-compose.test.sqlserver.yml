@@ -3,7 +3,7 @@ services:
   ### infrastructure ###
 
   database:
-    container_name: bkb-sql_server
+    container_name: bkb-sql_server-test
     hostname: sqlserver
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
@@ -24,8 +24,9 @@ services:
       - database
 
   seed-client:
-    command: >
-      ./backbone client create -p SqlServer -c "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True" --clientId test --clientSecret test
+    environment:
+      Database__Provider: SqlServer
+      Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
 
 configs:
   Config:
