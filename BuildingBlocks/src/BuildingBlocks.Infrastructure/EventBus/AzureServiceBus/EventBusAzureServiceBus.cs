@@ -212,7 +212,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, string, string, Exception> ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE =
         LoggerMessage.Define<string, string, string>(
             LogLevel.Warning,
-            new EventId(726744, "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerType"),
+            new EventId(726744, "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerCausingRetry"),
             "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
         );
 
