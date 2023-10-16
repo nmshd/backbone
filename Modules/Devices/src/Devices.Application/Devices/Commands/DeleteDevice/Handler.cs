@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
 file static class LoggerExtensions
 {
-    private static readonly Action<ILogger, DeviceId, Exception> MARK_DEVICE_WITH_ID_AS_DELETED =
+    private static readonly Action<ILogger, DeviceId, Exception> MARKED_DEVICE_AS_DELETED =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
             new EventId(776010, "Devices.MarkDeviceWithIdAsDeleted"),
@@ -55,6 +55,6 @@ file static class LoggerExtensions
 
     public static void MarkDeviceWithIdAsDeleted(this ILogger logger, DeviceId deviceId)
     {
-        MARK_DEVICE_WITH_ID_AS_DELETED(logger, deviceId, default!);
+        MARKED_DEVICE_AS_DELETED(logger, deviceId, default!);
     }
 }
