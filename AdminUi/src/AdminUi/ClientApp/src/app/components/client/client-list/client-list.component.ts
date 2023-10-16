@@ -18,7 +18,7 @@ import { Sort } from "@angular/material/sort";
 })
 export class ClientListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
-    @ViewChild(MatTable) table!: MatTable<any>;
+    @ViewChild(MatTable) public table!: MatTable<any>;
     public header: string;
     public headerDescription: string;
     public clients: ClientOverview[];
@@ -70,7 +70,7 @@ export class ClientListComponent {
 
     public filterClients(): void {
         this.loading = true;
-        this.clients = this.serverClients.filter((c) => c.clientId.indexOf(this.clientIdFilter) != -1 && c.clientId.indexOf(this.displayNameFilter) != -1);
+        this.clients = this.serverClients.filter((c) => c.clientId.includes(this.clientIdFilter) && c.clientId.includes(this.displayNameFilter));
         this.loading = false;
     }
 
@@ -90,14 +90,14 @@ export class ClientListComponent {
     public onTableSort(sort: Sort): void {
         switch (sort.active) {
             case "clientId":
-                if (sort.direction.toString() == "desc") {
+                if (sort.direction.toString() === "desc") {
                     this.clients.sort((a, b) => a.clientId.toLowerCase().localeCompare(b.clientId.toLowerCase()));
                 } else {
                     this.clients.sort((a, b) => a.clientId.toLowerCase().localeCompare(b.clientId.toLowerCase())).reverse();
                 }
                 break;
             case "displayName":
-                if (sort.direction.toString() == "desc") {
+                if (sort.direction.toString() === "desc") {
                     this.clients.sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase()));
                 } else {
                     this.clients.sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase())).reverse();

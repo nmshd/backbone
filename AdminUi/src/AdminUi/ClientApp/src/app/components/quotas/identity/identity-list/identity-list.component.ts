@@ -153,30 +153,33 @@ export class IdentityListComponent {
                 break;
             case "numberOfDevices":
                 if (
-                    (this.filter.numberOfDevices.operator !== null && this.filter.numberOfDevices.operator !== "" && this.filter.numberOfDevices.value !== null) ||
-                    (this.filter.numberOfDevices.operator == null && this.filter.numberOfDevices.value == null)
-                )
+                    (this.filter.numberOfDevices.operator !== undefined && this.filter.numberOfDevices.operator !== "" && this.filter.numberOfDevices.value !== undefined) ||
+                    (this.filter.numberOfDevices.operator === undefined && this.filter.numberOfDevices.value === undefined)
+                ) {
                     this.getIdentities();
+                }
                 break;
             case "createdAt":
-                if (this.filter.createdAt.operator !== null && this.filter.createdAt.operator !== "" && this.filter.createdAt.value !== null) this.getIdentities();
+                if (this.filter.createdAt.operator !== undefined && this.filter.createdAt.operator !== "" && this.filter.createdAt.value !== undefined) this.getIdentities();
                 break;
             case "lastLoginAt":
-                if (this.filter.lastLoginAt.operator !== null && this.filter.lastLoginAt.operator !== "" && this.filter.lastLoginAt.value !== null) this.getIdentities();
+                if (this.filter.lastLoginAt.operator !== undefined && this.filter.lastLoginAt.operator !== "" && this.filter.lastLoginAt.value !== undefined) this.getIdentities();
                 break;
             case "datawalletVersion":
                 if (
-                    (this.filter.datawalletVersion.operator !== null && this.filter.datawalletVersion.operator !== "" && this.filter.datawalletVersion.value !== null) ||
-                    (this.filter.datawalletVersion.operator == null && this.filter.datawalletVersion.value == null)
-                )
+                    (this.filter.datawalletVersion.operator !== undefined && this.filter.datawalletVersion.operator !== "" && this.filter.datawalletVersion.value !== undefined) ||
+                    (this.filter.datawalletVersion.operator === undefined && this.filter.datawalletVersion.value === undefined)
+                ) {
                     this.getIdentities();
+                }
                 break;
             case "identityVersion":
                 if (
-                    (this.filter.identityVersion.operator !== null && this.filter.identityVersion.operator !== "" && this.filter.identityVersion.value !== null) ||
-                    (this.filter.identityVersion.operator == null && this.filter.identityVersion.value == null)
-                )
+                    (this.filter.identityVersion.operator !== undefined && this.filter.identityVersion.operator !== "" && this.filter.identityVersion.value !== undefined) ||
+                    (this.filter.identityVersion.operator === undefined && this.filter.identityVersion.value === undefined)
+                ) {
                     this.getIdentities();
+                }
                 break;
         }
     }
@@ -189,11 +192,11 @@ export class IdentityListComponent {
                 break;
             case "createdAt":
                 this.filter.createdAt.value = undefined;
-                if (this.filter.createdAt.operator !== null) this.getIdentities();
+                if (this.filter.createdAt.operator !== undefined) this.getIdentities();
                 break;
             case "lastLoginAt":
                 this.filter.lastLoginAt.value = undefined;
-                if (this.filter.lastLoginAt.operator !== null) this.getIdentities();
+                if (this.filter.lastLoginAt.operator !== undefined) this.getIdentities();
                 break;
         }
     }

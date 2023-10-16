@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Tier, TierOverview, TierService } from "src/app/services/tier-service/tier.service";
