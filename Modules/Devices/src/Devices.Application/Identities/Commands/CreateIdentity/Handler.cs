@@ -77,7 +77,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, IdentityAddress, DeviceId, string, Exception> CREATED_IDENTITY =
         LoggerMessage.Define<IdentityAddress, DeviceId, string>(
             LogLevel.Information,
-            new EventId(436321, "CreateIdentity.Handler.CreatedIdentity"),
+            new EventId(436321, "CreatedIdentity"),
             "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'."
         );
 

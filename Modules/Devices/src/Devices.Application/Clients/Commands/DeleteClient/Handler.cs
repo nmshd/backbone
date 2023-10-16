@@ -30,7 +30,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception> DELETED_CLIENT_WITH_ID =
         LoggerMessage.Define<string>(
             LogLevel.Information,
-            new EventId(418943, "DeleteClient.Handler.DeletedClientWithId"),
+            new EventId(418943, "DeletedClientWithId"),
             "Successfully deleted client with id '{clientId}'."
         );
 

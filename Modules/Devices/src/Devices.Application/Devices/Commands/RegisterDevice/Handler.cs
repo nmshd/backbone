@@ -116,7 +116,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, DeviceId, string, string, Exception> CREATED_DEVICE =
         LoggerMessage.Define<DeviceId, string, string>(
             LogLevel.Information,
-            new EventId(219823, "RegisterDevice.Handler.CreatedDevice"),
+            new EventId(219823, "CreatedDevice"),
             "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'."
         );
 

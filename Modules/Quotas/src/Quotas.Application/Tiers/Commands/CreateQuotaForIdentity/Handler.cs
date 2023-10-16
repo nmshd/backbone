@@ -55,7 +55,7 @@ file static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception> CREATED_QUOTAS_FOR_IDENTITY =
         LoggerMessage.Define<string>(
             LogLevel.Information,
-            new EventId(868289, "CreateQuotaForIdentity.Handler.CreatedQuotasForIdentities"),
+            new EventId(868289, "CreatedQuotasForIdentities"),
             "Successfully created Quota for Identity. Identity Address: '{identityAddress}'."
         );
 
