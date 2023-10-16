@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
 
 file static class LoggerExtensions
 {
-    private static readonly Action<ILogger, DeviceId, Exception> CHANGED_PASSWORD_FOR_DEVICE_WITH_ID =
+    private static readonly Action<ILogger, DeviceId, Exception> CHANGED_PASSWORD_FOR_DEVICE =
         LoggerMessage.Define<DeviceId>(
             LogLevel.Information,
             new EventId(277894, "Devices.ChangedPasswordForDeviceWithId"),
@@ -48,6 +48,6 @@ file static class LoggerExtensions
 
     public static void ChangedPasswordForDeviceWithId(this ILogger logger, DeviceId activeDevice)
     {
-        CHANGED_PASSWORD_FOR_DEVICE_WITH_ID(logger, activeDevice, default!);
+        CHANGED_PASSWORD_FOR_DEVICE(logger, activeDevice, default!);
     }
 }
