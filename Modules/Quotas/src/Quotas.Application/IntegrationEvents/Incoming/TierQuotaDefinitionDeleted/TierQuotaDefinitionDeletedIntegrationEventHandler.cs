@@ -23,7 +23,11 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
     public async Task Handle(TierQuotaDefinitionDeletedIntegrationEvent @event)
     {
         _logger.LogTrace("Handling '{eventName}' ... ", nameof(TierQuotaDefinitionDeletedIntegrationEvent));
+        await RecalculateMetricStatuses(@event);
+    }
 
+    private async Task RecalculateMetricStatuses(TierQuotaDefinitionDeletedIntegrationEvent @event)
+    {
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None);
 
         await _metricStatusesService.RecalculateMetricStatuses(
@@ -31,7 +35,5 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
             MetricKey.GetSupportedMetricKeyValues().ToList(),
             CancellationToken.None
         );
-
-        _logger.LogTrace("Successfully deleted quotas for Identities.");
     }
 }
