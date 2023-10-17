@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 
 public class QuotaExhaustedException : ApplicationException
 {

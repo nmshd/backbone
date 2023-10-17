@@ -1,6 +1,6 @@
 ﻿using Azure.Identity;
 
-namespace ConsumerApi.Extensions;
+namespace Backbone.ConsumerApi.Extensions;
 
 public static class IConfigurationBuilderExtensions
 {

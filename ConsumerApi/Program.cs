@@ -1,6 +1,16 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using Backbone.Infrastructure.EventBus;
+using Backbone.Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Common.Infrastructure;
+using Backbone.ConsumerApi;
+using Backbone.ConsumerApi.Configuration;
+using Backbone.ConsumerApi.Extensions;
+using Backbone.ConsumerApi.Mvc.Middleware;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -17,17 +27,7 @@ using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using ConsumerApi;
-using ConsumerApi.Configuration;
-using ConsumerApi.Extensions;
-using ConsumerApi.Mvc.Middleware;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.Common.Infrastructure;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using MediatR;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -206,6 +206,9 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
 
-public partial class Program
+namespace Backbone.ConsumerApi
 {
+    public partial class Program
+    {
+    }
 }

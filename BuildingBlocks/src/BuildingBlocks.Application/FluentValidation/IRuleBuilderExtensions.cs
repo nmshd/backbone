@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace Enmeshed.BuildingBlocks.Application.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
 public static class IRuleBuilderExtensions
 {

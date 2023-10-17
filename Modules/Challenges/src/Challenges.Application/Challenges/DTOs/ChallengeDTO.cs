@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.DTOs;
 

@@ -1,13 +1,13 @@
 using System.Net;
-using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Configuration;
-using ConsumerApi.Tests.Integration.Extensions;
-using ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow.Assist;
 
-namespace ConsumerApi.Tests.Integration.StepDefinitions;
+namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Token")]

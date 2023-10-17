@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
+namespace Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 public class StronglyTypedIdHelpers
 {

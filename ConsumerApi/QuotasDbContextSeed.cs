@@ -4,7 +4,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsumerApi;
+namespace Backbone.ConsumerApi;
 
 public class QuotasDbContextSeed
 {

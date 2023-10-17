@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.API.Mvc;
+﻿using Backbone.BuildingBlocks.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
-namespace AdminUi.Controllers;
+namespace Backbone.AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("ApiKey")]

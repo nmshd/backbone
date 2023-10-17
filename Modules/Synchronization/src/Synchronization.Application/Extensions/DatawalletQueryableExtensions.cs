@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;

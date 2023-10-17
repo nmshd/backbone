@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Tokens.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;

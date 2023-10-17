@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AdminUi.Infrastructure.Persistence;
-using Backbone.Infrastructure.EventBus;
+using Backbone.AdminUi.Infrastructure.Persistence;
+using Backbone.Backbone.Infrastructure.EventBus;
 
-namespace AdminUi.Configuration;
+namespace Backbone.AdminUi.Configuration;
 
 public class AdminConfiguration
 {

@@ -1,8 +1,8 @@
-﻿using Enmeshed.Crypto.Abstractions;
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+﻿using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
+namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
 public class AesEncryptionHelperTests : IDisposable
 {

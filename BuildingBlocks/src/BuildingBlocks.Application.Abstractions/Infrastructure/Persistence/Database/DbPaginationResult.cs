@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
 public class DbPaginationResult<T>
 {

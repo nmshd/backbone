@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Tokens.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporter : IReporter
 {

@@ -1,7 +1,7 @@
-﻿using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Models;
+﻿using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Models;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Log")]

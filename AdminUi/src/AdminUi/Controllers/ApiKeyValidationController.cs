@@ -1,8 +1,8 @@
-﻿using AdminUi.Authentication;
+﻿using Backbone.AdminUi.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AdminUi.Controllers;
+namespace Backbone.AdminUi.Controllers;
 
 [Route("api/v1/ValidateApiKey")]
 public class ApiKeyValidationController : ControllerBase

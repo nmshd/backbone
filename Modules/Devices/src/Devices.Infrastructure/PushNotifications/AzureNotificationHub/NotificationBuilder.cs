@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;

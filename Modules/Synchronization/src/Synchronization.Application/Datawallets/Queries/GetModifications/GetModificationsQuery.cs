@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;

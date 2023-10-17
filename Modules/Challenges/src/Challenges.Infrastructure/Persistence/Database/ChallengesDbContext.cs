@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;

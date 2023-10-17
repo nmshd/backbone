@@ -1,10 +1,10 @@
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
-using Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using Xunit;
 
-namespace Messages.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Tests;
 
 public class SanityCheckTests
 {

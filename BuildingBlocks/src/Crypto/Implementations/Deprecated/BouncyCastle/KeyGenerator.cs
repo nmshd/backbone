@@ -1,8 +1,8 @@
-﻿using Enmeshed.Crypto.Abstractions;
+﻿using Backbone.Crypto.Abstractions;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle;
+namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
 
 public class KeyGenerator : IKeyGenerator
 {

@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using AdminUi.Tests.Integration.Configuration;
-using AdminUi.Tests.Integration.Models;
+using Backbone.AdminUi.Tests.Integration.Configuration;
+using Backbone.AdminUi.Tests.Integration.Models;
 using FluentValidation.TestHelper;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using HttpResponse = AdminUi.Tests.Integration.Models.HttpResponse;
+using HttpResponse = Backbone.AdminUi.Tests.Integration.Models.HttpResponse;
 
-namespace AdminUi.Tests.Integration.API;
+namespace Backbone.AdminUi.Tests.Integration.API;
 
 public class BaseApi
 {

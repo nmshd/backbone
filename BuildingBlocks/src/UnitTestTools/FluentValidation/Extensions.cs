@@ -3,7 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Xunit.Sdk;
 
-namespace Enmeshed.UnitTestTools.FluentValidation;
+namespace Backbone.UnitTestTools.FluentValidation;
 
 public static class StringExtensions
 {

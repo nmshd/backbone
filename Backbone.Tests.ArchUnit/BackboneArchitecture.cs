@@ -3,7 +3,7 @@ using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
 using Assembly = System.Reflection.Assembly;
 
-namespace Backbone.Tests.ArchUnit;
+namespace Backbone.Backbone.Tests.ArchUnit;
 public static class Backbone
 {
     public static readonly Architecture ARCHITECTURE =

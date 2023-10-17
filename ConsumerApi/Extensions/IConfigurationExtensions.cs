@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ConsumerApi.Extensions;
+namespace Backbone.ConsumerApi.Extensions;
 
 [ExcludeFromCodeCoverage]
 internal static class IConfigurationExtensions

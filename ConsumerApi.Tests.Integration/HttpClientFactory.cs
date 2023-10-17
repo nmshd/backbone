@@ -1,6 +1,6 @@
-﻿using Enmeshed.Tooling.Extensions;
+﻿using Backbone.Tooling.Extensions;
 
-namespace ConsumerApi.Tests.Integration;
+namespace Backbone.ConsumerApi.Tests.Integration;
 
 public class HttpClientFactory
 {

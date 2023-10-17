@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
 
-namespace Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
 public class FakeDataSource : IDataSource
 {

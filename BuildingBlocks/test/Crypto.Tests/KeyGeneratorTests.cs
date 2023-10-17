@@ -1,8 +1,8 @@
-﻿using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle;
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+﻿using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests;
+namespace Backbone.Crypto.Tests;
 
 public class KeyGeneratorTests : IDisposable
 {

@@ -1,6 +1,6 @@
-﻿using ConsumerApi.Tests.Integration.Models;
+﻿using Backbone.ConsumerApi.Tests.Integration.Models;
 
-namespace ConsumerApi.Tests.Integration.API;
+namespace Backbone.ConsumerApi.Tests.Integration.API;
 
 public class ChallengesApi : BaseApi
 {

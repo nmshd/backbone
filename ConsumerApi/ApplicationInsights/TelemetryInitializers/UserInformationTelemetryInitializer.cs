@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace ConsumerApi.ApplicationInsights.TelemetryInitializers;
+namespace Backbone.ConsumerApi.ApplicationInsights.TelemetryInitializers;
 
 public class UserInformationTelemetryInitializer : ITelemetryInitializer
 {

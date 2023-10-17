@@ -1,8 +1,8 @@
-﻿using AdminUi.Tests.Integration.Configuration;
-using AdminUi.Tests.Integration.Models;
+﻿using Backbone.AdminUi.Tests.Integration.Configuration;
+using Backbone.AdminUi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 
-namespace AdminUi.Tests.Integration.API;
+namespace Backbone.AdminUi.Tests.Integration.API;
 
 public class TiersApi : BaseApi
 {

@@ -1,19 +1,18 @@
 ﻿using System.Reflection;
-using AdminUi.Authentication;
-using AdminUi.Configuration;
-using AdminUi.Extensions;
-using AdminUi.Infrastructure.Persistence;
-using AdminUi.Infrastructure.Persistence.Database;
 using Autofac.Extensions.DependencyInjection;
-using Backbone.Infrastructure.EventBus;
+using Backbone.AdminUi.Authentication;
+using Backbone.AdminUi.Configuration;
+using Backbone.AdminUi.Extensions;
+using Backbone.AdminUi.Infrastructure.Persistence;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
+using Backbone.Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -158,6 +157,9 @@ static void Configure(WebApplication app)
     });
 }
 
-public partial class Program
+namespace Backbone.AdminUi
 {
+    public partial class Program
+    {
+    }
 }

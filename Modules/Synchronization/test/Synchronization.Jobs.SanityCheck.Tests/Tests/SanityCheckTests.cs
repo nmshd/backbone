@@ -1,10 +1,10 @@
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.Modules.Synchronization.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
-using Synchronization.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Synchronization.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using Xunit;
 
-namespace Synchronization.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Tests.Tests;
 
 public class SanityCheckTests
 {

@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 
-namespace Enmeshed.BuildingBlocks.Application.Attributes;
+namespace Backbone.BuildingBlocks.Application.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class ApplyQuotasForMetricsAttribute : Attribute

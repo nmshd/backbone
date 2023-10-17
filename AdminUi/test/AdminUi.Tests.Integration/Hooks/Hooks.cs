@@ -1,6 +1,6 @@
-﻿using SpecFlowCucumberResultsExporter.Extensions;
+﻿using Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
-namespace AdminUi.Tests.Integration.Hooks;
+namespace Backbone.AdminUi.Tests.Integration.Hooks;
 
 [Binding]
 public sealed class Hooks

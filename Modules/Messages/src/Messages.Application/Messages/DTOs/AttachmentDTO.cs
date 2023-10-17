@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 

@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+﻿using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Infrastructure.EventBus;
+namespace Backbone.Backbone.Infrastructure.EventBus;
 
 public static class EventBusServiceCollectionExtensions
 {
@@ -19,14 +19,14 @@ public static class EventBusServiceCollectionExtensions
             case AZURE:
                 services.AddAzureServiceBus(options =>
                 {
-                    LoadBasicBusOptions(configuration, options);
+                    LoadBasicBusOptions<ServiceBusOptions>(configuration, options);
                     options.ConnectionString = configuration.ConnectionInfo;
                 });
                 break;
             case GOOGLE_CLOUD:
                 services.AddGoogleCloudPubSub(options =>
                 {
-                    LoadBasicBusOptions(configuration, options);
+                    LoadBasicBusOptions<GoogleCloudPubSubOptions>(configuration, options);
                     options.ProjectId = configuration.GcpPubSubProjectId;
                     options.TopicName = configuration.GcpPubSubTopicName;
                     options.ConnectionInfo = configuration.ConnectionInfo;
@@ -35,7 +35,7 @@ public static class EventBusServiceCollectionExtensions
             case RABBIT_MQ:
                 services.AddRabbitMq(options =>
                 {
-                    LoadBasicBusOptions(configuration, options);
+                    LoadBasicBusOptions<RabbitMqOptions>(configuration, options);
                     options.HostName = configuration.ConnectionInfo;
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
