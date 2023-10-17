@@ -9,10 +9,8 @@ updates:
         patterns:
           - "*"
         exclude-patterns:
-          - "OpenIddict.*"
           - "AspNetCore.HealthChecks.NpgSql"
           - "Npgsql.EntityFrameworkCore.PostgreSQL"
-          - "Microsoft.IdentityModel.Tokens"
     reviewers:
       - "tnotheis"
     labels:
