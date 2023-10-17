@@ -5,9 +5,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class TierQuota : Quota
 {
-#pragma warning disable IDE1006 // Naming Styles
-    internal readonly TierQuotaDefinition _definition;
-#pragma warning restore IDE1006 // Naming Styles
+    private readonly TierQuotaDefinition _definition;
 
     private TierQuota() { }
 
