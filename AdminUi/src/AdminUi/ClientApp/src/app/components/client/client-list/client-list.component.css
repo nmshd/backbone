@@ -10,22 +10,23 @@
 }
 
 .mat-column-numberOfIdentities {
-    width: 10%;
+    max-width: 200px;
     word-break: normal;
 }
 
 .mat-column-createdAt {
-    width: 15%;
+    max-width: 370px;
     word-break: normal;
 }
 
 .mat-column-actions {
-    width: 20%;
+    max-width: 300px;
     word-break: normal;
 }
 
 .actions-button {
     min-height: 36px;
+    min-width: 200px;
     height: auto;
 }
 
@@ -39,6 +40,10 @@
     color: blue;
 }
 
+.inline-action-buttons ::ng-deep .mat-mdc-form-field-icon-suffix {
+    display: inherit;
+}
+
 .loading {
     display: flex;
     justify-content: center;
@@ -48,6 +53,13 @@
     margin-top: -60px;
     width: 100%;
     height: 100%;
+}
+
+.complex-filter-container {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 10px;
 }
 
 .header-container {

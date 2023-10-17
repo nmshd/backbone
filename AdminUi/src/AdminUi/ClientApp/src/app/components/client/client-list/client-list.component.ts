@@ -7,7 +7,8 @@ import { Sort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { Observable, forkJoin } from "rxjs";
-import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientOverview, ClientOverviewFilter, ClientServiceService } from "src/app/services/client-service/client-service";
+import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
 import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
@@ -24,28 +25,48 @@ export class ClientListComponent {
     public clients: ClientOverview[];
     public serverClients: ClientOverview[];
     public loading = false;
-    public clientIdFilter: string;
-    public displayNameFilter: string;
+    public filter: ClientOverviewFilter;
+    public tiers: TierOverview[];
     public selection = new SelectionModel<ClientOverview>(true, []);
+    public operators: string[] = ["=", "<", ">", ">=", "<="];
     public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "numberOfIdentities", "createdAt", "actions"];
 
     public constructor(
         private readonly router: Router,
         private readonly dialog: MatDialog,
         private readonly snackBar: MatSnackBar,
+        private readonly tierService: TierService,
         private readonly clientService: ClientServiceService
     ) {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
         this.clients = [];
+        this.tiers = [];
         this.serverClients = [];
-        this.clientIdFilter = "";
-        this.displayNameFilter = "";
+        this.filter = { createdAt: { operator: "=" }, numberOfIdentities: { operator: "=" } };
         this.loading = true;
     }
 
     public ngOnInit(): void {
         this.getPagedData();
+        this.getTiers();
+    }
+
+    public getTiers(): void {
+        this.tierService.getTiers().subscribe({
+            next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
+                this.tiers = data.result;
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
     }
 
     public getPagedData(): void {
@@ -70,17 +91,62 @@ export class ClientListComponent {
 
     public filterClients(): void {
         this.loading = true;
-        this.clients = this.serverClients.filter((c) => c.clientId.includes(this.clientIdFilter) && c.clientId.includes(this.displayNameFilter));
+
+        this.clients = this.serverClients;
+        if (this.filter.clientId) this.clients = this.clients.filter((c) => c.clientId.toUpperCase().includes(this.filter.clientId!.toUpperCase()));
+        if (this.filter.displayName) this.clients = this.clients.filter((c) => c.displayName.toUpperCase().includes(this.filter.displayName!.toUpperCase()));
+        if (this.filter.tiers && this.filter.tiers.length > 0) this.clients = this.clients.filter((c) => this.filter.tiers!.includes(c.defaultTier));
+        if (this.filter.numberOfIdentities.value !== undefined && this.filter.numberOfIdentities.value !== null) {
+            switch (this.filter.numberOfIdentities.operator) {
+                case "=":
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities == this.filter.numberOfIdentities.value!);
+                    break;
+                case ">":
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities > this.filter.numberOfIdentities.value!);
+                    break;
+                case "<":
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities < this.filter.numberOfIdentities.value!);
+                    break;
+                case ">=":
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities >= this.filter.numberOfIdentities.value!);
+                    break;
+                case "<=":
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities <= this.filter.numberOfIdentities.value!);
+                    break;
+            }
+        }
+        if (this.filter.createdAt.value !== undefined && this.filter.createdAt.value !== null) {
+            switch (this.filter.createdAt.operator) {
+                case "=":
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() == this.filter.createdAt.value!.toISOString());
+                    break;
+                case ">":
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() > this.filter.createdAt.value!.toISOString());
+                    break;
+                case "<":
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() < this.filter.createdAt.value!.toISOString());
+                    break;
+                case ">=":
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() >= this.filter.createdAt.value!.toISOString());
+                    break;
+                case "<=":
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() <= this.filter.createdAt.value!.toISOString());
+                    break;
+            }
+        }
         this.loading = false;
     }
 
     public clearFilter(filter: string): void {
         switch (filter) {
             case "clientId":
-                this.clientIdFilter = "";
+                this.filter.clientId = "";
                 break;
             case "displayName":
-                this.displayNameFilter = "";
+                this.filter.displayName = "";
+                break;
+            case "createdAt":
+                this.filter.createdAt.value = undefined;
                 break;
         }
 

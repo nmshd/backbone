@@ -1,7 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { NumberFilter } from "src/app/utils/number-filter";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
 
@@ -61,4 +63,12 @@ export interface ChangeClientSecretRequest {
 
 export interface UpdateClientRequest {
     defaultTier: string;
+}
+
+export interface ClientOverviewFilter {
+    clientId?: string;
+    tiers?: string[];
+    displayName?: string;
+    numberOfIdentities: NumberFilter;
+    createdAt: DateFilter;
 }
