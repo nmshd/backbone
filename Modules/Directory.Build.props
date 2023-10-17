@@ -3,6 +3,6 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
     </PropertyGroup>
 </Project>
