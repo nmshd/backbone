@@ -1,7 +1,8 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs";
 import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
@@ -15,6 +16,18 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 })
 export class IdentityListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
+    @ViewChild("addressFilter", { static: false }) set addressFilter(addressFilterInput: ElementRef) {
+        this.debounceFilter(addressFilterInput, "address");
+    }
+    @ViewChild("numberOfDevicesFilter", { static: false }) set numberOfDevicesFilter(numberOfDevicesFilterInput: ElementRef) {
+        this.debounceFilter(numberOfDevicesFilterInput, "numberOfDevices");
+    }
+    @ViewChild("datawalletVersionFilter", { static: false }) set datawalletVersionFilter(datawalletVersionFilterInput: ElementRef) {
+        this.debounceFilter(datawalletVersionFilterInput, "datawalletVersion");
+    }
+    @ViewChild("identityVersionFilter", { static: false }) set identityVersionFilter(identityVersionFilterInput: ElementRef) {
+        this.debounceFilter(identityVersionFilterInput, "identityVersion");
+    }
 
     public header: string;
     public headerDescription: string;
@@ -41,7 +54,6 @@ export class IdentityListComponent {
     public operators: string[] = ["=", "<", ">", ">=", "<="];
 
     public filter: IdentityOverviewFilter;
-    public addressFilter: string;
     public tiers: TierOverview[];
     public clients: ClientOverview[];
 
@@ -61,8 +73,7 @@ export class IdentityListComponent {
         this.pageSize = 10;
         this.pageIndex = 0;
 
-        this.filter = { createdAt: {}, numberOfDevices: {}, identityVersion: {}, lastLoginAt: {}, datawalletVersion: {} };
-        this.addressFilter = "";
+        this.filter = { createdAt: { operator: "=" }, numberOfDevices: { operator: "=" }, identityVersion: { operator: "=" }, lastLoginAt: { operator: "=" }, datawalletVersion: { operator: "=" } };
         this.tiers = [];
         this.clients = [];
 
@@ -73,6 +84,21 @@ export class IdentityListComponent {
         this.getIdentities();
         this.getTiers();
         this.getClients();
+    }
+
+    private debounceFilter(filterElement: ElementRef, filterName: string): void {
+        if (filterElement) {
+            fromEvent(filterElement.nativeElement, "keyup")
+                .pipe(
+                    filter(Boolean),
+                    debounceTime(750),
+                    distinctUntilChanged(),
+                    tap((_) => {
+                        this.onFilterChange(filterName);
+                    })
+                )
+                .subscribe();
+        }
     }
 
     public getTiers(): void {
@@ -147,14 +173,14 @@ export class IdentityListComponent {
             case "address":
                 if (this.filter.address!.length > 2) this.getIdentities();
                 break;
-            case "tier":
-            case "client":
+            case "tiers":
+            case "clients":
                 this.getIdentities();
                 break;
             case "numberOfDevices":
                 if (
-                    (this.filter.numberOfDevices.operator !== undefined && this.filter.numberOfDevices.operator !== "" && this.filter.numberOfDevices.value !== undefined) ||
-                    (this.filter.numberOfDevices.operator === undefined && this.filter.numberOfDevices.value === undefined)
+                    (this.filter.numberOfDevices.operator !== undefined && this.filter.numberOfDevices.value !== undefined) ||
+                    (this.filter.numberOfDevices.operator !== undefined && this.filter.numberOfDevices.value === undefined)
                 ) {
                     this.getIdentities();
                 }
@@ -167,16 +193,16 @@ export class IdentityListComponent {
                 break;
             case "datawalletVersion":
                 if (
-                    (this.filter.datawalletVersion.operator !== undefined && this.filter.datawalletVersion.operator !== "" && this.filter.datawalletVersion.value !== undefined) ||
-                    (this.filter.datawalletVersion.operator === undefined && this.filter.datawalletVersion.value === undefined)
+                    (this.filter.datawalletVersion.operator !== undefined && this.filter.datawalletVersion.value !== undefined) ||
+                    (this.filter.datawalletVersion.operator !== undefined && this.filter.datawalletVersion.value === undefined)
                 ) {
                     this.getIdentities();
                 }
                 break;
             case "identityVersion":
                 if (
-                    (this.filter.identityVersion.operator !== undefined && this.filter.identityVersion.operator !== "" && this.filter.identityVersion.value !== undefined) ||
-                    (this.filter.identityVersion.operator === undefined && this.filter.identityVersion.value === undefined)
+                    (this.filter.identityVersion.operator !== undefined && this.filter.identityVersion.value !== undefined) ||
+                    (this.filter.identityVersion.operator !== undefined && this.filter.identityVersion.value === undefined)
                 ) {
                     this.getIdentities();
                 }

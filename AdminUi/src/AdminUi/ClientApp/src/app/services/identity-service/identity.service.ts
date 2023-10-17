@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { NGXLogger } from "ngx-logger";
+import ODataFilterBuilder from "odata-filter-builder";
 import { Observable } from "rxjs";
+import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { NumberFilter } from "src/app/utils/number-filter";
+import { ODataResponse } from "src/app/utils/odata-response";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
-import { ODataResponse } from "src/app/utils/odata-response";
-import ODataFilterBuilder from "odata-filter-builder";
-import { NumberFilter } from "src/app/utils/number-filter";
-import { DateFilter } from "src/app/utils/date-filter";
-import { NGXLogger } from "ngx-logger";
 
 @Injectable({
     providedIn: "root"
@@ -97,7 +97,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.numberOfDevices.operator !== undefined && filter.numberOfDevices.value !== undefined) {
+        if (filter.numberOfDevices.operator !== undefined && filter.numberOfDevices.value !== undefined && filter.numberOfDevices.value !== null) {
             switch (filter.numberOfDevices.operator) {
                 case ">":
                     odataFilter.gt("numberOfDevices", filter.numberOfDevices.value);
@@ -120,7 +120,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.datawalletVersion.operator !== undefined && filter.datawalletVersion.value !== undefined) {
+        if (filter.datawalletVersion.operator !== undefined && filter.datawalletVersion.value !== undefined && filter.datawalletVersion.value !== null) {
             switch (filter.datawalletVersion.operator) {
                 case ">":
                     odataFilter.gt("datawalletVersion", filter.datawalletVersion.value);
@@ -143,7 +143,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.identityVersion.operator !== undefined && filter.identityVersion.value !== undefined) {
+        if (filter.identityVersion.operator !== undefined && filter.identityVersion.value !== undefined && filter.identityVersion.value !== null) {
             switch (filter.identityVersion.operator) {
                 case ">":
                     odataFilter.gt("identityVersion", filter.identityVersion.value);
