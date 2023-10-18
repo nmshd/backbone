@@ -67,7 +67,7 @@ file static class LoggerExtensions
     }
 }
 
-internal static partial class RelationshipsLogs
+internal static partial class RelationshipTemplateLogs
 {
     [LoggerMessage(
         EventId = 231727,
