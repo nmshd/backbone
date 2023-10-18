@@ -42,7 +42,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         switch (context.Exception)
         {
             case InfrastructureException infrastructureException:
-                ExceptionFilterLogs.InvalidUserInput(_logger, infrastructureException.ToString(), infrastructureException.Code, infrastructureException.Message);
+                _logger.InvalidUserInput(infrastructureException.ToString(), infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -51,7 +51,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case ApplicationException applicationException:
-                ExceptionFilterLogs.InvalidUserInput(_logger, applicationException.ToString(), applicationException.Code, applicationException.Message);
+                _logger.InvalidUserInput(applicationException.ToString(), applicationException.Code, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
