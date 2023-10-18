@@ -70,7 +70,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .WaitAndRetry(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.SocketException(ex.ToString()));
+                (ex, _) => _logger.SocketException(nameof(ex)));
 
         var eventName = @event.GetType().Name;
 

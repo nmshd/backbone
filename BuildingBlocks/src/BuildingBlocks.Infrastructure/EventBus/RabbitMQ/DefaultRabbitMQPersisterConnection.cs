@@ -62,7 +62,7 @@ public class DefaultRabbitMqPersistentConnection
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount,
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                    (ex, _) => _logger.BrokerUnreachableException(ex.ToString()));
+                    (ex, _) => _logger.BrokerUnreachableException(nameof(ex)));
 
             policy.Execute(() => _connection = _connectionFactory
                     .CreateConnection());
