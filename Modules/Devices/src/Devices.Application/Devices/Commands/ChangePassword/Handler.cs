@@ -44,6 +44,5 @@ internal static partial class ChangePasswordLogs
         EventName = "Devices.ChangedPasswordForDeviceWithId",
         Level = LogLevel.Information,
         Message = "Successfully changed password for device with id '{activeDevice}'.")]
-    public static partial void ChangedPasswordForDeviceWithId(
-        ILogger logger, DeviceId activeDevice);
+    public static partial void ChangedPasswordForDeviceWithId(ILogger logger, DeviceId activeDevice);
 }

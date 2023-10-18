@@ -51,6 +51,5 @@ internal static partial class DeleteDeviceLogs
         EventName = "Devices.MarkDeviceWithIdAsDeleted",
         Level = LogLevel.Information,
         Message = "Successfully marked device with id '{deviceId}' as deleted.")]
-    public static partial void MarkDeviceWithIdAsDeleted(
-        ILogger logger, string deviceId);
+    public static partial void MarkDeviceWithIdAsDeleted(ILogger logger, string deviceId);
 }
