@@ -44,55 +44,82 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-var builder = WebApplication.CreateBuilder(args);
-builder.WebHost
-    .UseKestrel(options =>
-    {
-        options.AddServerHeader = false;
-        options.Limits.MaxRequestBodySize = 20.Mebibytes();
-    });
-
-LoadConfiguration(builder, args);
-
-builder.Host
-    .UseSerilog((context, configuration) => configuration
-        .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-        .Enrich.WithDemystifiedStackTraces()
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("service", "consumerapi")
-        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-            .WithDefaultDestructurers()
-            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
-    )
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
-ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
-
-var app = builder.Build();
-Configure(app);
-
-app
-    .MigrateDbContext<ChallengesDbContext>()
-    .MigrateDbContext<DevicesDbContext>((context, sp) =>
-    {
-        var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
-        devicesDbContextSeed.SeedAsync(context).Wait();
-    })
-    .MigrateDbContext<FilesDbContext>()
-    .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
-    .MigrateDbContext<MessagesDbContext>()
-    .MigrateDbContext<SynchronizationDbContext>()
-    .MigrateDbContext<TokensDbContext>()
-    .MigrateDbContext<QuotasDbContext>();
-
-foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+try
 {
-    module.PostStartupValidation(app.Services);
+    Log.Information("Creating app...");
+
+    var app = CreateApp(args);
+
+    Log.Information("App created.");
+
+    Log.Information("Starting app...");
+
+    app.Run();
+
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.Run();
+static WebApplication CreateApp(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost
+        .UseKestrel(options =>
+        {
+            options.AddServerHeader = false;
+            options.Limits.MaxRequestBodySize = 20.Mebibytes();
+        });
+
+    LoadConfiguration(builder, args);
+
+    builder.Host
+        .UseSerilog((context, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+            .Enrich.WithDemystifiedStackTraces()
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("service", "consumerapi")
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+        )
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
+    var app = builder.Build();
+    Configure(app);
+
+    app
+        .MigrateDbContext<ChallengesDbContext>()
+        .MigrateDbContext<DevicesDbContext>((context, sp) =>
+        {
+            var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
+            devicesDbContextSeed.SeedAsync(context).Wait();
+        })
+        .MigrateDbContext<FilesDbContext>()
+        .MigrateDbContext<RelationshipsDbContext>()
+        .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+        .MigrateDbContext<MessagesDbContext>()
+        .MigrateDbContext<SynchronizationDbContext>()
+        .MigrateDbContext<TokensDbContext>()
+        .MigrateDbContext<QuotasDbContext>();
+
+    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+    {
+        module.PostStartupValidation(app.Services);
+    }
+
+    return app;
+}
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {

@@ -26,36 +26,63 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-var builder = WebApplication.CreateBuilder(args);
-builder.WebHost
-    .UseKestrel(options =>
-    {
-        options.AddServerHeader = false;
-        options.Limits.MaxRequestBodySize = 20.Mebibytes();
-    });
+try
+{
+    Log.Information("Creating app...");
 
-LoadConfiguration(builder, args);
+    var app = CreateApp(args);
 
-builder.Host
-    .UseSerilog((context, configuration) => configuration
-        .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-        .Enrich.WithDemystifiedStackTraces()
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("service", "adminui")
-        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-            .WithDefaultDestructurers()
-            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+    Log.Information("App created.");
 
-ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+    Log.Information("Starting app...");
 
-var app = builder.Build();
-Configure(app);
+    app.Run();
 
-app.MigrateDbContext<AdminUiDbContext>();
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
-app.Run();
+static WebApplication CreateApp(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost
+        .UseKestrel(options =>
+        {
+            options.AddServerHeader = false;
+            options.Limits.MaxRequestBodySize = 20.Mebibytes();
+        });
+
+    LoadConfiguration(builder, args);
+
+    builder.Host
+        .UseSerilog((context, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+            .Enrich.WithDemystifiedStackTraces()
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("service", "adminui")
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
+    var app = builder.Build();
+    Configure(app);
+
+    app.MigrateDbContext<AdminUiDbContext>();
+    
+    return app;
+}
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
