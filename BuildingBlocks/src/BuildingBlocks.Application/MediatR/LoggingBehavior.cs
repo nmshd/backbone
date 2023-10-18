@@ -36,31 +36,27 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     private void After()
     {
         _watch!.Stop();
-        _logger.HandledMediatorRequest(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
+
+        if (_watch.ElapsedMilliseconds > 1000)
+            LoggingBehaviorLogs.HandledMediatorRequestWarning(_logger, typeof(TRequest).Name, _watch.ElapsedMilliseconds);
+        else
+            LoggingBehaviorLogs.HandledMediatorRequestInformation(_logger, typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
 }
 
-file static class LoggerExtensions
+internal static partial class LoggingBehaviorLogs
 {
-    private static readonly Action<ILogger, string, long, Exception> HANDLED_REQUEST_WARNING =
-        LoggerMessage.Define<string, long>(
-            LogLevel.Warning,
-            new EventId(724322, "LoggingBehavior.HandledRequestInformation"),
-            "Handled '{requestName}' ('{timeElapsed}' ms)."
-        );
+    [LoggerMessage(
+        EventId = 724322,
+        EventName = "LoggingBehavior.HandledRequestInformation",
+        Level = LogLevel.Information,
+        Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
+    public static partial void HandledMediatorRequestInformation(ILogger logger, string requestName, long timeElapsed);
 
-    private static readonly Action<ILogger, string, long, Exception> HANDLED_REQUEST_INFORMATION =
-        LoggerMessage.Define<string, long>(
-            LogLevel.Information,
-            new EventId(724322, "LoggingBehavior.HandledRequestInformation"),
-            "Handled '{requestName}' ('{timeElapsed}' ms)."
-        );
-
-    public static void HandledMediatorRequest(this ILogger logger, string requestName, long timeElapsed)
-    {
-        if (timeElapsed > 1000)
-            HANDLED_REQUEST_WARNING(logger, requestName, timeElapsed, default!);
-        else
-            HANDLED_REQUEST_INFORMATION(logger, requestName, timeElapsed, default!);
-    }
+    [LoggerMessage(
+        EventId = 724322,
+        EventName = "LoggingBehavior.HandledRequestInformation",
+        Level = LogLevel.Warning,
+        Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
+    public static partial void HandledMediatorRequestWarning(ILogger logger, string requestName, long timeElapsed);
 }
