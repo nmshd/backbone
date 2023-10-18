@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.NoBlobForTokenId(databaseId);
+            TokensLogs.NoBlobForTokenId(_logger, databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.NoDatabaseEntryForBlobId(blobId);
+            TokensLogs.NoDatabaseEntryForBlobId(_logger, blobId);
         }
     }
 
@@ -40,29 +40,19 @@ public class LogReporter : IReporter
     }
 }
 
-file static class LoggerExtensions
+internal static partial class TokensLogs
 {
-    private static readonly Action<ILogger, TokenId, Exception> NO_BLOB_FOR_TOKEN_ID =
-        LoggerMessage.Define<TokenId>(
-            LogLevel.Error,
-            new EventId(826083, "Tokens.LogReporter.NoBlobForTokenId"),
-            "No blob found for token id: '{tokenId}'."
-        );
+    [LoggerMessage(
+        EventId = 826083,
+        EventName = "Tokens.LogReporter.NoBlobForTokenId",
+        Level = LogLevel.Error,
+        Message = "No blob found for token id: '{tokenId}'.")]
+    public static partial void NoBlobForTokenId(ILogger logger, TokenId tokenId);
 
-    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
-        LoggerMessage.Define<string>(
-            LogLevel.Error,
-            new EventId(271286, "Tokens.LogReporter.NoDatabaseEntryForBlobId"),
-            "No database entry found for blob id: '{blobId}'."
-        );
-
-    public static void NoBlobForTokenId(this ILogger logger, TokenId tokenId)
-    {
-        NO_BLOB_FOR_TOKEN_ID(logger, tokenId, default!);
-    }
-
-    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
-    {
-        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
-    }
+    [LoggerMessage(
+        EventId = 271286,
+        EventName = "Tokens.LogReporter.NoDatabaseEntryForBlobId",
+        Level = LogLevel.Error,
+        Message = "No database entry found for blob id: '{blobId}'.")]
+    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
 }
