@@ -1,6 +1,7 @@
 # Backbone
 
 [![GitHub Actions CI](https://github.com/nmshd/backbone/workflows/Publish/badge.svg)](https://github.com/nmshd/backbone/actions?query=workflow%3APublish)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/enmeshed-backbone)](https://artifacthub.io/packages/helm/enmeshed-backbone/backbone-helm-chart)
 
 The Enmeshed Backbone embraces all central services required by the Enmeshed platform to work. It consists of the underlying infrastructure, its hosted services, and the libraries used within the services.
 
