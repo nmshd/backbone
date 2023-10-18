@@ -40,7 +40,7 @@ export class IdentityService {
         if (filter.address !== undefined && filter.address !== "") odataFilter.contains("address", filter.address);
 
         if (filter.tiers !== undefined && filter.tiers.length > 0) {
-            var tiersFilter = new ODataFilterBuilder();
+            const tiersFilter = new ODataFilterBuilder();
             filter.tiers.forEach((tier) => {
                 tiersFilter.or((x) => x.eq("tierId", tier));
             });
@@ -48,8 +48,8 @@ export class IdentityService {
         }
 
         if (filter.clients !== undefined && filter.clients.length > 0) {
-            var clientsFilter = new ODataFilterBuilder();
-            filter.clients.forEach((client, index) => {
+            const clientsFilter = new ODataFilterBuilder();
+            filter.clients.forEach((client) => {
                 clientsFilter.or((x) => x.eq("createdWithClient", client));
             });
             odataFilter.and((_) => clientsFilter);
