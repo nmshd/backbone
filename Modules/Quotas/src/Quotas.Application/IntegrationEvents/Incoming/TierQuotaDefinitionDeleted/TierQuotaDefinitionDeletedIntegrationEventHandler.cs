@@ -40,21 +40,16 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        _logger.DeletedQuotasForIdentities();
+        TierQuotaDefinitionDeletedLogs.DeletedQuotasForIdentities(_logger);
     }
 }
 
-file static class LoggerExtensions
+internal static partial class TierQuotaDefinitionDeletedLogs
 {
-    private static readonly Action<ILogger, Exception> DELETED_QUOTAS_FOR_IDENTITIES =
-        LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(942996, "Quotas.TierQuotaDefinitionDeletedIntegrationEventHandler.DeletedQuotasForIdentities"),
-            "Successfully deleted quotas for Identities."
-        );
-
-    public static void DeletedQuotasForIdentities(this ILogger logger)
-    {
-        DELETED_QUOTAS_FOR_IDENTITIES(logger, default!);
-    }
+    [LoggerMessage(
+        EventId = 942996,
+        EventName = "Quotas.TierQuotaDefinitionDeletedIntegrationEventHandler.DeletedQuotasForIdentities",
+        Level = LogLevel.Information,
+        Message = "Successfully deleted quotas for Identities.")]
+    public static partial void DeletedQuotasForIdentities(ILogger logger);
 }
