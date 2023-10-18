@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.CreatedQuotaForTier(tier.Id, tier.Name);
+        CreateQuotaForTierLogs.CreatedQuotaForTier(_logger, tier.Id, tier.Name);
 
         _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
 
@@ -53,17 +53,12 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
     }
 }
 
-file static class LoggerExtensions
+internal static partial class CreateQuotaForTierLogs
 {
-    private static readonly Action<ILogger, TierId, string, Exception> CREATED_QUOTA_FOR_TIER =
-        LoggerMessage.Define<TierId, string>(
-            LogLevel.Information,
-            new EventId(346835, "Quotas.CreatedQuotaForTier"),
-            "Successfully created Quota for Tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
-        );
-
-    public static void CreatedQuotaForTier(this ILogger logger, TierId tierId, string identityAddress)
-    {
-        CREATED_QUOTA_FOR_TIER(logger, tierId, identityAddress, default!);
-    }
+    [LoggerMessage(
+        EventId = 346835,
+        EventName = "Quotas.CreatedQuotaForTier",
+        Level = LogLevel.Information,
+        Message = "Successfully created Quota for Tier. Tier ID: '{tierId}', Tier Name: '{tierName}'.")]
+    public static partial void CreatedQuotaForTier(ILogger logger, TierId tierId, string tierName);
 }
