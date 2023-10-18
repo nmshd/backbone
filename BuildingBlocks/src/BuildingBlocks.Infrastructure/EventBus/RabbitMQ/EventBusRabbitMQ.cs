@@ -70,7 +70,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .WaitAndRetry(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.SocketException(ex));
+                (ex, _) => EventBusRabbitMQLogs.SocketException(_logger, ex.ToString()));
 
         var eventName = @event.GetType().Name;
 
@@ -102,7 +102,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.PublishedIntegrationEvent(@event.IntegrationEventId);
+            EventBusRabbitMQLogs.PublishedIntegrationEvent(_logger, @event.IntegrationEventId);
         });
     }
 
@@ -171,7 +171,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 channel.BasicReject(eventArgs.DeliveryTag, true);
 
-                _logger.ErrorWhileProcessingIntegrationEvent(eventName, ex);
+                EventBusRabbitMQLogs.ErrorWhileProcessingIntegrationEvent(_logger, eventName);
             }
         };
 
@@ -210,77 +210,52 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!, ex));
+                    _handlerRetryBehavior, (ex, _) => EventBusRabbitMQLogs.ErrorWhileExecutingEventHandlerType(_logger, eventName, ex.Message, ex.StackTrace!));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
         }
         else
         {
-            _logger.NoSubscriptionForEvent(eventName);
+            EventBusRabbitMQLogs.NoSubscriptionForEvent(_logger, eventName);
         }
     }
 }
 
-file static class LoggerExtensions
+internal static partial class EventBusRabbitMQLogs
 {
-    private static readonly Action<ILogger, string, Exception> SOCKET_EXCEPTION =
-        LoggerMessage.Define<string>(
-            LogLevel.Warning,
-            new EventId(411326, "EventBusRabbitMQ.SocketException"),
-            "{exceptionString}"
-        );
+    [LoggerMessage(
+        EventId = 411326,
+        EventName = "EventBusRabbitMQ.SocketException",
+        Level = LogLevel.Warning,
+        Message = "{exceptionString}")]
+    public static partial void SocketException(ILogger logger, string exceptionString);
 
-    private static readonly Action<ILogger, string, Exception> PUBLISHED_INTEGERATION_EVENT =
-        LoggerMessage.Define<string>(
-            LogLevel.Debug,
-            new EventId(585231, "EventBusRabbitMQ.PublishedIntegrationEvent"),
-            "Successfully published event with id '{integrationEventId}'."
-        );
+    [LoggerMessage(
+        EventId = 585231,
+        EventName = "EventBusRabbitMQ.PublishedIntegrationEvent",
+        Level = LogLevel.Debug,
+        Message = "Successfully published event with id '{integrationEventId}'.")]
+    public static partial void PublishedIntegrationEvent(ILogger logger, string integrationEventId);
 
-    private static readonly Action<ILogger, string, Exception> ERROR_WHILE_PROCESSING_INTEGRATION_EVENT =
-        LoggerMessage.Define<string>(
-            LogLevel.Error,
-            new EventId(702822, "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent"),
-            "An error occurred while processing the integration event of type '{eventName}'."
-        );
+    [LoggerMessage(
+        EventId = 702822,
+        EventName = "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent",
+        Level = LogLevel.Error,
+        Message = "An error occurred while processing the integration event of type '{eventName}'.")]
+    public static partial void ErrorWhileProcessingIntegrationEvent(ILogger logger, string eventName);
 
-    private static readonly Action<ILogger, string, Exception> NO_SUBSCRIPTION_FOR_EVENT =
-        LoggerMessage.Define<string>(
-            LogLevel.Warning,
-            new EventId(980768, "EventBusRabbitMQ.NoSubscriptionForEvent"),
-            "No subscription for event: '{eventName}'."
-        );
+    [LoggerMessage(
+        EventId = 980768,
+        EventName = "EventBusRabbitMQ.NoSubscriptionForEvent",
+        Level = LogLevel.Warning,
+        Message = "No subscription for event: '{eventName}'.")]
+    public static partial void NoSubscriptionForEvent(ILogger logger, string eventName);
 
-    private static readonly Action<ILogger, string, string, string, Exception> ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE =
-        LoggerMessage.Define<string, string, string>(
-            LogLevel.Warning,
-            new EventId(288394, "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType"),
-            "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry..."
-        );
-
-    public static void SocketException(this ILogger logger, Exception e)
-    {
-        SOCKET_EXCEPTION(logger, e.Message, e);
-    }
-
-    public static void PublishedIntegrationEvent(this ILogger logger, string integrationEventId)
-    {
-        PUBLISHED_INTEGERATION_EVENT(logger, integrationEventId, default!);
-    }
-
-    public static void NoSubscriptionForEvent(this ILogger logger, string eventName)
-    {
-        NO_SUBSCRIPTION_FOR_EVENT(logger, eventName, default!);
-    }
-
-    public static void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace, Exception e)
-    {
-        ERROR_WHILE_EXECUTING_EVENT_HANDLER_TYPE(logger, eventHandlerType, errorMessage, stackTrace, e);
-    }
-
-    public static void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception e)
-    {
-        ERROR_WHILE_PROCESSING_INTEGRATION_EVENT(logger, eventName, e);
-    }
+    [LoggerMessage(
+        EventId = 288394,
+        EventName = "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType",
+        Level = LogLevel.Warning,
+        Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
 }
