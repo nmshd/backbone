@@ -80,7 +80,7 @@ static WebApplication CreateApp(string[] args)
     Configure(app);
 
     app.MigrateDbContext<AdminUiDbContext>();
-    
+
     return app;
 }
 
@@ -117,7 +117,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             options
                 .UseEntityFrameworkCore()
                 .UseDbContext<DevicesDbContext>()
-                .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
+                .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
+                    CustomOpenIddictEntityFrameworkCoreToken, string>();
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
