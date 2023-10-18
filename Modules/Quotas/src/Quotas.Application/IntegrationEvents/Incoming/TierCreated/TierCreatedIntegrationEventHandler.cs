@@ -20,21 +20,16 @@ public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierC
         var tier = new Tier(new TierId(integrationEvent.Id), integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
-        _logger.TierCreated(tier.Id, tier.Name);
+        TierCreatedLogs.TierCreated(_logger, tier.Id, tier.Name);
     }
 }
 
-file static class LoggerExtensions
+internal static partial class TierCreatedLogs
 {
-    private static readonly Action<ILogger, TierId, string, Exception> TIER_CREATED =
-        LoggerMessage.Define<TierId, string>(
-            LogLevel.Information,
-            new EventId(151788, "Quotas.TierCreatedIntegrationEventHandler.TierCreated"),
-            "Successfully created tier. Tier ID: '{tierId}', Tier Name: '{tierName}'."
-        );
-
-    public static void TierCreated(this ILogger logger, TierId tierId, string name)
-    {
-        TIER_CREATED(logger, tierId, name, default!);
-    }
+    [LoggerMessage(
+        EventId = 151788,
+        EventName = "Quotas.TierCreatedIntegrationEventHandler.TierCreated",
+        Level = LogLevel.Information,
+        Message = "Successfully created tier. Tier ID: '{tierId}', Tier Name: '{tierName}'.")]
+    public static partial void TierCreated(ILogger logger, TierId tierId, string tierName);
 }
