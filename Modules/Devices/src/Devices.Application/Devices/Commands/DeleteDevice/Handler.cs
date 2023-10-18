@@ -40,21 +40,17 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         await _identitiesRepository.Update(device, cancellationToken);
 
-        _logger.MarkDeviceWithIdAsDeleted(request.DeviceId);
+        DeleteDeviceLogs.MarkDeviceWithIdAsDeleted(_logger, request.DeviceId);
     }
 }
 
-file static class LoggerExtensions
+internal static partial class DeleteDeviceLogs
 {
-    private static readonly Action<ILogger, DeviceId, Exception> MARKED_DEVICE_AS_DELETED =
-        LoggerMessage.Define<DeviceId>(
-            LogLevel.Information,
-            new EventId(776010, "Devices.MarkDeviceWithIdAsDeleted"),
-            "Successfully marked device with id '{deviceId}' as deleted."
-        );
-
-    public static void MarkDeviceWithIdAsDeleted(this ILogger logger, DeviceId deviceId)
-    {
-        MARKED_DEVICE_AS_DELETED(logger, deviceId, default!);
-    }
+    [LoggerMessage(
+        EventId = 776010,
+        EventName = "Devices.MarkDeviceWithIdAsDeleted",
+        Level = LogLevel.Information,
+        Message = "Successfully marked device with id '{deviceId}' as deleted.")]
+    public static partial void MarkDeviceWithIdAsDeleted(
+        ILogger logger, string deviceId);
 }
