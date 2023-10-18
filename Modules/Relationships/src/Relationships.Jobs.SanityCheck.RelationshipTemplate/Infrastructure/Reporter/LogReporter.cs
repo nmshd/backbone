@@ -66,3 +66,20 @@ file static class LoggerExtensions
         NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
     }
 }
+
+internal static partial class RelationshipsLogs
+{
+    [LoggerMessage(
+        EventId = 231727,
+        EventName = "Relationships.LogReporter.NoBlobForRelationshipTemplateId",
+        Level = LogLevel.Error,
+        Message = "No blob found for relationship template id: '{databaseId}'.")]
+    public static partial void NoBlobForRelationshipTemplateId(ILogger logger, RelationshipTemplateId databaseId);
+
+    [LoggerMessage(
+        EventId = 232800,
+        EventName = "Relationships.LogReporter.NoDatabaseEntryForBlobId",
+        Level = LogLevel.Error,
+        Message = "No database entry found for blob id: '{blobId}'.")]
+    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
+}
