@@ -56,7 +56,7 @@
 }
 
 .complex-filter-container {
-    display: flex; 
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-top: 10px;

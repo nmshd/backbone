@@ -13,11 +13,11 @@ body {
 /* Chrome, Safari, Edge, Opera */
 input[matinput]::-webkit-outer-spin-button,
 input[matinput]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
-input[matinput][type=number] {
-  -moz-appearance: textfield;
+input[matinput][type="number"] {
+    -moz-appearance: textfield;
 }
