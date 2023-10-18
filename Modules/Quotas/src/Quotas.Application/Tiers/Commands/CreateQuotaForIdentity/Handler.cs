@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.CreatedQuotasForIdentities(identity.Address);
+        CreateQuotaForIdentityLogs.CreatedQuotasForIdentities(_logger, identity.Address);
 
         var identityAddresses = new List<string> { identity.Address };
         var metrics = new List<string> { metric.Key.Value };
@@ -50,17 +50,12 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
     }
 }
 
-file static class LoggerExtensions
+internal static partial class CreateQuotaForIdentityLogs
 {
-    private static readonly Action<ILogger, string, Exception> CREATED_QUOTAS_FOR_IDENTITY =
-        LoggerMessage.Define<string>(
-            LogLevel.Information,
-            new EventId(868289, "Quotas.CreatedQuotasForIdentities"),
-            "Successfully created Quota for Identity. Identity Address: '{identityAddress}'."
-        );
-
-    public static void CreatedQuotasForIdentities(this ILogger logger, string identityAddress)
-    {
-        CREATED_QUOTAS_FOR_IDENTITY(logger, identityAddress, default!);
-    }
+    [LoggerMessage(
+        EventId = 868289,
+        EventName = "Quotas.CreatedQuotasForIdentities",
+        Level = LogLevel.Information,
+        Message = "Successfully created Quota for Identity. Identity Address: '{identityAddress}'.")]
+    public static partial void CreatedQuotasForIdentities(ILogger logger, string identityAddress);
 }
