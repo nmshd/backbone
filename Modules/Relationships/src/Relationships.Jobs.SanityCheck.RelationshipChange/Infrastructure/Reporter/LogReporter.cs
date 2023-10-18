@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.NoBlobForRelationshipChangeId(databaseId);
+            RelationshipChangeLogs.NoBlobForRelationshipChangeId(_logger, databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.NoDatabaseEntryForBlobId(blobId);
+            RelationshipChangeLogs.NoDatabaseEntryForBlobId(_logger, blobId);
         }
     }
 
@@ -40,29 +40,19 @@ public class LogReporter : IReporter
     }
 }
 
-file static class LoggerExtensions
+internal static partial class RelationshipChangeLogs
 {
-    private static readonly Action<ILogger, RelationshipChangeId, Exception> NO_BLOB_FOR_RELATIONSHIP_CHANGE_ID =
-        LoggerMessage.Define<RelationshipChangeId>(
-            LogLevel.Error,
-            new EventId(349287, "Relationships.LogReporter.NoBlobForRelationshipChangeId"),
-            "No blob found for relationship change id: '{databaseId}'."
-        );
+    [LoggerMessage(
+        EventId = 349287,
+        EventName = "Relationships.LogReporter.NoBlobForRelationshipChangeId",
+        Level = LogLevel.Error,
+        Message = "No blob found for relationship change id: '{databaseId}'.")]
+    public static partial void NoBlobForRelationshipChangeId(ILogger logger, RelationshipChangeId databaseId);
 
-    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
-        LoggerMessage.Define<string>(
-            LogLevel.Error,
-            new EventId(429922, "Relationships.LogReporter.NoDatabaseEntryForBlobId"),
-            "No database entry found for blob id: '{blobId}'."
-        );
-
-    public static void NoBlobForRelationshipChangeId(this ILogger logger, RelationshipChangeId relationshipChangeId)
-    {
-        NO_BLOB_FOR_RELATIONSHIP_CHANGE_ID(logger, relationshipChangeId, default!);
-    }
-
-    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
-    {
-        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
-    }
+    [LoggerMessage(
+        EventId = 429922,
+        EventName = "Relationships.LogReporter.NoDatabaseEntryForBlobId",
+        Level = LogLevel.Error,
+        Message = "No database entry found for blob id: '{blobId}'.")]
+    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
 }
