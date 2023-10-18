@@ -10,18 +10,17 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -43,6 +42,7 @@ builder.Host
         .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
         .Enrich.WithDemystifiedStackTraces()
         .Enrich.FromLogContext()
+        .Enrich.WithProperty("service", "adminui")
         .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
             .WithDefaultDestructurers()
             .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
@@ -125,6 +125,12 @@ static void Configure(WebApplication app)
 
     var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
 
+    app.UseSerilogRequestLogging(opts =>
+    {
+        opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+        opts.GetLevel = LogHelper.GetLevel;
+    });
+
     app.UseSecurityHeaders(policies =>
     {
         policies
@@ -137,10 +143,10 @@ static void Configure(WebApplication app)
     });
 
     if (configuration.SwaggerUi.Enabled)
-    {
         app.UseSwagger().UseSwaggerUI();
-        IdentityModelEventSource.ShowPII = true;
-    }
+
+    if (app.Environment.IsDevelopment())
+        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 
