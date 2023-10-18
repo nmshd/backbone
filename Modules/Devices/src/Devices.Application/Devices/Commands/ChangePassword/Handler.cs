@@ -33,11 +33,11 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         if (!changePasswordResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
-        ChangePassword.ChangedPasswordForDeviceWithId(_logger, _activeDevice);
+        ChangePasswordLogs.ChangedPasswordForDeviceWithId(_logger, _activeDevice);
     }
 }
 
-internal static partial class ChangePassword
+internal static partial class ChangePasswordLogs
 {
     [LoggerMessage(
         EventId = 277894,
