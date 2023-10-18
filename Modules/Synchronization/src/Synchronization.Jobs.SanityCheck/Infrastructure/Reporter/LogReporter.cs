@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.NoBlobForDatawalletModificationId(databaseId);
+            SynchronizationLogs.NoBlobForDatawalletModificationId(_logger, databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.NoDatabaseEntryForBlobId(blobId);
+            SynchronizationLogs.NoDatabaseEntryForBlobId(_logger, blobId);
         }
     }
 
@@ -40,29 +40,19 @@ public class LogReporter : IReporter
     }
 }
 
-file static class LoggerExtensions
+internal static partial class SynchronizationLogs
 {
-    private static readonly Action<ILogger, DatawalletModificationId, Exception> NO_BLOB_FOR_DATAWALLET_MODIFICATION_ID =
-        LoggerMessage.Define<DatawalletModificationId>(
-            LogLevel.Error,
-            new EventId(525684, "Synchronization.LogReporter.NoBlobForDatawalletModificationId"),
-            "No blob found for datawallet modification id: '{databaseId}'."
-        );
+    [LoggerMessage(
+        EventId = 525684,
+        EventName = "Synchronization.LogReporter.NoBlobForDatawalletModificationId",
+        Level = LogLevel.Error,
+        Message = "No blob found for datawallet modification id: '{databaseId}'.")]
+    public static partial void NoBlobForDatawalletModificationId(ILogger logger, DatawalletModificationId databaseId);
 
-    private static readonly Action<ILogger, string, Exception> NO_DATABASE_ENTRY_FOR_BLOB_ID =
-        LoggerMessage.Define<string>(
-            LogLevel.Error,
-            new EventId(560290, "Synchronization.LogReporter.NoDatabaseEntryForBlobId"),
-            "No database entry found for blob id: '{blobId}'."
-        );
-
-    public static void NoBlobForDatawalletModificationId(this ILogger logger, DatawalletModificationId datawalletModificationId)
-    {
-        NO_BLOB_FOR_DATAWALLET_MODIFICATION_ID(logger, datawalletModificationId, default!);
-    }
-
-    public static void NoDatabaseEntryForBlobId(this ILogger logger, string blobId)
-    {
-        NO_DATABASE_ENTRY_FOR_BLOB_ID(logger, blobId, default!);
-    }
+    [LoggerMessage(
+        EventId = 560290,
+        EventName = "Synchronization.LogReporter.NoDatabaseEntryForBlobId",
+        Level = LogLevel.Error,
+        Message = "No database entry found for blob id: '{blobId}'.")]
+    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
 }
