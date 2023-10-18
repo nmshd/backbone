@@ -6,6 +6,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Sort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
 import { Router } from "@angular/router";
+import { NGXLogger } from "ngx-logger";
 import { Observable, forkJoin } from "rxjs";
 import { ClientOverview, ClientOverviewFilter, ClientServiceService } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
@@ -36,7 +37,8 @@ export class ClientListComponent {
         private readonly dialog: MatDialog,
         private readonly snackBar: MatSnackBar,
         private readonly tierService: TierService,
-        private readonly clientService: ClientServiceService
+        private readonly clientService: ClientServiceService,
+        private readonly logger: NGXLogger
     ) {
         this.header = "Clients";
         this.headerDescription = "A list of existing Clients";
@@ -113,6 +115,9 @@ export class ClientListComponent {
                 case "<=":
                     this.clients = this.clients.filter((c) => c.numberOfIdentities <= this.filter.numberOfIdentities.value!);
                     break;
+                default:
+                    this.logger.error(`Invalid numberOfIdentities filter operator: ${this.filter.numberOfIdentities.operator}`);
+                    break;
             }
         }
         if (this.filter.createdAt.value !== undefined && this.filter.createdAt.value !== null) {
@@ -132,6 +137,9 @@ export class ClientListComponent {
                 case "<=":
                     this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() <= this.filter.createdAt.value!.toISOString());
                     break;
+                default:
+                    this.logger.error(`Invalid createdAt filter operator: ${this.filter.createdAt.operator}`);
+                    break;
             }
         }
         this.loading = false;
@@ -147,6 +155,9 @@ export class ClientListComponent {
                 break;
             case "createdAt":
                 this.filter.createdAt.value = undefined;
+                break;
+            default:
+                this.logger.error(`Invalid filter: ${filter}`);
                 break;
         }
 
