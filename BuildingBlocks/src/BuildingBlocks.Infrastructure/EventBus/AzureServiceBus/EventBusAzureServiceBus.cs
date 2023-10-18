@@ -65,7 +65,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             Subject = eventName
         };
 
-        EventBusAzureServiceBusLogs.SendingIntegrationEvent(_logger, message.MessageId);
+        _logger.SendingIntegrationEvent(message.MessageId);
 
         await _logger.TraceTime(async () =>
             await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
@@ -121,7 +121,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 if (await ProcessEvent(eventName, messageData))
                     await args.CompleteMessageAsync(args.Message);
                 else
-                    EventBusAzureServiceBusLogs.EventWasNotProcessed(_logger, args.Message.MessageId);
+                    _logger.EventWasNotProcessed(args.Message.MessageId);
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
@@ -133,7 +133,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         var ex = args.Exception;
         var context = args.ErrorSource;
 
-        EventBusAzureServiceBusLogs.ErrorHandlingMessage(_logger, ex.Message, context);
+        _logger.ErrorHandlingMessage(ex.Message, context);
 
         return Task.CompletedTask;
     }
@@ -142,7 +142,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
         {
-            EventBusAzureServiceBusLogs.NoSubscriptionForEvent(_logger, eventName);
+            _logger.NoSubscriptionForEvent(eventName);
             return false;
         }
 
@@ -164,13 +164,13 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             try
             {
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => EventBusAzureServiceBusLogs.ErrorWhileExecutingEventHandlerType(_logger, eventType.Name, ex.Message, ex.StackTrace!));
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex.Message, ex.StackTrace!));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
             catch (Exception ex)
             {
-                EventBusAzureServiceBusLogs.ErrorWhileProcessingIntegrationEvent(_logger, integrationEvent.IntegrationEventId);
+                _logger.ErrorWhileProcessingIntegrationEvent(integrationEvent.IntegrationEventId);
                 return false;
             }
         }
@@ -186,40 +186,40 @@ internal static partial class EventBusAzureServiceBusLogs
         EventName = "EventBusAzureServiceBus.SendingIntegrationEvent",
         Level = LogLevel.Debug,
         Message = "Sending integration event with id '{messageId}'...")]
-    public static partial void SendingIntegrationEvent(ILogger logger, string messageId);
+    public static partial void SendingIntegrationEvent(this ILogger logger, string messageId);
 
     [LoggerMessage(
         EventId = 630568,
         EventName = "EventBusAzureServiceBus.EventWasNotProcessed",
         Level = LogLevel.Information,
         Message = "The event with the MessageId '{messageId}' wasn't processed and will therefore not be completed.")]
-    public static partial void EventWasNotProcessed(ILogger logger, string messageId);
+    public static partial void EventWasNotProcessed(this ILogger logger, string messageId);
 
     [LoggerMessage(
         EventId = 949322,
         EventName = "EventBusAzureServiceBus.ErrorHandlingMessage",
         Level = LogLevel.Error,
         Message = "ERROR handling message: '{exceptionMessage}' - Context: '{exceptionContext}'.")]
-    public static partial void ErrorHandlingMessage(ILogger logger, string exceptionMessage, ServiceBusErrorSource exceptionContext);
+    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionMessage, ServiceBusErrorSource exceptionContext);
 
     [LoggerMessage(
         EventId = 341537,
         EventName = "EventBusAzureServiceBus.NoSubscriptionForEvent",
         Level = LogLevel.Warning,
         Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(ILogger logger, string eventName);
+    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
 
     [LoggerMessage(
         EventId = 726744,
         EventName = "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerCausingRetry",
         Level = LogLevel.Warning,
         Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
 
     [LoggerMessage(
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingIntegrationEvent",
         Level = LogLevel.Error,
         Message = "An error occurred while processing the integration event with id '{integrationEventId}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(ILogger logger, string integrationEventId);
+    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string integrationEventId);
 }

@@ -172,7 +172,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
         catch (BlobAlreadyExistsException ex)
         {
-            RelationshipRepositoryLogs.ErrorTryingToSaveRelationshipChange(_logger, latestChange.Id, ex.BlobName);
+            _logger.ErrorTryingToSaveRelationshipChange(latestChange.Id, ex.BlobName);
         }
     }
 
@@ -204,5 +204,5 @@ internal static partial class RelationshipRepositoryLogs
         EventName = "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange",
         Level = LogLevel.Error,
         Message = "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'.")]
-    public static partial void ErrorTryingToSaveRelationshipChange(ILogger logger, RelationshipChangeId id, string name);
+    public static partial void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name);
 }

@@ -70,7 +70,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .WaitAndRetry(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => EventBusRabbitMQLogs.SocketException(_logger, ex.ToString()));
+                (ex, _) => _logger.SocketException(ex.ToString()));
 
         var eventName = @event.GetType().Name;
 
@@ -102,7 +102,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            EventBusRabbitMQLogs.PublishedIntegrationEvent(_logger, @event.IntegrationEventId);
+            _logger.PublishedIntegrationEvent(@event.IntegrationEventId);
         });
     }
 
@@ -171,7 +171,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 channel.BasicReject(eventArgs.DeliveryTag, true);
 
-                EventBusRabbitMQLogs.ErrorWhileProcessingIntegrationEvent(_logger, eventName);
+                _logger.ErrorWhileProcessingIntegrationEvent(eventName);
             }
         };
 
@@ -210,14 +210,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => EventBusRabbitMQLogs.ErrorWhileExecutingEventHandlerType(_logger, eventName, ex.Message, ex.StackTrace!));
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
         }
         else
         {
-            EventBusRabbitMQLogs.NoSubscriptionForEvent(_logger, eventName);
+            _logger.NoSubscriptionForEvent(eventName);
         }
     }
 }
@@ -229,33 +229,33 @@ internal static partial class EventBusRabbitMQLogs
         EventName = "EventBusRabbitMQ.SocketException",
         Level = LogLevel.Warning,
         Message = "{exceptionString}")]
-    public static partial void SocketException(ILogger logger, string exceptionString);
+    public static partial void SocketException(this ILogger logger, string exceptionString);
 
     [LoggerMessage(
         EventId = 585231,
         EventName = "EventBusRabbitMQ.PublishedIntegrationEvent",
         Level = LogLevel.Debug,
         Message = "Successfully published event with id '{integrationEventId}'.")]
-    public static partial void PublishedIntegrationEvent(ILogger logger, string integrationEventId);
+    public static partial void PublishedIntegrationEvent(this ILogger logger, string integrationEventId);
 
     [LoggerMessage(
         EventId = 702822,
         EventName = "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent",
         Level = LogLevel.Error,
         Message = "An error occurred while processing the integration event of type '{eventName}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(ILogger logger, string eventName);
+    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName);
 
     [LoggerMessage(
         EventId = 980768,
         EventName = "EventBusRabbitMQ.NoSubscriptionForEvent",
         Level = LogLevel.Warning,
         Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(ILogger logger, string eventName);
+    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
 
     [LoggerMessage(
         EventId = 288394,
         EventName = "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType",
         Level = LogLevel.Warning,
         Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
 }

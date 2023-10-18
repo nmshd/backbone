@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            FilesLogs.NoBlobForFileId(_logger, databaseId);
+            _logger.NoBlobForFileId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            FilesLogs.NoDatabaseEntryForBlobId(_logger, blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -47,12 +47,12 @@ internal static partial class FilesLogs
         EventName = "Files.LogReporter.NoBlobForFileId",
         Level = LogLevel.Error,
         Message = "No blob found for file id: '{databaseId}'.")]
-    public static partial void NoBlobForFileId(ILogger logger, FileId databaseId);
+    public static partial void NoBlobForFileId(this ILogger logger, FileId databaseId);
 
     [LoggerMessage(
         EventId = 487180,
         EventName = "Files.LogReporter.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
-    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
+    public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);
 }

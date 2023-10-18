@@ -74,7 +74,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
         catch (Exception ex)
         {
-            AzureStorageAccountLogs.ErrorListingAllBlobs(_logger, ex);
+            _logger.ErrorListingAllBlobs(ex);
             throw;
         }
     }
@@ -127,7 +127,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                AzureStorageAccountLogs.ErrorDeletingBlob(_logger, cloudBlockBlob.Name, ex);
+                _logger.ErrorDeletingBlob(cloudBlockBlob.Name, ex);
                 throw new NotFoundException();
             }
 
@@ -142,12 +142,12 @@ internal static partial class AzureStorageAccountLogs
         EventName = "AzureStorageAccount.ErrorListingAllBlobs",
         Level = LogLevel.Error,
         Message = "There was an error listing all blobs.")]
-    public static partial void ErrorListingAllBlobs(ILogger logger, Exception e);
+    public static partial void ErrorListingAllBlobs(this ILogger logger, Exception e);
 
     [LoggerMessage(
         EventId = 645028,
         EventName = "AzureStorageAccount.ErrorDeletingBlob",
         Level = LogLevel.Error,
         Message = "There was an error deleting the blob with id '{cloudBlockBlobName}'. {e}")]
-    public static partial void ErrorDeletingBlob(ILogger logger, string cloudBlockBlobName, Exception e);
+    public static partial void ErrorDeletingBlob(this ILogger logger, string cloudBlockBlobName, Exception e);
 }

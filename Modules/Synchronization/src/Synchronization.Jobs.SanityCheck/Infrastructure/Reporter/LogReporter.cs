@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            SynchronizationLogs.NoBlobForDatawalletModificationId(_logger, databaseId);
+            _logger.NoBlobForDatawalletModificationId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            SynchronizationLogs.NoDatabaseEntryForBlobId(_logger, blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -47,12 +47,12 @@ internal static partial class SynchronizationLogs
         EventName = "Synchronization.LogReporter.NoBlobForDatawalletModificationId",
         Level = LogLevel.Error,
         Message = "No blob found for datawallet modification id: '{databaseId}'.")]
-    public static partial void NoBlobForDatawalletModificationId(ILogger logger, DatawalletModificationId databaseId);
+    public static partial void NoBlobForDatawalletModificationId(this ILogger logger, DatawalletModificationId databaseId);
 
     [LoggerMessage(
         EventId = 560290,
         EventName = "Synchronization.LogReporter.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
-    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
+    public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);
 }

@@ -62,7 +62,7 @@ public class DefaultRabbitMqPersistentConnection
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount,
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                    (ex, _) => DefaultRabbitMqPersistentConnectionLogs.BrokerUnreachableException(_logger, ex.ToString()));
+                    (ex, _) => _logger.BrokerUnreachableException(ex.ToString()));
 
             policy.Execute(() => _connection = _connectionFactory
                     .CreateConnection());
@@ -87,21 +87,21 @@ public class DefaultRabbitMqPersistentConnection
     private void OnConnectionBlocked(object? sender, ConnectionBlockedEventArgs e)
     {
         if (_disposed) return;
-        DefaultRabbitMqPersistentConnectionLogs.ConnectionIsOnShutdown(_logger);
+        _logger.ConnectionIsOnShutdown();
         TryConnect();
     }
 
     private void OnCallbackException(object? sender, CallbackExceptionEventArgs e)
     {
         if (_disposed) return;
-        DefaultRabbitMqPersistentConnectionLogs.ConnectionThrewAnException(_logger);
+        _logger.ConnectionThrewAnException();
         TryConnect();
     }
 
     private void OnConnectionShutdown(object? sender, ShutdownEventArgs reason)
     {
         if (_disposed) return;
-        DefaultRabbitMqPersistentConnectionLogs.ConnectionIsShutdown(_logger);
+        _logger.ConnectionIsShutdown();
         TryConnect();
     }
 }
@@ -113,26 +113,26 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
         EventName = "DefaultRabbitMqPersistentConnection.BrokerUnreachableException",
         Level = LogLevel.Warning,
         Message = "{exceptionString}")]
-    public static partial void BrokerUnreachableException(ILogger logger, string exceptionString);
+    public static partial void BrokerUnreachableException(this ILogger logger, string exceptionString);
 
     [LoggerMessage(
         EventId = 119836,
         EventName = "DefaultRabbitMqPersistentConnection.ConnectionIsShutdown",
         Level = LogLevel.Warning,
         Message = "A RabbitMQ connection is shutdown. Trying to re-connect...")]
-    public static partial void ConnectionIsShutdown(ILogger logger);
+    public static partial void ConnectionIsShutdown(this ILogger logger);
 
     [LoggerMessage(
         EventId = 143946,
         EventName = "DefaultRabbitMqPersistentConnection.ConnectionThrewAnException",
         Level = LogLevel.Warning,
         Message = "A RabbitMQ connection threw an exception. Trying to re-connect...")]
-    public static partial void ConnectionThrewAnException(ILogger logger);
+    public static partial void ConnectionThrewAnException(this ILogger logger);
 
     [LoggerMessage(
         EventId = 454129,
         EventName = "DefaultRabbitMqPersistentConnection.ConnectionIsOnShutdown",
         Level = LogLevel.Warning,
         Message = "A RabbitMQ connection is on shutdown. Trying to re-connect...")]
-    public static partial void ConnectionIsOnShutdown(ILogger logger);
+    public static partial void ConnectionIsOnShutdown(this ILogger logger);
 }

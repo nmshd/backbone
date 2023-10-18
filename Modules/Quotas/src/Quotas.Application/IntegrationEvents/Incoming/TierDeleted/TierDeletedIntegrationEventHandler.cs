@@ -21,7 +21,7 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
 
         await _tiersRepository.RemoveById(tier.Id);
 
-        TierDeletedLogs.TierDeleted(_logger, tier.Id, tier.Name);
+        _logger.TierDeleted(tier.Id, tier.Name);
     }
 }
 
@@ -32,5 +32,5 @@ internal static partial class TierDeletedLogs
         EventName = "Quotas.TierDeletedIntegrationEventHandler.TierDeleted",
         Level = LogLevel.Information,
         Message = "Successfully deleted tier. Tier ID: '{tierId}', Tier Name: '{tierName}'.")]
-    public static partial void TierDeleted(ILogger logger, TierId tierId, string tierName);
+    public static partial void TierDeleted(this ILogger logger, TierId tierId, string tierName);
 }

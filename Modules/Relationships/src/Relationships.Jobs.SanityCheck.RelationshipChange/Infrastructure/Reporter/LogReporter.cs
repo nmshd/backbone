@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            RelationshipChangeLogs.NoBlobForRelationshipChangeId(_logger, databaseId);
+            _logger.NoBlobForRelationshipChangeId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            RelationshipChangeLogs.NoDatabaseEntryForBlobId(_logger, blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -47,12 +47,12 @@ internal static partial class RelationshipChangeLogs
         EventName = "Relationships.LogReporter.NoBlobForRelationshipChangeId",
         Level = LogLevel.Error,
         Message = "No blob found for relationship change id: '{databaseId}'.")]
-    public static partial void NoBlobForRelationshipChangeId(ILogger logger, RelationshipChangeId databaseId);
+    public static partial void NoBlobForRelationshipChangeId(this ILogger logger, RelationshipChangeId databaseId);
 
     [LoggerMessage(
         EventId = 429922,
         EventName = "Relationships.LogReporter.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
-    public static partial void NoDatabaseEntryForBlobId(ILogger logger, string blobId);
+    public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);
 }

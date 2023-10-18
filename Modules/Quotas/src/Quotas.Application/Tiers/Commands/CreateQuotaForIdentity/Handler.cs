@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        CreateQuotaForIdentityLogs.CreatedQuotasForIdentities(_logger, identity.Address);
+        _logger.CreatedQuotasForIdentities(identity.Address);
 
         var identityAddresses = new List<string> { identity.Address };
         var metrics = new List<string> { metric.Key.Value };
@@ -57,5 +57,5 @@ internal static partial class CreateQuotaForIdentityLogs
         EventName = "Quotas.CreatedQuotasForIdentities",
         Level = LogLevel.Information,
         Message = "Successfully created Quota for Identity. Identity Address: '{identityAddress}'.")]
-    public static partial void CreatedQuotasForIdentities(ILogger logger, string identityAddress);
+    public static partial void CreatedQuotasForIdentities(this ILogger logger, string identityAddress);
 }
