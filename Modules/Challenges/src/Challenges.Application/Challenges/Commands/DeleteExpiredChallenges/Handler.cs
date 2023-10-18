@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -19,13 +20,13 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
     {
         if (cancellationToken.IsCancellationRequested)
         {
-            _logger.CancellationRequested();
+            DeleteExpiredChallengesLogs.CancellationRequested(_logger);
             return DeleteExpiredChallengesResponse.NoDeletedChallenges();
         }
 
         var deletedChallengesCount = await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
 
-        _logger.DeletionSuccessful(deletedChallengesCount);
+        DeleteExpiredChallengesLogs.DeletionSuccessful(_logger, deletedChallengesCount);
 
         var response = new DeleteExpiredChallengesResponse(deletedChallengesCount);
 
@@ -58,4 +59,21 @@ file static class LoggerExtensions
     {
         DELETION_SUCCESSFUL(logger, numberOfDeletedChallenges, default!);
     }
+}
+
+internal static partial class DeleteExpiredChallengesLogs
+{
+    [LoggerMessage(
+        EventId = 599235,
+        EventName = "Challenges.Application.DeleteExpiredChallenges.CancellationRequested",
+        Level = LogLevel.Debug,
+        Message = "Cancellation was requested. Stopping execution...")]
+    public static partial void CancellationRequested(ILogger logger);
+
+    [LoggerMessage(
+        EventId = 916630,
+        EventName = "Challenges.Application.DeleteExpiredChallenges.DeletionSuccessful",
+        Level = LogLevel.Debug,
+        Message = "Deletion of '{deletedChallengesCount}' challenges successful.")]
+    public static partial void DeletionSuccessful(ILogger logger, int deletedChallengesCount);
 }
