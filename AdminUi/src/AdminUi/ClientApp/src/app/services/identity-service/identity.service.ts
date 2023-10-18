@@ -40,15 +40,19 @@ export class IdentityService {
         if (filter.address !== undefined && filter.address !== "") odataFilter.contains("address", filter.address);
 
         if (filter.tiers !== undefined && filter.tiers.length > 0) {
+            var tiersFilter = new ODataFilterBuilder();
             filter.tiers.forEach((tier) => {
-                odataFilter.eq("tierId", tier);
+                tiersFilter.or((x) => x.eq("tierId", tier));
             });
+            odataFilter.and((_) => tiersFilter);
         }
 
         if (filter.clients !== undefined && filter.clients.length > 0) {
-            filter.clients.forEach((client) => {
-                odataFilter.eq("createdWithClient", client);
+            var clientsFilter = new ODataFilterBuilder();
+            filter.clients.forEach((client, index) => {
+                clientsFilter.or((x) => x.eq("createdWithClient", client));
             });
+            odataFilter.and((_) => clientsFilter);
         }
 
         if (filter.createdAt.operator !== undefined && filter.createdAt.value !== undefined) {
@@ -97,7 +101,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.numberOfDevices.operator !== undefined && filter.numberOfDevices.value !== undefined && filter.numberOfDevices.value !== null) {
+        if (filter.numberOfDevices.operator !== undefined && filter.numberOfDevices.value?.valueOf) {
             switch (filter.numberOfDevices.operator) {
                 case ">":
                     odataFilter.gt("numberOfDevices", filter.numberOfDevices.value);
@@ -120,7 +124,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.datawalletVersion.operator !== undefined && filter.datawalletVersion.value !== undefined && filter.datawalletVersion.value !== null) {
+        if (filter.datawalletVersion.operator !== undefined && filter.datawalletVersion.value?.valueOf) {
             switch (filter.datawalletVersion.operator) {
                 case ">":
                     odataFilter.gt("datawalletVersion", filter.datawalletVersion.value);
@@ -143,7 +147,7 @@ export class IdentityService {
             }
         }
 
-        if (filter.identityVersion.operator !== undefined && filter.identityVersion.value !== undefined && filter.identityVersion.value !== null) {
+        if (filter.identityVersion.operator !== undefined && filter.identityVersion.value?.valueOf) {
             switch (filter.identityVersion.operator) {
                 case ">":
                     odataFilter.gt("identityVersion", filter.identityVersion.value);

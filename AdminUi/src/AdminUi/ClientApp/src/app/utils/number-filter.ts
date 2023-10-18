@@ -1,4 +1,4 @@
 export interface NumberFilter {
     operator?: string;
-    value?: number;
+    value?: number | null;
 }

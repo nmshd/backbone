@@ -98,10 +98,10 @@ export class ClientListComponent {
         if (this.filter.clientId) this.clients = this.clients.filter((c) => c.clientId.toUpperCase().includes(this.filter.clientId!.toUpperCase()));
         if (this.filter.displayName) this.clients = this.clients.filter((c) => c.displayName.toUpperCase().includes(this.filter.displayName!.toUpperCase()));
         if (this.filter.tiers && this.filter.tiers.length > 0) this.clients = this.clients.filter((c) => this.filter.tiers!.includes(c.defaultTier));
-        if (this.filter.numberOfIdentities.value !== undefined && this.filter.numberOfIdentities.value !== null) {
+        if (this.filter.numberOfIdentities.value !== undefined) {
             switch (this.filter.numberOfIdentities.operator) {
                 case "=":
-                    this.clients = this.clients.filter((c) => c.numberOfIdentities == this.filter.numberOfIdentities.value!);
+                    this.clients = this.clients.filter((c) => c.numberOfIdentities === this.filter.numberOfIdentities.value!);
                     break;
                 case ">":
                     this.clients = this.clients.filter((c) => c.numberOfIdentities > this.filter.numberOfIdentities.value!);
@@ -120,10 +120,10 @@ export class ClientListComponent {
                     break;
             }
         }
-        if (this.filter.createdAt.value !== undefined && this.filter.createdAt.value !== null) {
+        if (this.filter.createdAt.value !== undefined) {
             switch (this.filter.createdAt.operator) {
                 case "=":
-                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() == this.filter.createdAt.value!.toISOString());
+                    this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() === this.filter.createdAt.value!.toISOString());
                     break;
                 case ">":
                     this.clients = this.clients.filter((c) => new Date(c.createdAt).toISOString() > this.filter.createdAt.value!.toISOString());

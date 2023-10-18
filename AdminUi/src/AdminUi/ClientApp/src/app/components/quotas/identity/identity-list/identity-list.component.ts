@@ -16,16 +16,16 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 })
 export class IdentityListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
-    @ViewChild("addressFilter", { static: false }) public set addressFilter(addressFilterInput: ElementRef) {
+    @ViewChild("addressFilter", { static: false }) public set addressFilter(addressFilterInput: ElementRef | undefined) {
         this.debounceFilter(addressFilterInput, "address");
     }
-    @ViewChild("numberOfDevicesFilter", { static: false }) public set numberOfDevicesFilter(numberOfDevicesFilterInput: ElementRef) {
+    @ViewChild("numberOfDevicesFilter", { static: false }) public set numberOfDevicesFilter(numberOfDevicesFilterInput: ElementRef | undefined) {
         this.debounceFilter(numberOfDevicesFilterInput, "numberOfDevices");
     }
-    @ViewChild("datawalletVersionFilter", { static: false }) public set datawalletVersionFilter(datawalletVersionFilterInput: ElementRef) {
+    @ViewChild("datawalletVersionFilter", { static: false }) public set datawalletVersionFilter(datawalletVersionFilterInput: ElementRef | undefined) {
         this.debounceFilter(datawalletVersionFilterInput, "datawalletVersion");
     }
-    @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(identityVersionFilterInput: ElementRef) {
+    @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(identityVersionFilterInput: ElementRef | undefined) {
         this.debounceFilter(identityVersionFilterInput, "identityVersion");
     }
 
@@ -86,7 +86,7 @@ export class IdentityListComponent {
         this.getClients();
     }
 
-    private debounceFilter(filterElement: ElementRef, filterName: string): void {
+    private debounceFilter(filterElement: ElementRef | undefined, filterName: string): void {
         if (filterElement !== undefined) {
             fromEvent(filterElement.nativeElement, "keyup")
                 .pipe(
