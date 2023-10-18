@@ -12,8 +12,8 @@ public static class LogHelper
             ? LogEventLevel.Error
             : ctx.Response.StatusCode > 499
                 ? LogEventLevel.Error
-                : IsHealthCheckEndpoint(ctx) // Not an error, check if it was a health check
-                    ? LogEventLevel.Verbose // Was a health check, use Verbose
+                : IsHealthCheckEndpoint(ctx)
+                    ? LogEventLevel.Verbose
                     : LogEventLevel.Information;
     }
 
@@ -27,8 +27,7 @@ public static class LogHelper
                 "Health checks",
                 StringComparison.Ordinal);
         }
-
-        // No endpoint, so not a health check endpoint
+        
         return false;
     }
 
