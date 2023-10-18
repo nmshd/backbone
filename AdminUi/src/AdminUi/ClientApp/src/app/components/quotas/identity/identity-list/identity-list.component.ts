@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { NGXLogger } from "ngx-logger";
 import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs";
 import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
@@ -62,7 +63,8 @@ export class IdentityListComponent {
         private readonly snackBar: MatSnackBar,
         private readonly identityService: IdentityService,
         private readonly tierService: TierService,
-        private readonly clientService: ClientServiceService
+        private readonly clientService: ClientServiceService,
+        private readonly logger: NGXLogger
     ) {
         this.header = "Identities";
         this.headerDescription = "A list of existing Identities";
@@ -207,6 +209,9 @@ export class IdentityListComponent {
                     this.getIdentities();
                 }
                 break;
+            default:
+                this.logger.error(`OnFilterChange: Invalid filter name: ${filter}`);
+                break;
         }
     }
 
@@ -223,6 +228,9 @@ export class IdentityListComponent {
             case "lastLoginAt":
                 this.filter.lastLoginAt.value = undefined;
                 if (this.filter.lastLoginAt.operator !== undefined) this.getIdentities();
+                break;
+            default:
+                this.logger.error(`ClearFilter: Invalid filter name: ${filter}`);
                 break;
         }
     }
