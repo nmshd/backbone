@@ -39,21 +39,16 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.IdentityCreated(identity.Address, identity.TierId);
+        IdentityCreatedLogs.IdentityCreated(_logger, identity.Address, identity.TierId);
     }
 }
 
-file static class LoggerExtensions
+internal static partial class IdentityCreatedLogs
 {
-    private static readonly Action<ILogger, string, TierId, Exception> IDENTITY_CREATED =
-        LoggerMessage.Define<string, TierId>(
-            LogLevel.Information,
-            new EventId(811934, "Quotas.IdentityCreatedIntegrationEventHandler.IdentityCreated"),
-            "Successfully created identity. Identity Address: '{address}', Tier ID: '{tierId}'."
-        );
-
-    public static void IdentityCreated(this ILogger logger, string address, TierId tierId)
-    {
-        IDENTITY_CREATED(logger, address, tierId, default!);
-    }
+    [LoggerMessage(
+        EventId = 811934,
+        EventName = "Quotas.IdentityCreatedIntegrationEventHandler.IdentityCreated",
+        Level = LogLevel.Information,
+        Message = "Successfully created identity. Identity Address: '{address}', Tier ID: '{tierId}'.")]
+    public static partial void IdentityCreated(ILogger logger, string address, TierId tierId);
 }
