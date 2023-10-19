@@ -170,13 +170,8 @@ export class IdentityService {
             }
         }
 
-        let filterParameter = "";
-        if (odataFilter.toString() !== "") filterParameter = `?$filter=${odataFilter.toString()}`;
-        if (filterParameter === "") {
-            filterParameter += `?${paginationFilter}`;
-        } else {
-            filterParameter += `&${paginationFilter}`;
-        }
+        const filterComponents = [odataFilter.toString() !== "" ? `$filter=${odataFilter.toString()}` : "", paginationFilter];
+        const filterParameter = `?${filterComponents.join("&")}`;
 
         return filterParameter;
     }
