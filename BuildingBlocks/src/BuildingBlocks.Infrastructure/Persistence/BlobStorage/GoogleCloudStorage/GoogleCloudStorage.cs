@@ -133,7 +133,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             await _logger.TraceTime(async () =>
                 await _storageClient.GetObjectAsync(folder, key), nameof(_storageClient.GetObjectAsync));
 
-            _logger.ErrorBlobWithNameExists();
+            _logger.ErrorBlobWithNameExists(key);
             throw new BlobAlreadyExistsException(key);
         }
         catch (GoogleApiException ex)
@@ -199,8 +199,8 @@ internal static partial class GoogleCloudStorageLogs
         EventId = 358892,
         EventName = "GoogleCloudStorage.ErrorBlobWithNameExists",
         Level = LogLevel.Error,
-        Message = "The blob with the given name already exists.")]
-    public static partial void ErrorBlobWithNameExists(this ILogger logger);
+        Message = "The blob with the name {blobName} already exists.")]
+    public static partial void ErrorBlobWithNameExists(this ILogger logger, string blobName);
 
     [LoggerMessage(
         EventId = 304533,
