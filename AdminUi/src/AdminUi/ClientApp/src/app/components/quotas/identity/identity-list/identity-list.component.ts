@@ -17,17 +17,17 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 })
 export class IdentityListComponent {
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
-    @ViewChild("addressFilter", { static: false }) public set addressFilter(addressFilterInput: ElementRef | undefined) {
-        this.debounceFilter(addressFilterInput, "address");
+    @ViewChild("addressFilter", { static: false }) public set addressFilter(input: ElementRef | undefined) {
+        this.debounceFilter(input, "address");
     }
-    @ViewChild("numberOfDevicesFilter", { static: false }) public set numberOfDevicesFilter(numberOfDevicesFilterInput: ElementRef | undefined) {
-        this.debounceFilter(numberOfDevicesFilterInput, "numberOfDevices");
+    @ViewChild("numberOfDevicesFilter", { static: false }) public set numberOfDevicesFilter(input: ElementRef | undefined) {
+        this.debounceFilter(input, "numberOfDevices");
     }
-    @ViewChild("datawalletVersionFilter", { static: false }) public set datawalletVersionFilter(datawalletVersionFilterInput: ElementRef | undefined) {
-        this.debounceFilter(datawalletVersionFilterInput, "datawalletVersion");
+    @ViewChild("datawalletVersionFilter", { static: false }) public set datawalletVersionFilter(input: ElementRef | undefined) {
+        this.debounceFilter(input, "datawalletVersion");
     }
-    @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(identityVersionFilterInput: ElementRef | undefined) {
-        this.debounceFilter(identityVersionFilterInput, "identityVersion");
+    @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(input: ElementRef | undefined) {
+        this.debounceFilter(input, "identityVersion");
     }
 
     public header: string;
