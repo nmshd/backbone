@@ -37,10 +37,9 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     {
         _watch!.Stop();
 
-        if (_watch.ElapsedMilliseconds > 1000)
-            _logger.HandledMediatorRequestWarning(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
-        else
-            _logger.HandledMediatorRequestInformation(typeof(TRequest).Name, _watch.ElapsedMilliseconds);
+        _logger.HandledMediatorRequest(
+            _watch.ElapsedMilliseconds > 1000 ? LogLevel.Warning : LogLevel.Information,
+            typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
 }
 
@@ -49,14 +48,7 @@ internal static partial class LoggingBehaviorLogs
     [LoggerMessage(
         EventId = 724322,
         EventName = "LoggingBehavior.HandledRequestInformation",
-        Level = LogLevel.Information,
         Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
-    public static partial void HandledMediatorRequestInformation(this ILogger logger, string requestName, long timeElapsed);
+    public static partial void HandledMediatorRequest(this ILogger logger, LogLevel level, string requestName, long timeElapsed);
 
-    [LoggerMessage(
-        EventId = 724322,
-        EventName = "LoggingBehavior.HandledRequestInformation",
-        Level = LogLevel.Warning,
-        Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
-    public static partial void HandledMediatorRequestWarning(this ILogger logger, string requestName, long timeElapsed);
 }
