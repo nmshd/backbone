@@ -210,7 +210,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!));
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
@@ -256,6 +256,6 @@ internal static partial class EventBusRabbitMQLogs
         EventId = 288394,
         EventName = "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType",
         Level = LogLevel.Warning,
-        Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
+        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }
