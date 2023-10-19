@@ -148,6 +148,6 @@ internal static partial class AzureStorageAccountLogs
         EventId = 645028,
         EventName = "AzureStorageAccount.ErrorDeletingBlob",
         Level = LogLevel.Error,
-        Message = "There was an error deleting the blob with id '{cloudBlockBlobName}'. {e}")]
-    public static partial void ErrorDeletingBlob(this ILogger logger, string cloudBlockBlobName, Exception e);
+        Message = "There was an error deleting the blob with id '{cloudBlockBlobName}'.")]
+    public static partial void ErrorDeletingBlob(this ILogger logger, string cloudBlockBlobName, Exception ex);
 }
