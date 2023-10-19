@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.AzureNotificationHub;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +8,6 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {
-    public const string PROVIDER_AZURE_NOTIFICATION_HUB = "AzureNotificationHub";
     public const string PROVIDER_DIRECT = "Direct";
     public const string PROVIDER_DUMMY = "Dummy";
 
@@ -17,9 +15,6 @@ public static class IServiceCollectionExtensions
     {
         switch (options.Provider)
         {
-            case PROVIDER_AZURE_NOTIFICATION_HUB:
-                services.AddAzureNotificationHubPushNotifications(options.AzureNotificationHub);
-                break;
             case PROVIDER_DUMMY:
                 services.AddDummyPushNotifications();
                 break;
@@ -36,10 +31,8 @@ public class PushNotificationOptions
 {
     [Required]
     [RegularExpression(
-        $"{IServiceCollectionExtensions.PROVIDER_AZURE_NOTIFICATION_HUB}|{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
+        $"{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
     public string Provider { get; set; }
-
-    public AzureNotificationHub.IServiceCollectionExtensions.AzureNotificationHubPushNotificationsOptions AzureNotificationHub { get; set; }
 
 #nullable enable
     public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
