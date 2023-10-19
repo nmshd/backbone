@@ -2,6 +2,7 @@
 using Autofac;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
@@ -101,7 +102,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.ErrorHandlingMessage(ex.Message, ex.StackTrace!);
+            _logger.ErrorHandlingMessage(ex.StackTrace!, ex);
             return SubscriberClient.Reply.Nack;
         }
 
@@ -155,8 +156,8 @@ internal static partial class EventBusGoogleCloudPubSubLogs
         EventId = 712382,
         EventName = "EventBusGoogleCloudPubSub.ErrorHandlingMessage",
         Level = LogLevel.Error,
-        Message = "ERROR handling message: '{exceptionMessage}' - Context: '{exceptionSource}'.")]
-    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionMessage, string exceptionSource);
+        Message = "Error handling message with context {exceptionSource}.")]
+    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionSource, Exception exception);
 
     [LoggerMessage(
         EventId = 590747,
