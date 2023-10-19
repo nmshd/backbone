@@ -44,7 +44,7 @@ public static class ILoggerExtensions
     }
 }
 
-file static class Logs
+internal static partial class ILoggerExtensionsLogs
 {
     private static readonly Action<ILogger, string, long, Exception> EXECUTED_ACTION =
         LoggerMessage.Define<string, long>(
