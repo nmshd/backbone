@@ -6,9 +6,9 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Domain.Errors;
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
@@ -84,7 +84,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 break;
             default:
                 _logger.LogError(context.Exception,
-                    "Unexpected Error while processing request to '{uri}'", context.HttpContext.Request.GetUri());
+                    "Unexpected Error while processing request to '{uri}'", context.HttpContext.Request.GetDisplayUrl());
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 

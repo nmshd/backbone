@@ -1,9 +1,4 @@
 
-Write-Host "Setting environment variables..."
-$AzureStorageAccountConnectionString = Read-Host -Prompt "Enter the Azure Storage Account Connection String"
-[Environment]::SetEnvironmentVariable("ENMESHED_BLOB_STORAGE_CONNECTION_STRING", $AzureStorageAccountConnectionString, "User")
-Write-Host "OK"
-
 $repoRoot = git rev-parse --show-toplevel
 
 Write-Host "Creating Docker volumes..."
