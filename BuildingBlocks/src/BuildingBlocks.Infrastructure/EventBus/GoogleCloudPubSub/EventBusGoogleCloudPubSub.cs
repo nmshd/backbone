@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Autofac;
+using Azure.Messaging.ServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
@@ -136,7 +137,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             var handleMethod = handler.GetType().GetMethod("Handle");
 
             var policy = EventBusRetryPolicyFactory.Create(
-                _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex.Message, ex.StackTrace!));
+                _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
             await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
@@ -170,6 +171,6 @@ internal static partial class EventBusGoogleCloudPubSubLogs
         EventId = 304842,
         EventName = "EventBusGoogleCloudPubSub.ErrorWhileExecutingEventHandlerType",
         Level = LogLevel.Warning,
-        Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
+        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }

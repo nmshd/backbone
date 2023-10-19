@@ -133,7 +133,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         var ex = args.Exception;
         var context = args.ErrorSource;
 
-        _logger.ErrorHandlingMessage(ex.Message, context);
+        _logger.ErrorHandlingMessage(context, ex);
 
         return Task.CompletedTask;
     }
@@ -164,7 +164,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             try
             {
                 var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex.Message, ex.StackTrace!));
+                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex));
 
                 await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
             }
@@ -199,8 +199,8 @@ internal static partial class EventBusAzureServiceBusLogs
         EventId = 949322,
         EventName = "EventBusAzureServiceBus.ErrorHandlingMessage",
         Level = LogLevel.Error,
-        Message = "ERROR handling message: '{exceptionMessage}' - Context: '{exceptionContext}'.")]
-    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionMessage, ServiceBusErrorSource exceptionContext);
+        Message = "Error handling message with context {exceptionContext}.")]
+    public static partial void ErrorHandlingMessage(this ILogger logger, ServiceBusErrorSource exceptionContext, Exception exception);
 
     [LoggerMessage(
         EventId = 341537,
@@ -213,9 +213,9 @@ internal static partial class EventBusAzureServiceBusLogs
         EventId = 726744,
         EventName = "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerCausingRetry",
         Level = LogLevel.Warning,
-        Message = "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stackTrace}.\nAttempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, string errorMessage, string stackTrace);
-
+        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
+    
     [LoggerMessage(
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingIntegrationEvent",
