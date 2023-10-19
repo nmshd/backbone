@@ -35,17 +35,12 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
     }
 }
 
-file static class Logs
+internal static partial class SaveChangesTimeInterceptorLogs
 {
-    private static readonly Action<ILogger, string, long, Exception> EXECUTED_ACTION =
-        LoggerMessage.Define<string, long>(
-            LogLevel.Debug,
-            LogEventIds.EXECUTION_TIME,
-            "Executed '{action}' in {elapsedMilliseconds}ms."
-        );
-
-    public static void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds)
-    {
-        EXECUTED_ACTION(logger, actionName, elapsedMilliseconds, default!);
-    }
+    [LoggerMessage(
+        EventId = 293800,
+        EventName = "ExecutionTime",
+        Level = LogLevel.Information,
+        Message = "Executed '{actionName}' in {elapsedMilliseconds}ms.")]
+    public static partial void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds);
 }
