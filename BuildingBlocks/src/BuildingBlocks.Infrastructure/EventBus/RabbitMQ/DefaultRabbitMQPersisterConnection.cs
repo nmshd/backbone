@@ -48,7 +48,7 @@ public class DefaultRabbitMqPersistentConnection
         }
         catch (IOException ex)
         {
-            _logger.LogCritical(ex, ex.Message);
+            _logger.LogCritical(ex, "There was an error while disposing the connection.");
         }
     }
 
@@ -62,7 +62,7 @@ public class DefaultRabbitMqPersistentConnection
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount,
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                    (ex, _) => _logger.BrokerUnreachableException(nameof(ex)));
+                    (ex, _) => _logger.ConnectionError(ex));
 
             policy.Execute(() => _connection = _connectionFactory
                     .CreateConnection());
@@ -110,10 +110,10 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
 {
     [LoggerMessage(
         EventId = 715507,
-        EventName = "DefaultRabbitMqPersistentConnection.BrokerUnreachableException",
+        EventName = "DefaultRabbitMqPersistentConnection.ConnectionError",
         Level = LogLevel.Warning,
-        Message = "{exceptionString}")]
-    public static partial void BrokerUnreachableException(this ILogger logger, string exceptionString);
+        Message = "There was an error while trying to connect to RabbitMQ. Attemping to retry...")]
+    public static partial void ConnectionError(this ILogger logger, Exception exception);
 
     [LoggerMessage(
         EventId = 119836,
