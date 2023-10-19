@@ -103,7 +103,7 @@ export class IdentityListComponent {
         }
     }
 
-    public getTiers(): void {
+    private getTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tiers = data.result;
@@ -120,7 +120,7 @@ export class IdentityListComponent {
         });
     }
 
-    public getClients(): void {
+    private getClients(): void {
         this.clientService.getClients().subscribe({
             next: (data: PagedHttpResponseEnvelope<ClientOverview>) => {
                 this.clients = data.result;
@@ -137,7 +137,7 @@ export class IdentityListComponent {
         });
     }
 
-    public getIdentities(): void {
+    private getIdentities(): void {
         this.loading = true;
         this.identityService.getIdentities(this.filter, this.pageIndex, this.pageSize).subscribe({
             next: (data: ODataResponse<IdentityOverview[]>) => {
