@@ -178,8 +178,8 @@ internal static partial class GoogleCloudStorageLogs
         EventId = 997942,
         EventName = "GoogleCloudStorage.ErrorDownloadingBlobWithName",
         Level = LogLevel.Error,
-        Message = "There was an error downloading the blob with name '{blobId}'. {ex}")]
-    public static partial void ErrorDownloadingBlobWithName(this ILogger logger, string blobId, Exception ex);
+        Message = "There was an error downloading the blob with name '{blobName}'.")]
+    public static partial void ErrorDownloadingBlobWithName(this ILogger logger, string blobName, Exception ex);
 
     [LoggerMessage(
         EventId = 998879,
@@ -192,7 +192,7 @@ internal static partial class GoogleCloudStorageLogs
         EventId = 166344,
         EventName = "GoogleCloudStorage.ErrorUploadingBlobWithName",
         Level = LogLevel.Error,
-        Message = "There was an error uploading the blob with name '{blobName}'. {ex}")]
+        Message = "There was an error uploading the blob with name '{blobName}'.")]
     public static partial void ErrorUploadingBlobWithName(this ILogger logger, string blobName, Exception ex);
 
     [LoggerMessage(
@@ -206,6 +206,6 @@ internal static partial class GoogleCloudStorageLogs
         EventId = 304533,
         EventName = "GoogleCloudStorage.ErrorDeletingBlobWithName",
         Level = LogLevel.Error,
-        Message = "There was an error downloading the blob with name '{blobName}'. {ex}")]
+        Message = "There was an error downloading the blob with name '{blobName}'.")]
     public static partial void ErrorDeletingBlobWithName(this ILogger logger, string blobName, Exception ex);
 }
