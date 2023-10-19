@@ -4,19 +4,6 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NO_COLOR='\033[0m'
 
-read -p "Enter the Azure Notification Hub Connection String: " notificationHubConnectionString
-read -p "Enter the Azure Storage Account Connection String: " storageAccountConnectionString
-echo "${YELLOW}Paste the following lines into the configuration file of your shell:"
-echo
-echo "${CYAN}export ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING=${notificationHubConnectionString}"
-echo "export ENMESHED_BLOB_STORAGE_CONNECTION_STRING=Server=${storageAccountConnectionString}${YELLOW}"
-echo
-read -p "Press Enter after you completed the manual step above..." x
-echo -n "${NO_COLOR}"
-
-ENMESHED_AZURE_NOTIFICATION_HUB_CONNECTION_STRING=$notificationHubConnectionString
-ENMESHED_BLOB_STORAGE_CONNECTION_STRING=$storageAccountConnectionString
-
 repoRoot=$(git rev-parse --show-toplevel)
 
 echo "Creating Docker volumes..."

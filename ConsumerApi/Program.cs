@@ -30,7 +30,6 @@ using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Enmeshed.Common.Infrastructure;
 using Enmeshed.Tooling.Extensions;
 using MediatR;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
@@ -150,7 +149,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
-        .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication, environment);
@@ -171,9 +169,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 static void Configure(WebApplication app)
 {
-    var telemetryConfiguration = app.Services.GetRequiredService<TelemetryConfiguration>();
-    telemetryConfiguration.DisableTelemetry = !app.Configuration.GetApplicationInsightsConfiguration().Enabled;
-
     app.UseSerilogRequestLogging(opts =>
     {
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
@@ -242,7 +237,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
-    webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
 
 public partial class Program
