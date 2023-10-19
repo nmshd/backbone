@@ -112,7 +112,7 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
         EventId = 715507,
         EventName = "DefaultRabbitMqPersistentConnection.ConnectionError",
         Level = LogLevel.Warning,
-        Message = "There was an error while trying to connect to RabbitMQ. Attemping to retry...")]
+        Message = "There was an error while trying to connect to RabbitMQ. Attempting to retry...")]
     public static partial void ConnectionError(this ILogger logger, Exception exception);
 
     [LoggerMessage(
