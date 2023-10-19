@@ -8,7 +8,6 @@ public class RequestConfiguration
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }
     public string? Content { get; set; }
-    public bool IsODataRequest { get; set; }
 
     public void SetContent(object obj)
     {
@@ -21,7 +20,6 @@ public class RequestConfiguration
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;
         Content ??= other.Content;
-        IsODataRequest = other.IsODataRequest;
     }
 
     public RequestConfiguration Clone()
