@@ -284,11 +284,8 @@ global:
             # connectionString - should be set via environment variable
             connectionString: ""
           pushNotifications:
-            # provider - possible values: "AzureNotificationHub"/"Dummy"/"Direct"
+            # provider - possible values: /"Dummy"/"Direct"
             provider: ""
-            # azureNotificationHub:
-            #   hubName: ""
-            #   connectionString: ""
             # directPnsCommunication:
             #   fcm:
             #     # serviceAccounts - the service accounts that should be used to communicate with the FCM service
