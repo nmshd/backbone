@@ -70,7 +70,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .WaitAndRetry(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.SocketException(nameof(ex)));
+                (ex, _) => _logger.ErrorOnPublish(ex));
 
         var eventName = @event.GetType().Name;
 
@@ -171,7 +171,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 channel.BasicReject(eventArgs.DeliveryTag, true);
 
-                _logger.ErrorWhileProcessingIntegrationEvent(eventName);
+                _logger.ErrorWhileProcessingIntegrationEvent(eventName, ex);
             }
         };
 
@@ -226,10 +226,10 @@ internal static partial class EventBusRabbitMQLogs
 {
     [LoggerMessage(
         EventId = 411326,
-        EventName = "EventBusRabbitMQ.SocketException",
+        EventName = "EventBusRabbitMQ.ErrorOnPublish",
         Level = LogLevel.Warning,
-        Message = "{exceptionString}")]
-    public static partial void SocketException(this ILogger logger, string exceptionString);
+        Message = "There was an error while trying to publish an event.")]
+    public static partial void ErrorOnPublish(this ILogger logger, Exception exception);
 
     [LoggerMessage(
         EventId = 585231,
@@ -243,7 +243,7 @@ internal static partial class EventBusRabbitMQLogs
         EventName = "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent",
         Level = LogLevel.Error,
         Message = "An error occurred while processing the integration event of type '{eventName}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName);
+    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception exception);
 
     [LoggerMessage(
         EventId = 980768,
