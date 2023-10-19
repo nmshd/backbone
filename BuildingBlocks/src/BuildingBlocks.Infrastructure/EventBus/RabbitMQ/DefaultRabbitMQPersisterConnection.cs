@@ -87,7 +87,7 @@ public class DefaultRabbitMqPersistentConnection
     private void OnConnectionBlocked(object? sender, ConnectionBlockedEventArgs e)
     {
         if (_disposed) return;
-        _logger.ConnectionIsOnShutdown();
+        _logger.ConnectionIsBlocked();
         TryConnect();
     }
 
@@ -131,8 +131,8 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
 
     [LoggerMessage(
         EventId = 454129,
-        EventName = "DefaultRabbitMqPersistentConnection.ConnectionIsOnShutdown",
+        EventName = "DefaultRabbitMqPersistentConnection.ConnectionIsBlocked",
         Level = LogLevel.Warning,
-        Message = "A RabbitMQ connection is on shutdown. Trying to re-connect...")]
-    public static partial void ConnectionIsOnShutdown(this ILogger logger);
+        Message = "A RabbitMQ connection is blocked. Trying to re-connect...")]
+    public static partial void ConnectionIsBlocked(this ILogger logger);
 }
