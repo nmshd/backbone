@@ -4,7 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { NGXLogger } from "ngx-logger";
 import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs";
-import { ClientOverview, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientOverview, ClientService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { ODataResponse } from "src/app/utils/odata-response";
@@ -63,7 +63,7 @@ export class IdentityListComponent {
         private readonly snackBar: MatSnackBar,
         private readonly identityService: IdentityService,
         private readonly tierService: TierService,
-        private readonly clientService: ClientServiceService,
+        private readonly clientService: ClientService,
         private readonly logger: NGXLogger
     ) {
         this.header = "Identities";

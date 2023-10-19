@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ChangeClientSecretRequest, Client, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ChangeClientSecretRequest, Client, ClientService } from "src/app/services/client-service/client-service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
@@ -20,7 +20,7 @@ export class ChangeSecretDialogComponent {
 
     public constructor(
         private readonly snackBar: MatSnackBar,
-        private readonly clientService: ClientServiceService,
+        private readonly clientService: ClientService,
         public dialogRef: MatDialogRef<ChangeSecretDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {

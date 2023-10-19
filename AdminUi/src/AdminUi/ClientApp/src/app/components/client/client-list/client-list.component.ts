@@ -8,7 +8,7 @@ import { MatTable } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { NGXLogger } from "ngx-logger";
 import { Observable, forkJoin } from "rxjs";
-import { ClientOverview, ClientOverviewFilter, ClientServiceService } from "src/app/services/client-service/client-service";
+import { ClientOverview, ClientOverviewFilter, ClientService } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
@@ -37,7 +37,7 @@ export class ClientListComponent {
         private readonly dialog: MatDialog,
         private readonly snackBar: MatSnackBar,
         private readonly tierService: TierService,
-        private readonly clientService: ClientServiceService,
+        private readonly clientService: ClientService,
         private readonly logger: NGXLogger
     ) {
         this.header = "Clients";
