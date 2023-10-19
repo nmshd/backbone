@@ -142,7 +142,7 @@ internal static partial class AzureStorageAccountLogs
         EventName = "AzureStorageAccount.ErrorListingAllBlobs",
         Level = LogLevel.Error,
         Message = "There was an error listing all blobs.")]
-    public static partial void ErrorListingAllBlobs(this ILogger logger, Exception e);
+    public static partial void ErrorListingAllBlobs(this ILogger logger, Exception ex);
 
     [LoggerMessage(
         EventId = 645028,
