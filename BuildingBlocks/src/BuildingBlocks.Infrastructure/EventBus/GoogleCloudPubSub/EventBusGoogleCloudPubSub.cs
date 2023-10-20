@@ -1,7 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using Autofac;
+using Azure.Messaging.ServiceBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
@@ -65,7 +67,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         var messageId = await _logger.TraceTime(
             () => _connection.PublisherClient.PublishAsync(message), nameof(_connection.PublisherClient.PublishAsync));
 
-        _logger.LogTrace("Successfully sent integration event with id '{messageId}'.", messageId);
+        _logger.EventWasNotProcessed(messageId);
     }
 
     public void Subscribe<T, TH>()
@@ -101,8 +103,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "ERROR handling message: {ExceptionMessage} - Context: {@ExceptionSource}",
-                ex.Message, ex.Source);
+            _logger.ErrorHandlingMessage(ex.StackTrace!, ex);
             return SubscriberClient.Reply.Nack;
         }
 
@@ -114,7 +115,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     {
         if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
         {
-            _logger.LogWarning("No subscription for event: '{EventName}'", eventName);
+            _logger.NoSubscriptionForEvent(eventName);
             return;
         }
 
@@ -136,15 +137,40 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             var handleMethod = handler.GetType().GetMethod("Handle");
 
             var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior,
-                    (ex, _) => _logger.LogWarning(
-                        "The following error was thrown while executing '{eventHandlerType}':\n'{errorMessage}'\n{stacktrace}.\nAttempting to retry...",
-                        eventName,
-                        ex.Message,
-                        ex.StackTrace)
-                    );
+                _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
             await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
         }
     }
+}
+
+internal static partial class EventBusGoogleCloudPubSubLogs
+{
+    [LoggerMessage(
+        EventId = 830408,
+        EventName = "EventBusGoogleCloudPubSub.SendingIntegrationEvent",
+        Level = LogLevel.Debug,
+        Message = "Successfully sent integration event with id '{messageId}'.")]
+    public static partial void EventWasNotProcessed(this ILogger logger, string messageId);
+
+    [LoggerMessage(
+        EventId = 712382,
+        EventName = "EventBusGoogleCloudPubSub.ErrorHandlingMessage",
+        Level = LogLevel.Error,
+        Message = "Error handling message with context {exceptionSource}.")]
+    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionSource, Exception exception);
+
+    [LoggerMessage(
+        EventId = 590747,
+        EventName = "EventBusGoogleCloudPubSub.NoSubscriptionForEvent",
+        Level = LogLevel.Warning,
+        Message = "No subscription for event: '{eventName}'.")]
+    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
+
+    [LoggerMessage(
+        EventId = 304842,
+        EventName = "EventBusGoogleCloudPubSub.ErrorWhileExecutingEventHandlerType",
+        Level = LogLevel.Warning,
+        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }
