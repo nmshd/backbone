@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Enmeshed.BuildingBlocks.API.Extensions;
@@ -81,7 +80,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             default:
-                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetUri());
+                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl());
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
@@ -147,12 +146,12 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return null;
     }
 
-    private HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
     {
         return HttpStatusCode.BadRequest;
     }
 
-    private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
+    private static HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
     {
         return exception switch
         {
@@ -206,7 +205,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return httpError;
     }
 
-    private IEnumerable<string> GetFormattedStackTrace(Exception exception)
+    private static IEnumerable<string> GetFormattedStackTrace(Exception exception)
     {
         if (exception.StackTrace == null)
             return Enumerable.Empty<string>();
@@ -229,13 +228,13 @@ internal static partial class ExceptionFilterLogs
         EventId = 938218,
         EventName = "ExceptionFilter.RequestBodyTooLarge",
         Level = LogLevel.Information,
-        Message = "'{error_code}': The body of the request is too large.")]
-    public static partial void RequestBodyTooLarge(this ILogger logger, string error_code);
+        Message = "'{errorCode}': The body of the request is too large.")]
+    public static partial void RequestBodyTooLarge(this ILogger logger, string errorCode);
 
     [LoggerMessage(
         EventId = 259125,
         EventName = "ExceptionFilter.ErrorWhileProcessingRequestToUri",
         Level = LogLevel.Error,
         Message = "Unexpected Error while processing request to '{uri}'.")]
-    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, Uri uri);
+    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri);
 }
