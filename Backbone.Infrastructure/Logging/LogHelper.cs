@@ -27,7 +27,7 @@ public static class LogHelper
                 "Health checks",
                 StringComparison.Ordinal);
         }
-        
+
         return false;
     }
 

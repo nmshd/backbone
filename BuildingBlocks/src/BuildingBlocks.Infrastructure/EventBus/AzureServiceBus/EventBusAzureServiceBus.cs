@@ -215,7 +215,7 @@ internal static partial class EventBusAzureServiceBusLogs
         Level = LogLevel.Warning,
         Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
     public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
-    
+
     [LoggerMessage(
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingIntegrationEvent",
