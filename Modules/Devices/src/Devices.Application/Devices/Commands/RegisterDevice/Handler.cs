@@ -115,7 +115,7 @@ internal static partial class DeleteDeviceLogs
 {
     [LoggerMessage(
         EventId = 219823,
-        EventName = "Devices.CreatedDevice",
+        EventName = "Devices.RegisterDevice.RegisteredDevice",
         Level = LogLevel.Information,
         Message = "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'.")]
     public static partial void CreatedDevice(this ILogger logger, DeviceId deviceId, string userId, string userName);

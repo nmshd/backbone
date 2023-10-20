@@ -46,7 +46,7 @@ internal static partial class CreatedTierLogs
 {
     [LoggerMessage(
         EventId = 383136,
-        EventName = "Devices.CreatedTier",
+        EventName = "Devices.CreateTier.CreatedTier",
         Level = LogLevel.Information,
         Message = "Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}")]
     public static partial void CreatedTier(this ILogger logger, string tierId, string tierName);
