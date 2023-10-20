@@ -114,41 +114,26 @@ public class DirectPushService : IPushService
     }
 }
 
-file static class LoggerExtensions
+internal static partial class DirectPushServiceLogs
 {
-    private static readonly Action<ILogger, DeviceId, Exception> DELETING_DEVICE_REGISTRATION =
-        LoggerMessage.Define<DeviceId>(
-            LogLevel.Information,
-            new EventId(950845, "Devices.DirectPushService.DeletingDeviceRegistration"),
-            "Deleting device registration for '{deviceId}' since handle is no longer valid."
-        );
+    [LoggerMessage(
+        EventId = 950845,
+        EventName = "Devices.DirectPushService.DeletingDeviceRegistration",
+        Level = LogLevel.Information,
+        Message = "Deleting device registration for '{deviceId}' since handle is no longer valid.")]
+    public static partial void DeletingDeviceRegistration(this ILogger logger, DeviceId deviceId);
 
-    private static readonly Action<ILogger, DeviceId, string, Exception> ERROR_WHILE_TRYING_TO_SEND_NOTIFICATION =
-        LoggerMessage.Define<DeviceId, string>(
-            LogLevel.Error,
-            new EventId(624412, "Devices.DirectPushService.ErrorWhileTryingToSendNotification"),
-            "The following error occurred while trying to send the notification for '{deviceId}': '{error}'."
-        );
+    [LoggerMessage(
+        EventId = 624412,
+        EventName = "Devices.DirectPushService.ErrorWhileTryingToSendNotification",
+        Level = LogLevel.Error,
+        Message = "The following error occurred while trying to send the notification for '{deviceId}': '{error}'.")]
+    public static partial void ErrorWhileTryingToSendNotification(this ILogger logger, DeviceId deviceId, string error);
 
-    private static readonly Action<ILogger, DeviceId, Exception> UNREGISTERED_DEVICE =
-        LoggerMessage.Define<DeviceId>(
-            LogLevel.Information,
-            new EventId(628738, "Devices.DirectPushService.UnregisteredDevice"),
-            "Unregistered device '{deviceId} from push notifications."
-        );
-
-    public static void DeletingDeviceRegistration(this ILogger logger, DeviceId deviceId)
-    {
-        DELETING_DEVICE_REGISTRATION(logger, deviceId, default!);
-    }
-
-    public static void ErrorWhileTryingToSendNotification(this ILogger logger, DeviceId deviceId, string error)
-    {
-        ERROR_WHILE_TRYING_TO_SEND_NOTIFICATION(logger, deviceId, error, default!);
-    }
-
-    public static void UnregisteredDevice(this ILogger logger, DeviceId deviceId)
-    {
-        UNREGISTERED_DEVICE(logger, deviceId, default!);
-    }
+    [LoggerMessage(
+        EventId = 628738,
+        EventName = "Devices.DirectPushService.UnregisteredDevice",
+        Level = LogLevel.Information,
+        Message = "Unregistered device '{deviceId} from push notifications.")]
+    public static partial void UnregisteredDevice(this ILogger logger, DeviceId deviceId);
 }
