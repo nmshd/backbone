@@ -72,17 +72,12 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     }
 }
 
-file static class LoggerExtensions
+internal static partial class CreatedIdentityLogs
 {
-    private static readonly Action<ILogger, IdentityAddress, DeviceId, string, Exception> CREATED_IDENTITY =
-        LoggerMessage.Define<IdentityAddress, DeviceId, string>(
-            LogLevel.Information,
-            new EventId(436321, "Devices.CreatedIdentity"),
-            "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'."
-        );
-
-    public static void CreatedIdentity(this ILogger logger, IdentityAddress identityAddress, DeviceId deviceId, string userName)
-    {
-        CREATED_IDENTITY(logger, identityAddress, deviceId, userName, default!);
-    }
+    [LoggerMessage(
+               EventId = 436321,
+                      EventName = "Devices.CreatedIdentity",
+                      Level = LogLevel.Information,
+                      Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
+    public static partial void CreatedIdentity(this ILogger logger, IdentityAddress address, DeviceId deviceId, string userName);
 }
