@@ -32,7 +32,7 @@ public class ApplePushNotificationServiceConnectorTests
         var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var registrations = new List<PnsRegistration>
         {
-            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value, APP_ID)
+            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value, APP_ID, Environment.Development)
         };
         await connector.Send(registrations, recipient, new { SomeProperty = "SomeValue" });
 

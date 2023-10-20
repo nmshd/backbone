@@ -6,6 +6,7 @@ using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
@@ -27,7 +28,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, cancellationToken);
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment), cancellationToken);
         }
         else
         {
@@ -37,13 +38,23 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         return Unit.Value;
     }
 
+    private static Environment DeserializeEnvironment(string environment)
+    {
+        return environment switch
+        {
+            "Development" => Environment.Development,
+            "Production" => Environment.Production,
+            _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
+        };
+    }
+
     private static PushNotificationPlatform DeserializePlatform(string platform)
     {
         return platform switch
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
+            _ => throw new NotImplementedException($"The environment '{platform}' is invalid.")
         };
     }
 }

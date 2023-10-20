@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Respo
 using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
@@ -68,14 +69,14 @@ public class DirectPushService : IPushService
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
 
         if (registration != null)
         {
-            registration.Update(handle, appId);
+            registration.Update(handle, appId, environment);
             pnsConnector.ValidateRegistration(registration);
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
@@ -84,12 +85,12 @@ public class DirectPushService : IPushService
         }
         else
         {
-            registration = new PnsRegistration(address, deviceId, handle, appId);
+            registration = new PnsRegistration(address, deviceId, handle, appId, environment);
             pnsConnector.ValidateRegistration(registration);
 
             try
             {
-                await _pnsRegistrationRepository.Add(new PnsRegistration(address, deviceId, handle, appId), cancellationToken);
+                await _pnsRegistrationRepository.Add(registration, cancellationToken);
                 _logger.LogTrace("New device successfully registered.");
             }
             catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
