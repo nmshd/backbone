@@ -23,7 +23,7 @@ Contribution to this project is highly appreciated. Head over to our [contributi
 
 ### Logging
 
-Log event IDs are random 6-digit numbers and can be generated using `./scripts/linux/get_random_event_id.sh` or `./scripts/windows/get_random_event_id.ps1`. Simply run the scripts to generate a random 6-digit positive integer.
+Log event IDs are random 6-digit numbers and can be generated using `./scripts/linux/generate_log_event_id.sh` or `./scripts/windows/generate_log_event_id.ps1`. Simply run the scripts to generate a random 6-digit positive integer.
 
 ## License
 
