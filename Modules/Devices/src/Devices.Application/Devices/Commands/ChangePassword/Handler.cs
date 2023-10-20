@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         if (!changePasswordResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.ChangePasswordFailed(changePasswordResult.Errors.First().Description));
 
-        _logger.ChangedPasswordForDeviceWithId(_activeDevice);
+        _logger.ChangedPasswordForDevice(_activeDevice);
     }
 }
 
@@ -41,8 +41,8 @@ internal static partial class ChangePasswordLogs
 {
     [LoggerMessage(
         EventId = 277894,
-        EventName = "Devices.ChangedPasswordForDeviceWithId",
+        EventName = "Devices.ChangePassword.ChangedPasswordForDevice",
         Level = LogLevel.Information,
         Message = "Successfully changed password for device with id '{activeDevice}'.")]
-    public static partial void ChangedPasswordForDeviceWithId(this ILogger logger, DeviceId activeDevice);
+    public static partial void ChangedPasswordForDevice(this ILogger logger, DeviceId activeDevice);
 }

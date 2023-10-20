@@ -44,14 +44,14 @@ internal static partial class FilesLogs
 {
     [LoggerMessage(
         EventId = 629592,
-        EventName = "Files.LogReporter.NoBlobForFileId",
+        EventName = "Files.SanityCheck.NoBlobForFileId",
         Level = LogLevel.Error,
         Message = "No blob found for file id: '{databaseId}'.")]
     public static partial void NoBlobForFileId(this ILogger logger, FileId databaseId);
 
     [LoggerMessage(
         EventId = 487180,
-        EventName = "Files.LogReporter.NoDatabaseEntryForBlobId",
+        EventName = "Files.SanityCheck.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
     public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);

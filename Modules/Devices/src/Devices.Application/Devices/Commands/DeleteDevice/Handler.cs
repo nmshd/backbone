@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         await _identitiesRepository.Update(device, cancellationToken);
 
-        _logger.MarkDeviceWithIdAsDeleted(request.DeviceId);
+        _logger.MarkedDeviceAsDeleted(request.DeviceId);
     }
 }
 
@@ -48,8 +48,8 @@ internal static partial class DeleteDeviceLogs
 {
     [LoggerMessage(
         EventId = 776010,
-        EventName = "Devices.MarkDeviceWithIdAsDeleted",
+        EventName = "Devices.MarkDeviceAsDeleted.MarkedDeviceAsDeleted",
         Level = LogLevel.Information,
         Message = "Successfully marked device with id '{deviceId}' as deleted.")]
-    public static partial void MarkDeviceWithIdAsDeleted(this ILogger logger, string deviceId);
+    public static partial void MarkedDeviceAsDeleted(this ILogger logger, string deviceId);
 }

@@ -47,7 +47,7 @@ internal static partial class LoggingBehaviorLogs
 {
     [LoggerMessage(
         EventId = 724322,
-        EventName = "LoggingBehavior.HandledRequestInformation",
+        EventName = "LoggingBehavior.HandledRequest",
         Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
     public static partial void HandledMediatorRequest(this ILogger logger, LogLevel level, string requestName, long timeElapsed);
 

@@ -38,15 +38,15 @@ internal static partial class DeleteExpiredChallengesLogs
 {
     [LoggerMessage(
         EventId = 599235,
-        EventName = "Challenges.Application.DeleteExpiredChallenges.CancellationRequested",
+        EventName = "Challenges.DeleteExpiredChallenges.CancellationRequested",
         Level = LogLevel.Debug,
         Message = "Cancellation was requested. Stopping execution...")]
     public static partial void CancellationRequested(this ILogger logger);
 
     [LoggerMessage(
         EventId = 916630,
-        EventName = "Challenges.Application.DeleteExpiredChallenges.DeletionSuccessful",
-        Level = LogLevel.Debug,
+        EventName = "Challenges.DeleteExpiredChallenges.DeletionSuccessful",
+        Level = LogLevel.Information,
         Message = "Deletion of '{deletedChallengesCount}' challenges successful.")]
     public static partial void DeletionSuccessful(this ILogger logger, int deletedChallengesCount);
 }
