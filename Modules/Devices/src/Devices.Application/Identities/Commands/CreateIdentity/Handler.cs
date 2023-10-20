@@ -54,11 +54,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.LogTrace("Identity created. Address: '{address}', Device ID: {deviceId}, Username: {userName}", newIdentity.Address, user.DeviceId, user.UserName);
+        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName);
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
-
-        _logger.LogTrace("Successfully published IdentityCreatedIntegrationEvent. Identity Address: '{address}', Tier Id: {tierId}", newIdentity.Address, client.DefaultTier);
 
         return new CreateIdentityResponse
         {
@@ -72,4 +70,14 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             }
         };
     }
+}
+
+internal static partial class CreatedIdentityLogs
+{
+    [LoggerMessage(
+               EventId = 436321,
+                      EventName = "Devices.CreateIdentity.CreatedIdentity",
+                      Level = LogLevel.Information,
+                      Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
+    public static partial void CreatedIdentity(this ILogger logger, IdentityAddress address, DeviceId deviceId, string userName);
 }

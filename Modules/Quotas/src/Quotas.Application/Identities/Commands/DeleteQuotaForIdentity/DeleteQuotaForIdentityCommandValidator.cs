@@ -1,7 +1,7 @@
 ﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 
 public class DeleteQuotaForIdentityCommandValidator : AbstractValidator<DeleteQuotaForIdentityCommand>
 {

@@ -31,11 +31,18 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.LogTrace("Successfully deleted tier quota definition with id: '{tierQuotaDefinitionId}'.", request.TierQuotaDefinitionId);
+        _logger.DeletedTierQuotaDefinition(request.TierQuotaDefinitionId, tier.Id);
 
         _eventBus.Publish(new TierQuotaDefinitionDeletedIntegrationEvent(tier.Id, request.TierQuotaDefinitionId));
-
-        _logger.LogTrace("Successfully published '{tierQuotaDefinitionDeletedIntegrationEvent}' with id: '{tierQuotaDefinitionId}' and tier id: '{tierId}'",
-            nameof(TierQuotaDefinitionDeletedIntegrationEvent), request.TierQuotaDefinitionId, request.TierId);
     }
+}
+
+internal static partial class DeleteTierQuotaDefinitionLogs
+{
+    [LoggerMessage(
+        EventId = 519284,
+        EventName = "Quotas.DeleteTierQuotaDefinition.DeletedTierQuotaDefinition",
+        Level = LogLevel.Information,
+        Message = "Successfully deleted tier quota definition with id: '{tierQuotaDefinitionId}' from tier with id '{tierId}'.")]
+    public static partial void DeletedTierQuotaDefinition(this ILogger logger, string tierQuotaDefinitionId, string tierId);
 }
