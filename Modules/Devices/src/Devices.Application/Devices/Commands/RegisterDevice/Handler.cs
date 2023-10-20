@@ -111,17 +111,12 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
     }
 }
 
-file static class LoggerExtensions
+internal static partial class DeleteDeviceLogs
 {
-    private static readonly Action<ILogger, DeviceId, string, string, Exception> CREATED_DEVICE =
-        LoggerMessage.Define<DeviceId, string, string>(
-            LogLevel.Information,
-            new EventId(219823, "Devices.CreatedDevice"),
-            "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'."
-        );
-
-    public static void CreatedDevice(this ILogger logger, DeviceId deviceId, string userId, string userName)
-    {
-        CREATED_DEVICE(logger, deviceId, userId, userName, default!);
-    }
+    [LoggerMessage(
+        EventId = 219823,
+        EventName = "Devices.CreatedDevice",
+        Level = LogLevel.Information,
+        Message = "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'.")]
+    public static partial void CreatedDevice(this ILogger logger, DeviceId deviceId, string userId, string userName);
 }
