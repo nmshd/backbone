@@ -86,8 +86,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Infrastructure", "Mo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{8D25581A-C9DD-4DED-A1DB-A26CD9239666}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.API.Tests", "BuildingBlocks\test\BuildingBlocks.API.Tests\BuildingBlocks.API.Tests.csproj", "{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Application.Tests", "BuildingBlocks\test\BuildingBlocks.Application.Tests\BuildingBlocks.Application.Tests.csproj", "{6E326CDD-7992-487E-A840-987929DC79EF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Infrastructure.Tests", "BuildingBlocks\test\BuildingBlocks.Infrastructure.Tests\BuildingBlocks.Infrastructure.Tests.csproj", "{35B85FC1-3134-4FE5-815E-F7C4282C6991}"
@@ -99,8 +97,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds.Tests", "BuildingBlocks\test\StronglyTypedIds.Tests\StronglyTypedIds.Tests.csproj", "{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling.Tests", "BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj", "{33AF4A60-5E10-4F84-93A5-E724D013CFC3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestTools.Tests", "BuildingBlocks\test\UnitTestTools.Tests\UnitTestTools.Tests.csproj", "{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.API", "BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj", "{EB4F2036-B4F2-4DEF-838C-480BFF3635E4}"
 EndProject
@@ -281,9 +277,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{30CFBC0E-D72A-4890-9647-D488273B0F68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminUi.Infrastructure.Database.SqlServer", "AdminUi\src\AdminUi.Infrastructure.Database.SqlServer\AdminUi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.SqlServer", "AdminUi\src\AdminUi.Infrastructure.Database.SqlServer\AdminUi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminUi.Infrastructure.Database.Postgres", "AdminUi\src\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.Postgres", "AdminUi\src\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure", "AdminUi\src\AdminUi.Infrastructure\AdminUi.Infrastructure.csproj", "{5028E85D-E115-4E02-AC94-2B441686E44E}"
 EndProject
@@ -401,10 +397,6 @@ Global
 		{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C59C1F22-C00F-4F67-99FA-4DE56F7428DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E326CDD-7992-487E-A840-987929DC79EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E326CDD-7992-487E-A840-987929DC79EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E326CDD-7992-487E-A840-987929DC79EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -429,10 +421,6 @@ Global
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB4F2036-B4F2-4DEF-838C-480BFF3635E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB4F2036-B4F2-4DEF-838C-480BFF3635E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB4F2036-B4F2-4DEF-838C-480BFF3635E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -749,14 +737,12 @@ Global
 		{B643D89D-A4ED-4C36-9D18-060096C1F37D} = {903C38CB-C2E2-42D2-9277-74CE675551E8}
 		{4A4F4D8A-B4AA-4938-8FFA-724E1FEF60EE} = {903C38CB-C2E2-42D2-9277-74CE675551E8}
 		{8D25581A-C9DD-4DED-A1DB-A26CD9239666} = {0EAF57B8-E97C-469E-A74B-596D78C978B2}
-		{C59C1F22-C00F-4F67-99FA-4DE56F7428DA} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{6E326CDD-7992-487E-A840-987929DC79EF} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{35B85FC1-3134-4FE5-815E-F7C4282C6991} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{6932B4A6-A8D8-4F0B-9338-520F6488925E} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
-		{F156F2CA-0E4C-414D-A07C-D2EF4631AF8D} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{EB4F2036-B4F2-4DEF-838C-480BFF3635E4} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{6F58D49A-BDF4-4599-9584-AC7A4134838E} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{A5BC6269-E1FC-4F91-B1D2-5B4F90571531} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
