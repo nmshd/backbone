@@ -22,7 +22,7 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.ExecutedAction(actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
 
@@ -39,7 +39,17 @@ public static class ILoggerExtensions
         finally
         {
             watch.Stop();
-            logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", actionName ?? "Action", watch.ElapsedMilliseconds);
+            logger.ExecutedAction(actionName ?? "Action", watch.ElapsedMilliseconds);
         }
     }
+}
+
+internal static partial class SaveChangesTimeInterceptorLogs
+{
+    [LoggerMessage(
+        EventId = 293800,
+        EventName = "ExecutionTime",
+        Level = LogLevel.Information,
+        Message = "Executed '{actionName}' in {elapsedMilliseconds}ms.")]
+    public static partial void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds);
 }

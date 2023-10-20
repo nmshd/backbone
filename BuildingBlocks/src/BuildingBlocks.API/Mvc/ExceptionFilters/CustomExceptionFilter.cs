@@ -41,8 +41,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         switch (context.Exception)
         {
             case InfrastructureException infrastructureException:
-                _logger.LogInformation(
-                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(InfrastructureException), infrastructureException.Code, infrastructureException.Message);
+                _logger.InvalidUserInput(nameof(InfrastructureException), infrastructureException.Code, infrastructureException.Message);
 
                 httpError = CreateHttpErrorForInfrastructureException(infrastructureException);
 
@@ -51,8 +50,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case ApplicationException applicationException:
-                _logger.LogInformation(
-                    "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(ApplicationException), applicationException.Code, applicationException.Message);
+                _logger.InvalidUserInput(nameof(ApplicationException), applicationException.Code, applicationException.Message);
 
                 httpError = CreateHttpErrorForApplicationException(applicationException);
 
@@ -60,9 +58,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                     (int)GetStatusCodeForApplicationException(applicationException);
 
                 break;
+
             case DomainException domainException:
-                _logger.LogInformation(
-                    "A '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'", nameof(DomainException), domainException.Code, domainException.Message);
+                _logger.InvalidUserInput(nameof(DomainException), domainException.Code, domainException.Message);
 
                 httpError = CreateHttpErrorForDomainException(domainException);
 
@@ -70,8 +68,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             case BadHttpRequestException _:
-                _logger.LogInformation(
-                    "'{error_code}': The body of the request is too large.", ERROR_CODE_REQUEST_BODY_TOO_LARGE);
+                _logger.RequestBodyTooLarge(ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
                     ERROR_CODE_REQUEST_BODY_TOO_LARGE,
@@ -83,8 +80,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             default:
-                _logger.LogError(context.Exception,
-                    "Unexpected Error while processing request to '{uri}'", context.HttpContext.Request.GetDisplayUrl());
+                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl());
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
@@ -150,12 +146,12 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return null;
     }
 
-    private HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
     {
         return HttpStatusCode.BadRequest;
     }
 
-    private HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
+    private static HttpStatusCode GetStatusCodeForApplicationException(ApplicationException exception)
     {
         return exception switch
         {
@@ -209,7 +205,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return httpError;
     }
 
-    private IEnumerable<string> GetFormattedStackTrace(Exception exception)
+    private static IEnumerable<string> GetFormattedStackTrace(Exception exception)
     {
         if (exception.StackTrace == null)
             return Enumerable.Empty<string>();
@@ -217,4 +213,28 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return
             Regex.Matches(exception.StackTrace, "at .+").Select(m => m.Value.Trim());
     }
+}
+
+internal static partial class ExceptionFilterLogs
+{
+    [LoggerMessage(
+        EventId = 799306,
+        EventName = "ExceptionFilter.InvalidUserInput",
+        Level = LogLevel.Information,
+        Message = "An '{exception}' occurred. Error Code: '{code}'. Error message: '{message}'.")]
+    public static partial void InvalidUserInput(this ILogger logger, string exception, string code, string message);
+
+    [LoggerMessage(
+        EventId = 938218,
+        EventName = "ExceptionFilter.RequestBodyTooLarge",
+        Level = LogLevel.Information,
+        Message = "'{errorCode}': The body of the request is too large.")]
+    public static partial void RequestBodyTooLarge(this ILogger logger, string errorCode);
+
+    [LoggerMessage(
+        EventId = 259125,
+        EventName = "ExceptionFilter.ErrorWhileProcessingRequestToUri",
+        Level = LogLevel.Error,
+        Message = "Unexpected Error while processing request to '{uri}'.")]
+    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri);
 }

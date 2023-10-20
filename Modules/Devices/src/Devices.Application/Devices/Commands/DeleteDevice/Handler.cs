@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -39,6 +40,16 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         await _identitiesRepository.Update(device, cancellationToken);
 
-        _logger.LogTrace("Successfully marked device with id '{deviceId}' as deleted.", request.DeviceId);
+        _logger.MarkedDeviceAsDeleted(request.DeviceId);
     }
+}
+
+internal static partial class DeleteDeviceLogs
+{
+    [LoggerMessage(
+        EventId = 776010,
+        EventName = "Devices.MarkDeviceAsDeleted.MarkedDeviceAsDeleted",
+        Level = LogLevel.Information,
+        Message = "Successfully marked device with id '{deviceId}' as deleted.")]
+    public static partial void MarkedDeviceAsDeleted(this ILogger logger, string deviceId);
 }

@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
@@ -33,12 +34,20 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         await _tierRepository.AddAsync(tier, cancellationToken);
 
-        _logger.LogTrace("Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id.Value, tier.Name.Value);
+        _logger.CreatedTier(tier.Id.Value, tier.Name.Value);
 
         _eventBus.Publish(new TierCreatedIntegrationEvent(tier));
 
-        _logger.LogTrace("Successfully published TierCreatedIntegrationEvent. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id.Value, tier.Name.Value);
-
         return new CreateTierResponse(tier.Id, tier.Name);
     }
+}
+
+internal static partial class CreatedTierLogs
+{
+    [LoggerMessage(
+        EventId = 383136,
+        EventName = "Devices.CreateTier.CreatedTier",
+        Level = LogLevel.Information,
+        Message = "Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}")]
+    public static partial void CreatedTier(this ILogger logger, string tierId, string tierName);
 }
