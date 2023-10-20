@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 
 public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IndividualQuotaDTO>
 {

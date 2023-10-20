@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
         await _tiersRepository.Update(tier, cancellationToken);
 
-        _logger.DeletedTierQuota(request.TierQuotaDefinitionId, tier.Id);
+        _logger.DeletedTierQuotaDefinition(request.TierQuotaDefinitionId, tier.Id);
 
         _eventBus.Publish(new TierQuotaDefinitionDeletedIntegrationEvent(tier.Id, request.TierQuotaDefinitionId));
     }
