@@ -40,18 +40,18 @@ public class LogReporter : IReporter
     }
 }
 
-internal static partial class SynchronizationLogs
+internal static partial class LogReporterLogs
 {
     [LoggerMessage(
         EventId = 525684,
-        EventName = "Synchronization.LogReporter.NoBlobForDatawalletModificationId",
+        EventName = "Synchronization.SanityCheck.NoBlobForDatawalletModificationId",
         Level = LogLevel.Error,
         Message = "No blob found for datawallet modification id: '{databaseId}'.")]
     public static partial void NoBlobForDatawalletModificationId(this ILogger logger, DatawalletModificationId databaseId);
 
     [LoggerMessage(
         EventId = 560290,
-        EventName = "Synchronization.LogReporter.NoDatabaseEntryForBlobId",
+        EventName = "Synchronization.SanityCheck.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
     public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);

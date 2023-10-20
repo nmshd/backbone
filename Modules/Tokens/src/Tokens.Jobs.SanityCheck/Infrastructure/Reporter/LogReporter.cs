@@ -40,18 +40,18 @@ public class LogReporter : IReporter
     }
 }
 
-internal static partial class TokensLogs
+internal static partial class LogReporterLogs
 {
     [LoggerMessage(
         EventId = 826083,
-        EventName = "Tokens.LogReporter.NoBlobForTokenId",
+        EventName = "Tokens.SanityCheck.NoBlobForTokenId",
         Level = LogLevel.Error,
         Message = "No blob found for token id: '{tokenId}'.")]
     public static partial void NoBlobForTokenId(this ILogger logger, TokenId tokenId);
 
     [LoggerMessage(
         EventId = 271286,
-        EventName = "Tokens.LogReporter.NoDatabaseEntryForBlobId",
+        EventName = "Tokens.SanityCheck.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
     public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);

@@ -40,7 +40,7 @@ public class LogReporter : IReporter
     }
 }
 
-internal static partial class FilesLogs
+internal static partial class LogReporterLogs
 {
     [LoggerMessage(
         EventId = 629592,

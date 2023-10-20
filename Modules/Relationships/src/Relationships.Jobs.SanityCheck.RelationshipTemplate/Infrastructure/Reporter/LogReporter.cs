@@ -40,18 +40,18 @@ public class LogReporter : IReporter
     }
 }
 
-internal static partial class RelationshipTemplateLogs
+internal static partial class LogReporterLogs
 {
     [LoggerMessage(
         EventId = 231727,
-        EventName = "Relationships.LogReporter.NoBlobForRelationshipTemplateId",
+        EventName = "Relationships.SanityCheck.NoBlobForRelationshipTemplateId",
         Level = LogLevel.Error,
         Message = "No blob found for relationship template id: '{databaseId}'.")]
     public static partial void NoBlobForRelationshipTemplateId(this ILogger logger, RelationshipTemplateId databaseId);
 
     [LoggerMessage(
         EventId = 232800,
-        EventName = "Relationships.LogReporter.NoDatabaseEntryForBlobId",
+        EventName = "Relationships.SanityCheck.NoDatabaseEntryForBlobId",
         Level = LogLevel.Error,
         Message = "No database entry found for blob id: '{blobId}'.")]
     public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);
