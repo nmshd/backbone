@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,8 +12,6 @@
 		<PackageReference Include="FluentValidation" Version="11.8.0" />
 		<PackageReference Include="MediatR" Version="12.1.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.12" />
-		<PackageReference Include="Moq" Version="4.20.69" />
-		<PackageReference Include="xunit.abstractions" Version="2.0.3" />
 		<PackageReference Include="xunit.assert" Version="2.5.3" />
 	</ItemGroup>
 
