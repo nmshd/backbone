@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Tier, TierOverview, TierService } from "src/app/services/tier-service/tier.service";
@@ -18,10 +18,6 @@ export class TierListComponent {
 
     public tiers: TierOverview[];
 
-    public totalRecords: number;
-    public pageSize: number;
-    public pageIndex: number;
-
     public loading = false;
 
     public displayedColumns: string[] = ["name", "numberOfIdentities"];
@@ -36,27 +32,18 @@ export class TierListComponent {
 
         this.tiers = [];
 
-        this.totalRecords = 0;
-        this.pageSize = 10;
-        this.pageIndex = 0;
-
         this.loading = true;
     }
 
     public ngOnInit(): void {
-        this.getPagedData();
+        this.getTiers();
     }
 
-    public getPagedData(): void {
+    public getTiers(): void {
         this.loading = true;
-        this.tierService.getTiers(this.pageIndex, this.pageSize).subscribe({
+        this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tiers = data.result;
-                if (data.pagination) {
-                    this.totalRecords = data.pagination.totalRecords!;
-                } else {
-                    this.totalRecords = data.result.length;
-                }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -68,12 +55,6 @@ export class TierListComponent {
                 });
             }
         });
-    }
-
-    public pageChangeEvent(event: PageEvent): void {
-        this.pageIndex = event.pageIndex;
-        this.pageSize = event.pageSize;
-        this.getPagedData();
     }
 
     public async addTier(): Promise<void> {
