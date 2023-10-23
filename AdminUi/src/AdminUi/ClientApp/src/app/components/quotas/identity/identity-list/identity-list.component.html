@@ -2,8 +2,8 @@
     <h2 class="header-title">{{ header }}</h2>
     <p class="header-description">{{ headerDescription }}</p>
 </div>
-<mat-card [ngClass]="{ 'disabled-container': loading }">
-    <mat-card-content style="min-height: 400px">
+<mat-card [ngClass]="{ 'disabled-container': loading }" style="width: fit-content">
+    <mat-card-content style="min-height: 400px; min-width: 1350px">
         <div *ngIf="loading" class="loading">
             <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
         </div>
@@ -54,7 +54,120 @@
                     {{ identity.identityVersion }}
                 </td>
             </ng-container>
+            <ng-container matColumnDef="address-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <mat-form-field style="width: 100%">
+                        <input matInput type="text" [(ngModel)]="filter.address" #addressFilter />
+                        <button *ngIf="filter.address" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('address')">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="tier-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <mat-form-field>
+                        <mat-label>Tiers</mat-label>
+                        <mat-select multiple [(ngModel)]="filter.tiers" (selectionChange)="onFilterChange('tiers')">
+                            <mat-option *ngFor="let tier of tiers" [value]="tier.id">{{ tier.name }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="client-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <mat-form-field>
+                        <mat-label>Clients</mat-label>
+                        <mat-select multiple [(ngModel)]="filter.clients" (selectionChange)="onFilterChange('clients')">
+                            <mat-option *ngFor="let client of clients" [value]="client.clientId">{{ client.displayName }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="number-of-devices-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <div class="filter-cell">
+                        <mat-form-field style="width: 45%">
+                            <mat-select [(ngModel)]="filter.numberOfDevices.operator" (selectionChange)="onFilterChange('numberOfDevices')">
+                                <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 45%">
+                            <input #numberOfDevicesFilter matInput type="number" [(ngModel)]="filter.numberOfDevices.value" />
+                        </mat-form-field>
+                    </div>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="created-at-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <div class="filter-cell">
+                        <mat-form-field style="width: 25%">
+                            <mat-select [(ngModel)]="filter.createdAt.operator" (selectionChange)="onFilterChange('createdAt')">
+                                <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 70%" class="inline-action-buttons">
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.createdAt.value" (dateChange)="onFilterChange('createdAt')" />
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <button *ngIf="filter.createdAt.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('createdAt')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="last-login-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <div class="filter-cell">
+                        <mat-form-field style="width: 25%">
+                            <mat-select [(ngModel)]="filter.lastLoginAt.operator" (selectionChange)="onFilterChange('lastLoginAt')">
+                                <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 70%" class="inline-action-buttons">
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="filter.lastLoginAt.value" (dateChange)="onFilterChange('lastLoginAt')" />
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <button *ngIf="filter.lastLoginAt.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('lastLoginAt')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="datawallet-version-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <div class="filter-cell">
+                        <mat-form-field style="width: 45%">
+                            <mat-select [(ngModel)]="filter.datawalletVersion.operator" (selectionChange)="onFilterChange('datawalletVersion')">
+                                <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 45%">
+                            <input #datawalletVersionFilter matInput type="number" [(ngModel)]="filter.datawalletVersion.value" />
+                        </mat-form-field>
+                    </div>
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="identity-version-filter">
+                <th mat-header-cell *matHeaderCellDef style="padding-top: 10px">
+                    <div class="filter-cell">
+                        <mat-form-field style="width: 45%">
+                            <mat-select [(ngModel)]="filter.identityVersion.operator" (selectionChange)="onFilterChange('identityVersion')">
+                                <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 45%">
+                            <input #identityVersionFilter matInput type="number" [(ngModel)]="filter.identityVersion.value" />
+                        </mat-form-field>
+                    </div>
+                </th>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnFilters"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">No identities found.</td>

@@ -12,6 +12,7 @@ namespace AdminUi.Tests.Integration.API;
 public class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
+    protected const string ODATA_ROUTE_PREFIX = "/odata";
     private readonly HttpClient _httpClient;
     private const string XSRF_TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
     private const string XSRF_TOKEN_COOKIE_NAME = "X-XSRF-COOKIE";
@@ -55,6 +56,11 @@ public class BaseApi
         {
             throw new ValidationTestException("Could not load XSRF tokens.");
         }
+    }
+
+    protected async Task<ODataResponse<T>> GetOData<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteODataRequest<T>(HttpMethod.Get, endpoint, requestConfiguration);
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -105,6 +111,27 @@ public class BaseApi
         return response;
     }
 
+    private async Task<ODataResponse<T>> ExecuteODataRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new HttpRequestMessage(method, ODATA_ROUTE_PREFIX + endpoint);
+
+        var httpResponse = await _httpClient.SendAsync(request);
+        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+
+        var responseData = JsonConvert.DeserializeObject<ODataResponseContent<T>>(responseRawContent);
+
+        var response = new ODataResponse<T>
+        {
+            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
+            StatusCode = httpResponse.StatusCode,
+            Content = responseData!,
+            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
+            RawContent = responseRawContent
+        };
+
+        return response;
+    }
+
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
@@ -117,6 +144,7 @@ public class BaseApi
 
         var httpResponse = await _httpClient.SendAsync(request);
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+
         var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
 
         var response = new HttpResponse<T>

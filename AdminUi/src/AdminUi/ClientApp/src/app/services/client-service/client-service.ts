@@ -1,14 +1,16 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { NumberFilter } from "src/app/utils/number-filter";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: "root"
 })
-export class ClientServiceService {
+export class ClientService {
     private readonly apiUrl: string;
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Clients`;
@@ -18,12 +20,8 @@ export class ClientServiceService {
         return this.http.get<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${id}`);
     }
 
-    public getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
-        const httpOptions = {
-            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
-        };
-
-        return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl, httpOptions);
+    public getClients(): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
+        return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl);
     }
 
     public createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
@@ -45,7 +43,7 @@ export class ClientServiceService {
 
 export interface ClientOverview {
     clientId: string;
-    displayName?: string;
+    displayName: string;
     defaultTier: string;
     createdAt: Date;
     numberOfIdentities: number;
@@ -65,4 +63,12 @@ export interface ChangeClientSecretRequest {
 
 export interface UpdateClientRequest {
     defaultTier: string;
+}
+
+export interface ClientOverviewFilter {
+    clientId?: string;
+    tiers?: string[];
+    displayName?: string;
+    numberOfIdentities: NumberFilter;
+    createdAt: DateFilter;
 }
