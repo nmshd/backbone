@@ -31,4 +31,4 @@ RUN dotnet publish /property:UseAppHost=false /property:WarningLevel=0 --configu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Files.Jobs.SanityCheck.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Files.Jobs.SanityCheck.dll"]

@@ -58,4 +58,4 @@ RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --c
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AdminUi.dll"]
+ENTRYPOINT ["dotnet", "Backbone.AdminUi.dll"]
