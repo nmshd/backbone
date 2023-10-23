@@ -33,4 +33,4 @@ RUN dotnet publish /property:UseAppHost=false /property:WarningLevel=0 --configu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.dll"]
