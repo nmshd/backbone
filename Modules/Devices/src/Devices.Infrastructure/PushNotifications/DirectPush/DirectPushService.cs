@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPushService : IPushService
 {

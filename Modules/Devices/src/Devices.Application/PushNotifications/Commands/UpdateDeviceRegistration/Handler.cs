@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+namespace Backbone.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 {

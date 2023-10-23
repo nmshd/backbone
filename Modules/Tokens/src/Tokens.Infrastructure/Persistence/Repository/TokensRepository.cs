@@ -4,13 +4,13 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Tokens.Domain.Entities;
+using Backbone.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Tokens.Infrastructure.Persistence.Repository;
 
 public class TokensRepository : ITokensRepository
 {

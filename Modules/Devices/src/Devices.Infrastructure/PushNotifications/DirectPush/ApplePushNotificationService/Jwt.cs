@@ -1,6 +1,6 @@
 ﻿using Backbone.Tooling;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
 public class Jwt
 {

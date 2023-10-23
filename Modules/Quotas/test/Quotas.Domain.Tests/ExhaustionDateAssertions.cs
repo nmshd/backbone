@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Quotas.Domain.Aggregates.Identities;
 using Backbone.Tooling.Extensions;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
 
-namespace Backbone.Modules.Quotas.Domain.Tests;
+namespace Backbone.Quotas.Domain.Tests;
 
 public static class ExhaustionDateExtensions
 {

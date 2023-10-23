@@ -4,14 +4,14 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Synchronization.Application.Infrastructure;
+using Backbone.Synchronization.Domain.Entities;
 using Backbone.Tooling.Extensions;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+namespace Backbone.Synchronization.Application.Datawallets.Queries.GetModifications;
 
 public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsResponse>
 {

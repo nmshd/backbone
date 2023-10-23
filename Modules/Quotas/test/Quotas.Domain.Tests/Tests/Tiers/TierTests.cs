@@ -1,11 +1,11 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
+namespace Backbone.Quotas.Domain.Tests.Tests.Tiers;
 
 public class TierTests
 {

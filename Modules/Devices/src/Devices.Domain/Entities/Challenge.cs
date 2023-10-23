@@ -1,6 +1,6 @@
 ﻿using Backbone.Tooling;
 
-namespace Backbone.Modules.Devices.Domain.Entities;
+namespace Backbone.Devices.Domain.Entities;
 
 public class Challenge
 {

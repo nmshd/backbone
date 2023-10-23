@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
+namespace Backbone.Devices.Application.Clients.Commands.UpdateClient;
 
 public class UpdateClientCommand : IRequest<UpdateClientResponse>
 {

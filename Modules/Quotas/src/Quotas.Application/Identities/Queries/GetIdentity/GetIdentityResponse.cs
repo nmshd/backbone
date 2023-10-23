@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Quotas.Application.DTOs;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+namespace Backbone.Quotas.Application.Identities.Queries.GetIdentity;
 public class GetIdentityResponse
 {
     public GetIdentityResponse(string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics)

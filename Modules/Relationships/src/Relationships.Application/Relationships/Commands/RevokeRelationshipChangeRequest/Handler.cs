@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Relationships.Application.IntegrationEvents;
+using Backbone.Relationships.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
+namespace Backbone.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
 
 public class Handler : IRequestHandler<RevokeRelationshipChangeRequestCommand, RevokeRelationshipChangeRequestResponse>
 {

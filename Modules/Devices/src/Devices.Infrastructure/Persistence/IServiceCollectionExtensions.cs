@@ -1,12 +1,12 @@
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence;
+namespace Backbone.Devices.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
@@ -38,7 +38,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(CompiledModels.SqlServer.DevicesDbContextModel.Instance);
+                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.SqlServer.DevicesDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
@@ -53,7 +53,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(CompiledModels.Postgres.DevicesDbContextModel.Instance);
+                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

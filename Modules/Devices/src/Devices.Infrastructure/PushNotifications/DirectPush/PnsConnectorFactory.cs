@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+﻿using Backbone.Devices.Domain.Aggregates.PushNotifications;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
 public abstract class PnsConnectorFactory
 {
     public IPnsConnector CreateFor(PushNotificationPlatform platform)

@@ -9,19 +9,18 @@ using Backbone.Backbone.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Application;
+using Backbone.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

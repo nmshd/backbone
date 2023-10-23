@@ -2,7 +2,7 @@
 using Serilog;
 using Serilog.Events;
 
-namespace Backbone.Infrastructure.Logging;
+namespace Backbone.Backbone.Infrastructure.Logging;
 
 public static class LogHelper
 {

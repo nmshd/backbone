@@ -1,12 +1,12 @@
-﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Devices.Application.Clients.Commands.ChangeClientSecret;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Domain.Entities;
 using Backbone.Tooling;
 using FakeItEasy;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.Commands.ChangeClientSecret;
+namespace Backbone.Devices.Application.Tests.Tests.Clients.Commands.ChangeClientSecret;
 public class HandlerTests
 {
     [Fact]

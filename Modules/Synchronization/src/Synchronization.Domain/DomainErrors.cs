@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Backbone.Modules.Synchronization.Domain;
+namespace Backbone.Synchronization.Domain;
 public static class DomainErrors
 {
     public static class Datawallet

@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Backbone.Challenges.Domain.Ids;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Challenges.Domain.Entities;
+namespace Backbone.Challenges.Domain.Entities;
 
 public class Challenge
 {

@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
+namespace Backbone.Synchronization.Domain.Entities.Sync;
 
 public class ExternalEvent
 {

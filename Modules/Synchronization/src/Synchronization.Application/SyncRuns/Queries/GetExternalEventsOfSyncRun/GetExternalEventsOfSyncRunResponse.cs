@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Synchronization.Application.SyncRuns.DTOs;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 
 public class GetExternalEventsOfSyncRunResponse : PagedResponse<ExternalEventDTO>
 {

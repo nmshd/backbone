@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Challenges.Application.Challenges.DTOs;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Challenges.Application.Challenges.DTOs;
+using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
+namespace Backbone.Challenges.Application.Challenges.Queries.GetChallengeById;
 
 public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 {

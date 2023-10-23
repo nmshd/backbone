@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Backbone.Modules.Devices.Domain;
+namespace Backbone.Devices.Domain;
 
 public static class DomainErrors
 {

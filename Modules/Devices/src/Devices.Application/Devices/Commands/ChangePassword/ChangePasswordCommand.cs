@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
+namespace Backbone.Devices.Application.Devices.Commands.ChangePassword;
 
 public class ChangePasswordCommand : IRequest
 {

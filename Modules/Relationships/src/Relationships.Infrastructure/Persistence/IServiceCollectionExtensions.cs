@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.Modules.Relationships.Application.Infrastructure;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
+using Backbone.Relationships.Application.Infrastructure;
+using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Relationships.Infrastructure.Persistence.Database.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Relationships.Infrastructure.Persistence;
+namespace Backbone.Relationships.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
@@ -32,6 +32,6 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
+    public global::Backbone.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
     public BlobStorageOptions BlobStorageOptions { get; set; } = new();
 }

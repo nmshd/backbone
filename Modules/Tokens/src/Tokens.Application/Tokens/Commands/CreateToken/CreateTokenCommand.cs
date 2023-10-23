@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Tokens.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Tokens.Application.Tokens.Commands.CreateToken;
 
 [ApplyQuotasForMetrics("NumberOfTokens")]
 public class CreateTokenCommand : IRequest<CreateTokenResponse>, IMapTo<Token>

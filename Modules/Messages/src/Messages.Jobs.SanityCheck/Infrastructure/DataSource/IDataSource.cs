@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
+﻿using Backbone.Messages.Domain.Ids;
 
-namespace Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public interface IDataSource
 {

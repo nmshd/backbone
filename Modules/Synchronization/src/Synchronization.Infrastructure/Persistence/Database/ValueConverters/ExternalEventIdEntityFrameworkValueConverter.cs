@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 
 public class ExternalEventIdEntityFrameworkValueConverter : ValueConverter<ExternalEventId, string>
 {

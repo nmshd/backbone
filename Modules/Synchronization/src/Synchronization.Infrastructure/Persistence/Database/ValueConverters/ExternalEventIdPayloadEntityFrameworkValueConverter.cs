@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 
-namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 public class ExternalEventIdPayloadEntityFrameworkValueConverter : ValueConverter<object, string>
 {
     public ExternalEventIdPayloadEntityFrameworkValueConverter() : base(

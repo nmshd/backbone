@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿namespace Backbone.Quotas.Domain.Aggregates.Tiers;
 
 public record TierId(string Value)
 {

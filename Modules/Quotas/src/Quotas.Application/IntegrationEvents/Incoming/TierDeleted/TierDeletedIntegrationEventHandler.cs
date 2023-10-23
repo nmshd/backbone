@@ -1,9 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
+namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
 public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierDeletedIntegrationEvent>
 {
     private readonly ITiersRepository _tiersRepository;

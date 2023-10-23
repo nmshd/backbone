@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Backbone.Quotas.Application.Tests.TestDoubles;
 
 internal class UserContextStub : IUserContext
 {

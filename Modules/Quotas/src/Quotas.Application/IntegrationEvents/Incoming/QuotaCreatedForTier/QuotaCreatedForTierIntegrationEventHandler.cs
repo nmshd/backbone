@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Quotas.Application.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
+namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 
 public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandler<QuotaCreatedForTierIntegrationEvent>
 {

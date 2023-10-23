@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Messages.Application;
+using Backbone.Messages.Application;
 
-namespace Backbone.Modules.Messages.ConsumerApi;
+namespace Backbone.Messages.ConsumerApi;
 
 public class Configuration
 {

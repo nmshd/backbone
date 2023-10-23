@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Relationships.Domain.Entities;
+namespace Backbone.Relationships.Domain.Entities;
 
 public class RelationshipTerminationChange : RelationshipChange
 {

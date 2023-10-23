@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.Entities;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using Backbone.Files.Domain.Entities;
+using File = Backbone.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Application.Files.DTOs;
+namespace Backbone.Files.Application.Files.DTOs;
 
 public class FileMetadataDTO : IHaveCustomMapping
 {

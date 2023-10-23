@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using File = Backbone.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
+public class FileEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Entities.File>
 {
     public void Configure(EntityTypeBuilder<File> builder)
     {

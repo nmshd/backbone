@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 using MediatR;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 
 public class GetExternalEventsOfSyncRunQuery : IRequest<GetExternalEventsOfSyncRunResponse>
 {

@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
-using Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
+﻿using Backbone.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+namespace Backbone.Synchronization.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporter : IReporter
 {

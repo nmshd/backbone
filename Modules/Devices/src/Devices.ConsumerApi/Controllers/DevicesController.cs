@@ -4,13 +4,13 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
-using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
-using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
-using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
+using Backbone.Devices.Application;
+using Backbone.Devices.Application.Devices.Commands.ChangePassword;
+using Backbone.Devices.Application.Devices.Commands.DeleteDevice;
+using Backbone.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Devices.Application.Devices.DTOs;
+using Backbone.Devices.Application.Devices.Queries.GetActiveDevice;
+using Backbone.Devices.Application.Devices.Queries.ListDevices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +19,7 @@ using Microsoft.Extensions.Options;
 using OpenIddict.Validation.AspNetCore;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
+namespace Backbone.Devices.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]

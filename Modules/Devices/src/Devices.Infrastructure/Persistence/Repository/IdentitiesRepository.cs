@@ -3,15 +3,15 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Devices.Application;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+namespace Backbone.Devices.Infrastructure.Persistence.Repository;
 public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identities;

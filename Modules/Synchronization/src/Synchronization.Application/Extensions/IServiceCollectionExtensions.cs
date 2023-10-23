@@ -2,14 +2,14 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
-using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Synchronization.Application.AutoMapper;
+using Backbone.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
-namespace Backbone.Modules.Synchronization.Application.Extensions;
+namespace Backbone.Synchronization.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

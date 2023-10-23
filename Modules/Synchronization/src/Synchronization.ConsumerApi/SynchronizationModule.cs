@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Synchronization.Application;
-using Backbone.Modules.Synchronization.Application.Extensions;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence;
+using Backbone.Synchronization.Application;
+using Backbone.Synchronization.Application.Extensions;
+using Backbone.Synchronization.Infrastructure.Persistence;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Synchronization.ConsumerApi;
+namespace Backbone.Synchronization.ConsumerApi;
 
 public class SynchronizationModule : AbstractModule
 {

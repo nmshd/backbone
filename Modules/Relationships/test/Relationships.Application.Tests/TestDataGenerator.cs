@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Relationships.Application.Tests;
+namespace Backbone.Relationships.Application.Tests;
 
 public static class TestDataGenerator
 {

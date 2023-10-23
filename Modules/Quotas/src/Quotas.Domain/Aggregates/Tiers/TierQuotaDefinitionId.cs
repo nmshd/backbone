@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+namespace Backbone.Quotas.Domain.Aggregates.Tiers;
 
 public record TierQuotaDefinitionId : StronglyTypedId
 {

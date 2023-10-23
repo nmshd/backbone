@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Domain.Entities;
 
-namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+namespace Backbone.Synchronization.Application.Datawallets.DTOs;
 
 public class CreatedDatawalletModificationDTO : IMapTo<DatawalletModification>
 {

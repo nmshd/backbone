@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Relationships.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
+namespace Backbone.Relationships.Infrastructure.Database.Postgres;
 
 public static class MigrationOperations
 {

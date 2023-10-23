@@ -2,13 +2,13 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+using Backbone.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+namespace Backbone.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {

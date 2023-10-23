@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Devices.Domain.Entities;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
+namespace Backbone.Devices.Application.Clients.Commands.CreateClient;
 
 public class CreateClientResponse
 {

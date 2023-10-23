@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Messages.Application.Messages.Commands.SendMessage;
 
 [ApplyQuotasForMetrics("NumberOfSentMessages")]
 public class SendMessageCommand : IRequest<SendMessageResponse>

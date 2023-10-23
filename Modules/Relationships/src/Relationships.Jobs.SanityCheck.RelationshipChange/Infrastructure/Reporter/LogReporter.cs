@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
+﻿using Backbone.Relationships.Domain.Ids;
 
-namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
+namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
 
 public class LogReporter : IReporter
 {

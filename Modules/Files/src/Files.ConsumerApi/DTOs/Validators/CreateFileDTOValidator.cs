@@ -2,7 +2,7 @@
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Modules.Files.ConsumerApi.DTOs.Validators;
+namespace Backbone.Files.ConsumerApi.DTOs.Validators;
 
 public class CreateFileDTOValidator : AbstractValidator<CreateFileDTO>
 {

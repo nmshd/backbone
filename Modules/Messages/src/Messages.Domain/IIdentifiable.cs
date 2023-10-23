@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Messages.Domain;
+﻿namespace Backbone.Messages.Domain;
 
 public interface IIdentifiable<out TId>
 {

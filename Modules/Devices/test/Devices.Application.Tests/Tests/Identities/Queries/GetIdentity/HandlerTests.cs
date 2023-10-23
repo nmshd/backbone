@@ -1,14 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Application.Identities.Queries.GetIdentity;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Entities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+namespace Backbone.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
 public class HandlerTests
 {
     [Fact]

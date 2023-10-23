@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+namespace Backbone.Devices.Application.Clients.Commands.DeleteClient;
 
 public class Handler : IRequestHandler<DeleteClientCommand>
 {

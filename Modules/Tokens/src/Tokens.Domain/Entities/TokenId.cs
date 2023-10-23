@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Tokens.Domain.Entities;
+namespace Backbone.Tokens.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(TokenIdTypeConverter))]

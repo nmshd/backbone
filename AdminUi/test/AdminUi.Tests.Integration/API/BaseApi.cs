@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using AdminUi.Tests.Integration.Models;
 using Backbone.AdminUi.Tests.Integration.Configuration;
 using Backbone.AdminUi.Tests.Integration.Models;
 using FluentValidation.TestHelper;

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Tokens.Application;
+namespace Backbone.Tokens.Application;
 
 public class ApplicationOptions
 {

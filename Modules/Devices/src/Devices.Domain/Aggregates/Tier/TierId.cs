@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
+namespace Backbone.Devices.Domain.Aggregates.Tier;
 
 public record TierId : StronglyTypedId
 {

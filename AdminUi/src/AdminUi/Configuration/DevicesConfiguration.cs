@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Application;
+using Backbone.Devices.Application;
 
 namespace Backbone.AdminUi.Configuration;
 

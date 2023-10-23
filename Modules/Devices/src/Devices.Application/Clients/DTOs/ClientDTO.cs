@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Domain.Entities;
 
-namespace Backbone.Modules.Devices.Application.Clients.DTOs;
+namespace Backbone.Devices.Application.Clients.DTOs;
 
 public class ClientDTO : IHaveCustomMapping
 {

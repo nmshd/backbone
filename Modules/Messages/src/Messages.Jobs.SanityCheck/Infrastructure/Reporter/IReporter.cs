@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
+﻿using Backbone.Messages.Domain.Ids;
 
-namespace Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
+namespace Backbone.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
 
 public interface IReporter
 {

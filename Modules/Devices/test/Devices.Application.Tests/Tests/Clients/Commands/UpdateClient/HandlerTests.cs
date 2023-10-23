@@ -1,17 +1,17 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.Tests.Extensions;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Application.Clients.Commands.UpdateClient;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.Tests.Extensions;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Domain.Entities;
 using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.Commands.UpdateClient;
+namespace Backbone.Devices.Application.Tests.Tests.Clients.Commands.UpdateClient;
 public class HandlerTests
 {
     [Fact]

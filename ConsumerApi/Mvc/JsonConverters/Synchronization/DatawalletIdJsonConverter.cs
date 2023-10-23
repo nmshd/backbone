@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Domain.Entities;
 
 namespace Backbone.ConsumerApi.Mvc.JsonConverters.Synchronization;
 

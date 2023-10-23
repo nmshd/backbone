@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Extensions;
+namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Extensions;
 
 internal static class IConfigurationExtensions
 {

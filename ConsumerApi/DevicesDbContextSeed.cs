@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
-using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Devices.Application.Extensions;
+using Backbone.Devices.Application.Tiers.Commands.CreateTier;
+using Backbone.Devices.Application.Users.Commands.SeedTestUsers;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

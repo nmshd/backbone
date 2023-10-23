@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.Synchronization.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+namespace Backbone.Synchronization.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
@@ -32,7 +32,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.SqlServer.SynchronizationDbContextModel.Instance);
+                        }).UseModel(Modules.Synchronization.Infrastructure.CompiledModels.SqlServer.SynchronizationDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -40,7 +40,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.Postgres.SynchronizationDbContextModel.Instance);
+                        }).UseModel(Modules.Synchronization.Infrastructure.CompiledModels.Postgres.SynchronizationDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

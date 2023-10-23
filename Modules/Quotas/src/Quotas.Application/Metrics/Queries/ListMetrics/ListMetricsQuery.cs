@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
+namespace Backbone.Quotas.Application.Metrics.Queries.ListMetrics;
 public class ListMetricsQuery : IRequest<ListMetricsResponse>
 {
 }

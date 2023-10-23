@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using File = Backbone.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Application.IntegrationEvents.Out;
+namespace Backbone.Files.Application.IntegrationEvents.Out;
 public class FileUploadedIntegrationEvent : IntegrationEvent
 {
     public FileUploadedIntegrationEvent(File file) : base($"{file.Id}/Created")

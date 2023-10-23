@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
+﻿using Backbone.Messages.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Messages.Infrastructure.Persistence.Database.EntityConfigurations;
 
 public class AttachmentEntityTypeConfiguration : IEntityTypeConfiguration<Attachment>
 {

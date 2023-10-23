@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+namespace Backbone.Tokens.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
@@ -31,7 +31,7 @@ public static class IServiceCollectionExtensions
                                 sqlOptions.CommandTimeout(20);
                                 sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            }).UseModel(CompiledModels.SqlServer.TokensDbContextModel.Instance);
+                            }).UseModel(Modules.Tokens.Infrastructure.CompiledModels.SqlServer.TokensDbContextModel.Instance);
                             break;
                         case POSTGRES:
                             dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -39,7 +39,7 @@ public static class IServiceCollectionExtensions
                                 sqlOptions.CommandTimeout(20);
                                 sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            }).UseModel(CompiledModels.Postgres.TokensDbContextModel.Instance);
+                            }).UseModel(Modules.Tokens.Infrastructure.CompiledModels.Postgres.TokensDbContextModel.Instance);
                             break;
                         default:
                             throw new Exception($"Unsupported database provider: {options.Provider}");

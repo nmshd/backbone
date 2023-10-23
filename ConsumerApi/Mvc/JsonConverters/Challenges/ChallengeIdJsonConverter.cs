@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Challenges.Domain.Ids;
 
 namespace Backbone.ConsumerApi.Mvc.JsonConverters.Challenges;
 

@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Messages.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesQuery : IRequest<ListMessagesResponse>
 {

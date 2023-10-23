@@ -3,15 +3,15 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
-using Backbone.Modules.Synchronization.Domain.Entities;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Application.Infrastructure;
+using Backbone.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
+using static Backbone.Synchronization.Domain.Entities.Datawallet;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 
 public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse>
 {

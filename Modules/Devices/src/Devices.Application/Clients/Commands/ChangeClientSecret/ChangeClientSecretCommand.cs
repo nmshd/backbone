@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
+namespace Backbone.Devices.Application.Clients.Commands.ChangeClientSecret;
 public class ChangeClientSecretCommand : IRequest<ChangeClientSecretResponse>
 {
     public ChangeClientSecretCommand(string clientId, string newSecret)

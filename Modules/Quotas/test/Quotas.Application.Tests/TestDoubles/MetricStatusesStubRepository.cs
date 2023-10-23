@@ -2,7 +2,7 @@
 using Backbone.Common.Infrastructure.Persistence.Repository;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Backbone.Quotas.Application.Tests.TestDoubles;
 
 internal class MetricStatusesStubRepository : IMetricStatusesRepository
 {

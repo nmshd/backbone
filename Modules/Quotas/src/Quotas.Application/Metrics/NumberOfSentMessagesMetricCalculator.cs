@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain;
+﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Domain;
 
-namespace Backbone.Modules.Quotas.Application.Metrics;
+namespace Backbone.Quotas.Application.Metrics;
 public class NumberOfSentMessagesMetricCalculator : IMetricCalculator
 {
     private readonly IMessagesRepository _messagesRepository;

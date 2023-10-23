@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+namespace Backbone.Devices.Infrastructure.Persistence.Repository;
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;

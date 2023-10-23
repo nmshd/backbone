@@ -1,14 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Quotas.Application.DTOs;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Application.DTOs;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
+namespace Backbone.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 
 public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IndividualQuotaDTO>
 {

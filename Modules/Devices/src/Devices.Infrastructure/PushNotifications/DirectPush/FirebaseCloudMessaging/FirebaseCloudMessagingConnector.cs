@@ -3,14 +3,14 @@ using System.Reflection;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+using Backbone.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Quotas.Application;
+using Backbone.Quotas.Application;
 
 namespace Backbone.AdminUi.Configuration;
 

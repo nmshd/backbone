@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
+namespace Backbone.Devices.Application.Identities.Queries.ListIdentities;
 public class ListIdentitiesQuery : IRequest<ListIdentitiesResponse>
 {
     public ListIdentitiesQuery(PaginationFilter paginationFilter)

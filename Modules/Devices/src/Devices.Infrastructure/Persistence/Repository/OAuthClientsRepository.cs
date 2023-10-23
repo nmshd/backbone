@@ -2,13 +2,13 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.OpenIddict;
 using OpenIddict.Core;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+namespace Backbone.Devices.Infrastructure.Persistence.Repository;
 
 public class OAuthClientsRepository : IOAuthClientsRepository
 {

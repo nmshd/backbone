@@ -1,11 +1,11 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Metrics;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.Metrics;
+using Backbone.Quotas.Domain.Metrics;
+using Backbone.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+namespace Backbone.Quotas.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
@@ -35,7 +35,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.SqlServer.QuotasDbContextModel.Instance);
+                        }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.SqlServer.QuotasDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -43,7 +43,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.Postgres.QuotasDbContextModel.Instance);
+                        }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.Postgres.QuotasDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

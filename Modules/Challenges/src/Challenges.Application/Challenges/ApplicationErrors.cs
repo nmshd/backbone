@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Challenges.Application.Challenges;
+﻿namespace Backbone.Challenges.Application.Challenges;
 
 public static class ApplicationErrors
 {

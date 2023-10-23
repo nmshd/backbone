@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
-using RootCommand = Backbone.Modules.Devices.AdminCli.Commands.RootCommand;
+using RootCommand = Backbone.Devices.AdminCli.Commands.RootCommand;
 
-namespace Backbone.Modules.Devices.AdminCli;
+namespace Backbone.Devices.AdminCli;
 
 public class Program
 {

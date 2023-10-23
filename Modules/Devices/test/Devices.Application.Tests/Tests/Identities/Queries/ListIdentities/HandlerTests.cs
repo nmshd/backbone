@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Application.Identities.Queries.ListIdentities;
+using Backbone.Devices.Domain.Entities;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
+namespace Backbone.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
 public class HandlerTests
 {

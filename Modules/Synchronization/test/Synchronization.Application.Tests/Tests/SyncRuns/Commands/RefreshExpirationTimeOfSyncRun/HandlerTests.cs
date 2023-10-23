@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+using Backbone.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+namespace Backbone.Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
 public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
+﻿using Backbone.Synchronization.Domain.Entities;
 
-namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public interface IDataSource
 {

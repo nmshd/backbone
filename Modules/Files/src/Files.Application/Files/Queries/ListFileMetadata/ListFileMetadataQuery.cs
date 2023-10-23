@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Files.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
+namespace Backbone.Files.Application.Files.Queries.ListFileMetadata;
 
 public class ListFileMetadataQuery : IRequest<ListFileMetadataResponse>
 {

@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Http;
 
-namespace Backbone.Modules.Files.ConsumerApi.DTOs;
+namespace Backbone.Files.ConsumerApi.DTOs;
 
 public class CreateFileDTO
 {

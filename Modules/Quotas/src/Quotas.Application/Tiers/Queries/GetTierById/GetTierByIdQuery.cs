@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
+﻿using Backbone.Quotas.Application.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+namespace Backbone.Quotas.Application.Tiers.Queries.GetTierById;
 public class GetTierByIdQuery : IRequest<TierDetailsDTO>
 {
     public GetTierByIdQuery(string id)

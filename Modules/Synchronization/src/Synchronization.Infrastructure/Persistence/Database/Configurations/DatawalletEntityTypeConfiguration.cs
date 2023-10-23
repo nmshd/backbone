@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
+﻿using Backbone.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
+namespace Backbone.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
 public class DatawalletEntityTypeConfiguration : IEntityTypeConfiguration<Datawallet>
 {

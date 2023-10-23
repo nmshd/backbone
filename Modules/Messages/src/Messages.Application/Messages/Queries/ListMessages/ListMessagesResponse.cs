@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Messages.Application.Messages.DTOs;
 
-namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesResponse : PagedResponse<MessageDTO>
 {

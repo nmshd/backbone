@@ -1,16 +1,16 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
+using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Quotas.Application.Metrics;
+using Backbone.Quotas.Application.Tests.TestDoubles;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
+namespace Backbone.Quotas.Application.Tests.Tests.Identities;
 
 public class QuotaCreatedForTierIntegrationEventHandlerTests
 {

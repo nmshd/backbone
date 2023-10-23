@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Files.Application.Files.DTOs;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Files.Application.Files.DTOs;
+using Backbone.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
+namespace Backbone.Files.Application.Files.Queries.GetFileMetadata;
 
 public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
 {

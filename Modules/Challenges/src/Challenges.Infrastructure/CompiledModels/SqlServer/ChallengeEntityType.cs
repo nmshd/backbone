@@ -2,10 +2,10 @@
 using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Challenges.Domain.Entities;
+using Backbone.Challenges.Domain.Ids;
+using Backbone.Challenges.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Challenges.Domain.Entities;
-using Backbone.Modules.Challenges.Domain.Ids;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618

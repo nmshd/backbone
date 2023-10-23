@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
+using Backbone.Devices.Application.Devices.DTOs.Validators;
 using FluentValidation;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+namespace Backbone.Devices.Application.Identities.Commands.CreateIdentity;
 
 // ReSharper disable once UnusedMember.Global
 public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCommand>

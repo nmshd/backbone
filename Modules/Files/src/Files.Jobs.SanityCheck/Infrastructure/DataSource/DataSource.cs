@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
-using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Files.Application.Infrastructure.Persistence;
+using Backbone.Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using File = Backbone.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Files.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.Entities;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application.Infrastructure;
+namespace Backbone.Synchronization.Application.Infrastructure;
 
 public interface ISynchronizationDbContext : IDbContext
 {

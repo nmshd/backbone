@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.Devices.DTOs;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
+namespace Backbone.Devices.Application.Devices.Commands.DeleteDevice;
 
 public class Handler : IRequestHandler<DeleteDeviceCommand>
 {

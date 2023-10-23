@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Relationships.Application.Relationships.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+namespace Backbone.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
 {

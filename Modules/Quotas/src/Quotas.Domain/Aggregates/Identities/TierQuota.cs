@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+namespace Backbone.Quotas.Domain.Aggregates.Identities;
 
 public class TierQuota : Quota
 {

@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Application.Tiers.DTOs;
+﻿namespace Backbone.Devices.Application.Tiers.DTOs;
 
 public class TierDTO
 {

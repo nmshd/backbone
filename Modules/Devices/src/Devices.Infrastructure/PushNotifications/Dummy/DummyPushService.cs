@@ -1,9 +1,9 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
+namespace Backbone.Devices.Infrastructure.PushNotifications.Dummy;
 
 public class DummyPushService : IPushService
 {

@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Entities;
 
-namespace Backbone.Modules.Relationships.Application.IntegrationEvents;
+namespace Backbone.Relationships.Application.IntegrationEvents;
 public class RelationshipTemplateCreatedIntegrationEvent : IntegrationEvent
 {
     public RelationshipTemplateCreatedIntegrationEvent(RelationshipTemplate template) : base($"{template.Id}/Created")

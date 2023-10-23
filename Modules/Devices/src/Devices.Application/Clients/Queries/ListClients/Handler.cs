@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Devices.Application.Clients.DTOs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.Clients.DTOs;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+namespace Backbone.Devices.Application.Clients.Queries.ListClients;
 
 public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
 {

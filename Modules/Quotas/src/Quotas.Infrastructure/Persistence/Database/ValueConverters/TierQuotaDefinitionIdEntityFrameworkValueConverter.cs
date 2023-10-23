@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 
 public class TierQuotaDefinitionIdEntityFrameworkValueConverter : ValueConverter<TierQuotaDefinitionId, string>
 {

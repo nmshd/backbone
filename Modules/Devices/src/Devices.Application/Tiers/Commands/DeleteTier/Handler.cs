@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Devices.Domain.Aggregates.Tier;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
+namespace Backbone.Devices.Application.Tiers.Commands.DeleteTier;
 
 public class Handler : IRequestHandler<DeleteTierCommand>
 {

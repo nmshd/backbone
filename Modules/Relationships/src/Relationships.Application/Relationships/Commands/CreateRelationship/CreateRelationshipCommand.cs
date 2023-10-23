@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
+namespace Backbone.Relationships.Application.Relationships.Commands.CreateRelationship;
 
 [ApplyQuotasForMetrics("NumberOfRelationships")]
 public class CreateRelationshipCommand : IRequest<CreateRelationshipResponse>

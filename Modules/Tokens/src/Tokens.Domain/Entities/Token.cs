@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Tokens.Domain.Entities;
+namespace Backbone.Tokens.Domain.Entities;
 
 public class Token
 {

@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Entities;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Backbone.Relationships.Application.Extensions;
 
 public static class ChangeHistoryExtensions
 {

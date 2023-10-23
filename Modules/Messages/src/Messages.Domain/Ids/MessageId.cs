@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Messages.Domain.Ids;
+namespace Backbone.Messages.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(MessageIdTypeConverter))]

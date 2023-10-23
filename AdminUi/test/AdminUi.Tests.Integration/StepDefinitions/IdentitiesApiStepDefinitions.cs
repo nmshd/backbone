@@ -1,4 +1,3 @@
-using AdminUi.Tests.Integration.Models;
 using Backbone.AdminUi.Tests.Integration.API;
 using Backbone.AdminUi.Tests.Integration.Extensions;
 using Backbone.AdminUi.Tests.Integration.Models;

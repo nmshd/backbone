@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
+using Backbone.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 
-namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
+namespace Backbone.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
 
 public class DatawalletModifiedIntegrationEventHandler : IIntegrationEventHandler<DatawalletModifiedIntegrationEvent>
 {

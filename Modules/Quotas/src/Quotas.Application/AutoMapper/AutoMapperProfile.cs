@@ -2,7 +2,7 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.AutoMapper;
 
-namespace Backbone.Modules.Quotas.Application.AutoMapper;
+namespace Backbone.Quotas.Application.AutoMapper;
 
 public class AutoMapperProfile : AutoMapperProfileBase
 {

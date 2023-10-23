@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.AdminCli;
+﻿namespace Backbone.Devices.AdminCli;
 
 public static class ConsoleHelpers
 {

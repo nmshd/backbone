@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Synchronization.Domain.Entities.Sync;
 using MediatR;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
 public class RefreshExpirationTimeOfSyncRunCommand : IRequest<RefreshExpirationTimeOfSyncRunResponse>
 {

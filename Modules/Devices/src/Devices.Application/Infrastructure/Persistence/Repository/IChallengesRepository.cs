@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Devices.Domain.Entities;
 
-namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface IChallengesRepository
 {

@@ -1,16 +1,16 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Quotas.Application.Identities.Queries.GetIdentity;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.Tests.TestDoubles;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.GetIdentity;
+namespace Backbone.Quotas.Application.Tests.Tests.Identities.GetIdentity;
 
 public class HandlerTests
 {

@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+namespace Backbone.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 
 public class RelationshipChangeCreatedIntegrationEvent : IntegrationEvent
 {

@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
+namespace Backbone.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 // ReSharper disable once UnusedMember.Global
 public class FinalizeDatawalletVersionUpgradeSyncRunCommandValidator : AbstractValidator<FinalizeDatawalletVersionUpgradeSyncRunCommand>

@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.Pagination;
 using FluentValidation;
 
-namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Tokens.Application.Tokens.Queries.ListTokens;
 
 // ReSharper disable once UnusedMember.Global
 public class ListTokensQueryValidator : AbstractValidator<ListTokensQuery>

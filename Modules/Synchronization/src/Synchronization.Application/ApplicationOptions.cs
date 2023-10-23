@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Synchronization.Application;
+namespace Backbone.Synchronization.Application;
 
 public class ApplicationOptions
 {

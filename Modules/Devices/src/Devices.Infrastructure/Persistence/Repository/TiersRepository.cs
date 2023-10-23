@@ -2,15 +2,15 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Core;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+namespace Backbone.Devices.Infrastructure.Persistence.Repository;
 
 public class TiersRepository : ITiersRepository
 {

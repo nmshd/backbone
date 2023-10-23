@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Devices.Application.Devices.Commands.RegisterDevice;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Backbone.Modules.Devices.Application.Devices.DTOs;
+namespace Backbone.Devices.Application.Devices.DTOs;
 
 public class PublicKey
 {

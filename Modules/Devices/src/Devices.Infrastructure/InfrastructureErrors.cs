@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 
-namespace Backbone.Modules.Devices.Infrastructure;
+namespace Backbone.Devices.Infrastructure;
 public static class InfrastructureErrors
 {
     public static InfrastructureError InvalidPushNotificationConfiguration(List<string> supportedAppIds)

@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Synchronization.Application.Extensions;
+namespace Backbone.Synchronization.Application.Extensions;
 
 public static class DatawalletQueryableExtensions
 {

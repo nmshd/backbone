@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application.Extensions;
+namespace Backbone.Synchronization.Application.Extensions;
 
 public static class ExternalEventsQueryableExtensions
 {

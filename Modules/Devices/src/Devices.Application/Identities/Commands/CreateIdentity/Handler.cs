@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Application.Devices.DTOs;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Devices.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+namespace Backbone.Devices.Application.Identities.Commands.CreateIdentity;
 
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {

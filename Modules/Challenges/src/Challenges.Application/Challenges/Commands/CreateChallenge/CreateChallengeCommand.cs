@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Challenges.Application.Challenges.DTOs;
+﻿using Backbone.Challenges.Application.Challenges.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
+namespace Backbone.Challenges.Application.Challenges.Commands.CreateChallenge;
 
 public class CreateChallengeCommand : IRequest<ChallengeDTO> { }

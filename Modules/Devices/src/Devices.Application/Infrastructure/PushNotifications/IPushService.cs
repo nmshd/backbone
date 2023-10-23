@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
 
-namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+namespace Backbone.Devices.Application.Infrastructure.PushNotifications;
 
 public interface IPushService
 {

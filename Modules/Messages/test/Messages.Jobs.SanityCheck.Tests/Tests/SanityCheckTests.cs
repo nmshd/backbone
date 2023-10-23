@@ -1,22 +1,22 @@
-using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+using Backbone.Messages.Domain.Ids;
+using Backbone.Messages.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.Messages.Jobs.SanityCheck.Tests.Tests;
 
 public class SanityCheckTests
 {
     private readonly FakeDataSource _dataSource;
     private readonly TestReporter _reporter;
-    private readonly Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTests()
     {
         _dataSource = new FakeDataSource();
         _reporter = new TestReporter();
-        _sanityCheck = new Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

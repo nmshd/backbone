@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
+namespace Backbone.Devices.Application.PushNotifications.Commands.SendTestNotification;
 
 public class SendTestNotificationCommand : IRequest<Unit>
 {

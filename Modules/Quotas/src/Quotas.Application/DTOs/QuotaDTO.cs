@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Quotas.Domain.Aggregates.Identities;
 
-namespace Backbone.Modules.Quotas.Application.DTOs;
+namespace Backbone.Quotas.Application.DTOs;
 public class QuotaDTO
 {
     public QuotaDTO(string id, QuotaSource source, MetricDTO metric, int max, string period)

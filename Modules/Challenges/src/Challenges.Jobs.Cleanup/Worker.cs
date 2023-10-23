@@ -1,7 +1,7 @@
-using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+using Backbone.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 using MediatR;
 
-namespace Backbone.Modules.Challenges.Jobs.Cleanup;
+namespace Backbone.Challenges.Jobs.Cleanup;
 
 public class Worker : IHostedService
 {

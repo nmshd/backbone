@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Tokens.Domain.Entities;
 
-namespace Backbone.Modules.Tokens.Application.IntegrationEvents;
+namespace Backbone.Tokens.Application.IntegrationEvents;
 public class TokenCreatedIntegrationEvent : IntegrationEvent
 {
     public TokenCreatedIntegrationEvent(Token newToken) : base($"{newToken.Id}/Created")

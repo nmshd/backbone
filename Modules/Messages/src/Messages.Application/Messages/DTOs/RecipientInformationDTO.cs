@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Messages.Domain.Entities;
 
-namespace Backbone.Modules.Messages.Application.Messages.DTOs;
+namespace Backbone.Messages.Application.Messages.DTOs;
 
 public class RecipientInformationDTO : IMapTo<RecipientInformation>
 {

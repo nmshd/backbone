@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
+namespace Backbone.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 public class DeleteTierQuotaDefinitionCommand : IRequest
 {
     public DeleteTierQuotaDefinitionCommand(string tierId, string tierQuotaDefinitionId)

@@ -1,19 +1,19 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
+using Backbone.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
+using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
 
-namespace Backbone.Modules.Quotas.Application.Extensions;
+namespace Backbone.Quotas.Application.Extensions;
 
 public static class IEventBusExtensions
 {

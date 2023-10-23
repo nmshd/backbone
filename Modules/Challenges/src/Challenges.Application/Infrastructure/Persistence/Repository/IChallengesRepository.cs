@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
-using Backbone.Modules.Challenges.Domain.Ids;
+﻿using Backbone.Challenges.Domain.Entities;
+using Backbone.Challenges.Domain.Ids;
 
-namespace Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
 public interface IChallengesRepository
 {
     Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken);

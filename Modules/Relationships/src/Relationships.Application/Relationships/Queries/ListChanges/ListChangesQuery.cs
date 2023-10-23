@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Common;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
+namespace Backbone.Relationships.Application.Relationships.Queries.ListChanges;
 
 public class ListChangesQuery : IRequest<ListChangesResponse>
 {

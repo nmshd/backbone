@@ -1,5 +1,4 @@
-﻿using AdminUi.Tests.Integration.Models;
-using Backbone.AdminUi.Tests.Integration.Configuration;
+﻿using Backbone.AdminUi.Tests.Integration.Configuration;
 using Backbone.AdminUi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 

@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application.Tests;
+namespace Backbone.Synchronization.Application.Tests;
 
 public class SyncRunBuilder
 {

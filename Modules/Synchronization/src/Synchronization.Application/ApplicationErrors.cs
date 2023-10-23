@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application;
+namespace Backbone.Synchronization.Application;
 
 public static class ApplicationErrors
 {

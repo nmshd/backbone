@@ -4,7 +4,7 @@ using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+namespace Backbone.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
 public class CreateRelationshipTemplateCommandValidator : AbstractValidator<CreateRelationshipTemplateCommand>
 {

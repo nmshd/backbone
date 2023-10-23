@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Domain.Entities;
-using Backbone.Modules.Challenges.Domain.Ids;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Challenges.Domain.Entities;
+using Backbone.Challenges.Domain.Ids;
+using Backbone.Challenges.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+namespace Backbone.Challenges.Infrastructure.Persistence.Database;
 
 public class ChallengesDbContext : AbstractDbContextBase
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Messages.Application.Messages.Queries.ListMessages;
 
 // ReSharper disable once UnusedMember.Global
 public class ListMessagesQueryValidator : AbstractValidator<ListMessagesQuery>

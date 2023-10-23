@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
+using Backbone.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+namespace Backbone.Relationships.Infrastructure.Persistence.Database;
 
 public class RelationshipsDbContext : AbstractDbContextBase
 {

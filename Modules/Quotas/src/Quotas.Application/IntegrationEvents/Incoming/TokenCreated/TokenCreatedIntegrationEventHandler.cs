@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Application.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
+namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.TokenCreated;
 
 public class TokenCreatedIntegrationEventHandler : IIntegrationEventHandler<TokenCreatedIntegrationEvent>
 {

@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
+namespace Backbone.Devices.Domain.Aggregates.Tier;
 
 public class Tier
 {

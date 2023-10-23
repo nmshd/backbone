@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Relationships.Application.AutoMapper;
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+using Backbone.Relationships.Application.AutoMapper;
+using Backbone.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Relationships.Application.Extensions;
+namespace Backbone.Relationships.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

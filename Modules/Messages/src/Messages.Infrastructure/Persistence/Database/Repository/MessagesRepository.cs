@@ -3,15 +3,15 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Messages.Application.Infrastructure.Persistence;
+using Backbone.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Messages.Domain.Entities;
+using Backbone.Messages.Domain.Ids;
+using Backbone.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
 {
     private readonly DbSet<Message> _messages;

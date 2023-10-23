@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Messages.Domain.Entities;
+using Backbone.Messages.Domain.Ids;
 using Backbone.Tooling;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+namespace Backbone.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class MessagesQueryableExtensions
 {

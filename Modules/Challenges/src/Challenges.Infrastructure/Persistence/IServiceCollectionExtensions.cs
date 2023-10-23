@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+﻿using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Challenges.Infrastructure.Persistence;
+namespace Backbone.Challenges.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
@@ -29,7 +29,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.SqlServer.ChallengesDbContextModel.Instance);
+                        }).UseModel(Modules.Challenges.Infrastructure.CompiledModels.SqlServer.ChallengesDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -37,7 +37,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.Postgres.ChallengesDbContextModel.Instance);
+                        }).UseModel(Modules.Challenges.Infrastructure.CompiledModels.Postgres.ChallengesDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Messages.Common;
+﻿namespace Backbone.Messages.Common;
 
 public class Range<T>
 {

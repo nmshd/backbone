@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+﻿using Backbone.Quotas.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
 public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipTemplate>
 {
     public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)

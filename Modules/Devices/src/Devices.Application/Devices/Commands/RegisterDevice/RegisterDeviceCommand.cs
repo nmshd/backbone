@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+﻿using Backbone.Devices.Application.Devices.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+namespace Backbone.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class RegisterDeviceCommand : IRequest<RegisterDeviceResponse>
 {

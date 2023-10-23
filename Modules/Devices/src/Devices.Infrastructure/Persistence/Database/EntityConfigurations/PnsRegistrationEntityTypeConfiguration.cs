@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+﻿using Backbone.Devices.Domain.Aggregates.PushNotifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<PnsRegistration>
 {
     public void Configure(EntityTypeBuilder<PnsRegistration> builder)

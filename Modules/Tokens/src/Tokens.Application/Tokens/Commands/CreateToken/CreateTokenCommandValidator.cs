@@ -4,7 +4,7 @@ using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class CreateTokenCommandValidator : AbstractValidator<CreateTokenCommand>
 {

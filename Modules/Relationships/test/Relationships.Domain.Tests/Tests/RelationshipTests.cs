@@ -1,15 +1,15 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Ids;
-using Backbone.Modules.Relationships.Domain.Tests.Extensions;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Errors;
+using Backbone.Relationships.Domain.Ids;
+using Backbone.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
+namespace Backbone.Relationships.Domain.Tests.Tests;
 
 public class RelationshipTests
 {

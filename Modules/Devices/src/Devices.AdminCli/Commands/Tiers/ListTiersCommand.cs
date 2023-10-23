@@ -1,11 +1,11 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
+using Backbone.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.Devices.Application.Tiers.Queries.ListTiers;
 using MediatR;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands.Tiers;
+namespace Backbone.Devices.AdminCli.Commands.Tiers;
 
 public class ListTiersCommand : AdminCliDbCommand
 {

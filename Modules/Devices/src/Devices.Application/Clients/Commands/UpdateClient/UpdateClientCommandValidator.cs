@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
+namespace Backbone.Devices.Application.Clients.Commands.UpdateClient;
 public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>
 {
     public UpdateClientCommandValidator()

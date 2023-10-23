@@ -2,11 +2,11 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Synchronization.Application.Infrastructure;
+using Backbone.Synchronization.Application.SyncRuns.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 
 public class Handler : IRequestHandler<GetExternalEventsOfSyncRunQuery, GetExternalEventsOfSyncRunResponse>
 {

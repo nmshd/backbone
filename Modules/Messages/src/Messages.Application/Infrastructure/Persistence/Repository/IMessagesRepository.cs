@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Messages.Domain.Entities;
+using Backbone.Messages.Domain.Ids;
 
-namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Messages.Application.Infrastructure.Persistence.Repository;
 public interface IMessagesRepository
 {
     Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false);

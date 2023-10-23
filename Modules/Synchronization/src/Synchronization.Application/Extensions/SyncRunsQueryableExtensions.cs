@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Synchronization.Application.Extensions;
+namespace Backbone.Synchronization.Application.Extensions;
 
 public static class SyncRunsQueryableExtensions
 {

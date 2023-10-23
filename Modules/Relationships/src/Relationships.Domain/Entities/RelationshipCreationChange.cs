@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Errors;
+using Backbone.Relationships.Domain.Errors;
 
-namespace Backbone.Modules.Relationships.Domain.Entities;
+namespace Backbone.Relationships.Domain.Entities;
 
 public class RelationshipCreationChange : RelationshipChange
 {

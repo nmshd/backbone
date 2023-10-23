@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Quotas.Application.DTOs;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+namespace Backbone.Quotas.Application.Tiers.Queries.GetTierById;
 public class Handler : IRequestHandler<GetTierByIdQuery, TierDetailsDTO>
 {
     private readonly ITiersRepository _tiersRepository;

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
+using Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Devices.Infrastructure.PushNotifications.Dummy;
 using Microsoft.Extensions.DependencyInjection;
-using DirectPnsCommunicationOptions = Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.DirectPnsCommunicationOptions;
+using DirectPnsCommunicationOptions = Backbone.Devices.Infrastructure.PushNotifications.DirectPush.DirectPnsCommunicationOptions;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {

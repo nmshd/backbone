@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿namespace Backbone.Quotas.Domain.Aggregates.Identities;
 public enum QuotaSource
 {
     Individual,

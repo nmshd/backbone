@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Backbone.Modules.Quotas.Application.DTOs;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.DTOs;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
+namespace Backbone.Quotas.Application.Metrics.Queries.ListMetrics;
 public class Handler : IRequestHandler<ListMetricsQuery, ListMetricsResponse>
 {
     private readonly IMapper _mapper;

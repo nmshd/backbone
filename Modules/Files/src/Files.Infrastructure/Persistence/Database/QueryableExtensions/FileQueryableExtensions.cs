@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.Entities;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using Backbone.Files.Domain.Entities;
+using File = Backbone.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.QueryableExtensions;
+namespace Backbone.Files.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class FileQueryableExtensions
 {

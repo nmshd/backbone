@@ -1,22 +1,22 @@
-using Backbone.Modules.Relationships.Domain.Ids;
-using Backbone.Modules.Relationships.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Backbone.Modules.Relationships.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+using Backbone.Relationships.Domain.Ids;
+using Backbone.Relationships.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.Relationships.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.Relationships.Jobs.SanityCheck.Tests.Tests;
 
 public class SanityCheckTestsRelationshipTemplate
 {
     private readonly FakeDataSourceRelationshipTemplate _dataSource;
     private readonly TestReporterRelationshipTemplate _reporter;
-    private readonly Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTestsRelationshipTemplate()
     {
         _dataSource = new FakeDataSourceRelationshipTemplate();
         _reporter = new TestReporterRelationshipTemplate();
-        _sanityCheck = new Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new RelationshipTemplate.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

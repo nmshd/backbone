@@ -3,10 +3,10 @@ using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.Entities;
-using Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Files.Domain.Entities;
+using Backbone.Files.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore.Metadata;
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using File = Backbone.Files.Domain.Entities.File;
 
 #pragma warning disable 219, 612, 618
 #nullable enable

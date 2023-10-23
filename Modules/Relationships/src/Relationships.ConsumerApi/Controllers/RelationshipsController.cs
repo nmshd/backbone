@@ -4,19 +4,19 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
-using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Application;
+using Backbone.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
+using Backbone.Relationships.Application.Relationships.Commands.CreateRelationship;
+using Backbone.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
+using Backbone.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
+using Backbone.Relationships.Application.Relationships.DTOs;
+using Backbone.Relationships.Application.Relationships.Queries.GetChange;
+using Backbone.Relationships.Application.Relationships.Queries.GetRelationship;
+using Backbone.Relationships.Application.Relationships.Queries.ListChanges;
+using Backbone.Relationships.Application.Relationships.Queries.ListRelationships;
+using Backbone.Relationships.Common;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
+namespace Backbone.Relationships.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

@@ -2,9 +2,9 @@
 using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OpenIddict.EntityFrameworkCore.Models;

@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Files.Application.Files.DTOs;
-using Backbone.Modules.Files.Domain.Entities;
+﻿using Backbone.Files.Application.Files.DTOs;
+using Backbone.Files.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
+namespace Backbone.Files.Application.Files.Queries.GetFileMetadata;
 
 public class GetFileMetadataQuery : IRequest<FileMetadataDTO>
 {

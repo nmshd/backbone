@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Synchronization.Domain.Entities.Sync;
 using MediatR;
 
-namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 public class FinalizeDatawalletVersionUpgradeSyncRunCommand : IRequest<FinalizeDatawalletVersionUpgradeSyncRunResponse>
 {

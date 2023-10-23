@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Relationships.Application.Infrastructure;
+﻿namespace Backbone.Relationships.Application.Infrastructure;
 
 public class ConstraintNames
 {

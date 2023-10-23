@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Messages.Domain.Entities;
 
-namespace Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Messages.Application.IntegrationEvents.Outgoing;
 
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {

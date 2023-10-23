@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Tokens.Domain.Entities;
 
-namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class CreateTokenResponse : IMapTo<Token>
 {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
+namespace Backbone.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 
 public class DeleteQuotaForIdentityCommand : IRequest
 {

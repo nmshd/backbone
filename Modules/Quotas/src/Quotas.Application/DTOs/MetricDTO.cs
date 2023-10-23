@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.DTOs;
+namespace Backbone.Quotas.Application.DTOs;
 
 public class MetricDTO : IHaveCustomMapping
 {

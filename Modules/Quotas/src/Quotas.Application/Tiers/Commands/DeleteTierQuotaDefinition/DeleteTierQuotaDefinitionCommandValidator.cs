@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
+namespace Backbone.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 public class DeleteTierQuotaDefinitionCommandValidator : AbstractValidator<DeleteTierQuotaDefinitionCommand>
 {
     public DeleteTierQuotaDefinitionCommandValidator()

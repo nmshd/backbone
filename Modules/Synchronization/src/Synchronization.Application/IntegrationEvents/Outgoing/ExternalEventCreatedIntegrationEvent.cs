@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Synchronization.Application.IntegrationEvents.Outgoing;
 
 public class ExternalEventCreatedIntegrationEvent : IntegrationEvent
 {

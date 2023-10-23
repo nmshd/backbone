@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+namespace Backbone.Quotas.Domain.Aggregates.Identities;
 
 public class MetricStatus
 {

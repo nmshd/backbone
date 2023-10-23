@@ -3,15 +3,15 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.IntegrationEvents;
-using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
-using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Tokens.Application.IntegrationEvents;
+using Backbone.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Tokens.Domain.Entities;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
+namespace Backbone.Tokens.Application.Tests.Tests.Tokens.CreateToken;
 public class HandlerTests
 {
     private readonly IUserContext _userContext;

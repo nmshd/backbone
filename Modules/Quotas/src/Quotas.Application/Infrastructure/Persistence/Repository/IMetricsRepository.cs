@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
 
 public interface IMetricsRepository
 {

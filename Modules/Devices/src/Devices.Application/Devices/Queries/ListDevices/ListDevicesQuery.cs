@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
+namespace Backbone.Devices.Application.Devices.Queries.ListDevices;
 
 public class ListDevicesQuery : IRequest<ListDevicesResponse>
 {

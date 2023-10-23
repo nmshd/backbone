@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
+namespace Backbone.Devices.Domain.Aggregates.Tier;
 
 public record TierName
 {

@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
 
-namespace Backbone.Modules.Relationships.Domain.Errors;
+namespace Backbone.Relationships.Domain.Errors;
 
 public static class DomainErrors
 {

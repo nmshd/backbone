@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Files.Application;
+using Backbone.Files.Application;
 
-namespace Backbone.Modules.Files.ConsumerApi;
+namespace Backbone.Files.ConsumerApi;
 
 public class Configuration
 {

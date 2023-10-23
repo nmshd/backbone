@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Common;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
 
-namespace Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
 public interface IRelationshipsRepository
 {
     Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false);

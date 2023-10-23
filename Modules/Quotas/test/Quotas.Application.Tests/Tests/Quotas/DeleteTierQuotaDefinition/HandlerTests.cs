@@ -2,20 +2,20 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Application.Tests.Extensions;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Quotas.Application.Tests.Extensions;
+using Backbone.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
+namespace Backbone.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
 public class HandlerTests
 {
     private readonly IEventBus _eventBus;

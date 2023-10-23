@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 
-namespace Backbone.Modules.Messages.Application;
+namespace Backbone.Messages.Application;
 
 public static class ApplicationErrors
 {

@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Challenges.Domain.Ids;
+namespace Backbone.Challenges.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(ChallengeIdTypeConverter))]

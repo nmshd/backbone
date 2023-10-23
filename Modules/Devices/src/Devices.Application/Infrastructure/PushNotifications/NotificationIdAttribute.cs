@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿namespace Backbone.Devices.Application.Infrastructure.PushNotifications;
 
 public class NotificationIdAttribute : Attribute
 {

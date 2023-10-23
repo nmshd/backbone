@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618

@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
+﻿using Backbone.Relationships.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
+namespace Backbone.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 
 public class AcceptRelationshipChangeRequestCommand : IRequest<AcceptRelationshipChangeRequestResponse>
 {

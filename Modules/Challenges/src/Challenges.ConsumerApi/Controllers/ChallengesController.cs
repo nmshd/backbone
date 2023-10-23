@@ -1,16 +1,16 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
-using Backbone.Modules.Challenges.Application.Challenges.DTOs;
-using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
-using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Challenges.Application.Challenges.Commands.CreateChallenge;
+using Backbone.Challenges.Application.Challenges.DTOs;
+using Backbone.Challenges.Application.Challenges.Queries.GetChallengeById;
+using Backbone.Challenges.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backbone.Modules.Challenges.ConsumerApi.Controllers;
+namespace Backbone.Challenges.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

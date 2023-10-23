@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
-namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Files.Application.Files.Commands.CreateFile;
 
 [ApplyQuotasForMetrics("NumberOfFiles", "UsedFileStorageSpace")]
 public class CreateFileCommand : IRequest<CreateFileResponse>

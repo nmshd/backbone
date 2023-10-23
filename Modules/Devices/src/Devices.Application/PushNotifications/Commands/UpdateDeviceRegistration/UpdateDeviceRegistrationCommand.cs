@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+namespace Backbone.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 public class UpdateDeviceRegistrationCommand : IRequest<Unit>
 {

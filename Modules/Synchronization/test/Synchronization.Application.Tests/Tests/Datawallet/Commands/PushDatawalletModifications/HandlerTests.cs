@@ -4,11 +4,11 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
-using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Synchronization.Application.AutoMapper;
+using Backbone.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Synchronization.Application.Infrastructure;
+using Backbone.Synchronization.Infrastructure.Persistence.Database;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
+namespace Backbone.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
 public class HandlerTests
 {

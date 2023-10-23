@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+namespace Backbone.Devices.Application.Identities.Commands.UpdateIdentity;
 public class UpdateIdentityCommand : IRequest
 {
     public string Address { get; set; }

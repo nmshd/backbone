@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿namespace Backbone.Synchronization.Application.Infrastructure;
 
 public class BlobOptions
 {

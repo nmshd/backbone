@@ -2,7 +2,7 @@
 using FluentAssertions.Specialized;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.Application.Tests.Extensions;
+namespace Backbone.Devices.Application.Tests.Extensions;
 public static class ExceptionAssertionsExtensions
 {
     public static void WithErrorCode<T>(this ExceptionAssertions<T> assertions, string code) where T : ApplicationException

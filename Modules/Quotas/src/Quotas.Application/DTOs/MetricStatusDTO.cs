@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Application.DTOs;
+﻿namespace Backbone.Quotas.Application.DTOs;
 public class MetricStatusDTO
 {
 }

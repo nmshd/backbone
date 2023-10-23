@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
+namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {
     public string Id { get; private set; }

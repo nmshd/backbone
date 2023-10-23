@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Challenges.Application.Extensions;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Challenges.Domain.Entities;
-using Backbone.Modules.Challenges.Domain.Ids;
+﻿using Backbone.Challenges.Application.Extensions;
+using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Challenges.Domain.Entities;
+using Backbone.Challenges.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Challenges.Infrastructure.Persistence.Database.Repository;
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;

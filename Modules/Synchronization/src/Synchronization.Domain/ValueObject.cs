@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Synchronization.Domain;
+﻿namespace Backbone.Synchronization.Domain;
 
 [Serializable]
 public abstract class ValueObject : IComparable, IComparable<ValueObject>

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Messages.Application.Extensions;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Messages.Application.Extensions;
+using Backbone.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Messages.Application.Messages.DTOs;
 using MediatR;
 
-namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+namespace Backbone.Messages.Application.Messages.Queries.ListMessages;
 
 public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 {

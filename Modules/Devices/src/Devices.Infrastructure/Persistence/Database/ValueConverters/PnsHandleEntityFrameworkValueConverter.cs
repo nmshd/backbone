@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+﻿using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Devices.Infrastructure.Persistence.Database.ValueConverters;
 public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, string>
 {
     public PnsHandleEntityFrameworkValueConverter() : this(null)

@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
-using Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
+using Backbone.Quotas.Application.Metrics.Queries.ListMetrics;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

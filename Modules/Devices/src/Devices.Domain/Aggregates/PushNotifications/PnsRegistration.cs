@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+namespace Backbone.Devices.Domain.Aggregates.PushNotifications;
 
 public class PnsRegistration
 {

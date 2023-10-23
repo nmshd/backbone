@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Messages.Domain.Ids;
 
-namespace Backbone.Modules.Messages.Domain.Entities;
+namespace Backbone.Messages.Domain.Entities;
 
 public class Relationship
 {

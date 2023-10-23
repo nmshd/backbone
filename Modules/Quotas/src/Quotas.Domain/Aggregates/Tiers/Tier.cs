@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Metrics;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+namespace Backbone.Quotas.Domain.Aggregates.Tiers;
 
 public class Tier
 {

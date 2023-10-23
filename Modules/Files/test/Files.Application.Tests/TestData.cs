@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Files.Application.Tests;
+namespace Backbone.Files.Application.Tests;
 
 public static class TestData
 {

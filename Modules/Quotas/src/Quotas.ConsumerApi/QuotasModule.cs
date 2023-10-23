@@ -1,14 +1,14 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Quotas.Application;
-using Backbone.Modules.Quotas.Application.Extensions;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Quotas.Application;
+using Backbone.Quotas.Application.Extensions;
+using Backbone.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Quotas.ConsumerApi;
+namespace Backbone.Quotas.ConsumerApi;
 
 public class QuotasModule : AbstractModule
 {

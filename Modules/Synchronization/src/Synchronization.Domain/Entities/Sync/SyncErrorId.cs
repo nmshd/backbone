@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
+namespace Backbone.Synchronization.Domain.Entities.Sync;
 
 [Serializable]
 [TypeConverter(typeof(SyncErrorIdTypeConverter))]

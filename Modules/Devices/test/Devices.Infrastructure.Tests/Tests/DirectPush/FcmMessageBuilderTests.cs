@@ -1,12 +1,12 @@
 using System.Text.Json;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+using Backbone.Devices.Infrastructure.PushNotifications;
+using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Devices.Infrastructure.Tests.Tests.DirectPush;
 
 public class FcmMessageBuilderTests
 {

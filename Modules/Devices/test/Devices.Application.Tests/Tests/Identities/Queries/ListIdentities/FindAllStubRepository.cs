@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Devices.Domain.Entities;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
+namespace Backbone.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
 public class FindAllStubRepository : IIdentitiesRepository
 {

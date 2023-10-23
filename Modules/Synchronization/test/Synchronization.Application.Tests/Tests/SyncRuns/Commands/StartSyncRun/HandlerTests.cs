@@ -1,11 +1,11 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
-using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
-using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Synchronization.Application.AutoMapper;
+using Backbone.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+using Backbone.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
@@ -13,7 +13,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
 
 public class HandlerTests
 {
@@ -39,7 +39,7 @@ public class HandlerTests
         _actContext = CreateDbContext();
         _assertionContext = CreateDbContext();
 
-        _arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
+        _arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
     }
 
     [Fact]

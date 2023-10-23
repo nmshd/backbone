@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Relationships.Infrastructure.Persistence.Database;
 
 #nullable disable
 

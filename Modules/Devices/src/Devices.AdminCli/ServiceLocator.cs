@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Domain.Entities;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Devices.Application.Extensions;
+using Backbone.Devices.Domain.Entities;
+using Backbone.Devices.Infrastructure.OpenIddict;
+using Backbone.Devices.Infrastructure.Persistence;
+using Backbone.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.AdminCli;
+namespace Backbone.Devices.AdminCli;
 
 public class ServiceLocator
 {

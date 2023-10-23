@@ -2,12 +2,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Synchronization.Application.Infrastructure;
+using Backbone.Synchronization.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
+namespace Backbone.Synchronization.Application.Datawallets.Queries.GetDatawallet;
 
 internal class Handler : IRequestHandler<GetDatawalletQuery, DatawalletDTO>
 {

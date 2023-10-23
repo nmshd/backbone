@@ -1,10 +1,10 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
 
 public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity>
 {

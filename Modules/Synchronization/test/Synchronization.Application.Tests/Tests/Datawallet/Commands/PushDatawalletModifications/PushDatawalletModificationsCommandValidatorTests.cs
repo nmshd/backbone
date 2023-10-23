@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+﻿using Backbone.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
+namespace Backbone.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
 public class PushDatawalletModificationsCommandValidatorTests
 {

@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Synchronization.Domain.Entities;
+namespace Backbone.Synchronization.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(DatawalletModificationIdTypeConverter))]

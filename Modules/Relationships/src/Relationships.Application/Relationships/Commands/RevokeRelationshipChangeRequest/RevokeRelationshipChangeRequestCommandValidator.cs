@@ -2,7 +2,7 @@
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
+namespace Backbone.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
 
 // ReSharper disable once UnusedMember.Global
 public class RevokeRelationshipChangeRequestCommandValidator : AbstractValidator<RevokeRelationshipChangeRequestCommand>

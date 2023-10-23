@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Relationships.Domain.Entities;
+using Backbone.Relationships.Domain.Ids;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
+namespace Backbone.Relationships.Application.Relationships.DTOs;
 
 public class RelationshipMetadataDTO : IMapTo<Relationship>
 {

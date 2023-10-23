@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Challenges.Domain.Entities;
+using Backbone.Challenges.Domain.Ids;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Challenges.Domain.Entities;
-using Backbone.Modules.Challenges.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Challenges.Application.Extensions;
+namespace Backbone.Challenges.Application.Extensions;
 
 public static class ChallengeQueryableExtensions
 {
