@@ -11,14 +11,11 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Enmeshed.BuildingBlocks.API;
 using Enmeshed.BuildingBlocks.API.Mvc;
 using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace AdminUi.Controllers;
 
@@ -36,16 +33,11 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TierOverview>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTiersAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverview>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var tierOverviews = await _adminUiDbContext.TierOverviews.OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
-        return Paged(new PagedResponse<TierOverview>(tierOverviews.ItemsOnPage, paginationFilter, tierOverviews.TotalNumberOfItems));
+        var tiers = await _adminUiDbContext.TierOverviews.ToListAsync(cancellationToken);
+        return Ok(tiers);
     }
 
     [HttpGet("{tierId}")]
