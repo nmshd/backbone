@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="xunit" Version="2.5.3" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
 			<PrivateAssets>all</PrivateAssets>
@@ -19,9 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Messages.Application\Messages.Application.csproj" />
-		<ProjectReference Include="..\..\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>
