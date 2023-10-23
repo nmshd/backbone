@@ -1,3 +1,4 @@
+using AdminUi.Tests.Integration.Models;
 using Backbone.AdminUi.Tests.Integration.API;
 using Backbone.AdminUi.Tests.Integration.Extensions;
 using Backbone.AdminUi.Tests.Integration.Models;
@@ -10,7 +11,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 public class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
-    private HttpResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
+    private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
     private HttpResponse<IdentitySummaryDTO>? _identityResponse;
     private string _existingIdentity;
 
@@ -53,8 +54,8 @@ public class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
-        _identityOverviewsResponse!.Content.Result.Should().NotBeNull();
-        _identityOverviewsResponse!.Content.Result.Should().NotBeNullOrEmpty();
+        _identityOverviewsResponse!.Content.Value.Should().NotBeNull();
+        _identityOverviewsResponse!.Content.Value.Should().NotBeNullOrEmpty();
         _identityOverviewsResponse!.AssertContentTypeIs("application/json");
         _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }

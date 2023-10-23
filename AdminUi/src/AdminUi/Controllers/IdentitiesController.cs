@@ -39,19 +39,6 @@ public class IdentitiesController : ApiControllerBase
         _options = options.Value;
     }
 
-    [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<IdentityOverview>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetIdentities([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var identityOverviews = await _adminUiDbContext.IdentityOverviews.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-        return Paged(new PagedResponse<IdentityOverview>(identityOverviews.ItemsOnPage, paginationFilter, identityOverviews.TotalNumberOfItems));
-    }
-
     [HttpPost("{identityAddress}/Quotas")]
     [ProducesResponseType(typeof(IndividualQuotaDTO), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status404NotFound)]

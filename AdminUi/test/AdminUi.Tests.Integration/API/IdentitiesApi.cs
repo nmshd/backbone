@@ -1,4 +1,5 @@
-﻿using Backbone.AdminUi.Tests.Integration.Configuration;
+﻿using AdminUi.Tests.Integration.Models;
+using Backbone.AdminUi.Tests.Integration.Configuration;
 using Backbone.AdminUi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 
@@ -23,8 +24,8 @@ public class IdentitiesApi : BaseApi
         return await Delete($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
     }
 
-    public async Task<HttpResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
+    public async Task<ODataResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
     {
-        return await Get<List<IdentityOverviewDTO>>("/Identities", requestConfiguration);
+        return await GetOData<List<IdentityOverviewDTO>>("/Identities", requestConfiguration);
     }
 }
