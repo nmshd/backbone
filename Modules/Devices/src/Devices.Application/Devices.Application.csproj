@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -10,8 +10,8 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
-		<PackageReference Include="FluentValidation" Version="11.7.1" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
+		<PackageReference Include="FluentValidation" Version="11.8.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
 		<PackageReference Include="OpenIddict.Core" Version="4.9.0" />
 		<PackageReference Include="OpenIddict.EntityFrameworkCore.Models" Version="4.9.0" />
 	</ItemGroup>
