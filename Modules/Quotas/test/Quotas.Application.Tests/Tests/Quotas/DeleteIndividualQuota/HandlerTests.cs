@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
@@ -9,7 +9,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using Handler = Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity.Handler;
+using Handler = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity.Handler;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteIndividualQuota;

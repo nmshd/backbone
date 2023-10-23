@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -39,7 +40,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.LogTrace("Successfully created device. Device ID: '{deviceId}', User ID: {userId}, Username: {userName}", user.DeviceId, user.Id, user.UserName);
+        _logger.CreatedDevice(user.DeviceId, user.Id, user.UserName);
 
         return new RegisterDeviceResponse
         {
@@ -108,4 +109,14 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
     {
         JsonSerializer.Serialize(writer, value, options);
     }
+}
+
+internal static partial class DeleteDeviceLogs
+{
+    [LoggerMessage(
+        EventId = 219823,
+        EventName = "Devices.RegisterDevice.RegisteredDevice",
+        Level = LogLevel.Information,
+        Message = "Successfully created device. Device ID: '{deviceId}', User ID: '{userId}', Username: '{userName}'.")]
+    public static partial void CreatedDevice(this ILogger logger, DeviceId deviceId, string userId, string userName);
 }

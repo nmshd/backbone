@@ -11,6 +11,7 @@ using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.ConsumerApi.Mvc.Middleware;
+using Backbone.Infrastructure.Logging;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -29,65 +30,95 @@ using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using MediatR;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.WebHost
-    .UseKestrel(options =>
-    {
-        options.AddServerHeader = false;
-        options.Limits.MaxRequestBodySize = 20.Mebibytes();
-    });
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-LoadConfiguration(builder, args);
-
-builder.Host
-    .UseSerilog((context, configuration) => configuration
-        .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-        .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-        .Enrich.WithDemystifiedStackTraces()
-        .Enrich.FromLogContext()
-        .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-            .WithDefaultDestructurers()
-            .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
-    )
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
-ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
-
-var app = builder.Build();
-Configure(app);
-
-app
-    .MigrateDbContext<ChallengesDbContext>()
-    .MigrateDbContext<DevicesDbContext>((context, sp) =>
-    {
-        var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
-        devicesDbContextSeed.SeedAsync(context).Wait();
-    })
-    .MigrateDbContext<FilesDbContext>()
-    .MigrateDbContext<RelationshipsDbContext>()
-    .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
-    .MigrateDbContext<MessagesDbContext>()
-    .MigrateDbContext<SynchronizationDbContext>()
-    .MigrateDbContext<TokensDbContext>()
-    .MigrateDbContext<QuotasDbContext>();
-
-foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+try
 {
-    module.PostStartupValidation(app.Services);
+    Log.Information("Creating app...");
+
+    var app = CreateApp(args);
+
+    Log.Information("App created.");
+
+    Log.Information("Starting app...");
+
+    app.Run();
+
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.Run();
+static WebApplication CreateApp(string[] args)
+{
+    var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost
+        .UseKestrel(options =>
+        {
+            options.AddServerHeader = false;
+            options.Limits.MaxRequestBodySize = 20.Mebibytes();
+        });
+
+    LoadConfiguration(builder, args);
+
+    builder.Host
+        .UseSerilog((context, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+            .Enrich.WithDemystifiedStackTraces()
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("service", "consumerapi")
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+        )
+        .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
+    var app = builder.Build();
+    Configure(app);
+
+    app
+        .MigrateDbContext<ChallengesDbContext>()
+        .MigrateDbContext<DevicesDbContext>((context, sp) =>
+        {
+            var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
+            devicesDbContextSeed.SeedAsync(context).Wait();
+        })
+        .MigrateDbContext<FilesDbContext>()
+        .MigrateDbContext<RelationshipsDbContext>()
+        .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+        .MigrateDbContext<MessagesDbContext>()
+        .MigrateDbContext<SynchronizationDbContext>()
+        .MigrateDbContext<TokensDbContext>()
+        .MigrateDbContext<QuotasDbContext>();
+
+    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+    {
+        module.PostStartupValidation(app.Services);
+    }
+
+    return app;
+}
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
@@ -118,7 +149,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
-        .AddCustomApplicationInsights()
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication, environment);
@@ -139,8 +169,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 static void Configure(WebApplication app)
 {
-    var telemetryConfiguration = app.Services.GetRequiredService<TelemetryConfiguration>();
-    telemetryConfiguration.DisableTelemetry = !app.Configuration.GetApplicationInsightsConfiguration().Enabled;
+    app.UseSerilogRequestLogging(opts =>
+    {
+        opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+        opts.GetLevel = LogHelper.GetLevel;
+    });
 
     app.UseForwardedHeaders();
 
@@ -155,12 +188,13 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var backboneConfiguration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-    if (backboneConfiguration.SwaggerUi.Enabled)
-    {
+    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+
+    if (configuration.SwaggerUi.Enabled)
         app.UseSwagger().UseSwaggerUI();
-        IdentityModelEventSource.ShowPII = true;
-    }
+
+    if (app.Environment.IsDevelopment())
+        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 
@@ -203,7 +237,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
-    webApplicationBuilder.Configuration.AddAzureAppConfiguration();
 }
 
 namespace Backbone.ConsumerApi

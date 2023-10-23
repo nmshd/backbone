@@ -89,12 +89,23 @@ services:
     volumes:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "8081:80"
+      - "5341:5341"
+    volumes:
+      - seq-data:/data
+    environment:
+      - ACCEPT_EULA=Y
+    restart: unless-stopped
+
   #elasticsearch:
   #  image: elasticsearch:${ELK_VERSION}
   #  container_name: elasticsearch
   #  restart: always
   #  volumes:
-  #    - elastic_data:/usr/share/elasticsearch/data/
+  #    - elastic-data:/usr/share/elasticsearch/data/
   #  environment:
   #    - xpack.watcher.enabled=false
   #    - xpack.security.enabled=false
@@ -138,4 +149,5 @@ volumes:
     external: true
   azure-storage-emulator-volume:
     external: true
-  elastic_data:
+  elastic-data:
+  seq-data:

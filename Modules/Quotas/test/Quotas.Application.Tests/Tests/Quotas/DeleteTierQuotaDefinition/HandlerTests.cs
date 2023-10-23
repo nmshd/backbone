@@ -27,6 +27,29 @@ public class HandlerTests
     }
 
     [Fact]
+    public async Task Triggers_TierQuotaDefinitionDeletedIntegrationEvent()
+    {
+        // Arrange
+        var tierId = new TierId("SomeTierId");
+        var tier = new Tier(tierId, "some-tier-name");
+
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
+
+        var handler = CreateHandler(tiersRepository);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task Deletes_tier_quota_definition()
     {
         // Arrange
@@ -121,29 +144,6 @@ public class HandlerTests
 
         // Assert
         await acting.Should().ThrowAsync<DomainException>().WithErrorCode("error.platform.recordNotFound");
-    }
-
-    [Fact]
-    public async Task Triggers_TierQuotaDefinitionDeletedIntegrationEvent()
-    {
-        // Arrange
-        var tierId = new TierId("SomeTierId");
-        var tier = new Tier(tierId, "some-tier-name");
-
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
-
-        var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
-
-        var handler = CreateHandler(tiersRepository);
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappenedOnceExactly();
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository)

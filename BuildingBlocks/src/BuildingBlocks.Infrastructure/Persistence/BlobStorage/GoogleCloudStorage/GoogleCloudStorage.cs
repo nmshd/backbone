@@ -57,7 +57,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         catch (Exception ex)
         {
             EliminateNotFound(ex, blobId);
-            _logger.LogError("There was an error downloading the blob with key '{blobId}'. {ex}", blobId, ex);
+            _logger.ErrorDownloadingBlobWithName(blobId, ex);
             throw;
         }
     }
@@ -75,7 +75,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError("There was an error listing all the blobs.", ex);
+            _logger.ErrorListingAllBlobs(ex);
             throw;
         }
     }
@@ -116,7 +116,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError("There was an error uploading the blob with key '{blobName}'. {ex}", blob.Name, ex);
+                _logger.ErrorUploadingBlobWithName(blob.Name, ex);
                 throw;
             }
             finally
@@ -133,7 +133,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             await _logger.TraceTime(async () =>
                 await _storageClient.GetObjectAsync(folder, key), nameof(_storageClient.GetObjectAsync));
 
-            _logger.LogError("The blob with the given key already exists.");
+            _logger.ErrorBlobWithNameExists(key);
             throw new BlobAlreadyExistsException(key);
         }
         catch (GoogleApiException ex)
@@ -160,7 +160,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             catch (Exception ex)
             {
                 EliminateNotFound(ex, blob.Name);
-                _logger.LogError("There was an error deleting the blob with key '{blobKey}'. {ex}", blob, ex);
+                _logger.ErrorDeletingBlobWithName(blob.Name, ex);
                 throw;
             }
 
@@ -170,4 +170,42 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     private record ChangedBlob(string Folder, string Name, byte[] Content);
 
     private record RemovedBlob(string Folder, string Name);
+}
+
+internal static partial class GoogleCloudStorageLogs
+{
+    [LoggerMessage(
+        EventId = 997942,
+        EventName = "GoogleCloudStorage.ErrorDownloadingBlobWithName",
+        Level = LogLevel.Error,
+        Message = "There was an error downloading the blob with name '{blobName}'.")]
+    public static partial void ErrorDownloadingBlobWithName(this ILogger logger, string blobName, Exception ex);
+
+    [LoggerMessage(
+        EventId = 998879,
+        EventName = "GoogleCloudStorage.ErrorListingAllBlobs",
+        Level = LogLevel.Error,
+        Message = "There was an error listing all the blobs.")]
+    public static partial void ErrorListingAllBlobs(this ILogger logger, Exception ex);
+
+    [LoggerMessage(
+        EventId = 166344,
+        EventName = "GoogleCloudStorage.ErrorUploadingBlobWithName",
+        Level = LogLevel.Error,
+        Message = "There was an error uploading the blob with name '{blobName}'.")]
+    public static partial void ErrorUploadingBlobWithName(this ILogger logger, string blobName, Exception ex);
+
+    [LoggerMessage(
+        EventId = 358892,
+        EventName = "GoogleCloudStorage.ErrorBlobWithNameExists",
+        Level = LogLevel.Error,
+        Message = "The blob with the name {blobName} already exists.")]
+    public static partial void ErrorBlobWithNameExists(this ILogger logger, string blobName);
+
+    [LoggerMessage(
+        EventId = 304533,
+        EventName = "GoogleCloudStorage.ErrorDeletingBlobWithName",
+        Level = LogLevel.Error,
+        Message = "There was an error downloading the blob with name '{blobName}'.")]
+    public static partial void ErrorDeletingBlobWithName(this ILogger logger, string blobName, Exception ex);
 }

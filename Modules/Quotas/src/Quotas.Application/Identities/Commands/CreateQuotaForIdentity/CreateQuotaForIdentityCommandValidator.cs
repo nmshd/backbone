@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 
 public class CreateQuotaForIdentityCommandValidator : AbstractValidator<CreateQuotaForIdentityCommand>
 {

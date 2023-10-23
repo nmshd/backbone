@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 
 public class CreateQuotaForIdentityCommand : IRequest<IndividualQuotaDTO>
 {

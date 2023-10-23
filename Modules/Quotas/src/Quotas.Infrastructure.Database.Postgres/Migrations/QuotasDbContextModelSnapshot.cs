@@ -17,7 +17,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -282,7 +282,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", null)
                         .WithMany()
                         .HasForeignKey("TierId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -314,7 +314,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", "_definition")
                         .WithMany()
-                        .HasForeignKey("_definitionId");
+                        .HasForeignKey("_definitionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("_definition");
                 });
@@ -323,7 +324,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", null)
                         .WithMany("Quotas")
-                        .HasForeignKey("TierId");
+                        .HasForeignKey("TierId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>

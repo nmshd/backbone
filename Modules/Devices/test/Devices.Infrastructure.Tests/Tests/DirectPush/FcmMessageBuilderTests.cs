@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
