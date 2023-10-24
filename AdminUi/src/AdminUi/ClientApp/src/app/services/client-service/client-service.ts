@@ -6,6 +6,7 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { NumberFilter } from "src/app/utils/number-filter";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
+import { TierDTO } from "../tier-service/tier.service";
 
 @Injectable({
     providedIn: "root"
@@ -44,7 +45,7 @@ export class ClientService {
 export interface ClientOverview {
     clientId: string;
     displayName: string;
-    defaultTier: string;
+    defaultTier: TierDTO;
     createdAt: Date;
     numberOfIdentities: number;
 }

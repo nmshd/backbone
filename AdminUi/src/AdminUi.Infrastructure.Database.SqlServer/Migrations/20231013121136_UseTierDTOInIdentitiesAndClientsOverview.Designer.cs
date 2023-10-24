@@ -3,39 +3,42 @@ using System;
 using AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AdminUi.Infrastructure.Database.Postgres.Migrations
+namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    partial class AdminUiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013121136_UseTierDTOInIdentitiesAndClientsOverview")]
+    partial class UseTierDTOInIdentitiesAndClientsOverview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
                 {
                     b.Property<string>("ClientId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfIdentities")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("ClientId");
 
@@ -47,25 +50,25 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedWithClient")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DatawalletVersion")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<byte>("IdentityVersion")
-                        .HasColumnType("smallint");
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("NumberOfDevices")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Address");
 
@@ -77,14 +80,14 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfIdentities")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.ToTable((string)null);
 
@@ -96,16 +99,16 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.OwnsOne("AdminUi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
                         {
                             b1.Property<string>("ClientOverviewClientId")
-                                .HasColumnType("text");
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<string>("Id")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("DefaultTierId");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("DefaultTierName");
 
                             b1.HasKey("ClientOverviewClientId");
@@ -127,16 +130,16 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.OwnsOne("AdminUi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
                         {
                             b1.Property<string>("IdentityOverviewAddress")
-                                .HasColumnType("text");
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<string>("Id")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TierId");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TierName");
 
                             b1.HasKey("IdentityOverviewAddress");
