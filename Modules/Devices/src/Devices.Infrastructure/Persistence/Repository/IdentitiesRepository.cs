@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;

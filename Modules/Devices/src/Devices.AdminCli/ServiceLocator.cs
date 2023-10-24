@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;

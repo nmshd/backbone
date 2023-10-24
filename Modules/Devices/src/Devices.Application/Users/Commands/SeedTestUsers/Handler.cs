@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 using MediatR;

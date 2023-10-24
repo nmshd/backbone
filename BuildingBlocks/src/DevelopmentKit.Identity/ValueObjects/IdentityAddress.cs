@@ -108,9 +108,9 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     #region Operators
 
-    public static implicit operator string(IdentityAddress deviceId)
+    public static implicit operator string(IdentityAddress identityAddress)
     {
-        return deviceId.StringValue;
+        return identityAddress.StringValue;
     }
 
     public static implicit operator IdentityAddress(string stringValue)

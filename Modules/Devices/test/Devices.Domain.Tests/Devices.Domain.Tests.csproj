@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="7.4.0" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="xunit" Version="2.5.3" />
@@ -25,6 +26,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Devices.Domain\Devices.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DevelopmentKit.Identity">
+      <HintPath>..\..\..\..\AdminUi\src\AdminUi\bin\Debug\net7.0\DevelopmentKit.Identity.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

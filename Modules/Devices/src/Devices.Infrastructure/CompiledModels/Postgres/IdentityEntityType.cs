@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;

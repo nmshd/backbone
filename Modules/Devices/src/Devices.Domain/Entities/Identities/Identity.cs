@@ -1,12 +1,14 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using System.Collections.Generic;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using CSharpFunctionalExtensions;
 using Enmeshed.BuildingBlocks.Domain;
 using Enmeshed.BuildingBlocks.Domain.Errors;
 using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
+using Enmeshed.DevelopmentKit.Identity.Entities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Backbone.Modules.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class Identity
 {
@@ -54,40 +56,15 @@ public class Identity
         TierId = id;
     }
 
-    public void StartDeletionProcess(DeviceId asDevice)
+    public void StartDeletionProcess(DeviceId asDevice, IHasher hasher)
     {
-        _deletionProcesses.Add(new IdentityDeletionProcess(Address, asDevice));
+        var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
+
+        if (activeProcessExists)
+            throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
+
+        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice, hasher));
     }
-}
-
-public class IdentityDeletionProcess
-{
-    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
-    {
-        Id = IdentityDeletionProcessId.Generate();
-        CreatedBy = createdBy;
-        CreatedByDevice = createdByDevice;
-        Status = DeletionProcessStatus.WaitingForApproval;
-        CreatedAt = SystemTime.UtcNow;
-    }
-
-    public IdentityDeletionProcessId Id { get; }
-    public IdentityAddress CreatedBy { get; }
-    public DeviceId CreatedByDevice { get; }
-    public DeletionProcessStatus Status { get; }
-    public DateTime CreatedAt { get; }
-    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog { get; set; }
-}
-
-public class IdentityDeletionProcessAuditLogEntry
-{
-    public IdentityDeletionProcessId ProcessId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public string Message { get; set; }
-    public byte[] IdentityAddressHash { get; set; }
-    public byte[]? DeviceIdHash { get; set; }
-    public DeletionProcessStatus? OldStatus { get; set; }
-    public DeletionProcessStatus NewStatus { get; set; }
 }
 
 public enum DeletionProcessStatus

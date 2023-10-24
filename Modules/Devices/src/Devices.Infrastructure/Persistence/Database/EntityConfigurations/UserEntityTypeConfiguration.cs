@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

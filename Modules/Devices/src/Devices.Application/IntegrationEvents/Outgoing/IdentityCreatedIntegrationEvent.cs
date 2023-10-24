@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;

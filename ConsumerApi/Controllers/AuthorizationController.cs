@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using ConsumerApi.Mvc;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using Enmeshed.Tooling.Extensions;

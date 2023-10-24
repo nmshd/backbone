@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;

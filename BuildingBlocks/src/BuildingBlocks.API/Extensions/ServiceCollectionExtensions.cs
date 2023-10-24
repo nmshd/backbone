@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Microsoft.AspNetCore.Identity;

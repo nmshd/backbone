@@ -2,7 +2,7 @@
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Enmeshed.Tooling;
 
-namespace Backbone.Modules.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class Device
 {
