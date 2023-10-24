@@ -1,7 +1,7 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using Backbone.Backbone.Infrastructure.EventBus;
-using Backbone.Backbone.Infrastructure.Logging;
+using Backbone.Infrastructure.EventBus;
+using Backbone.Infrastructure.Logging;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;

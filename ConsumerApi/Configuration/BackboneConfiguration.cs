@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Backbone.Infrastructure.EventBus;
+using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.ConsumerApi.Configuration;
 

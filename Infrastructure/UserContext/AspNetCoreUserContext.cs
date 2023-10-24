@@ -5,7 +5,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Http;
 
-namespace Backbone.Backbone.Infrastructure.UserContext;
+namespace Backbone.Infrastructure.UserContext;
 
 public class AspNetCoreUserContext : IUserContext
 {

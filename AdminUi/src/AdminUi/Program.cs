@@ -5,7 +5,7 @@ using Backbone.AdminUi.Configuration;
 using Backbone.AdminUi.Extensions;
 using Backbone.AdminUi.Infrastructure.Persistence;
 using Backbone.AdminUi.Infrastructure.Persistence.Database;
-using Backbone.Backbone.Infrastructure.EventBus;
+using Backbone.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -20,7 +20,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using LogHelper = Backbone.Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

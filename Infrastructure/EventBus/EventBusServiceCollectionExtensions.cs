@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Backbone.Infrastructure.EventBus;
+namespace Backbone.Infrastructure.EventBus;
 
 public static class EventBusServiceCollectionExtensions
 {

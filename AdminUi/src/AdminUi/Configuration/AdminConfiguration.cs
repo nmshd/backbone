@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.AdminUi.Infrastructure.Persistence;
-using Backbone.Backbone.Infrastructure.EventBus;
+using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.AdminUi.Configuration;
 

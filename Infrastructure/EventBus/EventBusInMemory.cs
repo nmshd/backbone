@@ -5,7 +5,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.E
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Backbone.Backbone.Infrastructure.EventBus;
+namespace Backbone.Infrastructure.EventBus;
 
 public class EventBusInMemory : IEventBus
 {
