@@ -13,6 +13,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -29,6 +31,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
+import { MatSortModule } from "@angular/material/sort";
 import { environment } from "src/environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -103,7 +106,10 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         MatButtonModule,
         MatIconModule,
         MatSidenavModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         MatCheckboxModule,
+        MatSortModule,
         MatListModule,
         MatGridListModule,
         MatTableModule,

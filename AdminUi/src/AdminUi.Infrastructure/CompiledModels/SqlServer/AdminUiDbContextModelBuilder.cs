@@ -13,11 +13,18 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
         partial void Initialize()
         {
             var clientOverview = ClientOverviewEntityType.Create(this);
+            var tierDTO = TierDTOEntityType.Create(this);
             var identityOverview = IdentityOverviewEntityType.Create(this);
+            var tierDTO0 = TierDTO0EntityType.Create(this);
             var tierOverview = TierOverviewEntityType.Create(this);
 
+            TierDTOEntityType.CreateForeignKey1(tierDTO, clientOverview);
+            TierDTO0EntityType.CreateForeignKey1(tierDTO0, identityOverview);
+
             ClientOverviewEntityType.CreateAnnotations(clientOverview);
+            TierDTOEntityType.CreateAnnotations(tierDTO);
             IdentityOverviewEntityType.CreateAnnotations(identityOverview);
+            TierDTO0EntityType.CreateAnnotations(tierDTO0);
             TierOverviewEntityType.CreateAnnotations(tierOverview);
 
             AddAnnotation("ProductVersion", "7.0.11");

@@ -5,7 +5,7 @@ using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -33,6 +33,16 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _logger.LogTrace("Successfully deleted individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
+        _logger.DeletedQuota(request.IndividualQuotaId, identity.Address);
     }
+}
+
+internal static partial class DeleteQuotaForIdentityLogs
+{
+    [LoggerMessage(
+        EventId = 247156,
+        EventName = "Quotas.DeleteQuotaForIdentity.DeletedQuota",
+        Level = LogLevel.Information,
+        Message = "Successfully deleted individual quota with id '{individualQuotaId}' from identity with address '{address}'.")]
+    public static partial void DeletedQuota(this ILogger logger, string individualQuotaId, string address);
 }
