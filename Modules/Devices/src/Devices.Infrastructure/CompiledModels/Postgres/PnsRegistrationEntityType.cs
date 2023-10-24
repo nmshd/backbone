@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverte
 using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 #pragma warning disable 219, 612, 618
 #nullable enable
@@ -38,6 +39,13 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 typeof(string),
                 propertyInfo: typeof(PnsRegistration).GetProperty("AppId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<AppId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var environment = runtimeEntityType.AddProperty(
+                "Environment",
+                typeof(Environment?),
+                propertyInfo: typeof(PnsRegistration).GetProperty("Environment", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(PnsRegistration).GetField("<Environment>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
 
             var handle = runtimeEntityType.AddProperty(
                 "Handle",
