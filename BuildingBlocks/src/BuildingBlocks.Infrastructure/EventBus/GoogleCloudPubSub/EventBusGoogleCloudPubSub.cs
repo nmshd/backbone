@@ -117,27 +117,32 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             return;
         }
 
-        await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
-
         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
-                throw new Exception(
-                    "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
-
             var integrationEvent = (JsonConvert.DeserializeObject(message, subscription.EventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
                 }) as IntegrationEvent)!;
 
-            var handleMethod = handler.GetType().GetMethod("Handle");
-
             var policy = EventBusRetryPolicyFactory.Create(
                 _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
-            await policy.ExecuteAsync(() => (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!);
+            await policy.ExecuteAsync(async () =>
+            {
+                await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+
+                if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                    throw new Exception(
+                        "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+
+                var handleMethod = handler.GetType().GetMethod("Handle");
+
+                handleMethod!.Invoke(handler, new object[] { integrationEvent });
+
+                return Task.CompletedTask;
+            });
         }
     }
 }

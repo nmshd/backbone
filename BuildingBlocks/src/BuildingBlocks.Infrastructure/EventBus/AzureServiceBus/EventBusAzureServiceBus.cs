@@ -146,13 +146,9 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             return false;
         }
 
-        await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
-
         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            var handler = scope.ResolveOptional(subscription.HandlerType);
-            if (handler == null) continue;
             var eventType = subscription.EventType;
             var integrationEvent = (IntegrationEvent)JsonConvert.DeserializeObject(message, eventType,
                 new JsonSerializerSettings
@@ -166,11 +162,20 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 var policy = EventBusRetryPolicyFactory.Create(
                     _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex));
 
-                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
+                await policy.ExecuteAsync(async () =>
+                {
+                    await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                        throw new Exception(
+                            "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+
+                    concreteType.GetMethod("Handle")!.Invoke(handler, new object?[] { integrationEvent });
+                });
             }
             catch (Exception ex)
             {
-                _logger.ErrorWhileProcessingIntegrationEvent(integrationEvent.IntegrationEventId);
+                _logger.ErrorWhileProcessingIntegrationEvent(integrationEvent.IntegrationEventId, ex);
                 return false;
             }
         }
@@ -221,5 +226,5 @@ internal static partial class EventBusAzureServiceBusLogs
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingIntegrationEvent",
         Level = LogLevel.Error,
         Message = "An error occurred while processing the integration event with id '{integrationEventId}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string integrationEventId);
+    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string integrationEventId, Exception ex);
 }
