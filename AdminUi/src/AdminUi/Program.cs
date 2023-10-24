@@ -5,10 +5,10 @@ using Backbone.AdminUi.Configuration;
 using Backbone.AdminUi.Extensions;
 using Backbone.AdminUi.Infrastructure.Persistence;
 using Backbone.AdminUi.Infrastructure.Persistence.Database;
-using Backbone.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -193,6 +193,9 @@ static void Configure(WebApplication app)
     });
 }
 
-public partial class Program
+namespace Backbone.AdminUi
 {
+    public partial class Program
+    {
+    }
 }

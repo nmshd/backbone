@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
-		<Nullable>Enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

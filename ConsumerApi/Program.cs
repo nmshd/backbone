@@ -1,7 +1,5 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Infrastructure.Logging;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
@@ -12,6 +10,8 @@ using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.ConsumerApi.Mvc.Middleware;
+using Backbone.Infrastructure.EventBus;
+using Backbone.Infrastructure.Logging;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -239,6 +239,9 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
 
-public partial class Program
+namespace Backbone.ConsumerApi
 {
+    public partial class Program
+    {
+    }
 }
