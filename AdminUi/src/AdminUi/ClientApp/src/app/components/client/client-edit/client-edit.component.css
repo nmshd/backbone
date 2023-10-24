@@ -79,6 +79,33 @@
     color: #fff;
 }
 
+.client-accordion {
+    margin: 0px 0px 0px 5px !important;
+}
+
+.details-expansion-panel-header {
+    background: #17428d !important;
+}
+
+.details-expansion-panel-header:hover {
+    background: #11337a !important;
+}
+.details-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
+    border-radius: 4px 4px 0px 0px;
+}
+
+.details-panel-header-title {
+    color: white !important;
+}
+
+.details-panel-header-desc {
+    color: rgba(255, 255, 255, 0.54) !important;
+}
+
+:host ::ng-deep .details-expansion-panel-header > .mat-expansion-indicator::after {
+    color: white !important;
+}
+
 .auto-height {
     height: auto;
 }
