@@ -2,15 +2,15 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Messages.Application.IntegrationEvents.Outgoing;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {

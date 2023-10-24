@@ -1,4 +1,4 @@
-﻿namespace Backbone.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
+﻿namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 
 public class RefreshExpirationTimeOfSyncRunResponse
 {

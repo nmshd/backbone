@@ -1,8 +1,8 @@
-﻿using Backbone.Devices.Domain.Aggregates.Tier;
-using Backbone.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using OpenIddict.EntityFrameworkCore.Models;
 
-namespace Backbone.Devices.Infrastructure.OpenIddict;
+namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 
 public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFrameworkCoreApplication<string, CustomOpenIddictEntityFrameworkCoreAuthorization,
     CustomOpenIddictEntityFrameworkCoreToken>

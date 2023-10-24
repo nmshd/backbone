@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Devices.DTOs;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities;
 
-namespace Backbone.Devices.Application.DTOs;
+namespace Backbone.Modules.Devices.Application.DTOs;
 
 public class IdentitySummaryDTO
 {

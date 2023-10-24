@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Devices.Application.Clients.Commands.ChangeClientSecret;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSecretResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;

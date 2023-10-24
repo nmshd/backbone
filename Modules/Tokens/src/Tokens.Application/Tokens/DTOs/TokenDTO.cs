@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Backbone.Tokens.Application.Tokens.DTOs;
+namespace Backbone.Modules.Tokens.Application.Tokens.DTOs;
 
 public class TokenDTO : IMapTo<Token>
 {

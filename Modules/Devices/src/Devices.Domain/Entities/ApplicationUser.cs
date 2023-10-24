@@ -2,7 +2,7 @@
 using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 
-namespace Backbone.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class ApplicationUser : IdentityUser
 {

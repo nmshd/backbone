@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 
 public class SendResult
 {

@@ -1,7 +1,7 @@
-﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Domain;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain;
 
-namespace Backbone.Quotas.Application.Metrics;
+namespace Backbone.Modules.Quotas.Application.Metrics;
 public class NumberOfRelationshipsMetricCalculator : IMetricCalculator
 {
     private readonly IRelationshipsRepository _relationshipsRepository;

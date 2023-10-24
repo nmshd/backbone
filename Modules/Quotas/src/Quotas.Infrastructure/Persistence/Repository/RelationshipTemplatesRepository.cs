@@ -1,11 +1,11 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Domain.Aggregates.Relationships;
-using Backbone.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 {
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;

@@ -1,7 +1,7 @@
-﻿using Backbone.Devices.Infrastructure.Persistence.Database;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Quotas.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi;

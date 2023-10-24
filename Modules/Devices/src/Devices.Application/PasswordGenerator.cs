@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Backbone.Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public static class PasswordGenerator
 {

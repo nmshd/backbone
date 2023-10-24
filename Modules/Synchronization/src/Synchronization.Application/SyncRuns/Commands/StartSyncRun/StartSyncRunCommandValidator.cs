@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 
-namespace Backbone.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 
 internal class StartSyncRunCommandValidator : AbstractValidator<StartSyncRunCommand>
 {

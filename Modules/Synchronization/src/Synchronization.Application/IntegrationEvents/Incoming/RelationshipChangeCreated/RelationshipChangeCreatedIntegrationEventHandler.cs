@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Synchronization.Application.Infrastructure;
-using Backbone.Synchronization.Application.IntegrationEvents.Outgoing;
-using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 
 public class RelationshipChangeCreatedIntegrationEventHandler : IIntegrationEventHandler<RelationshipChangeCreatedIntegrationEvent>
 {

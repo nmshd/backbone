@@ -1,8 +1,8 @@
-﻿using Backbone.Synchronization.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Synchronization.Application.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public class ApplicationDbContextWithDelayedSave : SynchronizationDbContext
 {

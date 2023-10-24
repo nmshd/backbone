@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Quotas.Application.AutoMapper;
-using Backbone.Quotas.Application.Metrics;
-using Backbone.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
-using Backbone.Quotas.Domain;
+using Backbone.Modules.Quotas.Application.AutoMapper;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Quotas.Application.Extensions;
+namespace Backbone.Modules.Quotas.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

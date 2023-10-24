@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 
-namespace Backbone.Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class SendMessageResponse : IMapTo<Message>
 {

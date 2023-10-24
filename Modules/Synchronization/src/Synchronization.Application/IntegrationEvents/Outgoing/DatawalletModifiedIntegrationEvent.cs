@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Synchronization.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 
 public class DatawalletModifiedIntegrationEvent : IntegrationEvent
 {

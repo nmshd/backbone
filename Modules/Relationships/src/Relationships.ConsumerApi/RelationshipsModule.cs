@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Relationships.Application;
-using Backbone.Relationships.Application.Extensions;
-using Backbone.Relationships.Infrastructure.Persistence;
+using Backbone.Modules.Relationships.Application;
+using Backbone.Modules.Relationships.Application.Extensions;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Relationships.ConsumerApi;
+namespace Backbone.Modules.Relationships.ConsumerApi;
 
 public class RelationshipsModule : AbstractModule
 {

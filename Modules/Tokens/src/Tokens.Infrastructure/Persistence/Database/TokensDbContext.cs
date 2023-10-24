@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Tokens.Domain.Entities;
-using Backbone.Tokens.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Tokens.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 
 public class TokensDbContext : AbstractDbContextBase
 {

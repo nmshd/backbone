@@ -1,8 +1,8 @@
-﻿using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExpiredChallengesResponse>
 {

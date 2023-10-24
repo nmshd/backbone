@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class TiersQueryableExtensions
 {

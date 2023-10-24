@@ -1,7 +1,7 @@
-﻿using Backbone.Messages.Domain.Ids;
-using Backbone.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporter : IReporter
 {

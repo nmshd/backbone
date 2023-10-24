@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Tokens.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public static class IServiceCollectionExtensions
 {

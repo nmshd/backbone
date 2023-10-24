@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
 public class ApnsMessageBuilder
 {

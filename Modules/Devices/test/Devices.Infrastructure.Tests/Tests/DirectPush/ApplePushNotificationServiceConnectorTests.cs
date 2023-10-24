@@ -1,17 +1,17 @@
 ﻿using System.Net;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace Backbone.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
 public class ApplePushNotificationServiceConnectorTests
 {

@@ -1,8 +1,8 @@
-﻿using Backbone.Challenges.Domain.Entities;
+﻿using Backbone.Modules.Challenges.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Challenges.Infrastructure.Persistence.Database.Configurations;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Configurations;
 
 public class ChallengeEventEntityTypeConfiguration : IEntityTypeConfiguration<Challenge>
 {

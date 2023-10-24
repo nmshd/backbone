@@ -3,12 +3,12 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Messages.Application;
-using Backbone.Messages.Application.Messages.Commands.SendMessage;
-using Backbone.Messages.Application.Messages.DTOs;
-using Backbone.Messages.Application.Messages.Queries.GetMessage;
-using Backbone.Messages.Application.Messages.Queries.ListMessages;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Application;
+using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
+using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
+using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Messages.ConsumerApi.Controllers;
+namespace Backbone.Modules.Messages.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

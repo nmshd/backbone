@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Files.Application;
-using Backbone.Files.Application.Extensions;
-using Backbone.Files.Infrastructure.Persistence;
+using Backbone.Modules.Files.Application;
+using Backbone.Modules.Files.Application.Extensions;
+using Backbone.Modules.Files.Infrastructure.Persistence;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Files.ConsumerApi;
+namespace Backbone.Modules.Files.ConsumerApi;
 
 public class FilesModule : AbstractModule
 {

@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Files.Domain.Entities;
+namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File
 {

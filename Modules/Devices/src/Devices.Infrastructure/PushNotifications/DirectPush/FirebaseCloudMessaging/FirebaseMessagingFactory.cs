@@ -3,7 +3,7 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
 public class FirebaseMessagingFactory
 {

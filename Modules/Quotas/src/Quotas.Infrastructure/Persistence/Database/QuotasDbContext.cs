@@ -1,16 +1,16 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Backbone.Quotas.Domain.Aggregates.FileMetadata;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Messages;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Relationships;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Quotas.Domain.Aggregates.Tokens;
-using Backbone.Quotas.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {

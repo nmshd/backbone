@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace Backbone.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class DeleteExpiredChallengesCommand : IRequest<DeleteExpiredChallengesResponse> { }

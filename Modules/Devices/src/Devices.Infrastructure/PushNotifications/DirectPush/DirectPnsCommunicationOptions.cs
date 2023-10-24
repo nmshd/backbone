@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPnsCommunicationOptions
 {

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.Files.Application.IntegrationEvents.Out;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Application.IntegrationEvents.Out;
 using MediatR;
-using File = Backbone.Files.Domain.Entities.File;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 {

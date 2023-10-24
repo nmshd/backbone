@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Tests.QuotaCheck;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 public class QuotaCheckerImplTests
 {
 

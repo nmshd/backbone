@@ -1,8 +1,8 @@
-﻿using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public class PnsConnectorFactoryImpl : PnsConnectorFactory
 {
     private readonly IServiceProvider _serviceProvider;

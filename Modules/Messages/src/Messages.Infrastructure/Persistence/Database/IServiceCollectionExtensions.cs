@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Messages.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

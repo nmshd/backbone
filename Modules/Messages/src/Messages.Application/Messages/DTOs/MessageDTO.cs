@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 
-namespace Backbone.Messages.Application.Messages.DTOs;
+namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
 public class MessageDTO : IMapTo<Message>
 {

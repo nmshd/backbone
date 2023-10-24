@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.Messages.Application.Infrastructure.Persistence;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Domain.Ids;
-using Backbone.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

@@ -1,9 +1,9 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 
 internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {

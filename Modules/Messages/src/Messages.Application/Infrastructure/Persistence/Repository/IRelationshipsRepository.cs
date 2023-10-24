@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 
-namespace Backbone.Messages.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 
 #nullable enable
 public interface IRelationshipsRepository

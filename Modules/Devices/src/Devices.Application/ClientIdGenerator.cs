@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 
-namespace Backbone.Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public static class ClientIdGenerator
 {

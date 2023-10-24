@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Devices.Application.Identities.Queries.GetIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

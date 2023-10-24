@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Devices.Application.Identities.Commands.CreateIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 
 public class CreateIdentityResponse
 {

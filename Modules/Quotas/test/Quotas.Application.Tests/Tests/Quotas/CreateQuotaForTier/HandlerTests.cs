@@ -1,19 +1,19 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Quotas.Application.Tests.TestDoubles;
-using Backbone.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
 
 public class HandlerTests
 {

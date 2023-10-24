@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Devices.Application.Clients.Commands.DeleteClient;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 
 public class DeleteClientCommandValidator : AbstractValidator<DeleteClientCommand>
 {

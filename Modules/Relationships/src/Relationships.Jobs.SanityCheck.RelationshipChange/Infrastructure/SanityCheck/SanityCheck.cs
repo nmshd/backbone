@@ -1,8 +1,8 @@
-﻿using Backbone.Relationships.Domain.Ids;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
 
-namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.SanityCheck;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.SanityCheck;
 
 public class SanityCheck
 {

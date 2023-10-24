@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
-namespace Backbone.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 public class OAuthClient
 {
     public OAuthClient(string clientId, string displayName, TierId defaultTier, DateTime createdAt)

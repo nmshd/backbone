@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Quotas.Application;
+namespace Backbone.Modules.Quotas.Application;
 
 public class ApplicationOptions
 {

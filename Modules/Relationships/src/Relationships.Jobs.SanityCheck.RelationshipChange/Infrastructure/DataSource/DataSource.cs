@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.Relationships.Application.Infrastructure;
-using Backbone.Relationships.Domain.Ids;
-using Backbone.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

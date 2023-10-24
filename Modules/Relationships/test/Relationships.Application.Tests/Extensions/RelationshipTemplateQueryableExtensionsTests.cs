@@ -1,12 +1,12 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Domain.Entities;
-using Backbone.Relationships.Infrastructure.Extensions;
-using Backbone.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Relationships.Application.Tests.Extensions;
+namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
 public class RelationshipTemplateQueryableExtensionsTests
 {

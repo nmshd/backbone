@@ -2,15 +2,15 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Relationships.Application.IntegrationEvents;
-using Backbone.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
-using Backbone.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+using Backbone.Modules.Relationships.Domain.Entities;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Backbone.Relationships.Application.Tests.Tests.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 public class HandlerTests
 {
     private readonly IUserContext _userContext;

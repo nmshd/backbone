@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public static class ApplicationErrors
 {

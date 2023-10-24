@@ -1,9 +1,9 @@
-﻿using Backbone.Devices.Application.Tiers.Commands.CreateTier;
+﻿using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Backbone.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
 public class CreateTierCommandValidatorTests
 {

@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Common;
-using Backbone.Relationships.Domain.Entities;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Common;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Relationships.Infrastructure.Extensions;
+namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipQueryableExtensions
 {

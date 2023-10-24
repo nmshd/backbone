@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Synchronization.Application.Datawallets.DTOs;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class PushDatawalletModificationItem
 {

@@ -1,15 +1,15 @@
-﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
-using Backbone.Quotas.Application.Tests.TestDoubles;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Quotas.Domain.Metrics;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Tests.Identities;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
 public class IdentityCreatedIntegrationEventHandlerTests
 {

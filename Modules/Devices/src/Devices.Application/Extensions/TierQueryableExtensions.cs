@@ -1,7 +1,7 @@
-﻿using Backbone.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class TierQueryableExtensions
 {

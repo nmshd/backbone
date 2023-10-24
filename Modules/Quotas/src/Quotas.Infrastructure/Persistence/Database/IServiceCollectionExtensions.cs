@@ -1,11 +1,11 @@
-﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.Metrics;
-using Backbone.Quotas.Domain.Metrics;
-using Backbone.Quotas.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

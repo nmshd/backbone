@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Entities;
 
-namespace Backbone.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class RelationshipsQueryableExtensions
 {

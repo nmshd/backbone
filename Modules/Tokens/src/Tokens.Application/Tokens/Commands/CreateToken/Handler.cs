@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Tokens.Application.IntegrationEvents;
-using Backbone.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.IntegrationEvents;
+using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Tokens.Application.Tokens.Commands.CreateToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 {

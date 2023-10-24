@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Synchronization.Domain.Entities;
+namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 public class DatawalletModification
 {

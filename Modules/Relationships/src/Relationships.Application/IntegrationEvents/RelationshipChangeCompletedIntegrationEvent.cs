@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 
-namespace Backbone.Relationships.Application.IntegrationEvents;
+namespace Backbone.Modules.Relationships.Application.IntegrationEvents;
 
 public class RelationshipChangeCompletedIntegrationEvent : IntegrationEvent
 {

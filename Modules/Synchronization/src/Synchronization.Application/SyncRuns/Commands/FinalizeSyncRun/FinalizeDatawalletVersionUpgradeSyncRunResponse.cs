@@ -1,6 +1,6 @@
-﻿using Backbone.Synchronization.Application.Datawallets.DTOs;
+﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
-namespace Backbone.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 public class FinalizeDatawalletVersionUpgradeSyncRunResponse
 {

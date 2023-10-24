@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class NotificationContent
 {

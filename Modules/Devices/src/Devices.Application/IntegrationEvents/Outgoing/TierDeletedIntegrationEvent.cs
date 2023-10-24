@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
-namespace Backbone.Devices.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 
 public class TierDeletedIntegrationEvent : IntegrationEvent
 {

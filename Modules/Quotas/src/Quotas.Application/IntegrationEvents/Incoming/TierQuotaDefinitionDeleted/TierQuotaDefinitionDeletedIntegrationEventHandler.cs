@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Quotas.Application.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierQuotaDefinitionDeleted;
 public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEventHandler<TierQuotaDefinitionDeletedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

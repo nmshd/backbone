@@ -4,7 +4,7 @@ using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Files.Application.Files.Commands.CreateFile;
+namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
 {

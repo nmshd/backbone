@@ -1,7 +1,7 @@
-﻿using Backbone.Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.Dummy;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
 public static class IServiceCollectionExtensions
 {

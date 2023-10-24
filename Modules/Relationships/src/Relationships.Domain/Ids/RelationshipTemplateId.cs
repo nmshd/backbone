@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Relationships.Domain.Ids;
+namespace Backbone.Modules.Relationships.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(RelationshipTemplateIdTypeConverter))]

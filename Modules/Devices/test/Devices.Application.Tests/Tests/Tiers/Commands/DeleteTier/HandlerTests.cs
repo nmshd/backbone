@@ -1,14 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Devices.Application.Tiers.Commands.DeleteTier;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Devices.Application.Tests.Tests.Tiers.Commands.DeleteTier;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.DeleteTier;
 public class HandlerTests
 {
     private readonly ITiersRepository _tiersRepository;

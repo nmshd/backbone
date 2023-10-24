@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Domain.Entities;
-using Backbone.Relationships.Domain.Ids;
-using Backbone.Relationships.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

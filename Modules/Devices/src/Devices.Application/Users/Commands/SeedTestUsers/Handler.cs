@@ -1,12 +1,12 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Infrastructure.Persistence.Database;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Backbone.Devices.Application.Users.Commands.SeedTestUsers;
+namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 public class Handler : IRequestHandler<SeedTestUsersCommand>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;

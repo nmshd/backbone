@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.Synchronization.Application.Infrastructure;
-using Backbone.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Synchronization.Infrastructure.Persistence;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

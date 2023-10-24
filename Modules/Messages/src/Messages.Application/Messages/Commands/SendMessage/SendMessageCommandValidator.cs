@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
-namespace Backbone.Messages.Application.Messages.Commands.SendMessage;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
 {

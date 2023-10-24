@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Domain.Errors;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Errors;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
-namespace Backbone.Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipTemplate
 {

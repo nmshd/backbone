@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Devices.Application.Devices.DTOs;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Devices.Application.Devices.Queries.GetActiveDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 
 public class Handler : IRequestHandler<GetActiveDeviceQuery, DeviceDTO>
 {

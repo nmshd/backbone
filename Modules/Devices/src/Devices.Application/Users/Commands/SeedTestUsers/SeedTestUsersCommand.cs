@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Devices.Application.Users.Commands.SeedTestUsers;
+namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 public class SeedTestUsersCommand : IRequest
 {
 }

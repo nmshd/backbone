@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Ids;
 
 namespace Backbone.ConsumerApi.Mvc.JsonConverters.Relationships;
 

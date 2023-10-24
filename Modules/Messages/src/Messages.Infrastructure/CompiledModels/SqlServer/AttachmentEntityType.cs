@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Domain.Ids;
-using Backbone.Messages.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

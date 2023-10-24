@@ -1,7 +1,7 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 
 public class MetricKeyEntityFrameworkValueConverter : ValueConverter<MetricKey, string>
 {

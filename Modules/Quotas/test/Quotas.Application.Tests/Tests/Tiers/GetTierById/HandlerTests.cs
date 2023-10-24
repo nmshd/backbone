@@ -1,13 +1,13 @@
-﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.Tests.TestDoubles;
-using Backbone.Quotas.Application.Tiers.Queries.GetTierById;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Tests.Tiers.GetTierById;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers.GetTierById;
 public class HandlerTests
 {
     [Fact]

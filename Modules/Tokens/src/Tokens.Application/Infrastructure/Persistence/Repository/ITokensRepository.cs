@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 
 public interface ITokensRepository
 {

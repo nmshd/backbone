@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Devices.Application.Devices.DTOs.Validators;
+namespace Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
 
 public class SignedChallengeDTOValidator : AbstractValidator<SignedChallengeDTO>
 {

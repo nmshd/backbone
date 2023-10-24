@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Tooling;
 
-namespace Backbone.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Identity
 {

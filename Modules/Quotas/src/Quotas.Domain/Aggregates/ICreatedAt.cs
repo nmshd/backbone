@@ -1,4 +1,4 @@
-﻿namespace Backbone.Quotas.Domain.Aggregates;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates;
 
 public interface ICreatedAt
 {

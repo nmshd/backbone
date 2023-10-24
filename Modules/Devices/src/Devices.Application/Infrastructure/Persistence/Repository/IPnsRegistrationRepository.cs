@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
-namespace Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface IPnsRegistrationRepository
 {

@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Devices.Application.Tiers.Commands.CreateTier;
+namespace Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 
 public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 {

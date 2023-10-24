@@ -1,10 +1,10 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Messages.Domain.Ids;
-using Backbone.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Messages.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly MessagesDbContext _dbContext;

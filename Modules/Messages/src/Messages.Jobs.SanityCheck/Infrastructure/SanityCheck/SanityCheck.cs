@@ -1,8 +1,8 @@
-﻿using Backbone.Messages.Domain.Ids;
-using Backbone.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
-using Backbone.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
+﻿using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.DataSource;
+using Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Messages.Jobs.SanityCheck.Infrastructure.SanityCheck;
+namespace Backbone.Modules.Messages.Jobs.SanityCheck.Infrastructure.SanityCheck;
 
 public class SanityCheck
 {

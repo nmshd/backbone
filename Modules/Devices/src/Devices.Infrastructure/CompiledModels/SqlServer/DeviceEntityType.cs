@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

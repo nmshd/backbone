@@ -1,7 +1,7 @@
-﻿using Backbone.Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
 
 public class RejectRelationshipChangeRequestCommand : IRequest<RejectRelationshipChangeRequestResponse>
 {

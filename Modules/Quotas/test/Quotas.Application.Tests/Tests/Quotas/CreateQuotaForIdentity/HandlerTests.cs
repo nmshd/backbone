@@ -1,21 +1,21 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.Metrics;
-using Backbone.Quotas.Application.Tests.TestDoubles;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
 
 public class HandlerTests
 {

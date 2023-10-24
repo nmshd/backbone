@@ -2,7 +2,7 @@
 
 #nullable disable
 
-using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;

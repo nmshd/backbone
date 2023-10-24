@@ -1,6 +1,6 @@
 ﻿using OpenIddict.EntityFrameworkCore.Models;
 
-namespace Backbone.Devices.Infrastructure.OpenIddict;
+namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 public class CustomOpenIddictEntityFrameworkCoreToken : OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>
 {
 }

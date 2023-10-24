@@ -1,6 +1,6 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Quotas.Domain.Aggregates.Identities;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IndividualQuota : Quota
 {

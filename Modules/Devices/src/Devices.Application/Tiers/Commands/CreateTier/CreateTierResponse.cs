@@ -1,6 +1,6 @@
-﻿using Backbone.Devices.Application.Tiers.DTOs;
+﻿using Backbone.Modules.Devices.Application.Tiers.DTOs;
 
-namespace Backbone.Devices.Application.Tiers.Commands.CreateTier;
+namespace Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 
 public class CreateTierResponse : TierDTO
 {

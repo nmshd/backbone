@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.Files.Application.Infrastructure.Persistence;
-using Backbone.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.Files.Infrastructure.Persistence.Database;
-using Backbone.Files.Infrastructure.Persistence.Database.Repository;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Files.Infrastructure.Persistence;
+namespace Backbone.Modules.Files.Infrastructure.Persistence;
 public static class IServiceCollectionExtensions
 {
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)

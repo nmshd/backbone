@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
-namespace Backbone.Synchronization.Application.Datawallets.Queries.GetModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 
 public class GetModificationsResponse : PagedResponse<DatawalletModificationDTO>
 {

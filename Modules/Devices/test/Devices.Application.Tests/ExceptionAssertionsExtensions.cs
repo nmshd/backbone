@@ -4,7 +4,7 @@ using FluentAssertions.Primitives;
 using FluentAssertions.Specialized;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Devices.Application.Tests;
+namespace Backbone.Modules.Devices.Application.Tests;
 
 public static class ApplicationExceptionExtensions
 {

@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities;
 
-namespace Backbone.Synchronization.Application.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public static class DatawalletExtensions
 {

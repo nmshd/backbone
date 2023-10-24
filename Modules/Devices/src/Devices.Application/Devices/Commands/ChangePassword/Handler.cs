@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Devices.Application.Devices.Commands.ChangePassword;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 
 public class Handler : IRequestHandler<ChangePasswordCommand>
 {

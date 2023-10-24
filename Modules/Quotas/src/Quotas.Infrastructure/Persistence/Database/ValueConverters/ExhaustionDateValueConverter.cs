@@ -1,7 +1,7 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
 
 public class ExhaustionDateValueConverter : ValueConverter<ExhaustionDate, DateTime>
 {

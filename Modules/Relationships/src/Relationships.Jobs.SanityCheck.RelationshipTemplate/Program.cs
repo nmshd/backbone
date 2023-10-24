@@ -1,11 +1,11 @@
 using System.Reflection;
-using Backbone.Relationships.Infrastructure.Persistence;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate.Extensions;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Extensions;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate;
 
 public class Program
 {

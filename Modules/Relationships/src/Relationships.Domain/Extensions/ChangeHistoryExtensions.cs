@@ -1,6 +1,6 @@
-﻿using Backbone.Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
 
-namespace Backbone.Relationships.Domain.Extensions;
+namespace Backbone.Modules.Relationships.Domain.Extensions;
 
 public static class ChangeHistoryExtensions
 {

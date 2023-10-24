@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
+namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 public record ApnsHandle : PnsHandle
 {
     private ApnsHandle(PushNotificationPlatform platform, string value) : base(platform, value)

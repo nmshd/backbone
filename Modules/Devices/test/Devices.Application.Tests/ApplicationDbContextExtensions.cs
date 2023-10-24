@@ -1,6 +1,6 @@
-﻿using Backbone.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
-namespace Backbone.Devices.Application.Tests;
+namespace Backbone.Modules.Devices.Application.Tests;
 
 public static class ApplicationDbContextExtensions
 {

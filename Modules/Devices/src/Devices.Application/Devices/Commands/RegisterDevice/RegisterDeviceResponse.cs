@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Devices.Application.Devices.Commands.RegisterDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class RegisterDeviceResponse
 {

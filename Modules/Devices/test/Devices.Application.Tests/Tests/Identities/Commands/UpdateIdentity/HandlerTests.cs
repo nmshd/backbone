@@ -2,17 +2,17 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Identities.Commands.UpdateIdentity;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Devices.Domain.Aggregates.Tier;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Devices.Application.Tests.Tests.Identities.Commands.UpdateIdentity;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateIdentity;
 public class HandlerTests
 {
     [Fact]

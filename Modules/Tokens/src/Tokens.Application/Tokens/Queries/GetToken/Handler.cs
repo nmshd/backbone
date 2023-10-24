@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Tokens.Application.Tokens.DTOs;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using MediatR;
 
-namespace Backbone.Tokens.Application.Tokens.Queries.GetToken;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
 public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 {

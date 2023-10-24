@@ -1,12 +1,12 @@
-using Backbone.Devices.Application.Infrastructure.Persistence.Database;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Infrastructure.OpenIddict;
-using Backbone.Devices.Infrastructure.Persistence.Database;
-using Backbone.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Devices.Infrastructure.Persistence;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

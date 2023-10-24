@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Messages.Application.AutoMapper;
-using Backbone.Messages.Application.Messages.Commands.SendMessage;
+using Backbone.Modules.Messages.Application.AutoMapper;
+using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

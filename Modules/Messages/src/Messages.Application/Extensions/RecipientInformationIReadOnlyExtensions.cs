@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Entities;
 
-namespace Backbone.Messages.Application.Extensions;
+namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class RecipientInformationICollectionExtensions
 {

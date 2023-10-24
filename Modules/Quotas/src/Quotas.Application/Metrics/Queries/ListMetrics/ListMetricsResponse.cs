@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
-using Backbone.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.DTOs;
 
-namespace Backbone.Quotas.Application.Metrics.Queries.ListMetrics;
+namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
 public class ListMetricsResponse : EnumerableResponseBase<MetricDTO>
 {
     public ListMetricsResponse(IEnumerable<MetricDTO> items) : base(items) { }

@@ -1,4 +1,4 @@
-﻿namespace Backbone.Quotas.Domain.Aggregates.Messages;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 public class Message : ICreatedAt
 {
     public string Id { get; set; }

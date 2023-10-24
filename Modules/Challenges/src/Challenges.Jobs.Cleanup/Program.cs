@@ -1,13 +1,13 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Challenges.Application.Extensions;
-using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
-using Backbone.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Challenges.Infrastructure.Persistence.Database.Repository;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Challenges.Application.Extensions;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Challenges.Jobs.Cleanup;
+namespace Backbone.Modules.Challenges.Jobs.Cleanup;
 
 public class Program
 {

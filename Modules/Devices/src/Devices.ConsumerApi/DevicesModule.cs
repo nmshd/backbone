@@ -3,18 +3,18 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
-using Backbone.Devices.Application;
-using Backbone.Devices.Application.Extensions;
-using Backbone.Devices.Infrastructure.Persistence;
-using Backbone.Devices.Infrastructure.Persistence.Database;
-using Backbone.Devices.Infrastructure.PushNotifications;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using IServiceCollectionExtensions = Backbone.Devices.Infrastructure.PushNotifications.IServiceCollectionExtensions;
+using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.PushNotifications.IServiceCollectionExtensions;
 
-namespace Backbone.Devices.ConsumerApi;
+namespace Backbone.Modules.Devices.ConsumerApi;
 
 public class DevicesModule : AbstractModule
 {

@@ -1,9 +1,9 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
-using Backbone.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
 using MediatR;
 
-namespace Backbone.Devices.AdminCli.Commands.Clients;
+namespace Backbone.Modules.Devices.AdminCli.Commands.Clients;
 
 public class CreateClientCommand : AdminCliDbCommand
 {

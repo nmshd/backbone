@@ -2,7 +2,7 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.AutoMapper;
 
-namespace Backbone.Devices.Application.AutoMapper;
+namespace Backbone.Modules.Devices.Application.AutoMapper;
 
 public class AutoMapperProfile : AutoMapperProfileBase
 {

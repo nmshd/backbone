@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using Backbone.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using MediatR;
 
-namespace Backbone.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 
 public class PushDatawalletModificationsCommand : IRequest<PushDatawalletModificationsResponse>
 {

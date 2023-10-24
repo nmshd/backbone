@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Quotas.Domain.Aggregates.Identities;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public record QuotaId : StronglyTypedId
 {

@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
-namespace Backbone.Relationships.Application.Relationships.Queries.ListRelationships;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 
 public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
 {

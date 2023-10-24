@@ -1,9 +1,9 @@
-﻿using Backbone.Synchronization.Domain.Entities.Sync;
-using Backbone.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Synchronization.Infrastructure.Persistence.Database.Configurations;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
 public class ExternalEventEntityTypeConfiguration : IEntityTypeConfiguration<ExternalEvent>
 {

@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Entities;
 
-namespace Backbone.Messages.Application.Messages.DTOs;
+namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
 public class AttachmentDTO : IMapTo<Attachment>
 {

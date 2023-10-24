@@ -1,7 +1,7 @@
-﻿using Backbone.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Backbone.Devices.Infrastructure.Persistence.Database.ValueConverters;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 
 public class TierIdEntityFrameworkValueConverter : ValueConverter<TierId, string>
 {

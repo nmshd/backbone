@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Tokens.Application.AutoMapper;
-using Backbone.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Modules.Tokens.Application.AutoMapper;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Tokens.Application.Extensions;
+namespace Backbone.Modules.Tokens.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

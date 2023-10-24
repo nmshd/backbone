@@ -1,6 +1,6 @@
-﻿using Backbone.Devices.AdminCli.Commands.BaseClasses;
+﻿using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
 
-namespace Backbone.Devices.AdminCli.Commands.Clients;
+namespace Backbone.Modules.Devices.AdminCli.Commands.Clients;
 
 public class ClientCommand : AdminCliCommand
 {

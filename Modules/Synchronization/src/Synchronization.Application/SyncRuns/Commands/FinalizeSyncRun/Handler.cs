@@ -5,16 +5,16 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Synchronization.Application.Infrastructure;
-using Backbone.Synchronization.Application.IntegrationEvents.Outgoing;
-using Backbone.Synchronization.Domain.Entities;
-using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, FinalizeExternalEventSyncSyncRunResponse>,
     IRequestHandler<FinalizeDatawalletVersionUpgradeSyncRunCommand, FinalizeDatawalletVersionUpgradeSyncRunResponse>

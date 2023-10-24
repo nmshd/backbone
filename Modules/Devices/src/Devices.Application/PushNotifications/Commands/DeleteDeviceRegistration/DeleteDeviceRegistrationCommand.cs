@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace Backbone.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
+namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 
 public class DeleteDeviceRegistrationCommand : IRequest { }

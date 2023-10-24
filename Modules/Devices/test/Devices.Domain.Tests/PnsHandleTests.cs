@@ -1,9 +1,9 @@
-﻿using Backbone.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Devices.Domain.Aggregates.PushNotifications.Handles;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Devices.Domain.Tests;
+namespace Backbone.Modules.Devices.Domain.Tests;
 public class PnsHandleTests
 {
     [Fact]

@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Quotas.Domain;
+namespace Backbone.Modules.Quotas.Domain;
 public static class DomainErrors
 {
     public static DomainError UnsupportedMetricKey()

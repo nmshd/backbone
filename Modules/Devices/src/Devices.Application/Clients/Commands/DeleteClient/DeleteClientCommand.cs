@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Devices.Application.Clients.Commands.DeleteClient;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 
 public class DeleteClientCommand : IRequest
 {

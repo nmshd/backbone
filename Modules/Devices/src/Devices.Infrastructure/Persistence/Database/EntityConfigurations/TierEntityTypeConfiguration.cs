@@ -1,8 +1,8 @@
-﻿using Backbone.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 
 public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
 {

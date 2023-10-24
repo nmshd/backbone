@@ -1,8 +1,8 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Domain.Aggregates.Tier;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 
-namespace Backbone.Devices.Application.Tests;
+namespace Backbone.Modules.Devices.Application.Tests;
 
 public static class TestDataGenerator
 {

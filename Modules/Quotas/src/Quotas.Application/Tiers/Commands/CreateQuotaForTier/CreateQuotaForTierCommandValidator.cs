@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
+namespace Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 
 public class CreateQuotaForTierCommandValidator : AbstractValidator<CreateQuotaForTierCommand>
 {

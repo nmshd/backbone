@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Backbone.Quotas.Domain.Aggregates.Identities;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
 {

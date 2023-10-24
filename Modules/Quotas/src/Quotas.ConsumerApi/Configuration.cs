@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Quotas.ConsumerApi;
+namespace Backbone.Modules.Quotas.ConsumerApi;
 
 public class Configuration
 {

@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Files.Domain.Entities;
+namespace Backbone.Modules.Files.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(FileIdTypeConverter))]

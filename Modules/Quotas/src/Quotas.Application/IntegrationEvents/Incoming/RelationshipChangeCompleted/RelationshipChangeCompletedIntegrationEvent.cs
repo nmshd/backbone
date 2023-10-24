@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 public class RelationshipChangeCompletedIntegrationEvent : IntegrationEvent
 {
     public string ChangeId { get; set; }

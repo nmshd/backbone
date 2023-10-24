@@ -1,8 +1,8 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Domain.Tests.Tests.Identities;
+namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 public class QuotaIdTests
 {
     [Fact]

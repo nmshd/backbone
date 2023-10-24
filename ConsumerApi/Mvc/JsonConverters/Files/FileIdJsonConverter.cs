@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 
 namespace Backbone.ConsumerApi.Mvc.JsonConverters.Files;
 

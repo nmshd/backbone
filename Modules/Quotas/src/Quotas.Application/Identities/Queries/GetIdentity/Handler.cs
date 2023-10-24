@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 
-namespace Backbone.Quotas.Application.Identities.Queries.GetIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

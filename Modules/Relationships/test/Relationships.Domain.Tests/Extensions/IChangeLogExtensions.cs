@@ -1,6 +1,6 @@
-﻿using Backbone.Relationships.Domain.Entities;
+﻿using Backbone.Modules.Relationships.Domain.Entities;
 
-namespace Backbone.Relationships.Domain.Tests.Extensions;
+namespace Backbone.Modules.Relationships.Domain.Tests.Extensions;
 
 public static class IChangeLogExtensions
 {

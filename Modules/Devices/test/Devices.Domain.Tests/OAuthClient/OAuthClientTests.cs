@@ -1,9 +1,9 @@
-﻿using Backbone.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Devices.Domain.Tests.OAuthClient;
+namespace Backbone.Modules.Devices.Domain.Tests.OAuthClient;
 public class OAuthClientTests
 {
     [Fact]

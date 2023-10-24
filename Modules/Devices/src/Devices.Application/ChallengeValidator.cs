@@ -2,12 +2,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;
-using Backbone.Devices.Application.Devices.DTOs;
-using Backbone.Devices.Application.DTOs;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.DTOs;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 
-namespace Backbone.Devices.Application;
+namespace Backbone.Modules.Devices.Application;
 
 public class ChallengeValidator
 {

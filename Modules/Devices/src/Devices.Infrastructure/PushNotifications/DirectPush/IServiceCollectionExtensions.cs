@@ -1,10 +1,10 @@
-﻿using Backbone.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
-using Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public static class IServiceCollectionExtensions
 {

@@ -1,9 +1,9 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Entities;
-using Backbone.Messages.Infrastructure.Persistence.Database;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Quotas.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
@@ -11,7 +11,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Tests.Repositories;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
 public class MessagesRepositoryTests
 {
     private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();

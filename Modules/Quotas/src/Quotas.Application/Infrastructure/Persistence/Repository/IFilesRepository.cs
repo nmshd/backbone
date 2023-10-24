@@ -1,4 +1,4 @@
-﻿namespace Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 public interface IFilesRepository
 {
     Task<uint> Count(string uploader, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken);

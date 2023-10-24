@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Files.Application.AutoMapper;
-using Backbone.Files.Application.Files.Commands.CreateFile;
+using Backbone.Modules.Files.Application.AutoMapper;
+using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Files.Application.Extensions;
+namespace Backbone.Modules.Files.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

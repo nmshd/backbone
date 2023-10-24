@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.Tests.Extensions;
-using Backbone.Devices.Application.Tiers.Commands.CreateTier;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Tests.Extensions;
+using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
 public class HandlerTests
 {

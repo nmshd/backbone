@@ -1,8 +1,8 @@
 ﻿using Backbone.AdminUi.Configuration;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
-using Backbone.Devices.Application.Extensions;
-using Backbone.Devices.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
 
 namespace Backbone.AdminUi.Extensions;
 

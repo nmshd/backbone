@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 using CSharpFunctionalExtensions;
 
-namespace Backbone.Quotas.Domain.Aggregates.Metrics;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public record MetricKey
 {

@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Files.Application.Infrastructure.Persistence;
-using Backbone.Files.Domain.Entities;
-using Backbone.Files.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
-using File = Backbone.Files.Domain.Entities.File;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Files.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
 public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
 {

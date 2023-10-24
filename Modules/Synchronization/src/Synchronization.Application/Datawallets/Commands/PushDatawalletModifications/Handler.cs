@@ -6,16 +6,16 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Synchronization.Application.Infrastructure;
-using Backbone.Synchronization.Application.IntegrationEvents.Outgoing;
-using Backbone.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using static Backbone.Synchronization.Domain.Entities.Datawallet;
+using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
-namespace Backbone.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 
 public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushDatawalletModificationsResponse>
 {

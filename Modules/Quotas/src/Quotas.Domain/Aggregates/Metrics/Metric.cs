@@ -1,4 +1,4 @@
-﻿namespace Backbone.Quotas.Domain.Aggregates.Metrics;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public class Metric
 {

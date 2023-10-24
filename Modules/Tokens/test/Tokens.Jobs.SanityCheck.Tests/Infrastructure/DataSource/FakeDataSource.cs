@@ -1,7 +1,7 @@
-﻿using Backbone.Tokens.Domain.Entities;
-using Backbone.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 
-namespace Backbone.Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
 public class FakeDataSource : IDataSource
 {

@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Files.Domain.Entities;
-using File = Backbone.Files.Domain.Entities.File;
+using Backbone.Modules.Files.Domain.Entities;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Files.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 public interface IFilesRepository
 {
     Task<File> Find(FileId id, CancellationToken cancellationToken, bool track = false, bool fillContent = true);

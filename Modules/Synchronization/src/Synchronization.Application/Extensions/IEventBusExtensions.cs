@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
-using Backbone.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 
-namespace Backbone.Synchronization.Application.Extensions;
+namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class IEventBusExtensions
 {

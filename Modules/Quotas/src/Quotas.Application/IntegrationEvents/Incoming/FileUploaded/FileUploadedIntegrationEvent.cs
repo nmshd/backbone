@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploaded;
 public class FileUploadedIntegrationEvent : IntegrationEvent
 {
     public string FileId { get; set; }

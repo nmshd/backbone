@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
-namespace Backbone.Devices.Application.Tests.Tests.Tiers.Queries.ListTiers;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Queries.ListTiers;
 public class FindAllStubRepository : ITiersRepository
 {
     private readonly DbPaginationResult<Tier> _tiers;

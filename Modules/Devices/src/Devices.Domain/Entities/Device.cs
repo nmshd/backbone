@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities;
 
 public class Device
 {

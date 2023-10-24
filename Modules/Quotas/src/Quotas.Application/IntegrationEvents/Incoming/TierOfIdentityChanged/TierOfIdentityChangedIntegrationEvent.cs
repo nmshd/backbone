@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
 public class TierOfIdentityChangedIntegrationEvent : IntegrationEvent
 {
     public string OldTier { get; set; }

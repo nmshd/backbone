@@ -1,10 +1,10 @@
-﻿using Backbone.Challenges.Application.Infrastructure.Persistence.Repository;
-using Backbone.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Challenges.Infrastructure.Persistence.Database.Repository;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Challenges.Infrastructure.Persistence;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {

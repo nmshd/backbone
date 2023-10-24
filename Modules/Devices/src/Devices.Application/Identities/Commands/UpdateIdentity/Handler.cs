@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Devices.Domain.Aggregates.Tier;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Devices.Application.Identities.Commands.UpdateIdentity;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 public class Handler : IRequestHandler<UpdateIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

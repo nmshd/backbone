@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using MediatR;
 
-namespace Backbone.Devices.Application.Devices.Commands.DeleteDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 public class DeleteDeviceCommand : IRequest
 {

@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 
-namespace Backbone.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 
 public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternalEventSyncSyncRunResponse>
 {

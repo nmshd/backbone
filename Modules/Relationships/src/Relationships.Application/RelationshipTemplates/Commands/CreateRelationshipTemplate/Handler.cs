@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Relationships.Application.IntegrationEvents;
-using Backbone.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {

@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Devices.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class PnsRegistrationRepository : IPnsRegistrationRepository
 {

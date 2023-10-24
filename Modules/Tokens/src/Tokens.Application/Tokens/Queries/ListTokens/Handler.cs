@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Tokens.Application.Tokens.DTOs;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using MediatR;
 
-namespace Backbone.Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
 {

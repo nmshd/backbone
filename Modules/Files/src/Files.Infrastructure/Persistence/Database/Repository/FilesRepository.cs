@@ -3,15 +3,15 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Files.Application.Infrastructure.Persistence;
-using Backbone.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.Files.Domain.Entities;
-using Backbone.Files.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using File = Backbone.Files.Domain.Entities.File;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Files.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 public class FilesRepository : IFilesRepository
 {
     private readonly DbSet<File> _files;

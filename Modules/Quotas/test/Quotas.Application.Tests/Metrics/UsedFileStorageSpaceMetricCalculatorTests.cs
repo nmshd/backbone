@@ -1,9 +1,9 @@
-﻿using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Application.Metrics;
+﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Metrics;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Application.Tests.Metrics;
+namespace Backbone.Modules.Quotas.Application.Tests.Metrics;
 public class UsedFileStorageSpaceMetricCalculatorTests
 {
     [Fact]

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Devices.Application.Clients.DTOs;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Clients.DTOs;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Devices.Application.Clients.Queries.GetClient;
+namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
     private readonly IMapper _mapper;

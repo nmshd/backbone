@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.Ids;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Backbone.Relationships.Application.Tests.Tests.RelationshipTemplates.Queries.ListRelationshipTemplates;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 public class ListRelationshipTemplatesValidatorTests
 {

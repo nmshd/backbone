@@ -1,4 +1,4 @@
-﻿namespace Backbone.Relationships.Application.Infrastructure;
+﻿namespace Backbone.Modules.Relationships.Application.Infrastructure;
 
 public class BlobOptions
 {

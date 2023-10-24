@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Quotas.Domain.Metrics;
-using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Metrics;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Quotas.Application.Metrics;
+namespace Backbone.Modules.Quotas.Application.Metrics;
 
 public class MetricStatusesService : IMetricStatusesService
 {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Devices.Application;
-using Backbone.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
-namespace Backbone.Devices.ConsumerApi;
+namespace Backbone.Modules.Devices.ConsumerApi;
 
 public class Configuration
 {

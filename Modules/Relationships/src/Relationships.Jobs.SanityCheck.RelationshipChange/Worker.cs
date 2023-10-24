@@ -1,7 +1,7 @@
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
-using Backbone.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
+using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.Reporter;
 
-namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipChange;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange;
 
 public class Worker : IHostedService
 {

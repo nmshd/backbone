@@ -1,9 +1,9 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Metrics;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Domain.Tests;
+namespace Backbone.Modules.Quotas.Domain.Tests;
 
 public class IndividualQuotaTests
 {

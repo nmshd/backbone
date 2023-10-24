@@ -1,8 +1,8 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Quotas.Domain.Tests.Tests.Tiers;
+namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
 public class TierQuotaDefinitionIdTests
 {

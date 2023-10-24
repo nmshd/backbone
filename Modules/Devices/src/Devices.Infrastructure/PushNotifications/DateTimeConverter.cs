@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class DateTimeConverter : JsonConverter<DateTime>
 {

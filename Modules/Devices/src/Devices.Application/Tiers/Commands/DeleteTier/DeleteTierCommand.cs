@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Backbone.Devices.Application.Tiers.Commands.DeleteTier;
+namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 
 public class DeleteTierCommand : IRequest
 {

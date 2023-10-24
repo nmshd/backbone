@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Tokens.Application;
+using Backbone.Modules.Tokens.Application;
 
-namespace Backbone.Tokens.ConsumerApi;
+namespace Backbone.Modules.Tokens.ConsumerApi;
 
 public class Configuration
 {

@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 
 public class IdentityCreatedIntegrationEvent : IntegrationEvent
 {

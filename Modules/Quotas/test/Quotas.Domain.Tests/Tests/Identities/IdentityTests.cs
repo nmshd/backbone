@@ -1,15 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.Quotas.Domain.Aggregates.Identities;
-using Backbone.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Quotas.Domain.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
-using MetricKey = Backbone.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
-namespace Backbone.Quotas.Domain.Tests.Tests.Identities;
+namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
 public class IdentityTests : IDisposable
 {

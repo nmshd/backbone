@@ -1,8 +1,8 @@
-﻿using Backbone.Quotas.Domain.Aggregates.Tiers;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backbone.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
+namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
 
 public class TierQuotaDefinitionEntityTypeConfiguration : IEntityTypeConfiguration<TierQuotaDefinition>
 {

@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Backbone.Quotas.Domain.Aggregates.FileMetadata;
+using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618

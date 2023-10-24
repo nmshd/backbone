@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Backbone.Messages.Common.FluentValidation;
+namespace Backbone.Modules.Messages.Common.FluentValidation;
 
 public class RangeValidator<T, TProperty, TRangeContent> : PropertyValidator<T, TProperty>
 {

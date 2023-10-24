@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Challenges.Domain.Entities;
-using Backbone.Challenges.Domain.Ids;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Ids;
 
-namespace Backbone.Challenges.Application.Challenges.DTOs;
+namespace Backbone.Modules.Challenges.Application.Challenges.DTOs;
 
 public class ChallengeDTO : IMapTo<Challenge>
 {

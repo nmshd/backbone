@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Devices.Application.Devices.DTOs.Validators;
+using Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
 using FluentValidation;
 
-namespace Backbone.Devices.Application.Devices.Commands.DeleteDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 // ReSharper disable once UnusedMember.Global
 public class DeleteDeviceValidator : AbstractValidator<DeleteDeviceCommand>

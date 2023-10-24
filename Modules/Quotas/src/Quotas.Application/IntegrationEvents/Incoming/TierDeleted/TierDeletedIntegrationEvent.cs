@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
 
 public class TierDeletedIntegrationEvent : IntegrationEvent
 {

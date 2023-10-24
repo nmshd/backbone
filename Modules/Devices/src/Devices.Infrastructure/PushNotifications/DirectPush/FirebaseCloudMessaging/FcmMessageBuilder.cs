@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using FirebaseAdmin.Messaging;
 
-namespace Backbone.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
 /// <summary>
 ///     See corresponding Unit Tests for an example of a built notification.

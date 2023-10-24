@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
-namespace Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface ITiersRepository
 {

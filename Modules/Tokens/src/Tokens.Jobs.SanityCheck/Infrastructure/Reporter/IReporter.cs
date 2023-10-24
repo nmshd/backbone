@@ -1,6 +1,6 @@
-﻿using Backbone.Tokens.Domain.Entities;
+﻿using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Backbone.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.Reporter;
 
 public interface IReporter
 {

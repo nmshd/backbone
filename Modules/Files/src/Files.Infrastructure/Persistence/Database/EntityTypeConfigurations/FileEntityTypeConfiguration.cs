@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using File = Backbone.Files.Domain.Entities.File;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
 public class FileEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Entities.File>
 {

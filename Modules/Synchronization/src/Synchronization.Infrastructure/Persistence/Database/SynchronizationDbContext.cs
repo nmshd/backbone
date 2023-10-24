@@ -5,18 +5,18 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Synchronization.Application.Extensions;
-using Backbone.Synchronization.Application.Infrastructure;
-using Backbone.Synchronization.Domain.Entities;
-using Backbone.Synchronization.Domain.Entities.Sync;
-using Backbone.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace Backbone.Synchronization.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationDbContext
 {

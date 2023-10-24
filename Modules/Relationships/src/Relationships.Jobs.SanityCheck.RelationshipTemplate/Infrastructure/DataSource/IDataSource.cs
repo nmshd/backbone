@@ -1,6 +1,6 @@
-﻿using Backbone.Relationships.Domain.Ids;
+﻿using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Backbone.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.DataSource;
 
 public interface IDataSource
 {

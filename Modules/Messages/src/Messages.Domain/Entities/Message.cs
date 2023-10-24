@@ -1,8 +1,8 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 
-namespace Backbone.Messages.Domain.Entities;
+namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Message : IIdentifiable<MessageId>
 {

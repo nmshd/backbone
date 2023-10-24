@@ -2,9 +2,9 @@
 using AutoMapper.Extensions.EnumMapping;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Synchronization.Application.SyncRuns.DTOs;
+namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
 public class SyncRunDTO : IHaveCustomMapping
 {

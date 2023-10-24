@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Tokens.Application.Tokens.Queries.ListTokens;
+namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class ListTokensQuery : IRequest<ListTokensResponse>
 {

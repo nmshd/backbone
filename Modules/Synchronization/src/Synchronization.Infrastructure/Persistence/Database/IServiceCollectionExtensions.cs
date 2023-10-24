@@ -1,8 +1,8 @@
-﻿using Backbone.Synchronization.Application.Infrastructure;
+﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Synchronization.Infrastructure.Persistence.Database;
+namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {

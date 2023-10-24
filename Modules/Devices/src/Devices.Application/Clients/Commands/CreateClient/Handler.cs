@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Domain.Aggregates.Tier;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Devices.Application.Clients.Commands.CreateClient;
+namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 
 public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse>
 {

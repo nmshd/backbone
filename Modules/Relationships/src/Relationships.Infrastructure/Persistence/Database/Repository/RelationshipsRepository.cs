@@ -4,18 +4,18 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Relationships.Application;
-using Backbone.Relationships.Application.Infrastructure;
-using Backbone.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Relationships.Common;
-using Backbone.Relationships.Domain.Entities;
-using Backbone.Relationships.Domain.Ids;
-using Backbone.Relationships.Infrastructure.Extensions;
+using Backbone.Modules.Relationships.Application;
+using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Common;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Relationships.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 
 public class RelationshipsRepository : IRelationshipsRepository
 {

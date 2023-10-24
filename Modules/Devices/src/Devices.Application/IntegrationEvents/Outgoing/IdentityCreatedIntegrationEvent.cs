@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities;
 
-namespace Backbone.Devices.Application.IntegrationEvents.Outgoing;
+namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 public class IdentityCreatedIntegrationEvent : IntegrationEvent
 {
     public IdentityCreatedIntegrationEvent(Identity identity) : base($"{identity.Address}/Created")

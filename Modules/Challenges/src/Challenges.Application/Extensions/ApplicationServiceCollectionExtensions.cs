@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Challenges.Application.AutoMapper;
-using Backbone.Challenges.Application.Challenges.Commands.CreateChallenge;
+using Backbone.Modules.Challenges.Application.AutoMapper;
+using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
-namespace Backbone.Challenges.Application.Extensions;
+namespace Backbone.Modules.Challenges.Application.Extensions;
 
 public static class ApplicationServiceCollectionExtensions
 {

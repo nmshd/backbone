@@ -1,8 +1,8 @@
-﻿using Backbone.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Devices.Application.Tiers.DTOs;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Tiers.DTOs;
 using MediatR;
 
-namespace Backbone.Devices.Application.Tiers.Queries.ListTiers;
+namespace Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
 {
     private readonly ITiersRepository _tierRepository;

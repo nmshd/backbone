@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Relationships.Domain.Entities;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Backbone.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
 public class CreateRelationshipTemplateResponse : IMapTo<RelationshipTemplate>
 {

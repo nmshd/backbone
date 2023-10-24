@@ -1,6 +1,6 @@
-﻿using Backbone.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities;
 
-namespace Backbone.Devices.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface IOAuthClientsRepository
 {

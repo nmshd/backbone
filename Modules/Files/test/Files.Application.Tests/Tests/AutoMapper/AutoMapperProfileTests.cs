@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Backbone.Files.Application.AutoMapper;
+using Backbone.Modules.Files.Application.AutoMapper;
 using Xunit;
 
-namespace Backbone.Files.Application.Tests.Tests.AutoMapper;
+namespace Backbone.Modules.Files.Application.Tests.Tests.AutoMapper;
 
 public class AutoMapperProfileTests
 {

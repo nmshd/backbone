@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Ids;
 
-namespace Backbone.Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public interface IRelationshipChangeLog : IEnumerable<RelationshipChange>
 {

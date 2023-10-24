@@ -6,9 +6,9 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
-using Backbone.Devices.Application.Devices.Commands.RegisterDevice;
-using Backbone.Devices.Infrastructure.OpenIddict;
-using Backbone.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using Serilog;
-using PublicKey = Backbone.Devices.Application.Devices.DTOs.PublicKey;
+using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
 

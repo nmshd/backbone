@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Devices.Application.AutoMapper;
-using Backbone.Devices.Application.Clients.Commands.DeleteClient;
-using Backbone.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.AutoMapper;
+using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
+using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Devices.Application.Extensions;
+namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {

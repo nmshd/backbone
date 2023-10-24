@@ -4,14 +4,14 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Files.Application;
-using Backbone.Files.Application.Files.Commands.CreateFile;
-using Backbone.Files.Application.Files.DTOs;
-using Backbone.Files.Application.Files.Queries.GetFileContent;
-using Backbone.Files.Application.Files.Queries.GetFileMetadata;
-using Backbone.Files.Application.Files.Queries.ListFileMetadata;
-using Backbone.Files.ConsumerApi.DTOs;
-using Backbone.Files.Domain.Entities;
+using Backbone.Modules.Files.Application;
+using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
+using Backbone.Modules.Files.Application.Files.DTOs;
+using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
+using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
+using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
+using Backbone.Modules.Files.ConsumerApi.DTOs;
+using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +20,7 @@ using Microsoft.Extensions.Options;
 using NeoSmart.Utils;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Files.ConsumerApi.Controllers;
+namespace Backbone.Modules.Files.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
