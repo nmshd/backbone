@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
@@ -16,6 +16,8 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
     styleUrls: ["./identities-overview.component.css"]
 })
 export class IdentitiesOverviewComponent {
+    @Input() public clientId?: string;
+
     @ViewChild(MatPaginator) public paginator!: MatPaginator;
     @ViewChild("addressFilter", { static: false }) public set addressFilter(input: ElementRef | undefined) {
         this.debounceFilter(input, "address");
@@ -77,9 +79,14 @@ export class IdentitiesOverviewComponent {
     }
 
     public ngOnInit(): void {
+        if (this.clientId) {
+            this.setClientFilter();
+        } else {
+            this.getClients();
+        }
+
         this.getIdentities();
         this.getTiers();
-        this.getClients();
     }
 
     private debounceFilter(filterElement: ElementRef | undefined, filterName: string): void {
@@ -112,6 +119,12 @@ export class IdentitiesOverviewComponent {
                 });
             }
         });
+    }
+
+    private setClientFilter(): void {
+        this.filter.clients = [this.clientId!];
+        this.displayedColumns = this.displayedColumns.filter((dc) => dc !== "createdWithClient");
+        this.displayedColumnFilters = this.displayedColumnFilters.filter((dcf) => dcf !== "client-filter");
     }
 
     private getClients(): void {
