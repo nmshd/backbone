@@ -193,9 +193,6 @@ static void Configure(WebApplication app)
     });
 }
 
-namespace Backbone.AdminUi
+public partial class Program
 {
-    public partial class Program
-    {
-    }
 }

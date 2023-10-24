@@ -239,9 +239,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
 
-namespace Backbone.ConsumerApi
+public partial class Program
 {
-    public partial class Program
-    {
-    }
 }
