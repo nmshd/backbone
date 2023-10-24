@@ -1,4 +1,6 @@
-﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
+﻿using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
+using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,7 +40,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(global::AdminUi.Infrastructure.CompiledModels.SqlServer.AdminUiDbContextModel.Instance);
+                        }).UseModel(SqlServerModel.AdminUiDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
@@ -46,7 +48,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(global::AdminUi.Infrastructure.CompiledModels.Postgres.AdminUiDbContextModel.Instance);
+                        }).UseModel(PostgresModel.AdminUiDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
