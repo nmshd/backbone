@@ -106,12 +106,6 @@ public class DirectPnsCommunicationOptions
             [Required]
             [MinLength(1)]
             public string KeyName { get; set; }
-
-            public enum ApnsServerType
-            {
-                Development,
-                Production
-            }
         }
 
         public class Key
