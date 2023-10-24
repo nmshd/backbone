@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment), cancellationToken);
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? "Production"), cancellationToken);
         }
         else
         {

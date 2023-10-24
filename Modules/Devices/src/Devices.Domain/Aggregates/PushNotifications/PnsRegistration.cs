@@ -23,7 +23,7 @@ public class PnsRegistration
     public PnsHandle Handle { get; private set; }
     public string AppId { get; set; }
     public DateTime UpdatedAt { get; private set; }
-    public Environment Environment { get; private set; }
+    public Environment? Environment { get; private set; }
 
     public void Update(PnsHandle newHandle, string appId, Environment environment)
     {
