@@ -9,7 +9,14 @@ public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<IdentityOverview> builder)
     {
         builder.ToView("IdentityOverviews");
-        builder.HasNoKey();
+        builder.OwnsOne(
+            c => c.Tier,
+            dt =>
+            {
+                dt.Property(p => p.Id).HasColumnName("TierId");
+                dt.Property(p => p.Name).HasColumnName("TierName");
+            });
+        builder.HasKey(c => c.Address);
     }
 }
 

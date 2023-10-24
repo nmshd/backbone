@@ -97,7 +97,7 @@ export class ClientListComponent {
         this.clients = this.serverClients;
         if (this.filter.clientId) this.clients = this.clients.filter((c) => c.clientId.toUpperCase().includes(this.filter.clientId!.toUpperCase()));
         if (this.filter.displayName) this.clients = this.clients.filter((c) => c.displayName.toUpperCase().includes(this.filter.displayName!.toUpperCase()));
-        if (this.filter.tiers && this.filter.tiers.length > 0) this.clients = this.clients.filter((c) => this.filter.tiers!.includes(c.defaultTier));
+        if (this.filter.tiers && this.filter.tiers.length > 0) this.clients = this.clients.filter((c) => this.filter.tiers!.includes(c.defaultTier.id));
         if (this.filter.numberOfIdentities.value !== undefined) {
             switch (this.filter.numberOfIdentities.operator) {
                 case "=":

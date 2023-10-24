@@ -23,7 +23,8 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 "Address",
                 typeof(string),
                 propertyInfo: typeof(IdentityOverview).GetProperty("Address", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<Address>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(IdentityOverview).GetField("<Address>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                afterSaveBehavior: PropertySaveBehavior.Throw);
 
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
@@ -67,17 +68,9 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 fieldInfo: typeof(IdentityOverview).GetField("<NumberOfDevices>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
 
-            var tierId = runtimeEntityType.AddProperty(
-                "TierId",
-                typeof(string),
-                propertyInfo: typeof(IdentityOverview).GetProperty("TierId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<TierId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
-            var tierName = runtimeEntityType.AddProperty(
-                "TierName",
-                typeof(string),
-                propertyInfo: typeof(IdentityOverview).GetProperty("TierName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(IdentityOverview).GetField("<TierName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            var key = runtimeEntityType.AddKey(
+                new[] { address });
+            runtimeEntityType.SetPrimaryKey(key);
 
             return runtimeEntityType;
         }
