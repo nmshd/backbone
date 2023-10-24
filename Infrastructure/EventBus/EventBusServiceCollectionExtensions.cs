@@ -19,14 +19,14 @@ public static class EventBusServiceCollectionExtensions
             case AZURE:
                 services.AddAzureServiceBus(options =>
                 {
-                    LoadBasicBusOptions<ServiceBusOptions>(configuration, options);
+                    LoadBasicBusOptions(configuration, options);
                     options.ConnectionString = configuration.ConnectionInfo;
                 });
                 break;
             case GOOGLE_CLOUD:
                 services.AddGoogleCloudPubSub(options =>
                 {
-                    LoadBasicBusOptions<GoogleCloudPubSubOptions>(configuration, options);
+                    LoadBasicBusOptions(configuration, options);
                     options.ProjectId = configuration.GcpPubSubProjectId;
                     options.TopicName = configuration.GcpPubSubTopicName;
                     options.ConnectionInfo = configuration.ConnectionInfo;
@@ -35,7 +35,7 @@ public static class EventBusServiceCollectionExtensions
             case RABBIT_MQ:
                 services.AddRabbitMq(options =>
                 {
-                    LoadBasicBusOptions<RabbitMqOptions>(configuration, options);
+                    LoadBasicBusOptions(configuration, options);
                     options.HostName = configuration.ConnectionInfo;
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
