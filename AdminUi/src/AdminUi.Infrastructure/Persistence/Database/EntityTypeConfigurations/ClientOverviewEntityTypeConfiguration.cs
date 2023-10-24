@@ -8,6 +8,13 @@ public class ClientOverviewEntityTypeConfiguration : IEntityTypeConfiguration<Cl
     public void Configure(EntityTypeBuilder<ClientOverview> builder)
     {
         builder.ToView("ClientOverviews");
-        builder.HasNoKey();
+        builder.OwnsOne(
+            c => c.DefaultTier,
+            dt =>
+            {
+                dt.Property(p => p.Id).HasColumnName("DefaultTierId");
+                dt.Property(p => p.Name).HasColumnName("DefaultTierName");
+            });
+        builder.HasKey(c => c.ClientId);
     }
 }

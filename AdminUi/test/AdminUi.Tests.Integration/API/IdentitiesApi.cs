@@ -25,6 +25,6 @@ public class IdentitiesApi : BaseApi
 
     public async Task<ODataResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
     {
-        return await GetOData<List<IdentityOverviewDTO>>("/Identities", requestConfiguration);
+        return await GetOData<List<IdentityOverviewDTO>>("/Identities?$expand=Tier", requestConfiguration);
     }
 }
