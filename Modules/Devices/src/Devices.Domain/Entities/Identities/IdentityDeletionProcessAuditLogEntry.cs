@@ -4,9 +4,14 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionProcessAuditLogEntry
 {
-    public static IdentityDeletionProcessAuditLogEntry ProcessStarted(IdentityDeletionProcessId processId, byte[] identityAddressHash, byte[] deviceIdHash)
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, byte[] identityAddressHash, byte[] deviceIdHash)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "Started deletion process.", identityAddressHash, deviceIdHash, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner.", identityAddressHash, deviceIdHash, null, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, byte[] identityAddressHash)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by a support employee.", identityAddressHash, null, null, DeletionProcessStatus.WaitingForApproval);
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)

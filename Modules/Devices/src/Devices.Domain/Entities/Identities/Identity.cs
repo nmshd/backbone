@@ -54,12 +54,22 @@ public class Identity
 
     public void StartDeletionProcess(DeviceId asDevice, IHasher hasher)
     {
+        EnsureNoActiveProcessExists();
+        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice, hasher));
+    }
+
+    public void StartDeletionProcess(IHasher hasher)
+    {
+        EnsureNoActiveProcessExists();
+        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, hasher));
+    }
+
+    private void EnsureNoActiveProcessExists()
+    {
         var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
 
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
-
-        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice, hasher));
     }
 }
 

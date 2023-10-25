@@ -12,20 +12,24 @@ public class IdentityDeletionProcess
         return new IdentityDeletionProcess(hasher.HashUtf8(createdBy), hasher.HashUtf8(createdByDevice));
     }
 
-    public static IdentityDeletionProcess Create(Device device, IHasher hasher)
+    public static IdentityDeletionProcess Create(IdentityAddress createdBy, IHasher hasher)
     {
-        return new IdentityDeletionProcess(hasher.HashUtf8(device.IdentityAddress), hasher.HashUtf8(device.Id));
+        return new IdentityDeletionProcess(hasher.HashUtf8(createdBy), null);
     }
 
-    private IdentityDeletionProcess(byte[] identityAddressHash, byte[] deviceIdHash)
+    private IdentityDeletionProcess(byte[] identityAddressHash, byte[]? deviceIdHash)
     {
         Id = IdentityDeletionProcessId.Generate();
         Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
+        var auditLogEntry = deviceIdHash == null ? 
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, identityAddressHash) :
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, identityAddressHash, deviceIdHash);
+
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
-            IdentityDeletionProcessAuditLogEntry.ProcessStarted(Id, identityAddressHash, deviceIdHash)
+            auditLogEntry
         };
     }
 
