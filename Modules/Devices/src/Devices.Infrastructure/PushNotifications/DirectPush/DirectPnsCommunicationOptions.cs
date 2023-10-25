@@ -106,22 +106,6 @@ public class DirectPnsCommunicationOptions
             [Required]
             [MinLength(1)]
             public string KeyName { get; set; }
-
-            public string Server => ServerType switch
-            {
-                ApnsServerType.Development => "https://api.sandbox.push.apple.com:443/3/device/",
-                ApnsServerType.Production => "https://api.push.apple.com:443/3/device/",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            [Required]
-            public ApnsServerType ServerType { get; set; }
-
-            public enum ApnsServerType
-            {
-                Development,
-                Production
-            }
         }
 
         public class Key

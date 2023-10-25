@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text.Json;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
@@ -9,6 +8,7 @@ using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -20,7 +20,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        ILogger<ApplePushNotificationServiceConnector> logger, IPnsRegistrationRepository registrationRepository)
+        ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
@@ -39,11 +39,10 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         {
             ValidateRegistration(pnsRegistration);
             var handle = pnsRegistration.Handle.Value;
-            var bundle = _options.GetBundleById(pnsRegistration.AppId!);
             var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
             var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{bundle.Server}{handle}", jwt.Value)
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, BuildUrl(pnsRegistration.Environment, handle), jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)
@@ -77,6 +76,18 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             else
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
         }
+    }
+
+    private static string BuildUrl(Environment environment, string handle)
+    {
+        var baseUrl = environment switch
+        {
+            Environment.Development => "https://api.sandbox.push.apple.com:443/3/device",
+            Environment.Production => "https://api.push.apple.com:443/3/device",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        return $"{baseUrl}/{handle}";
     }
 
     private static int GetNotificationId(object pushNotification)
