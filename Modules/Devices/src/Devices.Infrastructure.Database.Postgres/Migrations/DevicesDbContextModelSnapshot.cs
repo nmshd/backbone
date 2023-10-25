@@ -34,8 +34,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("Environment")
-                        .HasColumnType("integer");
+                    b.Property<int>("Environment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Handle")
                         .IsRequired()

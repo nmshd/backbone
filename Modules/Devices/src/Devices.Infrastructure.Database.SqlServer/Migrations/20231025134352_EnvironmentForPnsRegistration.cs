@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
     public partial class EnvironmentForPnsRegistration : Migration
@@ -13,8 +13,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "Environment",
                 table: "PnsRegistrations",
-                type: "integer",
-                nullable: true);
+                type: "int",
+                nullable: false,
+                defaultValue: 1);
         }
 
         /// <inheritdoc />

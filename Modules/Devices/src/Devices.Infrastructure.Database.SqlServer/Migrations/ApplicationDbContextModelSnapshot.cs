@@ -34,8 +34,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Environment")
-                        .HasColumnType("int");
+                    b.Property<int>("Environment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Handle")
                         .IsRequired()

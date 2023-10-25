@@ -42,10 +42,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
 
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
-                typeof(Environment?),
+                typeof(Environment),
                 propertyInfo: typeof(PnsRegistration).GetProperty("Environment", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<Environment>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
+                valueGenerated: ValueGenerated.OnAdd);
+            environment.AddAnnotation("Relational:DefaultValue", Environment.Production);
 
             var handle = runtimeEntityType.AddProperty(
                 "Handle",
