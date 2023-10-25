@@ -170,7 +170,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                         throw new Exception(
                             "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 
-                    concreteType.GetMethod("Handle")!.Invoke(handler, new object?[] { integrationEvent });
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
                 });
             }
             catch (Exception ex)
