@@ -42,7 +42,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
             var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{GetServer(pnsRegistration.Environment!.Value)}{handle}", jwt.Value)
+            var request = new ApnsMessageBuilder(pnsRegistration.AppId, $"{BuildUrl(pnsRegistration.Environment!.Value, handle)}", jwt.Value)
                 .AddContent(notificationContent)
                 .SetNotificationText(notificationTitle, notificationBody)
                 .SetNotificationId(notificationId)
@@ -78,14 +78,16 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         }
     }
 
-    private static string GetServer(Environment environment)
+    private static string BuildUrl(Environment environment, string handle)
     {
-        return environment switch
+        var baseUrl = environment switch
         {
             Environment.Development => "https://api.sandbox.push.apple.com:443/3/device/",
             Environment.Production => "https://api.push.apple.com:443/3/device/",
             _ => throw new ArgumentOutOfRangeException()
         };
+
+        return $"{baseUrl}{handle}";
     }
 
     private static int GetNotificationId(object pushNotification)
