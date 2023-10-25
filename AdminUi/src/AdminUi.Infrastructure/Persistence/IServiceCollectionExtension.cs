@@ -1,8 +1,8 @@
-﻿using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
-using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
-using Backbone.AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
+using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
 
 namespace Backbone.AdminUi.Infrastructure.Persistence;
 
