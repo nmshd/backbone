@@ -11,6 +11,8 @@ public class UpdateDeviceRegistrationValidator : AbstractValidator<UpdateDeviceR
     {
         RuleFor(dto => dto.Platform).In("fcm", "apns");
 
+        RuleFor(dto => dto.Environment).In("Development", "Production", null);
+
         RuleFor(dto => dto.Handle)
             .DetailedNotEmpty()
             .Length(10, 500).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
