@@ -15,6 +15,8 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushService _pushService;
     private readonly DeviceId _activeDevice;
+    private const string PRODUCTION_ENVIRONMENT = "Production";
+    private const string DEVELOPMENT_ENVIRONMENT = "Development";
 
     public Handler(IPushService pushService, IUserContext userContext)
     {
@@ -28,7 +30,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? "Production"), cancellationToken);
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
@@ -42,8 +44,8 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
     {
         return environment switch
         {
-            "Development" => Environment.Development,
-            "Production" => Environment.Production,
+            DEVELOPMENT_ENVIRONMENT => Environment.Development,
+            PRODUCTION_ENVIRONMENT => Environment.Production,
             _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
         };
     }
@@ -54,7 +56,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new NotImplementedException($"The environment '{platform}' is invalid.")
+            _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
         };
     }
 }
