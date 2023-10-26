@@ -9,7 +9,7 @@ using HttpResponse = Backbone.AdminUi.Tests.Integration.Models.HttpResponse;
 
 namespace Backbone.AdminUi.Tests.Integration.API;
 
-public class BaseApi
+internal class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     protected const string ODATA_ROUTE_PREFIX = "/odata";

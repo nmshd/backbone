@@ -7,7 +7,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Scope(Feature = "POST TierQuota")]
 [Scope(Feature = "DELETE TierQuota")]
-public class TierQuotaStepDefinitions : BaseStepDefinitions
+internal class TierQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private string _tierId;

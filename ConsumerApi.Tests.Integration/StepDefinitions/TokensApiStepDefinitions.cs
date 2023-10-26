@@ -13,7 +13,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Token")]
 [Scope(Feature = "GET Token")]
 [Scope(Feature = "GET Tokens")]
-public class TokensApiStepDefinitions : BaseStepDefinitions
+internal class TokensApiStepDefinitions : BaseStepDefinitions
 {
     private readonly TokensApi _tokensApi;
     private string _tokenId;

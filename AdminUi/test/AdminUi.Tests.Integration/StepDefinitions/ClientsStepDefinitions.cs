@@ -9,7 +9,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Clients")]
 [Scope(Feature = "DELETE Clients")]
 [Scope(Feature = "PATCH Clients")]
-public class ClientsStepDefinitions : BaseStepDefinitions
+internal class ClientsStepDefinitions : BaseStepDefinitions
 {
     private readonly ClientsApi _clientsApi;
     private readonly TiersApi _tiersApi;

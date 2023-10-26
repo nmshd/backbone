@@ -10,7 +10,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Tiers")]
 [Scope(Feature = "POST Tier")]
 [Scope(Feature = "DELETE Tier")]
-public class TiersStepDefinitions : BaseStepDefinitions
+internal class TiersStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private HttpResponse<TierDTO>? _tierResponse;

@@ -5,7 +5,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Log")]
-public class LogsStepDefinitions : BaseStepDefinitions
+internal class LogsStepDefinitions : BaseStepDefinitions
 {
     private readonly LogsApi _logsApi;
     private HttpResponse? _postResponse;

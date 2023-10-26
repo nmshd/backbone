@@ -4,7 +4,7 @@ using Backbone.AdminUi.Tests.Integration.Models;
 using Backbone.UnitTestTools.Data;
 
 namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
-public class ClientDetailsStepDefinitions : BaseStepDefinitions
+internal class ClientDetailsStepDefinitions : BaseStepDefinitions
 {
     private readonly ClientsApi _clientsApi;
     private readonly TiersApi _tiersApi;

@@ -7,7 +7,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Identities")]
-public class IdentitiesApiStepDefinitions : BaseStepDefinitions
+internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
     private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;

@@ -8,7 +8,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.ConsumerApi.Tests.Integration.API;
 
-public class BaseApi
+internal class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly HttpClient _httpClient;

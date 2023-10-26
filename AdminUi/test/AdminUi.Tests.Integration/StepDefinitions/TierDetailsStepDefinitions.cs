@@ -7,7 +7,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tier Details")]
-public class TierDetailsStepDefinitions : BaseStepDefinitions
+internal class TierDetailsStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private string _tierId;

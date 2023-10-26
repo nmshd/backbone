@@ -8,7 +8,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "POST IndividualQuota")]
 [Scope(Feature = "DELETE IndividualQuota")]
-public class IndividualQuotaStepDefinitions : BaseStepDefinitions
+internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
     private string _identityAddress;

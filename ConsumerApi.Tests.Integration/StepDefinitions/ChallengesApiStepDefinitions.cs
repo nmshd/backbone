@@ -10,7 +10,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "POST Challenge")]
 [Scope(Feature = "GET Challenge")]
-public class ChallengesApiStepDefinitions : BaseStepDefinitions
+internal class ChallengesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly ChallengesApi _challengeApi;
     private string _challengeId;

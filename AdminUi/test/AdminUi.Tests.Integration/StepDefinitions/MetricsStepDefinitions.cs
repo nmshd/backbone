@@ -6,7 +6,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Metrics")]
-public class MetricsStepDefinitions : BaseStepDefinitions
+internal class MetricsStepDefinitions : BaseStepDefinitions
 {
     private readonly MetricsApi _metricsApi;
     private HttpResponse<List<MetricDTO>>? _response;

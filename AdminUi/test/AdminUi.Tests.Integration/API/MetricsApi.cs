@@ -3,11 +3,11 @@ using Backbone.AdminUi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminUi.Tests.Integration.API;
-public class MetricsApi : BaseApi
+internal class MetricsApi : BaseApi
 {
     public MetricsApi(IOptions<HttpClientOptions> httpConfiguration, HttpClientFactory factory) : base(httpConfiguration, factory) { }
 
-    public async Task<HttpResponse<List<MetricDTO>>> GetAllMetrics(RequestConfiguration requestConfiguration)
+    internal async Task<HttpResponse<List<MetricDTO>>> GetAllMetrics(RequestConfiguration requestConfiguration)
     {
         return await Get<List<MetricDTO>>("/Metrics", requestConfiguration);
     }
