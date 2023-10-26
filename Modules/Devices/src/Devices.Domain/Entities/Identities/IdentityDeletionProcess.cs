@@ -1,4 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -42,28 +43,5 @@ public class IdentityDeletionProcess
     public bool IsActive()
     {
         return Status == DeletionProcessStatus.WaitingForApproval;
-    }
-}
-
-public static class Hasher
-{
-    private static IHasher _hasher = new HasherImpl();
-
-    public static void SetHasher(IHasher hasher)
-    {
-        _hasher = hasher;
-    }
-
-    public static byte[] HashUtf8(string input)
-    {
-        return _hasher.HashUtf8(input);
-    }
-}
-
-internal class HasherImpl : IHasher
-{
-    public byte[] HashUtf8(string input)
-    {
-        throw new NotImplementedException();
     }
 }
