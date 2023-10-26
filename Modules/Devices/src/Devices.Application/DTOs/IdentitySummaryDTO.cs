@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 

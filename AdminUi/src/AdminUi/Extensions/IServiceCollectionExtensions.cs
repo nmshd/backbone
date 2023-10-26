@@ -1,16 +1,19 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using AdminUi.Authentication;
-using AdminUi.Configuration;
+using Backbone.AdminUi.Authentication;
+using Backbone.AdminUi.Configuration;
+using Backbone.AdminUi.Infrastructure.DTOs;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 
-namespace AdminUi.Extensions;
+namespace Backbone.AdminUi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
@@ -162,6 +165,21 @@ public static class IServiceCollectionExtensions
         services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen();
+
+        return services;
+    }
+
+    public static IServiceCollection AddOData(this IServiceCollection services)
+    {
+        var builder = new ODataConventionModelBuilder()
+            .EnableLowerCamelCase();
+
+        builder.EntitySet<IdentityOverview>("Identities")
+            .EntityType.HasKey(identity => identity.Address);
+
+
+        services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
+            .AddRouteComponents("odata", builder.GetEdmModel()));
 
         return services;
     }

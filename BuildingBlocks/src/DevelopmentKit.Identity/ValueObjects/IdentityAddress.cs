@@ -2,10 +2,10 @@
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using Enmeshed.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using SimpleBase;
 
-namespace Enmeshed.DevelopmentKit.Identity.ValueObjects;
+namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(IdentityAddressTypeConverter))]

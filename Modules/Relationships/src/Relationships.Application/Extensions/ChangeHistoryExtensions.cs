@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Relationships.Domain.Entities;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Relationships.Application.Extensions;
 

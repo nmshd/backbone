@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 

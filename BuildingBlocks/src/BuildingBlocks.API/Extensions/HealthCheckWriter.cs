@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class HealthCheckWriter
 {

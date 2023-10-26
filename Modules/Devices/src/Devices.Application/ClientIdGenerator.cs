@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 
 namespace Backbone.Modules.Devices.Application;
 

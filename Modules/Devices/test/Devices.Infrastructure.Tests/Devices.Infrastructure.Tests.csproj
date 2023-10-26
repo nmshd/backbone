@@ -1,11 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,7 +19,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 	</ItemGroup>
 

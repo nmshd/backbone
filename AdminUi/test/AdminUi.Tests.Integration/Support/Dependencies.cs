@@ -1,10 +1,10 @@
-﻿using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Configuration;
+﻿using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
 
-namespace AdminUi.Tests.Integration.Support;
+namespace Backbone.AdminUi.Tests.Integration.Support;
 
 public static class Dependencies
 {

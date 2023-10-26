@@ -1,7 +1,7 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 #pragma warning disable CS8618 // turn off nullable checks
-namespace Enmeshed.DevelopmentKit.Identity.Entities;
+namespace Backbone.DevelopmentKit.Identity.Entities;
 
 public class Device
 {

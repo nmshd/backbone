@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Client, UpdateClientRequest, ClientServiceService } from "src/app/services/client-service/client-service";
+import { Client, ClientService, UpdateClientRequest } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
@@ -28,7 +28,7 @@ export class ClientEditComponent {
     public constructor(
         private readonly route: ActivatedRoute,
         private readonly snackBar: MatSnackBar,
-        private readonly clientService: ClientServiceService,
+        private readonly clientService: ClientService,
         private readonly tierService: TierService
     ) {
         this.headerCreate = "Create Client";

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace AdminUi.Tests.Integration.Models;
+namespace Backbone.AdminUi.Tests.Integration.Models;
 
 public class HttpResponse<T>
 {

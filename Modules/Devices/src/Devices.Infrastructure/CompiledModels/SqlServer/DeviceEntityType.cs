@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Domain.Errors;
+﻿namespace Backbone.BuildingBlocks.Domain.Errors;
 
 public class DomainError
 {

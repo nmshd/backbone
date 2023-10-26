@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;

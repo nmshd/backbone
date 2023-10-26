@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AdminUi.Controllers;
+namespace Backbone.AdminUi.Controllers;
 
 [Route("api/v1/xsrf")]
 [Authorize("ApiKey")]

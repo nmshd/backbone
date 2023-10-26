@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+﻿using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Infrastructure.EventBus;

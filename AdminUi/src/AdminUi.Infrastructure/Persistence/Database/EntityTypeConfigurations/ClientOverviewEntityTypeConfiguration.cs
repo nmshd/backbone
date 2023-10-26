@@ -1,13 +1,20 @@
-﻿using AdminUi.Infrastructure.DTOs;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AdminUi.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.AdminUi.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 public class ClientOverviewEntityTypeConfiguration : IEntityTypeConfiguration<ClientOverview>
 {
     public void Configure(EntityTypeBuilder<ClientOverview> builder)
     {
         builder.ToView("ClientOverviews");
-        builder.HasNoKey();
+        builder.OwnsOne(
+            c => c.DefaultTier,
+            dt =>
+            {
+                dt.Property(p => p.Id).HasColumnName("DefaultTierId");
+                dt.Property(p => p.Name).HasColumnName("DefaultTierName");
+            });
+        builder.HasKey(c => c.ClientId);
     }
 }

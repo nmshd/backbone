@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.Modules.Devices.Application.Clients.DTOs;
 

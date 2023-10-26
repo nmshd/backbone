@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Autofac;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

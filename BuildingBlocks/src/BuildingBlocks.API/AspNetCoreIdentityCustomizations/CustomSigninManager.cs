@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+namespace Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 
 public class CustomSigninManager : SignInManager<ApplicationUser>
 {

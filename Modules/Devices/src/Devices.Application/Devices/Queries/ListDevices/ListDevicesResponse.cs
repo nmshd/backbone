@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 
 namespace Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 

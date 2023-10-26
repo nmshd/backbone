@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;

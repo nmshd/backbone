@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;

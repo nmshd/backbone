@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipTemplate.Infrastructure.Reporter;
 
-namespace Relationships.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporterRelationshipTemplate : IReporter
 {

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
 

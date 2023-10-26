@@ -1,9 +1,9 @@
 ﻿using System.Text;
+using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SpecFlowCucumberResultsExporter.Reporting;
 
-namespace SpecFlowCucumberResultsExporter.Extensions;
+namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
 public class JsonReporter : Reporter
 {

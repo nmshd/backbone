@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Attributes;
+﻿using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;

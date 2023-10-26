@@ -1,13 +1,13 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 

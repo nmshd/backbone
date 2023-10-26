@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Common;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Common.FluentValidation;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;

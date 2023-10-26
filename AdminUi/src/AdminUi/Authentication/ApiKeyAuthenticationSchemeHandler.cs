@@ -3,7 +3,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
-namespace AdminUi.Authentication;
+namespace Backbone.AdminUi.Authentication;
 
 public class ApiKeyAuthenticationSchemeOptions : AuthenticationSchemeOptions
 {

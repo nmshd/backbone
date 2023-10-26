@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace AdminUi.Authentication;
+namespace Backbone.AdminUi.Authentication;
 
 public class ApiKeyValidator
 {

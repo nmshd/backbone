@@ -1,9 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Enmeshed.UnitTestTools.TestDoubles.Fakes;
+namespace Backbone.UnitTestTools.TestDoubles.Fakes;
 
 public static class FakeDbContextFactory
 {

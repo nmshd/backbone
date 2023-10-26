@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.UnitTestTools.Extensions;
+﻿namespace Backbone.UnitTestTools.Extensions;
 public static class EnumerableExtensions
 {
     public static T Second<T>(this IEnumerable<T> enumerable)

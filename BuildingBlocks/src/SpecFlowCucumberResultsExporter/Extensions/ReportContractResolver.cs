@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace SpecFlowCucumberResultsExporter.Extensions;
+namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
 public class ReportContractResolver : DefaultContractResolver
 {

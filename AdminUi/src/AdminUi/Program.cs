@@ -1,18 +1,18 @@
 ﻿using System.Reflection;
-using AdminUi.Authentication;
-using AdminUi.Configuration;
-using AdminUi.Extensions;
-using AdminUi.Infrastructure.Persistence;
-using AdminUi.Infrastructure.Persistence.Database;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.AdminUi.Authentication;
+using Backbone.AdminUi.Configuration;
+using Backbone.AdminUi.Extensions;
+using Backbone.AdminUi.Infrastructure.Persistence;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -100,6 +100,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
+        .AddOData()
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
@@ -190,8 +191,4 @@ static void Configure(WebApplication app)
     {
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
-}
-
-public partial class Program
-{
 }
