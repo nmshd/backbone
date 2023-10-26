@@ -99,18 +99,22 @@ static WebApplication CreateApp(string[] args)
 
     app
         .MigrateDbContext<ChallengesDbContext>()
-        .MigrateDbContext<DevicesDbContext>((context, sp) =>
-        {
-            var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
-            devicesDbContextSeed.SeedAsync(context).Wait();
-        })
+        .MigrateDbContext<DevicesDbContext>()
         .MigrateDbContext<FilesDbContext>()
         .MigrateDbContext<RelationshipsDbContext>()
-        .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+        .MigrateDbContext<QuotasDbContext>()
         .MigrateDbContext<MessagesDbContext>()
         .MigrateDbContext<SynchronizationDbContext>()
         .MigrateDbContext<TokensDbContext>()
         .MigrateDbContext<QuotasDbContext>();
+
+    app
+        .SeedDbContext<DevicesDbContext>((context, sp) =>
+        {
+            var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
+            devicesDbContextSeed.SeedAsync(context).Wait();
+        })
+        .SeedDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); });
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {

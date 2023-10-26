@@ -9,8 +9,7 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class HostExtensions
 {
-    public static IHost MigrateDbContext<TContext>(this IHost host,
-        Action<TContext, IServiceProvider>? seeder = null) where TContext : DbContext
+    public static IHost MigrateDbContext<TContext>(this IHost host) where TContext : DbContext
     {
         using var scope = host.Services.CreateScope();
 
@@ -34,14 +33,41 @@ public static class HostExtensions
 
             retry.Execute(context.Database.Migrate);
 
-            seeder?.Invoke(context, services);
-
             logger.LogInformation("Migrated database associated with context '{context}'", typeof(TContext).Name);
         }
         catch (Exception ex)
         {
             logger.LogError(ex,
-                "An error occurred while migrating the database used on context {context}", typeof(TContext).Name);
+                "An error occurred while migrating the database associated with context {context}", typeof(TContext).Name);
+            throw;
+        }
+
+        return host;
+    }
+
+    public static IHost SeedDbContext<TContext>(this IHost host,
+        Action<TContext, IServiceProvider>? seeder = null) where TContext : DbContext
+    {
+        using var scope = host.Services.CreateScope();
+
+        var services = scope.ServiceProvider;
+
+        var logger = services.GetRequiredService<ILogger<TContext>>();
+
+        var context = services.GetRequiredService<TContext>();
+
+        try
+        {
+            logger.LogInformation("Seeding database associated with context '{context}'", typeof(TContext).Name);
+
+            seeder?.Invoke(context, services);
+
+            logger.LogInformation("Seeded database associated with context '{context}'", typeof(TContext).Name);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "An error occurred while seeding the database associated with context {context}", typeof(TContext).Name);
             throw;
         }
 
