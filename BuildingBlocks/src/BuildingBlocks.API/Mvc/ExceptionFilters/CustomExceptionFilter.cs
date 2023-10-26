@@ -80,7 +80,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             default:
-                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl());
+                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl(), context.Exception);
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
@@ -236,5 +236,5 @@ internal static partial class ExceptionFilterLogs
         EventName = "ExceptionFilter.ErrorWhileProcessingRequestToUri",
         Level = LogLevel.Error,
         Message = "Unexpected Error while processing request to '{uri}'.")]
-    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri);
+    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri, Exception ex);
 }
