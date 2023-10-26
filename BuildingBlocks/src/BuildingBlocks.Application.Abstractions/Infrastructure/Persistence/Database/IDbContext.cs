@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 
 public interface IDbContext
 {

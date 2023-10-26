@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 public class TierOfIdentityChangedIntegrationEvent : IntegrationEvent

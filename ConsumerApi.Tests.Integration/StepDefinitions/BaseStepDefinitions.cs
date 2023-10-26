@@ -1,8 +1,8 @@
-﻿using ConsumerApi.Tests.Integration.Configuration;
-using ConsumerApi.Tests.Integration.Models;
+﻿using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 
-namespace ConsumerApi.Tests.Integration.StepDefinitions;
+namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 public class BaseStepDefinitions

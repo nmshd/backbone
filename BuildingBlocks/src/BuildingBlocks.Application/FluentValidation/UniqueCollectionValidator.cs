@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Enmeshed.BuildingBlocks.Application.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
 public class UniqueCollectionValidator<T, TElement, TPropertyKey> : PropertyValidator<T, IEnumerable<TElement>>
 {

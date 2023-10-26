@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.Tooling.Extensions;
+﻿namespace Backbone.Tooling.Extensions;
 
 public static class DateTimeExtensions
 {

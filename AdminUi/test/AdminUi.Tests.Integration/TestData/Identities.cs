@@ -1,4 +1,4 @@
-﻿namespace AdminUi.Tests.Integration.TestData;
+﻿namespace Backbone.AdminUi.Tests.Integration.TestData;
 
 public static class Identities
 {

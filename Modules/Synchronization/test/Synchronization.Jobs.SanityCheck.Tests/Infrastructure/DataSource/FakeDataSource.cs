@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Jobs.SanityCheck.Infrastructure.DataSource;
 
-namespace Synchronization.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+namespace Backbone.Modules.Synchronization.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
 public class FakeDataSource : IDataSource
 {

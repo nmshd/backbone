@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions;
+namespace Backbone.BuildingBlocks.Application.Extensions;
 
 public static class DbSetExtensions
 {

@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Microsoft.AspNetCore;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Core.Enrichers;
 
-namespace ConsumerApi.Mvc.Middleware;
+namespace Backbone.ConsumerApi.Mvc.Middleware;
 
 public class UserDataLoggingMiddleware
 {

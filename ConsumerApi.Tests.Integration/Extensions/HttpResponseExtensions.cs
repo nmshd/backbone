@@ -1,7 +1,7 @@
-﻿using ConsumerApi.Tests.Integration.Models;
-using ConsumerApi.Tests.Integration.Support;
+﻿using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 
-namespace ConsumerApi.Tests.Integration.Extensions;
+namespace Backbone.ConsumerApi.Tests.Integration.Extensions;
 
 public static class HttpResponseExtensions
 {

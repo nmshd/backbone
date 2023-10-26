@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Files.Domain.Entities;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Files;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Files;
 
 public class FileIdJsonConverter : JsonConverter<FileId>
 {

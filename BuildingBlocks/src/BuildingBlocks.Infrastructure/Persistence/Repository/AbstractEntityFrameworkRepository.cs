@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Repository;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Repository;
 
 public abstract class AbstractEntityFrameworkRepository<T, TId> : IRepository<T, TId> where T : class
 {

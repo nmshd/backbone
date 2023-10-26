@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <SpaProxyServerUrl>http://localhost:44480</SpaProxyServerUrl>
         <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-        <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..</DockerfileContext>
     </PropertyGroup>
@@ -45,7 +43,7 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
         <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
         <ProjectReference Include="..\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj" />

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using SpecFlowCucumberResultsExporter.Model;
+using Backbone.SpecFlowCucumberResultsExporter.Model;
 
-namespace SpecFlowCucumberResultsExporter.Extensions;
+namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
 public static class Extensions
 {

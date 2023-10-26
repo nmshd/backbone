@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using MediatR;
 
-namespace Enmeshed.BuildingBlocks.Application.CQRS.BaseClasses;
+namespace Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 
 public abstract class CollectionCommandBase<TResponse, TItem> : IRequest<TResponse>, ICollection<TItem>
 {

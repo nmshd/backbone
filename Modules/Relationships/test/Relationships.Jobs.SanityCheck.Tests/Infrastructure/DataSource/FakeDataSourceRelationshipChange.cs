@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Jobs.SanityCheck.RelationshipChange.Infrastructure.DataSource;
 
-namespace Relationships.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+namespace Backbone.Modules.Relationships.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
 public class FakeDataSourceRelationshipChange : IDataSource
 {

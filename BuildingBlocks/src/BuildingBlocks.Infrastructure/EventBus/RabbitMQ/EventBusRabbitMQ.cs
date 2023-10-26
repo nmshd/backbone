@@ -1,10 +1,9 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using Autofac;
-using Azure.Messaging.ServiceBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -12,7 +11,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
@@ -192,7 +191,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
-            await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {
@@ -205,14 +203,21 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                     {
                         ContractResolver = new ContractResolverWithPrivates()
                     });
-                var handler = scope.ResolveOptional(subscription.HandlerType) ?? throw new Exception(
-                        $"The handler type {subscription.HandlerType.FullName} is not registered in the dependency container.");
-                var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-
                 var policy = EventBusRetryPolicyFactory.Create(
                     _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
-                await policy.ExecuteAsync(() => (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!);
+                await policy.ExecuteAsync(async () =>
+                {
+                    await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                        throw new Exception(
+                            "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+
+                    var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+                });
             }
         }
         else

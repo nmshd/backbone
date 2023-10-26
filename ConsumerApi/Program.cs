@@ -1,5 +1,15 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Common.Infrastructure;
+using Backbone.ConsumerApi;
+using Backbone.ConsumerApi.Configuration;
+using Backbone.ConsumerApi.Extensions;
+using Backbone.ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Infrastructure.Logging;
 using Backbone.Modules.Challenges.ConsumerApi;
@@ -18,17 +28,7 @@ using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using ConsumerApi;
-using ConsumerApi.Configuration;
-using ConsumerApi.Extensions;
-using ConsumerApi.Mvc.Middleware;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.Common.Infrastructure;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -99,18 +99,18 @@ static WebApplication CreateApp(string[] args)
 
     app
         .MigrateDbContext<ChallengesDbContext>()
-        .MigrateDbContext<DevicesDbContext>((context, sp) =>
-        {
-            var devicesDbContextSeed = new DevicesDbContextSeed(sp.GetRequiredService<IMediator>());
-            devicesDbContextSeed.SeedAsync(context).Wait();
-        })
+        .MigrateDbContext<DevicesDbContext>()
         .MigrateDbContext<FilesDbContext>()
         .MigrateDbContext<RelationshipsDbContext>()
-        .MigrateDbContext<QuotasDbContext>((context, sp) => { new QuotasDbContextSeed(sp.GetRequiredService<DevicesDbContext>()).SeedAsync(context).Wait(); })
+        .MigrateDbContext<QuotasDbContext>()
         .MigrateDbContext<MessagesDbContext>()
         .MigrateDbContext<SynchronizationDbContext>()
         .MigrateDbContext<TokensDbContext>()
         .MigrateDbContext<QuotasDbContext>();
+
+    app
+        .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -123,6 +123,9 @@ static WebApplication CreateApp(string[] args)
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services.AddSaveChangesTimeInterceptor();
+
+    services.AddTransient<DevicesDbContextSeeder>();
+    services.AddTransient<QuotasDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)
@@ -237,8 +240,4 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
-}
-
-public partial class Program
-{
 }

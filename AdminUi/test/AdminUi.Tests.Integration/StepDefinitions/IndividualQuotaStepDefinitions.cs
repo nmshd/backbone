@@ -1,14 +1,14 @@
-﻿using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Extensions;
-using AdminUi.Tests.Integration.Models;
-using AdminUi.Tests.Integration.TestData;
+﻿using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Extensions;
+using Backbone.AdminUi.Tests.Integration.Models;
+using Backbone.AdminUi.Tests.Integration.TestData;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST IndividualQuota")]
 [Scope(Feature = "DELETE IndividualQuota")]
-public class IndividualQuotaStepDefinitions : BaseStepDefinitions
+internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
     private string _identityAddress;

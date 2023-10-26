@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
+﻿using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentAssertions;
 using FluentValidation;
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.Application.Tests.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.Tests.FluentValidation;
 
 public class ValueInValidatorTests
 {

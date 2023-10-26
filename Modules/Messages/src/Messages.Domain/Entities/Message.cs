@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
