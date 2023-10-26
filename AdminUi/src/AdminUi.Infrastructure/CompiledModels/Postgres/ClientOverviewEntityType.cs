@@ -15,7 +15,7 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "AdminUi.Infrastructure.DTOs.ClientOverview",
+                "Backbone.AdminUi.Infrastructure.DTOs.ClientOverview",
                 typeof(ClientOverview),
                 baseEntityType);
 

@@ -15,7 +15,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "AdminUi.Infrastructure.DTOs.IdentityOverview.Tier#TierDTO",
+                "Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview.Tier#TierDTO",
                 typeof(TierDTO),
                 baseEntityType,
                 sharedClrType: true);
@@ -24,7 +24,6 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 "IdentityOverviewAddress",
                 typeof(string),
                 afterSaveBehavior: PropertySaveBehavior.Throw);
-            identityOverviewAddress.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var id = runtimeEntityType.AddProperty(
                 "Id",
@@ -32,7 +31,6 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(TierDTO).GetProperty("Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TierDTO).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
             id.AddAnnotation("Relational:ColumnName", "TierId");
-            id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var name = runtimeEntityType.AddProperty(
                 "Name",
@@ -40,7 +38,6 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(TierDTO).GetProperty("Name", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(TierDTO).GetField("<Name>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
             name.AddAnnotation("Relational:ColumnName", "TierName");
-            name.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
                 new[] { identityOverviewAddress });
