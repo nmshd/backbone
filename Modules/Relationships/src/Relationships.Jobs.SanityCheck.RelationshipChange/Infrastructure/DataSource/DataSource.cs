@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Relationships.Application.Infrastructure;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -29,6 +29,6 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<RelationshipChangeId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.SetReadOnly<Backbone.Modules.Relationships.Domain.Entities.RelationshipChange>().Select(u => u.Id).ToListAsync(cancellationToken);
+        return await _dbContext.SetReadOnly<Domain.Entities.RelationshipChange>().Select(u => u.Id).ToListAsync(cancellationToken);
     }
 }

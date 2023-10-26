@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
-using Enmeshed.Tooling.Extensions;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 
 public static class BlobStorageServiceCollectionExtensions
 {

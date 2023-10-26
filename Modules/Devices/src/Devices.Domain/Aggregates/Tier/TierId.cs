@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
-using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 

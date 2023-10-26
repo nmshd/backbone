@@ -1,7 +1,7 @@
 ﻿using Polly;
 using Polly.Retry;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 internal class EventBusRetryPolicyFactory
 {
     static internal AsyncRetryPolicy Create(HandlerRetryBehavior handlerRetryBehavior, Action<Exception, TimeSpan> onRetry)

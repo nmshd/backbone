@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Tokens.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.Modules.Tokens.Domain.Entities;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 

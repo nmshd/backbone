@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Relationships.Domain.Errors;
 

@@ -1,15 +1,15 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.ConsumerApi.Configuration;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using ConsumerApi.Configuration;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,7 +19,7 @@ using OpenIddict.Validation.AspNetCore;
 using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
-namespace ConsumerApi.Extensions;
+namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {

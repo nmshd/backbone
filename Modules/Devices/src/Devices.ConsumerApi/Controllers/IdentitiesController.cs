@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Devices.Application.Extensions;
+﻿using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

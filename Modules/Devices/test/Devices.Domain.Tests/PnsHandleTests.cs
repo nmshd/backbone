@@ -3,7 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using FluentAssertions;
 using Xunit;
 
-namespace Devices.Domain.Tests;
+namespace Backbone.Modules.Devices.Domain.Tests;
 public class PnsHandleTests
 {
     [Fact]

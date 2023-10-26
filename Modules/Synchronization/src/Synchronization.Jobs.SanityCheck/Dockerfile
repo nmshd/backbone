@@ -4,6 +4,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
+COPY ["Directory.Build.props", "."]
 COPY ["Modules/Synchronization/src/Synchronization.Jobs.SanityCheck/Synchronization.Jobs.SanityCheck.csproj", "Modules/Synchronization/src/Synchronization.Jobs.SanityCheck/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -31,4 +32,4 @@ RUN dotnet publish /property:UseAppHost=false /property:WarningLevel=0 --configu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Synchronization.Jobs.SanityCheck.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Modules.Synchronization.Jobs.SanityCheck.dll"]

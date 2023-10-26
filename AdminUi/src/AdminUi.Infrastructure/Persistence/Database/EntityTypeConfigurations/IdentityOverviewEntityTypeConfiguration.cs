@@ -1,8 +1,8 @@
-﻿using AdminUi.Infrastructure.DTOs;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AdminUi.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+namespace Backbone.AdminUi.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
 public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<IdentityOverview>
 {

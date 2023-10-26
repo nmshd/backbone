@@ -2,7 +2,7 @@
 using FluentAssertions.Primitives;
 using Xunit.Sdk;
 
-namespace Enmeshed.UnitTestTools.FluentAssertions.Extensions;
+namespace Backbone.UnitTestTools.FluentAssertions.Extensions;
 
 public static class ObjectAssertionsExtensions
 {

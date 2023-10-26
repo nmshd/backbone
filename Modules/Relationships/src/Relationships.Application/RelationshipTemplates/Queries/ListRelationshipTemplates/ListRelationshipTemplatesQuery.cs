@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 

@@ -1,4 +1,4 @@
-﻿namespace AdminUi.Infrastructure.DTOs;
+﻿namespace Backbone.AdminUi.Infrastructure.DTOs;
 public class TierDTO
 {
     public string Id { get; set; }

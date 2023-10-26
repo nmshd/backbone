@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

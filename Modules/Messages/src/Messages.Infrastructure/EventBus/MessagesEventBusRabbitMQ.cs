@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Backbone.Modules.Messages.Application.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Messages.Infrastructure.EventBus;

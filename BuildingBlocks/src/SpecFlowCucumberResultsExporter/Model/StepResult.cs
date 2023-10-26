@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SpecFlowCucumberResultsExporter.Model;
+namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 public class StepResult
 {

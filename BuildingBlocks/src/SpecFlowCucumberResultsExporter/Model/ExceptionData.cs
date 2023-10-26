@@ -1,6 +1,6 @@
-﻿using SpecFlowCucumberResultsExporter.Extensions;
+﻿using Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
-namespace SpecFlowCucumberResultsExporter.Model;
+namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 /// <summary>
 ///     Contains the information about an <see cref="Exception" />.

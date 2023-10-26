@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Application.CQRS.BaseClasses;
+﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 
-namespace Enmeshed.BuildingBlocks.Application.Pagination;
+namespace Backbone.BuildingBlocks.Application.Pagination;
 
 public class PagedResponse<T> : EnumerableResponseBase<T>
 {

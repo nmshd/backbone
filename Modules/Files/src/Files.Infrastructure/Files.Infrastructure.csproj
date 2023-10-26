@@ -1,12 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<Compile Remove="Persistence\Migrations\**" />
 		<EmbeddedResource Remove="Persistence\Migrations\**" />
