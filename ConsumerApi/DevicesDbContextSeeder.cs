@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi;
 
-public class DevicesDbContextSeed : IDbSeeder<DevicesDbContext>
+public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 {
     private readonly IMediator _mediator;
 
-    public DevicesDbContextSeed(IMediator mediator)
+    public DevicesDbContextSeeder(IMediator mediator)
     {
         _mediator = mediator;
     }

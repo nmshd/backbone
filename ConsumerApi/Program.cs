@@ -109,8 +109,8 @@ static WebApplication CreateApp(string[] args)
         .MigrateDbContext<QuotasDbContext>();
 
     app
-        .SeedDbContext<DevicesDbContext, DevicesDbContextSeed>()
-        .SeedDbContext<QuotasDbContext, QuotasDbContextSeed>();
+        .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -124,8 +124,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services.AddSaveChangesTimeInterceptor();
 
-    services.AddTransient<IDbSeeder<DevicesDbContext>, DevicesDbContextSeed>();
-    services.AddTransient<IDbSeeder<QuotasDbContext>, QuotasDbContextSeed>();
+    services.AddTransient<DevicesDbContextSeeder>();
+    services.AddTransient<QuotasDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)

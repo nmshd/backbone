@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi;
 
-public class QuotasDbContextSeed : IDbSeeder<QuotasDbContext>
+public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 {
     private readonly DevicesDbContext _devicesDbContext;
 
-    public QuotasDbContextSeed(DevicesDbContext devicesDbContext)
+    public QuotasDbContextSeeder(DevicesDbContext devicesDbContext)
     {
         _devicesDbContext = devicesDbContext;
     }
