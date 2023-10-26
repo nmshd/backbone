@@ -45,8 +45,7 @@ public static class HostExtensions
         return host;
     }
 
-    public static IHost SeedDbContext<TContext>(this IHost host,
-        Action<TContext, IServiceProvider>? seeder = null) where TContext : DbContext
+    public static IHost SeedDbContext<TContext, TSeeder>(this IHost host) where TContext : DbContext where TSeeder : IDbSeeder<TContext>
     {
         using var scope = host.Services.CreateScope();
 
@@ -56,11 +55,13 @@ public static class HostExtensions
 
         var context = services.GetRequiredService<TContext>();
 
+        var seeder = services.GetRequiredService<TSeeder>();
+
         try
         {
             logger.LogInformation("Seeding database associated with context '{context}'", typeof(TContext).Name);
 
-            seeder?.Invoke(context, services);
+            seeder.SeedAsync(context).GetAwaiter().GetResult();
 
             logger.LogInformation("Seeded database associated with context '{context}'", typeof(TContext).Name);
         }

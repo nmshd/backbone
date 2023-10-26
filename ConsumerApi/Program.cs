@@ -109,8 +109,8 @@ static WebApplication CreateApp(string[] args)
         .MigrateDbContext<QuotasDbContext>();
 
     app
-        .SeedDbContext<DevicesDbContext>()
-        .SeedDbContext<QuotasDbContext>();
+        .SeedDbContext<DevicesDbContext, DevicesDbContextSeed>()
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeed>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
