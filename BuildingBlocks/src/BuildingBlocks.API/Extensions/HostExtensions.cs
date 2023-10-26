@@ -12,11 +12,8 @@ public static class HostExtensions
     public static IHost MigrateDbContext<TContext>(this IHost host) where TContext : DbContext
     {
         using var scope = host.Services.CreateScope();
-
         var services = scope.ServiceProvider;
-
         var logger = services.GetRequiredService<ILogger<TContext>>();
-
         var context = services.GetRequiredService<TContext>();
 
         try
@@ -48,13 +45,9 @@ public static class HostExtensions
     public static IHost SeedDbContext<TContext, TSeeder>(this IHost host) where TContext : DbContext where TSeeder : IDbSeeder<TContext>
     {
         using var scope = host.Services.CreateScope();
-
         var services = scope.ServiceProvider;
-
         var logger = services.GetRequiredService<ILogger<TContext>>();
-
         var context = services.GetRequiredService<TContext>();
-
         var seeder = services.GetRequiredService<TSeeder>();
 
         try
