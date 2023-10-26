@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Microsoft.Extensions.Logging;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
@@ -20,7 +21,7 @@ public class DummyPushService : IPushService
         return Task.CompletedTask;
     }
 
-    public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, CancellationToken cancellationToken)
+    public Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Registering for push notifications of Identity '{address}' and device '{deviceId}.", address, deviceId);
         return Task.CompletedTask;

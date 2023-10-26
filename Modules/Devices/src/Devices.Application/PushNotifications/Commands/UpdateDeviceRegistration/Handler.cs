@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
@@ -14,6 +15,8 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushService _pushService;
     private readonly DeviceId _activeDevice;
+    private const string PRODUCTION_ENVIRONMENT = "Production";
+    private const string DEVELOPMENT_ENVIRONMENT = "Development";
 
     public Handler(IPushService pushService, IUserContext userContext)
     {
@@ -27,7 +30,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, cancellationToken);
+            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
@@ -35,6 +38,16 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         }
 
         return Unit.Value;
+    }
+
+    private static Environment DeserializeEnvironment(string environment)
+    {
+        return environment switch
+        {
+            DEVELOPMENT_ENVIRONMENT => Environment.Development,
+            PRODUCTION_ENVIRONMENT => Environment.Production,
+            _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
+        };
     }
 
     private static PushNotificationPlatform DeserializePlatform(string platform)
