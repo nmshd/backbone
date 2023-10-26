@@ -241,10 +241,3 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
-
-namespace Backbone.ConsumerApi
-{
-    public partial class Program
-    {
-    }
-}

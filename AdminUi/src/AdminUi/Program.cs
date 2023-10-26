@@ -192,10 +192,3 @@ static void Configure(WebApplication app)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 }
-
-namespace Backbone.AdminUi
-{
-    public partial class Program
-    {
-    }
-}
