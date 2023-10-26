@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application;
+using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Enmeshed.BuildingBlocks.API;
@@ -30,6 +31,10 @@ public class QuotasModule : AbstractModule
         });
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+
+        services.AddMemoryCache();
+
+        services.AddTransient<MetricToMetricDtoResolver>();
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)
