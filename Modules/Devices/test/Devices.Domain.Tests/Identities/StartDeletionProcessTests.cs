@@ -12,6 +12,11 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class StartDeletionProcessTests
 {
+    public StartDeletionProcessTests()
+    {
+        Hasher.SetHasher(A.Dummy<IHasher>());
+    }
+
     [Fact]
     public void Start_deletion_process_as_owner()
     {
@@ -21,8 +26,10 @@ public class StartDeletionProcessTests
         var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
         var asDevice = DeviceId.Parse("DVC");
 
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
         // Act
-        activeIdentity.StartDeletionProcess(asDevice, new DummyHasher(new byte[] { 1, 2, 3 }));
+        activeIdentity.StartDeletionProcess(asDevice);
 
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity, "The deletion process was started by the owner.", new byte[] { 1, 2, 3 });
@@ -53,8 +60,10 @@ public class StartDeletionProcessTests
         var identityAddress = IdentityAddress.Create(Array.Empty<byte>(), "id1");
         var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
 
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
         // Act
-        activeIdentity.StartDeletionProcess(new DummyHasher(new byte[] { 1, 2, 3 }));
+        activeIdentity.StartDeletionProcess();
 
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity, "The deletion process was started by a support employee.");
@@ -104,18 +113,5 @@ public class StartDeletionProcessTests
 
         auditLogEntry.OldStatus.Should().BeNull();
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-    }
-}
-
-file static class IdentityExtensions
-{
-    public static void StartDeletionProcess(this Identity identity, DeviceId asDevice)
-    {
-        identity.StartDeletionProcess(asDevice, A.Dummy<IHasher>());
-    }
-
-    public static void StartDeletionProcess(this Identity identity)
-    {
-        identity.StartDeletionProcess( A.Dummy<IHasher>());
     }
 }

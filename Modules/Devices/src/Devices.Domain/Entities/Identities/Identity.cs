@@ -52,16 +52,16 @@ public class Identity
         TierId = id;
     }
 
-    public void StartDeletionProcess(DeviceId asDevice, IHasher hasher)
+    public void StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice, hasher));
+        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice));
     }
 
-    public void StartDeletionProcess(IHasher hasher)
+    public void StartDeletionProcess()
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, hasher));
+        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address));
     }
 
     private void EnsureNoActiveProcessExists()
