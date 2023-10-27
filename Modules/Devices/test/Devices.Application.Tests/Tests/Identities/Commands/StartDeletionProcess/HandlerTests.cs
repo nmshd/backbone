@@ -17,7 +17,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.S
 public class HandlerTests
 {
     [Fact]
-    public async Task Happy_path()
+    public async Task Happy_path_as_owner()
     {
         // Arrange
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -51,7 +51,42 @@ public class HandlerTests
     }
 
     [Fact]
-    public void Test() // todo: rename
+    public async Task Happy_path_as_support()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockEventBus = A.Fake<IEventBus>();
+        var fakeUserContext = A.Fake<IUserContext>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(
+                A<IdentityAddress>._,
+                A<CancellationToken>._,
+                A<bool>._))
+            .Returns(identity);
+
+        A.CallTo(() => fakeUserContext.GetAddressOrNull())
+            .Returns(null);
+
+        var handler = CreateHandler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
+
+        // Act
+        await handler.Handle(new StartDeletionProcessCommand(identity.Address), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockIdentitiesRepository.Update(
+                A<Identity>.That.Matches(i => i.DeletionProcesses.Count == 1),
+                A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockEventBus.Publish(
+                A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e => e.IdentityAddress == identity.Address)))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public void Identity_can_only_start_deletion_process_for_itself()
     {
         // Arrange
         var fakeUserContext = A.Fake<IUserContext>();
@@ -68,13 +103,11 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<ApplicationException>().Which.Code.Should().Be("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity");
     }
 
-
     [Fact]
-    public void Throws_NotFoundException_when_identity_is_not_found()
+    public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var dummyEventBus = A.Dummy<IEventBus>();
         var fakeUserContext = A.Fake<IUserContext>();
         var address = TestDataGenerator.CreateRandomIdentityAddress();
 
@@ -96,16 +129,6 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
     }
 
-    [Fact]
-    public void Test2()
-    {
-        // Arrange
-
-        // Act
-
-        // Assert
-    }
-
     private static Handler CreateHandler(IUserContext identitiesRepository)
     {
         return CreateHandler(A.Dummy<IIdentitiesRepository>(), A.Dummy<IEventBus>(), identitiesRepository);
@@ -120,6 +143,4 @@ public class HandlerTests
     {
         return new Handler(identitiesRepository, eventBus, userContext);
     }
-
-    // StartDeletionProcess as Owner / Support
 }

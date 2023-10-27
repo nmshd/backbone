@@ -25,9 +25,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand>
 
     public async Task Handle(StartDeletionProcessCommand request, CancellationToken cancellationToken)
     {
-        var address = _userContext.GetAddressOrNull();
-
-        EnsureStartedByOwner(request, address);
+        EnsureStartedByOwnerOrSupport(request);
 
         var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -38,9 +36,13 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand>
         _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address));
     }
 
-    private static void EnsureStartedByOwner(StartDeletionProcessCommand request, IdentityAddress address)
+    private void EnsureStartedByOwnerOrSupport(StartDeletionProcessCommand request)
     {
-        if (address != request.IdentityAddress)
+        var address = _userContext.GetAddressOrNull();
+        var userIsSupport = address == null;
+        var userIsOwner = address == request.IdentityAddress;
+        
+        if (!userIsOwner && !userIsSupport)
         {
             throw new ApplicationException(ApplicationErrors.Identities.CanOnlyStartDeletionProcessForOwnIdentity());
         }
