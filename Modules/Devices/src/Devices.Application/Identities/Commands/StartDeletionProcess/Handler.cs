@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.Entities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using MediatR;
@@ -26,10 +27,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand>
     {
         var address = _userContext.GetAddressOrNull();
 
-        if (address != request.IdentityAddress)
-        {
-            throw new ApplicationException(ApplicationErrors.Identities.CanOnlyStartDeletionProcessForOwnIdentity()); 
-        }
+        EnsureStartedByOwner(request, address);
 
         var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -38,5 +36,13 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand>
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address));
+    }
+
+    private static void EnsureStartedByOwner(StartDeletionProcessCommand request, IdentityAddress address)
+    {
+        if (address != request.IdentityAddress)
+        {
+            throw new ApplicationException(ApplicationErrors.Identities.CanOnlyStartDeletionProcessForOwnIdentity());
+        }
     }
 }
