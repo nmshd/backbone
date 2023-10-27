@@ -34,7 +34,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddressOrNull())
             .Returns(identity.Address);
 
-        var handler = new Handler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
+        var handler = CreateHandler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
 
         // Act
         await handler.Handle(new StartDeletionProcessCommand(identity.Address), CancellationToken.None);
@@ -49,14 +49,13 @@ public class HandlerTests
                 A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e => e.IdentityAddress == identity.Address)))
             .MustHaveHappenedOnceExactly();
     }
+
     [Fact]
-    public void Test()
+    public void Test() // todo: rename
     {
         // Arrange
-        var dummyIdentitiesRepository = A.Dummy<IIdentitiesRepository>();
-        var dummyEventBus = A.Dummy<IEventBus>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var handler = new Handler(dummyIdentitiesRepository, dummyEventBus, fakeUserContext);
+        var handler = CreateHandler(fakeUserContext);
 
         A.CallTo(() => fakeUserContext.GetAddressOrNull())
             .Returns(IdentityAddress.Create(new byte[] { 2 }, "id1"));
@@ -88,13 +87,38 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddressOrNull())
             .Returns(address);
 
-        var handler = new Handler(fakeIdentitiesRepository, dummyEventBus, fakeUserContext);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
         var acting = async () => await handler.Handle(new StartDeletionProcessCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
+    }
+
+    [Fact]
+    public void Test2()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    private static Handler CreateHandler(IUserContext identitiesRepository)
+    {
+        return CreateHandler(A.Dummy<IIdentitiesRepository>(), A.Dummy<IEventBus>(), identitiesRepository);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
+    {
+        return CreateHandler(identitiesRepository, A.Dummy<IEventBus>(), userContext);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus eventBus, IUserContext userContext)
+    {
+        return new Handler(identitiesRepository, eventBus, userContext);
     }
 
     // StartDeletionProcess as Owner / Support
