@@ -2,12 +2,10 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using Xunit;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentAssertions;
 using Backbone.UnitTestTools.Extensions;
@@ -64,7 +62,7 @@ public class HandlerTests
             .Returns(IdentityAddress.Create(new byte[] { 2 }, "id1"));
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new StartDeletionProcessCommand(IdentityAddress.Create(new byte[] { 1}, "id1")), CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(IdentityAddress.Create(new byte[] { 1}, "id1")), CancellationToken.None);
 
 
         // Assert
@@ -93,7 +91,7 @@ public class HandlerTests
         var handler = new Handler(fakeIdentitiesRepository, dummyEventBus, fakeUserContext);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new StartDeletionProcessCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
