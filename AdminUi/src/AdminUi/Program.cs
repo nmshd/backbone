@@ -107,6 +107,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddRelationships(parsedConfiguration.Modules.Relationships)
         .AddHealthChecks();
 
     if (parsedConfiguration.SwaggerUi.Enabled)

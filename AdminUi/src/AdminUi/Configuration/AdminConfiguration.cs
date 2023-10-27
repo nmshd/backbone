@@ -51,5 +51,8 @@ public class AdminConfiguration
 
         [Required]
         public QuotasConfiguration Quotas { get; set; } = new();
+
+        [Required]
+        public RelationshipsConfiguration Relationships { get; set; } = new();
     }
 }
