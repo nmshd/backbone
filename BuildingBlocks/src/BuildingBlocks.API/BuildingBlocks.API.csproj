@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
@@ -8,8 +8,8 @@
 		<!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
 		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[6.0.2]" />
 		<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.13" />
 		<PackageReference Include="Polly" Version="8.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	</ItemGroup>
