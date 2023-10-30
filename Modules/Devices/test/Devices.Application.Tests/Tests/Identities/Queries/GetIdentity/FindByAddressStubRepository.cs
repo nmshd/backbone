@@ -54,4 +54,9 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     {
         return Task.FromResult(_identity);
     }
+
+    public Task<IEnumerable<Identity>> FindAllWithAtLeastOneApprovedDeletionProcess(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

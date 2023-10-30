@@ -54,4 +54,9 @@ public class FindAllStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<IEnumerable<Identity>> FindAllWithAtLeastOneApprovedDeletionProcess(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -90,4 +90,12 @@ public class IdentitiesRepository : IIdentitiesRepository
         _identities.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Identity>> FindAllWithAtLeastOneApprovedDeletionProcess(CancellationToken cancellationToken)
+    {
+        return await _identities
+            .IncludeAll(_dbContext)
+            .Where(i => i.DeletionProcesses.Any(dp => dp.Status == DeletionProcessStatus.Approved))
+            .ToListAsync(cancellationToken);
+    }
 }
