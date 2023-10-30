@@ -7,6 +7,7 @@ public class DevicePushIdentifier
 {
     private DevicePushIdentifier(DeviceId deviceId)
     {
+        // todo: deviceId should be hashed?
         Value = deviceId + "-" + GenerateRandomIdentifier();
     }
 
@@ -19,6 +20,6 @@ public class DevicePushIdentifier
 
     private static string GenerateRandomIdentifier()
     {
-        return DevicePushIdentifierHasher.HashUtf8("seed");
+        return DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8("seed");
     }
 }

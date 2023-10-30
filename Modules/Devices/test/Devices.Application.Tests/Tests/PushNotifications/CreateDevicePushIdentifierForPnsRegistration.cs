@@ -14,7 +14,7 @@ public class CreateDevicePushIdentifierForPnsRegistration
     {
         // Arrange
         var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
-        var identifierTestValue = randomDeviceId + "-" + DevicePushIdentifierHasher.HashUtf8("seed");
+        var identifierTestValue = randomDeviceId + "-" + DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8("seed");
 
         // Act
         var randomIdentifier = DevicePushIdentifier.Create(randomDeviceId);
@@ -32,7 +32,7 @@ public class CreateDevicePushIdentifierForPnsRegistration
         var pnsHandle = PnsHandle.Parse("value", PushNotificationPlatform.Fcm).Value;
 
         // var identifierTestValue = DevicePushIdentifier.Create(randomDeviceId);
-        var identifierTestValue = randomDeviceId + "-" + DevicePushIdentifierHasher.HashUtf8("seed");
+        var identifierTestValue = randomDeviceId + "-" + DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8("seed");
 
         // Act
         var pnsRegistration = new PnsRegistration(randomIdentityAddress, randomDeviceId, pnsHandle, "appId", Environment.Development);
