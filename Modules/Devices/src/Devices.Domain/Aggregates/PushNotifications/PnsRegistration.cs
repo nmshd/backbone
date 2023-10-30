@@ -1,4 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 
@@ -12,6 +13,7 @@ public class PnsRegistration
     {
         IdentityAddress = identityAddress;
         DeviceId = deviceId;
+        DevicePushIdentifier = DevicePushIdentifier.Create(deviceId);
         Handle = handle;
         UpdatedAt = SystemTime.UtcNow;
         AppId = appId;
@@ -20,6 +22,7 @@ public class PnsRegistration
 
     public IdentityAddress IdentityAddress { get; }
     public DeviceId DeviceId { get; }
+    public DevicePushIdentifier DevicePushIdentifier { get; set; }
     public PnsHandle Handle { get; private set; }
     public string AppId { get; set; }
     public DateTime UpdatedAt { get; private set; }
