@@ -32,6 +32,11 @@ internal class BaseApi
         return await ExecuteRequest<T>(HttpMethod.Post, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse> Post(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest(HttpMethod.Post, endpoint, requestConfiguration);
+    }
+
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
@@ -59,6 +64,29 @@ internal class BaseApi
             Content = responseData!,
             ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
             RawContent = responseRawContent
+        };
+
+        return response;
+    }
+
+    private async Task<HttpResponse> ExecuteRequest(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
+
+        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
+            request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
+
+        var httpResponse = await _httpClient.SendAsync(request);
+
+        var response = new HttpResponse
+        {
+            Content = JsonConvert.DeserializeObject<ErrorResponseContent>(await httpResponse.Content.ReadAsStringAsync())!,
+            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
+            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
+            StatusCode = httpResponse.StatusCode
         };
 
         return response;
