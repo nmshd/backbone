@@ -20,7 +20,8 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand>
         foreach (var identity in identities)
         {
             var relevantDeletionProcess = identity.DeletionProcesses.FirstOrDefault(dp => dp.Status == Domain.Entities.Identities.DeletionProcessStatus.Approved);
-            if(relevantDeletionProcess != null) {
+            if (relevantDeletionProcess != null)
+            {
                 identity.MarkAsToBeDeleted();
                 _eventBus.Publish(new IdentityStatusChangedIntegrationEvent(identity.Address, identity.IdentityStatus));
             }

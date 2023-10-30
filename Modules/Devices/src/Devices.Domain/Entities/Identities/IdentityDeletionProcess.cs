@@ -25,7 +25,7 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
-        var auditLogEntry = deviceIdHash == null ? 
+        var auditLogEntry = deviceIdHash == null ?
             IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, identityAddressHash) :
             IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, identityAddressHash, deviceIdHash);
 
@@ -38,7 +38,7 @@ public class IdentityDeletionProcess
     public IdentityDeletionProcessId Id { get; }
     public DeletionProcessStatus Status { get; internal set; }
     public DateTime CreatedAt { get; }
-    
+
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
 
     public bool IsActive()
