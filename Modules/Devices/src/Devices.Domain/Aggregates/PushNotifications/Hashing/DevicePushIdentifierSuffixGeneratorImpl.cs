@@ -6,7 +6,7 @@ public class DevicePushIdentifierSuffixGeneratorImpl : IDevicePushIdentifierSuff
 
     public DevicePushIdentifierSuffixGeneratorImpl()
     {
-        _seed = "test";
+        _seed = "test"; // todo: real implementation
     }
 
     public string GenerateSuffixUtf8()
