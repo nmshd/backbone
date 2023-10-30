@@ -14,6 +14,7 @@ public record PnsHandle
         Value = value;
     }
 
+    // todo: change order of input params to match ctor
     public static Result<PnsHandle, DomainError> Parse(string value, PushNotificationPlatform platform)
     {
         switch (platform)
