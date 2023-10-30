@@ -2,8 +2,15 @@
 
 public class DevicePushIdentifierSuffixGeneratorImpl : IDevicePushIdentifierSuffixGenerator
 {
-    public string GenerateSuffixUtf8(string seed)
+    private readonly string _seed;
+
+    public DevicePushIdentifierSuffixGeneratorImpl()
     {
-        return seed;
+        _seed = "test";
+    }
+
+    public string GenerateSuffixUtf8()
+    {
+        return _seed;
     }
 }

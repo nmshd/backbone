@@ -20,6 +20,6 @@ public class DevicePushIdentifier
 
     private static string GenerateRandomIdentifier()
     {
-        return DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8("seed");
+        return DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8();
     }
 }

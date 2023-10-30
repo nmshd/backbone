@@ -2,5 +2,5 @@
 
 public interface IDevicePushIdentifierSuffixGenerator
 {
-    string GenerateSuffixUtf8(string seed);
+    string GenerateSuffixUtf8();
 }

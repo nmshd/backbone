@@ -6,7 +6,7 @@ public static class DevicePushIdentifierSuffixGenerator
 {
     private static readonly ThreadLocal<Func<IDevicePushIdentifierSuffixGenerator>> GET_SUFFIX_GENERATOR = new(() => () => new DevicePushIdentifierSuffixGeneratorImpl());
 
-    public static void SetHasher(IDevicePushIdentifierSuffixGenerator suffixGenerator)
+    public static void SetSuffixGenerator(IDevicePushIdentifierSuffixGenerator suffixGenerator)
     {
         var stackTrace = new StackTrace();
         var callerType = stackTrace.GetFrame(1)!.GetMethod()!.DeclaringType;
@@ -19,8 +19,8 @@ public static class DevicePushIdentifierSuffixGenerator
         GET_SUFFIX_GENERATOR.Value = () => suffixGenerator;
     }
 
-    public static string GenerateSuffixUtf8(string input)
+    public static string GenerateSuffixUtf8()
     {
-        return GET_SUFFIX_GENERATOR.Value!().GenerateSuffixUtf8(input);
+        return GET_SUFFIX_GENERATOR.Value!().GenerateSuffixUtf8();
     }
 }

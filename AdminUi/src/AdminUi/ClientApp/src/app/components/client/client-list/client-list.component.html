@@ -41,7 +41,7 @@
                     <div class="header-container">
                         <span>Client Id</span>
                         <mat-form-field style="width: 100%; padding-top: 10px">
-                            <input matInput type="text" [(ngModel)]="filter.clientId" (input)="filterClients()" />
+                            <input matInput type="text" [(ngModel)]="filter.clientId" (seed)="filterClients()" />
                             <button *ngIf="filter.clientId" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('clientId')">
                                 <mat-icon>close</mat-icon>
                             </button>
@@ -57,7 +57,7 @@
                     <div class="header-container">
                         <span>Display Name</span>
                         <mat-form-field style="width: 100%; padding-top: 10px">
-                            <input matInput type="text" [(ngModel)]="filter.displayName" (input)="filterClients()" />
+                            <input matInput type="text" [(ngModel)]="filter.displayName" (seed)="filterClients()" />
                             <button *ngIf="filter.displayName" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('displayName')">
                                 <mat-icon>close</mat-icon>
                             </button>
@@ -95,7 +95,7 @@
                                 </mat-select>
                             </mat-form-field>
                             <mat-form-field style="width: 45%">
-                                <input matInput type="number" [(ngModel)]="filter.numberOfIdentities.value" (input)="filterClients()" />
+                                <input matInput type="number" [(ngModel)]="filter.numberOfIdentities.value" (seed)="filterClients()" />
                             </mat-form-field>
                         </div>
                     </div>
