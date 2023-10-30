@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Tests;
-using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Hashing;
