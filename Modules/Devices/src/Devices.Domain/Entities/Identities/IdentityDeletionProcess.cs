@@ -1,4 +1,6 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -34,14 +36,19 @@ public class IdentityDeletionProcess
     }
 
     public IdentityDeletionProcessId Id { get; }
-    public DeletionProcessStatus Status { get; }
+    public DeletionProcessStatus Status { get; internal set; }
     public DateTime CreatedAt { get; }
     
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
 
     public bool IsActive()
     {
-        return Status == DeletionProcessStatus.WaitingForApproval;
+        return Status == DeletionProcessStatus.WaitingForApproval || Status == DeletionProcessStatus.Approved;
+    }
+
+    internal bool IsApproved()
+    {
+        return Status == DeletionProcessStatus.Approved;
     }
 }
 
@@ -64,6 +71,6 @@ internal class HasherImpl : IHasher
 {
     public byte[] HashUtf8(string input)
     {
-        throw new NotImplementedException();
+        return SHA1.HashData(Encoding.UTF8.GetBytes(input));
     }
 }

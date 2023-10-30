@@ -23,6 +23,7 @@ public class Identity
         _deletionProcesses = new List<IdentityDeletionProcess>();
     }
 
+    public IdentityStatus IdentityStatus { get; internal set; }
     public string? ClientId { get; private set; }
 
     public IdentityAddress Address { get; private set; }
@@ -71,9 +72,31 @@ public class Identity
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
     }
+
+    public void MarkAsToBeDeleted()
+    {
+        if (IdentityStatus == IdentityStatus.Deleting)
+        {
+            throw new DomainException(DomainErrors.CannotChangeIdentityStatusForIdentityUndergoingDeletion());
+        }
+
+        if (DeletionProcesses.Any(dp => dp.IsApproved()) == false)
+        {
+            throw new DomainException(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists());
+        }
+
+        IdentityStatus = IdentityStatus.ToBeDeleted;
+    }
+}
+public enum IdentityStatus
+{
+    Active,
+    ToBeDeleted,
+    Deleting
 }
 
 public enum DeletionProcessStatus
 {
-    WaitingForApproval
+    WaitingForApproval,
+    Approved
 }

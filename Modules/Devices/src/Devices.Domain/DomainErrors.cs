@@ -41,7 +41,19 @@ public static class DomainErrors
 
     public static DomainError OnlyOneActiveDeletionProcessAllowed()
     {
-        return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed",
+        return new DomainError("error.platform.validation.identity.onlyOneActiveDeletionProcessAllowed",
                        "Only one active deletion process is allowed.");
+    }
+
+    public static DomainError CannotChangeIdentityStatusForIdentityUndergoingDeletion()
+    {
+        return new DomainError("error.platform.validation.identity.cannotRevertDeletionUnderway",
+                       "An Identity with state \"Deleting\" cannot have its state changed.");
+    }
+
+    public static DomainError CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists()
+    {
+        return new DomainError("error.platform.validation.identity.cannotMarkAsToBeDeletedWithZeroApprovedDeletionProcesses",
+               "Cannot mark an Identity as \"To Be Deleted\" if it has no approved Deletion Processes associated.");
     }
 }
