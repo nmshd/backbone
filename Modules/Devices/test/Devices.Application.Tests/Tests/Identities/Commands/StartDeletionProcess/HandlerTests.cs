@@ -96,8 +96,7 @@ public class HandlerTests
             .Returns(IdentityAddress.Create(new byte[] { 2 }, "id1"));
 
         // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(IdentityAddress.Create(new byte[] { 1}, "id1")), CancellationToken.None);
-
+        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(IdentityAddress.Create(new byte[] { 1 }, "id1")), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<ApplicationException>().Which.Code.Should().Be("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity");
