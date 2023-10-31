@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +40,8 @@ public class Program
             {
                 var configuration = hostContext.Configuration;
                 services.AddHostedService<Worker>();
-
                 services.AddEventBus(configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().EventBus);
-            });
+            })
+             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }
