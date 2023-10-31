@@ -1,18 +1,16 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Hashing;
-using FakeItEasy;
-using FluentAssertions;
-using Xunit;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using Xunit;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
@@ -25,9 +23,9 @@ public class HandlerTests
     public async Task Updating_PnsRegistration_in_PushService()
     {
         // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
-        var randomDirectPushIdentifier = DevicePushIdentifier.Create(randomDeviceId); // todo: will be used later
+        var randomDirectPushIdentifier = DevicePushIdentifier.Create(randomDeviceId); // todo: move to one of the test data generators
 
         var fakeUserContext = A.Fake<IUserContext>();
         var mockPushService = A.Fake<IPushService>();
@@ -63,7 +61,7 @@ public class HandlerTests
     public async void Updating_existing_PnsRegistration_in_repository()
     {
         // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
@@ -94,7 +92,7 @@ public class HandlerTests
     public async void Adding_new_PnsRegistration_in_repository()
     {
         // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
@@ -123,7 +121,7 @@ public class HandlerTests
     public async void Trying_to_delete_existing_PnsRegistration()
     {
         // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
@@ -153,7 +151,7 @@ public class HandlerTests
     public async void Trying_to_delete_non_existing_PnsRegistration()
     {
         // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
