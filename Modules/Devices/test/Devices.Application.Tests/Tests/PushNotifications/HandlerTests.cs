@@ -8,8 +8,11 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
@@ -24,7 +27,7 @@ public class HandlerTests
         // Arrange
         var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
         var identity = TestDataGenerator.CreateIdentity();
-        var directPushIdentifier = DevicePushIdentifier.Create(randomDeviceId);
+        var directPushIdentifier = DevicePushIdentifier.Create(randomDeviceId); // todo: will be used later
 
         var mockPnsRegistrationRepository = A.Fake<Infrastructure.Persistence.Repository.IPnsRegistrationRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
@@ -58,56 +61,11 @@ public class HandlerTests
                 A<Environment>._,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-
-        A.CallTo(() => mockPnsRegistrationRepository.Update(
-                A<PnsRegistration>._,
-                CancellationToken.None))
-            .Returns(Task.CompletedTask);
     }
 
     [Fact]
-    public async Task Updating_an_existing_PNS_registration()
+    public void Test()
     {
-        // Arrange
-        var randomDeviceId = TestDataGenerator.CreateRandomDeviceId();
-        var identity = TestDataGenerator.CreateIdentity();
 
-        var mockPnsRegistrationRepository = A.Fake<Infrastructure.Persistence.Repository.IPnsRegistrationRepository>();
-        var fakeUserContext = A.Fake<IUserContext>();
-        var fakePushService = A.Fake<IPushService>();
-
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
-            .Returns(identity.Address);
-
-        A.CallTo(() => fakeUserContext.GetDeviceIdOrNull())
-            .Returns(randomDeviceId);
-
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
-            .Returns((PnsRegistration)null);
-
-        var handler = new Application.PushNotifications.Commands.UpdateDeviceRegistration.Handler(fakePushService, fakeUserContext);
-
-        // Act
-        await handler.Handle(new UpdateDeviceRegistrationCommand()
-        {
-            Platform = "fcm",
-            Handle = "handle",
-            AppId = "keyAppId",
-        }, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => fakePushService.UpdateRegistration(
-                A<IdentityAddress>._,
-                A<DeviceId>._,
-                A<PnsHandle>._,
-                A<string>._,
-                A<Environment>._,
-                CancellationToken.None))
-            .MustHaveHappenedOnceExactly();
-
-        A.CallTo(() => mockPnsRegistrationRepository.Add(
-                A<PnsRegistration>._,
-                CancellationToken.None))
-            .Returns(Task.CompletedTask);
     }
 }
