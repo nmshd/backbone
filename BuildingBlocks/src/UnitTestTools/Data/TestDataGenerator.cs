@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.Entities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.UnitTestTools.Data;
 
@@ -23,6 +24,11 @@ public static class TestDataGenerator
         var bytes = new byte[10];
         random.NextBytes(bytes);
         return bytes;
+    }
+
+    public static DeviceId CreateRandomDeviceId()
+    {
+        return DeviceId.New();
     }
 }
 
