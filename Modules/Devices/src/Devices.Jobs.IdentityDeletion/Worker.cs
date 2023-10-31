@@ -18,7 +18,7 @@ public class Worker : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var eventBus = _serviceScopeFactory.CreateScope().ServiceProvider.GetService<IEventBus>();
-        eventBus.Publish(new IdentityDeletionJobConfiguration());
+        
         return Task.CompletedTask;
     }
 
