@@ -2,8 +2,10 @@
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +21,14 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly IUserContext _userContext;
 
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager, IUserContext userContext) : base(mediator)
     {
         _applicationManager = applicationManager;
+        _userContext = userContext;
     }
 
     [HttpPost]
@@ -54,6 +58,15 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(command, cancellationToken);
 
         return Created("", response);
+    }
+
+    [HttpPost("Self/DeletionProcess")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new StartDeletionProcessCommand(_userContext.GetAddress()), cancellationToken);
+        return new CreatedResult("", null);
     }
 }
 

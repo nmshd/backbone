@@ -14,8 +14,14 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by a support employee.", identityAddressHash, null, null, DeletionProcessStatus.WaitingForApproval);
     }
 
+    private IdentityDeletionProcessAuditLogEntry()
+    {
+        
+    }
+
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
     {
+        Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
         CreatedAt = SystemTime.UtcNow;
         Message = message;
@@ -25,6 +31,7 @@ public class IdentityDeletionProcessAuditLogEntry
         NewStatus = newStatus;
     }
 
+    public IdentityDeletionProcessAuditLogEntryId Id { get; }
     public IdentityDeletionProcessId ProcessId { get; }
     public DateTime CreatedAt { get; }
     public string Message { get; }

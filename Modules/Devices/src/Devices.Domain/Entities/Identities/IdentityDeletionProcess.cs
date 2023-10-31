@@ -8,15 +8,19 @@ public class IdentityDeletionProcess
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
+    private IdentityDeletionProcess()
+    {
+    }
+
     public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId? createdByDevice = null)
     {
         Id = IdentityDeletionProcessId.Generate();
         Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
-        var auditLogEntry = createdByDevice == null ?
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy)) :
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
+        var auditLogEntry = createdByDevice == null
+            ? IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy))
+            : IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
