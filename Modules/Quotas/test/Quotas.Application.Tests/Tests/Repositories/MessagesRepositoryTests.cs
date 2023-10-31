@@ -14,16 +14,18 @@ using Xunit;
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
 public class MessagesRepositoryTests
 {
+    private static readonly DateTime HALF_OF_MONTH = new(DateTime.Now.Year, DateTime.Now.Month, 15);
+
     private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly IdentityAddress _identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
 
     private readonly MessagesDbContext _messagesArrangeContext;
     private readonly QuotasDbContext _actContext;
 
-    private static readonly DateTime YESTERDAY = DateTime.UtcNow.AddDays(-1);
-    private static readonly DateTime TOMORROW = DateTime.UtcNow.AddDays(1);
-    private static readonly DateTime LAST_YEAR = DateTime.UtcNow.AddYears(-1);
-    private static readonly DateTime NEXT_YEAR = DateTime.UtcNow.AddYears(1);
+    private static readonly DateTime YESTERDAY = HALF_OF_MONTH.AddDays(-1);
+    private static readonly DateTime TOMORROW = HALF_OF_MONTH.AddDays(1);
+    private static readonly DateTime LAST_YEAR = HALF_OF_MONTH.AddYears(-1);
+    private static readonly DateTime NEXT_YEAR = HALF_OF_MONTH.AddYears(1);
 
     public MessagesRepositoryTests()
     {
@@ -60,9 +62,6 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
-        var halfOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
-        SystemTime.Set(halfOfMonth);
-
         var messages = new List<Message>() {
             CreateMessage(DateTime.Now, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
