@@ -1,6 +1,5 @@
-﻿using System.Security.Cryptography;
-using System.Text;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -9,25 +8,15 @@ public class IdentityDeletionProcess
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
-    public static IdentityDeletionProcess Create(IdentityAddress createdBy, DeviceId createdByDevice)
-    {
-        return new IdentityDeletionProcess(Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
-    }
-
-    public static IdentityDeletionProcess Create(IdentityAddress createdBy)
-    {
-        return new IdentityDeletionProcess(Hasher.HashUtf8(createdBy), null);
-    }
-
-    private IdentityDeletionProcess(byte[] identityAddressHash, byte[]? deviceIdHash)
+    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId? createdByDevice = null)
     {
         Id = IdentityDeletionProcessId.Generate();
         Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
-        var auditLogEntry = deviceIdHash == null ?
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, identityAddressHash) :
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, identityAddressHash, deviceIdHash);
+        var auditLogEntry = createdByDevice == null ?
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy)) :
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
@@ -49,28 +38,5 @@ public class IdentityDeletionProcess
     internal bool IsApproved()
     {
         return Status == DeletionProcessStatus.Approved;
-    }
-}
-
-public static class Hasher
-{
-    private static IHasher _hasher = new HasherImpl();
-
-    public static void SetHasher(IHasher hasher)
-    {
-        _hasher = hasher;
-    }
-
-    public static byte[] HashUtf8(string input)
-    {
-        return _hasher.HashUtf8(input);
-    }
-}
-
-internal class HasherImpl : IHasher
-{
-    public byte[] HashUtf8(string input)
-    {
-        return SHA1.HashData(Encoding.UTF8.GetBytes(input));
     }
 }

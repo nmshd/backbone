@@ -56,13 +56,13 @@ public class Identity
     public void StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address, asDevice));
+        _deletionProcesses.Add(new IdentityDeletionProcess(Address, asDevice));
     }
 
     public void StartDeletionProcess()
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(IdentityDeletionProcess.Create(Address));
+        _deletionProcesses.Add(new IdentityDeletionProcess(Address));
     }
 
     private void EnsureNoActiveProcessExists()

@@ -24,6 +24,7 @@ public static class Dependencies
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
         services.AddTransient<TokensApi>();
         services.AddTransient<ChallengesApi>();
+        services.AddTransient<IdentitiesApi>();
 
         return services;
     }

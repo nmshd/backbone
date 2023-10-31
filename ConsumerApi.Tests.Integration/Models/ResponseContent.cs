@@ -8,3 +8,10 @@ public class ResponseContent<T>
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Error? Error { get; set; }
 }
+
+public class ErrorResponseContent
+{
+
+    [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public Error Error { get; set; }
+}

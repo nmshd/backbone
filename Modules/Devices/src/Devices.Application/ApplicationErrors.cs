@@ -61,4 +61,11 @@ public static class ApplicationErrors
             return new ApplicationError("error.platform.validation.device.tierIdInvalidOrDoesNotExist", "The passed tier ID is not valid or the tier does not exist.");
         }
     }
+    public static class Identities
+    {
+        public static ApplicationError CanOnlyStartDeletionProcessForOwnIdentity()
+        {
+            return new ApplicationError("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity", "You can only start a deletion process for your own identity.");
+        }
+    }
 }
