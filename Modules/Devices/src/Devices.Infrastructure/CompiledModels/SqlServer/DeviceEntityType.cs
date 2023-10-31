@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "Backbone.Modules.Devices.Domain.Entities.Device",
+                "Backbone.Modules.Devices.Domain.Entities.Identities.Device",
                 typeof(Device),
                 baseEntityType);
 

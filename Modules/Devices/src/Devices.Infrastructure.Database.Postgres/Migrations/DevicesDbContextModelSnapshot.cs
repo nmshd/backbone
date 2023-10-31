@@ -84,7 +84,26 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("Tiers");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -143,26 +162,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Challenges", "Challenges", t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -206,7 +206,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
                         .HasMaxLength(36)
@@ -237,6 +237,74 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Address");
 
                     b.ToTable("Identities");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IdentityAddress")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityAddress");
+
+                    b.ToTable("IdentityDeletionProcesses", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<byte[]>("DeviceIdHash")
+                        .HasColumnType("bytea");
+
+                    b.Property<byte[]>("IdentityAddressHash")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("IdentityDeletionProcessId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("NewStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OldStatus")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityDeletionProcessId");
+
+                    b.ToTable("IdentityDeletionProcessAuditLog", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
@@ -581,26 +649,40 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Device", "Device")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Device", "Device")
                         .WithOne("User")
-                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", "DeviceId")
+                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", "DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Device");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identity", "Identity")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", "Identity")
                         .WithMany("Devices")
                         .HasForeignKey("IdentityAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
+                        .WithMany("DeletionProcesses")
+                        .HasForeignKey("IdentityAddress");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
+                        .WithMany("AuditLog")
+                        .HasForeignKey("IdentityDeletionProcessId");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
@@ -647,7 +729,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -656,7 +738,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,7 +753,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -680,22 +762,29 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
                     b.Navigation("User")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
+                    b.Navigation("DeletionProcesses");
+
                     b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Navigation("AuditLog");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

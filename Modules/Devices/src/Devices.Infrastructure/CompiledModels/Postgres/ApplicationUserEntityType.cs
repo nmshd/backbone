@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
         public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
-                "Backbone.Modules.Devices.Domain.Entities.ApplicationUser",
+                "Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser",
                 typeof(ApplicationUser),
                 baseEntityType);
 

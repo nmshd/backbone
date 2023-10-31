@@ -120,16 +120,16 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         var query = PnsRegistrations.FromSqlRaw(
             Database.IsNpgsql()
-                ? $""" 
-                    SELECT "AppId" 
-                    FROM "Devices"."PnsRegistrations" 
-                    WHERE "Handle" LIKE '{platform}%'
-                  """
-                : $""" 
-                    SELECT "AppId" 
-                    FROM [Devices].[PnsRegistrations] 
-                    WHERE Handle LIKE '{platform}%'
-                  """);
+                ? $"""
+                     SELECT "AppId"
+                     FROM "Devices"."PnsRegistrations"
+                     WHERE "Handle" LIKE '{platform}%'
+                   """
+                : $"""
+                     SELECT "AppId"
+                     FROM [Devices].[PnsRegistrations]
+                     WHERE Handle LIKE '{platform}%'
+                   """);
 
         return query
             .Where(x => !supportedAppIds.Contains(x.AppId))
@@ -152,6 +152,10 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<TierName>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<IdentityDeletionProcessId>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(IdentityDeletionProcessId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<IdentityDeletionProcessAuditLogEntryId>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(IdentityDeletionProcessAuditLogEntryId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
 

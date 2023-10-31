@@ -15,10 +15,12 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
         {
             var pnsRegistration = PnsRegistrationEntityType.Create(this);
             var tier = TierEntityType.Create(this);
-            var applicationUser = ApplicationUserEntityType.Create(this);
             var challenge = ChallengeEntityType.Create(this);
+            var applicationUser = ApplicationUserEntityType.Create(this);
             var device = DeviceEntityType.Create(this);
             var identity = IdentityEntityType.Create(this);
+            var identityDeletionProcess = IdentityDeletionProcessEntityType.Create(this);
+            var identityDeletionProcessAuditLogEntry = IdentityDeletionProcessAuditLogEntryEntityType.Create(this);
             var customOpenIddictEntityFrameworkCoreApplication = CustomOpenIddictEntityFrameworkCoreApplicationEntityType.Create(this);
             var customOpenIddictEntityFrameworkCoreAuthorization = CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.Create(this);
             var customOpenIddictEntityFrameworkCoreScope = CustomOpenIddictEntityFrameworkCoreScopeEntityType.Create(this);
@@ -32,6 +34,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
 
             ApplicationUserEntityType.CreateForeignKey1(applicationUser, device);
             DeviceEntityType.CreateForeignKey1(device, identity);
+            IdentityDeletionProcessEntityType.CreateForeignKey1(identityDeletionProcess, identity);
+            IdentityDeletionProcessAuditLogEntryEntityType.CreateForeignKey1(identityDeletionProcessAuditLogEntry, identityDeletionProcess);
             CustomOpenIddictEntityFrameworkCoreApplicationEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreApplication, tier);
             CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreAuthorization, customOpenIddictEntityFrameworkCoreApplication);
             CustomOpenIddictEntityFrameworkCoreTokenEntityType.CreateForeignKey1(customOpenIddictEntityFrameworkCoreToken, customOpenIddictEntityFrameworkCoreApplication);
@@ -45,10 +49,12 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
 
             PnsRegistrationEntityType.CreateAnnotations(pnsRegistration);
             TierEntityType.CreateAnnotations(tier);
-            ApplicationUserEntityType.CreateAnnotations(applicationUser);
             ChallengeEntityType.CreateAnnotations(challenge);
+            ApplicationUserEntityType.CreateAnnotations(applicationUser);
             DeviceEntityType.CreateAnnotations(device);
             IdentityEntityType.CreateAnnotations(identity);
+            IdentityDeletionProcessEntityType.CreateAnnotations(identityDeletionProcess);
+            IdentityDeletionProcessAuditLogEntryEntityType.CreateAnnotations(identityDeletionProcessAuditLogEntry);
             CustomOpenIddictEntityFrameworkCoreApplicationEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreApplication);
             CustomOpenIddictEntityFrameworkCoreAuthorizationEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreAuthorization);
             CustomOpenIddictEntityFrameworkCoreScopeEntityType.CreateAnnotations(customOpenIddictEntityFrameworkCoreScope);
