@@ -10,6 +10,9 @@ import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasServ
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { Relationship, RelationshipService } from "src/app/services/relationship-service/relationship.service";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: "app-identity-edit",
@@ -19,15 +22,30 @@ import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quota
 export class IdentityEditComponent {
     public header: string;
     public headerDescription: string;
+
     public headerQuotas: string;
     public headerQuotasDescription: string;
+
     public headerDevices: string;
     public headerDevicesDescription: string;
+
+    public headerRelationships: string;
+    public headerRelationshipsDescription: string;
+
     public selectionQuotas: SelectionModel<IdentityQuota>;
     public quotasTableDisplayedColumns: string[];
     public quotasTableData: (Quota | MetricGroup)[];
+
     public devicesTableDisplayedColumns: string[];
     public devicesTableData: Device[];
+
+    public relationshipsTableDisplayedColumns: string[];
+    public relationshipsTableData: Relationship[];
+
+    public relationshipsTotalRecords: number;
+    public relationshipsPageSize: number;
+    public relationshipsPageIndex: number;
+
     public identityAddress?: string;
     public disabled: boolean;
     public identity: Identity;
@@ -42,7 +60,8 @@ export class IdentityEditComponent {
         private readonly dialog: MatDialog,
         private readonly identityService: IdentityService,
         private readonly quotasService: QuotasService,
-        private readonly tierService: TierService
+        private readonly tierService: TierService,
+        private readonly relationshipService: RelationshipService
     ) {
         this.header = "Edit Identity";
         this.headerDescription = "Perform your desired changes for this Identity";
@@ -50,10 +69,17 @@ export class IdentityEditComponent {
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
         this.headerDevices = "Devices";
         this.headerDevicesDescription = "View devices for this Identity.";
+        this.headerRelationships = "Relationships";
+        this.headerRelationshipsDescription = "View relationships of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
         this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
         this.devicesTableData = [];
+        this.relationshipsTableDisplayedColumns = ["peer", "requestedBy", "templateId", "status", "creationDate", "answeredAt", "createdByDevice", "answeredByDevice"];
+        this.relationshipsTableData = [];
+        this.relationshipsTotalRecords = 0;
+        this.relationshipsPageSize = 10;
+        this.relationshipsPageIndex = 0;
         this.loading = true;
         this.disabled = false;
         this.identity = {} as Identity;
@@ -102,6 +128,31 @@ export class IdentityEditComponent {
                 });
             }
         });
+    }
+
+    public getRelationships(): void {
+        this.loading = true;
+        this.relationshipService.getRelationshipsByParticipantAddress(this.identityAddress!, this.relationshipsPageIndex, this.relationshipsPageSize).subscribe({
+            next: (data: PagedHttpResponseEnvelope<Relationship>) => {
+                this.relationshipsTableData = data.result;
+                this.relationshipsTotalRecords = data.pagination!.totalRecords!;
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
+
+    public relationshipsPageChangeEvent(event: PageEvent): void {
+        this.relationshipsPageIndex = event.pageIndex;
+        this.relationshipsPageSize = event.pageSize;
+        this.getRelationships();
     }
 
     public hasPendingChanges(): boolean {
