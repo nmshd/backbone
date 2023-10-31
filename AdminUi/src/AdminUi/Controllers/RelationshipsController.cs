@@ -28,10 +28,10 @@ public class RelationshipsController : ApiControllerBase
         _options = options.Value;
     }
 
-    [HttpGet("{participant}")]
+    [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllRelationshipsByParticipantAddress([FromRoute] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllRelationshipsByParticipantAddress([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
