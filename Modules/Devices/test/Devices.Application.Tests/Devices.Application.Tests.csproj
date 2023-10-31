@@ -17,8 +17,8 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Devices.Application\Devices.Application.csproj" />
 		<ProjectReference Include="..\..\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 	</ItemGroup>
