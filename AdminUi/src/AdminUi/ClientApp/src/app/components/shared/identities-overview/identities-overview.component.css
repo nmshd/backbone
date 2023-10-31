@@ -135,3 +135,10 @@
         border-bottom: 0px;
     }
 }
+
+@media screen and (min-width: 960px) {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+        text-align: center;
+    }
+}
