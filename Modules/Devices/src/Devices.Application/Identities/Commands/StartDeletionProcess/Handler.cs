@@ -6,7 +6,6 @@ using Backbone.DevelopmentKit.Identity.Entities;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using MediatR;
-using Org.BouncyCastle.Asn1.Crmf;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;

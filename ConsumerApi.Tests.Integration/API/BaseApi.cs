@@ -79,6 +79,12 @@ internal class BaseApi
         if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
             request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
 
+        if (requestConfiguration.Authenticate)
+        {
+            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
+            request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
+        }
+
         var httpResponse = await _httpClient.SendAsync(request);
 
         var response = new HttpResponse
