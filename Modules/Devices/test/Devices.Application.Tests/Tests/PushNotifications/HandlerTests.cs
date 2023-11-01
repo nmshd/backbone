@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
@@ -18,6 +19,7 @@ public class HandlerTests
 {
     // now DirectPushService returns Task to Handler, Handler returns Task to Controller, Controller returns Task to Client
     // todo: DirectPushService returns DirectPushIdentifier, and so on...
+    // todo: test dummy push service as well (DummyPushService)
 
     [Fact]
     public async Task Updating_PnsRegistration_in_PushService()
@@ -25,7 +27,6 @@ public class HandlerTests
         // Arrange
         var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
-        var randomDirectPushIdentifier = DevicePushIdentifier.Create(randomDeviceId); // todo: move to one of the test data generators
 
         var fakeUserContext = A.Fake<IUserContext>();
         var mockPushService = A.Fake<IPushService>();
@@ -39,7 +40,7 @@ public class HandlerTests
         var handler = new Handler(mockPushService, fakeUserContext);
 
         // Act
-        await handler.Handle(new UpdateDeviceRegistrationCommand()
+        var acting = await handler.Handle(new UpdateDeviceRegistrationCommand()
         {
             Platform = "fcm",
             Handle = "handle",
@@ -55,6 +56,8 @@ public class HandlerTests
                 A<Environment>._,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
+
+        // acting.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
@@ -80,12 +83,14 @@ public class HandlerTests
         var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger, dummyPnsRegistrationRepository);
 
         // Act
-        await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+        var acting = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository
             .Update(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();                        
+
+        acting.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
