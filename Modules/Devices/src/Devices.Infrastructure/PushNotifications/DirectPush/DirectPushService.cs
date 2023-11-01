@@ -2,6 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
@@ -67,7 +68,7 @@ public class DirectPushService : IPushService
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
+    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
@@ -97,6 +98,10 @@ public class DirectPushService : IPushService
                 _logger.LogInformation(exception.Message);
             }
         }
+
+        var res = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true); // todo: should search with DevicePushIdentifier? check w Timo
+
+        return res.DevicePushIdentifier;
     }
 
     public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
