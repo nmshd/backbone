@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Hashing;
 using FluentAssertions;
 using Xunit;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.PushNotifications;
 
@@ -14,22 +15,20 @@ public class CreateRandomIdentifierForPushNotificationRegistration
     public void Generate_random_identifier()
     {
         // Arrange
-        var randomDeviceId = Application.Tests.TestDataGenerator.CreateRandomDeviceId();
-        var identifierTestValue = randomDeviceId + "-" + DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8();
 
         // Act
-        var randomIdentifier = DevicePushIdentifier.Create(randomDeviceId);
+        var randomDevicePushIdentifier = DevicePushIdentifier.New();
 
         // Assert
-        randomIdentifier.Value.Should().BeEquivalentTo(identifierTestValue);
+        randomDevicePushIdentifier.Should().
     }
 
     [Fact]
     public void Generate_random_identifier_while_instancing_PnsRegistration_class()
     {
         // Arrange
-        var randomIdentityAddress = Application.Tests.TestDataGenerator.CreateRandomIdentityAddress();
-        var randomDeviceId = Application.Tests.TestDataGenerator.CreateRandomDeviceId();
+        var randomIdentityAddress = CreateRandomIdentityAddress();
+        var randomDeviceId = CreateRandomDeviceId();
         var pnsHandle = PnsHandle.Parse("value", PushNotificationPlatform.Fcm).Value;
 
         // var identifierTestValue = DevicePushIdentifier.Create(randomDeviceId);

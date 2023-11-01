@@ -1,25 +1,28 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Hashing;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
-public class DevicePushIdentifier
+public class DevicePushIdentifier : StronglyTypedId
 {
-    private DevicePushIdentifier(DeviceId deviceId)
+    private DevicePushIdentifier(string stringValue) : base(stringValue)
     {
-        // todo: deviceId should be hashed?
-        Value = deviceId + "-" + GenerateRandomIdentifier();
+        Value = GenerateRandomIdentifier();
     }
 
-    public static DevicePushIdentifier Create(DeviceId deviceId)
+    public static DevicePushIdentifier Create(string stringValue)
     {
-        return new DevicePushIdentifier(deviceId);
+        return new DevicePushIdentifier(stringValue);
     }
 
     public string Value { get; }
 
-    private static string GenerateRandomIdentifier()
+    public static DeviceId New()
     {
-        return DevicePushIdentifierSuffixGenerator.GenerateSuffixUtf8();
+        // DevicePushIdentifier
+        var deviceIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        return new DeviceId(PREFIX + deviceIdAsString);
     }
 }
