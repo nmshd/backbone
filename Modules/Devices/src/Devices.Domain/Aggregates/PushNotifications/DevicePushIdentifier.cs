@@ -9,8 +9,6 @@ public class DevicePushIdentifier : StronglyTypedId
 
     private const string PREFIX = "DPI";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
-
     private DevicePushIdentifier(string stringValue) : base(stringValue) { }
 
     public static DevicePushIdentifier New()
