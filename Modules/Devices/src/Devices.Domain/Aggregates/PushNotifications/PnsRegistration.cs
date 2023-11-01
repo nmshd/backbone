@@ -13,7 +13,7 @@ public class PnsRegistration
     {
         IdentityAddress = identityAddress;
         DeviceId = deviceId;
-        DevicePushIdentifier = DevicePushIdentifier.Create(deviceId);
+        DevicePushIdentifier = DevicePushIdentifier.New();
         Handle = handle;
         UpdatedAt = SystemTime.UtcNow;
         AppId = appId;

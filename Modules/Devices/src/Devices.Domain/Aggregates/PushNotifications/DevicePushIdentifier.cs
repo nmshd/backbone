@@ -1,28 +1,21 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Hashing;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+﻿using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 using Backbone.BuildingBlocks.Domain;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
 public class DevicePushIdentifier : StronglyTypedId
 {
-    private DevicePushIdentifier(string stringValue) : base(stringValue)
-    {
-        Value = GenerateRandomIdentifier();
-    }
+    public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
 
-    public static DevicePushIdentifier Create(string stringValue)
-    {
-        return new DevicePushIdentifier(stringValue);
-    }
+    private const string PREFIX = "DPI";
 
-    public string Value { get; }
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    public static DeviceId New()
+    private DevicePushIdentifier(string stringValue) : base(stringValue) { }
+
+    public static DevicePushIdentifier New()
     {
-        // DevicePushIdentifier
-        var deviceIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new DeviceId(PREFIX + deviceIdAsString);
+        var devicePushIdentifierIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
+        return new DevicePushIdentifier(PREFIX + devicePushIdentifierIdAsString);
     }
 }
