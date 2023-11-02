@@ -1,8 +1,7 @@
-﻿using System.Dynamic;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Newtonsoft.Json;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
@@ -20,8 +19,6 @@ public class ExternalEventEntityTypeConfiguration : IEntityTypeConfiguration<Ext
 
         builder.Property(x => x.Payload)
             .HasMaxLength(200)
-            .HasConversion(
-                o => JsonConvert.SerializeObject(o),
-                s => JsonConvert.DeserializeObject<ExpandoObject>(s));
+            .HasConversion<ExternalEventIdPayloadEntityFrameworkValueConverter>();
     }
 }

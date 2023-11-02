@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AdminUi.Tests.Integration.Configuration;
+namespace Backbone.AdminUi.Tests.Integration.Configuration;
 
 public class HttpClientOptions
 {

@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 

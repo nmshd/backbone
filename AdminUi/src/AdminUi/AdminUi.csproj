@@ -1,30 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <SpaProxyServerUrl>http://localhost:44480</SpaProxyServerUrl>
         <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-        <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.3" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.13" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <!-- CAUTION: Do not upgrade OpenIddict to a version greater than 4.3.0, because it breaks authentication -->
-        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="[4.3.0]" />
+        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.9.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.21.0" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
@@ -37,6 +33,7 @@
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.3" />
         <!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[6.0.2]" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
@@ -46,9 +43,8 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\Backbone.Infrastructure\Backbone.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
-        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
         <ProjectReference Include="..\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\AdminUi.Infrastructure.Database.SqlServer\AdminUi.Infrastructure.Database.SqlServer.csproj" />

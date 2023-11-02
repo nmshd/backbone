@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Messages;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Messages;
 
 public class RelationshipIdJsonConverter : JsonConverter<RelationshipId>
 {

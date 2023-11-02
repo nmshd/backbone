@@ -1,14 +1,14 @@
 ﻿using System.Data;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class AbstractDbContextBase : DbContext, IDbContext
 {

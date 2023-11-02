@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
@@ -20,7 +20,16 @@ public class TierCreatedIntegrationEventHandler : IIntegrationEventHandler<TierC
         var tier = new Tier(new TierId(integrationEvent.Id), integrationEvent.Name);
         await _tierRepository.Add(tier, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}", tier.Id, tier.Name);
+        _logger.TierCreated(tier.Id, tier.Name);
     }
 }
 
+internal static partial class TierCreatedLogs
+{
+    [LoggerMessage(
+        EventId = 151788,
+        EventName = "Quotas.TierCreatedIntegrationEventHandler.TierCreated",
+        Level = LogLevel.Information,
+        Message = "Successfully created tier. Tier ID: '{tierId}', Tier Name: '{tierName}'.")]
+    public static partial void TierCreated(this ILogger logger, TierId tierId, string tierName);
+}

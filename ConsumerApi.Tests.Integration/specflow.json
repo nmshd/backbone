@@ -1,7 +1,7 @@
 {
     "stepAssemblies": [
         {
-            "assembly": "SpecFlowCucumberResultsExporter"
+            "assembly": "Backbone.SpecFlowCucumberResultsExporter"
         }
     ]
 }

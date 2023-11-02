@@ -1,6 +1,6 @@
-﻿using SpecFlowCucumberResultsExporter.Model;
+﻿using Backbone.SpecFlowCucumberResultsExporter.Model;
 
-namespace SpecFlowCucumberResultsExporter.Reporting;
+namespace Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 public abstract class Reporter
 {

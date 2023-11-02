@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Enmeshed.BuildingBlocks.Application.Attributes;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;

@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Devices.Domain;
 

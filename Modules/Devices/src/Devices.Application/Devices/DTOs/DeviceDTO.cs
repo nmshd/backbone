@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 

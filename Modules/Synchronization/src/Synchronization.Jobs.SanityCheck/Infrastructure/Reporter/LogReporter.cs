@@ -20,12 +20,12 @@ public class LogReporter : IReporter
     {
         foreach (var databaseId in _databaseIds)
         {
-            _logger.LogError("no blob found for datawallet modification id: '{databaseId}'", databaseId);
+            _logger.NoBlobForDatawalletModificationId(databaseId);
         }
 
         foreach (var blobId in _blobIds)
         {
-            _logger.LogError("no database entry found for blob id: '{blobId}'", blobId);
+            _logger.NoDatabaseEntryForBlobId(blobId);
         }
     }
 
@@ -38,4 +38,21 @@ public class LogReporter : IReporter
     {
         _databaseIds.Add(id);
     }
+}
+
+internal static partial class LogReporterLogs
+{
+    [LoggerMessage(
+        EventId = 525684,
+        EventName = "Synchronization.SanityCheck.NoBlobForDatawalletModificationId",
+        Level = LogLevel.Error,
+        Message = "No blob found for datawallet modification id: '{databaseId}'.")]
+    public static partial void NoBlobForDatawalletModificationId(this ILogger logger, DatawalletModificationId databaseId);
+
+    [LoggerMessage(
+        EventId = 560290,
+        EventName = "Synchronization.SanityCheck.NoDatabaseEntryForBlobId",
+        Level = LogLevel.Error,
+        Message = "No database entry found for blob id: '{blobId}'.")]
+    public static partial void NoDatabaseEntryForBlobId(this ILogger logger, string blobId);
 }

@@ -1,10 +1,10 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 
 public class AzureStorageAccount : IBlobStorage, IDisposable
 {
@@ -74,7 +74,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError("There was an error listing all the blobs.", ex);
+            _logger.ErrorListingAllBlobs(ex);
             throw;
         }
     }
@@ -127,10 +127,27 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError("There was an error deleting the blob with id '{cloudBlockBlobName}'. {ex}", cloudBlockBlob.Name, ex);
+                _logger.ErrorDeletingBlob(cloudBlockBlob.Name, ex);
                 throw new NotFoundException();
             }
 
         _logger.LogTrace("Deletion successful.");
     }
+}
+
+internal static partial class AzureStorageAccountLogs
+{
+    [LoggerMessage(
+        EventId = 516591,
+        EventName = "AzureStorageAccount.ErrorListingAllBlobs",
+        Level = LogLevel.Error,
+        Message = "There was an error listing all blobs.")]
+    public static partial void ErrorListingAllBlobs(this ILogger logger, Exception ex);
+
+    [LoggerMessage(
+        EventId = 645028,
+        EventName = "AzureStorageAccount.ErrorDeletingBlob",
+        Level = LogLevel.Error,
+        Message = "There was an error deleting the blob with id '{cloudBlockBlobName}'.")]
+    public static partial void ErrorDeletingBlob(this ILogger logger, string cloudBlockBlobName, Exception ex);
 }

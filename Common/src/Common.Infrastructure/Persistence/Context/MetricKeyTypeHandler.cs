@@ -1,8 +1,8 @@
 ﻿using System.Data;
+using Backbone.BuildingBlocks.Domain;
 using Dapper;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace Enmeshed.Common.Infrastructure.Persistence.Context;
+namespace Backbone.Common.Infrastructure.Persistence.Context;
 internal class MetricKeyTypeHandler : SqlMapper.TypeHandler<MetricKey>
 {
     public override MetricKey Parse(object value)

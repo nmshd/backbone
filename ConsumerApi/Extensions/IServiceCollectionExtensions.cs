@@ -1,23 +1,17 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.ConsumerApi.Configuration;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using ConsumerApi.ApplicationInsights.TelemetryInitializers;
-using ConsumerApi.Configuration;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
-using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -25,7 +19,7 @@ using OpenIddict.Validation.AspNetCore;
 using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
-namespace ConsumerApi.Extensions;
+namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
@@ -156,47 +150,6 @@ public static class IServiceCollectionExtensions
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomApplicationInsights(this IServiceCollection services)
-    {
-        services.AddApplicationInsightsTelemetry();
-
-        services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel());
-
-        TelemetryDebugWriter.IsTracingDisabled = true;
-
-        services.AddSingleton<ITelemetryInitializer, UserInformationTelemetryInitializer>();
-        services.AddSingleton<ITelemetryInitializer, CloudRoleNameTelemetryInitializer>();
-
-        services.ConfigureTelemetryModule<EventCounterCollectionModule>((module, _) =>
-        {
-            module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "alloc-rate"));
-            module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "cpu-usage"));
-            module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "exception-count"));
-            module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "gc-heap-size"));
-            module.Counters.Add(new EventCounterCollectionRequest("System.Runtime", "working-set"));
-
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft.AspNetCore.Hosting", "current-requests"));
-
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft.AspNetCore.Http.Connections",
-                "connections-duration"));
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft.AspNetCore.Http.Connections",
-                "current-connections"));
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft.AspNetCore.Http.Connections",
-                "connections-timed-out"));
-
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft-AspNetCore-Server-Kestrel",
-                "connections-per-second"));
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft-AspNetCore-Server-Kestrel",
-                "current-connections"));
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft-AspNetCore-Server-Kestrel",
-                "request-queue-length"));
-            module.Counters.Add(new EventCounterCollectionRequest("Microsoft-AspNetCore-Server-Kestrel",
-                "total-tls-handshakes"));
-        });
 
         return services;
     }

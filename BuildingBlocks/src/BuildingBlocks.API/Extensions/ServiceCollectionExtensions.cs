@@ -1,13 +1,13 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {

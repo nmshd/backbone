@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 

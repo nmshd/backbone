@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Relationships.Common;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 

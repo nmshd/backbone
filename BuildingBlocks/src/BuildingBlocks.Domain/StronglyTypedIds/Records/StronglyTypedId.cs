@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Records;
+﻿namespace Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 public abstract record StronglyTypedId(string Value)
 {

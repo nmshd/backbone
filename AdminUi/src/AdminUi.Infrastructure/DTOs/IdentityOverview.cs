@@ -1,4 +1,4 @@
-﻿namespace AdminUi.Infrastructure.DTOs;
+﻿namespace Backbone.AdminUi.Infrastructure.DTOs;
 
 public class IdentityOverview
 {
@@ -8,7 +8,6 @@ public class IdentityOverview
     public string? CreatedWithClient { get; set; }
     public int? DatawalletVersion { get; set; }
     public byte IdentityVersion { get; set; }
-    public string TierName { get; set; }
-    public string TierId { get; set; }
+    public TierDTO Tier { get; set; }
     public int? NumberOfDevices { get; set; }
 }

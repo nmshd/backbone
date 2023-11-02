@@ -35,7 +35,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        });
+                        }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.SqlServer.QuotasDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -43,7 +43,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        });
+                        }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.Postgres.QuotasDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

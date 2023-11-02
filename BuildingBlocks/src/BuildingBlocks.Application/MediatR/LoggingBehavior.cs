@@ -2,13 +2,11 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Application.MediatR;
+namespace Backbone.BuildingBlocks.Application.MediatR;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private static readonly EventId EVENT_ID_EXECUTION_TIME = new(1000, "ExecutionTimeTooHigh");
-
     private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
     private Stopwatch? _watch;
 
@@ -36,8 +34,18 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     {
         _watch!.Stop();
 
-        var logLevel = _watch.ElapsedMilliseconds < 1000 ? LogLevel.Information : LogLevel.Warning;
-
-        _logger.Log(logLevel, EVENT_ID_EXECUTION_TIME, "Handled '{requestName}' ('{timeElapsed}' ms)", typeof(TRequest).Name, _watch.ElapsedMilliseconds);
+        _logger.HandledMediatorRequest(
+            _watch.ElapsedMilliseconds > 1000 ? LogLevel.Warning : LogLevel.Information,
+            typeof(TRequest).Name, _watch.ElapsedMilliseconds);
     }
+}
+
+internal static partial class LoggingBehaviorLogs
+{
+    [LoggerMessage(
+        EventId = 724322,
+        EventName = "LoggingBehavior.HandledRequest",
+        Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
+    public static partial void HandledMediatorRequest(this ILogger logger, LogLevel level, string requestName, long timeElapsed);
+
 }

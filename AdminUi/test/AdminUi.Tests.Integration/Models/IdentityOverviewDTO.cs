@@ -1,4 +1,4 @@
-﻿namespace AdminUi.Tests.Integration.Models;
+﻿namespace Backbone.AdminUi.Tests.Integration.Models;
 public class IdentityOverviewDTO
 {
     public string Address { get; set; }
@@ -7,7 +7,6 @@ public class IdentityOverviewDTO
     public string? CreatedWithClient { get; set; }
     public int? DatawalletVersion { get; set; }
     public byte IdentityVersion { get; set; }
-    public string TierName { get; set; }
-    public string TierId { get; set; }
+    public TierDTO Tier { get; set; }
     public int? NumberOfDevices { get; set; }
 }

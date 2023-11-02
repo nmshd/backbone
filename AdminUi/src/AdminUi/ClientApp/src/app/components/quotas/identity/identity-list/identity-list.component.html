@@ -2,73 +2,8 @@
     <h2 class="header-title">{{ header }}</h2>
     <p class="header-description">{{ headerDescription }}</p>
 </div>
-<mat-card [ngClass]="{ 'disabled-container': loading }">
-    <mat-card-content style="min-height: 400px">
-        <div *ngIf="loading" class="loading">
-            <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
-        </div>
-        <table mat-table class="responsive" [dataSource]="identities" style="margin-top: 40px" *ngIf="!loading">
-            <ng-container matColumnDef="address">
-                <th mat-header-cell *matHeaderCellDef>Address</th>
-                <td mat-cell *matCellDef="let identity" data-label="Address" (click)="editIdentity(identity.address)">
-                    {{ identity.address }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="tierName">
-                <th mat-header-cell *matHeaderCellDef>Tier</th>
-                <td mat-cell *matCellDef="let identity" data-label="TierName" (click)="goToTier(identity.tierId)" class="tier-navigation">{{ identity.tierName }}</td>
-            </ng-container>
-            <ng-container matColumnDef="createdWithClient">
-                <th mat-header-cell *matHeaderCellDef>Created with Client</th>
-                <td mat-cell *matCellDef="let identity" data-label="Created with Client" (click)="editIdentity(identity.address)">
-                    {{ identity.createdWithClient }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="numberOfDevices">
-                <th mat-header-cell *matHeaderCellDef>Number of Devices</th>
-                <td mat-cell *matCellDef="let identity" data-label="Number of Devices" (click)="editIdentity(identity.address)">
-                    {{ identity.numberOfDevices }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="createdAt">
-                <th mat-header-cell *matHeaderCellDef>Created At</th>
-                <td mat-cell *matCellDef="let identity" data-label="Created At" (click)="editIdentity(identity.address)">
-                    {{ identity.createdAt | date }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="lastLoginAt">
-                <th mat-header-cell *matHeaderCellDef>Last Login At</th>
-                <td mat-cell *matCellDef="let identity" data-label="Last Login At" (click)="editIdentity(identity.address)">
-                    {{ identity.lastLoginAt | date }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="datawalletVersion">
-                <th mat-header-cell *matHeaderCellDef>Datawallet Version</th>
-                <td mat-cell *matCellDef="let identity" data-label="Datawallet Version" (click)="editIdentity(identity.address)">
-                    {{ identity.datawalletVersion }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="identityVersion">
-                <th mat-header-cell *matHeaderCellDef>Identity Version</th>
-                <td mat-cell *matCellDef="let identity" data-label="Identity Version" (click)="editIdentity(identity.address)">
-                    {{ identity.identityVersion }}
-                </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">No identities found.</td>
-            </tr>
-        </table>
-        <mat-paginator
-            *ngIf="!loading"
-            (page)="pageChangeEvent($event)"
-            [length]="totalRecords"
-            [pageSize]="pageSize"
-            [pageIndex]="pageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of identities">
-        </mat-paginator>
+<mat-card style="width: fit-content">
+    <mat-card-content style="min-height: 400px; min-width: 1350px">
+        <app-identities-overview></app-identities-overview>
     </mat-card-content>
 </mat-card>

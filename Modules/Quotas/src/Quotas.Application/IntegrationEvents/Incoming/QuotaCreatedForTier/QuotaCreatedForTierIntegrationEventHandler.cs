@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
@@ -25,13 +25,13 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
 
     public async Task Handle(QuotaCreatedForTierIntegrationEvent @event)
     {
-        _logger.LogTrace("Handling QuotaCreatedForTierIntegrationEvent ... ");
+        _logger.LogTrace("Handling QuotaCreatedForTierIntegrationEvent...");
 
         var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
-            _logger.LogTrace("No identities found with tier ID: '{tierId}'", @event.TierId);
+            _logger.LogTrace("No identities found with tier ID: '{tierId}'.", @event.TierId);
             return;
         }
 
@@ -48,6 +48,6 @@ public class QuotaCreatedForTierIntegrationEventHandler : IIntegrationEventHandl
         var metrics = new List<string> { tierQuotaDefinition.MetricKey.Value };
         await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created quotas for Identities!");
+        _logger.LogInformation("Successfully created quotas for Identities.");
     }
 }

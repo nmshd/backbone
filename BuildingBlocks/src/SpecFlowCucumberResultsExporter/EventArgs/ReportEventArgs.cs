@@ -1,7 +1,7 @@
-﻿using SpecFlowCucumberResultsExporter.Model;
-using SpecFlowCucumberResultsExporter.Reporting;
+﻿using Backbone.SpecFlowCucumberResultsExporter.Model;
+using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
-namespace SpecFlowCucumberResultsExporter.EventArgs;
+namespace Backbone.SpecFlowCucumberResultsExporter.EventArgs;
 
 public class ReportEventArgs : System.EventArgs
 {

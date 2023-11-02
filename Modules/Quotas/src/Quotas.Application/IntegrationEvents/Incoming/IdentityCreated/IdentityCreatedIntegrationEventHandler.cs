@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
@@ -39,8 +39,16 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.LogTrace("Successfully created identity. Identity Address: '{address}', Tier ID: {tierId}", identity.Address, identity.TierId);
-
-        _logger.LogTrace("'{quotasCount}' Tier Quotas created for Identity: {identityAddress} ", tier.Quotas.Count, identity.Address);
+        _logger.IdentityCreated(identity.Address, identity.TierId);
     }
+}
+
+internal static partial class IdentityCreatedLogs
+{
+    [LoggerMessage(
+        EventId = 811934,
+        EventName = "Quotas.IdentityCreatedIntegrationEventHandler.IdentityCreated",
+        Level = LogLevel.Information,
+        Message = "Successfully created identity. Identity Address: '{address}', Tier ID: '{tierId}'.")]
+    public static partial void IdentityCreated(this ILogger logger, string address, TierId tierId);
 }

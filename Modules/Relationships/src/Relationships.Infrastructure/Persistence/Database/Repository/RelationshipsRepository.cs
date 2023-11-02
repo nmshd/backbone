@@ -1,16 +1,16 @@
-﻿using Backbone.Modules.Relationships.Application;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -172,7 +172,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         }
         catch (BlobAlreadyExistsException ex)
         {
-            _logger.LogError(ex, "There was an error while trying to save the content of the RelationshipChange with the id {id}. The name of the blob was {name}.", latestChange.Id, ex.BlobName);
+            _logger.ErrorTryingToSaveRelationshipChange(latestChange.Id, ex.BlobName);
         }
     }
 
@@ -195,4 +195,14 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         await Task.WhenAll(changes.Select(FillContentOfChange).ToArray());
     }
+}
+
+internal static partial class RelationshipRepositoryLogs
+{
+    [LoggerMessage(
+        EventId = 664861,
+        EventName = "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange",
+        Level = LogLevel.Error,
+        Message = "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'.")]
+    public static partial void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name);
 }

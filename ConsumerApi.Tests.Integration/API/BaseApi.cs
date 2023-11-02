@@ -1,14 +1,14 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using ConsumerApi.Tests.Integration.Models;
-using Enmeshed.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
+using Backbone.ConsumerApi.Tests.Integration.Models;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace ConsumerApi.Tests.Integration.API;
+namespace Backbone.ConsumerApi.Tests.Integration.API;
 
-public class BaseApi
+internal class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly HttpClient _httpClient;

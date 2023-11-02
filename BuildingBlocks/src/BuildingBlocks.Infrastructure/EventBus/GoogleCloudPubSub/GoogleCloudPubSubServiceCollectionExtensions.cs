@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public static class GoogleCloudPubSubServiceCollectionExtensions
 {

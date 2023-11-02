@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Enmeshed.StronglyTypedIds.Tests;
+namespace Backbone.StronglyTypedIds.Tests;
 
 public class UnitTest1
 {

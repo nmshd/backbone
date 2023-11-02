@@ -1,15 +1,17 @@
-﻿using AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
+using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
 
-namespace AdminUi.Infrastructure.Persistence;
+namespace Backbone.AdminUi.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
     private const string SQLSERVER = "SqlServer";
-    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "AdminUi.Infrastructure.Database.SqlServer";
+    private const string SQLSERVER_MIGRATIONS_ASSEMBLY = "Backbone.AdminUi.Infrastructure.Database.SqlServer";
     private const string POSTGRES = "Postgres";
-    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "AdminUi.Infrastructure.Database.Postgres";
+    private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Backbone.AdminUi.Infrastructure.Database.Postgres";
 
     public static IServiceCollection AddDatabase(this IServiceCollection services, SqlDatabaseConfiguration configuration)
     {
@@ -38,7 +40,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        });
+                        }).UseModel(SqlServerModel.AdminUiDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
@@ -46,7 +48,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        });
+                        }).UseModel(PostgresModel.AdminUiDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

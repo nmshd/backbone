@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
-using SpecFlowCucumberResultsExporter.Extensions;
-using SpecFlowCucumberResultsExporter.Model;
+using Backbone.SpecFlowCucumberResultsExporter.Extensions;
+using Backbone.SpecFlowCucumberResultsExporter.Model;
 
-namespace SpecFlowCucumberResultsExporter.Reporting;
+namespace Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 [Binding]
 public partial class Reporters

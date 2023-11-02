@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Enmeshed.DevelopmentKit.Identity.ValueObjects;
+namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(DeviceNameTypeConverter))]

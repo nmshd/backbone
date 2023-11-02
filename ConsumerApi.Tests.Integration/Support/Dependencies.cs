@@ -1,10 +1,10 @@
-﻿using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Configuration;
+﻿using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
 
-namespace ConsumerApi.Tests.Integration.Support;
+namespace Backbone.ConsumerApi.Tests.Integration.Support;
 
 public static class Dependencies
 {

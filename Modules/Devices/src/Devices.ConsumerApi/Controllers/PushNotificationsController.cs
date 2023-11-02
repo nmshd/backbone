@@ -1,7 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
+﻿using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
+using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,14 @@ public class PushNotificationsController : ApiControllerBase
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UnregisterFromPushNotifications(CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteDeviceRegistrationCommand(), cancellationToken);
         return NoContent();
     }
 

@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Devices.Domain.Tests;
 using FluentAssertions;
 using Xunit;
 

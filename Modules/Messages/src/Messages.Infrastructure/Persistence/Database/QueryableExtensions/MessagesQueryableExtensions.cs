@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;

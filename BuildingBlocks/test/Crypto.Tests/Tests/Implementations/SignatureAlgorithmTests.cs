@@ -1,8 +1,8 @@
-using Enmeshed.Crypto.Implementations;
+using Backbone.Crypto.Implementations;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations;
+namespace Backbone.Crypto.Tests.Tests.Implementations;
 
 public class SignatureHelperTests : IDisposable
 {

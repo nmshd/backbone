@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics;
-using Enmeshed.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class SaveChangesTimeInterceptor : SaveChangesInterceptor
 {
     private readonly ILogger<SaveChangesTimeInterceptor> _logger;
-    private Stopwatch _stopwatch;
+    private Stopwatch? _stopwatch;
 
     public SaveChangesTimeInterceptor(ILogger<SaveChangesTimeInterceptor> logger)
     {
@@ -29,8 +28,18 @@ public class SaveChangesTimeInterceptor : SaveChangesInterceptor
         int result,
         CancellationToken cancellationToken = default)
     {
-        _stopwatch.Stop();
-        _logger.LogDebug(LogEventIds.EXECUTION_TIME, "Executed '{action}' in {elapsedMilliseconds}ms.", "SaveChangesAsync", _stopwatch.ElapsedMilliseconds);
+        _stopwatch!.Stop();
+        _logger.ExecutedAction("SaveChangesAsync", _stopwatch.ElapsedMilliseconds);
         return await base.SavedChangesAsync(eventData, result, cancellationToken);
     }
+}
+
+internal static partial class SaveChangesTimeInterceptorLogs
+{
+    [LoggerMessage(
+        EventId = 293800,
+        EventName = "ExecutionTime",
+        Level = LogLevel.Information,
+        Message = "Executed '{actionName}' in {elapsedMilliseconds}ms.")]
+    public static partial void ExecutedAction(this ILogger logger, string actionName, long elapsedMilliseconds);
 }

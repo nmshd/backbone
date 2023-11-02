@@ -1,6 +1,6 @@
 ﻿using FluentAssertions.Specialized;
 
-namespace Enmeshed.UnitTestTools.Extensions;
+namespace Backbone.UnitTestTools.Extensions;
 
 public static class NonGenericAsyncFunctionAssertionsExtensions
 {

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,9 +11,9 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
     public void Configure(EntityTypeBuilder<Identity> builder)
     {
         builder.HasKey(x => x.Address);
-        builder.HasOne<Tier>().WithMany().HasForeignKey(x => x.TierId);
-        builder.HasMany<TierQuota>(x => x.TierQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
-        builder.HasMany<IndividualQuota>(x => x.IndividualQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
+        builder.HasOne<Tier>().WithMany().HasForeignKey(x => x.TierId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasMany(x => x.TierQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
+        builder.HasMany(x => x.IndividualQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
         builder.Property(x => x.Address).IsUnicode(false).IsFixedLength().HasMaxLength(IdentityAddress.MAX_LENGTH);
         builder.Property(x => x.TierId).IsUnicode(false).IsFixedLength().HasMaxLength(20);
     }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ConsumerApi.Tests.Integration.Models;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class ResponseContent<T>
 {

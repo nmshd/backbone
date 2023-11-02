@@ -1,29 +1,28 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { NumberFilter } from "src/app/utils/number-filter";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
+import { TierDTO } from "../tier-service/tier.service";
 
 @Injectable({
     providedIn: "root"
 })
-export class ClientServiceService {
+export class ClientService {
     private readonly apiUrl: string;
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Clients`;
     }
 
-    public getClientById(id: string): Observable<HttpResponseEnvelope<ClientDTO>> {
-        return this.http.get<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${id}`);
+    public getClientById(id: string): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.get<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${id}`);
     }
 
-    public getClients(pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<ClientDTO>> {
-        const httpOptions = {
-            params: new HttpParams().set("PageNumber", pageNumber + 1).set("PageSize", pageSize)
-        };
-
-        return this.http.get<PagedHttpResponseEnvelope<ClientDTO>>(this.apiUrl, httpOptions);
+    public getClients(): Observable<PagedHttpResponseEnvelope<ClientOverview>> {
+        return this.http.get<PagedHttpResponseEnvelope<ClientOverview>>(this.apiUrl);
     }
 
     public createClient(client: Client): Observable<HttpResponseEnvelope<Client>> {
@@ -38,16 +37,17 @@ export class ClientServiceService {
         return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}/ChangeSecret`, request);
     }
 
-    public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<ClientDTO>> {
-        return this.http.patch<HttpResponseEnvelope<ClientDTO>>(`${this.apiUrl}/${clientId}`, request);
+    public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<Client>> {
+        return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
     }
 }
 
-export interface ClientDTO {
+export interface ClientOverview {
     clientId: string;
-    displayName?: string;
-    defaultTier: string;
+    displayName: string;
+    defaultTier: TierDTO;
     createdAt: Date;
+    numberOfIdentities: number;
 }
 
 export interface Client {
@@ -64,4 +64,12 @@ export interface ChangeClientSecretRequest {
 
 export interface UpdateClientRequest {
     defaultTier: string;
+}
+
+export interface ClientOverviewFilter {
+    clientId?: string;
+    tiers?: string[];
+    displayName?: string;
+    numberOfIdentities: NumberFilter;
+    createdAt: DateFilter;
 }

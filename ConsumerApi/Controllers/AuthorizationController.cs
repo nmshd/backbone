@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.ConsumerApi.Mvc;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Domain.Entities;
-using ConsumerApi.Mvc;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -16,7 +16,7 @@ using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace ConsumerApi.Controllers;
+namespace Backbone.ConsumerApi.Controllers;
 
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class AuthorizationController : ApiControllerBase

@@ -1,5 +1,8 @@
-﻿using AdminUi.Infrastructure.DTOs;
-using AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
@@ -8,19 +11,13 @@ using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace AdminUi.Controllers;
+namespace Backbone.AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("ApiKey")]
@@ -36,16 +33,11 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TierOverview>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTiersAsync([FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverview>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var tierOverviews = await _adminUiDbContext.TierOverviews.OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
-        return Paged(new PagedResponse<TierOverview>(tierOverviews.ItemsOnPage, paginationFilter, tierOverviews.TotalNumberOfItems));
+        var tiers = await _adminUiDbContext.TierOverviews.ToListAsync(cancellationToken);
+        return Ok(tiers);
     }
 
     [HttpGet("{tierId}")]

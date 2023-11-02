@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -33,6 +33,11 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("AppId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Environment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Handle")
                         .IsRequired()
