@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Domain.Aggregates;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -63,6 +64,8 @@ public class MessagesRepositoryTests
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
+
+        SystemTime.Set(TODAY);
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
