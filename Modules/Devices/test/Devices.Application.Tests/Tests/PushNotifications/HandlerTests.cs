@@ -12,15 +12,15 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Microsoft.EntityFrameworkCore;
+using Backbone.BuildingBlocks.Infrastructure.Exceptions;
+using Backbone.Modules.Devices.Infrastructure;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
 public class HandlerTests
 {
-    // now DirectPushService returns Task to Handler, Handler returns Task to Controller, Controller returns Task to Client
-    // todo: DirectPushService returns DirectPushIdentifier, and so on...
-    // todo: test dummy push service as well (DummyPushService)
-
     [Fact]
     public async Task Updating_PnsRegistration_in_PushService()
     {
@@ -110,7 +110,7 @@ public class HandlerTests
         var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
-           .Returns((PnsRegistration)null);
+           .Returns((PnsRegistration)null).Once();
 
         var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger, dummyPnsRegistrationRepository);
 
