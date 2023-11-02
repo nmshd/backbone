@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand>
         var address = _userContext.GetAddressOrNull();
         var userIsSupport = address == null;
         var userIsOwner = address == request.IdentityAddress;
-        
+
         if (!userIsOwner && !userIsSupport)
         {
             throw new ApplicationException(ApplicationErrors.Identities.CanOnlyStartDeletionProcessForOwnIdentity());

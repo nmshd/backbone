@@ -65,7 +65,7 @@ public class StartDeletionProcessTests
         AssertDeletionProcessWasStarted(activeIdentity, "The deletion process was started by a support employee.");
     }
 
-    
+
 
     [Fact]
     public void Only_one_active_deletion_process_is_allowed_when_started_by_the_support()

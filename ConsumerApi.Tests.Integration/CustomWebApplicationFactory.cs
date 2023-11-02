@@ -1,14 +1,14 @@
-﻿using Backbone.Crypto.Abstractions;
-using Backbone.Crypto;
+﻿using Backbone.Crypto;
+using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
 using Backbone.Tooling.Extensions;
+using Google;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Google;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi.Tests.Integration;
 
@@ -24,7 +24,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(d => d.ServiceType ==  typeof(ISignatureHelper));
+            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(ISignatureHelper));
 
             if (descriptor != null)
             {

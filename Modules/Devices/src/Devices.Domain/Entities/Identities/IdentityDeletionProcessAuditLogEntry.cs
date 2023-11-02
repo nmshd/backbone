@@ -16,7 +16,7 @@ public class IdentityDeletionProcessAuditLogEntry
 
     private IdentityDeletionProcessAuditLogEntry()
     {
-        
+
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
