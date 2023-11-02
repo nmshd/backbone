@@ -27,7 +27,14 @@ public class MessagesRepositoryTests
      * such as TOMORROW or YESTERDAY and be certain that those dates fall on the same Month.
      * </summary>
      */
-    private static readonly DateTime TODAY = new(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 15);
+    private static readonly DateTime TODAY = new(
+        DateTime.UtcNow.Year,
+        DateTime.UtcNow.Month,
+        15,
+        DateTime.UtcNow.Hour,
+        DateTime.UtcNow.Minute,
+        DateTime.UtcNow.Second
+        );
     private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
     private static readonly DateTime TOMORROW = TODAY.AddDays(1);
     private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
