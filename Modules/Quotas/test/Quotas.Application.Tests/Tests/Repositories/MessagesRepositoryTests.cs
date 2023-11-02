@@ -14,7 +14,6 @@ using Xunit;
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
 public class MessagesRepositoryTests
 {
-    private static readonly DateTime HALF_OF_MONTH = new(DateTime.Now.Year, DateTime.Now.Month, 15);
 
     private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly IdentityAddress _identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
@@ -22,10 +21,11 @@ public class MessagesRepositoryTests
     private readonly MessagesDbContext _messagesArrangeContext;
     private readonly QuotasDbContext _actContext;
 
-    private static readonly DateTime YESTERDAY = HALF_OF_MONTH.AddDays(-1);
-    private static readonly DateTime TOMORROW = HALF_OF_MONTH.AddDays(1);
-    private static readonly DateTime LAST_YEAR = HALF_OF_MONTH.AddYears(-1);
-    private static readonly DateTime NEXT_YEAR = HALF_OF_MONTH.AddYears(1);
+    private static readonly DateTime TODAY = new(DateTime.Now.Year, DateTime.Now.Month, 15);
+    private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
+    private static readonly DateTime TOMORROW = TODAY.AddDays(1);
+    private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
+    private static readonly DateTime NEXT_YEAR = TODAY.AddYears(1);
 
     public MessagesRepositoryTests()
     {
