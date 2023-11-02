@@ -80,6 +80,8 @@ public class DirectPushService : IPushService
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
 
+            registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+
             _logger.LogTrace("Device successfully updated.");
         }
         else
@@ -99,9 +101,7 @@ public class DirectPushService : IPushService
             }
         }
 
-        var res = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true); // todo: should search with DevicePushIdentifier? check w Timo
-
-        return res.DevicePushIdentifier;
+        return registration.DevicePushIdentifier;
     }
 
     public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
