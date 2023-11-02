@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Domain.Aggregates;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -14,16 +15,24 @@ using Xunit;
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
 public class MessagesRepositoryTests
 {
+
     private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly IdentityAddress _identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
 
     private readonly MessagesDbContext _messagesArrangeContext;
     private readonly QuotasDbContext _actContext;
 
-    private static readonly DateTime YESTERDAY = DateTime.UtcNow.AddDays(-1);
-    private static readonly DateTime TOMORROW = DateTime.UtcNow.AddDays(1);
-    private static readonly DateTime LAST_YEAR = DateTime.UtcNow.AddYears(-1);
-    private static readonly DateTime NEXT_YEAR = DateTime.UtcNow.AddYears(1);
+    /**
+     * <summary>
+     * TODAY is set to the 15th of the current month so that we can use notions
+     * such as TOMORROW or YESTERDAY and be certain that those dates fall on the same Month.
+     * </summary>
+     */
+    private static readonly DateTime TODAY = new(2020, 02, 15, 10, 30, 00);
+    private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
+    private static readonly DateTime TOMORROW = TODAY.AddDays(1);
+    private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
+    private static readonly DateTime NEXT_YEAR = TODAY.AddYears(1);
 
     public MessagesRepositoryTests()
     {
@@ -32,6 +41,8 @@ public class MessagesRepositoryTests
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_messagesArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>(connection);
         (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
+
+        SystemTime.Set(TODAY);
     }
 
     [Fact]
@@ -39,7 +50,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
         };
@@ -60,11 +71,8 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
-        var halfOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
-        SystemTime.Set(halfOfMonth);
-
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(LAST_YEAR, _identityAddress1),
@@ -88,7 +96,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
@@ -110,7 +118,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
@@ -129,6 +137,8 @@ public class MessagesRepositoryTests
 
     private static Message CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
     {
+        var savedDateTime = SystemTime.UtcNow;
+
         SystemTime.Set(createdAt);
 
         var message = new Message(
@@ -140,7 +150,7 @@ public class MessagesRepositoryTests
             new List<RecipientInformation>()
             );
 
-        SystemTime.Reset();
+        SystemTime.Set(savedDateTime);
 
         return message;
     }
