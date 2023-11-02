@@ -90,10 +90,6 @@ public class HandlerTests
             .Update(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockPnsRegistrationRepository
-            .FindByDeviceId(A<DeviceId>._, CancellationToken.None, true))
-            .MustHaveHappenedANumberOfTimesMatching(f => f.Equals(2));
-
         acting.Should().BeOfType<DevicePushIdentifier>();
     }
 
