@@ -151,12 +151,15 @@ public class HandlerTests
         var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger, dummyPnsRegistrationRepository);
 
         // Act
-        await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
+        var acting = await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository.Delete(
                 A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
             .MustHaveHappenedOnceExactly();
+
+        acting.Should().BeOfType<DevicePushIdentifier>();
+
     }
 
     [Fact]
