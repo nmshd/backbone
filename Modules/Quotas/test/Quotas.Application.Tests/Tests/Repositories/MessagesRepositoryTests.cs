@@ -28,14 +28,7 @@ public class MessagesRepositoryTests
      * such as TOMORROW or YESTERDAY and be certain that those dates fall on the same Month.
      * </summary>
      */
-    private static readonly DateTime TODAY = new(
-        DateTime.UtcNow.Year,
-        DateTime.UtcNow.Month,
-        15,
-        DateTime.UtcNow.Hour,
-        DateTime.UtcNow.Minute,
-        DateTime.UtcNow.Second
-        );
+    private static readonly DateTime TODAY = new(2020, 02, 15, 10, 30, 00);
     private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
     private static readonly DateTime TOMORROW = TODAY.AddDays(1);
     private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
@@ -48,6 +41,8 @@ public class MessagesRepositoryTests
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_messagesArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>(connection);
         (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
+
+        SystemTime.Set(TODAY);
     }
 
     [Fact]
@@ -64,8 +59,6 @@ public class MessagesRepositoryTests
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
-
-        SystemTime.Set(TODAY);
 
         // Act
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
@@ -144,6 +137,8 @@ public class MessagesRepositoryTests
 
     private static Message CreateMessage(DateTime createdAt, IdentityAddress identityAddress)
     {
+        var savedDateTime = SystemTime.UtcNow;
+
         SystemTime.Set(createdAt);
 
         var message = new Message(
@@ -155,7 +150,7 @@ public class MessagesRepositoryTests
             new List<RecipientInformation>()
             );
 
-        SystemTime.Reset();
+        SystemTime.Set(savedDateTime);
 
         return message;
     }
