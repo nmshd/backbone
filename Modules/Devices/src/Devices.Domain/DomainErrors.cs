@@ -41,7 +41,7 @@ public static class DomainErrors
 
     public static DomainError OnlyOneActiveDeletionProcessAllowed()
     {
-        return new DomainError("error.platform.validation.identity.onlyOneActiveDeletionProcessAllowed",
+        return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed",
                        "Only one active deletion process is allowed.");
     }
 
