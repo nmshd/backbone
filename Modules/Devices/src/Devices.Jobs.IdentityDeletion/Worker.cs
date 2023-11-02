@@ -1,7 +1,5 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService
@@ -13,17 +11,20 @@ public class Worker : IHostedService
     {
         _host = host;
         _serviceScopeFactory = serviceScopeFactory;
+        using var scope = _serviceScopeFactory.CreateScope();
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var eventBus = _serviceScopeFactory.CreateScope().ServiceProvider.GetService<IEventBus>();
-        
-        return Task.CompletedTask;
+        using var scope = _serviceScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
+        _host.StopApplication();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Stop called");
+        return Task.CompletedTask;
     }
 }

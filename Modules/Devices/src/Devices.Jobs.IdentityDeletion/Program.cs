@@ -1,17 +1,18 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Backbone.Modules.Devices.Application.AutoMapper;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        CreateHostBuilder(args).Build().RunAsync();
+        await CreateHostBuilder(args).Build().RunAsync();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args)
@@ -40,8 +41,25 @@ public class Program
             {
                 var configuration = hostContext.Configuration;
                 services.AddHostedService<Worker>();
-                services.AddEventBus(configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().EventBus);
+
+                var eventBusConfiguration = configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().EventBus;
+                var databaseConfiguration = configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().SqlDatabase;
+
+                services.AddEventBus(eventBusConfiguration);
+                services.AddDatabase(options =>
+                {
+                    options.Provider = databaseConfiguration.Provider;
+                    options.ConnectionString = databaseConfiguration.ConnectionString;
+                    options.RetryOptions = databaseConfiguration.RetryOptions;
+                });
+                services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+                services.AddMediatR(o =>
+                {
+                    o.RegisterServicesFromAssemblyContaining<UpdateDeletionProcessesCommand>()
+                    .AddOpenBehavior(typeof(LoggingBehavior<,>));
+                });
             })
-             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

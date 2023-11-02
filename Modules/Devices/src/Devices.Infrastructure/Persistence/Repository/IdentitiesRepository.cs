@@ -10,6 +10,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 public class IdentitiesRepository : IIdentitiesRepository
@@ -17,18 +18,18 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Identity> _identities;
     private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly DevicesDbContext _dbContext;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
+    private readonly IServiceProvider _serviceProvider;
 
-    public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public IdentitiesRepository(DevicesDbContext dbContext, IServiceProvider serviceProvider)
     {
         _identities = dbContext.Identities;
         _readonlyIdentities = dbContext.Identities.AsNoTracking();
         _dbContext = dbContext;
-        _userManager = userManager;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _serviceProvider = serviceProvider;
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
@@ -54,7 +55,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task AddUser(ApplicationUser user, string password)
     {
-        var createUserResult = await _userManager.CreateAsync(user, password);
+        var createUserResult = await _serviceProvider.GetRequiredService<UserManager<ApplicationUser>>().CreateAsync(user, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }

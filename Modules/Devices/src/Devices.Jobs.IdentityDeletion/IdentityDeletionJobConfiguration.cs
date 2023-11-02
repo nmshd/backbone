@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Modules.Devices.Infrastructure.Persistence;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class IdentityDeletionJobConfiguration
@@ -11,4 +12,6 @@ public class InfrastructureConfiguration
 {
     [Required]
     public EventBusConfiguration EventBus { get; set; } = new();
+    [Required]
+    public IServiceCollectionExtensions.DbOptions SqlDatabase { get; set; } = new();
 }

@@ -1,38 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <OutputType>Exe</OutputType>
-        <PublishSingleFile>True</PublishSingleFile>
-        <SelfContained>True</SelfContained>
+        <UserSecretsId>dotnet-Devices.Jobs.IdentityDeletion-553687ad-d9d2-47b9-88c5-a8869b426c22</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..\..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="appsettings.json" />
-        <None Remove="appsettings.override.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="appsettings.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Include="appsettings.override.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+        <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\Devices.Infrastructure\Devices.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>
