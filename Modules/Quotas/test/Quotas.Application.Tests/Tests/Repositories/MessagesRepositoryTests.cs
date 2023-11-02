@@ -21,7 +21,13 @@ public class MessagesRepositoryTests
     private readonly MessagesDbContext _messagesArrangeContext;
     private readonly QuotasDbContext _actContext;
 
-    private static readonly DateTime TODAY = new(DateTime.Now.Year, DateTime.Now.Month, 15);
+    /**
+     * <summary>
+     * TODAY is set to the 15th of the current month so that we can use notions
+     * such as TOMORROW or YESTERDAY and be certain that those dates fall on the same Month.
+     * </summary>
+     */
+    private static readonly DateTime TODAY = new(TODAY.Year, TODAY.Month, 15);
     private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
     private static readonly DateTime TOMORROW = TODAY.AddDays(1);
     private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
@@ -41,7 +47,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
         };
@@ -63,7 +69,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(LAST_YEAR, _identityAddress1),
@@ -87,7 +93,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
@@ -109,7 +115,7 @@ public class MessagesRepositoryTests
     {
         // Arrange
         var messages = new List<Message>() {
-            CreateMessage(DateTime.Now, _identityAddress1),
+            CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
