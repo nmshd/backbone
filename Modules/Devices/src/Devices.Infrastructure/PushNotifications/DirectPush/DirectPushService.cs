@@ -104,9 +104,11 @@ public class DirectPushService : IPushService
         return registration.DevicePushIdentifier;
     }
 
-    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    public async Task<DevicePushIdentifier> DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        DevicePushIdentifier devicePushIdentifier = null;
+
 
         if (registration == null)
         {
@@ -114,9 +116,12 @@ public class DirectPushService : IPushService
         }
         else
         {
+            devicePushIdentifier = registration.DevicePushIdentifier;
             await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
             _logger.UnregisteredDevice(deviceId);
         }
+
+        return devicePushIdentifier;
     }
 }
 

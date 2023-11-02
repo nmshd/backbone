@@ -28,9 +28,9 @@ public class DummyPushService : IPushService
         return Task.FromResult(DevicePushIdentifier.New());
     }
 
-    public Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    public Task<DevicePushIdentifier> DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Unregistering from push notifications with device '{deviceId}.", deviceId);
-        return Task.CompletedTask;
+        return Task.FromResult(DevicePushIdentifier.New());
     }
 }

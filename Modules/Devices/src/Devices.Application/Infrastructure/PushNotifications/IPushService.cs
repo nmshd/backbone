@@ -8,6 +8,6 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 public interface IPushService
 {
     Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken);
-    Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
+    Task<DevicePushIdentifier> DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
     Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken);
 }
