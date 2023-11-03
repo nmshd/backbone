@@ -3,7 +3,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { NGXLogger } from "ngx-logger";
-import { fromEvent, filter, debounceTime, distinctUntilChanged, tap } from "rxjs";
+import { Observable, debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs";
 import { ClientOverview, ClientService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
@@ -31,6 +31,8 @@ export class IdentitiesOverviewComponent {
     @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(input: ElementRef | undefined) {
         this.debounceFilter(input, "identityVersion");
     }
+
+    @Input() tier?: string;
 
     public identities: IdentityOverview[];
 
@@ -79,6 +81,8 @@ export class IdentitiesOverviewComponent {
     }
 
     public ngOnInit(): void {
+        this.setFilterIfTierIsSet();
+
         if (this.clientId) {
             this.setClientFilter();
         } else {
@@ -87,6 +91,14 @@ export class IdentitiesOverviewComponent {
 
         this.getIdentities();
         this.getTiers();
+    }
+
+    private setFilterIfTierIsSet() {
+        if (this.tier) {
+            this.displayedColumnFilters = this.displayedColumnFilters.filter((it) => it !== "tier-filter");
+            this.displayedColumns = this.displayedColumns.filter((it) => it !== "tierName");
+            this.filter.tiers = [this.tier];
+        }
     }
 
     private debounceFilter(filterElement: ElementRef | undefined, filterName: string): void {
@@ -105,9 +117,14 @@ export class IdentitiesOverviewComponent {
     }
 
     private getTiers(): void {
-        this.tierService.getTiers().subscribe({
-            next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
-                this.tiers = data.result;
+        var service = this.tier == null ? this.tierService.getTiers() : this.tierService.getTierById(this.tier);
+        (service as Observable<any>).subscribe({
+            next: (data: any) => {
+                if (Array.isArray(data.result)) {
+                    this.tiers = data.result;
+                } else {
+                    this.tiers = [data.result];
+                }
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
