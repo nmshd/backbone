@@ -16,4 +16,9 @@ public class DevicePushIdentifier : StronglyTypedId
         var devicePushIdentifierIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new DevicePushIdentifier(PREFIX + devicePushIdentifierIdAsString);
     }
+
+    public static DevicePushIdentifier Parse(string stringValue)
+    {
+        return new DevicePushIdentifier(stringValue);
+    }
 }
