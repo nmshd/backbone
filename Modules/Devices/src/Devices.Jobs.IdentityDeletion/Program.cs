@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.Modules.Devices.Application.AutoMapper;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
-using Backbone.Modules.Devices.Application.AutoMapper;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 
