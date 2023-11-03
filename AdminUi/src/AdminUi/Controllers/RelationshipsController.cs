@@ -29,7 +29,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipByParticipantAddressDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllRelationshipsByParticipantAddress([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {

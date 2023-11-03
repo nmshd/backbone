@@ -32,7 +32,7 @@ export interface Relationship {
     relationshipTemplateId: string;
     status: string;
     createdAt: Date;
-    answeredAt: Date;
+    answeredAt?: Date;
     createdByDevice: string;
     answeredByDevice: string;
 }

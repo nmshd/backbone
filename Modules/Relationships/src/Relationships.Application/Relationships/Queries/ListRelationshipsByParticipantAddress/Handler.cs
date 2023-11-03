@@ -19,6 +19,8 @@ public class Handler : IRequestHandler<ListRelationshipsByParticipantAddressQuer
     {
         var dbPaginationResult = await _relationshipsRepository.FindRelationshipsWithParticipant(request.ParticipantAddress, request.PaginationFilter, cancellationToken, track: false);
 
-        return new ListRelationshipsByParticipantAddressResponse(_mapper.Map<RelationshipDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        var relationshipItems = dbPaginationResult.ItemsOnPage.Select(i => new RelationshipByParticipantAddressDTO(request.ParticipantAddress, i));
+
+        return new ListRelationshipsByParticipantAddressResponse(relationshipItems, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }
