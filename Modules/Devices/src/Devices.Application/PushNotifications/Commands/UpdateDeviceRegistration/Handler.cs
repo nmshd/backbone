@@ -10,7 +10,7 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
-public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
+public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, DevicePushIdentifier>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushService _pushService;
@@ -25,19 +25,20 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<DevicePushIdentifier> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
+        DevicePushIdentifier res;
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+             res = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
         }
 
-        return Unit.Value;
+        return res;
     }
 
     private static Environment DeserializeEnvironment(string environment)
