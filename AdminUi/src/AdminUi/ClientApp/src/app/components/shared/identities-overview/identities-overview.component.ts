@@ -32,7 +32,7 @@ export class IdentitiesOverviewComponent {
         this.debounceFilter(input, "identityVersion");
     }
 
-    @Input() private readonly tier?: string;
+    @Input() public tier?: string;
 
     public identities: IdentityOverview[];
 
