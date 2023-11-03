@@ -12,10 +12,6 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
-using Microsoft.EntityFrameworkCore;
-using Backbone.BuildingBlocks.Infrastructure.Exceptions;
-using Backbone.Modules.Devices.Infrastructure;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
