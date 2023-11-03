@@ -1,4 +1,5 @@
-﻿Feature: POST Identities/Self/DeletionProcess
+@Integration
+Feature: POST Identities/Self/DeletionProcess
 
 User starts a deletion process
 
