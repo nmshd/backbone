@@ -1,15 +1,15 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
-using FakeItEasy;
-using Xunit;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using FluentAssertions;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using FakeItEasy;
+using FluentAssertions;
+using Xunit;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcess;

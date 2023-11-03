@@ -30,6 +30,6 @@ public class CreateIdentityRequest
 
 public class CreateIdentityRequestSignedChallenge
 {
-    public string Challenge { get; set; } 
+    public string Challenge { get; set; }
     public string Signature { get; set; }
 }

@@ -20,7 +20,7 @@ public class IdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter
     }
 }
 
-public class NullableIdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter  : ValueConverter<IdentityDeletionProcessAuditLogEntryId?, string?>
+public class NullableIdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter : ValueConverter<IdentityDeletionProcessAuditLogEntryId?, string?>
 {
     public NullableIdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter() : this(null)
     {
