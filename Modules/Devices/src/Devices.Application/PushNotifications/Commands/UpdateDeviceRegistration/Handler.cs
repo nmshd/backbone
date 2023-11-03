@@ -10,7 +10,7 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
-public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, DevicePushIdentifier>
+public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDeviceRegistrationResponse>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushService _pushService;
