@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, DevicePu
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<DevicePushIdentifier> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         DevicePushIdentifier res;
@@ -38,7 +38,10 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, DevicePu
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
         }
 
-        return res;
+        return new UpdateDeviceRegistrationResponse
+        {
+            DevicePushIdentifier = res
+        };
     }
 
     private static Environment DeserializeEnvironment(string environment)
