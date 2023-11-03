@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -145,6 +146,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
+        configurationBuilder.Properties<DevicePushIdentifier>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(DevicePushIdentifier.MAX_LENGTH).HaveConversion<DevicePushIdentifierEntityFrameworkValueConverter>();
         configurationBuilder.Properties<Username>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(Username.MAX_LENGTH).HaveConversion<UsernameValueConverter>();
         configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
