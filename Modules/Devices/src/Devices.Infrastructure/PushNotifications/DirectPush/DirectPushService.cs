@@ -2,7 +2,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;

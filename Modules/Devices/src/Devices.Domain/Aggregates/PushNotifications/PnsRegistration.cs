@@ -1,5 +1,4 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 

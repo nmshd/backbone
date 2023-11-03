@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 using Backbone.BuildingBlocks.Domain;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
+namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public class DevicePushIdentifier : StronglyTypedId
 {
