@@ -32,7 +32,7 @@ export class IdentitiesOverviewComponent {
         this.debounceFilter(input, "identityVersion");
     }
 
-    @Input() tier?: string;
+    @Input() private readonly tier?: string;
 
     public identities: IdentityOverview[];
 
@@ -117,7 +117,7 @@ export class IdentitiesOverviewComponent {
     }
 
     private getTiers(): void {
-        var service = this.tier == null ? this.tierService.getTiers() : this.tierService.getTierById(this.tier);
+        const service = !this.tier ? this.tierService.getTiers() : this.tierService.getTierById(this.tier);
         (service as Observable<any>).subscribe({
             next: (data: any) => {
                 if (Array.isArray(data.result)) {
