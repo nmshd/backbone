@@ -23,7 +23,7 @@ public class PushNotificationsController : ApiControllerBase
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var res = await _mediator.Send(request, cancellationToken);
-        return Ok(res);
+        return Created(res);
     }
 
     [HttpDelete]
