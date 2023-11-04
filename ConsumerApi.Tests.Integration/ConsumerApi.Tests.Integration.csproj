@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdminUi\test\AdminUi.Tests.Integration\AdminUi.Tests.Integration.csproj" />
     <ProjectReference Include="..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
     <ProjectReference Include="..\ConsumerApi\ConsumerApi.csproj" />
   </ItemGroup>
@@ -49,6 +50,10 @@
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\PnsRegistrations\" />
   </ItemGroup>
 
 </Project>
