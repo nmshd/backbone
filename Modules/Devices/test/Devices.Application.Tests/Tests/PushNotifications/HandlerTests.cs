@@ -31,7 +31,17 @@ public class HandlerTests
             .Returns(randomIdentity.Address);
 
         A.CallTo(() => fakeUserContext.GetDeviceIdOrNull())
-            .Returns(randomDeviceId);       
+            .Returns(randomDeviceId);
+
+        A.CallTo(() => mockPushService.UpdateRegistration(
+                    A<IdentityAddress>._,
+                    A<DeviceId>._,
+                    A<PnsHandle>._,
+                    A<string>._,
+                    A<Environment>._,
+                    CancellationToken.None
+                ))
+            .Returns(DevicePushIdentifier.New());
 
         var handler = new Handler(mockPushService, fakeUserContext);
 
@@ -52,8 +62,8 @@ public class HandlerTests
                 A<Environment>._,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-
-        // acting.Should().BeOfType<DevicePushIdentifier>();
+     
+        acting.Should().BeOfType<UpdateDeviceRegistrationResponse>();
     }
 
     [Fact]
