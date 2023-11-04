@@ -1,5 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 

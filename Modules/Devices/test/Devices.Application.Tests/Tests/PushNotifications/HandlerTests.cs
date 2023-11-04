@@ -1,17 +1,17 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
@@ -62,7 +62,7 @@ public class HandlerTests
                 A<Environment>._,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-     
+
         acting.Should().BeOfType<UpdateDeviceRegistrationResponse>();
     }
 

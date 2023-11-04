@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         DevicePushIdentifier res;
         if (parseHandleResult.IsSuccess)
         {
-             res = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+            res = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {

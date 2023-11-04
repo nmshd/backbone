@@ -50,7 +50,7 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
         ThrowHelpers.ThrowIfNull(_response);
         _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
     }
-    
+
     [Then(@"the response contains a DevicePushIdentifier")]
     public void ThenTheResponseContainsADevicePushIdentifier()
     {
