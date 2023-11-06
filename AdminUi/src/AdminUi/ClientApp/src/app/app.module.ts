@@ -54,6 +54,7 @@ import { LoggerWriterService } from "./services/logger-writer-service/logger-wri
 import { SidebarService } from "./services/sidebar-service/sidebar.service";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
+import { IdentitiesOverviewComponent } from "./components/shared/identities-overview/identities-overview.component";
 
 @NgModule({
     declarations: [
@@ -72,7 +73,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
         LoginComponent,
-        ChangeSecretDialogComponent
+        ChangeSecretDialogComponent,
+        IdentitiesOverviewComponent
     ],
     imports: [
         FormsModule,
