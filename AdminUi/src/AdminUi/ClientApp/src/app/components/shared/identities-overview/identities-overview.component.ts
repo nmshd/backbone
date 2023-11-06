@@ -3,7 +3,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { NGXLogger } from "ngx-logger";
-import { fromEvent, filter, debounceTime, distinctUntilChanged, tap } from "rxjs";
+import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs";
 import { ClientOverview, ClientService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
@@ -31,6 +31,8 @@ export class IdentitiesOverviewComponent {
     @ViewChild("identityVersionFilter", { static: false }) public set identityVersionFilter(input: ElementRef | undefined) {
         this.debounceFilter(input, "identityVersion");
     }
+
+    @Input() public tierId?: string;
 
     public identities: IdentityOverview[];
 
@@ -85,8 +87,19 @@ export class IdentitiesOverviewComponent {
             this.getClients();
         }
 
+        if (this.tierId) {
+            this.setTierFilter();
+        } else {
+            this.getTiers();
+        }
+
         this.getIdentities();
-        this.getTiers();
+    }
+
+    private setTierFilter() {
+        this.displayedColumnFilters = this.displayedColumnFilters.filter((it) => it !== "tier-filter");
+        this.displayedColumns = this.displayedColumns.filter((it) => it !== "tierName");
+        this.filter.tiers = [this.tierId!];
     }
 
     private debounceFilter(filterElement: ElementRef | undefined, filterName: string): void {
