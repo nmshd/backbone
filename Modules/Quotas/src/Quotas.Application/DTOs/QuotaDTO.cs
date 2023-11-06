@@ -3,7 +3,7 @@
 namespace Backbone.Modules.Quotas.Application.DTOs;
 public class QuotaDTO
 {
-    public QuotaDTO(string id, QuotaSource source, MetricDTO metric, int usage, int max, string period)
+    public QuotaDTO(string id, QuotaSource source, MetricDTO metric, uint usage, int max, string period)
     {
         Id = id;
         Source = source;
@@ -17,6 +17,6 @@ public class QuotaDTO
     public QuotaSource Source { get; set; }
     public MetricDTO Metric { get; set; }
     public int Max { get; set; }
-    public int Usage { get; set; }
+    public uint Usage { get; set; }
     public string Period { get; set; }
 }
