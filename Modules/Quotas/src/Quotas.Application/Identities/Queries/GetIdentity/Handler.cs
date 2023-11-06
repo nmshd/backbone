@@ -11,11 +11,11 @@ public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
     private readonly IMetricsRepository _metricsRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory factory)
+    public Handler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identitiesRepository = identitiesRepository;
         _metricsRepository = metricsRepository;
-        _metricCalculatorFactory = factory;
+        _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task<GetIdentityResponse> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
