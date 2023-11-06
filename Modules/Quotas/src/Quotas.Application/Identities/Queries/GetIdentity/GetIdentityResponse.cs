@@ -13,6 +13,7 @@ public class GetIdentityResponse
                 q.Id,
                 QuotaSource.Individual,
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
+                1,
                 q.Max,
                 q.Period.ToString()
             )
@@ -22,6 +23,7 @@ public class GetIdentityResponse
                 q.Id,
                 QuotaSource.Tier,
                 new MetricDTO(metrics.First(m => m.Key == q.MetricKey)),
+                2,
                 q.Max,
                 q.Period.ToString()
             )

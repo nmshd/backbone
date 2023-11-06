@@ -63,6 +63,7 @@ export interface Quota {
     source: "Tier" | "Individual";
     metric: Metric;
     max: number;
+    usage: number;
     period: string;
     disabled: boolean;
     deleteable: boolean;
