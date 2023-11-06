@@ -93,7 +93,7 @@
                 <mat-panel-title class="panel-header-title"> Identities </mat-panel-title>
                 <mat-panel-description class="panel-header-desc"> View Identities associated with this Tier </mat-panel-description>
             </mat-expansion-panel-header>
-            <app-identities-overview *ngIf="tierId !== undefined" [tier]="tierId"></app-identities-overview>
+            <app-identities-overview *ngIf="tierId !== undefined" [tierId]="tierId"></app-identities-overview>
         </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">
