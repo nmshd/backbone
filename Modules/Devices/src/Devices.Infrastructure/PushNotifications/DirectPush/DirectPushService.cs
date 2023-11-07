@@ -79,8 +79,6 @@ public class DirectPushService : IPushService
 
             await _pnsRegistrationRepository.Update(registration, cancellationToken);
 
-            registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
-
             _logger.LogTrace("Device successfully updated.");
         }
         else
