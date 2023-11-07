@@ -66,7 +66,7 @@ public class MessagesRepository : IMessagesRepository
 
         var messages = await query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken)
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         await FillBody(messages);
 
