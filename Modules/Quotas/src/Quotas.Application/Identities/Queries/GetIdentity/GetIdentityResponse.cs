@@ -12,7 +12,6 @@ public class GetIdentityResponse
 
 public class GetIdentityResponseBuilder
 {
-
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
     public GetIdentityResponseBuilder(MetricCalculatorFactory metricCalculatorFactory)
