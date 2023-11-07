@@ -1,5 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;

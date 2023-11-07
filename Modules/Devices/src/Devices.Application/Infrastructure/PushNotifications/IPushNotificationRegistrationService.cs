@@ -10,8 +10,3 @@ public interface IPushNotificationRegistrationService
     Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
 }
 
-public interface IPushNotificationSender
-{
-    Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken);
-}
-
