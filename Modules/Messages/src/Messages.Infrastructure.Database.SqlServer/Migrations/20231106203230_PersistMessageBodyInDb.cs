@@ -14,8 +14,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 name: "Body",
                 table: "Messages",
                 type: "varbinary(max)",
-                nullable: false,
-                defaultValue: new byte[0]);
+                nullable: true);
         }
 
         /// <inheritdoc />
