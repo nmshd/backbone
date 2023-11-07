@@ -38,10 +38,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
         }
 
-        return new UpdateDeviceRegistrationResponse
-        {
-            DevicePushIdentifier = response
-        };
+        return new UpdateDeviceRegistrationResponse(response);
     }
 
     private static Environment DeserializeEnvironment(string environment)
