@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Tests;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
@@ -67,12 +67,12 @@ public class MessagesRepositoryTest
         var messageRepository = new MessagesRepository(_actContext, fakeBlobStorage, A.Fake<IOptions<BlobOptions>>());
 
         // Act
-        var acting = messageRepository.FindMessagesWithIds(
+        var acting = (await messageRepository.FindMessagesWithIds(
                 new List<MessageId>(),
                 rndIdentityAddress,
                 A.Fake<PaginationFilter>(),
-                CancellationToken.None)
-            .Result.ItemsOnPage.ToList();
+                CancellationToken.None))
+            .ItemsOnPage.ToList();
 
         // Assert
         acting.Count.Should().Be(messages.Count);
