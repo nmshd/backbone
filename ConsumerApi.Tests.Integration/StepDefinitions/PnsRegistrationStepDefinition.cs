@@ -16,12 +16,12 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class PnsRegistrationStepDefinition : BaseStepDefinitions
 {
 
-    private readonly PnsRegistrationApi _pnsRegistrationApi;
+    private readonly PnsRegistrationApi _pnsRegistrationsApi;
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
 
-    public PnsRegistrationStepDefinition(IOptions<HttpConfiguration> httpConfiguration, PnsRegistrationApi pnsRegistrationApi) : base(httpConfiguration)
+    public PnsRegistrationStepDefinition(IOptions<HttpConfiguration> httpConfiguration, PnsRegistrationApi pnsRegistrationsApi) : base(httpConfiguration)
     {
-        _pnsRegistrationApi = pnsRegistrationApi;
+        _pnsRegistrationsApi = pnsRegistrationsApi;
     }
 
     [When(@"a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
@@ -41,7 +41,7 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
             AppId = "keyAppId"
         });
 
-        _response = await _pnsRegistrationApi.RegisterForPushNotifications(requestConfiguration);
+        _response = await _pnsRegistrationsApi.RegisterForPushNotifications(requestConfiguration);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
