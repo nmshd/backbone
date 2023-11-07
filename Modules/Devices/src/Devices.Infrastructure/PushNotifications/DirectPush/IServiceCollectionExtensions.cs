@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +29,6 @@ public static class IServiceCollectionExtensions
         services.AddHttpClient();
         services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IPushNotificationRegistrationService, DirectPushService>();
-        services.AddTransient<IPushNotificationSender, DirectPushService>();
         services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<ApnsJwtCache>();
     }
