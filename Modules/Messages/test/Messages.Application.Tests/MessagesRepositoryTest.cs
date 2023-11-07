@@ -39,16 +39,16 @@ public class MessagesRepositoryTest
             rndDeviceId,
             SystemTime.UtcNow,
             new byte[] { 1, 2, 3 },
-            new Attachment[] {},
-            new RecipientInformation[] {});
+            new Attachment[] { },
+            new RecipientInformation[] { });
 
         var messageWithEmptyBody = new Message(
             rndIdentityAddress,
             rndDeviceId,
             SystemTime.UtcNow,
-            new byte[] { },
-            new Attachment[] {},
-            new RecipientInformation[] {});
+            ""u8.ToArray(),
+            new Attachment[] { },
+            new RecipientInformation[] { });
 
         var messages = new List<Message>() {
             messageWithFilledBody,
@@ -63,14 +63,14 @@ public class MessagesRepositoryTest
         A.CallTo(() => fakeBlobStorage.FindAsync(
                 A<string>._, A<string>._))
             .Returns(new byte[] { 1, 2, 3 });
-        
+
         var messageRepository = new MessagesRepository(_actContext, fakeBlobStorage, A.Fake<IOptions<BlobOptions>>());
 
         // Act
         var acting = messageRepository.FindMessagesWithIds(
-                new List<MessageId>(), 
-                rndIdentityAddress, 
-                A.Fake<PaginationFilter>(), 
+                new List<MessageId>(),
+                rndIdentityAddress,
+                A.Fake<PaginationFilter>(),
                 CancellationToken.None)
             .Result.ItemsOnPage.ToList();
 

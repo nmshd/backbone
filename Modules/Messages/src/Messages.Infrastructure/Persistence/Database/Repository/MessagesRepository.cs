@@ -79,7 +79,7 @@ public class MessagesRepository : IMessagesRepository
             .Where(message => message.Body.Length == 0)
             .Select(FillBody)
             .ToList();
-        
+
         await Task.WhenAll(tasks);
 
         return messages;
