@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
-public class PnsRegistrationRepository : IPnsRegistrationRepository
+public class PnsRegistrationsRepository : IPnsRegistrationsRepository
 {
     private readonly DbSet<PnsRegistration> _registrations;
     private readonly IQueryable<PnsRegistration> _readonlyRegistrations;
     private readonly DevicesDbContext _dbContext;
 
-    public PnsRegistrationRepository(DevicesDbContext dbContext)
+    public PnsRegistrationsRepository(DevicesDbContext dbContext)
     {
         _registrations = dbContext.PnsRegistrations;
         _readonlyRegistrations = dbContext.PnsRegistrations.AsNoTracking();

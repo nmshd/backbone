@@ -12,17 +12,15 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPushService : IPushService
 {
-    private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
+    private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;
     private readonly PnsConnectorFactory _pnsConnectorFactory;
-    private readonly IPnsRegistrationRepository _registrationRepository;
 
-    public DirectPushService(IPnsRegistrationRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger, IPnsRegistrationRepository registrationRepository)
+    public DirectPushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger)
     {
         _pnsRegistrationRepository = pnsRegistrationRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
-        _registrationRepository = registrationRepository;
     }
 
     public async Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
@@ -62,7 +60,7 @@ public class DirectPushService : IPushService
             }
         }
 
-        await _registrationRepository.Delete(deviceIdsToDelete, CancellationToken.None);
+        await _pnsRegistrationRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
