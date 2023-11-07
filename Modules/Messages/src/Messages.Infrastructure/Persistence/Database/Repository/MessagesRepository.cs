@@ -36,12 +36,7 @@ public class MessagesRepository : IMessagesRepository
             .WithSenderOrRecipient(address)
             .FirstWithId(id, cancellationToken);
 
-        var isBodyFetchedFromDb = message.Body.Length > 0;
-
-        if (fillBody && !isBodyFetchedFromDb)
-        {
-            await FillBody(message);
-        }
+        await FillBody(new DbPaginationResult<Message>(new List<Message>() { message }, 1));
 
         return message;
     }
@@ -71,18 +66,21 @@ public class MessagesRepository : IMessagesRepository
 
         var messages = await query.WithSenderOrRecipient(requiredParticipant)
             .DoNotSendBeforePropertyIsNotInTheFuture()
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken)
 
-        // await Task.WhenAll(messages.ItemsOnPage.Select(FillBody).ToArray());
+        await FillBody(messages);
 
+        return messages;
+    }
+
+    private async Task FillBody(DbPaginationResult<Message> messages)
+    {
         var tasks = messages.ItemsOnPage
             .Where(message => message.Body.Length == 0)
             .Select(FillBody)
             .ToList();
 
         await Task.WhenAll(tasks);
-
-        return messages;
     }
 
     private async Task FillBody(Message message)
