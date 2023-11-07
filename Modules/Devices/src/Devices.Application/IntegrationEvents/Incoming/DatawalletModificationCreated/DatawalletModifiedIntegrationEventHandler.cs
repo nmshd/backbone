@@ -6,15 +6,15 @@ namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.Datawa
 
 public class DatawalletModifiedIntegrationEventHandler : IIntegrationEventHandler<DatawalletModifiedIntegrationEvent>
 {
-    private readonly IPushService _pushService;
+    private readonly IPushNotificationSender _pushSenderService;
 
-    public DatawalletModifiedIntegrationEventHandler(IPushService pushService)
+    public DatawalletModifiedIntegrationEventHandler(IPushNotificationSender pushSenderService)
     {
-        _pushService = pushService;
+        _pushSenderService = pushSenderService;
     }
 
     public async Task Handle(DatawalletModifiedIntegrationEvent integrationEvent)
     {
-        await _pushService.SendNotification(integrationEvent.Identity, new DatawalletModificationsCreatedPushNotification(integrationEvent.ModifiedByDevice), CancellationToken.None);
+        await _pushSenderService.SendNotification(integrationEvent.Identity, new DatawalletModificationsCreatedPushNotification(integrationEvent.ModifiedByDevice), CancellationToken.None);
     }
 }

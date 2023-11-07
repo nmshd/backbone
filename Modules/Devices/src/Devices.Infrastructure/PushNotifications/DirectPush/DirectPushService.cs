@@ -10,7 +10,7 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
-public class DirectPushService : IPushService
+public class DirectPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
     private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;

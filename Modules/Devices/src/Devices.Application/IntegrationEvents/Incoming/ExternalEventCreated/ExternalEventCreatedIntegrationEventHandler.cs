@@ -6,15 +6,15 @@ namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.Extern
 
 public class ExternalEventCreatedIntegrationEventHandler : IIntegrationEventHandler<ExternalEventCreatedIntegrationEvent>
 {
-    private readonly IPushService _pushService;
+    private readonly IPushNotificationSender _pushSenderService;
 
-    public ExternalEventCreatedIntegrationEventHandler(IPushService pushService)
+    public ExternalEventCreatedIntegrationEventHandler(IPushNotificationSender pushSenderService)
     {
-        _pushService = pushService;
+        _pushSenderService = pushSenderService;
     }
 
     public async Task Handle(ExternalEventCreatedIntegrationEvent @event)
     {
-        await _pushService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
+        await _pushSenderService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
     }
 }

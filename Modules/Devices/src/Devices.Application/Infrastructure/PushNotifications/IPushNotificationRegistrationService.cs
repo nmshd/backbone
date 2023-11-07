@@ -4,9 +4,14 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 
-public interface IPushService
+public interface IPushNotificationRegistrationService
 {
     Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken);
     Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
+}
+
+public interface IPushNotificationSender
+{
     Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken);
 }
+
