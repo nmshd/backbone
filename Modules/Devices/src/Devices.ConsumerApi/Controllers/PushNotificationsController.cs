@@ -22,8 +22,8 @@ public class PushNotificationsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var res = await _mediator.Send(request, cancellationToken);
-        return Created(res);
+        var response = await _mediator.Send(request, cancellationToken);
+        return Created(response);
     }
 
     [HttpDelete]
