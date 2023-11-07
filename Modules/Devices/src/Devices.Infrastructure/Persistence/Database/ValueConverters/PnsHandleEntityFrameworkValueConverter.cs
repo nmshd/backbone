@@ -41,6 +41,6 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
         };
         var value = tokens[1];
 
-        return PnsHandle.Parse(value, platform).Value;
+        return PnsHandle.Parse(platform, value).Value;
     }
 }

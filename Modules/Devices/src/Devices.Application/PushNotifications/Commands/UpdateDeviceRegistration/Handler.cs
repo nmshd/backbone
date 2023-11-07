@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
 
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
+        var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
         DevicePushIdentifier response;
         if (parseHandleResult.IsSuccess)
         {

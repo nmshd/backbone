@@ -15,7 +15,7 @@ public class CreateRandomIdentifierForPushNotificationRegistration
         // Arrange
         var randomIdentityAddress = CreateRandomIdentityAddress();
         var randomDeviceId = CreateRandomDeviceId();
-        var pnsHandle = PnsHandle.Parse("value", PushNotificationPlatform.Fcm).Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
 
         // Act
         var pnsRegistration = new PnsRegistration(randomIdentityAddress, randomDeviceId, pnsHandle, "appId", Environment.Development);
@@ -31,7 +31,7 @@ public class CreateRandomIdentifierForPushNotificationRegistration
         // Arrange
         var randomIdentityAddress = CreateRandomIdentityAddress();
         var randomDeviceId = CreateRandomDeviceId();
-        var pnsHandle = PnsHandle.Parse("value", PushNotificationPlatform.Fcm).Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
 
         var otherPnsRegistration = new PnsRegistration(randomIdentityAddress, randomDeviceId, pnsHandle, "appId", Environment.Development);
 

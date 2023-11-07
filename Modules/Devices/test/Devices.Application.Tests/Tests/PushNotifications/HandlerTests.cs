@@ -73,7 +73,7 @@ public class HandlerTests
         var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
-        var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var appId = "keyAppId";
 
         var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
@@ -106,7 +106,7 @@ public class HandlerTests
         var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
-        var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var appId = "keyAppId";
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
@@ -138,7 +138,7 @@ public class HandlerTests
         var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
-        var pnsHandle = PnsHandle.Parse("handle", PushNotificationPlatform.Fcm).Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var appId = "keyAppId";
         var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
 
