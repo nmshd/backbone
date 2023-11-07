@@ -88,7 +88,7 @@ public class TokensRepository : ITokensRepository
 
     private async Task FillContent(IEnumerable<Token> tokens)
     {
-        var fillContentTasks = tokens.Select(FillContent);
+        var fillContentTasks = tokens.Where(token => token.Content is { Length: 0 }).Select(FillContent);
         await Task.WhenAll(fillContentTasks);
     }
 
@@ -102,8 +102,8 @@ public class TokensRepository : ITokensRepository
     public async Task Add(Token token)
     {
         await _tokensDbSet.AddAsync(token);
-        _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
-        await _blobStorage.SaveAsync();
+        // _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
+        // await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync();
     }
 
