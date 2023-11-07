@@ -4,7 +4,6 @@ using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
-using Grpc.Core;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RequestConfiguration = Backbone.ConsumerApi.Tests.Integration.Models.RequestConfiguration;
@@ -56,11 +55,4 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
     {
         _response!.Content.Should().NotBeNull();
     }
-}
-
-public class PnsRegistrationRequest
-{
-    public string? Platform { get; set; }
-    public string? Handle { get; set; }
-    public string? AppId { get; set; }
 }
