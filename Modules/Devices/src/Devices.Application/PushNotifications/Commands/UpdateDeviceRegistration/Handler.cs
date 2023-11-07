@@ -28,10 +28,10 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
-        DevicePushIdentifier res;
+        DevicePushIdentifier response;
         if (parseHandleResult.IsSuccess)
         {
-            res = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+            response = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
 
         return new UpdateDeviceRegistrationResponse
         {
-            DevicePushIdentifier = res
+            DevicePushIdentifier = response
         };
     }
 
