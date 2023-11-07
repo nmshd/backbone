@@ -41,7 +41,7 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
             AppId = "keyAppId"
         });
 
-        _response = await _pnsRegistrationApi.TestRegisterForPushNotification(requestConfiguration);
+        _response = await _pnsRegistrationApi.RegisterForPushNotifications(requestConfiguration);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]

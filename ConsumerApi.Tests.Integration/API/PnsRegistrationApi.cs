@@ -6,7 +6,7 @@ internal class PnsRegistrationApi : BaseApi
 {
     public PnsRegistrationApi(HttpClientFactory factory) : base(factory) { }
 
-    internal async Task<HttpResponse<UpdateDeviceRegistrationResponse>> TestRegisterForPushNotification(RequestConfiguration requestConfiguration)
+    internal async Task<HttpResponse<UpdateDeviceRegistrationResponse>> RegisterForPushNotifications(RequestConfiguration requestConfiguration)
     {
         return await Put<UpdateDeviceRegistrationResponse>("/Devices/Self/PushNotifications", requestConfiguration);
     }
