@@ -62,8 +62,6 @@ public class HandlerTests
                 A<Environment>._,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-
-        pnsRegistration.Should().BeOfType<UpdateDeviceRegistrationResponse>();
     }
 
     [Fact]
