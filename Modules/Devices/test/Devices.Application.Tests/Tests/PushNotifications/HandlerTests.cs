@@ -77,9 +77,9 @@ public class HandlerTests
         var mockPnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
-        var dummyPnsConnectorFactory = A.Fake<PnsConnectorFactory>();
-        var dummyLogger = A.Fake<ILogger<DirectPushService>>();
-        var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
            .Returns(mockPnsRegistration);
@@ -109,9 +109,9 @@ public class HandlerTests
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
         var mockPnsRegistrationRepository1 = A.Fake<IPnsRegistrationRepository>();
-        var dummyPnsConnectorFactory = A.Fake<PnsConnectorFactory>();
-        var dummyLogger = A.Fake<ILogger<DirectPushService>>();
-        var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
            .Returns((PnsRegistration)null).Once();
@@ -141,9 +141,9 @@ public class HandlerTests
         var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
-        var dummyPnsConnectorFactory = A.Fake<PnsConnectorFactory>();
-        var dummyLogger = A.Fake<ILogger<DirectPushService>>();
-        var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
            .Returns(pnsRegistration);
@@ -167,9 +167,9 @@ public class HandlerTests
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
-        var dummyPnsConnectorFactory = A.Fake<PnsConnectorFactory>();
-        var dummyLogger = A.Fake<ILogger<DirectPushService>>();
-        var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
            .Returns((PnsRegistration)null);
