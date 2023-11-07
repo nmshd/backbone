@@ -7,7 +7,7 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Domain.Tests.PushNotifications;
 
-public class CreateRandomIdentifierForPushNotificationRegistration
+public class PnsRegistrationTests
 {
     [Fact]
     public void Generate_DevicePushIdentifier_while_instancing_PnsRegistration()
