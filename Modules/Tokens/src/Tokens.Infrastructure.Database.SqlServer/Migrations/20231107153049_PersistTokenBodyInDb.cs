@@ -14,8 +14,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                 name: "Content",
                 table: "Tokens",
                 type: "varbinary(max)",
-                nullable: false,
-                defaultValue: new byte[0]);
+                nullable: true);
         }
 
         /// <inheritdoc />

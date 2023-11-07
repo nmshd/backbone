@@ -14,8 +14,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                 name: "Content",
                 table: "Tokens",
                 type: "bytea",
-                nullable: false,
-                defaultValue: new byte[0]);
+                nullable: true);
         }
 
         /// <inheritdoc />
