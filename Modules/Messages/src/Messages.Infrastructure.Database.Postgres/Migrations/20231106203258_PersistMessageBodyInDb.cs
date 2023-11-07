@@ -14,8 +14,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                 name: "Body",
                 table: "Messages",
                 type: "bytea",
-                nullable: false,
-                defaultValue: new byte[0]);
+                nullable: true);
         }
 
         /// <inheritdoc />
