@@ -51,32 +51,29 @@ public class TokenRepositoryTests
             new byte[] { },
             DateTime.UtcNow);
 
-        var tokens = new List<Token>() {
+        var existingTokens = new List<Token>() {
             tokenWithContent,
             tokenWithoutContent
         };
 
-        await _arrangeContext.Tokens.AddRangeAsync(tokens);
+        await _arrangeContext.Tokens.AddRangeAsync(existingTokens);
         await _arrangeContext.SaveChangesAsync();
 
         var fakeBlobStorage = A.Fake<IBlobStorage>();
 
         A.CallTo(() => fakeBlobStorage.FindAsync(
-                A<string>._, A<string>._))
-            .Returns(new byte[] { 1, 2, 3 });
+                A<string>._, tokenWithoutContent.Id))
+            .Returns(new byte[] { 9, 8, 7 });
 
         var tokenRepository = new TokensRepository(_actContext, fakeBlobStorage, A.Fake<IOptions<TokensRepositoryOptions>>());
 
         // Act
-        var acting = (await tokenRepository.FindAllWithIds(new TokenId[] { }, new PaginationFilter(), CancellationToken.None))
+        var tokens = (await tokenRepository.FindAllWithIds(new TokenId[] { }, new PaginationFilter(), CancellationToken.None))
             .ItemsOnPage.ToList();
 
         // Assert
-        acting.Count.Should().Be(tokens.Count);
-
-        foreach (var token in acting)
-        {
-            token.Content.Should().NotBeEmpty();
-        }
+        tokens.Count.Should().Be(2);
+        tokens[0].Content.Should().BeEquivalentTo(new byte[] { 9, 8, 7 });
+        tokens[1].Content.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
     }
 }
