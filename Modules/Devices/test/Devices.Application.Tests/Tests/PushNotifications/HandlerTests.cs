@@ -75,7 +75,6 @@ public class HandlerTests
         var appId = "keyAppId";
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
-        var mockPnsRegistrationRepository1 = A.Fake<IPnsRegistrationsRepository>();
         var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
         var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
         var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationsRepository>();
