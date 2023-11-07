@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
@@ -17,8 +17,8 @@
 
 	<ItemGroup>
         <ProjectReference Include="..\..\src\Messages.Application\Messages.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
         <ProjectReference Include="..\..\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
 	</ItemGroup>
 
 </Project>
