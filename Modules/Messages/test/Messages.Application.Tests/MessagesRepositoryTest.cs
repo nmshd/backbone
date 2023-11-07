@@ -44,7 +44,7 @@ public class MessagesRepositoryTest
             identityAddress,
             deviceId,
             SystemTime.UtcNow,
-            new byte[] { },
+            ""u8.ToArray(),
             new Attachment[] { },
             new RecipientInformation[] { });
 
