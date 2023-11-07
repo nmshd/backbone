@@ -10,8 +10,6 @@ public class RelationshipChangeResponseEntityTypeConfiguration : IEntityTypeConf
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.Ignore(x => x.Content);
-
         builder.HasIndex(x => x.CreatedAt);
         builder.HasIndex(x => x.CreatedBy);
         builder.HasIndex(x => x.CreatedByDevice);
