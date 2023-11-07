@@ -46,7 +46,7 @@ public class HandlerTests
         var handler = new Handler(mockPushService, fakeUserContext);
 
         // Act
-        var acting = await handler.Handle(new UpdateDeviceRegistrationCommand()
+        var pnsRegistration = await handler.Handle(new UpdateDeviceRegistrationCommand()
         {
             Platform = "fcm",
             Handle = "handle",
@@ -63,7 +63,7 @@ public class HandlerTests
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
 
-        acting.Should().BeOfType<UpdateDeviceRegistrationResponse>();
+        pnsRegistration.Should().BeOfType<UpdateDeviceRegistrationResponse>();
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class HandlerTests
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var appId = "keyAppId";
 
-        var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
+        var mockPnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
         var dummyPnsConnectorFactory = A.Fake<PnsConnectorFactory>();
@@ -84,19 +84,19 @@ public class HandlerTests
         var dummyPnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
 
         A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
-           .Returns(pnsRegistration);
+           .Returns(mockPnsRegistration);
 
         var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger, dummyPnsRegistrationRepository);
 
         // Act
-        var acting = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository
             .Update(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
 
-        acting.Should().BeOfType<DevicePushIdentifier>();
+        pnsRegistration.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
@@ -121,14 +121,14 @@ public class HandlerTests
         var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger, dummyPnsRegistrationRepository);
 
         // Act
-        var acting = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository
             .Add(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
 
-        acting.Should().BeOfType<DevicePushIdentifier>();
+        pnsRegistration.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
