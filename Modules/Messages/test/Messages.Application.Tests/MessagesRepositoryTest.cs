@@ -26,7 +26,7 @@ public class MessagesRepositoryTest
     }
 
     [Fact]
-    public async Task Message_body_can_be_retrived_from_blob_storage_if_unavailable_in_database()
+    public async Task Message_body_can_be_retrieved_from_blob_storage_if_unavailable_in_database()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
