@@ -18,6 +18,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Tokens.Application\Tokens.Application.csproj" />
+        <ProjectReference Include="..\..\..\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
+        <ProjectReference Include="..\..\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>
