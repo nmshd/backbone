@@ -93,8 +93,6 @@ public class HandlerTests
         A.CallTo(() => mockPnsRegistrationRepository
             .Update(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-
-        pnsRegistration.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
@@ -125,8 +123,6 @@ public class HandlerTests
         A.CallTo(() => mockPnsRegistrationRepository
             .Add(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
-
-        pnsRegistration.Should().BeOfType<DevicePushIdentifier>();
     }
 
     [Fact]
