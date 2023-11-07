@@ -21,9 +21,9 @@ public class PnsRegistration
 
     public IdentityAddress IdentityAddress { get; }
     public DeviceId DeviceId { get; }
-    public DevicePushIdentifier DevicePushIdentifier { get; set; }
+    public DevicePushIdentifier DevicePushIdentifier { get; }
     public PnsHandle Handle { get; private set; }
-    public string AppId { get; set; }
+    public string AppId { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public Environment Environment { get; private set; }
 
