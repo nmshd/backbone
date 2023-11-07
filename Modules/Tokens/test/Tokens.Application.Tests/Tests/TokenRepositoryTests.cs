@@ -40,15 +40,15 @@ public class TokenRepositoryTests
         var deviceId = TestDataGenerator.CreateRandomDeviceId();
 
         var tokenWithContent = new Token(
-            identityAddress, 
-            deviceId, 
-            new byte[] { 1, 2, 3 }, 
+            identityAddress,
+            deviceId,
+            new byte[] { 1, 2, 3 },
             DateTime.UtcNow);
 
         var tokenWithoutContent = new Token(
             identityAddress,
             deviceId,
-            new byte[] { },
+            ""u8.ToArray(),
             DateTime.UtcNow);
 
         var existingTokens = new List<Token>() {
