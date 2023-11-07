@@ -29,57 +29,52 @@ public class MessagesRepositoryTest
     public async Task Message_body_can_be_retrieved_from_blob_storage_if_unavailable_in_database()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-
-        var rndIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var rndDeviceId = TestDataGenerator.CreateRandomDeviceId();
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var deviceId = TestDataGenerator.CreateRandomDeviceId();
 
         var messageWithFilledBody = new Message(
-            rndIdentityAddress,
-            rndDeviceId,
+            identityAddress,
+            deviceId,
             SystemTime.UtcNow,
             new byte[] { 1, 2, 3 },
             new Attachment[] { },
             new RecipientInformation[] { });
 
         var messageWithEmptyBody = new Message(
-            rndIdentityAddress,
-            rndDeviceId,
+            identityAddress,
+            deviceId,
             SystemTime.UtcNow,
-            ""u8.ToArray(),
+            new byte[] { },
             new Attachment[] { },
             new RecipientInformation[] { });
 
-        var messages = new List<Message>() {
+        var existingMessages = new List<Message>() {
             messageWithFilledBody,
             messageWithEmptyBody
         };
 
-        await _arrangeContext.Messages.AddRangeAsync(messages);
+        await _arrangeContext.Messages.AddRangeAsync(existingMessages);
         await _arrangeContext.SaveChangesAsync();
 
         var fakeBlobStorage = A.Fake<IBlobStorage>();
 
         A.CallTo(() => fakeBlobStorage.FindAsync(
-                A<string>._, A<string>._))
-            .Returns(new byte[] { 1, 2, 3 });
+                A<string>._, messageWithEmptyBody.Id))
+            .Returns(new byte[] { 9, 8, 7 });
 
         var messageRepository = new MessagesRepository(_actContext, fakeBlobStorage, A.Fake<IOptions<BlobOptions>>());
 
         // Act
-        var acting = (await messageRepository.FindMessagesWithIds(
+        var messages = (await messageRepository.FindMessagesWithIds(
                 new List<MessageId>(),
-                rndIdentityAddress,
+                identityAddress,
                 A.Fake<PaginationFilter>(),
                 CancellationToken.None))
             .ItemsOnPage.ToList();
 
         // Assert
-        acting.Count.Should().Be(messages.Count);
-
-        foreach (var message in acting)
-        {
-            message.Body.Should().NotBeEmpty();
-        }
+        messages.Count.Should().Be(2);
+        messages[0].Body.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
+        messages[1].Body.Should().BeEquivalentTo(new byte[] { 9, 8, 7 });
     }
 }
