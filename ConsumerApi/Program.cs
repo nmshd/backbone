@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Common.Infrastructure;
@@ -17,7 +16,6 @@ using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.ConsumerApi;
@@ -31,6 +29,7 @@ using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
@@ -144,8 +143,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddMetricStatusesRepository(quotasDbProvider, quotasDbConnectionString);
 
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
-
-    services.AddTransient<IPushNotificationSender, DirectPushService>();
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
