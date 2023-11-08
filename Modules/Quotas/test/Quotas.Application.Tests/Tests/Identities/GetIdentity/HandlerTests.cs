@@ -31,10 +31,9 @@ public class HandlerTests
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { metric });
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
-        var handler = CreateHandler(identitiesRepository, stubMetricsRepository, metricCalculatorFactory);
+        var handler = CreateHandler(identitiesRepository, stubMetricsRepository);
 
         // Act
         var result = await handler.Handle(new GetIdentityQuery(identity.Address), CancellationToken.None);
@@ -62,10 +61,9 @@ public class HandlerTests
         // Arrange
         var metricsRepository = A.Fake<IMetricsRepository>();
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
 
-        var handler = CreateHandler(identitiesRepository, metricsRepository, metricCalculatorFactory);
+        var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
@@ -76,8 +74,9 @@ public class HandlerTests
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory metricCalculatorFactory)
+    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
     {
+        var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
         return new Handler(identitiesRepository, metricsRepository, metricCalculatorFactory);
     }
 }
