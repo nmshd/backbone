@@ -16,9 +16,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Relationships.Application\Relationships.Application.csproj" />
 		<ProjectReference Include="..\..\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
 	</ItemGroup>
 
 </Project>

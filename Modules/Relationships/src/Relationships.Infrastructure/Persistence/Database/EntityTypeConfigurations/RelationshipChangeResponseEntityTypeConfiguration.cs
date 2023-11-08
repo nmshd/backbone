@@ -22,5 +22,8 @@ public class RelationshipChangeResponseEntityTypeConfiguration : IEntityTypeConf
 
         builder.Property(x => x.CreatedAt)
             .HasColumnName("Res_CreatedAt");
+
+        builder.Property(x => x.Content)
+            .HasColumnName("Res_Content");
     }
 }

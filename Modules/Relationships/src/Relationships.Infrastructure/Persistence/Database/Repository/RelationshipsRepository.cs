@@ -125,7 +125,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Update(Relationship relationship)
     {
         _relationships.Update(relationship);
-        await SaveContentOfLatestChange(relationship);
+        // await SaveContentOfLatestChange(relationship);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -133,7 +133,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {
         await _relationships.AddAsync(relationship, cancellationToken);
-        await SaveContentOfLatestChange(relationship);
+        // await SaveContentOfLatestChange(relationship);
         try
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -157,36 +157,46 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
-    private async Task SaveContentOfLatestChange(Relationship relationship)
-    {
-        var latestChange = relationship.Changes.MaxBy(c => c.CreatedAt);
-
-        if (relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
-            _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Req", latestChange.Request.Content);
-        else if (latestChange.Response?.Content != null)
-            _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Res", latestChange.Response.Content);
-
-        try
-        {
-            await _blobStorage.SaveAsync();
-        }
-        catch (BlobAlreadyExistsException ex)
-        {
-            _logger.ErrorTryingToSaveRelationshipChange(latestChange.Id, ex.BlobName);
-        }
-    }
+    // private async Task SaveContentOfLatestChange(Relationship relationship)
+    // {
+    //     var latestChange = relationship.Changes.MaxBy(c => c.CreatedAt);
+    //
+    //     if (relationship.Status == RelationshipStatus.Pending && latestChange.Request.Content != null)
+    //         _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Req", latestChange.Request.Content);
+    //     else if (latestChange.Response?.Content != null)
+    //         _blobStorage.Add(_blobOptions.RootFolder, $"{latestChange.Id}_Res", latestChange.Response.Content);
+    //
+    //     try
+    //     {
+    //         await _blobStorage.SaveAsync();
+    //     }
+    //     catch (BlobAlreadyExistsException ex)
+    //     {
+    //         _logger.ErrorTryingToSaveRelationshipChange(latestChange.Id, ex.BlobName);
+    //     }
+    // }
 
     private async Task FillContentOfChange(RelationshipChange change)
     {
         if (change.Type == RelationshipChangeType.Creation)
         {
-            var requestContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Req");
-            change.Request.LoadContent(requestContent);
-
-            if (change.IsCompleted)
+            if (change.Request.Content == null)
             {
-                var responseContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Res");
-                change.Response!.LoadContent(responseContent);
+                var requestContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Req");
+                change.Request.LoadContent(requestContent);
+            }
+
+            if (change.IsCompleted && change.Response!.Content == null)
+            {
+                try
+                {
+                    var responseContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, $"{change.Id}_Res");
+                    change.Response!.LoadContent(responseContent);
+                }
+                catch (NotFoundException)
+                {
+                    // response content is optional so we can ignore this exception
+                }
             }
         }
     }
