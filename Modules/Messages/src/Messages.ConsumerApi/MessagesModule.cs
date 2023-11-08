@@ -29,6 +29,8 @@ public class MessagesModule : AbstractModule
 
             if(parsedConfiguration.Infrastructure.BlobStorage != null)
             {
+                options.BlobStorageOptions = new();
+
                 options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
                 options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
                 options.BlobStorageOptions.Container =
