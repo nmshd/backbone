@@ -31,7 +31,7 @@ public class MessagesDbContextSeeder : IDbSeeder<MessagesDbContext>
             message.LoadBody(await _blobStorage.FindAsync(_blobRootFolder, message.Id));
             context.Messages.Update(message);
         }
-        
+
         await context.SaveChangesAsync();
     }
 }

@@ -27,16 +27,17 @@ public class MessagesModule : AbstractModule
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
-            if(parsedConfiguration.Infrastructure.BlobStorage != null)
+            if (parsedConfiguration.Infrastructure.BlobStorage != null)
             {
-                options.BlobStorageOptions = new();
-
-                options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
-                options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
-                options.BlobStorageOptions.Container =
+                options.BlobStorageOptions = new()
+                {
+                    CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
+                    ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
+                    Container =
                     parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
                         ? "messages"
-                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
+                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
+                };
             }
         });
 
