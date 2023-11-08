@@ -30,10 +30,10 @@ public class HandlerTests
 
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { metric });
 
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
-        var handler = CreateHandler(identitiesRepository, stubMetricsRepository);
+        var handler = CreateHandler(stubIdentitiesRepository, stubMetricsRepository);
 
         // Act
         var result = await handler.Handle(new GetIdentityQuery(identity.Address), CancellationToken.None);
@@ -59,11 +59,11 @@ public class HandlerTests
     public void Fails_when_no_identity_found()
     {
         // Arrange
-        var metricsRepository = A.Fake<IMetricsRepository>();
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
+        var dummyMetricsRepository = A.Dummy<IMetricsRepository>();
+        var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
 
-        var handler = CreateHandler(identitiesRepository, metricsRepository);
+        var handler = CreateHandler(stubIdentitiesRepository, dummyMetricsRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
@@ -76,7 +76,7 @@ public class HandlerTests
 
     private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
     {
-        var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
-        return new Handler(identitiesRepository, metricsRepository, metricCalculatorFactory);
+        var dummyMetricCalculatorFactory = A.Dummy<MetricCalculatorFactory>();
+        return new Handler(identitiesRepository, metricsRepository, dummyMetricCalculatorFactory);
     }
 }
