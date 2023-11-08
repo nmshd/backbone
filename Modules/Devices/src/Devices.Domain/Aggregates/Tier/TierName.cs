@@ -6,6 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 public record TierName
 {
     public static readonly TierName BASIC_DEFAULT_NAME = new("Basic");
+    public static readonly TierName UP_FOR_DELETION_DEFAULT_NAME = new("Up For Deletion");
     public string Value { get; }
     public const int MIN_LENGTH = 3;
     public const int MAX_LENGTH = 30;

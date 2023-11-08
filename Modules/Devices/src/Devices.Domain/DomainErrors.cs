@@ -25,6 +25,20 @@ public static class DomainErrors
             string.IsNullOrEmpty(reason) ? $"The Basic Tier cannot be deleted {formattedReason}." : reason);
     }
 
+    public static DomainError CannotDeleteUpForDeletionTier(string reason = "")
+    {
+        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
+        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeDeleted",
+            string.IsNullOrEmpty(reason) ? $"The Up For Deletion Tier cannot be deleted {formattedReason}." : reason);
+    }
+
+    public static DomainError CannotChangeTierUpForDeletion(string reason = "")
+    {
+        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
+        return new DomainError("error.platform.validation.device.identityTierUpForDeletionCannotBeChanged",
+            string.IsNullOrEmpty(reason) ? $"The Identity's Tier cannot be be changed from or to the Up for Deletion Tier {formattedReason}." : reason);
+    }
+
     public static DomainError CannotDeleteUsedTier(string reason = "")
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";

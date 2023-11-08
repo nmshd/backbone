@@ -7,11 +7,13 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class Tier
 {
+    public const string UP_FOR_DELETION_TIER_NAME = "Up For Deletion";
+
     public Tier(TierId id, string name)
     {
         Id = id;
         Name = name;
-        Quotas = new();
+        Quotas = new List<TierQuotaDefinition>();
     }
 
     public TierId Id { get; }
@@ -20,6 +22,9 @@ public class Tier
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
+        if (IsUpForDeletionTier())
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForUpForDeletionTier());
+
         if (max <= 0)
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
@@ -34,6 +39,9 @@ public class Tier
 
     public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
     {
+        if (IsUpForDeletionTier())
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForUpForDeletionTier());
+
         var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
 
         if (quotaDefinition == null)
@@ -42,6 +50,25 @@ public class Tier
         Quotas.Remove(quotaDefinition);
 
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
+    }
+
+    public Result<TierQuotaDefinition, DomainError> CreateQuotaForUpForDeletionTier(MetricKey metricKey, int max, QuotaPeriod period)
+    {
+        if (!IsUpForDeletionTier())
+            throw new InvalidOperationException("Method can only be called for the 'Up for Deletion' tier");
+
+        if (TierQuotaAlreadyExists(metricKey, period))
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
+
+        var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
+        Quotas.Add(quotaDefinition);
+
+        return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
+    }
+
+    private bool IsUpForDeletionTier()
+    {
+        return Id == TierId.UP_FOR_DELETION_DEFAULT_ID;
     }
 
     private bool TierQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
