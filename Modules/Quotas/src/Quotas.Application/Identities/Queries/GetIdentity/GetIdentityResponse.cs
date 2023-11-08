@@ -8,18 +8,8 @@ public class GetIdentityResponse
 {
     public string Address { get; set; }
     public IEnumerable<QuotaDTO> Quotas { get; set; }
-}
 
-public class GetIdentityResponseBuilder
-{
-    private readonly MetricCalculatorFactory _metricCalculatorFactory;
-
-    public GetIdentityResponseBuilder(MetricCalculatorFactory metricCalculatorFactory)
-    {
-        _metricCalculatorFactory = metricCalculatorFactory;
-    }
-
-    public async Task<GetIdentityResponse> BuildResponse(string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
+    public static async Task<GetIdentityResponse> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
     {
         var quotasList = new List<QuotaDTO>();
 
@@ -27,7 +17,7 @@ public class GetIdentityResponseBuilder
 
         foreach (var quota in allQuotas)
         {
-            var usage = await CalculateUsageAsync(_metricCalculatorFactory, quota, identityAddress, cancellationToken);
+            var usage = await CalculateUsage(metricCalculatorFactory, quota, identityAddress, cancellationToken);
             quotasList.Add(new QuotaDTO(
                     quota.Id,
                     quota is TierQuota ? QuotaSource.Tier : QuotaSource.Individual,
@@ -45,7 +35,7 @@ public class GetIdentityResponseBuilder
         };
     }
 
-    private static async Task<uint> CalculateUsageAsync(MetricCalculatorFactory metricCalculatorFactory, Quota quota, string identityAddress, CancellationToken cancellationToken)
+    private static async Task<uint> CalculateUsage(MetricCalculatorFactory metricCalculatorFactory, Quota quota, string identityAddress, CancellationToken cancellationToken)
     {
         var calculator = metricCalculatorFactory.CreateFor(quota.MetricKey);
         return await calculator.CalculateUsage(quota.Period.CalculateBegin(), quota.Period.CalculateEnd(), identityAddress, cancellationToken);

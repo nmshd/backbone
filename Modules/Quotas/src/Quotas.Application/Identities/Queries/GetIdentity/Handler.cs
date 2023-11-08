@@ -24,7 +24,6 @@ public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 
         var metricsKeys = identity.TierQuotas.Select(q => q.MetricKey).Union(identity.IndividualQuotas.Select(q => q.MetricKey));
         var metrics = await _metricsRepository.FindAllWithKeys(metricsKeys, cancellationToken);
-        var identityResponseBuilder = new GetIdentityResponseBuilder(_metricCalculatorFactory);
-        return await identityResponseBuilder.BuildResponse(identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics, cancellationToken);
+        return await GetIdentityResponse.Create(_metricCalculatorFactory, identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics, cancellationToken);
     }
 }
