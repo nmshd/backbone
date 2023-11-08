@@ -110,7 +110,8 @@ static WebApplication CreateApp(string[] args)
 
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
-        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
+        .SeedDbContext<RelationshipsDbContext, RelationshipChangesDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -126,6 +127,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddTransient<DevicesDbContextSeeder>();
     services.AddTransient<QuotasDbContextSeeder>();
+    services.AddTransient<RelationshipChangesDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)

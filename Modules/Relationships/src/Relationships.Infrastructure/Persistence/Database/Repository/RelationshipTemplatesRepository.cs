@@ -17,22 +17,16 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     private readonly DbSet<RelationshipTemplate> _templates;
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
     private readonly RelationshipsDbContext _dbContext;
-    private readonly IBlobStorage _blobStorage;
-    private readonly BlobOptions _blobOptions;
 
     public RelationshipTemplatesRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
     {
         _templates = dbContext.RelationshipTemplates;
         _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
         _dbContext = dbContext;
-        _blobStorage = blobStorage;
-        _blobOptions = blobOptions.Value;
     }
 
     public async Task Add(RelationshipTemplate template, CancellationToken cancellationToken)
     {
-        await SaveContentOfTemplate(template);
-
         await _templates.AddAsync(template, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
@@ -44,11 +38,6 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
                     .NotExpiredFor(identityAddress)
                     .NotDeleted()
                     .FirstWithId(id, cancellationToken);
-
-        if (fillContent)
-        {
-            await FillContentOfTemplate(template);
-        }
 
         return template;
     }
@@ -63,8 +52,6 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
-        await FillContentOfTemplates(templates.ItemsOnPage);
-
         return templates;
     }
 
@@ -72,25 +59,5 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();
-    }
-
-    private async Task FillContentOfTemplate(RelationshipTemplate template)
-    {
-        var content = await _blobStorage.FindAsync(_blobOptions.RootFolder, template.Id);
-        template.LoadContent(content);
-    }
-
-    private async Task FillContentOfTemplates(IEnumerable<RelationshipTemplate> templates)
-    {
-        await Task.WhenAll(templates.Select(FillContentOfTemplate).ToArray());
-    }
-
-    private async Task SaveContentOfTemplate(RelationshipTemplate template)
-    {
-        if (template.Content == null)
-            return;
-
-        _blobStorage.Add(_blobOptions.RootFolder, template.Id, template.Content);
-        await _blobStorage.SaveAsync();
     }
 }

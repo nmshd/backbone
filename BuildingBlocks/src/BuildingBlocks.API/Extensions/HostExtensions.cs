@@ -69,7 +69,7 @@ public static class HostExtensions
     }
 }
 
-public interface IDbSeeder<in T> where T : DbContext
+public interface IDbSeeder<in T>
 {
     Task SeedAsync(T context);
 }
