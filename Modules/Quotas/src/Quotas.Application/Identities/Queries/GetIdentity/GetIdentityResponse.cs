@@ -19,12 +19,9 @@ public class GetIdentityResponse
         {
             var usage = await CalculateUsage(metricCalculatorFactory, quota, identityAddress, cancellationToken);
             quotasList.Add(new QuotaDTO(
-                    quota.Id,
-                    quota is TierQuota ? QuotaSource.Tier : QuotaSource.Individual,
+                    quota,
                     new MetricDTO(metrics.First(m => m.Key == quota.MetricKey)),
-                    usage,
-                    quota.Max,
-                    quota.Period.ToString()
+                    usage
                 ));
         }
 
