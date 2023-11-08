@@ -18,13 +18,17 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
     {
         services.AddDatabase(options.DbOptions);
-        services.AddBlobStorage(options.BlobStorageOptions);
-        services.AddRepositories(options.BlobStorageOptions);
+
+        if (options.BlobStorageOptions != null)
+        {
+            services.AddBlobStorage(options.BlobStorageOptions);
+            services.AddRepositories(options.BlobStorageOptions);
+        }
     }
 }
 
 public class PersistenceOptions
 {
     public DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions BlobStorageOptions { get; set; } = new();
+    public BlobStorageOptions BlobStorageOptions { get; set; }
 }

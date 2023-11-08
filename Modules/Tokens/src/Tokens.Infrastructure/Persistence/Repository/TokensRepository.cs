@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -8,22 +7,17 @@ using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public class TokensRepository : ITokensRepository
 {
-    private readonly IBlobStorage _blobStorage;
-    private readonly TokensRepositoryOptions _options;
     private readonly TokensDbContext _dbContext;
     private readonly IQueryable<Token> _readonlyTokensDbSet;
     private readonly DbSet<Token> _tokensDbSet;
 
-    public TokensRepository(TokensDbContext dbContext, IBlobStorage blobStorage, IOptions<TokensRepositoryOptions> options)
+    public TokensRepository(TokensDbContext dbContext)
     {
-        _blobStorage = blobStorage;
-        _options = options.Value;
         _dbContext = dbContext;
         _tokensDbSet = dbContext.Tokens;
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
@@ -35,12 +29,7 @@ public class TokensRepository : ITokensRepository
             .Where(Token.IsNotExpired)
             .FirstWithId(id);
 
-        var getContent = _blobStorage.FindAsync(_options.BlobRootFolder, id);
-
-        await Task.WhenAll(getMetadata, getContent);
-
         var token = await getMetadata ?? throw new NotFoundException(nameof(Token));
-        token.Content = await getContent;
 
         return token;
     }
@@ -82,19 +71,7 @@ public class TokensRepository : ITokensRepository
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
-        await FillContent(dbPaginationResult.ItemsOnPage);
         return dbPaginationResult;
-    }
-
-    private async Task FillContent(IEnumerable<Token> tokens)
-    {
-        var fillContentTasks = tokens.Where(token => token.Content is { Length: 0 }).Select(FillContent);
-        await Task.WhenAll(fillContentTasks);
-    }
-
-    private async Task FillContent(Token token)
-    {
-        token.Content = await _blobStorage.FindAsync(_options.BlobRootFolder, token.Id);
     }
 
     #region Write
