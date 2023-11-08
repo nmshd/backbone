@@ -6,6 +6,7 @@ namespace Backbone.Modules.Devices.Application.Tests;
 
 public static class TestDataGenerator
 {
+    // todo: most methods from this class are present in UnitTestTools.Data.TestDataGenerator
     public static IdentityAddress CreateRandomIdentityAddress()
     {
         return IdentityAddress.Create(CreateRandomBytes(), "id1");
