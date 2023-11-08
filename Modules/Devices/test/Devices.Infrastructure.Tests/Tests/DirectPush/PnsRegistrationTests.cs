@@ -1,0 +1,133 @@
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
+using Backbone.Modules.Devices.Application.Tests;
+
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+
+public class PnsRegistrationTests
+{
+
+    [Fact]
+    public async void Adding_new_PnsRegistration_in_repository()
+    {
+        // Arrange
+        var randomDeviceId = CreateRandomDeviceId();
+        var randomIdentity = TestDataGenerator.CreateIdentity();
+
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
+        var appId = "keyAppId";
+
+        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationsRepository>();
+
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+           .Returns((PnsRegistration)null).Once();
+
+        var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger);
+
+        // Act
+        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPnsRegistrationRepository
+            .Add(A<PnsRegistration>._, CancellationToken.None))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async void Trying_to_delete_existing_PnsRegistration()
+    {
+        // Arrange
+        var randomDeviceId = CreateRandomDeviceId();
+        var randomIdentity = TestDataGenerator.CreateIdentity();
+
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
+        var appId = "keyAppId";
+        var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
+
+        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationsRepository>();
+
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+           .Returns(pnsRegistration);
+
+        var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger);
+
+        // Act
+        await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPnsRegistrationRepository.Delete(
+                A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async void Trying_to_delete_non_existing_PnsRegistration()
+    {
+        // Arrange
+        var randomDeviceId = CreateRandomDeviceId();
+        var randomIdentity = TestDataGenerator.CreateIdentity();
+
+        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationsRepository>();
+
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+           .Returns((PnsRegistration)null);
+
+        var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger);
+
+        // Act
+        await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPnsRegistrationRepository.Delete(
+                A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async void Updating_existing_PnsRegistration_in_repository()
+    {
+        // Arrange
+        var randomDeviceId = CreateRandomDeviceId();
+        var randomIdentity = TestDataGenerator.CreateIdentity();
+
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
+        var appId = "keyAppId";
+
+        var mockPnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
+
+        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
+        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyPnsRegistrationRepository = A.Dummy<IPnsRegistrationsRepository>();
+
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+           .Returns(mockPnsRegistration);
+
+        var directPushService = new DirectPushService(mockPnsRegistrationRepository, dummyPnsConnectorFactory, dummyLogger);
+
+        // Act
+        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPnsRegistrationRepository
+            .Update(A<PnsRegistration>._, CancellationToken.None))
+            .MustHaveHappenedOnceExactly();
+    }
+}
