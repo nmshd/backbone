@@ -29,14 +29,15 @@ public class TokensModule : AbstractModule
 
             if (parsedConfiguration.Infrastructure.BlobStorage != null)
             {
-                options.BlobStorageOptions = new();
-
-                options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
-                options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
-                options.BlobStorageOptions.Container =
+                options.BlobStorageOptions = new()
+                {
+                    CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
+                    ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
+                    Container =
                     parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
                         ? "tokens"
-                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
+                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
+                };
             }
         });
 
