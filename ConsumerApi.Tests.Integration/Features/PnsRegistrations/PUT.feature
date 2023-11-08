@@ -1,10 +1,10 @@
 @Integration
 Feature: PUT /Devices/Self/PushNotifications
 
-User creates a PnsRegistration for a device
+User registers for push notifications
 
-Scenario: Creating a PnsRegistration for a device
+Scenario: Register for push notifications
 	Given the user is authenticated
 	When a PUT request is sent to the /Devices/Self/PushNotifications endpoint
-	Then the response status code is 201 (Created)
-	And the response contains a DevicePushIdentifier
+	Then the response status code is 200 (OK)
+	And the response contains the push identifier for the device
