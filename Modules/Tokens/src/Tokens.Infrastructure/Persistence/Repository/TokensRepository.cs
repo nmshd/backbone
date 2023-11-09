@@ -96,8 +96,3 @@ public static class IDbSetExtensions
         return entity ?? throw new NotFoundException(nameof(Token));
     }
 }
-
-public class TokensRepositoryOptions
-{
-    public string BlobRootFolder { get; set; }
-}
