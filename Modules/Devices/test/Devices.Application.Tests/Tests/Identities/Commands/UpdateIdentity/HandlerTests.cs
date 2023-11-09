@@ -54,7 +54,7 @@ public class HandlerTests
 
         var oldTier = new Tier(TierName.Create("Old tier").Value);
         var newTier = new Tier(TierName.Create("New Tier").Value);
-            
+
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
