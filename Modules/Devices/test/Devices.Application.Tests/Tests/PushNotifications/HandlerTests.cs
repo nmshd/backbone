@@ -20,13 +20,13 @@ public class HandlerTests
         var randomDeviceId = CreateRandomDeviceId();
         var randomIdentity = TestDataGenerator.CreateIdentity();
 
-        var fakeUserContext = A.Fake<IUserContext>();
+        var mockUserContext = A.Fake<IUserContext>();
         var mockPushService = A.Fake<IPushService>();
 
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
+        A.CallTo(() => mockUserContext.GetAddressOrNull())
             .Returns(randomIdentity.Address);
 
-        A.CallTo(() => fakeUserContext.GetDeviceIdOrNull())
+        A.CallTo(() => mockUserContext.GetDeviceIdOrNull())
             .Returns(randomDeviceId);
 
         A.CallTo(() => mockPushService.UpdateRegistration(
@@ -39,23 +39,24 @@ public class HandlerTests
                 ))
             .Returns(DevicePushIdentifier.New());
 
-        var handler = new Handler(mockPushService, fakeUserContext);
+        var handler = new Handler(mockPushService, mockUserContext);
 
         // Act
-        var pnsRegistration = await handler.Handle(new UpdateDeviceRegistrationCommand()
+        await handler.Handle(new UpdateDeviceRegistrationCommand()
         {
             Platform = "fcm",
             Handle = "handle",
             AppId = "keyAppId",
+            Environment = "Development"
         }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushService.UpdateRegistration(
-                A<IdentityAddress>._,
-                A<DeviceId>._,
-                A<PnsHandle>._,
-                A<string>._,
-                A<Environment>._,
+                mockUserContext.GetAddress(),
+                mockUserContext.GetDeviceId(),
+                PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value,
+                "keyAppId",
+                Environment.Development,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
     }
