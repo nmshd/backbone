@@ -17,7 +17,7 @@
                 </mat-form-field>
                 <mat-form-field class="full-width">
                     <mat-label>Name</mat-label>
-                    <input matInput required [(ngModel)]="tier.name" [disabled]="disabled || editMode" />
+                    <input matInput required [(ngModel)]="tier.name" [disabled]="disabled || editMode || isUpForDeletionTier()" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
             </div>
@@ -34,10 +34,10 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
-                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0 || isUpForDeletionTier()">
                     <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!tier.id">
+                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!tier.id || isUpForDeletionTier()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>

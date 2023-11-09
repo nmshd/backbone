@@ -87,7 +87,7 @@ export class TierEditComponent {
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 this.tier = data.result;
-                this.tier.isDeletable = this.tier.name !== "Basic";
+                this.tier.isDeletable = this.tier.name !== "Basic" && !this.isUpForDeletionTier();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -99,6 +99,10 @@ export class TierEditComponent {
                 });
             }
         });
+    }
+
+    public isUpForDeletionTier(): boolean {
+        return this.tier.name === "Up For Deletion";
     }
 
     public createTier(): void {
