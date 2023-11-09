@@ -21,14 +21,21 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
 
     public async Task SeedAsync(TokensDbContext context)
     {
+        await FillContentColumnsFromBlobStorage(context);
+    }
+
+    private async Task FillContentColumnsFromBlobStorage(TokensDbContext context)
+    {
+        // _blobRootFolder is null when blob storage configuration is not provided, meaning the content of database entries should not be loaded from blob storage
         if (_blobRootFolder == null)
             return;
 
-        var tokens = await context.Tokens.Where(t => t.Content == null).ToListAsync();
+        var tokensWithMissingContents = await context.Tokens.Where(t => t.Content == null).ToListAsync();
 
-        foreach (var token in tokens)
+        foreach (var token in tokensWithMissingContents)
         {
-            token.Content = await _blobStorage!.FindAsync(_blobRootFolder!, token.Id);
+            var blobTokenContent = await _blobStorage!.FindAsync(_blobRootFolder!, token.Id);
+            token.Content = blobTokenContent;
             context.Tokens.Update(token);
         }
 
