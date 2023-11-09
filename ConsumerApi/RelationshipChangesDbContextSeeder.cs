@@ -26,18 +26,24 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
 
     public async Task SeedAsync(RelationshipsDbContext context)
     {
+        await FillContentColumnsFromBlobStorage(context);
+    }
+
+    private async Task FillContentColumnsFromBlobStorage(RelationshipsDbContext context)
+    {
         // _blobRootFolder is null when blob storage configuration is not provided, meaning the content of database entries should not be loaded from blob storage
-        if (_blobRootFolder == null)
+        if (_blobRootFolder == null || _blobStorage == null)
             return;
 
-        var relationshipChanges = await context.RelationshipChanges
-            .Where(rc =>  rc.Request.Content == null || (rc.Response != null && rc.Response.Content == null)).ToListAsync();
+        var relationshipChangesWithMissingContents = await context.RelationshipChanges
+            .Where(rc => rc.Request.Content == null || (rc.Response != null && rc.Response.Content == null)).ToListAsync();
 
-        foreach (var relationshipChange in relationshipChanges)
+        foreach (var relationshipChange in relationshipChangesWithMissingContents)
         {
-            if (relationshipChange.Request != null && relationshipChange.Request.Content == null)
+            if (relationshipChange.Request.Content == null)
             {
-                relationshipChange.Request.LoadContent(await _blobStorage!.FindAsync(_blobRootFolder, relationshipChange.Request.Id));
+                var blobRequestContent = await _blobStorage.FindAsync(_blobRootFolder, relationshipChange.Request.Id);
+                relationshipChange.Request.LoadContent(blobRequestContent);
                 context.RelationshipChanges.Update(relationshipChange);
             }
 
@@ -45,7 +51,8 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
             {
                 try
                 {
-                    relationshipChange.Response.LoadContent(await _blobStorage!.FindAsync(_blobRootFolder, relationshipChange.Response.Id));
+                    var blobResponseContent = await _blobStorage.FindAsync(_blobRootFolder, relationshipChange.Response.Id);
+                    relationshipChange.Response.LoadContent(blobResponseContent);
                     context.RelationshipChanges.Update(relationshipChange);
                 }
                 catch (NotFoundException)
