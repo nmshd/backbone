@@ -33,8 +33,7 @@ public class MessagesModule : AbstractModule
                 {
                     CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
                     ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
-                    Container =
-                    parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
+                    Container = parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
                         ? "messages"
                         : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
                 };
