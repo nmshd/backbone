@@ -1,11 +1,11 @@
 ﻿using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIndividualQuotas;
+namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
 
-public class ListIndividualQuotasQuery : IRequest<ListIndividualQuotasResponse>
+public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse>
 {
-    public ListIndividualQuotasQuery(PaginationFilter paginationFilter, string address)
+    public ListQuotasForIdentityQuery(PaginationFilter paginationFilter, string address)
     {
         PaginationFilter = paginationFilter;
         Address = address;
