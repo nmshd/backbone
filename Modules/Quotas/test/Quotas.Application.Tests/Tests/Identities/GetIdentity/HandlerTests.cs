@@ -59,11 +59,10 @@ public class HandlerTests
     public void Fails_when_no_identity_found()
     {
         // Arrange
-        var dummyMetricsRepository = A.Dummy<IMetricsRepository>();
         var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
 
-        var handler = CreateHandler(stubIdentitiesRepository, dummyMetricsRepository);
+        var handler = CreateHandler(stubIdentitiesRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
@@ -74,7 +73,13 @@ public class HandlerTests
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
+    {
+        var dummyMetricsRepository = A.Dummy<IMetricsRepository>();
+        return CreateHandler(identitiesRepository, dummyMetricsRepository);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
     {
         var dummyMetricCalculatorFactory = A.Dummy<MetricCalculatorFactory>();
         return new Handler(identitiesRepository, metricsRepository, dummyMetricCalculatorFactory);
