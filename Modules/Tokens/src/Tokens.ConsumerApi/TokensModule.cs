@@ -33,8 +33,7 @@ public class TokensModule : AbstractModule
                 {
                     CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
                     ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
-                    Container =
-                    parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
+                    Container = parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
                         ? "tokens"
                         : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
                 };
