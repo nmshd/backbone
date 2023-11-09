@@ -93,9 +93,12 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="max">
-                    <th mat-header-cell *matHeaderCellDef>Max</th>
-                    <td mat-cell *matCellDef="let Quota" data-label="Max:">
-                        {{ Quota.max }}
+                    <th mat-header-cell *matHeaderCellDef>Used/Max</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Used/Max:">
+                        <div class="progressWrapper">
+                            <span>{{ Quota.usage }}/{{ Quota.max }}</span>
+                            <mat-progress-bar mode="determinate" [value]="(Quota.usage / Quota.max) * 100"></mat-progress-bar>
+                        </div>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="period">
