@@ -79,8 +79,6 @@ public class TokensRepository : ITokensRepository
     public async Task Add(Token token)
     {
         await _tokensDbSet.AddAsync(token);
-        // _blobStorage.Add(_options.BlobRootFolder, token.Id, token.Content);
-        // await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync();
     }
 
