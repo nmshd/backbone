@@ -154,3 +154,12 @@
 .auto-height {
     height: auto;
 }
+
+.progressWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.progressWrapper > span {
+    min-width: 2.5rem;
+}
