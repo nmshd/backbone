@@ -30,9 +30,9 @@ public class MessagesDbContextSeeder : IDbSeeder<MessagesDbContext>
             return;
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        var messagesWithMissingBodies = await context.Messages.Where(m => m.Body == null).ToListAsync();
+        var messagesWithMissingBody = await context.Messages.Where(m => m.Body == null).ToListAsync();
 
-        foreach (var message in messagesWithMissingBodies)
+        foreach (var message in messagesWithMissingBody )
         {
             var blobMessageBody = await _blobStorage.FindAsync(_blobRootFolder, message.Id);
             message.LoadBody(blobMessageBody);
