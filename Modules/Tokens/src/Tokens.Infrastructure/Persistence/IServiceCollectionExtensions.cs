@@ -20,10 +20,9 @@ public static class IServiceCollectionExtensions
         services.AddDatabase(options.DbOptions);
 
         if (options.BlobStorageOptions != null)
-        {
             services.AddBlobStorage(options.BlobStorageOptions);
-            services.AddRepositories(options.BlobStorageOptions);
-        }
+
+        services.AddRepositories(options.BlobStorageOptions);
     }
 }
 
