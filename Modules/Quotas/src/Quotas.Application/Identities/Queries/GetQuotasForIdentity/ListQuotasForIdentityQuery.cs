@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Application.Pagination;
+﻿using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
