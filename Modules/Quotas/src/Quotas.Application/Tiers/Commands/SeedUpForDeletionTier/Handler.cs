@@ -38,7 +38,7 @@ public class Handler : IRequestHandler<SeedUpForDeletionTierCommand>
         var missingMetrics = metrics.Where(metric => upForDeletionTier.Quotas.All(quota => quota.MetricKey.Value != metric.Key.Value));
         foreach (var metric in missingMetrics)
         {
-            var result = upForDeletionTier.CreateQuotaForUpForDeletionTier(metric.Key, 0, QuotaPeriod.Day);
+            var result = upForDeletionTier.CreateQuotaForUpForDeletionTier(metric.Key, 0, QuotaPeriod.Total);
             _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(upForDeletionTier.Id, result.Value.Id));
         }
         await _tiersRepository.Update(upForDeletionTier, CancellationToken.None);
