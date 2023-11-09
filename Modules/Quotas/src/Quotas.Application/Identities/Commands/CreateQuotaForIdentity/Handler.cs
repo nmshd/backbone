@@ -45,7 +45,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
         var metrics = new List<string> { metric.Key.Value };
         await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, cancellationToken);
 
-        var response = new IndividualQuotaDTO(individualQuota.Id, metric.Key, individualQuota.Max, individualQuota.Period);
+        var response = new IndividualQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);
         return response;
     }
 }
