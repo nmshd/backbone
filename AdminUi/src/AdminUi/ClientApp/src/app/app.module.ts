@@ -23,6 +23,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
@@ -46,6 +47,7 @@ import { IdentityListComponent } from "./components/quotas/identity/identity-lis
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
+import { IdentitiesOverviewComponent } from "./components/shared/identities-overview/identities-overview.component";
 import { LoginComponent } from "./components/shared/login/login.component";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { TopbarComponent } from "./components/topbar/topbar.component";
@@ -72,7 +74,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
         LoginComponent,
-        ChangeSecretDialogComponent
+        ChangeSecretDialogComponent,
+        IdentitiesOverviewComponent
     ],
     imports: [
         FormsModule,
@@ -123,7 +126,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         LayoutModule,
         MatDialogModule,
         MatSelectModule,
-        MatChipsModule
+        MatChipsModule,
+        MatProgressBarModule
     ],
     providers: [
         SidebarService,

@@ -35,8 +35,6 @@ public class DevicesModule : AbstractModule
             options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
         });
 
-        services.AddPushNotifications(parsedConfiguration.Infrastructure.PushNotifications);
-
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
