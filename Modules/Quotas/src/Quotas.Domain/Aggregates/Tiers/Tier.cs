@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using CSharpFunctionalExtensions;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
@@ -28,13 +28,7 @@ public class Tier
         if (max <= 0)
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
-        if (TierQuotaAlreadyExists(metricKey, period))
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
-
-        var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
-        Quotas.Add(quotaDefinition);
-
-        return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
+        return CreateTierQuotaDefinition(metricKey, max, period);
     }
 
     public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
@@ -57,6 +51,11 @@ public class Tier
         if (!IsUpForDeletionTier())
             throw new InvalidOperationException("Method can only be called for the 'Up for Deletion' tier");
 
+        return CreateTierQuotaDefinition(metricKey, max, period);
+    }
+
+    private Result<TierQuotaDefinition, DomainError> CreateTierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
+    {
         if (TierQuotaAlreadyExists(metricKey, period))
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
 
