@@ -20,15 +20,22 @@ public class MessagesDbContextSeeder : IDbSeeder<MessagesDbContext>
 
     public async Task SeedAsync(MessagesDbContext context)
     {
+        await FillBodyColumnsFromBlobStorage(context);
+    }
+
+    private async Task FillBodyColumnsFromBlobStorage(MessagesDbContext context)
+    {
+        // _blobRootFolder is null when blob storage configuration is not provided, meaning the content of database entries should not be loaded from blob storage
         if (_blobRootFolder == null)
             return;
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        var messages = await context.Messages.Where(m => m.Body == null).ToListAsync();
+        var messagesWithMissingBodies = await context.Messages.Where(m => m.Body == null).ToListAsync();
 
-        foreach (var message in messages)
+        foreach (var message in messagesWithMissingBodies)
         {
-            message.LoadBody(await _blobStorage.FindAsync(_blobRootFolder, message.Id));
+            var blobMessageBody = await _blobStorage.FindAsync(_blobRootFolder, message.Id);
+            message.LoadBody(blobMessageBody);
             context.Messages.Update(message);
         }
 
