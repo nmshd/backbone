@@ -93,7 +93,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services
         .ConfigureAndValidate<AdminConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options));
+        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options))
+        .ConfigureAndValidate<Backbone.Modules.Relationships.Application.ApplicationOptions>(options => configuration.GetSection("Modules:Relationships:Application").Bind(options));
 
 #pragma warning disable ASP0000 We retrieve the Configuration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
