@@ -6,18 +6,18 @@ using MediatR;
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 internal class Handler : IRequestHandler<DeleteDeviceRegistrationCommand>
 {
-    private readonly IPushService _pushService;
+    private readonly IPushNotificationRegistrationService _pushRegistrationService;
     private readonly DeviceId _activeDevice;
 
-    public Handler(IPushService pushService, IUserContext userContext)
+    public Handler(IPushNotificationRegistrationService pushRegistrationService, IUserContext userContext)
     {
-        _pushService = pushService;
+        _pushRegistrationService = pushRegistrationService;
         _activeDevice = userContext.GetDeviceId();
     }
 
 
     public async Task Handle(DeleteDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        await _pushService.DeleteRegistration(_activeDevice, cancellationToken);
+        await _pushRegistrationService.DeleteRegistration(_activeDevice, cancellationToken);
     }
 }

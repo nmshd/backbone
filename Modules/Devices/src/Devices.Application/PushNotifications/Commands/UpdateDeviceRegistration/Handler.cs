@@ -13,14 +13,14 @@ namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.Update
 public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
 {
     private readonly IdentityAddress _activeIdentity;
-    private readonly IPushService _pushService;
+    private readonly IPushNotificationRegistrationService _pushRegistrationService;
     private readonly DeviceId _activeDevice;
     private const string PRODUCTION_ENVIRONMENT = "Production";
     private const string DEVELOPMENT_ENVIRONMENT = "Development";
 
-    public Handler(IPushService pushService, IUserContext userContext)
+    public Handler(IPushNotificationRegistrationService pushRegistrationService, IUserContext userContext)
     {
-        _pushService = pushService;
+        _pushRegistrationService = pushRegistrationService;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
         if (parseHandleResult.IsSuccess)
         {
-            await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+            await _pushRegistrationService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
