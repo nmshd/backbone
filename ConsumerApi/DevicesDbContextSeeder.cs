@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.CreateUpForDeletionTie
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +13,10 @@ namespace Backbone.ConsumerApi;
 public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 {
     private readonly IMediator _mediator;
-    private readonly IMetricsRepository _metricsRepository;
 
-    public DevicesDbContextSeeder(IMediator mediator, IMetricsRepository metricsRepository)
+    public DevicesDbContextSeeder(IMediator mediator)
     {
         _mediator = mediator;
-        _metricsRepository = metricsRepository;
     }
 
     public async Task SeedAsync(DevicesDbContext context)
