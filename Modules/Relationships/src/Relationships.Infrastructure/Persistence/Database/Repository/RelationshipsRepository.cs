@@ -64,7 +64,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
-        CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+        CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
@@ -75,8 +75,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id,
-        IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false,
-        bool fillContent = true)
+        IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var change = await (track ? _changes : _readOnlyChanges)
             .IncludeAll(_dbContext)
