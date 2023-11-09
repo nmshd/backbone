@@ -32,6 +32,8 @@ public class QuotasModule : AbstractModule
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
 
         services.AddMemoryCache();
+
+        services.AddResponseCaching();
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)

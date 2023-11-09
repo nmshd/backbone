@@ -25,6 +25,7 @@ public class QuotasController : ApiControllerBase
     }
 
     [HttpGet("{address}")]
+    [ResponseCache(Duration = 1800, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "address" })]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<QuotaDTO>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListIndividualQuotas([FromQuery] PaginationFilter paginationFilter, [FromRoute] string address, CancellationToken cancellationToken)
     {

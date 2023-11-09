@@ -22,39 +22,31 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"QuotasForIdentity_{request.Address}";
+        var identityList = await _identitiesRepository.FindByAddresses(new List<string> { request.Address }.AsReadOnly(), cancellationToken, true);
+        var identity = identityList.First();
 
-        if (!_cache.TryGetValue(cacheKey, out List<QuotaDTO> cachedQuotas))
-        {
-            var identityList = await _identitiesRepository.FindByAddresses(new List<string> { request.Address }.AsReadOnly(), cancellationToken, true);
-            var identity = identityList.First();
+        var individualQuotasForIdentity = identity.IndividualQuotas
+            .Select(q => new QuotaDTO(
+                q.Id,
+                QuotaSource.Individual,
+                new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString())),
+                q.Max,
+                q.Period.ToString()))
+            .ToList();
 
-            var individualQuotasForIdentity = identity.IndividualQuotas
-                .Select(q => new QuotaDTO(
-                    q.Id,
-                    QuotaSource.Individual,
-                    new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString())),
-                    q.Max,
-                    q.Period.ToString()))
-                .ToList();
+        var tierQuotasForIdentity = identity.TierQuotas
+            .Select(q => new QuotaDTO(
+                q.Id,
+                QuotaSource.Tier,
+                new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString())),
+                q.Max,
+                q.Period.ToString()))
+            .ToList();
 
-            var tierQuotasForIdentity = identity.TierQuotas
-                .Select(q => new QuotaDTO(
-                    q.Id,
-                    QuotaSource.Tier,
-                    new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString())),
-                    q.Max,
-                    q.Period.ToString()))
-                .ToList();
+        var quotasForIdentity = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
 
-            cachedQuotas = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(30)); // Adjust the timespan according to your needs
-            _cache.Set(cacheKey, cachedQuotas, cacheEntryOptions);
-        }
-
-        var totalRecords = cachedQuotas.Count;
-        var pagedQuotas = PaginationHelper.ApplyPagedResponse(cachedQuotas, request.PaginationFilter);
+        var totalRecords = quotasForIdentity.Count;
+        var pagedQuotas = PaginationHelper.ApplyPagedResponse(quotasForIdentity, request.PaginationFilter);
 
         var pagedResponse = new PagedResponse<QuotaDTO>(pagedQuotas, request.PaginationFilter, totalRecords);
         return new ListQuotasForIdentityResponse(pagedResponse, request.PaginationFilter, totalRecords);
