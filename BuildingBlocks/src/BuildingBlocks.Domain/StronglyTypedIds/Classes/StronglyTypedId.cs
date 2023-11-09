@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+﻿namespace Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
 public class StronglyTypedIdHelpers
 {

@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Common.Infrastructure.Persistence.Repository;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
+namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
 
 public class MetricStatusesStubRepository : IMetricStatusesRepository
 {

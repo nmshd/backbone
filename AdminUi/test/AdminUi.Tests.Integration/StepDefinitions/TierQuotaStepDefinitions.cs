@@ -1,13 +1,13 @@
-using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Extensions;
-using AdminUi.Tests.Integration.Models;
-using Enmeshed.UnitTestTools.Data;
+using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Extensions;
+using Backbone.AdminUi.Tests.Integration.Models;
+using Backbone.UnitTestTools.Data;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Scope(Feature = "POST TierQuota")]
 [Scope(Feature = "DELETE TierQuota")]
-public class TierQuotaStepDefinitions : BaseStepDefinitions
+internal class TierQuotaStepDefinitions : BaseStepDefinitions
 {
     private readonly TiersApi _tiersApi;
     private string _tierId;

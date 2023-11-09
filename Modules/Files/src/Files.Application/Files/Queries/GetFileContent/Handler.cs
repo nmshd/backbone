@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;

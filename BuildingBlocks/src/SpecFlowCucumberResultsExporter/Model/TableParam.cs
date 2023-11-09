@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SpecFlowCucumberResultsExporter.Model;
+namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 public class TableParam
 {

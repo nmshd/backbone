@@ -1,5 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 

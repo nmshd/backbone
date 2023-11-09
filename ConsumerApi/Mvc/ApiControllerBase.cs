@@ -1,10 +1,10 @@
 ﻿using System.Net.Mime;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConsumerApi.Mvc;
+namespace Backbone.ConsumerApi.Mvc;
 
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]

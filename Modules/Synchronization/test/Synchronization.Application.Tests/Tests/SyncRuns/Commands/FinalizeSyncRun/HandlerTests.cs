@@ -1,14 +1,14 @@
-﻿using Backbone.Modules.Synchronization.Application.AutoMapper;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
@@ -23,7 +23,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
     public HandlerTests()
     {
-        _arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
+        _arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
     }
 
     [Fact]

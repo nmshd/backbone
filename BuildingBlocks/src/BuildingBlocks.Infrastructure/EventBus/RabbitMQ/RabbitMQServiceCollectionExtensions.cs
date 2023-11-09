@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public static class RabbitMqServiceCollectionExtensions
 {

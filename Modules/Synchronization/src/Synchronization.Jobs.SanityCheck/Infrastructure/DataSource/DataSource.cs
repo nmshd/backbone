@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 

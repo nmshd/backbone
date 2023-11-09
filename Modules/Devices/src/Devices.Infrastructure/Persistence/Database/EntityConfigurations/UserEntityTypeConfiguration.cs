@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Challenges.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Challenges;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Challenges;
 
 public class ChallengeIdJsonConverter : JsonConverter<ChallengeId>
 {

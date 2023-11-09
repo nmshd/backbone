@@ -9,6 +9,7 @@ import { NumberFilter } from "src/app/utils/number-filter";
 import { ODataResponse } from "src/app/utils/odata-response";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
+import { TierDTO } from "../tier-service/tier.service";
 
 @Injectable({
     providedIn: "root"
@@ -27,7 +28,7 @@ export class IdentityService {
 
     public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
         const paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
-        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}`);
+        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`);
     }
 
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
@@ -42,7 +43,7 @@ export class IdentityService {
         if (filter.tiers !== undefined && filter.tiers.length > 0) {
             const tiersFilter = new ODataFilterBuilder();
             filter.tiers.forEach((tier) => {
-                tiersFilter.or((x) => x.eq("tierId", tier));
+                tiersFilter.or((x) => x.eq("tier/Id", tier));
             });
             odataFilter.and((_) => tiersFilter);
         }
@@ -176,6 +177,11 @@ export class IdentityService {
         return filterParameter;
     }
 
+    private buildODataExpand(): string {
+        const odataExpand = "&$expand=Tier";
+        return odataExpand;
+    }
+
     public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
@@ -210,8 +216,7 @@ export interface IdentityOverview {
     lastLoginAt: Date;
     createdWithClient: string;
     datawalletVersion: string;
-    tierName: string;
-    tierId: string;
+    tier: TierDTO;
     identityVersion: string;
     numberOfDevices: number;
 }

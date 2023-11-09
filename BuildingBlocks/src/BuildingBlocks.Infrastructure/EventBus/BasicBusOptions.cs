@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+﻿namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 public class BasicBusOptions
 {
 #pragma warning disable CS8618

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Extensions;
+﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -6,13 +7,13 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsumerApi;
+namespace Backbone.ConsumerApi;
 
-public class DevicesDbContextSeed
+public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 {
     private readonly IMediator _mediator;
 
-    public DevicesDbContextSeed(IMediator mediator)
+    public DevicesDbContextSeeder(IMediator mediator)
     {
         _mediator = mediator;
     }

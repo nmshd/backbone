@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;

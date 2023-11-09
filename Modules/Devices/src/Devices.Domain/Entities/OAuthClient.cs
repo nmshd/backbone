@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
 public class OAuthClient

@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <UserSecretsId>dotnet-Messages.Jobs.SanityCheck-a3dc391a-82e0-40c7-935d-46fd24a3b324</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <ImplicitUsings>enable</ImplicitUsings>
         <DockerfileContext>..\..\..\..</DockerfileContext>
-        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

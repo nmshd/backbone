@@ -1,13 +1,13 @@
-﻿using Backbone.Modules.Devices.Application;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

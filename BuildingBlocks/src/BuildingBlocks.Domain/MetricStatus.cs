@@ -1,6 +1,6 @@
-﻿using Enmeshed.Tooling;
+﻿using Backbone.Tooling;
 
-namespace Enmeshed.BuildingBlocks.Domain;
+namespace Backbone.BuildingBlocks.Domain;
 public class MetricStatus
 {
     public bool IsExhausted => IsExhaustedUntil.HasValue && IsExhaustedUntil > SystemTime.UtcNow;

@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.Crypto.Abstractions;
+﻿namespace Backbone.Crypto.Abstractions;
 
 public interface ISignatureHelper
 {

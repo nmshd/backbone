@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AdminUi.Infrastructure.Persistence;
+namespace Backbone.AdminUi.Infrastructure.Persistence;
 
 public class SqlDatabaseConfiguration
 {

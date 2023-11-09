@@ -1,13 +1,13 @@
-using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Extensions;
-using AdminUi.Tests.Integration.Models;
-using AdminUi.Tests.Integration.TestData;
+using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Extensions;
+using Backbone.AdminUi.Tests.Integration.Models;
+using Backbone.AdminUi.Tests.Integration.TestData;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Identities")]
-public class IdentitiesApiStepDefinitions : BaseStepDefinitions
+internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly IdentitiesApi _identitiesApi;
     private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;

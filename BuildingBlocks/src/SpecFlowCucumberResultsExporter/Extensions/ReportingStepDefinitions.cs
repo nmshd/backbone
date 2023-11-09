@@ -1,6 +1,6 @@
-﻿using SpecFlowCucumberResultsExporter.Reporting;
+﻿using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
-namespace SpecFlowCucumberResultsExporter.Extensions;
+namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
 public abstract class ReportingStepDefinitions : ContextBoundObject
 {

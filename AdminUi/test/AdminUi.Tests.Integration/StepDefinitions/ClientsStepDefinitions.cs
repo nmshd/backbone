@@ -1,15 +1,15 @@
-using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Extensions;
-using AdminUi.Tests.Integration.Models;
-using Enmeshed.UnitTestTools.Data;
+using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Extensions;
+using Backbone.AdminUi.Tests.Integration.Models;
+using Backbone.UnitTestTools.Data;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Clients")]
 [Scope(Feature = "DELETE Clients")]
 [Scope(Feature = "PATCH Clients")]
-public class ClientsStepDefinitions : BaseStepDefinitions
+internal class ClientsStepDefinitions : BaseStepDefinitions
 {
     private readonly ClientsApi _clientsApi;
     private readonly TiersApi _tiersApi;
