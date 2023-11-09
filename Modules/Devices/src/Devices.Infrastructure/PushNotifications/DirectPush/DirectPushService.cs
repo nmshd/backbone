@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -10,7 +11,7 @@ using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
-public class DirectPushService : IPushService
+public class DirectPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
     private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
     private readonly ILogger<DirectPushService> _logger;

@@ -16,6 +16,7 @@ using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.ConsumerApi;
@@ -37,6 +38,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -167,6 +169,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     });
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+
+    var devicesConfiguration = new DevicesConfiguration();
+    configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
+
+    services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
 }
 
 static void Configure(WebApplication app)
