@@ -26,6 +26,7 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
 
     public async Task SeedAsync(RelationshipsDbContext context)
     {
+        // _blobRootFolder is null when blob storage configuration is not provided, meaning the content of database entries should not be loaded from blob storage
         if (_blobRootFolder == null)
             return;
 
