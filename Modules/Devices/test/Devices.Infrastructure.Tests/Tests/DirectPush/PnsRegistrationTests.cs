@@ -19,20 +19,20 @@ public class PnsRegistrationTests
     public async void Adding_new_PnsRegistration_in_repository()
     {
         // Arrange
-        var randomDeviceId = CreateRandomDeviceId();
-        var randomIdentity = TestDataGenerator.CreateIdentity();
+        var deviceId = CreateRandomDeviceId();
+        var identity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns((PnsRegistration)null).Once();
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
 
         // Act
-        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, "keyAppId", Environment.Development, CancellationToken.None);
+        var pnsRegistration = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, "keyAppId", Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository
@@ -44,23 +44,23 @@ public class PnsRegistrationTests
     public async void Updating_existing_PnsRegistration_in_repository()
     {
         // Arrange
-        var randomDeviceId = CreateRandomDeviceId();
-        var randomIdentity = TestDataGenerator.CreateIdentity();
+        var deviceId = CreateRandomDeviceId();
+        var identity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var appId = "keyAppId";
 
-        var mockPnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development);
+        var mockPnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development);
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns(mockPnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
 
         // Act
-        var pnsRegistration = await directPushService.UpdateRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+        var pnsRegistration = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository
@@ -72,21 +72,21 @@ public class PnsRegistrationTests
     public async void Trying_to_delete_existing_PnsRegistration()
     {
         // Arrange
-        var randomDeviceId = CreateRandomDeviceId();
-        var randomIdentity = TestDataGenerator.CreateIdentity();
+        var deviceId = CreateRandomDeviceId();
+        var identity = TestDataGenerator.CreateIdentity();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
-        var pnsRegistration = new PnsRegistration(randomIdentity.Address, randomDeviceId, pnsHandle, "keyAppId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, "keyAppId", Environment.Development);
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
 
         // Act
-        await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
+        await directPushService.DeleteRegistration(deviceId, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository.Delete(
@@ -98,17 +98,17 @@ public class PnsRegistrationTests
     public async void Trying_to_delete_non_existing_PnsRegistration()
     {
         // Arrange
-        var randomDeviceId = CreateRandomDeviceId();
+        var deviceId = CreateRandomDeviceId();
 
         var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(randomDeviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns((PnsRegistration)null);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
 
         // Act
-        await directPushService.DeleteRegistration(randomDeviceId, CancellationToken.None);
+        await directPushService.DeleteRegistration(deviceId, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationRepository.Delete(

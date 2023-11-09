@@ -17,17 +17,17 @@ public class HandlerTests
     public async Task Updating_PnsRegistration_in_PushService()
     {
         // Arrange
-        var randomDeviceId = CreateRandomDeviceId();
-        var randomIdentity = TestDataGenerator.CreateIdentity();
+        var deviceId = CreateRandomDeviceId();
+        var identity = TestDataGenerator.CreateIdentity();
 
         var mockUserContext = A.Fake<IUserContext>();
         var mockPushService = A.Fake<IPushService>();
 
         A.CallTo(() => mockUserContext.GetAddressOrNull())
-            .Returns(randomIdentity.Address);
+            .Returns(identity.Address);
 
         A.CallTo(() => mockUserContext.GetDeviceIdOrNull())
-            .Returns(randomDeviceId);
+            .Returns(deviceId);
 
         A.CallTo(() => mockPushService.UpdateRegistration(
                     A<IdentityAddress>._,
