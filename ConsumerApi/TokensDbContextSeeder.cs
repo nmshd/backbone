@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi;
@@ -30,12 +29,12 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
         if (_blobRootFolder == null)
             return;
 
-        var tokensWithMissingContents = await context.Tokens.Where(t => t.Content == null).ToListAsync();
+        var tokensWithMissingContent = await context.Tokens.Where(t => t.Content == null).ToListAsync();
 
-        foreach (var token in tokensWithMissingContents)
+        foreach (var token in tokensWithMissingContent)
         {
             var blobTokenContent = await _blobStorage!.FindAsync(_blobRootFolder!, token.Id);
-            token.Content = blobTokenContent;
+            token.LoadContent(blobTokenContent);
             context.Tokens.Update(token);
         }
 
