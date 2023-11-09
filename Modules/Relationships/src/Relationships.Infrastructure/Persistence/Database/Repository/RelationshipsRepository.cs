@@ -64,7 +64,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
-        CancellationToken cancellationToken, bool track = false, bool fillContent = true) // todo: fill content is redundant
+        CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
@@ -76,7 +76,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id,
         IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false,
-        bool fillContent = true) // todo: fillContent is redundant
+        bool fillContent = true)
     {
         var change = await (track ? _changes : _readOnlyChanges)
             .IncludeAll(_dbContext)
@@ -104,7 +104,6 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Update(Relationship relationship)
     {
         _relationships.Update(relationship);
-        // await SaveContentOfLatestChange(relationship);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -112,7 +111,6 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {
         await _relationships.AddAsync(relationship, cancellationToken);
-        // await SaveContentOfLatestChange(relationship);
         try
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
