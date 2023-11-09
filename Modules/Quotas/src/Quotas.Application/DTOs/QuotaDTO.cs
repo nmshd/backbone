@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using AutoMapper;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
 public class QuotaDTO
