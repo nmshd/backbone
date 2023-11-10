@@ -29,7 +29,7 @@ export class RelationshipService {
 export interface Relationship {
     peer: string;
     requestedBy: string;
-    relationshipTemplateId: string;
+    templateId: string;
     status: string;
     creationDate: Date;
     answeredAt?: Date;
