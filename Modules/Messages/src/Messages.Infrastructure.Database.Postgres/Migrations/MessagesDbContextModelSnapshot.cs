@@ -17,7 +17,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -50,6 +50,10 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<byte[]>("Body")
+                        .IsRequired()
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -157,7 +161,10 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Relationships", "Relationships");
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Attachment", b =>
