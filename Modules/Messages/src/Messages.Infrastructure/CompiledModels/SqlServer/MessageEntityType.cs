@@ -34,6 +34,13 @@ namespace Backbone.Modules.Messages.Infrastructure.CompiledModels.SqlServer
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var body = runtimeEntityType.AddProperty(
+                "Body",
+                typeof(byte[]),
+                propertyInfo: typeof(Message).GetProperty("Body", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Message).GetField("<Body>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            body.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),
