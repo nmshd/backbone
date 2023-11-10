@@ -31,7 +31,7 @@ export interface Relationship {
     requestedBy: string;
     relationshipTemplateId: string;
     status: string;
-    createdAt: Date;
+    creationDate: Date;
     answeredAt?: Date;
     createdByDevice: string;
     answeredByDevice: string;
