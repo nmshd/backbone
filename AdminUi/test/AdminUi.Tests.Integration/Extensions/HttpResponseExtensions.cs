@@ -1,7 +1,7 @@
-﻿using AdminUi.Tests.Integration.Models;
-using AdminUi.Tests.Integration.Support;
+﻿using Backbone.AdminUi.Tests.Integration.Models;
+using Backbone.AdminUi.Tests.Integration.Support;
 
-namespace AdminUi.Tests.Integration.Extensions;
+namespace Backbone.AdminUi.Tests.Integration.Extensions;
 
 public static class HttpResponseExtensions
 {

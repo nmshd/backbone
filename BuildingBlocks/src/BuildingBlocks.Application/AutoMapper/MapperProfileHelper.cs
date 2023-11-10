@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
-namespace Enmeshed.BuildingBlocks.Application.AutoMapper;
+namespace Backbone.BuildingBlocks.Application.AutoMapper;
 
 internal static class MapperProfileHelper
 {

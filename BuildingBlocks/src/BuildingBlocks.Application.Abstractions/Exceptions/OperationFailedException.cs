@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿namespace Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 
 public class OperationFailedException : ApplicationException
 {

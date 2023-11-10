@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
@@ -28,9 +28,17 @@ public class Token
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
 
-    public byte[] Content { get; set; }
+    public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+
+    public void LoadContent(byte[] content)
+    {
+        if (Content != null)
+            throw new Exception("Cannot change the content of a token.");
+
+        Content = content;
+    }
 
     public static Expression<Func<Token, bool>> IsExpired =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow;

@@ -1,5 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.Tooling.Extensions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application;
 

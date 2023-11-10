@@ -14,8 +14,13 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 export class ClientEditComponent {
     public headerEdit: string;
     public headerCreate: string;
+
     public headerDescriptionEdit: string;
     public headerDescriptionCreate: string;
+
+    public headerIdentities: string;
+    public headerIdentitiesDescription: string;
+
     public showPassword: boolean;
     public clientId?: string;
     public editMode: boolean;
@@ -35,6 +40,8 @@ export class ClientEditComponent {
         this.headerEdit = "Edit Client";
         this.headerDescriptionCreate = "Please fill the form below to create your Client";
         this.headerDescriptionEdit = "Perform your desired changes and save to edit your Client";
+        this.headerIdentities = "Identities";
+        this.headerIdentitiesDescription = "View and manage Identities created by this Client.";
         this.editMode = false;
         this.loading = true;
         this.disabled = false;

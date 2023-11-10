@@ -3,7 +3,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
-namespace Enmeshed.UnitTestTools.FluentAssertions.Extensions;
+namespace Backbone.UnitTestTools.FluentAssertions.Extensions;
 public static class StringAssertionsExtensions
 {
     public static AndConstraint<DateTimeAssertions> Be(this DateTimeAssertions it, string dateTimeString)

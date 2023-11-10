@@ -1,4 +1,4 @@
-﻿namespace SpecFlowCucumberResultsExporter.Model;
+﻿namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 public enum TestResult
 {

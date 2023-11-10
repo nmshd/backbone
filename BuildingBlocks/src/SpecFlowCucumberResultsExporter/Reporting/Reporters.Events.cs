@@ -1,6 +1,6 @@
-﻿using SpecFlowCucumberResultsExporter.EventArgs;
+﻿using Backbone.SpecFlowCucumberResultsExporter.EventArgs;
 
-namespace SpecFlowCucumberResultsExporter.Reporting;
+namespace Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 public partial class Reporters
 {

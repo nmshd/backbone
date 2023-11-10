@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <UserSecretsId>dotnet-Relationships.Jobs.SanityCheck.RelationshipTemplate-14c0858e-c11d-4e0a-af58-f2fc178e1728</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <ImplicitUsings>enable</ImplicitUsings>
         <DockerfileContext>..\..\..\..</DockerfileContext>
-        <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-        <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

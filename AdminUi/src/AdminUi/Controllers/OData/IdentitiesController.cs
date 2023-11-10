@@ -1,9 +1,9 @@
-﻿using AdminUi.Infrastructure.DTOs;
-using AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-namespace AdminUi.Controllers.OData;
+namespace Backbone.AdminUi.Controllers.OData;
 
 public class IdentitiesController : ODataController
 {

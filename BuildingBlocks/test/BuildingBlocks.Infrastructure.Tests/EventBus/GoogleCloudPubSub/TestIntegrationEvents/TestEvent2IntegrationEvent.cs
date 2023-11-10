@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
 
 public class TestEvent2IntegrationEvent : IntegrationEvent
 {

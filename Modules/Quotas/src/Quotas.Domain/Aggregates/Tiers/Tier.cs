@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 

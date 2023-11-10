@@ -24,12 +24,12 @@
         </mat-card-content>
     </mat-card>
     <mat-accordion *ngIf="editMode" class="tier-accordion" [multi]="true">
-        <mat-expansion-panel class="quotas-expansion-panel" [expanded]="true">
-            <mat-expansion-panel-header class="quotas-expansion-panel-header">
-                <mat-panel-title class="quotas-panel-header-title">
+        <mat-expansion-panel class="expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="expansion-panel-header">
+                <mat-panel-title class="panel-header-title">
                     {{ headerQuotas }}
                 </mat-panel-title>
-                <mat-panel-description class="quotas-panel-header-desc">
+                <mat-panel-description class="panel-header-desc">
                     {{ headerQuotasDescription }}
                 </mat-panel-description>
             </mat-expansion-panel-header>
@@ -87,6 +87,13 @@
                     <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
                 </tr>
             </table>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="expansion-panel-header">
+                <mat-panel-title class="panel-header-title"> Identities </mat-panel-title>
+                <mat-panel-description class="panel-header-desc"> View Identities associated with this Tier </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-identities-overview *ngIf="tierId !== undefined" [tierId]="tierId"></app-identities-overview>
         </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">

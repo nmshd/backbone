@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence;

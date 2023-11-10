@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
@@ -37,7 +37,7 @@ public class Message : IIdentifiable<MessageId>
 
     public void LoadBody(byte[] bytes)
     {
-        if (Body != null)
+        if (Body is { Length: > 0 })
         {
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }

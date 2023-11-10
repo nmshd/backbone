@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Core;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 

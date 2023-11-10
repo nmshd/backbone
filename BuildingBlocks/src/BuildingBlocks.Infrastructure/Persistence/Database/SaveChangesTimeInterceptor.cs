@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using Enmeshed.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class SaveChangesTimeInterceptor : SaveChangesInterceptor
 {

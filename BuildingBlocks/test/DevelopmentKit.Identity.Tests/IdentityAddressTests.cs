@@ -1,8 +1,8 @@
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentAssertions;
 using Xunit;
 
-namespace Enmeshed.DevelopmentKit.Identity.Tests;
+namespace Backbone.DevelopmentKit.Identity.Tests;
 
 public class IdentityAddressTests
 {

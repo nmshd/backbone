@@ -1,8 +1,8 @@
-﻿using AdminUi.Infrastructure.DTOs;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace AdminUi.Infrastructure.Persistence.Database;
+namespace Backbone.AdminUi.Infrastructure.Persistence.Database;
 
 public class AdminUiDbContext : AbstractDbContextBase
 {

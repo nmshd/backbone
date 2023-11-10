@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.Infrastructure.EventBus;
 

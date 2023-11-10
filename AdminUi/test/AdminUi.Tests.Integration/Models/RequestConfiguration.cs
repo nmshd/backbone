@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AdminUi.Tests.Integration.Models;
+namespace Backbone.AdminUi.Tests.Integration.Models;
 
 public class RequestConfiguration
 {

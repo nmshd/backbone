@@ -1,12 +1,12 @@
-﻿using AdminUi.Tests.Integration.API;
-using AdminUi.Tests.Integration.Extensions;
-using AdminUi.Tests.Integration.Models;
+﻿using Backbone.AdminUi.Tests.Integration.API;
+using Backbone.AdminUi.Tests.Integration.Extensions;
+using Backbone.AdminUi.Tests.Integration.Models;
 
-namespace AdminUi.Tests.Integration.StepDefinitions;
+namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Metrics")]
-public class MetricsStepDefinitions : BaseStepDefinitions
+internal class MetricsStepDefinitions : BaseStepDefinitions
 {
     private readonly MetricsApi _metricsApi;
     private HttpResponse<List<MetricDTO>>? _response;

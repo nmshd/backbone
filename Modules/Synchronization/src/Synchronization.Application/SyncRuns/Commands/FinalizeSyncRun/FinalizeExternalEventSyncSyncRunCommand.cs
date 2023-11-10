@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;

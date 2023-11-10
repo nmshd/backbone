@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Common.Infrastructure.Persistence.Repository;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 

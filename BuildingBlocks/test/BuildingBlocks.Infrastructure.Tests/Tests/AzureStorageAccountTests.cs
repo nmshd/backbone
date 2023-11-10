@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests

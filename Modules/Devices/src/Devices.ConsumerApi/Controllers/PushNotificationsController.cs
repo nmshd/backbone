@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
+﻿using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

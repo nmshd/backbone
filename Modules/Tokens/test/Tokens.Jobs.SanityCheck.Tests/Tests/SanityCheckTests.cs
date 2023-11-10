@@ -1,22 +1,22 @@
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.Modules.Tokens.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using FluentAssertions;
-using Tokens.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Tokens.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using Xunit;
 
-namespace Tokens.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Tests.Tests;
 
 public class SanityCheckTests
 {
     private readonly FakeDataSource _dataSource;
     private readonly TestReporter _reporter;
-    private readonly Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTests()
     {
         _dataSource = new FakeDataSource();
         _reporter = new TestReporter();
-        _sanityCheck = new Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

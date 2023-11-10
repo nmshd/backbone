@@ -59,7 +59,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             IdentityUserRoleEntityType.CreateAnnotations(identityUserRole);
             IdentityUserTokenEntityType.CreateAnnotations(identityUserToken);
 
-            AddAnnotation("ProductVersion", "7.0.11");
+            AddAnnotation("ProductVersion", "7.0.12");
             AddAnnotation("Relational:MaxIdentifierLength", 128);
             AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
         }

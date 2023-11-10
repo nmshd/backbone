@@ -38,7 +38,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(CompiledModels.SqlServer.DevicesDbContextModel.Instance);
+                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.SqlServer.DevicesDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
@@ -53,7 +53,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(CompiledModels.Postgres.DevicesDbContextModel.Instance);
+                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance);
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");

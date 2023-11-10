@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
 

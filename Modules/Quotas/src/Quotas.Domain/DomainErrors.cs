@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Domain;
 public static class DomainErrors

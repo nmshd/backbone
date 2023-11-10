@@ -1,7 +1,7 @@
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
+namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
 public class EllipticCurveSignatureHelperTests : IDisposable
 {

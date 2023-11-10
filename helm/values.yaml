@@ -315,7 +315,6 @@ global:
             #      bundleId1:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
-            #         serverType: ''
       files:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints

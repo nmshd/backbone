@@ -1,16 +1,17 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsumerApi;
+namespace Backbone.ConsumerApi;
 
-public class QuotasDbContextSeed
+public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 {
     private readonly DevicesDbContext _devicesDbContext;
 
-    public QuotasDbContextSeed(DevicesDbContext devicesDbContext)
+    public QuotasDbContextSeeder(DevicesDbContext devicesDbContext)
     {
         _devicesDbContext = devicesDbContext;
     }

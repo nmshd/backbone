@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
-using Enmeshed.Tooling.Extensions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Tooling.Extensions;
 using FluentValidation;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;

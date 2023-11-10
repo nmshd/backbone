@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application;
 
