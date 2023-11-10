@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { RelationshipService } from './relationship.service';
+import { RelationshipService } from "./relationship.service";
 
-describe('RelationshipService', () => {
-  let service: RelationshipService;
+describe("RelationshipService", function () {
+    let service: RelationshipService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(RelationshipService);
-  });
+    beforeEach(function () {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(RelationshipService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it("should be created", async function () {
+        await expect(service).toBeTruthy();
+    });
 });
