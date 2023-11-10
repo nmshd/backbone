@@ -33,6 +33,12 @@ namespace Backbone.Modules.Messages.Infrastructure.CompiledModels.Postgres
                 valueConverter: new MessageIdEntityFrameworkValueConverter());
             id.AddAnnotation("Relational:IsFixedLength", true);
 
+            var body = runtimeEntityType.AddProperty(
+                "Body",
+                typeof(byte[]),
+                propertyInfo: typeof(Message).GetProperty("Body", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Message).GetField("<Body>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),
