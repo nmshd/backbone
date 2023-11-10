@@ -1,18 +1,17 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 public class RelationshipByParticipantAddressDTO
 {
-    public IdentityAddress Peer { get; set; }
+    public string Peer { get; set; }
     public string RequestedBy { get; set; }
-    public RelationshipTemplateId TemplateId { get; set; }
+    public string TemplateId { get; set; }
     public RelationshipStatus Status { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime? AnsweredAt { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
-    public DeviceId AnsweredByDevice { get; set; }
+    public string CreatedByDevice { get; set; }
+    public string AnsweredByDevice { get; set; }
 
     public RelationshipByParticipantAddressDTO(IdentityAddress participantAddress, Relationship relationship)
     {
