@@ -204,6 +204,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 

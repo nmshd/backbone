@@ -204,6 +204,9 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
