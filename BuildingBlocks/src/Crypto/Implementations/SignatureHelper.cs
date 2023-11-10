@@ -35,6 +35,13 @@ public class SignatureHelper : ISignatureHelper
         return isValid;
     }
 
+    public ConvertibleString CreateSignature(ConvertibleString message, ConvertibleString privateKey)
+    {
+        var key = ImportPrivateKey(privateKey);
+        var signature = _signatureAlgorithm.Sign(key, message.BytesRepresentation);
+        return ConvertibleString.FromByteArray(signature);
+    }
+
     private PublicKey ImportPublicKey(ConvertibleString publicKey)
     {
         try
