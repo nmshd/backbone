@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 public class RelationshipByParticipantAddressDTO

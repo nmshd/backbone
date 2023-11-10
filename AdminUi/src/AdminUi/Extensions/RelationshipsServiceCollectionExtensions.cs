@@ -1,9 +1,9 @@
-﻿using AdminUi.Configuration;
+﻿using Backbone.AdminUi.Configuration;
 using Backbone.Modules.Relationships.Application.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 
-namespace AdminUi.Extensions;
+namespace Backbone.AdminUi.Extensions;
 
 public static class RelationshipsServiceCollectionExtensions
 {

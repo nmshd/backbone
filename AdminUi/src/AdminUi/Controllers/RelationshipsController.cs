@@ -1,18 +1,19 @@
-﻿using AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationshipsByParticipantAddress;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace AdminUi.Controllers;
+namespace Backbone.AdminUi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("ApiKey")]
@@ -35,7 +36,7 @@ public class RelationshipsController : ApiControllerBase
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException(
+            throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var relationships = await _mediator.Send(new ListRelationshipsByParticipantAddressQuery(paginationFilter, participant), cancellationToken);
