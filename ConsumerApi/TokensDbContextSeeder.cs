@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+// ReSharper disable EntityFramework.NPlusOne.IncompleteDataQuery
 
 namespace Backbone.ConsumerApi;
 
@@ -15,7 +16,7 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
     public TokensDbContextSeeder(IServiceProvider serviceProvider)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
-        _blobRootFolder = serviceProvider.GetService<IOptions<TokensRepositoryOptions>>()!.Value.BlobRootFolder;
+        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
     }
 
     public async Task SeedAsync(TokensDbContext context)
@@ -29,6 +30,7 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
         if (_blobRootFolder == null)
             return;
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         var tokensWithMissingContent = await context.Tokens.Where(t => t.Content == null).ToListAsync();
 
         foreach (var token in tokensWithMissingContent)
