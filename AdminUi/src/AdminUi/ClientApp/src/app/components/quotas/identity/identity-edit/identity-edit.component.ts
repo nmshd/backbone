@@ -135,7 +135,7 @@ export class IdentityEditComponent {
         this.relationshipService.getRelationshipsByParticipantAddress(this.identityAddress!, this.relationshipsPageIndex, this.relationshipsPageSize).subscribe({
             next: (data: PagedHttpResponseEnvelope<Relationship>) => {
                 this.relationshipsTableData = data.result;
-                this.relationshipsTotalRecords = data.pagination!.totalRecords!;
+                this.relationshipsTotalRecords = data.pagination?.totalRecords ? data.pagination.totalRecords : data.result.length;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
