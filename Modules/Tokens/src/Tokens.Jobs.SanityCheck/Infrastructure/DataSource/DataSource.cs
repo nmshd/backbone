@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -10,10 +10,10 @@ namespace Backbone.Modules.Tokens.Jobs.SanityCheck.Infrastructure.DataSource;
 public class DataSource : IDataSource
 {
     private readonly IBlobStorage _blobStorage;
-    private readonly TokensRepositoryOptions _repositoryOptions;
+    private readonly BlobOptions _repositoryOptions;
     private readonly TokensDbContext _dbContext;
 
-    public DataSource(IBlobStorage blobStorage, IOptions<TokensRepositoryOptions> repositoryOptions, TokensDbContext dbContext)
+    public DataSource(IBlobStorage blobStorage, IOptions<BlobOptions> repositoryOptions, TokensDbContext dbContext)
     {
         _blobStorage = blobStorage;
         _repositoryOptions = repositoryOptions.Value;
@@ -22,7 +22,7 @@ public class DataSource : IDataSource
 
     public async Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
     {
-        var blobIds = await _blobStorage.FindAllAsync(_repositoryOptions.BlobRootFolder);
+        var blobIds = await _blobStorage.FindAllAsync(_repositoryOptions.RootFolder);
         return await blobIds.ToListAsync(cancellationToken);
     }
 
