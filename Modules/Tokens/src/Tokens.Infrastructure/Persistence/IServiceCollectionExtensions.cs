@@ -23,7 +23,7 @@ public static class IServiceCollectionExtensions
         if (options.BlobStorageOptions != null)
         {
             services.AddBlobStorage(options.BlobStorageOptions);
-            services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = options.BlobStorageOptions.Container);  
+            services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = options.BlobStorageOptions.Container);
         }
 
 
