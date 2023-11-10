@@ -16,6 +16,9 @@ public class RelationshipsConfiguration
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
+        [Required]
+        public BlobStorageConfiguration BlobStorage { get; set; } = new();
+
         public class SqlDatabaseConfiguration
         {
             [Required]
@@ -26,6 +29,18 @@ public class RelationshipsConfiguration
             [Required]
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
+        }
+
+        public class BlobStorageConfiguration
+        {
+            [Required]
+            [MinLength(1)]
+            [RegularExpression("Azure|GoogleCloud")]
+            public string CloudProvider { get; set; } = string.Empty;
+
+            public string ConnectionInfo { get; set; } = string.Empty;
+
+            public string ContainerName { get; set; } = string.Empty;
         }
     }
 }
