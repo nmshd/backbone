@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<ListRelationshipsByParticipantAddressQuer
 
     public async Task<ListRelationshipsByParticipantAddressResponse> Handle(ListRelationshipsByParticipantAddressQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipsRepository.FindRelationshipsWithParticipant(request.ParticipantAddress, request.PaginationFilter, cancellationToken, track: false);
+        var dbPaginationResult = await _relationshipsRepository.FindRelationshipsWithParticipant(request.ParticipantAddress, request.PaginationFilter, cancellationToken, track: false, fillContent: false);
 
         var relationshipItems = dbPaginationResult.ItemsOnPage.Select(i => new RelationshipByParticipantAddressDTO(request.ParticipantAddress, i));
 
