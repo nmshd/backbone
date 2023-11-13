@@ -22,6 +22,6 @@ public class RelationshipByParticipantAddressDTO
         CreationDate = relationship.CreatedAt;
         AnsweredAt = relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Response?.CreatedAt;
         CreatedByDevice = relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Request.CreatedByDevice;
-        AnsweredByDevice = relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Response?.CreatedByDevice;
+        AnsweredByDevice = relationship.Changes.GetLatestOfType(RelationshipChangeType.Creation).Response?.CreatedByDevice ?? "";
     }
 }
