@@ -45,7 +45,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         {
             var (notificationTitle, notificationBody) = GetNotificationText(notification);
             var notificationId = GetNotificationId(notification);
-            var notificationContent = new NotificationContent(recipient, notification);
+            var notificationContent = new NotificationContent(recipient, registrations.ToList()[0].DevicePushIdentifier, notification);
 
             var message = new FcmMessageBuilder()
                 .AddContent(notificationContent)

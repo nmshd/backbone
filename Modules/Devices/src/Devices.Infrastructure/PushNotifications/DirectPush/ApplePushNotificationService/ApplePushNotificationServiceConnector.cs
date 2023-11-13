@@ -33,7 +33,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(recipient, notification);
+        DevicePushIdentifier dpi = registrations.ToList().FirstOrDefault().DevicePushIdentifier;
+        var notificationContent = new NotificationContent(recipient, dpi, notification);
 
         var sendResults = new SendResults();
         var tasks = registrations.Select(async pnsRegistration =>
