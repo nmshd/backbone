@@ -17,7 +17,7 @@ public class FcmMessageBuilderTests
         // Act
         var message = new FcmMessageBuilder()
             .SetTag(1)
-            .SetTokens(new[] { "token1", "token2" })
+            .SetToken(new[] { "token1", "token2" })
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
             .Build();
