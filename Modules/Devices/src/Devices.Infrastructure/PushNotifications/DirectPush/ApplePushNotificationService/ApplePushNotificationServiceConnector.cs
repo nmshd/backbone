@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
@@ -33,12 +32,11 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
-        DevicePushIdentifier dpi = registrations.ToList().FirstOrDefault().DevicePushIdentifier;
-        var notificationContent = new NotificationContent(recipient, dpi, notification);
 
         var sendResults = new SendResults();
         var tasks = registrations.Select(async pnsRegistration =>
         {
+            var notificationContent = new NotificationContent(recipient, pnsRegistration.DevicePushIdentifier, notification);
             ValidateRegistration(pnsRegistration);
             var handle = pnsRegistration.Handle.Value;
             var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
