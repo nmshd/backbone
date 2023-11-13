@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Fireb
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
@@ -18,7 +19,7 @@ public class FcmMessageBuilderTests
             .SetTag(1)
             .SetTokens(new[] { "token1", "token2" })
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -46,13 +47,14 @@ public class FcmMessageBuilderTests
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIFcXKTzkqDA6YLmHke"), new { SomeProperty = "someValue" }))
             .Build();
         var contentJson = FormatJson(message.Data["content"]);
 
         // Assert
         contentJson.Should().Be(FormatJson(@"{
           'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+          'devicePushIdentifier' : 'DPIFcXKTzkqDA6YLmHke',
           'eventName': 'dynamic',
           'sentAt': '2021-01-01T00:00:00.000Z',
           'payload': {
