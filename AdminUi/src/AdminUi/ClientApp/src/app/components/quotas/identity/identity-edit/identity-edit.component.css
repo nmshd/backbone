@@ -114,6 +114,18 @@
     padding: 25px;
 }
 
+.mat-column-peer,
+.mat-column-requestedBy,
+.mat-column-templateId,
+.mat-column-status,
+.mat-column-creationDate,
+.mat-column-answeredAt,
+.mat-column-createdByDevice,
+.mat-column-answeredByDevice {
+    width: 10%;
+    word-break: break-all;
+}
+
 @media screen and (max-width: 960px) {
     .mat-mdc-table .mat-mdc-header-row {
         display: none;
