@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 #pragma warning disable 219, 612, 618
 #nullable enable
@@ -39,6 +38,16 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 typeof(string),
                 propertyInfo: typeof(PnsRegistration).GetProperty("AppId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<AppId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var devicePushIdentifier = runtimeEntityType.AddProperty(
+                "DevicePushIdentifier",
+                typeof(DevicePushIdentifier),
+                propertyInfo: typeof(PnsRegistration).GetProperty("DevicePushIdentifier", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(PnsRegistration).GetField("<DevicePushIdentifier>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20,
+                unicode: false,
+                valueConverter: new DevicePushIdentifierEntityFrameworkValueConverter());
+            devicePushIdentifier.AddAnnotation("Relational:IsFixedLength", true);
 
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
