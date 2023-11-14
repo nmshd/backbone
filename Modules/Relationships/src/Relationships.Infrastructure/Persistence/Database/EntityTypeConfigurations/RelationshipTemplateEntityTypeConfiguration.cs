@@ -11,5 +11,7 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
         builder.HasIndex(x => x.CreatedBy);
         builder.HasIndex(x => x.DeletedAt);
         builder.HasIndex(x => x.ExpiresAt);
+
+        builder.Ignore(x => x.Content);
     }
 }
