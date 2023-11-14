@@ -7,6 +7,7 @@ using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
 public class HandlerTests
@@ -15,7 +16,7 @@ public class HandlerTests
     public async void Gets_identity_by_address()
     {
         // Arrange
-        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, TestDataGenerator.CreateRandomTierId(), 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, TestDataGenerator.CreateRandomTierId(), 1);
 
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
