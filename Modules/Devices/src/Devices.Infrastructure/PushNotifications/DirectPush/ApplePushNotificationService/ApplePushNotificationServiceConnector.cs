@@ -35,7 +35,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         ValidateRegistration(registrations.ToList().FirstOrDefault());
 
         var sendResults = new SendResults();
-        
+
         var tasks = registrations.Select(r => SendNotification(r, notification, sendResults));
 
         await Task.WhenAll(tasks);

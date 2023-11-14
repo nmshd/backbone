@@ -1,5 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Tests;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
-using Backbone.Modules.Devices.Application.Tests;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
@@ -114,7 +114,7 @@ public class PnsRegistrationTests
         A.CallTo(() => mockPnsRegistrationRepository.Delete(
                 A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
             .MustNotHaveHappened();
-    }    
+    }
 
     private DirectPushService CreateDirectPushService(IPnsRegistrationsRepository pnsRegistrationsRepository)
     {

@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class ApnsMessageBuilderTests
