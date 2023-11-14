@@ -12,14 +12,11 @@ namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIde
 
 public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasForIdentityResponse>
 {
-    private readonly IMemoryCache _cache;
-
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
     public Handler(IMemoryCache cache, IIdentitiesRepository identitiesRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
-        _cache = cache;
         _identitiesRepository = identitiesRepository;
         _metricCalculatorFactory = metricCalculatorFactory;
     }
