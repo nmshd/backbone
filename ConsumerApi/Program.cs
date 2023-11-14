@@ -112,7 +112,7 @@ static WebApplication CreateApp(string[] args)
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
-        .SeedDbContext<RelationshipsDbContext, RelationshipsDbContextSeeder>();
+        .SeedDbContext<RelationshipsDbContext, RelationshipsDbContextSeeder>()
         .SeedDbContext<TokensDbContext, TokensDbContextSeeder>()
         .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>();
 
