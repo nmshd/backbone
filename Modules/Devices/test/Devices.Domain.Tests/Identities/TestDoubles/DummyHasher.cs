@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
 

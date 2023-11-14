@@ -1,6 +1,11 @@
 ﻿using System.Diagnostics;
 
-namespace Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
+
+public interface IHasher
+{
+    byte[] HashUtf8(string input);
+}
 
 public static class Hasher
 {
@@ -22,5 +27,13 @@ public static class Hasher
     public static byte[] HashUtf8(string input)
     {
         return GET_HASHER.Value!().HashUtf8(input);
+    }
+}
+
+internal class HasherImpl : IHasher
+{
+    public byte[] HashUtf8(string input)
+    {
+        return Array.Empty<byte>(); // TODO: implement real hashing
     }
 }

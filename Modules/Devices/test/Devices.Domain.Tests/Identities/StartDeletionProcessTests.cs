@@ -2,7 +2,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
 using Backbone.Tooling;
 using FluentAssertions;
