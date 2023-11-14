@@ -76,12 +76,9 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
 
         foreach (var relationshipTemplate in relationshipTemplatesWithMissingContent)
         {
-            if (relationshipTemplate.Content == null)
-            {
-                var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipTemplate.Id);
-                relationshipTemplate.LoadContent(blobContent);
-                context.RelationshipTemplates.Update(relationshipTemplate);
-            }
+            var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipTemplate.Id);
+            relationshipTemplate.LoadContent(blobContent);
+            context.RelationshipTemplates.Update(relationshipTemplate);
 
             await context.SaveChangesAsync();
         }
