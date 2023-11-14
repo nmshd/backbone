@@ -10,12 +10,12 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi;
 
-public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbContext>
+public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
 {
     private readonly IBlobStorage? _blobStorage;
     private readonly string? _blobRootFolder;
 
-    public RelationshipChangesDbContextSeeder(IServiceProvider serviceProvider)
+    public RelationshipsDbContextSeeder(IServiceProvider serviceProvider)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
         _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
