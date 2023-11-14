@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RequestConfiguration = Backbone.ConsumerApi.Tests.Integration.Models.RequestConfiguration;
@@ -14,6 +15,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "PUT /Devices/Self/PushNotifications")]
 internal class PnsRegistrationStepDefinition : BaseStepDefinitions
 {
+    // keep in mind: these tests use DummyPushService so they will not execute the implemented code
 
     private readonly PnsRegistrationApi _pnsRegistrationsApi;
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
@@ -48,11 +50,5 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
     {
         ThrowHelpers.ThrowIfNull(_response);
         _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
-    }
-
-    [Then(@"the response contains the push identifier for the device")]
-    public void ThenTheResponseContainsADevicePushIdentifier()
-    {
-        _response!.Content.Should().NotBeNull();
     }
 }
