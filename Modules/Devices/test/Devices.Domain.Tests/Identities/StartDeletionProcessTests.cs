@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
 using Backbone.Tooling;
-using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
@@ -28,7 +27,15 @@ public class StartDeletionProcessTests
         activeIdentity.StartDeletionProcess(asDevice);
 
         // Assert
-        AssertDeletionProcessWasStarted(activeIdentity, "The deletion process was started by the owner.", new byte[] { 1, 2, 3 });
+        AssertDeletionProcessWasStarted(activeIdentity);
+        var deletionProcess = activeIdentity.DeletionProcesses[0];
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+
+        AssertAuditLogEntryWasCreated(deletionProcess);
+        var auditLogEntry = deletionProcess.AuditLog[0];
+        auditLogEntry.Message.Should().Be("The deletion process was started by the owner.");
+        auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }
 
     [Fact]
@@ -62,7 +69,14 @@ public class StartDeletionProcessTests
         activeIdentity.StartDeletionProcess();
 
         // Assert
-        AssertDeletionProcessWasStarted(activeIdentity, "The deletion process was started by a support employee.");
+        AssertDeletionProcessWasStarted(activeIdentity);
+        var deletionProcess = activeIdentity.DeletionProcesses[0];
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+
+        var auditLogEntry = deletionProcess.AuditLog[0];
+        auditLogEntry.Message.Should().Be("The deletion process was started by a support employee.");
+        auditLogEntry.DeviceIdHash.Should().BeNull();
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }
 
 
@@ -83,7 +97,7 @@ public class StartDeletionProcessTests
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
-    private static void AssertDeletionProcessWasStarted(Identity activeIdentity, string message, byte[]? deviceIdHash = null)
+    private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
         activeIdentity.DeletionProcesses.Should().HaveCount(1);
         var deletionProcess = activeIdentity.DeletionProcesses[0];
@@ -92,22 +106,17 @@ public class StartDeletionProcessTests
         deletionProcess.Id.Should().NotBeNull();
         deletionProcess.Id.Value.Should().HaveLength(20);
 
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
         deletionProcess.CreatedAt.Should().Be(SystemTime.UtcNow);
 
         deletionProcess.AuditLog.Should().HaveCount(1);
+    }
 
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
+    {
         var auditLogEntry = deletionProcess.AuditLog[0];
         auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
         auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.Message.Should().Be(message);
         auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        if (deviceIdHash == null)
-            auditLogEntry.DeviceIdHash.Should().BeNull();
-        else
-            auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(deviceIdHash);
-
         auditLogEntry.OldStatus.Should().BeNull();
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }
 }
