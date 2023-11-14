@@ -25,8 +25,7 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
-        var identityList = await _identitiesRepository.FindByAddresses(new List<string> { _identityAddress }.AsReadOnly(), cancellationToken, true);
-        var identity = identityList.First();
+        var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken);
 
         var individualQuotasForIdentityTasks = identity.IndividualQuotas
             .Select(async q =>
