@@ -28,9 +28,9 @@ public class QuotasController : ApiControllerBase
     [HttpGet("ListIndividualQuotas")]
     [ResponseCache(Duration = 1800, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "address" })]
     [ProducesResponseType(typeof(List<QuotaDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListIndividualQuotas([FromQuery] PaginationFilter paginationFilter, [FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListIndividualQuotas(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListQuotasForIdentityQuery(address), cancellationToken);
+        var response = await _mediator.Send(new ListQuotasForIdentityQuery(), cancellationToken);
 
         return Ok(response);
     }
