@@ -1,11 +1,12 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using MediatR;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
 
@@ -13,16 +14,18 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
+    private readonly IdentityAddress _identityAddress;
 
-    public Handler(IMemoryCache cache, IIdentitiesRepository identitiesRepository, MetricCalculatorFactory metricCalculatorFactory)
+    public Handler(IUserContext userContext, IIdentitiesRepository identitiesRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
+        _identityAddress = userContext.GetAddress();
         _identitiesRepository = identitiesRepository;
         _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
-        var identityList = await _identitiesRepository.FindByAddresses(new List<string> { request.Address }.AsReadOnly(), cancellationToken, true);
+        var identityList = await _identitiesRepository.FindByAddresses(new List<string> { _identityAddress }.AsReadOnly(), cancellationToken, true);
         var identity = identityList.First();
 
         var individualQuotasForIdentityTasks = identity.IndividualQuotas

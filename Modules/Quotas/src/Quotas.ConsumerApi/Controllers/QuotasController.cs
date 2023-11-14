@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Application;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 namespace Backbone.Modules.Quotas.ConsumerApi.Controllers;
 
 [Route("api/v1/[controller]")]
+[Authorize("OpenIddict.Validation.AspNetCore")]
 public class QuotasController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
@@ -23,7 +25,7 @@ public class QuotasController : ApiControllerBase
         _options = options.Value;
     }
 
-    [HttpGet("{address}")]
+    [HttpGet("ListIndividualQuotas")]
     [ResponseCache(Duration = 1800, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "address" })]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<QuotaDTO>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListIndividualQuotas([FromQuery] PaginationFilter paginationFilter, [FromRoute] string address, CancellationToken cancellationToken)
