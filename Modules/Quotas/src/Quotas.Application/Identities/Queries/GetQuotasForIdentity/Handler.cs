@@ -58,11 +58,7 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
         var quotasForIdentity = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
 
-        var totalRecords = quotasForIdentity.Count;
-        var pagedQuotas = PaginationHelper.ApplyPagedResponse(quotasForIdentity, request.PaginationFilter);
-
-        var pagedResponse = new PagedResponse<QuotaDTO>(pagedQuotas, request.PaginationFilter, totalRecords);
-        return new ListQuotasForIdentityResponse(pagedResponse, request.PaginationFilter, totalRecords);
+        return new ListQuotasForIdentityResponse(quotasForIdentity);
     }
 }
 
