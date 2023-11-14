@@ -29,7 +29,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         await context.Database.EnsureCreatedAsync();
 
         await SeedBasicTier(context);
-        await SeedUpForDeletionTier(context);
+        await SeedUpForDeletionTier();
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
@@ -55,17 +55,9 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         }
     }
 
-    private static async Task<Tier?> GetUpForDeletionTier(DevicesDbContext context)
+    private async Task SeedUpForDeletionTier()
     {
-        return await context.Tiers.GetUpForDeletionTier(CancellationToken.None) ?? null;
-    }
-
-    private async Task SeedUpForDeletionTier(DevicesDbContext context)
-    {
-        if (await GetUpForDeletionTier(context) == null)
-        {
-            await _mediator.Send(new CreateUpForDeletionTierCommand());
-        }
+        await _mediator.Send(new CreateUpForDeletionTierCommand());
     }
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)

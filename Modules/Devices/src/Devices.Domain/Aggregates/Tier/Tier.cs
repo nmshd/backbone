@@ -4,13 +4,15 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public class Tier
 {
+    public static readonly Tier UP_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Up For Deletion").Value);
+
     public Tier(TierName name)
     {
         Id = TierId.Generate();
         Name = name;
     }
 
-    public Tier(TierId id, TierName name)
+    private Tier(TierId id, TierName name)
     {
         Id = id;
         Name = name;
@@ -43,6 +45,6 @@ public class Tier
 
     public bool IsUpForDeletionTier()
     {
-        return Id == TierId.UP_FOR_DELETION_DEFAULT_ID;
+        return Id == UP_FOR_DELETION.Id;
     }
 }

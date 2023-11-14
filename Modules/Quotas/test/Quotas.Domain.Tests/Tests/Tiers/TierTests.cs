@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -94,5 +94,26 @@ public class TierTests
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Error.Code.Should().Be("error.platform.quotas.duplicateQuota");
+    }
+
+    [Fact]
+    public void Create_quota_for_all_metrics_only_creates_missing_quotas()
+    {
+        // Arrange
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
+            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+        };
+
+        var quotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 0, QuotaPeriod.Total);
+        Tier.UP_FOR_DELETION.Quotas.Add(quotaDefinition);
+
+        // Act
+        var createdQuotaResults = Tier.UP_FOR_DELETION.CreateQuotaForAllMetrics(metrics).ToList();
+
+        // Assert
+        createdQuotaResults.Where(result => result.IsFailure).Should().BeEmpty();
+        createdQuotaResults.Should().HaveCount(1);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using MediatR;
 
@@ -15,10 +16,13 @@ public class Handler : IRequestHandler<CreateUpForDeletionTierCommand>
 
     public async Task Handle(CreateUpForDeletionTierCommand request, CancellationToken cancellationToken)
     {
-        var tierName = TierName.Create(TierName.UP_FOR_DELETION_DEFAULT_NAME).Value;
-        var tierId = TierId.Create(TierId.UP_FOR_DELETION_DEFAULT_ID).Value;
-        var tier = new Tier(tierId, tierName);
-
-        await _tiersRepository.AddAsync(tier, cancellationToken);
+        try
+        {
+            await _tiersRepository.FindById(TierId.Create(Tier.UP_FOR_DELETION.Id).Value, CancellationToken.None);
+        }
+        catch (NotFoundException)
+        {
+            await _tiersRepository.AddAsync(Tier.UP_FOR_DELETION, cancellationToken);
+        }
     }
 }

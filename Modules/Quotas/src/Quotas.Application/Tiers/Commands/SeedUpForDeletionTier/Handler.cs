@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using MediatR;
 
@@ -26,21 +25,18 @@ public class Handler : IRequestHandler<SeedUpForDeletionTierCommand>
         Tier upForDeletionTier;
         try
         {
-            upForDeletionTier = await _tiersRepository.Find(TierId.UP_FOR_DELETION_DEFAULT_ID, CancellationToken.None, true);
+            upForDeletionTier = await _tiersRepository.Find(Tier.UP_FOR_DELETION.Id, CancellationToken.None, true);
         }
         catch (NotFoundException)
         {
-            upForDeletionTier = new Tier(new TierId(TierId.UP_FOR_DELETION_DEFAULT_ID), Tier.UP_FOR_DELETION_TIER_NAME);
+            upForDeletionTier = new Tier(new TierId(Tier.UP_FOR_DELETION.Id), Tier.UP_FOR_DELETION.Name);
             await _tiersRepository.Add(upForDeletionTier, CancellationToken.None);
         }
 
         var metrics = await _metricsRepository.FindAll(CancellationToken.None);
-        var missingMetrics = metrics.Where(metric => upForDeletionTier.Quotas.All(quota => quota.MetricKey.Value != metric.Key.Value));
-        foreach (var metric in missingMetrics)
-        {
-            var result = upForDeletionTier.CreateQuotaForUpForDeletionTier(metric.Key, 0, QuotaPeriod.Total);
-            _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(upForDeletionTier.Id, result.Value.Id));
-        }
+        var createdQuotaResults = upForDeletionTier.CreateQuotaForAllMetrics(metrics);
         await _tiersRepository.Update(upForDeletionTier, CancellationToken.None);
+
+        createdQuotaResults.ToList().ForEach(result => _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(upForDeletionTier.Id, result.Value.Id)));
     }
 }

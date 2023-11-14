@@ -20,23 +20,17 @@ public static class DomainErrors
 
     public static DomainError CannotDeleteBasicTier(string reason = "")
     {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted",
-            string.IsNullOrEmpty(reason) ? $"The Basic Tier cannot be deleted {formattedReason}." : reason);
+        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted", "The Basic Tier cannot be deleted.");
     }
 
-    public static DomainError CannotDeleteUpForDeletionTier(string reason = "")
+    public static DomainError CannotDeleteUpForDeletionTier()
     {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeDeleted",
-            string.IsNullOrEmpty(reason) ? $"The Up For Deletion Tier cannot be deleted {formattedReason}." : reason);
+        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeDeleted", "The Up For Deletion Tier cannot be deleted.");
     }
 
-    public static DomainError CannotChangeTierUpForDeletion(string reason = "")
+    public static DomainError CannotChangeTierUpForDeletion()
     {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.device.identityTierUpForDeletionCannotBeChanged",
-            string.IsNullOrEmpty(reason) ? $"The Identity's Tier cannot be be changed from or to the Up for Deletion Tier {formattedReason}." : reason);
+        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the Up for Deletion Tier.");
     }
 
     public static DomainError CannotDeleteUsedTier(string reason = "")
@@ -55,7 +49,6 @@ public static class DomainErrors
 
     public static DomainError OnlyOneActiveDeletionProcessAllowed()
     {
-        return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed",
-                       "Only one active deletion process is allowed.");
+        return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
 }

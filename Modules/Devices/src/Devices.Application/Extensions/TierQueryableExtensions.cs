@@ -13,7 +13,7 @@ public static class TierQueryableExtensions
 
     public static async Task<Tier> GetUpForDeletionTier(this IQueryable<Tier> query, CancellationToken cancellationToken)
     {
-        var upForDeletionTier = await query.FirstOrDefaultAsync(t => t.Id == TierId.UP_FOR_DELETION_DEFAULT_ID, cancellationToken);
+        var upForDeletionTier = await query.FirstOrDefaultAsync(t => t.Id == Tier.UP_FOR_DELETION.Id, cancellationToken);
         return upForDeletionTier;
     }
 }
