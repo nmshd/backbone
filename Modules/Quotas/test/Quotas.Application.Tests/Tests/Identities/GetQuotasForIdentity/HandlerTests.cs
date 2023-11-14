@@ -49,7 +49,7 @@ public class HandlerTests
 
         // Assert
         quotas.Should().HaveCount(2);
-        
+
         quotas[0].Id.Should().Be(identity.IndividualQuotas.First().Id);
         quotas[0].Max.Should().Be(max);
         quotas[0].Period.Should().Be(period.ToString());
