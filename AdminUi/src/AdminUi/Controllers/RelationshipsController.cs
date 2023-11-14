@@ -3,15 +3,16 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationshipsByParticipantAddress;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using RelationshipDTO = Backbone.AdminUi.Infrastructure.DTOs.RelationshipDTO;
 
 namespace Backbone.AdminUi.Controllers;
 
@@ -39,7 +40,13 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var relationships = await _mediator.Send(new ListRelationshipsByParticipantAddressQuery(paginationFilter, participant), cancellationToken);
-        return Paged(relationships);
+        var relationshipOverviews = await _adminUiDbContext.RelationshipOverviews
+            .AsQueryable()
+            .Where(r => r.To == participant || r.From == participant)
+            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+
+        var relationshipItems = relationshipOverviews.ItemsOnPage.Select(i => new RelationshipDTO(participant, i));
+
+        return Paged(new PagedResponse<RelationshipDTO>(relationshipItems, paginationFilter, relationshipOverviews.TotalNumberOfItems));
     }
 }
