@@ -1,12 +1,14 @@
-﻿using Backbone.Tooling;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionProcessAuditLogEntry
 {
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, byte[] identityAddressHash, byte[] deviceIdHash)
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner.", identityAddressHash, deviceIdHash, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner. It was automatically approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), null, DeletionProcessStatus.Approved);
     }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, byte[] identityAddressHash)

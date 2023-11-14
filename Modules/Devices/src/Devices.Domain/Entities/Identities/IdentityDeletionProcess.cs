@@ -15,12 +15,23 @@ public class IdentityDeletionProcess
     public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId? createdByDevice = null)
     {
         Id = IdentityDeletionProcessId.Generate();
-        Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
-        var auditLogEntry = createdByDevice == null
-            ? IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy))
-            : IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
+        IdentityDeletionProcessAuditLogEntry auditLogEntry;
+
+        if (createdByDevice != null)
+        {
+            Status = DeletionProcessStatus.Approved;
+            ApprovedAt = SystemTime.UtcNow;
+            ApprovedByDevice = createdByDevice;
+
+            auditLogEntry = IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice);
+        }
+        else
+        {
+            Status = DeletionProcessStatus.WaitingForApproval;
+            auditLogEntry = IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy));
+        }
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
@@ -33,9 +44,12 @@ public class IdentityDeletionProcess
     public DateTime CreatedAt { get; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
+    
+    public DateTime? ApprovedAt { get; }
+    public DeviceId? ApprovedByDevice { get; }
 
     public bool IsActive()
     {
-        return Status == DeletionProcessStatus.WaitingForApproval;
+        return Status is DeletionProcessStatus.WaitingForApproval or DeletionProcessStatus.Approved;
     }
 }

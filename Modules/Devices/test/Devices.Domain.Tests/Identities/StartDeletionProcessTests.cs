@@ -29,13 +29,15 @@ public class StartDeletionProcessTests
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity);
         var deletionProcess = activeIdentity.DeletionProcesses[0];
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
+        deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
+        deletionProcess.ApprovedByDevice.Should().Be(asDevice);
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by the owner.");
+        auditLogEntry.Message.Should().Be("The deletion process was started by the owner. It was automatically approved.");
         auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
     }
 
     [Fact]
@@ -72,6 +74,8 @@ public class StartDeletionProcessTests
         AssertDeletionProcessWasStarted(activeIdentity);
         var deletionProcess = activeIdentity.DeletionProcesses[0];
         deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        deletionProcess.ApprovedAt.Should().BeNull();
+        deletionProcess.ApprovedByDevice.Should().BeNull();
 
         var auditLogEntry = deletionProcess.AuditLog[0];
         auditLogEntry.Message.Should().Be("The deletion process was started by a support employee.");

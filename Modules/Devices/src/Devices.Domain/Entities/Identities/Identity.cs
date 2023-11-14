@@ -75,5 +75,6 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    WaitingForApproval
+    WaitingForApproval,
+    Approved
 }
