@@ -2,10 +2,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Relationships.Application.Infrastructure;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 // ReSharper disable EntityFramework.NPlusOne.IncompleteDataUsage
@@ -35,14 +32,21 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
         if (_blobRootFolder == null || _blobStorage == null)
             return;
 
-        var relationshipChangesWithMissingContents = await context.RelationshipChanges
+        await FillRelationshipChangesWithMissingContent(context);
+
+        await FillRelationshipTemplatesWithMissingContent(context);
+    }
+
+    private async Task FillRelationshipChangesWithMissingContent(RelationshipsDbContext context)
+    {
+        var relationshipChangesWithMissingContent = await context.RelationshipChanges
             .Where(rc => rc.Request.Content == null || (rc.Response != null && rc.Response.Content == null)).ToListAsync();
 
-        foreach (var relationshipChange in relationshipChangesWithMissingContents)
+        foreach (var relationshipChange in relationshipChangesWithMissingContent)
         {
             if (relationshipChange.Request.Content == null)
             {
-                var blobRequestContent = await _blobStorage.FindAsync(_blobRootFolder, relationshipChange.Request.Id);
+                var blobRequestContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipChange.Request.Id);
                 relationshipChange.Request.LoadContent(blobRequestContent);
                 context.RelationshipChanges.Update(relationshipChange);
             }
@@ -51,7 +55,7 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
             {
                 try
                 {
-                    var blobResponseContent = await _blobStorage.FindAsync(_blobRootFolder, relationshipChange.Response.Id);
+                    var blobResponseContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipChange.Response.Id);
                     relationshipChange.Response.LoadContent(blobResponseContent);
                     context.RelationshipChanges.Update(relationshipChange);
                 }
@@ -59,6 +63,24 @@ public class RelationshipChangesDbContextSeeder : IDbSeeder<RelationshipsDbConte
                 {
                     // response content is optional so we can ignore this
                 }
+            }
+
+            await context.SaveChangesAsync();
+        }
+    }
+
+    private async Task FillRelationshipTemplatesWithMissingContent(RelationshipsDbContext context)
+    {
+        var relationshipTemplatesWithMissingContent = await context.RelationshipTemplates
+            .Where(rt => rt.Content == null).ToListAsync();
+
+        foreach (var relationshipTemplate in relationshipTemplatesWithMissingContent)
+        {
+            if (relationshipTemplate.Content == null)
+            {
+                var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipTemplate.Id);
+                relationshipTemplate.LoadContent(blobContent);
+                context.RelationshipTemplates.Update(relationshipTemplate);
             }
 
             await context.SaveChangesAsync();
