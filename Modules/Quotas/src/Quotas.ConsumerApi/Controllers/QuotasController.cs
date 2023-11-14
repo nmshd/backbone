@@ -30,12 +30,7 @@ public class QuotasController : ApiControllerBase
     [ProducesResponseType(typeof(List<QuotaDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListIndividualQuotas([FromQuery] PaginationFilter paginationFilter, [FromRoute] string address, CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var response = await _mediator.Send(new ListQuotasForIdentityQuery(paginationFilter, address), cancellationToken);
+        var response = await _mediator.Send(new ListQuotasForIdentityQuery(address), cancellationToken);
 
         return Ok(response);
     }
