@@ -9,7 +9,6 @@ namespace Backbone.Modules.Relationships.Application.Infrastructure.Persistence.
 public interface IRelationshipsRepository
 {
     Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false);
-    Task<DbPaginationResult<Relationship>> FindRelationshipsWithParticipant(IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
     Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids, RelationshipChangeType? relationshipChangeType,
         RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt, IdentityAddress createdBy,
         IdentityAddress completedBy, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false);

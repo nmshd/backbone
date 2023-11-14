@@ -122,24 +122,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationships;
     }
 
-    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithParticipant(IdentityAddress identityAddress,
-        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
-    {
-        var query = (track ? _relationships : _readOnlyRelationships)
-            .AsQueryable()
-            .IncludeAll(_dbContext)
-            .WithParticipant(identityAddress);
-
-        var relationships = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        if (fillContent)
-        {
-            await FillContentOfChanges(relationships.ItemsOnPage.SelectMany(r => r.Changes));
-        }
-
-        return relationships;
-    }
-
     public async Task Update(Relationship relationship)
     {
         _relationships.Update(relationship);

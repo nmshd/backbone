@@ -1,18 +1,16 @@
-﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.AdminUi.Infrastructure.DTOs;
+using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
-using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Relationships.Application;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Devices.Application;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
-using RelationshipDTO = Backbone.AdminUi.Infrastructure.DTOs.RelationshipDTO;
 
 namespace Backbone.AdminUi.Controllers;
 
@@ -31,8 +29,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipByParticipantAddressDTO>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllRelationshipsByParticipantAddress([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
