@@ -63,8 +63,6 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    depends_on:
-      - pg-admin
 
   pg-admin:
     container_name: bkb-pgadmin
@@ -88,13 +86,46 @@ services:
   seq:
     image: datalust/seq:latest
     ports:
-      - "8081:80"
+      - "8082:80"
       - "5341:5341"
     volumes:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
     restart: unless-stopped
+
+  adminApi:
+    image: nmshd-adminapi
+    container_name: adminApi
+    hostname: adminApi
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/Dockerfile.debug
+    ports:
+      - "5173:5000"
+    depends_on:
+      # - ms-sql-server
+      - rabbitmq
+      - postgres
+      - seq
+    volumes:
+      - ../:/app
+      - /app/AdminUi/src/AdminUi/obj
+      - /app/AdminUi/src/AdminUi/bin
+
+  adminUi:
+    image: nmshd-adminui
+    container_name: admin-ui
+    hostname: adminUi
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/ClientApp/Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - adminApi
+    volumes:
+      - ../AdminUi/src/AdminUi/ClientApp:/app
 
   #elasticsearch:
   #  image: elasticsearch:${ELK_VERSION}
