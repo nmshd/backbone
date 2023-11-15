@@ -14,14 +14,16 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly ChallengesApi _challengeApi;
+    private readonly SignatureHelper _signatureHelper;
     private readonly IdentitiesApi _identitiesApi;
     private HttpResponse<CreateIdentityResponse>? _identityResponse;
     private HttpResponse<Challenge>? _challengeResponse;
 
-    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengeApi) : base(httpConfiguration)
+    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengeApi, SignatureHelper signatureHelper) : base(httpConfiguration)
     {
         _identitiesApi = identitiesApi;
         _challengeApi = challengeApi;
+        _signatureHelper = signatureHelper;
     }
 
     [Given(@"a Challenge c")]
@@ -34,16 +36,10 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When(@"a POST request is sent to the /Identities endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
-        var serializedChallenge = JsonConvert.SerializeObject(new
-        {
-            _challengeResponse!.Content.Result!.Id,
-            _challengeResponse!.Content.Result!.ExpiresAt,
-            Type = "Identity"
-        });
+        var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Content.Result!);
 
-        var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
-        var keyPair = signatureHelper.CreateKeyPair();
-        var signature = signatureHelper.CreateSignature(ConvertibleString.FromUtf8(serializedChallenge), keyPair.PrivateKey);
+        var keyPair = _signatureHelper.CreateKeyPair();
+        var signature = _signatureHelper.CreateSignature(ConvertibleString.FromUtf8(serializedChallenge), keyPair.PrivateKey);
 
         dynamic publicKey = new
         {
@@ -81,9 +77,9 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a CreateIdentityResponse")]
     public void ThenTheResponseContainsACreateIdentityResponse()
     {
-        _identityResponse!.AssertHasValue();
-        _identityResponse!.AssertStatusCodeIsSuccess();
-        _identityResponse!.AssertContentTypeIs("application/json");
+        _identityResponse!.Should().NotBeNull();
+        _identityResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _identityResponse!.ContentType.Should().Be("application/json");
         _identityResponse!.AssertContentCompliesWithSchema();
     }
 
