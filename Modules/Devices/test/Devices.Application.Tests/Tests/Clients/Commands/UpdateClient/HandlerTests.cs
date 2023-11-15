@@ -18,11 +18,11 @@ public class HandlerTests
     public async Task Change_Default_Tier()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
-        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
+        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id, 1);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
@@ -47,11 +47,11 @@ public class HandlerTests
     public async Task Change_Default_Tier_With_Inexistent_Tier()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
-        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
+        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id, 1);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
@@ -72,11 +72,11 @@ public class HandlerTests
     public async Task Change_Default_Tier_Of_Inexistent_Client()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
 
         var newDefaultTier = new Tier(TierName.Create("new-default-tier").Value);
 
-        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id);
+        var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id, 1);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns((OAuthClient)null);
@@ -99,9 +99,9 @@ public class HandlerTests
         // Arrange
         var defaultTier = new Tier(TierName.Create("some-default-tier").Value);
 
-        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id, SystemTime.UtcNow);
+        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id, SystemTime.UtcNow, 1);
 
-        var command = new UpdateClientCommand(client.ClientId, defaultTier.Id);
+        var command = new UpdateClientCommand(client.ClientId, defaultTier.Id, 1);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
