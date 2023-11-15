@@ -31,6 +31,17 @@ public class TierTests
     }
 
     [Fact]
+    public void Queued_for_deletion_tier_cannot_be_deleted()
+    {
+        // Arrange & Act
+        var error = Tier.QUEUED_FOR_DELETION.CanBeDeleted(clientsCount: 0, identitiesCount: 0);
+
+        // Assert
+        error.Should().NotBeNull();
+        error.Should().BeEquivalentTo(DomainErrors.CannotDeleteQueuedForDeletionTier());
+    }
+
+    [Fact]
     public void Tier_with_related_identities_cannot_be_deleted()
     {
         // Arrange
