@@ -24,6 +24,10 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ client.createdAt | date }}</span>
                     </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Identities Limit</span>
+                        <span matListItemLine>{{ client.maxIdentities }}</span>
+                    </mat-list-item>
                     <mat-list-item class="auto-height">
                         <span matListItemTitle>Default Tier</span>
                         <span matListItemLine>
@@ -58,6 +62,12 @@
                             <mat-icon>file_copy</mat-icon>
                         </button>
                         <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>Identities Limit</mat-label>
+                        <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" required [disabled]="disabled || editMode" />
+                        <mat-hint>The maximum number of Identities that can be created by this Client.</mat-hint>
+                        <mat-error>You must enter a positive value</mat-error>
                     </mat-form-field>
                     <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
                         <span class="client-secret-warning">Please save the Client Secret since it will be unaccessible after exiting.</span>

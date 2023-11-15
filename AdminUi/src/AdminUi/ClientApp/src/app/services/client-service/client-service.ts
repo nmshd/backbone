@@ -56,6 +56,7 @@ export interface Client {
     clientSecret?: string;
     defaultTier: string;
     createdAt: Date;
+    maxIdentities: number;
 }
 
 export interface ChangeClientSecretRequest {
@@ -64,6 +65,7 @@ export interface ChangeClientSecretRequest {
 
 export interface UpdateClientRequest {
     defaultTier: string;
+    maxIdentities: number;
 }
 
 export interface ClientOverviewFilter {
