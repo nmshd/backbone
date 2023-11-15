@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -30,12 +31,26 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        var changeError = client.ChangeDefaultTier(tierIdResult.Value);
-        if (changeError != null)
-            throw new DomainException(changeError);
+        var changeDefaultTierError = client.ChangeDefaultTier(tierIdResult.Value);
+        var changeMaxIdentitiesError = client.ChangeMaxIdentities(request.MaxIdentities);
 
-        await _oAuthClientsRepository.Update(client, cancellationToken);
+        if (CanUpdate(new List<DomainError> {changeMaxIdentitiesError, changeMaxIdentitiesError}))
+        {
+            await _oAuthClientsRepository.Update(client, cancellationToken);
+        }
+        else
+        {
+            if (changeDefaultTierError != null)
+                throw new DomainException(changeDefaultTierError);
+            if (changeMaxIdentitiesError != null)
+                throw new DomainException(changeMaxIdentitiesError);
+        }
 
         return new UpdateClientResponse(client);
+    }
+
+    public static bool CanUpdate(List<DomainError> fields)
+    {
+        return fields.Any(f => f == null);
     }
 }
