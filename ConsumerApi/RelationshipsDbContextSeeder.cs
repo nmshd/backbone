@@ -64,9 +64,9 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
                     // response content is optional so we can ignore this
                 }
             }
-
-            await context.SaveChangesAsync();
         }
+
+        await context.SaveChangesAsync();
     }
 
     private async Task FillRelationshipTemplatesWithMissingContent(RelationshipsDbContext context)
