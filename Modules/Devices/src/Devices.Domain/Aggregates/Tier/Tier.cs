@@ -4,7 +4,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public class Tier
 {
-    public static readonly Tier UP_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Up For Deletion").Value);
+    public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Queued for Deletion").Value);
 
     public Tier(TierName name)
     {
@@ -32,8 +32,8 @@ public class Tier
         if (IsBasicTier())
             return DomainErrors.CannotDeleteBasicTier();
 
-        if (IsUpForDeletionTier())
-            return DomainErrors.CannotDeleteUpForDeletionTier();
+        if (IsQueuedForDeletionTier())
+            return DomainErrors.CannotDeleteQueuedForDeletionTier();
 
         return null;
     }
@@ -43,8 +43,8 @@ public class Tier
         return Name == TierName.BASIC_DEFAULT_NAME;
     }
 
-    public bool IsUpForDeletionTier()
+    public bool IsQueuedForDeletionTier()
     {
-        return Id == UP_FOR_DELETION.Id;
+        return Id == QUEUED_FOR_DELETION.Id;
     }
 }

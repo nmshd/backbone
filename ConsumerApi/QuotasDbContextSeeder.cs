@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedUpForDeletionTier;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
@@ -24,12 +24,12 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
     {
         await SeedTier(context);
         await AddTierToIdentities(context);
-        await EnsureUpForDeletionTierWithQuotas(context);
+        await EnsureQueuedForDeletionTierWithQuotas();
     }
 
-    private async Task EnsureUpForDeletionTierWithQuotas(QuotasDbContext context)
+    private async Task EnsureQueuedForDeletionTierWithQuotas()
     {
-        await _mediator.Send(new SeedUpForDeletionTierCommand());
+        await _mediator.Send(new SeedQueuedForDeletionTierCommand());
     }
 
     private async Task AddTierToIdentities(QuotasDbContext context)

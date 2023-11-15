@@ -7,7 +7,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class Tier
 {
-    public static readonly Tier UP_FOR_DELETION = new(new TierId("TIR00000000000000001"), "Up For Deletion");
+    public static readonly Tier QUEUED_FOR_DELETION = new(new TierId("TIR00000000000000001"), "Queued For Deletion");
 
     public Tier(TierId id, string name)
     {
@@ -22,8 +22,8 @@ public class Tier
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (IsUpForDeletionTier())
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForUpForDeletionTier());
+        if (IsQueuedForDeletionTier())
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForQueuedForDeletionTier());
 
         if (max < 0)
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerThanZero());
@@ -33,8 +33,8 @@ public class Tier
 
     public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
     {
-        if (IsUpForDeletionTier())
-            return Result.Failure<TierQuotaDefinitionId, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForUpForDeletionTier());
+        if (IsQueuedForDeletionTier())
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForQueuedForDeletionTier());
 
         var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
 
@@ -46,18 +46,13 @@ public class Tier
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
 
-    public Result<TierQuotaDefinition, DomainError> CreateQuotaForUpForDeletionTier(MetricKey metricKey, int max, QuotaPeriod period)
-    {
-        if (!IsUpForDeletionTier())
-            throw new InvalidOperationException("Method can only be called for the 'Up for Deletion' tier");
-
-        return CreateTierQuotaDefinition(metricKey, max, period);
-    }
-
     public IEnumerable<Result<TierQuotaDefinition, DomainError>> CreateQuotaForAllMetrics(IEnumerable<Metric> metrics)
     {
+        if (!IsQueuedForDeletionTier())
+            throw new InvalidOperationException("Method can only be called for the 'Queued for Deletion' tier");
+
         var missingMetrics = metrics.Where(metric => Quotas.All(quota => quota.MetricKey.Value != metric.Key.Value));
-        return missingMetrics.Select(metric => CreateQuotaForUpForDeletionTier(metric.Key, 0, QuotaPeriod.Total));
+        return missingMetrics.Select(metric => CreateTierQuotaDefinition(metric.Key, 0, QuotaPeriod.Total));
     }
 
     private Result<TierQuotaDefinition, DomainError> CreateTierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
@@ -71,9 +66,9 @@ public class Tier
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
     }
 
-    private bool IsUpForDeletionTier()
+    private bool IsQueuedForDeletionTier()
     {
-        return Id == UP_FOR_DELETION.Id;
+        return Id == QUEUED_FOR_DELETION.Id;
     }
 
     private bool TierQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)

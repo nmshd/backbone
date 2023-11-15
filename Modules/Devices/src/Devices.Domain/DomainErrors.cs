@@ -20,17 +20,17 @@ public static class DomainErrors
 
     public static DomainError CannotDeleteBasicTier(string reason = "")
     {
-        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted", "The Basic Tier cannot be deleted.");
+        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted", "The 'Basic' Tier cannot be deleted.");
     }
 
-    public static DomainError CannotDeleteUpForDeletionTier()
+    public static DomainError CannotDeleteQueuedForDeletionTier()
     {
-        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeDeleted", "The Up For Deletion Tier cannot be deleted.");
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted", "The 'Queued for Deletion' Tier cannot be deleted.");
     }
 
-    public static DomainError CannotChangeTierUpForDeletion()
+    public static DomainError CannotChangeTierQueuedForDeletion()
     {
-        return new DomainError("error.platform.validation.device.upForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the Up for Deletion Tier.");
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
     }
 
     public static DomainError CannotDeleteUsedTier(string reason = "")

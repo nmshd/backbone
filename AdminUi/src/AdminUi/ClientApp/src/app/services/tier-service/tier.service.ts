@@ -11,7 +11,7 @@ import { TierQuota } from "../quotas-service/quotas.service";
 })
 export class TierService {
     private readonly apiUrl: string;
-    private static readonly UP_FOR_DELETION_TIER_ID = "TIR00000000000000001";
+    private static readonly QUEUED_FOR_DELETION_TIER_ID = "TIR00000000000000001";
     private static readonly BASIC_TIER_NAME = "Basic";
 
     public constructor(private readonly http: HttpClient) {
@@ -25,8 +25,8 @@ export class TierService {
     public getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
         return this.http.get<HttpResponseEnvelope<Tier>>(`${this.apiUrl}/${id}`).pipe(
             map((responseEnvelope: HttpResponseEnvelope<Tier>) => {
-                responseEnvelope.result.isDeletable = responseEnvelope.result.name !== TierService.BASIC_TIER_NAME && responseEnvelope.result.id !== TierService.UP_FOR_DELETION_TIER_ID;
-                responseEnvelope.result.isReadOnly = responseEnvelope.result.id === TierService.UP_FOR_DELETION_TIER_ID;
+                responseEnvelope.result.isDeletable = responseEnvelope.result.name !== TierService.BASIC_TIER_NAME && responseEnvelope.result.id !== TierService.QUEUED_FOR_DELETION_TIER_ID;
+                responseEnvelope.result.isReadOnly = responseEnvelope.result.id === TierService.QUEUED_FOR_DELETION_TIER_ID;
                 return responseEnvelope;
             })
         );

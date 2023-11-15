@@ -10,10 +10,4 @@ public static class TierQueryableExtensions
         var basicTier = await query.FirstOrDefaultAsync(t => t.Name == TierName.BASIC_DEFAULT_NAME, cancellationToken);
         return basicTier;
     }
-
-    public static async Task<Tier> GetUpForDeletionTier(this IQueryable<Tier> query, CancellationToken cancellationToken)
-    {
-        var upForDeletionTier = await query.FirstOrDefaultAsync(t => t.Id == Tier.UP_FOR_DELETION.Id, cancellationToken);
-        return upForDeletionTier;
-    }
 }

@@ -20,8 +20,8 @@ public static class DomainErrors
         return new DomainError("error.platform.quotas.duplicateQuota", "A quota targeting the same metric and period already exists.");
     }
 
-    public static DomainError CannotCreateOrDeleteQuotaForUpForDeletionTier()
+    public static DomainError CannotCreateOrDeleteQuotaForQueuedForDeletionTier()
     {
-        return new DomainError("error.platform.quotas.cannotCreateOrDeleteQuotaOnUpForDeletionTier", "Quotas cannot be manually managed for the Up for Deletion tier.");
+        return new DomainError("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier", "Quotas cannot be manually managed for the 'Queued for Deletion' tier.");
     }
 }
