@@ -79,8 +79,8 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
             var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipTemplate.Id);
             relationshipTemplate.LoadContent(blobContent);
             context.RelationshipTemplates.Update(relationshipTemplate);
-
-            await context.SaveChangesAsync();
         }
+
+        await context.SaveChangesAsync();
     }
 }
