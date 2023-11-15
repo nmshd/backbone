@@ -31,6 +31,20 @@ updates:
     labels:
       - "dependencies"
 
+  ##### Pipeline scripts #####
+  - package-ecosystem: "npm"
+    directory: /.ci
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
   ##### Admin UI Angular App #####
   - package-ecosystem: "npm"
     directory: "/AdminUi/src/AdminUi/ClientApp"
@@ -61,19 +75,6 @@ updates:
 
   - package-ecosystem: "npm"
     directory: /Modules/Files/test/Files.API.Tests.Performance.EndToEnd
-    schedule:
-      interval: "weekly"
-    groups:
-      update-npm-dependencies:
-        patterns:
-          - "*"
-    reviewers:
-      - "tnotheis"
-    labels:
-      - "dependencies"
-
-  - package-ecosystem: "npm"
-    directory: /Modules/Challenges/test/Challenges.API.Tests.Performance.EndToEnd
     schedule:
       interval: "weekly"
     groups:
