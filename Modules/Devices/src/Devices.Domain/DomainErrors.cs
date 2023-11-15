@@ -38,4 +38,11 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.clientDefaultTierCannotBeChanged",
             string.IsNullOrEmpty(reason) ? $"The Client's Default Tier cannot be changed {formattedReason}" : reason);
     }
+
+    public static DomainError CannotChangeClientMaxIdentities(string reason = "")
+    {
+        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
+        return new DomainError("error.platform.validation.device.clientMaxIdentitiesCannotBeChanged",
+            string.IsNullOrEmpty(reason) ? $"The Client's Maximum number of Identities cannot be changed {formattedReason}" : reason);
+    }
 }
