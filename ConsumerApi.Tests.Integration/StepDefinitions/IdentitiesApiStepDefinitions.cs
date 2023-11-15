@@ -33,7 +33,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _challengeResponse!.IsSuccessStatusCode.Should().BeTrue();
     }
 
-    [When(@"a POST request is sent to the /Identities endpoint")]
+    [When(@"a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
         var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Content.Result!);
