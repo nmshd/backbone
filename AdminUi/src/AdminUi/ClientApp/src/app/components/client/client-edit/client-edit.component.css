@@ -56,6 +56,14 @@
     margin-bottom: 20px;
 }
 
+.form-field-edit {
+    margin-top: 10px;
+}
+
+.mat-list-item-edit {
+    min-height: 100px;
+}
+
 .form-card {
     margin-top: 60px;
     min-height: 250px;

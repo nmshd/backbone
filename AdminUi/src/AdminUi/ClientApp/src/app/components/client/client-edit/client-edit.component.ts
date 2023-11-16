@@ -90,7 +90,8 @@ export class ClientEditComponent {
                     clientId: data.result.clientId,
                     displayName: data.result.displayName,
                     defaultTier: data.result.defaultTier,
-                    createdAt: data.result.createdAt
+                    createdAt: data.result.createdAt,
+                    maxIdentities: data.result.maxIdentities
                 } as Client;
             },
             complete: () => (this.loading = false),

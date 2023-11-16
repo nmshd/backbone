@@ -24,9 +24,13 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ client.createdAt | date }}</span>
                     </mat-list-item>
-                    <mat-list-item>
+                    <mat-list-item class="mat-list-item-edit">
                         <span matListItemTitle>Identities Limit</span>
-                        <span matListItemLine>{{ client.maxIdentities }}</span>
+                        <span matListItemLine>
+                            <mat-form-field class="form-field-edit">
+                                <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" required [disabled]="disabled" />
+                            </mat-form-field>
+                        </span>
                     </mat-list-item>
                     <mat-list-item class="auto-height">
                         <span matListItemTitle>Default Tier</span>
