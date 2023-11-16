@@ -31,7 +31,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("CreatedAt")
