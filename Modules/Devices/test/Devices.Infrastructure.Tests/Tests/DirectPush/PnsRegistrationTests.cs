@@ -11,10 +11,8 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
-
 public class PnsRegistrationTests
 {
-
     [Fact]
     public async void Adding_new_PnsRegistration_in_repository()
     {
