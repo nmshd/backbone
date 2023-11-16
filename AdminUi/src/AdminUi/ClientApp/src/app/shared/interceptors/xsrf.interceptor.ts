@@ -26,7 +26,9 @@ export class XSRFInterceptor implements HttpInterceptor {
             catchError((err) => {
                 const xsrfError = err && err.status === 400 && (err.error.detail as string).includes("xsrf-token-may-be-invalid");
                 if (xsrfError) {
+                    this.xsrfService.clearStoredToken();
                     this.xsrfService.loadAndStoreXSRFToken();
+
                     this.snackBar.open("There was a state error. Please try again.", "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"

@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { CookieService } from "ngx-cookie-service";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -8,7 +9,10 @@ import { environment } from "src/environments/environment";
 export class XSRFService {
     private readonly apiUrl: string;
 
-    public constructor(private readonly http: HttpClient) {
+    public constructor(
+        private readonly http: HttpClient,
+        private readonly cookieService: CookieService
+    ) {
         this.apiUrl = environment.apiUrl;
     }
 
@@ -26,5 +30,6 @@ export class XSRFService {
 
     public clearStoredToken(): void {
         localStorage.removeItem("xsrf-token");
+        this.cookieService.delete("X-XSRF-COOKIE");
     }
 }

@@ -27,6 +27,7 @@
         "@ngx-env/builder": "^16.0.2",
         "bootstrap": "^5.2.3",
         "jquery": "^3.6.3",
+        "ngx-cookie-service": "^16.1.0",
         "ngx-logger": "^5.0.12",
         "odata-filter-builder": "^1.0.0",
         "oidc-client": "^1.11.5",
