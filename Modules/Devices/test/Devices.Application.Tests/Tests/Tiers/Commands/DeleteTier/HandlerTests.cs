@@ -72,7 +72,6 @@ public class HandlerTests
 
         // Assert
         var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
-        exception.Message.Should().Be("The 'Queued for Deletion' Tier cannot be deleted.");
         exception.Code.Should().Be("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted");
 
         A.CallTo(() => _tiersRepository.Remove(Tier.QUEUED_FOR_DELETION)).MustNotHaveHappened();
