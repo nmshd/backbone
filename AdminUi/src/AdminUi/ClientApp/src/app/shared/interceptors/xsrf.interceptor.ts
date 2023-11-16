@@ -6,7 +6,10 @@ import { XSRFService } from "src/app/services/xsrf-service/xsrf.service";
 
 @Injectable()
 export class XSRFInterceptor implements HttpInterceptor {
-    public constructor(private readonly xsrfService: XSRFService, private readonly snackBar: MatSnackBar) {}
+    public constructor(
+        private readonly xsrfService: XSRFService,
+        private readonly snackBar: MatSnackBar
+    ) {}
 
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = this.xsrfService.getStoredToken();
@@ -21,13 +24,13 @@ export class XSRFInterceptor implements HttpInterceptor {
 
         return next.handle(req).pipe(
             catchError((err) => {
-                const xsrfError = err && err.status === 400 && (err.error.detail as string).includes('xsrf-token-may-be-invalid');
+                const xsrfError = err && err.status === 400 && (err.error.detail as string).includes("xsrf-token-may-be-invalid");
                 if (xsrfError) {
                     this.xsrfService.loadAndStoreXSRFToken();
                     this.snackBar.open("There was a state error. Please try again.", "Dismiss", {
                         verticalPosition: "top",
                         horizontalPosition: "center"
-                    })
+                    });
                     err = err.error?.message || err.statusText;
                 }
 
