@@ -2,9 +2,9 @@
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 namespace Backbone.ConsumerApi.Tests.Integration.API;
-internal class PnsRegistrationApi : BaseApi
+internal class PushNotificationsApi : BaseApi
 {
-    public PnsRegistrationApi(HttpClientFactory factory) : base(factory) { }
+    public PushNotificationsApi(HttpClientFactory factory) : base(factory) { }
 
     internal async Task<HttpResponse<UpdateDeviceRegistrationResponse>> RegisterForPushNotifications(RequestConfiguration requestConfiguration)
     {

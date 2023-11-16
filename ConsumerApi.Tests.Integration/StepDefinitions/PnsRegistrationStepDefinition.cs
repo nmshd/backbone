@@ -17,10 +17,10 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
 {
     // keep in mind: these tests use DummyPushService so they will not execute the implemented code
 
-    private readonly PnsRegistrationApi _pnsRegistrationsApi;
+    private readonly PushNotificationsApi _pnsRegistrationsApi;
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
 
-    public PnsRegistrationStepDefinition(IOptions<HttpConfiguration> httpConfiguration, PnsRegistrationApi pnsRegistrationsApi) : base(httpConfiguration)
+    public PnsRegistrationStepDefinition(IOptions<HttpConfiguration> httpConfiguration, PushNotificationsApi pnsRegistrationsApi) : base(httpConfiguration)
     {
         _pnsRegistrationsApi = pnsRegistrationsApi;
     }
