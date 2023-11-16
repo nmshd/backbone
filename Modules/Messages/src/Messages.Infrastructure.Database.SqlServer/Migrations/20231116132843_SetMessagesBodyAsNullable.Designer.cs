@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
-    [Migration("20231115142614_SetMessagesBodyAsNullable")]
+    [Migration("20231116132843_SetMessagesBodyAsNullable")]
     partial class SetMessagesBodyAsNullable
     {
         /// <inheritdoc />

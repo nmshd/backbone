@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
-    [Migration("20231115142644_SetMessagesBodyAsNullable")]
+    [Migration("20231116132927_SetMessagesBodyAsNullable")]
     partial class SetMessagesBodyAsNullable
     {
         /// <inheritdoc />
