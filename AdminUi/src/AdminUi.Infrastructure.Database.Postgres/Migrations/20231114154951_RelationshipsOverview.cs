@@ -13,22 +13,22 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.Sql("""
                 CREATE VIEW "RelationshipOverviews" AS
                     SELECT
-                        Relationships."From" AS "From",
-                        Relationships."To" AS "To",
-                        Relationships."RelationshipTemplateId" AS "RelationshipTemplateId",
-                        Relationships."Status" AS "Status",
-                        Relationships."CreatedAt" AS "CreatedAt",
-                        RelationshipChanges."Res_CreatedAt" AS "AnsweredAt",
-                        RelationshipChanges."Req_CreatedByDevice" AS "CreatedByDevice",
-                        RelationshipChanges."Res_CreatedByDevice" AS "AnsweredByDevice"
+                        "Relationships"."From" AS "From",
+                        "Relationships"."To" AS "To",
+                        "Relationships"."RelationshipTemplateId" AS "RelationshipTemplateId",
+                        "Relationships"."Status" AS "Status",
+                        "Relationships"."CreatedAt" AS "CreatedAt",
+                        "RelationshipChanges"."Res_CreatedAt" AS "AnsweredAt",
+                        "RelationshipChanges"."Req_CreatedByDevice" AS "CreatedByDevice",
+                        "RelationshipChanges"."Res_CreatedByDevice" AS "AnsweredByDevice"
                     FROM
-                        "Relationships"."Relationships" AS Relationships
+                        "Relationships"."Relationships" AS "Relationships"
                     LEFT JOIN
-                        "Relationships"."RelationshipChanges" AS RelationshipChanges
+                        "Relationships"."RelationshipChanges" AS "RelationshipChanges"
                     ON
-                        Relationships."Id" = RelationshipChanges."RelationshipId"
+                        "Relationships"."Id" = "RelationshipChanges"."RelationshipId"
                     WHERE
-                        RelationshipChanges."Type" = 10
+                        "RelationshipChanges"."Type" = 10
         """);
         }
 
