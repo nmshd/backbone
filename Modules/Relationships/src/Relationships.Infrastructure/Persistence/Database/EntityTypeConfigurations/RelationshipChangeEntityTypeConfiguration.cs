@@ -18,9 +18,6 @@ public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguratio
         builder.Ignore(x => x.Request);
         builder.Ignore(x => x.Response);
 
-        builder.Ignore("Req_Content");
-        builder.Ignore("Res_Content");
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipId);
