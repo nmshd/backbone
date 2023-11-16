@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         var displayName = string.IsNullOrEmpty(request.DisplayName) ? clientId : request.DisplayName;
         var defaultTierId = await GetTierId(request.DefaultTier, cancellationToken);
 
-        var client = new OAuthClient(clientId, displayName, defaultTierId, SystemTime.UtcNow);
+        var client = new OAuthClient(clientId, displayName, defaultTierId, SystemTime.UtcNow, request.MaxIdentities);
 
         await _oAuthClientsRepository.Add(client, clientSecret, cancellationToken);
 

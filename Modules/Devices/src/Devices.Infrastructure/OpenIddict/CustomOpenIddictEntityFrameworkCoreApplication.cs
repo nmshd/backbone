@@ -21,5 +21,6 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
     public void UpdateFromModel(OAuthClient client)
     {
         DefaultTier = client.DefaultTier;
+        MaxIdentities = client.MaxIdentities;
     }
 }
