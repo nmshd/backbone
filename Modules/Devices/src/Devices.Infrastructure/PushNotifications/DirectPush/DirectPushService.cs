@@ -12,20 +12,20 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPushService : IPushService
 {
-    private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;
+    private readonly IPnsRegistrationsRepository _pnsRegistrationsRepository;
     private readonly ILogger<DirectPushService> _logger;
     private readonly PnsConnectorFactory _pnsConnectorFactory;
 
     public DirectPushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger)
     {
-        _pnsRegistrationRepository = pnsRegistrationRepository;
+        _pnsRegistrationsRepository = pnsRegistrationRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
     }
 
     public async Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
     {
-        var registrations = await _pnsRegistrationRepository.FindWithAddress(recipient, cancellationToken);
+        var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
@@ -60,14 +60,14 @@ public class DirectPushService : IPushService
             }
         }
 
-        await _pnsRegistrationRepository.Delete(deviceIdsToDelete, CancellationToken.None);
+        await _pnsRegistrationsRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
     public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
     {
-        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
 
         if (registration != null)
@@ -75,7 +75,7 @@ public class DirectPushService : IPushService
             registration.Update(handle, appId, environment);
             pnsConnector.ValidateRegistration(registration);
 
-            await _pnsRegistrationRepository.Update(registration, cancellationToken);
+            await _pnsRegistrationsRepository.Update(registration, cancellationToken);
 
             _logger.LogTrace("Device successfully updated.");
         }
@@ -86,7 +86,7 @@ public class DirectPushService : IPushService
 
             try
             {
-                await _pnsRegistrationRepository.Add(registration, cancellationToken);
+                await _pnsRegistrationsRepository.Add(registration, cancellationToken);
                 _logger.LogTrace("New device successfully registered.");
             }
             catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
@@ -101,7 +101,7 @@ public class DirectPushService : IPushService
 
     public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
     {
-        var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
 
         if (registration == null)
         {
@@ -109,7 +109,7 @@ public class DirectPushService : IPushService
         }
         else
         {
-            await _pnsRegistrationRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+            await _pnsRegistrationsRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
             _logger.UnregisteredDevice(deviceId);
         }
     }
