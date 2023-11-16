@@ -16,8 +16,7 @@ public class Configuration
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
-        [Required]
-        public BlobStorageConfiguration BlobStorage { get; set; } = new();
+        public BlobStorageConfiguration BlobStorage { get; set; }
 
         public class BlobStorageConfiguration
         {
