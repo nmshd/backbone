@@ -9,5 +9,5 @@ public class UpdateDeviceRegistrationResponse
         DevicePushIdentifier = devicePushIdentifier;
     }
 
-    public string DevicePushIdentifier { get; private set; }
+    public string DevicePushIdentifier { get; }
 }
