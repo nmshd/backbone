@@ -1,15 +1,12 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
@@ -18,7 +15,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
     private readonly RelationshipsDbContext _dbContext;
 
-    public RelationshipTemplatesRepository(RelationshipsDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
+    public RelationshipTemplatesRepository(RelationshipsDbContext dbContext)
     {
         _templates = dbContext.RelationshipTemplates;
         _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
