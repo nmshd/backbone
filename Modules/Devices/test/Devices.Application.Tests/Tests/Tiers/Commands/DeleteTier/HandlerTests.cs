@@ -63,7 +63,6 @@ public class HandlerTests
     public void Cannot_delete_queued_for_deletion_tier()
     {
         // Arrange
-
         A.CallTo(() => _tiersRepository.FindById(Tier.QUEUED_FOR_DELETION.Id, A<CancellationToken>._)).Returns(Task.FromResult(Tier.QUEUED_FOR_DELETION));
         A.CallTo(() => _tiersRepository.GetNumberOfClientsWithDefaultTier(Tier.QUEUED_FOR_DELETION, A<CancellationToken>._)).Returns(Task.FromResult(0));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(Tier.QUEUED_FOR_DELETION, A<CancellationToken>._)).Returns(Task.FromResult(0));
