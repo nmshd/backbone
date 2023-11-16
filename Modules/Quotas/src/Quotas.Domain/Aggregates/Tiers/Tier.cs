@@ -46,7 +46,7 @@ public class Tier
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
 
-    public IEnumerable<Result<TierQuotaDefinition, DomainError>> CreateQuotaForAllMetrics(IEnumerable<Metric> metrics)
+    public IEnumerable<Result<TierQuotaDefinition, DomainError>> CreateQuotaForAllMetricsOnQueuedForDeletion(IEnumerable<Metric> metrics)
     {
         if (!IsQueuedForDeletionTier())
             throw new InvalidOperationException("Method can only be called for the 'Queued for Deletion' tier");

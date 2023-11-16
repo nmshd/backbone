@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         }
 
         var metrics = await _metricsRepository.FindAll(CancellationToken.None);
-        var createdQuotaResults = queuedForDeletionTier.CreateQuotaForAllMetrics(metrics);
+        var createdQuotaResults = queuedForDeletionTier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
         await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
 
         foreach (var result in createdQuotaResults.ToList())

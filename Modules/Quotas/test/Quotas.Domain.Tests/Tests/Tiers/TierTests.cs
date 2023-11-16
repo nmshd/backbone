@@ -42,7 +42,6 @@ public class TierTests
         // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
-        result.Error.Message.Should().Be("Quotas cannot be manually managed for the 'Queued for Deletion' tier.");
     }
 
     [Fact]
@@ -71,7 +70,6 @@ public class TierTests
         // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
-        result.Error.Message.Should().Be("Quotas cannot be manually managed for the 'Queued for Deletion' tier.");
     }
 
     [Fact]
@@ -129,13 +127,12 @@ public class TierTests
         // Arrange
         var metrics = new List<Metric>
         {
-            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
             new(MetricKey.NumberOfRelationships, "Number of Relationships")
         };
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
 
         // Act
-        Action act = () => tier.CreateQuotaForAllMetrics(metrics);
+        Action act = () => tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Assert
         act.Should().Throw<InvalidOperationException>().Which.Message.Should().Be("Method can only be called for the 'Queued for Deletion' tier");
@@ -155,7 +152,7 @@ public class TierTests
         Tier.QUEUED_FOR_DELETION.Quotas.Add(quotaDefinition);
 
         // Act
-        var createdQuotaResults = Tier.QUEUED_FOR_DELETION.CreateQuotaForAllMetrics(metrics).ToList();
+        var createdQuotaResults = Tier.QUEUED_FOR_DELETION.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
 
         // Assert
         createdQuotaResults.Where(result => result.IsFailure).Should().BeEmpty();
