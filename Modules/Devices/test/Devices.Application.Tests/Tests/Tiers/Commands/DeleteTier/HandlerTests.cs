@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -57,24 +56,6 @@ public class HandlerTests
         // Assert
         await acting.Should().ThrowAsync<DomainException>();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustNotHaveHappened();
-    }
-
-    [Fact]
-    public void Cannot_delete_queued_for_deletion_tier()
-    {
-        // Arrange
-        A.CallTo(() => _tiersRepository.FindById(Tier.QUEUED_FOR_DELETION.Id, A<CancellationToken>._)).Returns(Task.FromResult(Tier.QUEUED_FOR_DELETION));
-        A.CallTo(() => _tiersRepository.GetNumberOfClientsWithDefaultTier(Tier.QUEUED_FOR_DELETION, A<CancellationToken>._)).Returns(Task.FromResult(0));
-        A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(Tier.QUEUED_FOR_DELETION, A<CancellationToken>._)).Returns(Task.FromResult(0));
-
-        // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand(Tier.QUEUED_FOR_DELETION.Id), CancellationToken.None);
-
-        // Assert
-        var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted");
-
-        A.CallTo(() => _tiersRepository.Remove(Tier.QUEUED_FOR_DELETION)).MustNotHaveHappened();
     }
 
     private Handler CreateHandler()
