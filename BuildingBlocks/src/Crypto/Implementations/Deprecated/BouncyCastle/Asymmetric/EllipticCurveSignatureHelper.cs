@@ -32,6 +32,11 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
         return isValid;
     }
 
+    public ConvertibleString CreateSignature(ConvertibleString message, ConvertibleString privateKey)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool IsValidPublicKey(ConvertibleString publicKey)
     {
         try

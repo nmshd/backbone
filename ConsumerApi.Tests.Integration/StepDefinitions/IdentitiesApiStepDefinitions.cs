@@ -3,7 +3,7 @@ using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Crypto;
-using Backbone.Crypto.Implementations;
+using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -14,12 +14,12 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private readonly ChallengesApi _challengeApi;
-    private readonly SignatureHelper _signatureHelper;
+    private readonly ISignatureHelper _signatureHelper;
     private readonly IdentitiesApi _identitiesApi;
     private HttpResponse<CreateIdentityResponse>? _identityResponse;
     private HttpResponse<Challenge>? _challengeResponse;
 
-    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengeApi, SignatureHelper signatureHelper) : base(httpConfiguration)
+    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengeApi, ISignatureHelper signatureHelper) : base(httpConfiguration)
     {
         _identitiesApi = identitiesApi;
         _challengeApi = challengeApi;
