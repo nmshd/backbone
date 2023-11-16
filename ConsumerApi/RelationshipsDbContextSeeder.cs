@@ -40,13 +40,15 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
     private async Task FillRelationshipChangesWithMissingContent(RelationshipsDbContext context)
     {
         var relationshipChangesWithMissingContent = await context.RelationshipChanges
+            .Include(rc => rc.Request)
+            .Include(rc => rc.Response)
             .Where(rc => rc.Request.Content == null || (rc.Response != null && rc.Response.Content == null)).ToListAsync();
 
         foreach (var relationshipChange in relationshipChangesWithMissingContent)
         {
             if (relationshipChange.Request.Content == null)
             {
-                var blobRequestContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipChange.Request.Id);
+                var blobRequestContent = await _blobStorage!.FindAsync(_blobRootFolder!, $"{relationshipChange.Request.Id}_Req");
                 relationshipChange.Request.LoadContent(blobRequestContent);
                 context.RelationshipChanges.Update(relationshipChange);
             }
@@ -55,7 +57,7 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
             {
                 try
                 {
-                    var blobResponseContent = await _blobStorage!.FindAsync(_blobRootFolder!, relationshipChange.Response.Id);
+                    var blobResponseContent = await _blobStorage!.FindAsync(_blobRootFolder!, $"{relationshipChange.Response.Id}_Res");
                     relationshipChange.Response.LoadContent(blobResponseContent);
                     context.RelationshipChanges.Update(relationshipChange);
                 }
