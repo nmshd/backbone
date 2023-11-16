@@ -30,7 +30,7 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllRelationshipsByParticipantAddress([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
@@ -38,7 +38,6 @@ public class RelationshipsController : ApiControllerBase
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var relationshipOverviews = await _adminUiDbContext.RelationshipOverviews
-            .AsQueryable()
             .Where(r => r.To == participant || r.From == participant)
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 

@@ -12,10 +12,10 @@ public class RelationshipDTO
     public string CreatedByDevice { get; set; }
     public string? AnsweredByDevice { get; set; }
 
-    public RelationshipDTO(IdentityAddress participantAddress, RelationshipOverview relationshipOverview)
+    public RelationshipDTO(IdentityAddress pointOfView, RelationshipOverview relationshipOverview)
     {
-        Peer = relationshipOverview.To == participantAddress ? relationshipOverview.From : relationshipOverview.To;
-        RequestedBy = relationshipOverview.To == participantAddress ? "Peer" : "Self";
+        Peer = relationshipOverview.To == pointOfView ? relationshipOverview.From : relationshipOverview.To;
+        RequestedBy = relationshipOverview.To == pointOfView ? "Peer" : "Self";
         TemplateId = relationshipOverview.RelationshipTemplateId;
         Status = relationshipOverview.Status;
         CreationDate = relationshipOverview.CreatedAt;
