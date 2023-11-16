@@ -28,17 +28,17 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
-        DevicePushIdentifier response;
+        DevicePushIdentifier devicePushIdentifier;
         if (parseHandleResult.IsSuccess)
         {
-            response = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+            devicePushIdentifier = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
         }
         else
         {
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
         }
 
-        return new UpdateDeviceRegistrationResponse(response);
+        return new UpdateDeviceRegistrationResponse(devicePushIdentifier);
     }
 
     private static Environment DeserializeEnvironment(string environment)
