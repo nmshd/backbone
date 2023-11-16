@@ -10,7 +10,6 @@ updates:
         patterns:
           - "*"
         exclude-patterns:
-          - "AspNetCore.HealthChecks.NpgSql"
           - "Npgsql.EntityFrameworkCore.PostgreSQL"
     reviewers:
       - "tnotheis"
