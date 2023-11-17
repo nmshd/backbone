@@ -94,6 +94,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")

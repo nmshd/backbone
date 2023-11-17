@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20231114154951_RelationshipsOverview")]
+    [Migration("20231117103711_RelationshipsOverview")]
     partial class RelationshipsOverview
     {
         /// <inheritdoc />
@@ -97,6 +97,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")

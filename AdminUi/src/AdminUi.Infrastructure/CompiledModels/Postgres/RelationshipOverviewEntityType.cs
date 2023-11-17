@@ -57,8 +57,7 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 "RelationshipTemplateId",
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("RelationshipTemplateId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(RelationshipOverview).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
+                fieldInfo: typeof(RelationshipOverview).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var status = runtimeEntityType.AddProperty(
                 "Status",
