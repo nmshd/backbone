@@ -5,10 +5,4 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletion
 
 public class StartDeletionProcessCommand : IRequest
 {
-    public StartDeletionProcessCommand(IdentityAddress identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public IdentityAddress IdentityAddress { get; set; }
 }

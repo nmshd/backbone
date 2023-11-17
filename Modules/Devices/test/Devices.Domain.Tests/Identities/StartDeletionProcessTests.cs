@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
+using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
@@ -49,48 +49,6 @@ public class StartDeletionProcessTests : IDisposable
 
         // Act
         var acting = () => activeIdentity.StartDeletionProcess(asDevice);
-
-        // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
-    }
-
-    [Fact]
-    public void Start_deletion_process_as_support()
-    {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
-
-        // Act
-        activeIdentity.StartDeletionProcess();
-
-        // Assert
-        AssertDeletionProcessWasStarted(activeIdentity);
-        var deletionProcess = activeIdentity.DeletionProcesses[0];
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        deletionProcess.ApprovedAt.Should().BeNull();
-        deletionProcess.ApprovedByDevice.Should().BeNull();
-
-        var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by a support employee.");
-        auditLogEntry.DeviceIdHash.Should().BeNull();
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-    }
-
-
-
-    [Fact]
-    public void Only_one_active_deletion_process_is_allowed_when_started_by_the_support()
-    {
-        // Arrange
-        var activeIdentity = CreateIdentity();
-
-        activeIdentity.StartDeletionProcess();
-
-        // Act
-        var acting = () => activeIdentity.StartDeletionProcess();
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");

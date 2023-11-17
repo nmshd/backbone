@@ -10,14 +10,12 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner. It was automatically approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), null, DeletionProcessStatus.Approved);
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, byte[] identityAddressHash)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by a support employee.", identityAddressHash, null, null, DeletionProcessStatus.WaitingForApproval);
-    }
-
+    // EF Core needs the empty constructor
+#pragma warning disable CS8618
+    // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcessAuditLogEntry()
+#pragma warning restore CS8618
     {
-
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)

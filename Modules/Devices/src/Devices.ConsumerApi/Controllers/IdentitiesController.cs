@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
@@ -21,14 +20,12 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
-    private readonly IUserContext _userContext;
 
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager, IUserContext userContext) : base(mediator)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
         _applicationManager = applicationManager;
-        _userContext = userContext;
     }
 
     [HttpPost]
@@ -65,23 +62,23 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new StartDeletionProcessCommand(_userContext.GetAddress()), cancellationToken);
+        await _mediator.Send(new StartDeletionProcessCommand(), cancellationToken);
         return new CreatedResult("", null);
     }
 }
 
 public class CreateIdentityRequest
 {
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
-    public byte[] IdentityPublicKey { get; set; }
-    public string DevicePassword { get; set; }
-    public byte IdentityVersion { get; set; }
-    public CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
+    public required string ClientId { get; set; }
+    public required string ClientSecret { get; set; }
+    public required byte[] IdentityPublicKey { get; set; }
+    public required string DevicePassword { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
 }
 
 public class CreateIdentityRequestSignedChallenge
 {
-    public string Challenge { get; set; }
-    public byte[] Signature { get; set; }
+    public required string Challenge { get; set; }
+    public required byte[] Signature { get; set; }
 }

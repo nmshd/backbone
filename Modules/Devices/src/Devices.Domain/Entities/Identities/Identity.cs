@@ -10,7 +10,6 @@ public class Identity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
 
-
     public Identity(string? clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
@@ -58,12 +57,6 @@ public class Identity
         _deletionProcesses.Add(new IdentityDeletionProcess(Address, asDevice));
     }
 
-    public void StartDeletionProcess()
-    {
-        EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(new IdentityDeletionProcess(Address));
-    }
-
     private void EnsureNoActiveProcessExists()
     {
         var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
@@ -75,6 +68,5 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    WaitingForApproval,
     Approved
 }

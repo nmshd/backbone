@@ -38,4 +38,17 @@ public static class TestDataGenerator
             CreateRandomTierId(),
             1);
     }
+
+    public static Identity CreateIdentityWithOneDevice()
+    {
+        var identity = new Identity(
+            CreateRandomDeviceId(),
+            CreateRandomIdentityAddress(),
+            CreateRandomBytes(),
+            CreateRandomTierId(),
+            1);
+        identity.Devices.Add(new Device(identity));
+
+        return identity;
+    }
 }
