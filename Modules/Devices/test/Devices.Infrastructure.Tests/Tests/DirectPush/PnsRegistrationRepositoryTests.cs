@@ -76,18 +76,18 @@ public class PnsRegistrationRepositoryTests
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
         var pnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, "keyAppId", Environment.Development);
 
-        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns(pnsRegistration);
 
-        var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
+        var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
         await directPushService.DeleteRegistration(deviceId, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPnsRegistrationRepository.Delete(
+        A.CallTo(() => mockPnsRegistrationsRepository.Delete(
                 A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
             .MustHaveHappenedOnceExactly();
     }
@@ -98,18 +98,18 @@ public class PnsRegistrationRepositoryTests
         // Arrange
         var deviceId = CreateRandomDeviceId();
 
-        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns((PnsRegistration)null);
 
-        var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
+        var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
         await directPushService.DeleteRegistration(deviceId, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPnsRegistrationRepository.Delete(
+        A.CallTo(() => mockPnsRegistrationsRepository.Delete(
                 A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
             .MustNotHaveHappened();
     }
