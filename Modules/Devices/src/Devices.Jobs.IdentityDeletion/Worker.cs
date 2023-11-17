@@ -24,7 +24,6 @@ public class Worker : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Stop called");
         return Task.CompletedTask;
     }
 }
