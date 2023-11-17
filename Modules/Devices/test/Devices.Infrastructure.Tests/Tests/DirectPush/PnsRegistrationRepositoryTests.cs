@@ -50,18 +50,18 @@ public class PnsRegistrationRepositoryTests
 
         var mockPnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development);
 
-        var mockPnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
+        var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, CancellationToken.None, true))
            .Returns(mockPnsRegistration);
 
-        var directPushService = CreateDirectPushService(mockPnsRegistrationRepository);
+        var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
         var pnsRegistration = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPnsRegistrationRepository
+        A.CallTo(() => mockPnsRegistrationsRepository
             .Update(A<PnsRegistration>._, CancellationToken.None))
             .MustHaveHappenedOnceExactly();
     }
