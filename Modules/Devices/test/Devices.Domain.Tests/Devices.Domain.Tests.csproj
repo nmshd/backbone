@@ -23,14 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Devices.Domain\Devices.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DevelopmentKit.Identity">
-      <HintPath>..\..\..\..\AdminUi\src\AdminUi\bin\Debug\net7.0\DevelopmentKit.Identity.dll</HintPath>
-    </Reference>
-    <Reference Include="FakeItEasy">
-      <HintPath>..\..\..\..\..\..\Users\nvojisla\.nuget\packages\fakeiteasy\7.4.0\lib\net5.0\FakeItEasy.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

@@ -19,15 +19,15 @@ public class HandlerTests
     public async Task Happy_path_as_owner()
     {
         // Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var activeDevice = activeIdentity.Devices[0];
+
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var activeDevice = identity.Devices[0];
         var fakeUserContext = A.Fake<IUserContext>();
 
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
-            .Returns(identity);
-
-        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
+            .Returns(activeIdentity);
+        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
@@ -42,7 +42,7 @@ public class HandlerTests
 
         A.CallTo(() => mockIdentitiesRepository.Update(
                 A<Identity>.That.Matches(
-                    i => i.Address == identity.Address &&
+                    i => i.Address == activeIdentity.Address &&
                          i.DeletionProcesses.Count == 1 &&
                          i.DeletionProcesses[0].Id == response.Id &&
                          i.DeletionProcesses[0].AuditLog.Count == 1),
@@ -54,16 +54,16 @@ public class HandlerTests
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
+        var address = CreateRandomIdentityAddress();
+
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var address = CreateRandomIdentityAddress();
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
                 A<IdentityAddress>._,
                 A<CancellationToken>._,
                 A<bool>._))
             .Returns<Identity>(null);
-
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(address);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);

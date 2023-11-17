@@ -17,12 +17,12 @@ public class StartDeletionProcessTests : IDisposable
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var activeIdentity = CreateIdentity();
-        var asDevice = DeviceId.Parse("DVC");
+        var activeDevice = DeviceId.Parse("DVC");
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcess(asDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcess(activeDevice);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
@@ -30,7 +30,7 @@ public class StartDeletionProcessTests : IDisposable
         AssertDeletionProcessWasStarted(activeIdentity);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.ApprovedByDevice.Should().Be(asDevice);
+        deletionProcess.ApprovedByDevice.Should().Be(activeDevice);
         deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
@@ -45,12 +45,12 @@ public class StartDeletionProcessTests : IDisposable
     {
         // Arrange
         var activeIdentity = CreateIdentity();
-        var asDevice = DeviceId.Parse("DVC");
+        var activeDevice = DeviceId.Parse("DVC");
 
-        activeIdentity.StartDeletionProcess(asDevice);
+        activeIdentity.StartDeletionProcess(activeDevice);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcess(asDevice);
+        var acting = () => activeIdentity.StartDeletionProcess(activeDevice);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
