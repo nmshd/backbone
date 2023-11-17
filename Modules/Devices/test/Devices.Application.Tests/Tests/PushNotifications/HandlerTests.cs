@@ -46,7 +46,7 @@ public class HandlerTests
         {
             Platform = "fcm",
             Handle = "handle",
-            AppId = "keyAppId",
+            AppId = "someAppId",
             Environment = "Development"
         }, CancellationToken.None);
 
@@ -55,7 +55,7 @@ public class HandlerTests
                 mockUserContext.GetAddress(),
                 mockUserContext.GetDeviceId(),
                 PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value,
-                "keyAppId",
+                "someAppId",
                 Environment.Development,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
