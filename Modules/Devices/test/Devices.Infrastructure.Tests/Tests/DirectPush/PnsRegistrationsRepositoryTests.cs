@@ -20,7 +20,7 @@ public class PnsRegistrationsRepositoryTests
         var deviceId = CreateRandomDeviceId();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
@@ -30,11 +30,11 @@ public class PnsRegistrationsRepositoryTests
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
-        var pnsRegistration = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, "keyAppId", Environment.Development, CancellationToken.None);
+        var devicePushIdentifier = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, "someAppId", Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
-            .Add(A<PnsRegistration>._, CancellationToken.None))
+            .Add(A<PnsRegistration>.That.Matches(p => p.DevicePushIdentifier == devicePushIdentifier), CancellationToken.None))
             .MustHaveHappenedOnceExactly();
     }
 
