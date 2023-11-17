@@ -1,13 +1,9 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
+﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+using Backbone.Modules.Quotas.Application.DTOs;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
 
-public class ListQuotasForIdentityResponse
+public class ListQuotasForIdentityResponse : EnumerableResponseBase<QuotaDTO>
 {
-    public ListQuotasForIdentityResponse(IEnumerable<QuotaDTO> items)
-    {
-        Items = items;
-    }
-
-    public IEnumerable<QuotaDTO> Items { get; }
+    public ListQuotasForIdentityResponse(IEnumerable<QuotaDTO> items) : base(items) { }
 }
