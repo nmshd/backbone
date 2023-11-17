@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
@@ -39,6 +41,6 @@ internal class HasherImpl : IHasher
 {
     public byte[] HashUtf8(string input)
     {
-        return Array.Empty<byte>(); // TODO: implement real hashing
+        return SHA256.HashData(Encoding.UTF8.GetBytes(input));
     }
 }
