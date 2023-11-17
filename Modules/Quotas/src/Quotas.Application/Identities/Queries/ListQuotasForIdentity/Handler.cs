@@ -14,18 +14,21 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
+    private readonly IMetricsRepository _metricsRepository;
     private readonly IdentityAddress _identityAddress;
 
-    public Handler(IUserContext userContext, IIdentitiesRepository identitiesRepository, MetricCalculatorFactory metricCalculatorFactory)
+    public Handler(IUserContext userContext, IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identityAddress = userContext.GetAddress();
         _identitiesRepository = identitiesRepository;
+        _metricsRepository = metricsRepository;
         _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var metrics = await _metricsRepository.FindAll(cancellationToken);
 
         var individualQuotasForIdentityTasks = identity.IndividualQuotas
             .Select(async q =>
@@ -33,10 +36,9 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
                 var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
                 var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
 
-                return new QuotaDTO(
-                    q,
-                    new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString()!)),
-                    usage);
+                var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
+
+                return new QuotaDTO(q, metric, usage);
             });
 
         var individualQuotasForIdentity = await Task.WhenAll(individualQuotasForIdentityTasks);
@@ -47,12 +49,10 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
                 var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
                 var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
 
-                return new QuotaDTO(
-                    q,
-                    new MetricDTO(new Metric(q.MetricKey, q.MetricKey.ToString()!)),
-                    usage);
-            })
-            .ToList();
+                var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
+
+                return new QuotaDTO(q, metric, usage);
+            });
 
         var tierQuotasForIdentity = await Task.WhenAll(tierQuotasForIdentityTasks);
 
