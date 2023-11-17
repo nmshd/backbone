@@ -110,7 +110,7 @@ public class PnsRegistrationsRepositoryTests
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository.Delete(
-                A<List<DeviceId>>.That.Matches(e => e.Count == 1), CancellationToken.None))
+                A<List<DeviceId>>._, CancellationToken.None))
             .MustNotHaveHappened();
     }
 
