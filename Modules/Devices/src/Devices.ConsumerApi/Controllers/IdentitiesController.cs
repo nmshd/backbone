@@ -62,8 +62,8 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new StartDeletionProcessCommand(), cancellationToken);
-        return new CreatedResult("", null);
+        var response = await _mediator.Send(new StartDeletionProcessCommand(), cancellationToken);
+        return Created("", response);
     }
 }
 

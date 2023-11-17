@@ -3,6 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 
-public class StartDeletionProcessCommand : IRequest
+public class StartDeletionProcessCommand : IRequest<StartDeletionProcessResponse>
 {
 }

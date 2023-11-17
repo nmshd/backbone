@@ -7,6 +7,7 @@ Scenario: Starting a deletion process
 	Given no active deletion process for the user exists
 	When a POST request is sent to the /Identities/Self/DeletionProcesses endpoint
 	Then the response status code is 201 (Created)
+	And the response contains a Deletion Process
 
 Scenario: There can only be one active deletion process
 	Given an active deletion process for the user exists
