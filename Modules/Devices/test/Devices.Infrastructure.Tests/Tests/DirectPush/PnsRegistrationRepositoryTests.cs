@@ -93,7 +93,7 @@ public class PnsRegistrationRepositoryTests
     }
 
     [Fact]
-    public async void Trying_to_delete_non_existing_PnsRegistration()
+    public async void Trying_to_delete_non_existing_PnsRegistration_does_nothing()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
