@@ -38,14 +38,14 @@ public class PnsRegistrationTests
     public void Generate_DevicePushIdentifier_independent_of_PnsRegistration_constructor_parameters()
     {
         // Arrange
-        var randomIdentityAddress = CreateRandomIdentityAddress();
-        var randomDeviceId = CreateRandomDeviceId();
+        var identityAddress = CreateRandomIdentityAddress();
+        var deviceId = CreateRandomDeviceId();
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
 
-        var otherPnsRegistration = new PnsRegistration(randomIdentityAddress, randomDeviceId, pnsHandle, "appId", Environment.Development);
+        var otherPnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
 
         // Act
-        var pnsRegistration = new PnsRegistration(randomIdentityAddress, randomDeviceId, pnsHandle, "appId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
 
         // Assert
         pnsRegistration.DevicePushIdentifier.StringValue.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.StringValue);
