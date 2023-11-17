@@ -16,13 +16,13 @@ public class PnsRegistrationTests
         // Arrange
         var identityAddress = CreateRandomIdentityAddress();
         var deviceId = CreateRandomDeviceId();
-        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
         var time = DateTime.UtcNow;
 
         SystemTime.Set(time);
 
         // Act
-        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
 
         // Assert
         pnsRegistration.IdentityAddress.Should().Be(identityAddress);
@@ -30,7 +30,7 @@ public class PnsRegistrationTests
         pnsRegistration.DevicePushIdentifier.Should().NotBeNull();
         pnsRegistration.Handle.Should().Be(pnsHandle);
         pnsRegistration.UpdatedAt.Should().Be(time);
-        pnsRegistration.AppId.Should().Be("appId");
+        pnsRegistration.AppId.Should().Be("someAppId");
         pnsRegistration.Environment.Should().Be(Environment.Development);
     }
 
@@ -40,12 +40,12 @@ public class PnsRegistrationTests
         // Arrange
         var identityAddress = CreateRandomIdentityAddress();
         var deviceId = CreateRandomDeviceId();
-        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
+        var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
-        var otherPnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
+        var otherPnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
 
         // Act
-        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
 
         // Assert
         pnsRegistration.DevicePushIdentifier.StringValue.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.StringValue);
