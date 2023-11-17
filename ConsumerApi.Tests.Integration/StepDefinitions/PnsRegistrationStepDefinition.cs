@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
@@ -46,9 +47,15 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIsCreated(int statusCode)
+    public void ThenTheResponseStatusCodeIs(int statusCode)
     {
         ThrowHelpers.ThrowIfNull(_response);
         _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
+    }
+
+    [Then(@"the response contains the push identifier for the device")]
+    public void ThenTheResponseContainsThePushIdentifierForTheDevice()
+    {
+        _response!.Content.Result!.DevicePushIdentifier.Should().NotBeNull();
     }
 }
