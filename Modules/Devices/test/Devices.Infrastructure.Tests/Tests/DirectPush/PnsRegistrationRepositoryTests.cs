@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class PnsRegistrationRepositoryTests
 {
     [Fact]
-    public async void Adding_new_PnsRegistration_in_repository()
+    public async void Update_of_a_registration_that_does_not_exist_yet()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
