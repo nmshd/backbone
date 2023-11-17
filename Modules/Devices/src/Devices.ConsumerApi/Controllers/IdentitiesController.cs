@@ -57,7 +57,7 @@ public class IdentitiesController : ApiControllerBase
         return Created("", response);
     }
 
-    [HttpPost("Self/DeletionProcess")]
+    [HttpPost("Self/DeletionProcesses")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)

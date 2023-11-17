@@ -61,7 +61,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         await _identitiesApi.StartDeletionProcess(requestConfiguration);
     }
 
-    [When("a POST request is sent to the /Identities/Self/DeletionProcess endpoint")]
+    [When("a POST request is sent to the /Identities/Self/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesSelfDeletionProcessEndpoint()
     {
         var requestConfiguration = new RequestConfiguration();
