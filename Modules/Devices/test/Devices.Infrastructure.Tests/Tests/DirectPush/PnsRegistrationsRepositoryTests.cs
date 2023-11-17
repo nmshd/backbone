@@ -1,6 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.Tests;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -18,7 +17,7 @@ public class PnsRegistrationsRepositoryTests
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
-        var identity = TestDataGenerator.CreateIdentity();
+        var identityAddress = CreateRandomIdentityAddress();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
@@ -30,7 +29,7 @@ public class PnsRegistrationsRepositoryTests
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
-        var devicePushIdentifier = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, "someAppId", Environment.Development, CancellationToken.None);
+        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
@@ -43,12 +42,12 @@ public class PnsRegistrationsRepositoryTests
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
-        var identity = TestDataGenerator.CreateIdentity();
+        var identityAddress = CreateRandomIdentityAddress();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
         var appId = "someAppId";
 
-        var mockPnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development);
+        var mockPnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, appId, Environment.Development);
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
@@ -58,7 +57,7 @@ public class PnsRegistrationsRepositoryTests
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
-        var devicePushIdentifier = await directPushService.UpdateRegistration(identity.Address, deviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
+        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, appId, Environment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
@@ -71,10 +70,10 @@ public class PnsRegistrationsRepositoryTests
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
-        var identity = TestDataGenerator.CreateIdentity();
+        var identityAddress = CreateRandomIdentityAddress();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value;
-        var pnsRegistration = new PnsRegistration(identity.Address, deviceId, pnsHandle, "keyAppId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "keyAppId", Environment.Development);
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
