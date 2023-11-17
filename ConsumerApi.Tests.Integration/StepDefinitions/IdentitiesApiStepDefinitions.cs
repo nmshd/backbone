@@ -29,12 +29,45 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
-        _challengeResponse!.IsSuccessStatusCode.Should().BeTrue();
+        await CreateChallenge();
     }
 
     [When(@"a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
+    {
+        await CreateIdentity();
+    }
+
+    [Given(@"an Identity i")]
+    public async Task GivenAnIdentityI()
+    {
+        await CreateChallenge();
+        await CreateIdentity();
+    }
+
+    [Then(@"the response contains a CreateIdentityResponse")]
+    public void ThenTheResponseContainsACreateIdentityResponse()
+    {
+        _identityResponse!.Should().NotBeNull();
+        _identityResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _identityResponse!.ContentType.Should().Be("application/json");
+        _identityResponse!.AssertContentCompliesWithSchema();
+    }
+
+    [Then(@"the response status code is (\d+) \(.+\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    {
+        var actualStatusCode = (int)_identityResponse!.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode);
+    }
+
+    private async Task CreateChallenge()
+    {
+        _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
+        _challengeResponse!.IsSuccessStatusCode.Should().BeTrue();
+    }
+
+    private async Task CreateIdentity()
     {
         var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Content.Result!);
 
@@ -72,21 +105,5 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createIdentityRequest);
 
         _identityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
-    }
-
-    [Then(@"the response contains a CreateIdentityResponse")]
-    public void ThenTheResponseContainsACreateIdentityResponse()
-    {
-        _identityResponse!.Should().NotBeNull();
-        _identityResponse!.IsSuccessStatusCode.Should().BeTrue();
-        _identityResponse!.ContentType.Should().Be("application/json");
-        _identityResponse!.AssertContentCompliesWithSchema();
-    }
-
-    [Then(@"the response status code is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        var actualStatusCode = (int)_identityResponse!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
     }
 }
