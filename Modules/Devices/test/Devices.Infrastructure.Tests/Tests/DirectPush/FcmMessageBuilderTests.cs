@@ -45,14 +45,14 @@ public class FcmMessageBuilderTests
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIFcXKTzkqDA6YLmHke"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
             .Build();
         var contentJson = FormatJson(message.Data["content"]);
 
         // Assert
         contentJson.Should().Be(FormatJson(@"{
           'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-          'devicePushIdentifier' : 'DPIFcXKTzkqDA6YLmHke',
+          'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
           'eventName': 'dynamic',
           'sentAt': '2021-01-01T00:00:00.000Z',
           'payload': {
