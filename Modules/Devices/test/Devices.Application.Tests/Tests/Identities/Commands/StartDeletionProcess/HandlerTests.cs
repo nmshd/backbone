@@ -9,6 +9,7 @@ using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcess;
 
@@ -49,7 +50,7 @@ public class HandlerTests
         // Arrange
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var address = TestDataGenerator.CreateRandomIdentityAddress();
+        var address = CreateRandomIdentityAddress();
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
                 A<IdentityAddress>._,
@@ -67,11 +68,6 @@ public class HandlerTests
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
-    }
-
-    private static Handler CreateHandler(IUserContext identitiesRepository)
-    {
-        return CreateHandler(A.Dummy<IIdentitiesRepository>(), A.Dummy<IEventBus>(), identitiesRepository);
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)

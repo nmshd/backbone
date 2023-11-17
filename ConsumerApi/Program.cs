@@ -16,6 +16,7 @@ using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.ConsumerApi;
@@ -37,6 +38,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -109,7 +111,9 @@ static WebApplication CreateApp(string[] args)
 
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
-        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
+        .SeedDbContext<TokensDbContext, TokensDbContextSeeder>()
+        .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -125,6 +129,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddTransient<DevicesDbContextSeeder>();
     services.AddTransient<QuotasDbContextSeeder>();
+    services.AddTransient<TokensDbContextSeeder>();
+    services.AddTransient<MessagesDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)
@@ -167,6 +173,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     });
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+
+    var devicesConfiguration = new DevicesConfiguration();
+    configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
+
+    services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
 }
 
 static void Configure(WebApplication app)

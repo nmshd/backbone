@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
@@ -37,14 +38,14 @@ public class HandlerTests
         var request = new PaginationFilter();
         List<Identity> identitiesList = new()
         {
-            new(TestDataGenerator.CreateRandomDeviceId(),
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomBytes(),
+            new(CreateRandomDeviceId(),
+            CreateRandomIdentityAddress(),
+            CreateRandomBytes(),
             TestDataGenerator.CreateRandomTierId(),
             1),
-            new(TestDataGenerator.CreateRandomDeviceId(),
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomBytes(),
+            new(CreateRandomDeviceId(),
+            CreateRandomIdentityAddress(),
+            CreateRandomBytes(),
             TestDataGenerator.CreateRandomTierId(),
             1)
         };
@@ -63,8 +64,8 @@ public class HandlerTests
     {
         // Arrange
         var request = new PaginationFilter();
-        var expectedClientId = TestDataGenerator.CreateRandomDeviceId();
-        var expectedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var expectedClientId = CreateRandomDeviceId();
+        var expectedAddress = CreateRandomIdentityAddress();
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
         List<Identity> identitiesList = new()
         {
