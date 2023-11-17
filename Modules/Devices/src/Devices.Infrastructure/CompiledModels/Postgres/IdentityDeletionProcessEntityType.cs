@@ -33,12 +33,39 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 valueConverter: new IdentityDeletionProcessIdEntityFrameworkValueConverter());
             id.AddAnnotation("Relational:IsFixedLength", true);
 
+            var approvedAt = runtimeEntityType.AddProperty(
+                "ApprovedAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+
+            var approvedByDevice = runtimeEntityType.AddProperty(
+                "ApprovedByDevice",
+                typeof(DeviceId),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovedByDevice", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovedByDevice>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 20,
+                unicode: false,
+                valueConverter: new DeviceIdValueConverter());
+            approvedByDevice.AddAnnotation("Relational:IsFixedLength", true);
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),
                 propertyInfo: typeof(IdentityDeletionProcess).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+
+            var gracePeriodEndsAt = runtimeEntityType.AddProperty(
+                "GracePeriodEndsAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("GracePeriodEndsAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<GracePeriodEndsAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
 
             var identityAddress = runtimeEntityType.AddProperty(
                 "IdentityAddress",
