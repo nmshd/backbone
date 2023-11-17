@@ -6,11 +6,11 @@ import { Relationship, RelationshipService } from "src/app/services/relationship
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
-    selector: "app-identity-edit-relationships",
-    templateUrl: "./identity-edit-relationships.component.html",
-    styleUrls: ["./identity-edit-relationships.component.css"]
+    selector: "app-identity-details-relationships",
+    templateUrl: "./identity-details-relationships.component.html",
+    styleUrls: ["./identity-details-relationships.component.css"]
 })
-export class IdentityEditRelationshipsComponent {
+export class IdentityDetailsRelationshipsComponent {
     @Input() public identityAddress?: string;
 
     public relationshipsTableDisplayedColumns: string[];

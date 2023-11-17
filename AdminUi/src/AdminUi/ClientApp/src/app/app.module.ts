@@ -42,8 +42,9 @@ import { ClientListComponent } from "./components/client/client-list/client-list
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
-import { IdentityEditComponent } from "./components/quotas/identity/identity-edit/identity-edit.component";
+import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
+import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
@@ -56,7 +57,6 @@ import { LoggerWriterService } from "./services/logger-writer-service/logger-wri
 import { SidebarService } from "./services/sidebar-service/sidebar.service";
 import { ApiKeyInterceptor } from "./shared/interceptors/api-key.interceptor";
 import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
-import { IdentityEditRelationshipsComponent } from "./components/quotas/identity/identity-edit/identity-edit-relationships/identity-edit-relationships.component";
 
 @NgModule({
     declarations: [
@@ -66,18 +66,17 @@ import { IdentityEditRelationshipsComponent } from "./components/quotas/identity
         SidebarComponent,
         TopbarComponent,
         IdentityListComponent,
-        IdentityEditComponent,
+        IdentityDetailsComponent,
         TierListComponent,
         TierEditComponent,
         ClientListComponent,
-        IdentityEditComponent,
         ClientEditComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
         LoginComponent,
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
-        IdentityEditRelationshipsComponent
+        IdentityDetailsRelationshipsComponent
     ],
     imports: [
         FormsModule,

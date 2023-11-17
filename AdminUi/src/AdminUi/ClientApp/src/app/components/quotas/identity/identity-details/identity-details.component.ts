@@ -12,11 +12,11 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
-    selector: "app-identity-edit",
-    templateUrl: "./identity-edit.component.html",
-    styleUrls: ["./identity-edit.component.css"]
+    selector: "app-identity-details",
+    templateUrl: "./identity-details.component.html",
+    styleUrls: ["./identity-details.component.css"]
 })
-export class IdentityEditComponent {
+export class IdentityDetailsComponent {
     public header: string;
     public headerDescription: string;
 
