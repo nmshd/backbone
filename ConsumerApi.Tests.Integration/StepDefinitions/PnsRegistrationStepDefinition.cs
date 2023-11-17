@@ -1,11 +1,9 @@
 ﻿using System.Net;
 using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RequestConfiguration = Backbone.ConsumerApi.Tests.Integration.Models.RequestConfiguration;
@@ -40,7 +38,7 @@ internal class PnsRegistrationStepDefinition : BaseStepDefinitions
         {
             Platform = "fcm",
             Handle = "eXYs0v3XT9w:APA91bHal6RzkPdjiFmoXvtVRJlfN81OCyzVIbXx4bTQupfcUQmDY9eAdUABLntZzO4M5rv7jmcj3Mk6",
-            AppId = "keyAppId"
+            AppId = "someAppId"
         });
 
         _response = await _pnsRegistrationsApi.RegisterForPushNotifications(requestConfiguration);
