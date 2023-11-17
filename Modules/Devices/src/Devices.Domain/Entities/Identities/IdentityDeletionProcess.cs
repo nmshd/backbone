@@ -20,10 +20,7 @@ public class IdentityDeletionProcess
         Id = IdentityDeletionProcessId.Generate();
         CreatedAt = SystemTime.UtcNow;
 
-        Status = DeletionProcessStatus.Approved;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        Approve(createdByDevice);
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
@@ -31,16 +28,24 @@ public class IdentityDeletionProcess
         };
     }
 
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
+
     public IdentityDeletionProcessId Id { get; }
-    public DeletionProcessStatus Status { get; }
+    public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
 
-    public DateTime? ApprovedAt { get; }
-    public DeviceId? ApprovedByDevice { get; }
+    public DateTime? ApprovedAt { get; private set; }
+    public DeviceId? ApprovedByDevice { get; private set; }
 
-    public DateTime? GracePeriodEndsAt { get; }
+    public DateTime? GracePeriodEndsAt { get; private set; }
 
     public bool IsActive()
     {
