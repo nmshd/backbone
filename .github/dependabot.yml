@@ -1,5 +1,6 @@
 version: 2
 updates:
+  ##### NuGet packages for Backbone.sln #####
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -9,13 +10,13 @@ updates:
         patterns:
           - "*"
         exclude-patterns:
-          - "AspNetCore.HealthChecks.NpgSql"
           - "Npgsql.EntityFrameworkCore.PostgreSQL"
     reviewers:
       - "tnotheis"
     labels:
       - "dependencies"
 
+  ##### GitHub Actions #####
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -29,8 +30,89 @@ updates:
     labels:
       - "dependencies"
 
+  ##### Pipeline scripts #####
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: /.ci
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  ##### Admin UI Angular App #####
+  - package-ecosystem: "npm"
+    directory: "/AdminUi/src/AdminUi/ClientApp"
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  ##### Performance Tests #####
+  - package-ecosystem: "npm"
+    directory: /Modules/Challenges/test/Challenges.API.Tests.Performance.EndToEnd
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: /Modules/Files/test/Files.API.Tests.Performance.EndToEnd
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: /Modules/Messages/test/Messages.API.Tests.Performance.EndToEnd
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: /Modules/Relationships/test/Relationships.API.Tests.Performance.EndToEnd
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: /Modules/Tokens/test/Tokens.API.Tests.Performance.EndToEnd
     schedule:
       interval: "weekly"
     groups:
