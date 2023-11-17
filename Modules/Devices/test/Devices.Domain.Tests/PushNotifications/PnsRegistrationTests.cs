@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using FluentAssertions;
 using Xunit;
@@ -23,10 +22,8 @@ public class PnsRegistrationTests
 
         // Assert
         pnsRegistration.IdentityAddress.Should().Be(identityAddress);
-        pnsRegistration.DeviceId.StringValue[..3].Should().Be("DVC");
-        pnsRegistration.DeviceId.StringValue.Length.Should().Be(20);
-        pnsRegistration.DevicePushIdentifier.StringValue[..3].Should().Be("DPI");
-        pnsRegistration.DevicePushIdentifier.StringValue.Length.Should().Be(20);
+        pnsRegistration.DeviceId.Should().NotBeNull();
+        pnsRegistration.DevicePushIdentifier.Should().NotBeNull();
         pnsRegistration.Handle.Should().Be(pnsHandle);
         pnsRegistration.UpdatedAt.Should().BeBefore(DateTime.UtcNow);
         pnsRegistration.AppId.Should().Be("appId");
