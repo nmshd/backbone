@@ -29,14 +29,11 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     {
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
         DevicePushIdentifier devicePushIdentifier;
-        if (parseHandleResult.IsSuccess)
-        {
-            devicePushIdentifier = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
-        }
-        else
-        {
+
+        if (parseHandleResult.IsFailure)
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
-        }
+
+        devicePushIdentifier = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
 
         return new UpdateDeviceRegistrationResponse(devicePushIdentifier);
     }
