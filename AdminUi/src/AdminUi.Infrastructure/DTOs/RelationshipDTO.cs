@@ -5,7 +5,7 @@ public class RelationshipDTO
 {
     public string Peer { get; set; }
     public string RequestedBy { get; set; }
-    public string? TemplateId { get; set; }
+    public string TemplateId { get; set; }
     public RelationshipStatus Status { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime? AnsweredAt { get; set; }
