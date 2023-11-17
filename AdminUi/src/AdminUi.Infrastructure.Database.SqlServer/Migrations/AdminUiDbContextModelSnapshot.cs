@@ -94,6 +94,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")

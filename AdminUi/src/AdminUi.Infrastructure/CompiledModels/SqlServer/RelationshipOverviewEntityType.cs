@@ -62,8 +62,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 "RelationshipTemplateId",
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("RelationshipTemplateId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(RelationshipOverview).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
+                fieldInfo: typeof(RelationshipOverview).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
             relationshipTemplateId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var status = runtimeEntityType.AddProperty(

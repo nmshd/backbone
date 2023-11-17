@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20231114174224_RelationshipsOverview")]
+    [Migration("20231117101915_RelationshipsOverview")]
     partial class RelationshipsOverview
     {
         /// <inheritdoc />
@@ -97,6 +97,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
