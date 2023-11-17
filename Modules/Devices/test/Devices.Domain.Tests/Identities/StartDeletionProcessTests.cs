@@ -9,15 +9,14 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessTests
+public class StartDeletionProcessTests : IDisposable
 {
     [Fact]
     public void Start_deletion_process_as_owner()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identityAddress = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
+        var activeIdentity = CreateIdentity();
         var asDevice = DeviceId.Parse("DVC");
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
@@ -43,8 +42,7 @@ public class StartDeletionProcessTests
     public void Only_one_active_deletion_process_is_allowed_when_started_by_the_owner()
     {
         // Arrange
-        var identityAddress = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
+        var activeIdentity = CreateIdentity();
         var asDevice = DeviceId.Parse("DVC");
 
         activeIdentity.StartDeletionProcess(asDevice);
@@ -61,8 +59,7 @@ public class StartDeletionProcessTests
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identityAddress = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
+        var activeIdentity = CreateIdentity();
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
@@ -88,8 +85,7 @@ public class StartDeletionProcessTests
     public void Only_one_active_deletion_process_is_allowed_when_started_by_the_support()
     {
         // Arrange
-        var identityAddress = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        var activeIdentity = new Identity("", identityAddress, Array.Empty<byte>(), TierId.Generate(), 1);
+        var activeIdentity = CreateIdentity();
 
         activeIdentity.StartDeletionProcess();
 
@@ -121,5 +117,16 @@ public class StartDeletionProcessTests
         auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
         auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.Should().BeNull();
+    }
+
+    private static Identity CreateIdentity()
+    {
+        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
+        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+    }
+
+    public void Dispose()
+    {
+        Hasher.Reset();
     }
 }

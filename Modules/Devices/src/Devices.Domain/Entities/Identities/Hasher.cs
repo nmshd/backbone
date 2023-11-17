@@ -28,6 +28,11 @@ public static class Hasher
     {
         return GET_HASHER.Value!().HashUtf8(input);
     }
+
+    public static void Reset()
+    {
+        GET_HASHER.Value = () => new HasherImpl();
+    }
 }
 
 internal class HasherImpl : IHasher
