@@ -46,9 +46,7 @@ public class Identity
     public void ChangeTier(TierId id)
     {
         if (TierId == id)
-        {
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
-        }
 
         TierId = id;
     }
@@ -56,9 +54,12 @@ public class Identity
     public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
+
         var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
+
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+
         return deletionProcess;
     }
 
