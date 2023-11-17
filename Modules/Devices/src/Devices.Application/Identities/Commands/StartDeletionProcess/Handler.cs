@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address));
-        
+
         return new StartDeletionProcessResponse(deletionProcess);
     }
 }

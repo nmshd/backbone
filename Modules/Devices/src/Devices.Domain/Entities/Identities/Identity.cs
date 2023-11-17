@@ -35,7 +35,7 @@ public class Identity
     public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
-    
+
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
 
     public bool IsNew()
