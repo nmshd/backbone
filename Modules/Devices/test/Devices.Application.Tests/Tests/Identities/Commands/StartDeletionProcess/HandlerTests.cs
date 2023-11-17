@@ -5,7 +5,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -21,7 +20,6 @@ public class HandlerTests
     {
         // Arrange
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var mockEventBus = A.Fake<IEventBus>();
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         var activeDevice = identity.Devices[0];
         var fakeUserContext = A.Fake<IUserContext>();
@@ -32,7 +30,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
         var command = new StartDeletionProcessCommand();
@@ -80,11 +78,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
-        return CreateHandler(identitiesRepository, A.Dummy<IEventBus>(), userContext);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus eventBus, IUserContext userContext)
-    {
-        return new Handler(identitiesRepository, eventBus, userContext);
+        return new Handler(identitiesRepository, userContext);
     }
 }

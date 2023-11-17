@@ -54,7 +54,7 @@ public class IdentitiesController : ApiControllerBase
 
         var response = await _mediator.Send(command, cancellationToken);
 
-        return Created("", response);
+        return Created(response);
     }
 
     [HttpPost("Self/DeletionProcesses")]

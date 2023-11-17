@@ -11,13 +11,11 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletion
 public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly IEventBus _eventBus;
     private readonly IUserContext _userContext;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IEventBus eventBus, IUserContext userContext)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
         _identitiesRepository = identitiesRepository;
-        _eventBus = eventBus;
         _userContext = userContext;
     }
 
@@ -28,8 +26,6 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
         var deletionProcess = identity.StartDeletionProcess(_userContext.GetDeviceId());
 
         await _identitiesRepository.Update(identity, cancellationToken);
-
-        _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address));
 
         return new StartDeletionProcessResponse(deletionProcess);
     }

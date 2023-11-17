@@ -24,12 +24,12 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identitiesApi = identitiesApi;
     }
 
-    [Given("no active deletion process for the user exists")]
+    [Given("no active deletion process for the identity exists")]
     public void GivenNoActiveDeletionProcessForTheUserExists()
     {
     }
 
-    [Given("an active deletion process for the user exists")]
+    [Given("an active deletion process for the identity exists")]
     public async Task GivenAnActiveDeletionProcessForTheUserExists()
     {
         var requestConfiguration = new RequestConfiguration();
