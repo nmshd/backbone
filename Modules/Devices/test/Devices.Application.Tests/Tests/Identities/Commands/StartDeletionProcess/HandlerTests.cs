@@ -26,8 +26,7 @@ public class HandlerTests
         var activeDevice = identity.Devices[0];
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(
-                A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
@@ -47,7 +46,8 @@ public class HandlerTests
                 A<Identity>.That.Matches(
                     i => i.Address == identity.Address &&
                          i.DeletionProcesses.Count == 1 &&
-                         i.DeletionProcesses[0].Id == response.Id),
+                         i.DeletionProcesses[0].Id == response.Id &&
+                         i.DeletionProcesses[0].AuditLog.Count == 1),
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
