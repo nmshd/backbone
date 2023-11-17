@@ -32,7 +32,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        ValidateRegistration(registrations.ToList().FirstOrDefault());
+        ValidateRegistrations(registrations);
 
         var sendResults = new SendResults();
 
@@ -40,6 +40,14 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         await Task.WhenAll(tasks);
         return sendResults;
+    }
+
+    private void ValidateRegistrations(IEnumerable<PnsRegistration> registrations)
+    {
+        foreach (var registration in registrations)
+        {
+            ValidateRegistration(registration);
+        }
     }
 
     public void ValidateRegistration(PnsRegistration registration)
