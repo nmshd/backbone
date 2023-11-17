@@ -18,14 +18,9 @@ namespace Backbone.Modules.Quotas.ConsumerApi.Controllers;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class QuotasController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    public QuotasController(IMediator mediator) : base(mediator) { }
 
-    public QuotasController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
-    {
-        _options = options.Value;
-    }
-
-    [HttpGet("ListIndividualQuotas")]
+    [HttpGet]
     [ResponseCache(Duration = 1800, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "address" })]
     [ProducesResponseType(typeof(List<QuotaDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListIndividualQuotas(CancellationToken cancellationToken)
