@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
@@ -16,6 +17,9 @@ public class PnsRegistrationTests
         var identityAddress = CreateRandomIdentityAddress();
         var deviceId = CreateRandomDeviceId();
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "value").Value;
+        var time = DateTime.UtcNow;
+
+        SystemTime.Set(time);
 
         // Act
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "appId", Environment.Development);
@@ -25,7 +29,7 @@ public class PnsRegistrationTests
         pnsRegistration.DeviceId.Should().NotBeNull();
         pnsRegistration.DevicePushIdentifier.Should().NotBeNull();
         pnsRegistration.Handle.Should().Be(pnsHandle);
-        pnsRegistration.UpdatedAt.Should().BeBefore(DateTime.UtcNow);
+        pnsRegistration.UpdatedAt.Should().Be(time);
         pnsRegistration.AppId.Should().Be("appId");
         pnsRegistration.Environment.Should().Be(Environment.Development);
     }
