@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
@@ -60,21 +59,5 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
         var quotasForIdentity = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
 
         return new ListQuotasForIdentityResponse(quotasForIdentity);
-    }
-}
-
-public static class PaginationHelper
-{
-    public static List<T> ApplyPagedResponse<T>(List<T> source, PaginationFilter paginationFilter)
-    {
-        var page = paginationFilter.PageNumber - 1;
-        var pageSize = paginationFilter.PageSize ??= 10;
-
-        var pagedData = source
-            .Skip(page * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        return pagedData;
     }
 }
