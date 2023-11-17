@@ -22,14 +22,16 @@ public class StartDeletionProcessTests : IDisposable
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        activeIdentity.StartDeletionProcess(asDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcess(asDevice);
 
         // Assert
+        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+
         AssertDeletionProcessWasStarted(activeIdentity);
-        var deletionProcess = activeIdentity.DeletionProcesses[0];
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
         deletionProcess.ApprovedByDevice.Should().Be(asDevice);
+        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];

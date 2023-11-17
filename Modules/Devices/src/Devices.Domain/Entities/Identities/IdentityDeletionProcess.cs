@@ -23,6 +23,7 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.Approved;
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
@@ -38,6 +39,8 @@ public class IdentityDeletionProcess
 
     public DateTime? ApprovedAt { get; }
     public DeviceId? ApprovedByDevice { get; }
+
+    public DateTime? GracePeriodEndsAt { get; }
 
     public bool IsActive()
     {

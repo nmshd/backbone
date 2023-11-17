@@ -35,6 +35,8 @@ public class Identity
     public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
+    
+    public DateTime? DeletionGracePeriodEndsAt { get; private set; }
 
     public bool IsNew()
     {
@@ -51,10 +53,13 @@ public class Identity
         TierId = id;
     }
 
-    public void StartDeletionProcess(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(new IdentityDeletionProcess(Address, asDevice));
+        var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
+        _deletionProcesses.Add(deletionProcess);
+        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        return deletionProcess;
     }
 
     private void EnsureNoActiveProcessExists()
