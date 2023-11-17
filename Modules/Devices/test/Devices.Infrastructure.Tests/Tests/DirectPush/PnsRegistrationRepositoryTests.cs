@@ -39,7 +39,7 @@ public class PnsRegistrationRepositoryTests
     }
 
     [Fact]
-    public async void Updating_existing_PnsRegistration_in_repository()
+    public async void Update_existing_PnsRegistration_in_repository()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
@@ -67,7 +67,7 @@ public class PnsRegistrationRepositoryTests
     }
 
     [Fact]
-    public async void Trying_to_delete_existing_PnsRegistration()
+    public async void Delete_existing_PnsRegistration()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
