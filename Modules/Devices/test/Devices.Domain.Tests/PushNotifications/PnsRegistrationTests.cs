@@ -35,7 +35,7 @@ public class PnsRegistrationTests
     }
 
     [Fact]
-    public void Generate_DevicePushIdentifier_independent_of_PnsRegistration_constructor_parameters()
+    public void Generate_new_DevicePushIdentifier_on_every_PnsRegistration_instance()
     {
         // Arrange
         var identityAddress = CreateRandomIdentityAddress();
