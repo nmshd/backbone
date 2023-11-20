@@ -19,21 +19,22 @@ public class OAuthClient
     public DateTime CreatedAt { get; }
     public int MaxIdentities { get; private set; }
 
-    public DomainError? ChangeDefaultTier(TierId newDefaultTier)
+    public DomainError? Update(TierId newDefaultTier, int newMaxIdentities)
     {
-        if (DefaultTier == newDefaultTier)
-            return DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided default Tier.");
+        var isUpdated = false;
 
-        DefaultTier = newDefaultTier;
-        return null;
-    }
+        if (DefaultTier != newDefaultTier)
+        {
+            isUpdated = true;
+            DefaultTier = newDefaultTier;
+        }
 
-    public DomainError? ChangeMaxIdentities(int newMaxIdentities)
-    {
-        if (MaxIdentities == newMaxIdentities)
-            return DomainErrors.CannotChangeClientDefaultTier("The Client already uses the provided maximum number of Identities.");
+        if (MaxIdentities != newMaxIdentities)
+        {
+            isUpdated = true;
+            MaxIdentities = newMaxIdentities;
+        }
 
-        MaxIdentities = newMaxIdentities;
-        return null;
+        return isUpdated ? null  : DomainErrors.CannotUpdateClient("No properties were changed for the Client.");
     }
 }
