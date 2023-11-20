@@ -72,7 +72,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Content.Result!);
 
         var keyPair = _signatureHelper.CreateKeyPair();
-        var signature = _signatureHelper.CreateSignature(ConvertibleString.FromUtf8(serializedChallenge), keyPair.PrivateKey);
+        var signature = _signatureHelper.GetSignature(keyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
 
         dynamic publicKey = new
         {
