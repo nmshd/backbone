@@ -8,7 +8,7 @@ public class PnsRegistration
 {
     private PnsRegistration() { }
 
-    public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle, string appId, Environment environment)
+    public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment)
     {
         IdentityAddress = identityAddress;
         DeviceId = deviceId;
@@ -23,9 +23,9 @@ public class PnsRegistration
     public PnsHandle Handle { get; private set; }
     public string AppId { get; set; }
     public DateTime UpdatedAt { get; private set; }
-    public Environment Environment { get; private set; }
+    public PushEnvironment Environment { get; private set; }
 
-    public void Update(PnsHandle newHandle, string appId, Environment environment)
+    public void Update(PnsHandle newHandle, string appId, PushEnvironment environment)
     {
         AppId = appId;
         Handle = newHandle;
@@ -34,7 +34,7 @@ public class PnsRegistration
     }
 }
 
-public enum Environment
+public enum PushEnvironment
 {
     Development,
     Production
