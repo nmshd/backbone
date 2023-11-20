@@ -56,6 +56,19 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
 
+            var deletionStartedAt = runtimeEntityType.AddProperty(
+                "DeletionStartedAt",
+                typeof(DateTime),
+                propertyInfo: typeof(Identity).GetProperty("DeletionStartedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<DeletionStartedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueConverter: new DateTimeValueConverter());
+
+            var identityStatus = runtimeEntityType.AddProperty(
+                "IdentityStatus",
+                typeof(IdentityStatus),
+                propertyInfo: typeof(Identity).GetProperty("IdentityStatus", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<IdentityStatus>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
             var identityVersion = runtimeEntityType.AddProperty(
                 "IdentityVersion",
                 typeof(byte),

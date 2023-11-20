@@ -59,4 +59,14 @@ public class FindAllStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Delete(Identity identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

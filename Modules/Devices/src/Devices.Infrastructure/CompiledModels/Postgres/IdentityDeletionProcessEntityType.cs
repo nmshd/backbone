@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
@@ -96,7 +97,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IdentityAddress")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Address")! })!,
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade);
 
             var deletionProcesses = principalEntityType.AddNavigation("DeletionProcesses",
                 runtimeForeignKey,

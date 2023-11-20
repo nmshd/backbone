@@ -92,11 +92,17 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
     {
-        return await _identities
+        return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
             .Where(i => i.DeletionGracePeriodEndsAt > DateTime.Now)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task Delete(Identity identity, CancellationToken cancellationToken)
+    {
+        _identities.Remove(identity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }   
 }

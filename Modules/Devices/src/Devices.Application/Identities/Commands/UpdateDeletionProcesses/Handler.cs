@@ -16,14 +16,19 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand>
     }
     public async Task Handle(UpdateDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithPastDeletionGracePeriod(cancellationToken);
+        var identities = await _identitiesRepository.FindAllWithPastDeletionGracePeriod(cancellationToken, track: true);
         foreach (var identity in identities)
         {
-            var relevantDeletionProcess = identity.DeletionProcesses.FirstOrDefault(dp => dp.Status == Domain.Entities.Identities.DeletionProcessStatus.Approved);
-            if (relevantDeletionProcess != null)
-            {
-                // _eventBus.Publish(new IdentityStatusChangedIntegrationEvent(identity.Address, identity.IdentityStatus));
-            }
+            identity.DeletionStarted();
+            await _identitiesRepository.Update(identity, cancellationToken);
+
+            // send notification
+
+            // create external event PeerIdentityDeleted
+
+            // process deletion
+            await _identitiesRepository.Delete(identity, cancellationToken);
+            // --- delete deletion process
         }
     }
 }

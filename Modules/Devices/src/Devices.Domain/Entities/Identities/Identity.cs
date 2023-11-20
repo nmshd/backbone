@@ -23,6 +23,9 @@ public class Identity
     }
 
     public IdentityStatus IdentityStatus { get; internal set; }
+    
+    public DateTime? DeletionStartedAt { get; private set; }
+    
     public string? ClientId { get; private set; }
 
     public IdentityAddress Address { get; private set; }
@@ -62,6 +65,12 @@ public class Identity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
 
         return deletionProcess;
+    }
+
+    public void DeletionStarted()
+    {
+        IdentityStatus = IdentityStatus.Deleting;
+        DeletionStartedAt = SystemTime.UtcNow;
     }
 
     private void EnsureNoActiveProcessExists()
