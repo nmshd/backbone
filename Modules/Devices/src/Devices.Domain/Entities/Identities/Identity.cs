@@ -71,21 +71,6 @@ public class Identity
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
     }
-
-    public void MarkAsToBeDeleted()
-    {
-        if (IdentityStatus == IdentityStatus.Deleting)
-        {
-            throw new DomainException(DomainErrors.CannotChangeIdentityStatusForIdentityUndergoingDeletion());
-        }
-
-        if (DeletionProcesses.Any(dp => dp.IsApproved()) == false)
-        {
-            throw new DomainException(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists());
-        }
-
-        IdentityStatus = IdentityStatus.ToBeDeleted;
-    }
 }
 public enum IdentityStatus
 {

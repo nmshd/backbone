@@ -1,5 +1,4 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -38,7 +37,7 @@ public class IdentityDeletionProcess
     }
 
     public IdentityDeletionProcessId Id { get; }
-    public DeletionProcessStatus Status { get; private set; }
+    public DeletionProcessStatus Status { get; internal set; }
     public DateTime CreatedAt { get; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
@@ -49,11 +48,6 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodEndsAt { get; private set; }
 
     public bool IsActive()
-    {
-        return Status == DeletionProcessStatus.WaitingForApproval || Status == DeletionProcessStatus.Approved;
-    }
-
-    internal bool IsApproved()
     {
         return Status is DeletionProcessStatus.Approved;
     }
