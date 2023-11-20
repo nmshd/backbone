@@ -55,7 +55,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         return Task.FromResult(_identity);
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithAtLeastOneApprovedDeletionProcess(CancellationToken cancellationToken)
+    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

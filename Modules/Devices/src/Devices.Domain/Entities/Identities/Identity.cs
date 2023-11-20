@@ -38,6 +38,8 @@ public class Identity
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
+    public DateTime? DeletionGracePeriodEndsAt { get; private set; }
+
     public bool IsNew()
     {
         return Devices.Count < 1;

@@ -1,5 +1,4 @@
-﻿using System.Runtime.Intrinsics.Arm;
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;

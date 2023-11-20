@@ -55,7 +55,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithAtLeastOneApprovedDeletionProcess(CancellationToken cancellationToken)
+    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

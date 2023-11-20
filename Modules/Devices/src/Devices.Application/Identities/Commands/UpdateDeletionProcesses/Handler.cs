@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand>
     }
     public async Task Handle(UpdateDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithAtLeastOneApprovedDeletionProcess(cancellationToken);
+        var identities = await _identitiesRepository.FindAllWithPastDeletionGracePeriod(cancellationToken);
         foreach (var identity in identities)
         {
             var relevantDeletionProcess = identity.DeletionProcesses.FirstOrDefault(dp => dp.Status == Domain.Entities.Identities.DeletionProcessStatus.Approved);
