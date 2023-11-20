@@ -10,7 +10,6 @@ updates:
         patterns:
           - "*"
         exclude-patterns:
-          - "AspNetCore.HealthChecks.NpgSql"
           - "Npgsql.EntityFrameworkCore.PostgreSQL"
     reviewers:
       - "tnotheis"
@@ -24,6 +23,20 @@ updates:
       interval: "weekly"
     groups:
       update-github-actions-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
+  ##### Pipeline scripts #####
+  - package-ecosystem: "npm"
+    directory: /.ci
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
         patterns:
           - "*"
     reviewers:
@@ -61,19 +74,6 @@ updates:
 
   - package-ecosystem: "npm"
     directory: /Modules/Files/test/Files.API.Tests.Performance.EndToEnd
-    schedule:
-      interval: "weekly"
-    groups:
-      update-npm-dependencies:
-        patterns:
-          - "*"
-    reviewers:
-      - "tnotheis"
-    labels:
-      - "dependencies"
-
-  - package-ecosystem: "npm"
-    directory: /Modules/Challenges/test/Challenges.API.Tests.Performance.EndToEnd
     schedule:
       interval: "weekly"
     groups:
