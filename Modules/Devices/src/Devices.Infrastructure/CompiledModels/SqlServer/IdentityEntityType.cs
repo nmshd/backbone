@@ -51,6 +51,15 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 valueConverter: new DateTimeValueConverter());
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var deletionGracePeriodEndsAt = runtimeEntityType.AddProperty(
+                "DeletionGracePeriodEndsAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(Identity).GetProperty("DeletionGracePeriodEndsAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<DeletionGracePeriodEndsAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            deletionGracePeriodEndsAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var identityVersion = runtimeEntityType.AddProperty(
                 "IdentityVersion",
                 typeof(byte),

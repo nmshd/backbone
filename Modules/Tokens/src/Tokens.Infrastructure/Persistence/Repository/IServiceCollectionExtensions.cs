@@ -6,9 +6,8 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddRepositories(this IServiceCollection services, BlobStorageOptions blobStorageOptions)
+    public static void AddRepositories(this IServiceCollection services)
     {
         services.AddTransient<ITokensRepository, TokensRepository>();
-        services.Configure<TokensRepositoryOptions>(options => options.BlobRootFolder = blobStorageOptions.Container);
     }
 }

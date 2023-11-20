@@ -11,6 +11,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities",
+                type: "timestamp with time zone",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "IdentityDeletionProcesses",
                 columns: table => new
@@ -18,6 +24,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ApprovedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ApprovedByDevice = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: true),
+                    GracePeriodEndsAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     IdentityAddress = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true)
                 },
                 constraints: table =>
@@ -72,6 +81,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
+
+            migrationBuilder.DropColumn(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities");
         }
     }
 }

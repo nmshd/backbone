@@ -10,7 +10,6 @@ public class Identity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
 
-
     public Identity(string? clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
@@ -48,23 +47,21 @@ public class Identity
     public void ChangeTier(TierId id)
     {
         if (TierId == id)
-        {
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
-        }
 
         TierId = id;
     }
 
-    public void StartDeletionProcess(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(new IdentityDeletionProcess(Address, asDevice));
-    }
 
-    public void StartDeletionProcess()
-    {
-        EnsureNoActiveProcessExists();
-        _deletionProcesses.Add(new IdentityDeletionProcess(Address));
+        var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
+        _deletionProcesses.Add(deletionProcess);
+
+        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+
+        return deletionProcess;
     }
 
     private void EnsureNoActiveProcessExists()

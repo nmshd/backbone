@@ -48,6 +48,14 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 fieldInfo: typeof(Identity).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
 
+            var deletionGracePeriodEndsAt = runtimeEntityType.AddProperty(
+                "DeletionGracePeriodEndsAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(Identity).GetProperty("DeletionGracePeriodEndsAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<DeletionGracePeriodEndsAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+
             var identityVersion = runtimeEntityType.AddProperty(
                 "IdentityVersion",
                 typeof(byte),

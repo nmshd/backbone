@@ -4,13 +4,12 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
-using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcess;
 
@@ -20,126 +19,65 @@ public class HandlerTests
     public async Task Happy_path_as_owner()
     {
         // Arrange
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var mockEventBus = A.Fake<IEventBus>();
-        var identity = TestDataGenerator.CreateIdentity();
-        var fakeUserContext = A.Fake<IUserContext>();
-
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(
-                A<IdentityAddress>._,
-                A<CancellationToken>._,
-                A<bool>._))
-            .Returns(identity);
-
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
-            .Returns(identity.Address);
-
-        var handler = CreateHandler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
-
-        // Act
-        await handler.Handle(new StartDeletionProcessCommand(identity.Address), CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockIdentitiesRepository.Update(
-                A<Identity>.That.Matches(i => i.DeletionProcesses.Count == 1),
-                A<CancellationToken>._))
-            .MustHaveHappenedOnceExactly();
-
-        A.CallTo(() => mockEventBus.Publish(
-                A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e => e.IdentityAddress == identity.Address)))
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Happy_path_as_support()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentity();
+        var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var activeDevice = activeIdentity.Devices[0];
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var mockEventBus = A.Fake<IEventBus>();
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(
-                A<IdentityAddress>._,
-                A<CancellationToken>._,
-                A<bool>._))
-            .Returns(identity);
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+            .Returns(activeIdentity);
+        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
-            .Returns(null);
-
-        var handler = CreateHandler(mockIdentitiesRepository, mockEventBus, fakeUserContext);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
-        await handler.Handle(new StartDeletionProcessCommand(identity.Address), CancellationToken.None);
+        var command = new StartDeletionProcessCommand();
+        var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
+        response.Should().NotBeNull();
+        response.ApprovedByDevice.Should().NotBeNull();
+
         A.CallTo(() => mockIdentitiesRepository.Update(
-                A<Identity>.That.Matches(i => i.DeletionProcesses.Count == 1),
+                A<Identity>.That.Matches(
+                    i => i.Address == activeIdentity.Address &&
+                         i.DeletionProcesses.Count == 1 &&
+                         i.DeletionProcesses[0].Id == response.Id &&
+                         i.DeletionProcesses[0].AuditLog.Count == 1),
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
-
-        A.CallTo(() => mockEventBus.Publish(
-                A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e => e.IdentityAddress == identity.Address)))
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public void Identity_can_only_start_deletion_process_for_itself()
-    {
-        // Arrange
-        var fakeUserContext = A.Fake<IUserContext>();
-        var handler = CreateHandler(fakeUserContext);
-
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
-            .Returns(IdentityAddress.Create(new byte[] { 2 }, "id1"));
-
-        // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(IdentityAddress.Create(new byte[] { 1 }, "id1")), CancellationToken.None);
-
-        // Assert
-        acting.Should().AwaitThrowAsync<ApplicationException>().Which.Code.Should().Be("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity");
     }
 
     [Fact]
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
+        var address = CreateRandomIdentityAddress();
+
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var address = TestDataGenerator.CreateRandomIdentityAddress();
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
                 A<IdentityAddress>._,
                 A<CancellationToken>._,
                 A<bool>._))
-            .Returns((Identity)null);
-
-        A.CallTo(() => fakeUserContext.GetAddressOrNull())
-            .Returns(address);
+            .Returns<Identity>(null);
+        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(address);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(address), CancellationToken.None);
+        var command = new StartDeletionProcessCommand();
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
-    }
-
-    private static Handler CreateHandler(IUserContext identitiesRepository)
-    {
-        return CreateHandler(A.Dummy<IIdentitiesRepository>(), A.Dummy<IEventBus>(), identitiesRepository);
+        acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
-        return CreateHandler(identitiesRepository, A.Dummy<IEventBus>(), userContext);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus eventBus, IUserContext userContext)
-    {
-        return new Handler(identitiesRepository, eventBus, userContext);
+        return new Handler(identitiesRepository, userContext);
     }
 }

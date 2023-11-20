@@ -78,6 +78,19 @@
             </div>
         </mat-card-content>
     </mat-card>
+    <mat-accordion *ngIf="editMode" class="client-accordion">
+        <mat-expansion-panel class="details-expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerIdentities }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerIdentitiesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-identities-overview [clientId]="clientId"></app-identities-overview>
+        </mat-expansion-panel>
+    </mat-accordion>
     <div class="action-buttons">
         <button *ngIf="editMode" mat-raised-button color="primary" (click)="updateClient()" [disabled]="!canSaveClient() || disabled">Save</button>
         <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createClient()" [disabled]="!canSaveClient() || disabled">Save</button>

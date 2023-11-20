@@ -8,31 +8,45 @@ public class IdentityDeletionProcess
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
+    // EF Core needs the empty constructor
+#pragma warning disable CS8618
+    // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcess()
+#pragma warning restore CS8618
     {
     }
 
-    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId? createdByDevice = null)
+    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
-        Status = DeletionProcessStatus.WaitingForApproval;
         CreatedAt = SystemTime.UtcNow;
 
-        var auditLogEntry = createdByDevice == null
-            ? IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, Hasher.HashUtf8(createdBy))
-            : IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, Hasher.HashUtf8(createdBy), Hasher.HashUtf8(createdByDevice));
+        Approve(createdByDevice);
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
-            auditLogEntry
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)
         };
     }
 
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
+
     public IdentityDeletionProcessId Id { get; }
-    public DeletionProcessStatus Status { get; internal set; }
+    public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
+
+    public DateTime? ApprovedAt { get; private set; }
+    public DeviceId? ApprovedByDevice { get; private set; }
+
+    public DateTime? GracePeriodEndsAt { get; private set; }
 
     public bool IsActive()
     {
@@ -41,6 +55,6 @@ public class IdentityDeletionProcess
 
     internal bool IsApproved()
     {
-        return Status == DeletionProcessStatus.Approved;
+        return Status is DeletionProcessStatus.Approved;
     }
 }

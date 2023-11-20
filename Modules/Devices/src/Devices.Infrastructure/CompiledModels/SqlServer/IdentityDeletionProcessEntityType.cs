@@ -34,6 +34,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var approvedAt = runtimeEntityType.AddProperty(
+                "ApprovedAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            approvedAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var approvedByDevice = runtimeEntityType.AddProperty(
+                "ApprovedByDevice",
+                typeof(DeviceId),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovedByDevice", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovedByDevice>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                maxLength: 20,
+                unicode: false,
+                valueConverter: new DeviceIdValueConverter());
+            approvedByDevice.AddAnnotation("Relational:IsFixedLength", true);
+            approvedByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),
@@ -41,6 +62,15 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var gracePeriodEndsAt = runtimeEntityType.AddProperty(
+                "GracePeriodEndsAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("GracePeriodEndsAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<GracePeriodEndsAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            gracePeriodEndsAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var identityAddress = runtimeEntityType.AddProperty(
                 "IdentityAddress",

@@ -1,10 +1,15 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 
-namespace Backbone.Modules.Devices.Domain.Tests.Identities.Utilities;
+namespace Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 
 public class DummyHasher : IHasher
 {
     private readonly byte[] _bytes;
+
+    public DummyHasher()
+    {
+        _bytes = new byte[] { 1, 2, 3 };
+    }
 
     public DummyHasher(byte[] bytes)
     {

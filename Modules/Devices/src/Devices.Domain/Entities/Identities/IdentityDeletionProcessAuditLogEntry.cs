@@ -1,22 +1,21 @@
-﻿using Backbone.Tooling;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionProcessAuditLogEntry
 {
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, byte[] identityAddressHash, byte[] deviceIdHash)
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner.", identityAddressHash, deviceIdHash, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner. It was automatically approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), null, DeletionProcessStatus.Approved);
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, byte[] identityAddressHash)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by a support employee.", identityAddressHash, null, null, DeletionProcessStatus.WaitingForApproval);
-    }
-
+    // EF Core needs the empty constructor
+#pragma warning disable CS8618
+    // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcessAuditLogEntry()
+#pragma warning restore CS8618
     {
-
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
