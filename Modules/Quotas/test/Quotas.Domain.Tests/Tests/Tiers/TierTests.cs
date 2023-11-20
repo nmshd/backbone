@@ -62,10 +62,14 @@ public class TierTests
     public void Cannot_delete_quota_on_queued_for_deletion_tier()
     {
         // Arrange
-        Tier.QUEUED_FOR_DELETION.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 0, QuotaPeriod.Total));
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+        };
+        var createdQuotaResults = Tier.QUEUED_FOR_DELETION.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Act
-        var result = Tier.QUEUED_FOR_DELETION.DeleteQuota(Tier.QUEUED_FOR_DELETION.Quotas.First().Id);
+        var result = Tier.QUEUED_FOR_DELETION.DeleteQuota(createdQuotaResults.First().Value.Id);
 
         // Assert
         result.IsFailure.Should().BeTrue();
