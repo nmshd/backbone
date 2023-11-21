@@ -18,7 +18,7 @@ public class PnsRegistrationTests
         var deviceId = CreateRandomDeviceId();
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
-        SystemTime.Set(DateTime.UtcNow);
+        SystemTime.Set(SystemTime.UtcNow);
 
         // Act
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
