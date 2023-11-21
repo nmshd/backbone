@@ -17,9 +17,8 @@ public class PnsRegistrationTests
         var identityAddress = CreateRandomIdentityAddress();
         var deviceId = CreateRandomDeviceId();
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
-        var time = DateTime.UtcNow;
 
-        SystemTime.Set(time);
+        SystemTime.Set(DateTime.UtcNow);
 
         // Act
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
@@ -29,7 +28,7 @@ public class PnsRegistrationTests
         pnsRegistration.DeviceId.Should().NotBeNull();
         pnsRegistration.DevicePushIdentifier.Should().NotBeNull();
         pnsRegistration.Handle.Should().Be(pnsHandle);
-        pnsRegistration.UpdatedAt.Should().Be(time);
+        pnsRegistration.UpdatedAt.Should().Be(SystemTime.UtcNow);
         pnsRegistration.AppId.Should().Be("someAppId");
         pnsRegistration.Environment.Should().Be(Environment.Development);
     }
