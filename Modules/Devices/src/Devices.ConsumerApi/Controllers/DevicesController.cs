@@ -79,9 +79,9 @@ public class DevicesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, [FromBody] DeleteDeviceRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, DeletionCertificate = request.DeletionCertificate, SignedChallenge = request.SignedChallenge }, cancellationToken);
+        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, }, cancellationToken);
 
         return NoContent();
     }
