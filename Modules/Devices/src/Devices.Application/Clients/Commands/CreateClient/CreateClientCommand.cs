@@ -20,6 +20,6 @@ public class CreateClientCommand : IRequest<CreateClientResponse>
     public string ClientSecret { get; set; }
 
     public string DefaultTier { get; set; }
-    
+
     public int MaxIdentities { get; set; }
 }

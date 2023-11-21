@@ -18,9 +18,9 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private string _tier1Id;
     private string _tier2Id;
-    private int _maxIdentities;
-    private int _maxIdentities1;
-    private int _maxIdentities2;
+    private readonly int _maxIdentities;
+    private readonly int _maxIdentities1;
+    private readonly int _maxIdentities2;
     private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;

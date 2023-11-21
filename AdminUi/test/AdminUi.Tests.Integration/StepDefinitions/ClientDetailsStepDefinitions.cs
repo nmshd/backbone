@@ -10,7 +10,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _tierId;
-    private int _maxIdentities;
+    private readonly int _maxIdentities;
     private HttpResponse<ClientDTO>? _response;
 
     public ClientDetailsStepDefinitions(ClientsApi clientsApi, TiersApi tiersApi)

@@ -35,6 +35,6 @@ public class OAuthClient
             MaxIdentities = newMaxIdentities;
         }
 
-        return isUpdated ? null  : DomainErrors.CannotUpdateClient("No properties were changed for the Client.");
+        return isUpdated ? null : DomainErrors.CannotUpdateClient("No properties were changed for the Client.");
     }
 }
