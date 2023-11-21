@@ -69,13 +69,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 valueConverter: new DeviceIdValueConverter());
             deletedByDevice.AddAnnotation("Relational:IsFixedLength", true);
 
-            var deletionCertificate = runtimeEntityType.AddProperty(
-                "DeletionCertificate",
-                typeof(byte[]),
-                propertyInfo: typeof(Device).GetProperty("DeletionCertificate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Device).GetField("<DeletionCertificate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-
             var identityAddress = runtimeEntityType.AddProperty(
                 "IdentityAddress",
                 typeof(IdentityAddress),

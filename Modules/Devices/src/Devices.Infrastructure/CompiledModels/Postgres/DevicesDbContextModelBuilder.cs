@@ -61,7 +61,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
             IdentityUserTokenEntityType.CreateAnnotations(identityUserToken);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "7.0.12");
+            AddAnnotation("ProductVersion", "7.0.13");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
         }
     }

@@ -74,14 +74,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             deletedByDevice.AddAnnotation("Relational:IsFixedLength", true);
             deletedByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
-            var deletionCertificate = runtimeEntityType.AddProperty(
-                "DeletionCertificate",
-                typeof(byte[]),
-                propertyInfo: typeof(Device).GetProperty("DeletionCertificate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Device).GetField("<DeletionCertificate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-            deletionCertificate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
-
             var identityAddress = runtimeEntityType.AddProperty(
                 "IdentityAddress",
                 typeof(IdentityAddress),
