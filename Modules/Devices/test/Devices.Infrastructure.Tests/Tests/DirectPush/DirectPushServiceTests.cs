@@ -46,12 +46,12 @@ public class DirectPushServiceTests
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
-        var mockPnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, true))
-           .Returns(mockPnsRegistration);
+           .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
