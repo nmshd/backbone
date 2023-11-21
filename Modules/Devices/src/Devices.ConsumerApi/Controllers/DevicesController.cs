@@ -86,9 +86,3 @@ public class DevicesController : ApiControllerBase
         return NoContent();
     }
 }
-
-public class DeleteDeviceRequest
-{
-    public byte[] DeletionCertificate { get; set; }
-    public SignedChallengeDTO SignedChallenge { get; set; }
-}

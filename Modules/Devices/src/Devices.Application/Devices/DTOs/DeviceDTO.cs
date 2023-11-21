@@ -17,7 +17,6 @@ public class DeviceDTO : IHaveCustomMapping
 
     public DateTime? DeletedAt { get; set; }
     public DeviceId DeletedByDevice { get; set; }
-    public byte[] DeletionCertificate { get; set; }
 
     public LastLoginInformation LastLogin { get; set; }
 

@@ -14,5 +14,4 @@ public class Device
 
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
-    public byte[]? DeletionCertificate { get; set; }
 }
