@@ -1,15 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 
-public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse>
-{
-    public ListQuotasForIdentityQuery(IdentityAddress address)
-    {
-        Address = address;
-    }
-
-    public IdentityAddress Address { get; }
-}
+public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse> { }

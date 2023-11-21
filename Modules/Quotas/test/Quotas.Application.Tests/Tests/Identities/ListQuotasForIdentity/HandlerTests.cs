@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -49,7 +41,7 @@ public class HandlerTests
         var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricsRepository, fakeMetricCalculationFactory);
 
         // Act
-        var quotas = (await handler.Handle(new ListQuotasForIdentityQuery(identity.Address), CancellationToken.None)).ToList();
+        var quotas = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
 
         // Assert
         quotas.Should().HaveCount(2);

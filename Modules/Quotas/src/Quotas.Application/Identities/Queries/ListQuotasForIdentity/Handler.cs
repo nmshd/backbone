@@ -7,7 +7,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using MediatR;
 
-namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetQuotasForIdentity;
+namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 
 public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasForIdentityResponse>
 {
@@ -27,8 +27,6 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-
-        ValidateAddress(request.Address);
 
         var metrics = await _metricsRepository.FindAll(cancellationToken);
 
@@ -61,11 +59,5 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
         var quotasForIdentity = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
 
         return new ListQuotasForIdentityResponse(quotasForIdentity);
-    }
-
-    private void ValidateAddress(IdentityAddress queryAddress)
-    {
-        if (queryAddress != _identityAddress)
-            throw new OperationFailedException(ApplicationErrors.QueryAddressDoesNotMatchTheCurrentUser(queryAddress));
     }
 }
