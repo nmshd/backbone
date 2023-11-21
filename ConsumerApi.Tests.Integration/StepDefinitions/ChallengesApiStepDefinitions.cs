@@ -1,6 +1,5 @@
 using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
@@ -65,10 +64,9 @@ internal class ChallengesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        _response!.AssertHasValue();
-        _response!.AssertStatusCodeIsSuccess();
-        _response!.AssertContentTypeIs("application/json");
-
+        _response!.Should().NotBeNull();
+        _response!.IsSuccessStatusCode.Should().BeTrue();
+        _response!.ContentType.Should().Be("application/json");
         AssertExpirationDateIsInFuture();
     }
 
