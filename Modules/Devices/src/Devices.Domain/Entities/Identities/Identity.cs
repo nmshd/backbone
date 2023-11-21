@@ -23,9 +23,7 @@ public class Identity
     }
 
     public IdentityStatus IdentityStatus { get; internal set; }
-    
-    public DateTime? DeletionStartedAt { get; private set; }
-    
+        
     public string? ClientId { get; private set; }
 
     public IdentityAddress Address { get; private set; }
@@ -40,7 +38,7 @@ public class Identity
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
-    public DateTime? DeletionGracePeriodEndsAt { get; private set; }
+    public DateTime? DeletionGracePeriodEndsAt { get; internal set; }
 
     public bool IsNew()
     {
@@ -70,7 +68,8 @@ public class Identity
     public void DeletionStarted()
     {
         IdentityStatus = IdentityStatus.Deleting;
-        DeletionStartedAt = SystemTime.UtcNow;
+        var deletionProcess = DeletionProcesses.Single(dp => dp.IsActive());
+        deletionProcess.DeletionStarted();
     }
 
     private void EnsureNoActiveProcessExists()
@@ -91,5 +90,6 @@ public enum IdentityStatus
 public enum DeletionProcessStatus
 {
     WaitingForApproval,
-    Approved
+    Approved,
+    Deleting
 }

@@ -58,10 +58,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
 
             var deletionStartedAt = runtimeEntityType.AddProperty(
                 "DeletionStartedAt",
-                typeof(DateTime),
+                typeof(DateTime?),
                 propertyInfo: typeof(Identity).GetProperty("DeletionStartedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Identity).GetField("<DeletionStartedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                valueConverter: new DateTimeValueConverter());
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
 
             var identityStatus = runtimeEntityType.AddProperty(
                 "IdentityStatus",

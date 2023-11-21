@@ -38,6 +38,7 @@ public class IdentityDeletionProcess
 
     public IdentityDeletionProcessId Id { get; }
     public DeletionProcessStatus Status { get; internal set; }
+    public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
@@ -50,5 +51,11 @@ public class IdentityDeletionProcess
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved;
+    }
+
+    internal void DeletionStarted()
+    {
+        Status = DeletionProcessStatus.Deleting;
+        DeletionStartedAt = SystemTime.UtcNow;
     }
 }
