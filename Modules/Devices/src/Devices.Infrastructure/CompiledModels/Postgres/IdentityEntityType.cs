@@ -56,12 +56,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
 
-            var identityStatus = runtimeEntityType.AddProperty(
-                "IdentityStatus",
-                typeof(IdentityStatus),
-                propertyInfo: typeof(Identity).GetProperty("IdentityStatus", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(Identity).GetField("<IdentityStatus>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
-
             var identityVersion = runtimeEntityType.AddProperty(
                 "IdentityVersion",
                 typeof(byte),
@@ -73,6 +67,12 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 typeof(byte[]),
                 propertyInfo: typeof(Identity).GetProperty("PublicKey", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Identity).GetField("<PublicKey>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
+            var status = runtimeEntityType.AddProperty(
+                "Status",
+                typeof(IdentityStatus),
+                propertyInfo: typeof(Identity).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var tierId = runtimeEntityType.AddProperty(
                 "TierId",
