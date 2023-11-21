@@ -28,12 +28,11 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
-        DevicePushIdentifier devicePushIdentifier;
 
         if (parseHandleResult.IsFailure)
             throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
 
-        devicePushIdentifier = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
+        var devicePushIdentifier = await _pushService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
 
         return new UpdateDeviceRegistrationResponse(devicePushIdentifier);
     }
