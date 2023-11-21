@@ -94,7 +94,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Cannot_change_Default_Tier_If_ChangeDefaultTier_returns_an_error()
+    public async Task Cannot_change_Default_Tier_If_Update_returns_an_error()
     {
         // Arrange
         var defaultTier = new Tier(TierName.Create("some-default-tier").Value);
@@ -108,6 +108,80 @@ public class HandlerTests
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(defaultTier.Id, A<CancellationToken>._)).Returns(true);
+
+        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+
+        // Act
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<DomainException>();
+        A.CallTo(() => oAuthClientsRepository.Update(client, A<CancellationToken>._)).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task Change_Max_Identities()
+    {
+        // Arrange
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
+
+        var command = new UpdateClientCommand(client.ClientId, client.DefaultTier, 2);
+
+        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
+
+        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => oAuthClientsRepository.Update(A<OAuthClient>.That.Matches(c =>
+                c.ClientId == client.ClientId &&
+                c.MaxIdentities == 2)
+            , CancellationToken.None)
+        ).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Change_Max_Identities_Of_Inexistent_Client()
+    {
+        // Arrange
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
+
+        var command = new UpdateClientCommand(client.ClientId, client.DefaultTier, 2);
+
+        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns((OAuthClient)null);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
+
+        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+
+        // Act
+        var acting = async () => await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await acting.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task Cannot_change_Max_Identities_If_Update_returns_an_error()
+    {
+        // Arrange
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
+
+        var command = new UpdateClientCommand(client.ClientId, client.DefaultTier, 1);
+
+        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
+
+        var tiersRepository = A.Fake<ITiersRepository>();
+        A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
 
         var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
 
