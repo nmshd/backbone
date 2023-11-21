@@ -67,7 +67,7 @@ public class HandlerTests
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var anotherIdentity = _identities.Second();
-        anotherIdentity .StartDeletionProcess(new Device(anIdentity).Id); // not called
+        anotherIdentity.StartDeletionProcess(new Device(anIdentity).Id); // not called
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
