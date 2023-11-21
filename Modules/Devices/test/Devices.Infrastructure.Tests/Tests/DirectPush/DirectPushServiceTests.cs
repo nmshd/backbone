@@ -23,7 +23,7 @@ public class DirectPushServiceTests
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
            .Returns((PnsRegistration)null).Once();
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
@@ -50,7 +50,7 @@ public class DirectPushServiceTests
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
            .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
@@ -76,7 +76,7 @@ public class DirectPushServiceTests
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
            .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
@@ -98,7 +98,7 @@ public class DirectPushServiceTests
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
-        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, true))
+        A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
            .Returns((PnsRegistration)null);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
