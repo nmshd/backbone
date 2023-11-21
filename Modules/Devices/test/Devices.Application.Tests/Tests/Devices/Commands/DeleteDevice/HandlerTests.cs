@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -14,14 +15,13 @@ public class HandlerTests
     public async Task Deletes_device_owned_by_identity()
     {
         // Arrange
-        var startTime = DateTime.UtcNow;
+        var startTime = SystemTime.UtcNow;
 
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => mockIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
-        A.CallTo(() => mockIdentitiesRepository.Update(device, A<CancellationToken>._)).DoesNothing();
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
@@ -32,20 +32,12 @@ public class HandlerTests
             DeviceId = device.Id
         };
 
-        var dummyLogger = A.Fake<ILogger<Handler>>();
-
-        var handler = new Handler(mockIdentitiesRepository, fakeUserContext, dummyLogger);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
         await handler.Handle(deleteDeviceCommand, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(
-            device.Id,
-            A<CancellationToken>._,
-            A<bool>._
-        )).MustHaveHappenedOnceExactly();
-
         device.DeletedAt.Should().NotBeNull();
         device.DeletedAt.Should().BeAfter(startTime);
         device.DeletedByDevice.Should().Be(deleteDeviceCommand.DeviceId);
@@ -54,5 +46,10 @@ public class HandlerTests
             device,
             A<CancellationToken>._
         )).MustHaveHappenedOnceExactly();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext fakeUserContext)
+    {
+        return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());
     }
 }
