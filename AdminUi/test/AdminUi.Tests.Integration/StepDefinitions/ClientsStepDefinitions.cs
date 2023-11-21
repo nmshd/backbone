@@ -18,6 +18,9 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private string _tier1Id;
     private string _tier2Id;
+    private int _maxIdentities;
+    private int _maxIdentities1;
+    private int _maxIdentities2;
     private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
@@ -34,6 +37,9 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _tierId = string.Empty;
         _tier1Id = string.Empty;
         _tier2Id = string.Empty;
+        _maxIdentities = 1;
+        _maxIdentities1 = 1;
+        _maxIdentities2 = 2;
     }
 
     [Given(@"a non-existent Client c")]
@@ -116,7 +122,31 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             ClientId = string.Empty,
             DisplayName = string.Empty,
             ClientSecret = string.Empty,
-            DefaultTier = _tierId
+            DefaultTier = _tierId,
+            MaxIdentities = 1
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createClientRequest);
+
+        var response = await _clientsApi.CreateClient(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _clientId = response.Content.Result!.ClientId;
+    }
+
+    [Given(@"a Client c with Tier t and MaxIdentities mi")]
+    public async Task GivenAClientCWithTierTAndMaxIdentitiesMi()
+    {
+        var createClientRequest = new CreateClientRequest
+        {
+            ClientId = string.Empty,
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tierId,
+            MaxIdentities = _maxIdentities
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -138,7 +168,31 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             ClientId = string.Empty,
             DisplayName = string.Empty,
             ClientSecret = string.Empty,
-            DefaultTier = _tier1Id
+            DefaultTier = _tier1Id,
+            MaxIdentities = 1
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createClientRequest);
+
+        var response = await _clientsApi.CreateClient(requestConfiguration);
+
+        var actualStatusCode = (int)response.StatusCode;
+        actualStatusCode.Should().Be(201);
+        _clientId = response.Content.Result!.ClientId;
+    }
+
+    [Given(@"a Client c with Tier t and MaxIdentities mi1")]
+    public async Task GivenAClientCWithTierTAndMaxIdentitiesMi1()
+    {
+        var createClientRequest = new CreateClientRequest
+        {
+            ClientId = string.Empty,
+            DisplayName = string.Empty,
+            ClientSecret = string.Empty,
+            DefaultTier = _tierId,
+            MaxIdentities = _maxIdentities1
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -228,7 +282,27 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         var updateClientRequest = new UpdateClientRequest()
         {
-            DefaultTier = _tier2Id
+            DefaultTier = _tier2Id,
+            MaxIdentities = 1
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi2")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithMaxIdentities2()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = _tierId,
+            MaxIdentities = _maxIdentities2
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -246,7 +320,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         var updateClientRequest = new UpdateClientRequest()
         {
-            DefaultTier = "inexistent-tier-id"
+            DefaultTier = "inexistent-tier-id",
+            MaxIdentities = 1
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -264,7 +339,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         var updateClientRequest = new UpdateClientRequest()
         {
-            DefaultTier = "new-tier-id"
+            DefaultTier = "new-tier-id",
+            MaxIdentities = 1
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -282,7 +358,27 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         var updateClientRequest = new UpdateClientRequest()
         {
-            DefaultTier = _tierId
+            DefaultTier = _tierId,
+            MaxIdentities = 1
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(updateClientRequest);
+
+        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
+
+        _updateClientResponse.Should().NotBeNull();
+        _updateClientResponse.Content.Should().NotBeNull();
+    }
+
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithMaxIdentities()
+    {
+        var updateClientRequest = new UpdateClientRequest()
+        {
+            DefaultTier = _tierId,
+            MaxIdentities = _maxIdentities
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -344,6 +440,21 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.AssertContentTypeIs("application/json");
         response.AssertContentCompliesWithSchema();
         response.Content.Result.DefaultTier.Should().Be(_tier2Id);
+    }
+
+    [Then(@"the Client in the Backend has the new maxIdentities")]
+    public async Task ThenTheClientInTheBackendHasNewMaxIdentities()
+    {
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
+
+        response.AssertHasValue();
+        response.AssertStatusCodeIsSuccess();
+        response.AssertContentTypeIs("application/json");
+        response.AssertContentCompliesWithSchema();
+        response.Content.Result.MaxIdentities.Should().Be(_maxIdentities2);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
