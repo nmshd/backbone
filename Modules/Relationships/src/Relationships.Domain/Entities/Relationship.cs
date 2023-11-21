@@ -30,8 +30,8 @@ public class Relationship
     }
 
     public RelationshipId Id { get; }
-    public RelationshipTemplateId? RelationshipTemplateId { get; }
-    public RelationshipTemplate? RelationshipTemplate { get; }
+    public RelationshipTemplateId RelationshipTemplateId { get; }
+    public RelationshipTemplate RelationshipTemplate { get; }
 
     public IdentityAddress From { get; }
     public IdentityAddress To { get; }
