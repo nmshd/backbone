@@ -13,15 +13,17 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
 
     public async Task<UpdateDeletionProcessesResponse> Handle(UpdateDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var response = new UpdateDeletionProcessesResponse();
-        response.IdentityAddresses = new();
+        var response = new UpdateDeletionProcessesResponse
+        {
+            IdentityAddresses = new()
+        };
 
         var identities = await _identitiesRepository.FindAllWithPastDeletionGracePeriod(cancellationToken, track: true);
         foreach (var identity in identities)
         {
             identity.DeletionStarted();
             await _identitiesRepository.Update(identity, cancellationToken);
-            
+
             response.IdentityAddresses.Add(identity.Address);
         }
 

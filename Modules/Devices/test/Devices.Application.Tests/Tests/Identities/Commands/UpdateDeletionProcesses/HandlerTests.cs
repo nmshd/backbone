@@ -1,8 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using FluentAssertions;
 using Xunit;
 

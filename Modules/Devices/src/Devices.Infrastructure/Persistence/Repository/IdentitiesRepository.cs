@@ -104,5 +104,5 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identities.Remove(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
-    }   
+    }
 }

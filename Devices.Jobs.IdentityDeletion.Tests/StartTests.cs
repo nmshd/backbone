@@ -12,7 +12,7 @@ public class StartTests
     {
         // Arrange
         var mediator = A.Fake<MediatR.IMediator>();
-        
+
         // Act
         await Worker.StartProcessing(mediator, CancellationToken.None);
 

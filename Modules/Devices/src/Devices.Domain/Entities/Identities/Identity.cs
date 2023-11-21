@@ -23,7 +23,7 @@ public class Identity
     }
 
     public IdentityStatus IdentityStatus { get; internal set; }
-        
+
     public string? ClientId { get; private set; }
 
     public IdentityAddress Address { get; private set; }

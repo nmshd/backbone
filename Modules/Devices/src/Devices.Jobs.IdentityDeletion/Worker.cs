@@ -26,7 +26,7 @@ public class Worker : IHostedService
 
     internal static async Task StartProcessing(IMediator mediator, CancellationToken cancellationToken)
     {
-        var identityAddresses = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
+        _ = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
 
         // for each of the identities
         // --- send notification
