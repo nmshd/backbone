@@ -11,5 +11,12 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
         builder.HasIndex(x => x.CreatedBy);
         builder.HasIndex(x => x.DeletedAt);
         builder.HasIndex(x => x.ExpiresAt);
+
+        builder
+            .HasMany(x => x.Relationships)
+            .WithOne(x => x.RelationshipTemplate)
+            .HasForeignKey(x => x.RelationshipTemplateId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
