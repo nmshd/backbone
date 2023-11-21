@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,16 +8,14 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 public class Handler : IRequestHandler<DeleteDeviceCommand>
 {
-    private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
     private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, ChallengeValidator challengeValidator, ILogger<Handler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, ILogger<Handler> logger)
     {
         _identitiesRepository = identitiesRepository;
         _userContext = userContext;
-        _challengeValidator = challengeValidator;
         _logger = logger;
     }
 
@@ -31,11 +28,9 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
             throw new NotFoundException(nameof(device));
         }
 
-        await _challengeValidator.Validate(request.SignedChallenge, PublicKey.FromBytes(device.Identity.PublicKey));
-
         _logger.LogTrace("Challenge successfully validated.");
 
-        device.MarkAsDeleted(request.DeletionCertificate, _userContext.GetDeviceId());
+        device.MarkAsDeleted(_userContext.GetDeviceId());
 
         await _identitiesRepository.Update(device, cancellationToken);
 
