@@ -10,7 +10,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
-public class PnsRegistrationsRepositoryTests
+public class DirectPushServiceTests
 {
     [Fact]
     public async void Update_of_a_registration_that_does_not_exist_yet()
