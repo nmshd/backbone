@@ -60,6 +60,13 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
 
+            var deletionStartedAt = runtimeEntityType.AddProperty(
+                "DeletionStartedAt",
+                typeof(DateTime),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("DeletionStartedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<DeletionStartedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                valueConverter: new DateTimeValueConverter());
+
             var gracePeriodEndsAt = runtimeEntityType.AddProperty(
                 "GracePeriodEndsAt",
                 typeof(DateTime?),
