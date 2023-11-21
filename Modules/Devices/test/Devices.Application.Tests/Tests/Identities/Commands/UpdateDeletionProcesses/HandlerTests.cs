@@ -2,8 +2,10 @@
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateDeletionProcesses;
@@ -21,7 +23,7 @@ public class HandlerTests
         anIdentity.StartDeletionProcess(new Device(anIdentity).Id);
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(30); // Future
 
-        var handler = new Handler(identitiesRepository);
+        var handler = CreateHandler(identitiesRepository);
         var command = new UpdateDeletionProcessesCommand();
 
         // Act
@@ -42,7 +44,7 @@ public class HandlerTests
         anIdentity.StartDeletionProcess(new Device(anIdentity).Id);
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
-        var handler = new Handler(identitiesRepository);
+        var handler = CreateHandler(identitiesRepository);
         var command = new UpdateDeletionProcessesCommand();
 
         // Act
@@ -52,6 +54,37 @@ public class HandlerTests
         result.IdentityAddresses.Should().HaveCount(1);
         result.IdentityAddresses.First().Should().Be(anIdentity.Address);
         A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+    }
+
+    [Fact]
+    public async Task Handler_continues_if_Identity_without_IdentityDeletionProcess_has_past_DeletionGracePeriodEndsAt()
+    {
+        // Arrange
+        var identitiesRepository = CreateFakeIdentitiesRepository();
+
+        var anIdentity = _identities.First();
+        // anIdentity.StartDeletionProcess(new Device(anIdentity).Id); // not called
+        anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
+
+        var anotherIdentity = _identities.Second();
+        anotherIdentity .StartDeletionProcess(new Device(anIdentity).Id); // not called
+        anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
+
+        var handler = CreateHandler(identitiesRepository);
+        var command = new UpdateDeletionProcessesCommand();
+
+        // Act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IdentityAddresses.Should().HaveCount(1);
+        result.IdentityAddresses.First().Should().Be(anotherIdentity.Address);
+        A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
+    {
+        return new Handler(identitiesRepository, A.Dummy<ILogger<Handler>>());
     }
 
     private static IIdentitiesRepository CreateFakeIdentitiesRepository()
