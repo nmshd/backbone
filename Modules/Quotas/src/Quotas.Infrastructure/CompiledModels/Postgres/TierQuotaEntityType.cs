@@ -84,7 +84,8 @@ namespace Backbone.Modules.Quotas.Infrastructure.CompiledModels.Postgres
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("_definitionId")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade);
 
             var _definition = declaringEntityType.AddNavigation("_definition",
                 runtimeForeignKey,

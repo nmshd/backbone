@@ -56,7 +56,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.CompiledModels.Postgres
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("TierId")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
                 principalEntityType,
-                deleteBehavior: DeleteBehavior.Cascade,
+                deleteBehavior: DeleteBehavior.NoAction,
                 required: true);
 
             return runtimeForeignKey;

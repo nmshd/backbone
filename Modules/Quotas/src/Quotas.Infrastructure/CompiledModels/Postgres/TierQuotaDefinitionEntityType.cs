@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
@@ -78,7 +79,8 @@ namespace Backbone.Modules.Quotas.Infrastructure.CompiledModels.Postgres
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("TierId")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade);
 
             var quotas = principalEntityType.AddNavigation("Quotas",
                 runtimeForeignKey,
