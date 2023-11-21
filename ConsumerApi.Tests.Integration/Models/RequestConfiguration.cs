@@ -1,4 +1,6 @@
-﻿namespace Backbone.ConsumerApi.Tests.Integration.Models;
+﻿using Newtonsoft.Json;
+
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class RequestConfiguration
 {
@@ -15,5 +17,17 @@ public class RequestConfiguration
         AcceptHeader ??= other.AcceptHeader;
         ContentType ??= other.ContentType;
         Content ??= other.Content;
+    }
+
+    public RequestConfiguration Clone()
+    {
+        var requestConfiguration = new RequestConfiguration();
+        requestConfiguration.SupplementWith(this);
+        return requestConfiguration;
+    }
+
+    public void SetContent(object obj)
+    {
+        Content = JsonConvert.SerializeObject(obj);
     }
 }
