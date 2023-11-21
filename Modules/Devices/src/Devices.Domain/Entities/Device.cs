@@ -38,15 +38,13 @@ public class Device
 
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
-    public byte[]? DeletionCertificate { get; set; }
 
     public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletionCertificate == null && device.DeletedAt == null && device.DeletedByDevice == null;
+        device => device.DeletedAt == null && device.DeletedByDevice == null;
 
-    public void MarkAsDeleted(byte[] deletionCertificate, DeviceId deletedByDevice)
+    public void MarkAsDeleted(DeviceId deletedByDevice)
     {
         DeletedAt = SystemTime.UtcNow;
-        DeletionCertificate = deletionCertificate;
         DeletedByDevice = deletedByDevice;
     }
 }
