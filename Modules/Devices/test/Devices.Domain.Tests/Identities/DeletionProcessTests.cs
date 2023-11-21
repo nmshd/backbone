@@ -22,7 +22,7 @@ public class DeletionProcessTests : IDisposable
         activeIdentity.DeletionStarted();
 
         // Assert
-        activeIdentity.IdentityStatus.Should().Be(IdentityStatus.Deleting);
+        activeIdentity.Status.Should().Be(IdentityStatus.Deleting);
         activeIdentity.DeletionProcesses.Should().HaveCount(1);
         activeIdentity.DeletionProcesses.First().DeletionStartedAt.Should().Be(currentDateTime);
 

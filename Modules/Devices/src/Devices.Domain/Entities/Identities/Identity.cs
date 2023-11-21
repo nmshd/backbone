@@ -22,7 +22,7 @@ public class Identity
         _deletionProcesses = new List<IdentityDeletionProcess>();
     }
 
-    public IdentityStatus IdentityStatus { get; internal set; }
+    public IdentityStatus Status { get; internal set; }
 
     public string? ClientId { get; private set; }
 
@@ -67,7 +67,7 @@ public class Identity
 
     public void DeletionStarted()
     {
-        IdentityStatus = IdentityStatus.Deleting;
+        Status = IdentityStatus.Deleting;
         var deletionProcess = DeletionProcesses.Single(dp => dp.IsActive());
         deletionProcess.DeletionStarted();
     }
