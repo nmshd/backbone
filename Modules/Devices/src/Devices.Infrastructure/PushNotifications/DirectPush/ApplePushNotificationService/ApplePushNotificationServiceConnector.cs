@@ -9,7 +9,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Respo
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -79,12 +78,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         }
     }
 
-    private static string BuildUrl(Environment environment, string handle)
+    private static string BuildUrl(PushEnvironment environment, string handle)
     {
         var baseUrl = environment switch
         {
-            Environment.Development => "https://api.sandbox.push.apple.com:443/3/device",
-            Environment.Production => "https://api.push.apple.com:443/3/device",
+            PushEnvironment.Development => "https://api.sandbox.push.apple.com:443/3/device",
+            PushEnvironment.Production => "https://api.push.apple.com:443/3/device",
             _ => throw new ArgumentOutOfRangeException()
         };
 
