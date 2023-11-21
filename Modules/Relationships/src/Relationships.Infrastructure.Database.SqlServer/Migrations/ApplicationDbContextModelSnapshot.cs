@@ -41,6 +41,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -293,9 +294,13 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.Relationship", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", null)
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
-                        .HasForeignKey("RelationshipTemplateId");
+                        .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>

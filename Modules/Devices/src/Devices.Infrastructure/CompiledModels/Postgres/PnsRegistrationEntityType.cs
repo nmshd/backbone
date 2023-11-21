@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 #pragma warning disable 219, 612, 618
 #nullable enable
@@ -42,11 +41,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
 
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
-                typeof(Environment),
+                typeof(PushEnvironment),
                 propertyInfo: typeof(PnsRegistration).GetProperty("Environment", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<Environment>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd);
-            environment.AddAnnotation("Relational:DefaultValue", Environment.Production);
+            environment.AddAnnotation("Relational:DefaultValue", PushEnvironment.Production);
 
             var handle = runtimeEntityType.AddProperty(
                 "Handle",
