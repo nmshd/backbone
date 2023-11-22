@@ -12,6 +12,7 @@ public class StartTests
     {
         // Arrange
         var mediator = A.Fake<MediatR.IMediator>();
+        A.CallTo(() => mediator.Send(A<UpdateDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(new UpdateDeletionProcessesResponse() { IdentityAddresses = [] });
 
         // Act
         await Worker.StartProcessing(mediator, CancellationToken.None);
