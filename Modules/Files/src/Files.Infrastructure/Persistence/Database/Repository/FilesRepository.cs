@@ -38,6 +38,18 @@ public class FilesRepository : IFilesRepository
 
     }
 
+    public async Task DeleteFilesByCreator(string identityAddress, CancellationToken cancellationToken)
+    {
+        var files = _files.CreatedBy(identityAddress).ToList();
+        foreach (var file in files)
+        {
+            _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
+        }
+
+        _files.RemoveRange(files);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<File> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var file = await (track ? _files : _readOnlyFiles)
