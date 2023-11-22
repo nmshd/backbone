@@ -57,4 +57,9 @@ public class PnsRegistrationRepository : IPnsRegistrationRepository
         _registrations.Update(registration);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task DeleteByIdentityAddress(IdentityAddress address, CancellationToken cancellationToken)
+    {
+        await _registrations.Where(x => x.IdentityAddress == address).ExecuteDeleteAsync(cancellationToken);
+    }
 }

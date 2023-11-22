@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
@@ -26,7 +27,13 @@ public class Worker : IHostedService
 
     internal static async Task StartProcessing(IMediator mediator, CancellationToken cancellationToken)
     {
-        _ = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
+        var identities = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
+
+        foreach (var identityAddress in identities.IdentityAddresses)
+        {
+            await mediator.Send(new DeleteIdentityCommand(identityAddress), cancellationToken);
+
+        }
 
         // for each of the identities
         // --- send notification
@@ -37,16 +44,16 @@ public class Worker : IHostedService
         // --- delete all devices
         // --- delete all users
         // --- delete all files
-        // --- delete all Individual Quotas
-        // --- delete all Tier Quotas
-        // --- delete all MetricStatuses
+        // --- 📍 delete all Individual Quotas (in module)
+        // --- 📍 delete all Tier Quotas (in module)
+        // --- 📍 delete all MetricStatuses (in module)
         // --- delete all Datawallet and Datawallet modifications
         // --- delete all External Events
         // --- delete all Sync Runs
         // --- delete all Sync Errors
         // --- delete all Tokens
         // --- ✅ delete all Deletion Processes (cascade)
-        // --- delete all PNS Registrations
+        // --- 📍 delete all PNS Registrations (in module)
         // --- modify messsages (replace old address and deviceID with dummies)
         // --- create Audit Log for identity deletion
         // --- Delete identity (with cascade for deletion processes)
