@@ -101,7 +101,10 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let client" data-label="Number of Identities:" (click)="editClient(client.clientId)" style="text-align: center">
-                    {{ client.numberOfIdentities }}
+                    <div class="progressWrapper">
+                        <span style="padding-right: 5px">{{ client.numberOfIdentities }}/{{ client.maxIdentities }}</span>
+                        <mat-progress-bar mode="determinate" [value]="(client.numberOfIdentities / client.maxIdentities) * 100"></mat-progress-bar>
+                    </div>
                 </td>
             </ng-container>
             <ng-container matColumnDef="createdAt">

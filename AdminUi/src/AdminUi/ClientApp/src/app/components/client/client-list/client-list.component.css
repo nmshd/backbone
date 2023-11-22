@@ -99,6 +99,15 @@
     justify-content: flex-end;
 }
 
+.progressWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.progressWrapper > span {
+    min-width: 2.5rem;
+}
+
 @media screen and (max-width: 960px) {
     .card-header {
         margin: 15px 15px -20px 15px;

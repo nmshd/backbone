@@ -47,6 +47,7 @@ export interface ClientOverview {
     displayName: string;
     defaultTier: TierDTO;
     createdAt: Date;
+    maxIdentities: number;
     numberOfIdentities: number;
 }
 
