@@ -39,6 +39,12 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
                 propertyInfo: typeof(ClientOverview).GetProperty("DisplayName", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(ClientOverview).GetField("<DisplayName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
+            var maxIdentities = runtimeEntityType.AddProperty(
+                "MaxIdentities",
+                typeof(int),
+                propertyInfo: typeof(ClientOverview).GetProperty("MaxIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ClientOverview).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+
             var numberOfIdentities = runtimeEntityType.AddProperty(
                 "NumberOfIdentities",
                 typeof(int),
