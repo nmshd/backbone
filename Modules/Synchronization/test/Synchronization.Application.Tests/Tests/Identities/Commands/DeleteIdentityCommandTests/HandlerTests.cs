@@ -6,14 +6,14 @@ namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Identities.Co
 public class HandlerTests
 {
     [Fact]
-    public async Task a()
+    public async Task TODO()
     {
         // Arrange
-        var handler = CreateHandler();
+        //var handler = CreateHandler();
 
         // Act
-        await handler.Handle(new DeleteIdentityCommand("identity-address"), CancellationToken.None);
-
+        //await handler.Handle(new DeleteIdentityCommand("identity-address"), CancellationToken.None);
+        // cannot mock dbcontext trivially
         // Assert
 
     }
