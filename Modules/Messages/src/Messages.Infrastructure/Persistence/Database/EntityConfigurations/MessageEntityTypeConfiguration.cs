@@ -12,11 +12,9 @@ public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<Message>
         builder.HasIndex(m => m.DoNotSendBefore);
         builder.HasIndex(m => m.CreatedAt);
 
+        builder.Property(m => m.Body).IsRequired(false);
         builder.Property(x => x.CreatedByDevice);
 
-        builder
-            .HasKey(m => m.Id);
-
-        builder.Ignore(a => a.Body);
+        builder.HasKey(m => m.Id);
     }
 }

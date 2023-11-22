@@ -7,7 +7,6 @@ using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class DirectPushServiceTests
@@ -29,7 +28,7 @@ public class DirectPushServiceTests
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
-        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development, CancellationToken.None);
+        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
@@ -46,7 +45,7 @@ public class DirectPushServiceTests
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
 
-        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
@@ -56,7 +55,7 @@ public class DirectPushServiceTests
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
         // Act
-        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development, CancellationToken.None);
+        var devicePushIdentifier = await directPushService.UpdateRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
@@ -72,7 +71,7 @@ public class DirectPushServiceTests
         var identityAddress = CreateRandomIdentityAddress();
 
         var pnsHandle = PnsHandle.Parse(PushNotificationPlatform.Fcm, "someValue").Value;
-        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", Environment.Development);
+        var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 

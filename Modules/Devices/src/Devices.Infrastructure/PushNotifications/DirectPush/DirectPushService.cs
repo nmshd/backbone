@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -6,11 +7,10 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Microsoft.Extensions.Logging;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
-public class DirectPushService : IPushService
+public class DirectPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
     private readonly IPnsRegistrationsRepository _pnsRegistrationsRepository;
     private readonly ILogger<DirectPushService> _logger;
@@ -65,7 +65,7 @@ public class DirectPushService : IPushService
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
-    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
+    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);

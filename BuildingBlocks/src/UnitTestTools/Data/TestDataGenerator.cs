@@ -18,17 +18,17 @@ public static class TestDataGenerator
         return IdentityAddress.Create(CreateRandomBytes(), "id1");
     }
 
+    public static DeviceId CreateRandomDeviceId()
+    {
+        return DeviceId.New();
+    }
+
     public static byte[] CreateRandomBytes()
     {
         var random = new Random();
         var bytes = new byte[10];
         random.NextBytes(bytes);
         return bytes;
-    }
-
-    public static DeviceId CreateRandomDeviceId()
-    {
-        return DeviceId.New();
     }
 }
 

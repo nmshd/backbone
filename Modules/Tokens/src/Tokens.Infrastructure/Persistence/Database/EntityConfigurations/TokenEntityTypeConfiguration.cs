@@ -10,6 +10,6 @@ public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
     {
         builder.HasIndex(r => r.CreatedBy);
 
-        builder.Ignore(a => a.Content);
+        builder.Property(r => r.Content).IsRequired(false);
     }
 }

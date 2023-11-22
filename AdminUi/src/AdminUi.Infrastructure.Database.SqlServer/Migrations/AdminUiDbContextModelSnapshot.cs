@@ -17,12 +17,12 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.ClientOverview", b =>
                 {
                     b.Property<string>("ClientId")
                         .HasColumnType("nvarchar(450)");
@@ -44,7 +44,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.ToView("ClientOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(450)");
@@ -74,7 +74,42 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.ToView("IdentityOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.RelationshipOverview", b =>
+                {
+                    b.Property<DateTime?>("AnsweredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AnsweredByDevice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByDevice")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("RelationshipOverviews", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.TierOverview", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(max)");
@@ -91,9 +126,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.ToView("TierOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.ClientOverview", b =>
                 {
-                    b.OwnsOne("AdminUi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
+                    b.OwnsOne("Backbone.AdminUi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
                         {
                             b1.Property<string>("ClientOverviewClientId")
                                 .HasColumnType("nvarchar(450)");
@@ -122,9 +157,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
-                    b.OwnsOne("AdminUi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
+                    b.OwnsOne("Backbone.AdminUi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
                         {
                             b1.Property<string>("IdentityOverviewAddress")
                                 .HasColumnType("nvarchar(450)");

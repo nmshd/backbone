@@ -17,18 +17,21 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Tokens.Domain.Entities.Token", b =>
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.Token", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

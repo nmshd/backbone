@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;

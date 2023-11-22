@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using FakeItEasy;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
 
@@ -21,7 +20,7 @@ public class HandlerTests
         var identity = TestDataGenerator.CreateIdentity();
 
         var mockUserContext = A.Fake<IUserContext>();
-        var mockPushService = A.Fake<IPushService>();
+        var mockPushService = A.Fake<IPushNotificationRegistrationService>();
 
         A.CallTo(() => mockUserContext.GetAddressOrNull())
             .Returns(identity.Address);
@@ -34,7 +33,7 @@ public class HandlerTests
                     A<DeviceId>._,
                     A<PnsHandle>._,
                     A<string>._,
-                    A<Environment>._,
+                    A<PushEnvironment>._,
                     CancellationToken.None
                 ))
             .Returns(DevicePushIdentifier.New());
@@ -56,7 +55,7 @@ public class HandlerTests
                 mockUserContext.GetDeviceId(),
                 PnsHandle.Parse(PushNotificationPlatform.Fcm, "handle").Value,
                 "someAppId",
-                Environment.Development,
+                PushEnvironment.Development,
                 CancellationToken.None))
             .MustHaveHappenedOnceExactly();
     }

@@ -32,6 +32,13 @@ namespace Backbone.Modules.Tokens.Infrastructure.CompiledModels.Postgres
                 valueConverter: new TokenIdEntityFrameworkValueConverter());
             id.AddAnnotation("Relational:IsFixedLength", true);
 
+            var content = runtimeEntityType.AddProperty(
+                "Content",
+                typeof(byte[]),
+                propertyInfo: typeof(Token).GetProperty("Content", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Token).GetField("<Content>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),
