@@ -17,7 +17,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -267,7 +267,8 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
-                        .HasForeignKey("DatawalletId");
+                        .HasForeignKey("DatawalletId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Datawallet");
                 });
@@ -276,7 +277,8 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
-                        .HasForeignKey("SyncRunId");
+                        .HasForeignKey("SyncRunId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("SyncRun");
                 });

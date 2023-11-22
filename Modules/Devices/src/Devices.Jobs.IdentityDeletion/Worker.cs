@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
-using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
+using DeleteIdentityQuotasCommand = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
+using DeleteIdentitySynchronizationCommand = Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
@@ -31,7 +32,8 @@ public class Worker : IHostedService
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
-            await mediator.Send(new DeleteIdentityCommand(identityAddress), cancellationToken);
+            await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
+            await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
 
         }
 
@@ -41,8 +43,8 @@ public class Worker : IHostedService
         // ---  --- create external event "PeerIdentityDeleted"
         // ---  --- (should delete relationships, their Changes, Template Allocations and Templates)
         // --- delete all challenges
-        // --- delete all devices
-        // --- delete all users
+        // --- 📍✅ delete all devices (in module, cascade on Devices.Identity deletion)
+        // --- 📍✅ delete all users (in module, cascade on Devices.Device ↑ deletion)
         // --- delete all files
         // --- 📍 delete all Individual Quotas (in module)
         // --- 📍 delete all Tier Quotas (in module)

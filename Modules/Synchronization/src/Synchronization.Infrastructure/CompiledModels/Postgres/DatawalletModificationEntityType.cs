@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
@@ -141,7 +142,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.Postgre
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DatawalletId")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade);
 
             var datawallet = declaringEntityType.AddNavigation("Datawallet",
                 runtimeForeignKey,

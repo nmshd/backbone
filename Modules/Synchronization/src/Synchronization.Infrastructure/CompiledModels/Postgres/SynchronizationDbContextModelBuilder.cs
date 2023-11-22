@@ -31,7 +31,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.Postgre
             SyncRunEntityType.CreateAnnotations(syncRun);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "7.0.11");
+            AddAnnotation("ProductVersion", "7.0.13");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
         }
     }
