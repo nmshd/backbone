@@ -63,7 +63,7 @@ public static class ApplicationErrors
 
         public static ApplicationError ClientReachedIdentitiesLimit()
         {
-            return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The clients Identity limit has been reached. A new Identity cannot be created for this client.");
+            return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The clients Identity limit has been reached. A new Identity cannot be created with this client.");
         }
     }
 }
