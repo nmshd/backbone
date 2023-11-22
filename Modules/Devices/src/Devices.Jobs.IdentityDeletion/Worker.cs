@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using MediatR;
 using DeleteIdentityQuotasCommand = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentitySynchronizationCommand = Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService

@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
                 response.IdentityAddresses.Add(identity.Address);
 
                 await _pnsRegistrationRepository.DeleteByIdentityAddress(identity.Address, cancellationToken); // pnsRegistrations ✅
-                
+
 
             }
             catch (Exception ex)
