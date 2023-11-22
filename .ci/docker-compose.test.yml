@@ -73,7 +73,7 @@ services:
     depends_on:
       consumer-api:
         condition: service_healthy
-    command: backbone client create --clientId test --clientSecret test --defaultTier Basic
+    command: backbone client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100
 
 networks:
   default:
