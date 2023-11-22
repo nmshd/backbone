@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
         <ProjectReference Include="..\..\..\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
         <ProjectReference Include="..\..\..\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
         <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />

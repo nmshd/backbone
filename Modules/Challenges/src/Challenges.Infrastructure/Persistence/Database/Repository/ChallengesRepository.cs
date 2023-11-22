@@ -31,4 +31,9 @@ public class ChallengesRepository : IChallengesRepository
     {
         return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task DeleteChallengesByIdentityAddress(string identityAddress, CancellationToken cancellationToken)
+    {
+        await _challenges.Where(c => c.CreatedBy == identityAddress).ExecuteDeleteAsync(cancellationToken);
+    }
 }

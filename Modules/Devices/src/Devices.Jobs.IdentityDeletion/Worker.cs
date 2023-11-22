@@ -2,6 +2,7 @@
 using MediatR;
 using DeleteIdentityQuotasCommand = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentitySynchronizationCommand = Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
+using DeleteIdentityChallengesCommand = Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService
@@ -34,6 +35,7 @@ public class Worker : IHostedService
         {
             await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
             await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
+            await mediator.Send(new DeleteIdentityChallengesCommand(identityAddress), cancellationToken);
 
         }
 

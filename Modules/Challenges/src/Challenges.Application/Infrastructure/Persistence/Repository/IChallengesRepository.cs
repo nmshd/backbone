@@ -9,4 +9,5 @@ public interface IChallengesRepository
     Task Add(Challenge challenge, CancellationToken cancellationToken);
 
     Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken);
+    Task DeleteChallengesByIdentityAddress(string identityAddress, CancellationToken cancellationToken);
 }

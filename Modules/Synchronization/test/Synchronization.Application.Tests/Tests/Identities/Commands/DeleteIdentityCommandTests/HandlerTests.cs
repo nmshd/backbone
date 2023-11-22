@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using FakeItEasy;
 using Xunit;
 
@@ -20,6 +21,6 @@ public class HandlerTests
 
     private static Handler CreateHandler()
     {
-        return A.Fake<Handler>();
+        return new Handler(A.Dummy<ISynchronizationDbContext>());
     }
 }
