@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
@@ -39,6 +40,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Relationships");
                         }).UseModel(Modules.Relationships.Infrastructure.CompiledModels.Postgres.RelationshipsDbContextModel.Instance);
                         break;
                     default:

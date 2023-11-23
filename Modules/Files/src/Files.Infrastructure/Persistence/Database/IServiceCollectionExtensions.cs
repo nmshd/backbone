@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
@@ -40,6 +41,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Files");
                         }).UseModel(Modules.Files.Infrastructure.CompiledModels.Postgres.FilesDbContextModel.Instance);
                         break;
                     default:

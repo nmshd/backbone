@@ -1,5 +1,6 @@
 ﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
 using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
@@ -48,6 +49,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "AdminUi");
                         }).UseModel(PostgresModel.AdminUiDbContextModel.Instance);
                         break;
                     default:

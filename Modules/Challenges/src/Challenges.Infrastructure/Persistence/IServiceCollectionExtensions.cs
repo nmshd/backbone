@@ -2,6 +2,7 @@
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence;
@@ -37,6 +38,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Challenges");
                         }).UseModel(CompiledModels.Postgres.ChallengesDbContextModel.Instance);
                         break;
                     default:

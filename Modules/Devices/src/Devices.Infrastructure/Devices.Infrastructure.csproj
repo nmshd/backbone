@@ -15,7 +15,6 @@
         <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-        <!-- CAUTION: Do not upgrade 'Npgsql.EntityFrameworkCore.PostgreSQL' to 7.0.11, because there is an error regarding __EFMigrationHistory tables introduces with the fix of the following GitHub issue: https://github.com/npgsql/efcore.pg/issues/2787 -->
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
         <PackageReference Include="OpenIddict.AspNetCore" Version="4.10.0" />
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.10.0" />

@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
@@ -43,6 +44,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Quotas");
                         }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.Postgres.QuotasDbContextModel.Instance);
                         break;
                     default:
