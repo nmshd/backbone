@@ -105,8 +105,8 @@
                         {{ client.numberOfIdentities }}
                     </div>
                     <ng-template #maxIdentitiesWrapper>
-                        <div class="progressWrapper">
-                            <span style="padding-right: 5px">{{ client.numberOfIdentities }}/{{ client.maxIdentities }}</span>
+                        <div>
+                            <span>{{ client.numberOfIdentities }}/{{ client.maxIdentities }}</span>
                             <mat-progress-bar mode="determinate" [value]="(client.numberOfIdentities / client.maxIdentities) * 100"></mat-progress-bar>
                         </div>
                     </ng-template>
