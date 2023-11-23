@@ -30,6 +30,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                     ON TIERS."Id" = CLIENTS."DefaultTier"
         """);
         }
+
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {

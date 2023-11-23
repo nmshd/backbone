@@ -34,7 +34,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("MaxIdentities")
+                    b.Property<int?>("MaxIdentities")
                         .HasColumnType("integer");
 
                     b.Property<int>("NumberOfIdentities")

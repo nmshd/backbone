@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20231122105359_AddMaxIdentitiesToClientsOverview")]
+    [Migration("20231123112934_AddMaxIdentitiesToClientsOverview")]
     partial class AddMaxIdentitiesToClientsOverview
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("MaxIdentities")
+                    b.Property<int?>("MaxIdentities")
                         .HasColumnType("integer");
 
                     b.Property<int>("NumberOfIdentities")
