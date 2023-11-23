@@ -1,7 +1,8 @@
-﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+﻿using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using FakeItEasy;
 using Xunit;
+using Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
 public class HandlerTests
@@ -10,19 +11,19 @@ public class HandlerTests
     public async Task Handler_calls_deletion_method_on_repository()
     {
         // Arrange
-        var identityAddress = "identity-address";
-        var challengesRepository = A.Fake<IFilesRepository>();
-        var handler = CreateHandler(challengesRepository);
+        var filesRepository = A.Fake<IFilesRepository>();
+        var handler = CreateHandler(filesRepository);
+        var identityAddress = CreateRandomIdentityAddress();
 
         // Act
         await handler.Handle(new DeleteIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => challengesRepository.DeleteFilesByCreator(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => filesRepository.DeleteFilesByCreator(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IFilesRepository challengesRepository = null)
+    private static Handler CreateHandler(IFilesRepository filesRepository = null)
     {
-        return new Handler(challengesRepository ?? A.Fake<IFilesRepository>());
+        return new Handler(filesRepository ?? A.Fake<IFilesRepository>());
     }
 }

@@ -11,7 +11,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.GetIdentity;
+namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Commands.GetIdentity;
 
 public class HandlerTests
 {

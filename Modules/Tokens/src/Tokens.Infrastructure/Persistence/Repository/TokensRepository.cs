@@ -72,6 +72,11 @@ public class TokensRepository : ITokensRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task DeleteAllOfOwner(string identityAddress, CancellationToken cancellationToken)
+    {
+        await _tokensDbSet.Where(t => t.CreatedBy == identityAddress).ExecuteDeleteAsync(cancellationToken);
+    }
+
     #endregion
 }
 
