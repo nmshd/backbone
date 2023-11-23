@@ -11,7 +11,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
 
     public DateTime CreatedAt { get; set; }
 
-    public int MaxIdentities { get; set; }
+    public int? MaxIdentities { get; set; }
 
     public OAuthClient ToModel()
     {
