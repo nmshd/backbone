@@ -8,7 +8,7 @@ WORKDIR "/src/Challenges.Jobs.Cleanup"
 RUN dotnet publish --configuration Release --output /app --no-restore
 
 # Run	
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
 WORKDIR /app
 ENV Logging__Console__FormatterName=
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
