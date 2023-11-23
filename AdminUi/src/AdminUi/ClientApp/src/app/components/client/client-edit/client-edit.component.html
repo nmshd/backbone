@@ -29,6 +29,9 @@
                         <span matListItemLine>
                             <mat-form-field class="form-field-edit">
                                 <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" placeholder="No limit" [disabled]="disabled" />
+                                <button matSuffix mat-icon-button aria-label="Clear" (click)="client.maxIdentities = undefined">
+                                    <mat-icon>close</mat-icon>
+                                </button>
                             </mat-form-field>
                         </span>
                     </mat-list-item>
