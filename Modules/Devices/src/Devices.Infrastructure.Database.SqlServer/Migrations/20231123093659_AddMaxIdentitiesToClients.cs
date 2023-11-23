@@ -14,8 +14,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 name: "MaxIdentities",
                 table: "OpenIddictApplications",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
         }
 
         /// <inheritdoc />

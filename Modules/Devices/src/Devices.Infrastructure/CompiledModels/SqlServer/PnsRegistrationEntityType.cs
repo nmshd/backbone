@@ -43,7 +43,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
-                typeof(Environment),
+                typeof(PushEnvironment),
                 propertyInfo: typeof(PnsRegistration).GetProperty("Environment", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<Environment>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd);

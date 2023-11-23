@@ -105,9 +105,10 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
             var maxIdentities = runtimeEntityType.AddProperty(
                 "MaxIdentities",
-                typeof(int),
+                typeof(int?),
                 propertyInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetProperty("MaxIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
             maxIdentities.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var permissions = runtimeEntityType.AddProperty(

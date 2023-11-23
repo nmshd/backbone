@@ -278,7 +278,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxIdentities")
+                    b.Property<int?>("MaxIdentities")
                         .HasColumnType("int");
 
                     b.Property<string>("Permissions")
