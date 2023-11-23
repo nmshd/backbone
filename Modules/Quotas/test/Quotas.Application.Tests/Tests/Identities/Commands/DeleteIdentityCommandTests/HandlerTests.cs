@@ -1,10 +1,10 @@
 ﻿using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using Xunit;
-using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
 public class HandlerTests

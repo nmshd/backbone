@@ -1,8 +1,8 @@
-﻿using static Backbone.UnitTestTools.Data.TestDataGenerator;
+﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
-using Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
 public class HandlerTests
