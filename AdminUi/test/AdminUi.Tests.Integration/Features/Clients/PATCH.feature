@@ -59,6 +59,14 @@ Scenario: Changing the max identities of an existing Client
 	And the response contains Client c
 	And the Client in the Backend has the new maxIdentities
 
+Scenario: Changing the max identities of an existing Client with an empty max identities
+	Given a Tier t
+	And a Client c with Tier t and MaxIdentities mi
+	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint without passing a maxIdentities
+	Then the response status code is 200 (OK)
+	And the response contains Client c
+	And the Client in the Backend has no max identities limit
+
 Scenario: Changing the max identities of an existing Client with the same max identities
 	Given a Tier t
 	And a Client c with Tier t and MaxIdentities mi

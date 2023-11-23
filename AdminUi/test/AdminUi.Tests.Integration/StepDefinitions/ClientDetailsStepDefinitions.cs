@@ -83,6 +83,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _response!.Content.Result!.ClientId.Should().Be(_clientId);
         _response!.Content.Result!.DefaultTier.Should().NotBeNull();
         _response!.Content.Result!.DefaultTier.Should().Be(_tierId);
+        _response!.Content.Result!.MaxIdentities.Should().NotBeNull();
         _response!.Content.Result!.MaxIdentities.Should().Be(_maxIdentities);
         _response!.AssertContentCompliesWithSchema();
     }

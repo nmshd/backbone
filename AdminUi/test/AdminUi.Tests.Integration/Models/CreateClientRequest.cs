@@ -6,5 +6,5 @@ public class CreateClientRequest
     public string DisplayName { get; set; }
     public string ClientSecret { get; set; }
     public string DefaultTier { get; set; }
-    public int MaxIdentities { get; set; }
+    public int? MaxIdentities { get; set; }
 }

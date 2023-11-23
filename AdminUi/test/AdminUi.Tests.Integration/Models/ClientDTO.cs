@@ -6,5 +6,5 @@ public class ClientDTO
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
-    public int MaxIdentities { get; set; }
+    public int? MaxIdentities { get; set; }
 }
