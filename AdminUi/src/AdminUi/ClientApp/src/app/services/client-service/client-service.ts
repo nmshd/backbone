@@ -47,7 +47,7 @@ export interface ClientOverview {
     displayName: string;
     defaultTier: TierDTO;
     createdAt: Date;
-    maxIdentities: number;
+    maxIdentities?: number;
     numberOfIdentities: number;
 }
 
@@ -57,7 +57,7 @@ export interface Client {
     clientSecret?: string;
     defaultTier: string;
     createdAt: Date;
-    maxIdentities: number;
+    maxIdentities?: number;
 }
 
 export interface ChangeClientSecretRequest {

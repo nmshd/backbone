@@ -50,8 +50,7 @@ export class ClientEditComponent {
         this.client = {
             clientId: "",
             displayName: "",
-            clientSecret: "",
-            maxIdentities: 0
+            clientSecret: ""
         } as Client;
         this.tierList = [];
     }
@@ -77,8 +76,7 @@ export class ClientEditComponent {
         this.client = {
             clientId: "",
             displayName: "",
-            clientSecret: "",
-            maxIdentities: 0
+            clientSecret: ""
         } as Client;
     }
 
@@ -192,7 +190,7 @@ export class ClientEditComponent {
     }
 
     public canSaveClient(): boolean {
-        if (!this.client.defaultTier || (!this.client.maxIdentities && this.client.maxIdentities !== 0) || this.client.maxIdentities < 0) return false;
+        if (!this.client.defaultTier || (this.client.maxIdentities && this.client.maxIdentities < 0)) return false;
         return true;
     }
 }
