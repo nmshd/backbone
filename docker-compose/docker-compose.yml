@@ -23,6 +23,7 @@ services:
       - rabbitmq
       - azure-storage-emulator
       - postgres
+      - seq
     volumes:
       - ../:/app
       - /app/ConsumerApi/obj

@@ -31,10 +31,10 @@ COPY ["AdminUi/src/AdminUi.Infrastructure.Database.SqlServer/AdminUi.Infrastruct
 RUN dotnet restore "AdminUi/src/AdminUi/AdminUi.csproj"
 COPY . .
 WORKDIR "/src/AdminUi/src/AdminUi"
-RUN dotnet build "AdminUi.csproj" -c Release -o /app/build
+RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/build --no-restore "AdminUi.csproj"
 
 FROM build AS publish
-RUN dotnet publish "AdminUi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "AdminUi.csproj"
 
 FROM base AS final
 WORKDIR /app
