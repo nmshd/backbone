@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20231122102932_AddMaxIdentitiesToClientsOverview")]
+    [Migration("20231123113553_AddMaxIdentitiesToClientsOverview")]
     partial class AddMaxIdentitiesToClientsOverview
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxIdentities")
+                    b.Property<int?>("MaxIdentities")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfIdentities")
