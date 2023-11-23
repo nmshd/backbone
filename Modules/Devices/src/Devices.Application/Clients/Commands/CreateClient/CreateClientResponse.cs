@@ -19,5 +19,5 @@ public class CreateClientResponse
     public string ClientSecret { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
-    public int MaxIdentities { get; set; }
+    public int? MaxIdentities { get; set; }
 }
