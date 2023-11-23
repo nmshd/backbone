@@ -14,8 +14,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "MaxIdentities",
                 table: "OpenIddictApplications",
                 type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
         }
 
         /// <inheritdoc />

@@ -277,7 +277,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("DisplayNames")
                         .HasColumnType("text");
 
-                    b.Property<int>("MaxIdentities")
+                    b.Property<int?>("MaxIdentities")
                         .HasColumnType("integer");
 
                     b.Property<string>("Permissions")
