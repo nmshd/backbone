@@ -4,7 +4,7 @@ namespace Backbone.Modules.Devices.Application.Clients.Commands.CreateClient;
 
 public class CreateClientCommand : IRequest<CreateClientResponse>
 {
-    public CreateClientCommand(string clientId, string displayName, string clientSecret, string defaultTier, int maxIdentities)
+    public CreateClientCommand(string clientId, string displayName, string clientSecret, string defaultTier, int? maxIdentities)
     {
         ClientId = clientId;
         DisplayName = displayName;
@@ -21,5 +21,5 @@ public class CreateClientCommand : IRequest<CreateClientResponse>
 
     public string DefaultTier { get; set; }
 
-    public int MaxIdentities { get; set; }
+    public int? MaxIdentities { get; set; }
 }

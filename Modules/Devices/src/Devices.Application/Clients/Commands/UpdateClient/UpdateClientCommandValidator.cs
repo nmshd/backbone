@@ -8,6 +8,5 @@ public class UpdateClientCommandValidator : AbstractValidator<UpdateClientComman
     {
         RuleFor(c => c.ClientId).DetailedNotEmpty();
         RuleFor(c => c.DefaultTier).DetailedNotEmpty();
-        RuleFor(c => c.MaxIdentities).DetailedNotEmpty();
     }
 }
