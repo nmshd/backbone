@@ -12,22 +12,30 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
-    selector: "app-identity-edit",
-    templateUrl: "./identity-edit.component.html",
-    styleUrls: ["./identity-edit.component.css"]
+    selector: "app-identity-details",
+    templateUrl: "./identity-details.component.html",
+    styleUrls: ["./identity-details.component.css"]
 })
-export class IdentityEditComponent {
+export class IdentityDetailsComponent {
     public header: string;
     public headerDescription: string;
+
     public headerQuotas: string;
     public headerQuotasDescription: string;
+
     public headerDevices: string;
     public headerDevicesDescription: string;
+
+    public headerRelationships: string;
+    public headerRelationshipsDescription: string;
+
     public selectionQuotas: SelectionModel<IdentityQuota>;
     public quotasTableDisplayedColumns: string[];
     public quotasTableData: (Quota | MetricGroup)[];
+
     public devicesTableDisplayedColumns: string[];
     public devicesTableData: Device[];
+
     public identityAddress?: string;
     public disabled: boolean;
     public identity: Identity;
@@ -50,6 +58,8 @@ export class IdentityEditComponent {
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
         this.headerDevices = "Devices";
         this.headerDevicesDescription = "View devices for this Identity.";
+        this.headerRelationships = "Relationships";
+        this.headerRelationshipsDescription = "View relationships of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
         this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];

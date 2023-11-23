@@ -9,7 +9,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
@@ -28,7 +27,7 @@ public class ApplePushNotificationServiceConnectorTests
         var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var registrations = new List<PnsRegistration>
         {
-            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value, APP_ID, Environment.Development)
+            new(recipient, DeviceId.New(), PnsHandle.Parse("some-device-id", PushNotificationPlatform.Apns).Value, APP_ID, PushEnvironment.Development)
         };
         await connector.Send(registrations, recipient, new { SomeProperty = "SomeValue" });
 

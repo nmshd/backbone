@@ -33,6 +33,15 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 valueConverter: new RelationshipChangeIdEntityFrameworkValueConverter());
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var content = runtimeEntityType.AddProperty(
+                "Content",
+                typeof(byte[]),
+                propertyInfo: typeof(RelationshipChangeRequest).GetProperty("Content", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(RelationshipChangeRequest).GetField("<Content>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            content.AddAnnotation("Relational:ColumnName", "Req_Content");
+            content.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),

@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
@@ -40,12 +39,12 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         return Unit.Value;
     }
 
-    private static Environment DeserializeEnvironment(string environment)
+    private static PushEnvironment DeserializeEnvironment(string environment)
     {
         return environment switch
         {
-            DEVELOPMENT_ENVIRONMENT => Environment.Development,
-            PRODUCTION_ENVIRONMENT => Environment.Production,
+            DEVELOPMENT_ENVIRONMENT => PushEnvironment.Development,
+            PRODUCTION_ENVIRONMENT => PushEnvironment.Production,
             _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
         };
     }

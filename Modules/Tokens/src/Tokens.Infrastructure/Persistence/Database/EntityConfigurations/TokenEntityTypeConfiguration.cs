@@ -9,5 +9,7 @@ public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
     public void Configure(EntityTypeBuilder<Token> builder)
     {
         builder.HasIndex(r => r.CreatedBy);
+
+        builder.Property(r => r.Content).IsRequired(false);
     }
 }

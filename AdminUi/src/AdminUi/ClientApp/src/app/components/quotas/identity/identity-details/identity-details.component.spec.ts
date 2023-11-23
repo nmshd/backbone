@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IdentityEditComponent } from "./identity-edit.component";
+import { IdentityDetailsComponent } from "./identity-details.component";
 
-describe("IdentityEditComponent", function () {
-    let component: IdentityEditComponent;
-    let fixture: ComponentFixture<IdentityEditComponent>;
+describe("IdentityDetailsComponent", function () {
+    let component: IdentityDetailsComponent;
+    let fixture: ComponentFixture<IdentityDetailsComponent>;
 
     beforeEach(async function () {
         await TestBed.configureTestingModule({
-            declarations: [IdentityEditComponent]
+            declarations: [IdentityDetailsComponent]
         }).compileComponents();
 
-        fixture = TestBed.createComponent(IdentityEditComponent);
+        fixture = TestBed.createComponent(IdentityDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -17,6 +17,7 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
             var tierDTO = TierDTOEntityType.Create(this);
             var identityOverview = IdentityOverviewEntityType.Create(this);
             var tierDTO0 = TierDTO0EntityType.Create(this);
+            var relationshipOverview = RelationshipOverviewEntityType.Create(this);
             var tierOverview = TierOverviewEntityType.Create(this);
 
             TierDTOEntityType.CreateForeignKey1(tierDTO, clientOverview);
@@ -26,10 +27,11 @@ namespace AdminUi.Infrastructure.CompiledModels.Postgres
             TierDTOEntityType.CreateAnnotations(tierDTO);
             IdentityOverviewEntityType.CreateAnnotations(identityOverview);
             TierDTO0EntityType.CreateAnnotations(tierDTO0);
+            RelationshipOverviewEntityType.CreateAnnotations(relationshipOverview);
             TierOverviewEntityType.CreateAnnotations(tierOverview);
 
             AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-            AddAnnotation("ProductVersion", "7.0.12");
+            AddAnnotation("ProductVersion", "7.0.13");
             AddAnnotation("Relational:MaxIdentifierLength", 63);
         }
     }

@@ -52,7 +52,6 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<byte[]>("Body")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")

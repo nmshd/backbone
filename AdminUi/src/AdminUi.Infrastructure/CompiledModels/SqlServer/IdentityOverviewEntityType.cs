@@ -25,6 +25,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityOverview).GetProperty("Address", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<Address>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 afterSaveBehavior: PropertySaveBehavior.Throw);
+            address.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
@@ -32,6 +33,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityOverview).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdWithClient = runtimeEntityType.AddProperty(
                 "CreatedWithClient",
@@ -39,6 +41,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityOverview).GetProperty("CreatedWithClient", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<CreatedWithClient>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            createdWithClient.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var datawalletVersion = runtimeEntityType.AddProperty(
                 "DatawalletVersion",
@@ -46,12 +49,14 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityOverview).GetProperty("DatawalletVersion", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<DatawalletVersion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            datawalletVersion.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var identityVersion = runtimeEntityType.AddProperty(
                 "IdentityVersion",
                 typeof(byte),
                 propertyInfo: typeof(IdentityOverview).GetProperty("IdentityVersion", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<IdentityVersion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            identityVersion.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var lastLoginAt = runtimeEntityType.AddProperty(
                 "LastLoginAt",
@@ -60,6 +65,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(IdentityOverview).GetField("<LastLoginAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            lastLoginAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var numberOfDevices = runtimeEntityType.AddProperty(
                 "NumberOfDevices",
@@ -67,6 +73,7 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityOverview).GetProperty("NumberOfDevices", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityOverview).GetField("<NumberOfDevices>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            numberOfDevices.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
                 new[] { address });

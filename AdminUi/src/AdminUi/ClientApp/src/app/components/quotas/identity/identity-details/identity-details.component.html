@@ -180,6 +180,19 @@
                 </table>
             </ng-template>
         </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerRelationships }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerRelationshipsDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-relationships [identityAddress]="identityAddress"></app-identity-details-relationships>
+            </ng-template>
+        </mat-expansion-panel>
     </mat-accordion>
     <div class="action-buttons">
         <button mat-raised-button [disabled]="!hasPendingChanges()" (click)="saveIdentity()" color="primary">Save</button>

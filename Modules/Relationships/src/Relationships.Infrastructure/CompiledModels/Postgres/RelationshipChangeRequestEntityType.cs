@@ -32,6 +32,14 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.Postgres
                 maxLength: 20,
                 valueConverter: new RelationshipChangeIdEntityFrameworkValueConverter());
 
+            var content = runtimeEntityType.AddProperty(
+                "Content",
+                typeof(byte[]),
+                propertyInfo: typeof(RelationshipChangeRequest).GetProperty("Content", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(RelationshipChangeRequest).GetField("<Content>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            content.AddAnnotation("Relational:ColumnName", "Req_Content");
+
             var createdAt = runtimeEntityType.AddProperty(
                 "CreatedAt",
                 typeof(DateTime),

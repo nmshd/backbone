@@ -3,7 +3,6 @@
 .mat-column-clientId,
 .mat-column-publicKey {
     width: 25%;
-    word-break: break-all;
 }
 
 .mat-column-createdAt,

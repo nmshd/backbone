@@ -45,7 +45,7 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
         }
     }
 
-    public ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message)
+    public ConvertibleString CreateSignature(ConvertibleString privateKey, ConvertibleString message)
     {
         var privateKeyParameters = CreatePrivateKeyParameters(privateKey);
 

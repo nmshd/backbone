@@ -7,6 +7,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
@@ -56,7 +57,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.Postgres
                 typeof(RelationshipTemplateId),
                 propertyInfo: typeof(Relationship).GetProperty("RelationshipTemplateId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Relationship).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true,
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new RelationshipTemplateIdEntityFrameworkValueConverter());
@@ -104,7 +104,16 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.Postgres
         {
             var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RelationshipTemplateId")! },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Restrict,
+                required: true);
+
+            var relationshipTemplate = declaringEntityType.AddNavigation("RelationshipTemplate",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(RelationshipTemplate),
+                propertyInfo: typeof(Relationship).GetProperty("RelationshipTemplate", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Relationship).GetField("<RelationshipTemplate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var relationships = principalEntityType.AddNavigation("Relationships",
                 runtimeForeignKey,

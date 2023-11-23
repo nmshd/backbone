@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 using Microsoft.Extensions.Logging;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
@@ -68,7 +67,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
-    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, Environment environment, CancellationToken cancellationToken)
+    public async Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
