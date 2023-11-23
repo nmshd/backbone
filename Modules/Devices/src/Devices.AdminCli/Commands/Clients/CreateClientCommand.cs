@@ -32,9 +32,9 @@ public class CreateClientCommand : AdminCliDbCommand
             Description = "The id or name of the Tier that should be assigned to all Identities created with this OAuth client."
         };
 
-        var maxIdentities = new Option<int>("--maxIdentities")
+        var maxIdentities = new Option<int?>("--maxIdentities")
         {
-            IsRequired = true,
+            IsRequired = false,
             Description = "The maximum number of Identities that can be created with this OAuth client."
         };
 
@@ -49,7 +49,7 @@ public class CreateClientCommand : AdminCliDbCommand
     }
 
     private async Task CreateClient(string dbProvider, string dbConnectionString, string? clientId,
-        string? displayName, string? clientSecret, string defaultTier, int maxIdentities)
+        string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
     {
         var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
 
