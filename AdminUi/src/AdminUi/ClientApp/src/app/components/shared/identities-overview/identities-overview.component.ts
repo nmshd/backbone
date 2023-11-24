@@ -162,7 +162,7 @@ export class IdentitiesOverviewComponent {
         this.identityService.getIdentities(this.filter, this.pageIndex, this.pageSize).subscribe({
             next: (data: ODataResponse<IdentityOverview[]>) => {
                 this.identities = data.value;
-                this.totalRecords = data.value.length;
+                this.totalRecords = data["@odata.count"];
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
