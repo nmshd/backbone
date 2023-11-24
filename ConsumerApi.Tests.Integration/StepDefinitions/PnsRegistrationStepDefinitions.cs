@@ -12,14 +12,14 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "PUT /Devices/Self/PushNotifications")]
-internal class PnsRegistrationStepDefinition : BaseStepDefinitions
+internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
 {
     // keep in mind: these tests use DummyPushService so they will not execute the implemented code
 
     private readonly PushNotificationsApi _pnsRegistrationsApi;
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
 
-    public PnsRegistrationStepDefinition(IOptions<HttpConfiguration> httpConfiguration, PushNotificationsApi pnsRegistrationsApi) : base(httpConfiguration)
+    public PnsRegistrationStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, PushNotificationsApi pnsRegistrationsApi) : base(httpConfiguration)
     {
         _pnsRegistrationsApi = pnsRegistrationsApi;
     }
