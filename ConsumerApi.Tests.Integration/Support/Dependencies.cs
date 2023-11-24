@@ -29,6 +29,7 @@ public static class Dependencies
         services.AddTransient<TokensApi>();
         services.AddTransient<ChallengesApi>();
         services.AddTransient<IdentitiesApi>();
+        services.AddTransient<DevicesApi>();
 
         return services;
     }

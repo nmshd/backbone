@@ -52,4 +52,8 @@
     </SpecFlowFeatureFiles>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Devices\{id}\" />
+  </ItemGroup>
+
 </Project>
