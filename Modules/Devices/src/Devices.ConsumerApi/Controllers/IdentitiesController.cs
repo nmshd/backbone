@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +56,15 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(command, cancellationToken);
 
         return Created(response);
+    }
+
+    [HttpPost("{address}/DeletionProcesses")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> StartDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
+        return Created("", response);
     }
 
     [HttpPost("Self/DeletionProcesses")]
