@@ -59,19 +59,19 @@ export class IdentityService {
         if (filter.createdAt.operator !== undefined && filter.createdAt.value !== undefined) {
             switch (filter.createdAt.operator) {
                 case ">":
-                    odataFilter.gt("createdAt", filter.createdAt.value);
+                    odataFilter.gt("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<":
-                    odataFilter.lt("createdAt", filter.createdAt.value);
+                    odataFilter.lt("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "=":
-                    odataFilter.eq("createdAt", filter.createdAt.value);
+                    odataFilter.eq("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<=":
-                    odataFilter.le("createdAt", filter.createdAt.value);
+                    odataFilter.le("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case ">=":
-                    odataFilter.ge("createdAt", filter.createdAt.value);
+                    odataFilter.ge("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 default:
                     this.logger.error(`Invalid createdAt filter operator: ${filter.createdAt.operator}`);
@@ -82,19 +82,19 @@ export class IdentityService {
         if (filter.lastLoginAt.operator !== undefined && filter.lastLoginAt.value !== undefined) {
             switch (filter.lastLoginAt.operator) {
                 case ">":
-                    odataFilter.gt("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.gt("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<":
-                    odataFilter.lt("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.lt("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "=":
-                    odataFilter.eq("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.eq("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<=":
-                    odataFilter.le("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.le("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case ">=":
-                    odataFilter.ge("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.ge("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 default:
                     this.logger.error(`Invalid lastLoginAt filter operator: ${filter.lastLoginAt.operator}`);
