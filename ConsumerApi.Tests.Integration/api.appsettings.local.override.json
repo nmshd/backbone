@@ -1,68 +1,65 @@
 {
-  "Infrastructure": {
-    "EventBus": {
-      "ConnectionInfo": "localhost"
-    }
-  },
-  "Modules": {
-    "Challenges": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True"
+    "Infrastructure": {
+        "EventBus": {
+            "ConnectionInfo": "localhost"
         }
-      }
     },
-    "Quotas": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Devices": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Files": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=files;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Messages": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=messages;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Relationships": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=relationships;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Synchronization": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=synchronization;Password=Passw0rd;TrustServerCertificate=True"
-        }
-      }
-    },
-    "Tokens": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=tokens;Password=Passw0rd;TrustServerCertificate=True"
+    "Modules": {
+        "Challenges": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
         },
-        "BlobStorage": {
-          "ConnectionInfo": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1;"
+        "Quotas": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Devices": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Files": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=files;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Messages": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=messages;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Relationships": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=relationships;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Synchronization": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=synchronization;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Tokens": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=tokens;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
         }
-      }
     }
-  }
 }
