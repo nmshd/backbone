@@ -54,6 +54,16 @@ public class Identity
         TierId = id;
     }
 
+    public IdentityDeletionProcess StartDeletionProcessBySupport(DeviceId asDevice)
+    {
+        EnsureNoActiveProcessExists();
+
+        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsSupport(Address, asDevice);
+        _deletionProcesses.Add(deletionProcess);
+
+        return deletionProcess;
+    }
+
     public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
@@ -77,5 +87,6 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    Approved
+    Approved,
+    WaitingForApproval
 }

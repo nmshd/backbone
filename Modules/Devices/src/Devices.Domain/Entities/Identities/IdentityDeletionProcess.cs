@@ -15,6 +15,23 @@ public class IdentityDeletionProcess
     {
     }
 
+    public static IdentityDeletionProcess CreateDeletionProcessAsSupport(IdentityAddress createdBy, DeviceId createdByDevice)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDevice, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice, DeletionProcessStatus status)
+    {
+        Id = IdentityDeletionProcessId.Generate();
+        CreatedAt = SystemTime.UtcNow;
+        Status = status;
+
+        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
+        {
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy, createdByDevice)
+        };
+    }
+
     public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
@@ -49,6 +66,6 @@ public class IdentityDeletionProcess
 
     public bool IsActive()
     {
-        return Status is DeletionProcessStatus.Approved;
+        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
     }
 }
