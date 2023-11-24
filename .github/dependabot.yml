@@ -1,21 +1,5 @@
 version: 2
 updates:
-  ##### NuGet packages for Backbone.sln #####
-  - package-ecosystem: "nuget"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      update-nuget-dependencies:
-        patterns:
-          - "*"
-        exclude-patterns:
-          - "Npgsql.EntityFrameworkCore.PostgreSQL"
-    reviewers:
-      - "tnotheis"
-    labels:
-      - "dependencies"
-
   ##### GitHub Actions #####
   - package-ecosystem: "github-actions"
     directory: "/"
