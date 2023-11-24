@@ -27,7 +27,7 @@ export class IdentityService {
     }
 
     public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
-        const paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
+        const paginationFilter = `$top=${pageSize}&$skip=${pageNumber * pageSize}&$count=true`;
         return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`);
     }
 
