@@ -12,11 +12,12 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class BaseStepDefinitions
 {
     protected readonly RequestConfiguration _requestConfiguration;
-    private readonly ISignatureHelper _signatureHelper;
-    private readonly ChallengesApi _challengesApi;
-    private readonly IdentitiesApi _identitiesApi;
+    protected readonly ISignatureHelper _signatureHelper;
+    protected readonly ChallengesApi _challengesApi;
+    protected readonly IdentitiesApi _identitiesApi;
+    protected readonly DevicesApi _devicesApi;
 
-    public BaseStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi)
+    public BaseStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi)
     {
         _requestConfiguration = new RequestConfiguration
         {
@@ -33,7 +34,10 @@ internal class BaseStepDefinitions
         _signatureHelper = signatureHelper;
         _challengesApi = challengesApi;
         _identitiesApi = identitiesApi;
+        _devicesApi = devicesApi;
     }
+
+    #region StepDefinitions
 
     [Given(@"the user is authenticated")]
     public void GivenTheUserIsAuthenticated()
@@ -52,6 +56,8 @@ internal class BaseStepDefinitions
     {
         _requestConfiguration.AcceptHeader = acceptHeader;
     }
+
+    #endregion
 
     protected async Task<HttpResponse<Challenge>> CreateChallenge()
     {
@@ -108,6 +114,7 @@ internal class BaseStepDefinitions
 
     protected void Authenticate(string username, string password)
     {
+        _requestConfiguration.Authenticate = true;
         _requestConfiguration.AuthenticationParameters.Username = username;
         _requestConfiguration.AuthenticationParameters.Password = password;
     }

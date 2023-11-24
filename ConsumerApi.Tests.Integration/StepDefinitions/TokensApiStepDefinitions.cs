@@ -27,8 +27,8 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     private static readonly string TOMORROW_AS_STRING = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YESTERDAY_AS_STRING = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi) : 
-        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi)
+    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) : 
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
