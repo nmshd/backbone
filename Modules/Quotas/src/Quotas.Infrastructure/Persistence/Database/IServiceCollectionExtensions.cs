@@ -44,7 +44,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Quotas");
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Quotas"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
                         }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.Postgres.QuotasDbContextModel.Instance);
                         break;
                     default:

@@ -47,7 +47,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Devices");
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Devices"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
                         });
                         dbContextOptions.UseOpenIddict<
                             CustomOpenIddictEntityFrameworkCoreApplication,
