@@ -4,6 +4,11 @@ namespace Backbone.Modules.Messages.Application;
 
 public class ApplicationOptions
 {
+    [Required]
+    [MinLength(3)]
+    [MaxLength(3)]
+    public string AddressPrefix { get; set; }
+
     [Range(1, 100)]
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 

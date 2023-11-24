@@ -7,6 +7,7 @@ using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -72,5 +73,12 @@ public class MessagesRepository : IMessagesRepository
     {
         _dbContext.UpdateRange(messages);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Message>> FindMessagesWithParticipant(IdentityAddress requiredParticipant, CancellationToken cancellationToken)
+    {
+        return await _messages.IncludeAll(_dbContext)
+            .WithSenderOrRecipient(requiredParticipant)
+            .ToListAsync(cancellationToken);
     }
 }

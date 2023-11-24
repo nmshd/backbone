@@ -26,7 +26,7 @@ public class Message : IIdentifiable<MessageId>
     public MessageId Id { get; }
 
     public DateTime CreatedAt { get; }
-    public IdentityAddress CreatedBy { get; }
+    public IdentityAddress CreatedBy { get; private set; }
     public DeviceId CreatedByDevice { get; }
 
     public DateTime? DoNotSendBefore { get; }
@@ -42,5 +42,20 @@ public class Message : IIdentifiable<MessageId>
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }
         Body = bytes;
+    }
+
+    public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
+    {
+        if (CreatedBy == oldIdentityAddress)
+        {
+            CreatedBy = newIdentityAddress;
+        }
+
+        var recipients = Recipients.Where(r => r.Address == oldIdentityAddress);
+
+        foreach (var recipient in recipients)
+        {
+            recipient.UpdateAddress(newIdentityAddress);
+        }
     }
 }
