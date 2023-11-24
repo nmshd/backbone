@@ -16,8 +16,9 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     private HttpResponse<CreateIdentityResponse>? _identityResponse;
     private HttpResponse<Challenge>? _challengeResponse;
 
-    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengesApi, ISignatureHelper signatureHelper, DevicesApi devicesApi) : 
-        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi) { }
+    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengesApi, ISignatureHelper signatureHelper, DevicesApi devicesApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
+    { }
 
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()

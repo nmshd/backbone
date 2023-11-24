@@ -21,7 +21,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     private string? _deviceIdD1;
     private string? _deviceIdD2;
 
-    public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) : 
+    public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _keyPair = signatureHelper.CreateKeyPair();

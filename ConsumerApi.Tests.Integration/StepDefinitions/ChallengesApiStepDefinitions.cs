@@ -16,7 +16,7 @@ internal class ChallengesApiStepDefinitions : BaseStepDefinitions
     private string _challengeId;
     private HttpResponse<Challenge>? _response;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) : 
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _challengesApi = challengesApi;
