@@ -15,9 +15,6 @@ public class DeviceDTO : IHaveCustomMapping
 
     public DeviceId CreatedByDevice { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
-    public DeviceId DeletedByDevice { get; set; }
-
     public LastLoginInformation LastLogin { get; set; }
 
     public void CreateMappings(Profile configuration)
