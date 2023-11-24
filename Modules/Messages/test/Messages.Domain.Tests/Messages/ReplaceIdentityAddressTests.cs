@@ -31,14 +31,14 @@ public class ReplaceIdentityAddressTests
     public void Recipient_gets_updated()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var createdBydentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdBydentityAddress, new[] { identityAddress });
+        var message = CreateMessage(createdBydentityAddress, recipientIdentityAddress);
 
         // Act
-        message.ReplaceIdentityAddress(identityAddress, newIdentityAddress);
+        message.ReplaceIdentityAddress(recipientIdentityAddress, newIdentityAddress);
 
         // Assert
         message.Recipients.Single().Address.Should().Be(newIdentityAddress);
@@ -54,7 +54,7 @@ public class ReplaceIdentityAddressTests
         var erroneousIdentityIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByIdentityAddress, new[] { recipient1IdentityAddress, recipient2IdentityAddress });
+        var message = CreateMessage(createdByIdentityAddress, recipient1IdentityAddress, recipient2IdentityAddress);
 
         // Act
         message.ReplaceIdentityAddress(erroneousIdentityIdentityAddress, newIdentityAddress);
@@ -65,11 +65,11 @@ public class ReplaceIdentityAddressTests
         message.CreatedBy.Should().Be(createdByIdentityAddress);
     }
 
-    private static Message CreateMessage(IdentityAddress createdBy, IEnumerable<IdentityAddress> recipientsIdentityAddresses = null)
+    private static Message CreateMessage(IdentityAddress createdBy, params IdentityAddress[] recipientsIdentityAddresses)
     {
         var recipientInformation = new List<RecipientInformation>();
 
-        foreach (var recipientIdentityAddress in recipientsIdentityAddresses ?? Array.Empty<IdentityAddress>())
+        foreach (var recipientIdentityAddress in recipientsIdentityAddresses)
         {
             recipientInformation.Add(new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), Array.Empty<byte>()));
         }
