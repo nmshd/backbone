@@ -1,5 +1,5 @@
 services:
-  consumerApi:
+  consumer-api:
     image: nmshd-consumerapi
     container_name: consumerApi
     hostname: consumerApi
@@ -94,7 +94,7 @@ services:
       - ACCEPT_EULA=Y
     restart: unless-stopped
 
-  adminApi:
+  admin-api:
     image: nmshd-adminapi
     container_name: adminApi
     hostname: adminApi
