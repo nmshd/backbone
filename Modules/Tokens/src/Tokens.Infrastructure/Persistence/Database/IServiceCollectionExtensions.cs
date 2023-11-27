@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
@@ -39,6 +40,7 @@ public static class IServiceCollectionExtensions
                                 sqlOptions.CommandTimeout(20);
                                 sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                                 sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                                sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
                             }).UseModel(Modules.Tokens.Infrastructure.CompiledModels.Postgres.TokensDbContextModel.Instance);
                             break;
                         default:
