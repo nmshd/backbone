@@ -30,7 +30,6 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _eventBus = eventBus;
     }
 
-
     public async Task<CreateRelationshipResponse> Handle(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
         _cancellationToken = cancellationToken;

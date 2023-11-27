@@ -48,9 +48,17 @@ public class RelationshipsDbContextSeeder : IDbSeeder<RelationshipsDbContext>
         {
             if (relationshipChange.Request.Content == null)
             {
-                var blobRequestContent = await _blobStorage!.FindAsync(_blobRootFolder!, $"{relationshipChange.Request.Id}_Req");
-                relationshipChange.Request.LoadContent(blobRequestContent);
-                context.RelationshipChanges.Update(relationshipChange);
+                try
+                {
+                    var blobRequestContent = await _blobStorage!.FindAsync(_blobRootFolder!, $"{relationshipChange.Request.Id}_Req");
+                    relationshipChange.Request.LoadContent(blobRequestContent);
+                    context.RelationshipChanges.Update(relationshipChange);
+                }
+                catch (NotFoundException)
+                {
+                    // due to missing validation, it was possible to create a relationship creation change without request content;
+                    // therefore we cannot tell whether this exception is an error or not
+                }
             }
 
             if (relationshipChange.Response is { Content: null })
