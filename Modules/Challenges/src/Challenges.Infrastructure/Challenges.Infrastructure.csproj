@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
 		<!-- CAUTION: Do not upgrade 'Npgsql.EntityFrameworkCore.PostgreSQL' to 7.0.11, because there is an error regarding __EFMigrationHistory tables introduces with the fix of the following GitHub issue: https://github.com/npgsql/efcore.pg/issues/2787 -->
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[7.0.4]" />
 		<PackageReference Include="System.Interactive.Async" Version="6.0.1" />
