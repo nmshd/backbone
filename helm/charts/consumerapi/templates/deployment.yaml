@@ -7,6 +7,11 @@ metadata:
     app: {{ include "global.name" . }}
 spec:
   replicas: {{ .Values.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.maxSurge }}
+      maxUnavailable: {{ .Values.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ include "global.name" . }}
