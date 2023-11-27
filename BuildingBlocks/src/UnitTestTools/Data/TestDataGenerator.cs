@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.Entities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.UnitTestTools.Data;
 
