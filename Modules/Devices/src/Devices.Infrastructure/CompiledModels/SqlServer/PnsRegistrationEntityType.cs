@@ -41,9 +41,20 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(PnsRegistration).GetField("<AppId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
             appId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var devicePushIdentifier = runtimeEntityType.AddProperty(
+                "DevicePushIdentifier",
+                typeof(DevicePushIdentifier),
+                propertyInfo: typeof(PnsRegistration).GetProperty("DevicePushIdentifier", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(PnsRegistration).GetField("<DevicePushIdentifier>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20,
+                unicode: false,
+                valueConverter: new DevicePushIdentifierEntityFrameworkValueConverter());
+            devicePushIdentifier.AddAnnotation("Relational:IsFixedLength", true);
+            devicePushIdentifier.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
-                typeof(Environment),
+                typeof(PushEnvironment),
                 propertyInfo: typeof(PnsRegistration).GetProperty("Environment", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<Environment>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd);
