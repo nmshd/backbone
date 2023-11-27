@@ -95,7 +95,7 @@ services:
 
   admin-api:
     image: nmshd-adminapi
-    container_name: adminApi
+    container_name: admin-api
     hostname: adminApi
     build:
       context: ..
@@ -112,7 +112,7 @@ services:
       - /app/AdminUi/src/AdminUi/obj
       - /app/AdminUi/src/AdminUi/bin
 
-  adminUi:
+  admin-ui:
     image: nmshd-adminui
     container_name: admin-ui
     hostname: adminUi
@@ -125,7 +125,7 @@ services:
     ports:
       - "4200:4200"
     depends_on:
-      - adminApi
+      - admin-api
     volumes:
       - ../AdminUi/src/AdminUi/ClientApp:/app
       - /app/node_modules
