@@ -9,8 +9,6 @@ updates:
       update-nuget-dependencies:
         patterns:
           - "*"
-        exclude-patterns:
-          - "Npgsql.EntityFrameworkCore.PostgreSQL"
     reviewers:
       - "tnotheis"
     labels:

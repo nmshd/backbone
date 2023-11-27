@@ -94,13 +94,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreApplication<string, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreToken>).GetField("<DisplayNames>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
 
-            var maxIdentities = runtimeEntityType.AddProperty(
-                "MaxIdentities",
-                typeof(int?),
-                propertyInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetProperty("MaxIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                nullable: true);
-
             var permissions = runtimeEntityType.AddProperty(
                 "Permissions",
                 typeof(string),
