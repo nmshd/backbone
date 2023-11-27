@@ -100,8 +100,11 @@ services:
     build:
       context: ..
       dockerfile: AdminUi/src/AdminUi/Dockerfile.debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
-      - "5173:5000"
+      - "5173:80"
     depends_on:
       # - ms-sql-server
       - rabbitmq
