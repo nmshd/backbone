@@ -1,4 +1,5 @@
 ﻿namespace Backbone.Modules.Devices.Domain.Tests;
+
 public static class TestDataGenerator
 {
     public static string GenerateString(int resultLength, char[]? chars = null)

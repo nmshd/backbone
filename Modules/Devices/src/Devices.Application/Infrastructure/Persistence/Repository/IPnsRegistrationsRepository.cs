@@ -3,7 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
-public interface IPnsRegistrationRepository
+public interface IPnsRegistrationsRepository
 {
     Task Add(PnsRegistration registration, CancellationToken cancellationToken);
     Task Update(PnsRegistration registration, CancellationToken cancellationToken);
