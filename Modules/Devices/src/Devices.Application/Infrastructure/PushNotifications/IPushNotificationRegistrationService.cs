@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 
 public interface IPushNotificationRegistrationService
 {
-    Task UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken);
+    Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken);
     Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
 }
 
