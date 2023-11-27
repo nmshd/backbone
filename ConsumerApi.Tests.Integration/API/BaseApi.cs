@@ -12,7 +12,7 @@ internal class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly HttpClient _httpClient;
-    private static AccessTokenResponse? _accessTokenResponse;
+    private AccessTokenResponse? _accessTokenResponse;
 
     protected BaseApi(HttpClientFactory factory)
     {
