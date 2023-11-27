@@ -10,6 +10,12 @@ consumerapi:
     timeoutSeconds: 5
     failureThreshold: 3
 
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
   image:
     repository: "ghcr.io/nmshd/backbone-consumer-api"
     tagOverride: ""
@@ -100,6 +106,12 @@ adminui:
   maxUnavailable: 0
 
   livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
     initialDelaySeconds: 30
     periodSeconds: 30
     timeoutSeconds: 5
