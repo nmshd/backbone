@@ -32,6 +32,11 @@ internal class BaseApi
         return await ExecuteRequest<T>(HttpMethod.Post, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse<T>> Put<T>(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest<T>(HttpMethod.Put, endpoint, requestConfiguration);
+    }
+
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
