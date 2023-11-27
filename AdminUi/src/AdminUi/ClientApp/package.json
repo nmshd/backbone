@@ -4,7 +4,7 @@
     "license": "MIT",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --port 44480",
+        "start": "ng serve --host 0.0.0.0 --disable-host-check --poll 1000",
         "build": "ng build",
         "build:ssr": "ng run AdminUi:server:dev",
         "watch": "ng build --watch --configuration development",
