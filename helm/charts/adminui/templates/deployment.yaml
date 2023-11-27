@@ -63,10 +63,10 @@ spec:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 15
-            failureThreshold: 5
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json

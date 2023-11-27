@@ -85,10 +85,10 @@ spec:
             httpGet:
               path: /health
               port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 15
-            failureThreshold: 5
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
