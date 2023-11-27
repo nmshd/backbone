@@ -14,7 +14,7 @@
         "copy-webpack-plugin": "^11.0.0",
         "k6-expect": "^1.2.3",
         "prettier": "3.1.0",
-        "typescript": "5.2.2",
+        "typescript": "5.3.2",
         "webpack": "^5.89.0",
         "webpack-cli": "5.1.4",
         "webpack-glob-entries": "^1.0.1"
