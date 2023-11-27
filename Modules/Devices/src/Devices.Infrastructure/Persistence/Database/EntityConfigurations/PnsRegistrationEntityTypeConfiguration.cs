@@ -9,6 +9,7 @@ public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<P
     {
         builder.HasKey(x => x.DeviceId);
         builder.Property(x => x.IdentityAddress).IsRequired();
+        builder.Property(x => x.DevicePushIdentifier);
         builder.Property(x => x.Handle).IsRequired();
         builder.Property(x => x.UpdatedAt);
         builder.Property(x => x.AppId);
