@@ -70,7 +70,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
-        services.AddTransient<IPnsRegistrationRepository, PnsRegistrationRepository>();
+        services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
     }
 
     public class DbOptions

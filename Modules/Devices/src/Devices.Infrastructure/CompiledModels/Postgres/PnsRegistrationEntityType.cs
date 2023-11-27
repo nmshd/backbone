@@ -39,6 +39,16 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.Postgres
                 propertyInfo: typeof(PnsRegistration).GetProperty("AppId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(PnsRegistration).GetField("<AppId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
+            var devicePushIdentifier = runtimeEntityType.AddProperty(
+                "DevicePushIdentifier",
+                typeof(DevicePushIdentifier),
+                propertyInfo: typeof(PnsRegistration).GetProperty("DevicePushIdentifier", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(PnsRegistration).GetField("<DevicePushIdentifier>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                maxLength: 20,
+                unicode: false,
+                valueConverter: new DevicePushIdentifierEntityFrameworkValueConverter());
+            devicePushIdentifier.AddAnnotation("Relational:IsFixedLength", true);
+
             var environment = runtimeEntityType.AddProperty(
                 "Environment",
                 typeof(PushEnvironment),

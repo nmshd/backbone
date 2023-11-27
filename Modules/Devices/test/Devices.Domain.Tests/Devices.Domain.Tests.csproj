@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Devices.Domain\Devices.Domain.csproj" />
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+      <ProjectReference Include="..\..\src\Devices.Domain\Devices.Domain.csproj" />
   </ItemGroup>
 
 </Project>
