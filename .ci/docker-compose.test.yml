@@ -35,8 +35,10 @@ services:
     build:
       context: ..
       dockerfile: AdminUi/src/AdminUi/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
     ports:
-      - "5173:80"
+      - "5173:5000"
     depends_on:
       database:
         condition: service_started
