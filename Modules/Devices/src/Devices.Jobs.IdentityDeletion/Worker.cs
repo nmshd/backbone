@@ -2,9 +2,9 @@
 using MediatR;
 using DeleteIdentityChallengesCommand = Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentityFilesCommand = Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
+using DeleteIdentityMessagesCommand = Backbone.Modules.Messages.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentityQuotasCommand = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentitySynchronizationCommand = Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentityMessagesCommand = Backbone.Modules.Messages.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentityTokensCommand = Backbone.Modules.Tokens.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
