@@ -17,7 +17,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -58,7 +58,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations");
+                    b.ToTable("PnsRegistrations", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
@@ -81,7 +81,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers");
+                    b.ToTable("Tiers", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
@@ -204,7 +204,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices");
+                    b.ToTable("Devices", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
@@ -237,7 +237,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
-                    b.ToTable("Identities");
+                    b.ToTable("Identities", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
@@ -277,9 +277,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MaxIdentities")
-                        .HasColumnType("int");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");
