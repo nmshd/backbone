@@ -74,6 +74,7 @@ public static class IServiceCollectionExtensions
                         .GetAssemblies()
                         .SelectMany(x => x.ExportedTypes)
                         .Where(x => !x.IsAbstract)
+                        .Where(x => !x.ContainsGenericParameters)
                         .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
 
                 foreach (var jsonConverter in jsonConverters)
