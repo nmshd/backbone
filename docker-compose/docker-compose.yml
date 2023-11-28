@@ -121,10 +121,7 @@ services:
     hostname: adminUi
     build:
       context: ..
-      dockerfile: AdminUi/src/AdminUi/ClientApp/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Local
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      dockerfile: AdminUi/src/AdminUi/ClientApp/Dockerfile.debug
     ports:
       - "4200:4200"
     depends_on:
