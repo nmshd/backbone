@@ -1,8 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
@@ -99,7 +97,7 @@ public class HandlerTests
         anotherIdentity.StartDeletionProcess(new Device(anotherIdentity).Id);
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-2); // Past
 
-        var pnsRegistrationRepository = A.Fake<IPnsRegistrationRepository>();
+        var pnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
 
         var handler = CreateHandler(identitiesRepository, pnsRegistrationRepository);
         var command = new UpdateDeletionProcessesCommand();
@@ -111,11 +109,11 @@ public class HandlerTests
         A.CallTo(() => pnsRegistrationRepository.DeleteByIdentityAddress(A<IdentityAddress>._, A<CancellationToken>._)).MustHaveHappenedTwiceExactly();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPnsRegistrationRepository pnsRegistrationRepository = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository = null)
     {
         return new Handler(
             identitiesRepository,
-            pnsRegistrationRepository ?? A.Dummy<IPnsRegistrationRepository>(),
+            pnsRegistrationRepository ?? A.Dummy<IPnsRegistrationsRepository>(),
             A.Dummy<ILogger<Handler>>()
             );
     }

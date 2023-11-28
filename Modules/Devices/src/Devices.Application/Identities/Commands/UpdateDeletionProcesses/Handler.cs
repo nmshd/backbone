@@ -7,9 +7,9 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IPnsRegistrationRepository _pnsRegistrationRepository;
+    private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IPnsRegistrationRepository pnsRegistrationRepository, ILogger<Handler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository, ILogger<Handler> logger)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
