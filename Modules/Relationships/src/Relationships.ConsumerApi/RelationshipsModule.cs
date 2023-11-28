@@ -29,12 +29,17 @@ public class RelationshipsModule : AbstractModule
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
-            options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
-            options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
-            options.BlobStorageOptions.Container =
-                parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                    ? "relationships"
-                    : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
+            if (parsedConfiguration.Infrastructure.BlobStorage != null)
+            {
+                options.BlobStorageOptions = new()
+                {
+                    CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
+                    ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
+                    Container = parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
+                        ? "relationships"
+                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
+                };
+            }
         });
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);

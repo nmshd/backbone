@@ -18,12 +18,12 @@ public class PushNotificationsController : ApiControllerBase
     public PushNotificationsController(IMediator mediator) : base(mediator) { }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
-        return NoContent();
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
 
     [HttpDelete]

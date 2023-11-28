@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -8,7 +9,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Respo
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 
@@ -30,32 +30,22 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var (notificationTitle, notificationBody) = GetNotificationText(notification);
-        var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(recipient, notification);
+        ValidateRegistrations(registrations);
 
         var sendResults = new SendResults();
-        var tasks = registrations.Select(async pnsRegistration =>
-        {
-            ValidateRegistration(pnsRegistration);
-            var handle = pnsRegistration.Handle.Value;
-            var keyInformation = _options.GetKeyInformationForBundleId(pnsRegistration.AppId!);
-            var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, pnsRegistration.AppId);
 
-            var request = new ApnsMessageBuilder(pnsRegistration.AppId, BuildUrl(pnsRegistration.Environment, handle), jwt.Value)
-                .AddContent(notificationContent)
-                .SetNotificationText(notificationTitle, notificationBody)
-                .SetNotificationId(notificationId)
-                .Build();
-
-            _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, recipient, pnsRegistration.Handle);
-
-            var response = await _httpClient.SendAsync(request);
-            await MapResponse(response, pnsRegistration, sendResults);
-        }).ToList();
+        var tasks = registrations.Select(r => SendNotification(r, notification, sendResults));
 
         await Task.WhenAll(tasks);
         return sendResults;
+    }
+
+    private void ValidateRegistrations(IEnumerable<PnsRegistration> registrations)
+    {
+        foreach (var registration in registrations)
+        {
+            ValidateRegistration(registration);
+        }
     }
 
     public void ValidateRegistration(PnsRegistration registration)
@@ -64,8 +54,25 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task MapResponse(HttpResponseMessage response, PnsRegistration registration, SendResults sendResults)
+    private async Task SendNotification(PnsRegistration registration, object notification, SendResults sendResults)
     {
+        var (notificationTitle, notificationBody) = GetNotificationText(notification);
+        var notificationId = GetNotificationId(notification);
+        var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
+
+        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId!);
+        var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
+
+        var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
+                .AddContent(notificationContent)
+                .SetNotificationText(notificationTitle, notificationBody)
+                .SetNotificationId(notificationId)
+                .Build();
+
+        _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, registration.IdentityAddress, registration.Handle);
+
+        var response = await _httpClient.SendAsync(request);
+
         if (response.IsSuccessStatusCode)
             sendResults.AddSuccess(registration.DeviceId);
         else
@@ -78,12 +85,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         }
     }
 
-    private static string BuildUrl(Environment environment, string handle)
+    private static string BuildUrl(PushEnvironment environment, string handle)
     {
         var baseUrl = environment switch
         {
-            Environment.Development => "https://api.sandbox.push.apple.com:443/3/device",
-            Environment.Production => "https://api.push.apple.com:443/3/device",
+            PushEnvironment.Development => "https://api.sandbox.push.apple.com:443/3/device",
+            PushEnvironment.Production => "https://api.push.apple.com:443/3/device",
             _ => throw new ArgumentOutOfRangeException()
         };
 

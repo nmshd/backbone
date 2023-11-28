@@ -1,5 +1,5 @@
 services:
-  consumerApi:
+  consumer-api:
     image: nmshd-consumerapi
     container_name: consumerApi
     hostname: consumerApi
@@ -11,11 +11,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
 
       - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
-      
-      - Modules__Relationships__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
-
       - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
-      
+
     ports:
       - "8080:80"
     depends_on:
@@ -23,6 +20,7 @@ services:
       - rabbitmq
       - azure-storage-emulator
       - postgres
+      - seq
     volumes:
       - ../:/app
       - /app/ConsumerApi/obj
@@ -63,8 +61,6 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    depends_on:
-      - pg-admin
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
@@ -92,14 +88,55 @@ services:
 
   seq:
     image: datalust/seq:latest
+    container_name: seq
     ports:
-      - "8081:80"
+      - "8082:80"
       - "5341:5341"
     volumes:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
     restart: unless-stopped
+
+  admin-api:
+    image: nmshd-adminapi
+    container_name: admin-api
+    hostname: adminApi
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/Dockerfile.debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "5173:80"
+    depends_on:
+      # - ms-sql-server
+      - rabbitmq
+      - postgres
+      - seq
+    volumes:
+      - ../:/app
+      - /app/AdminUi/src/AdminUi/obj
+      - /app/AdminUi/src/AdminUi/bin
+
+  admin-ui:
+    image: nmshd-adminui
+    container_name: admin-ui
+    hostname: adminUi
+    build:
+      context: ..
+      dockerfile: AdminUi/src/AdminUi/ClientApp/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+    ports:
+      - "4200:4200"
+    depends_on:
+      - admin-api
+    volumes:
+      - ../AdminUi/src/AdminUi/ClientApp:/app
+      - /app/node_modules
 
   #elasticsearch:
   #  image: elasticsearch:${ELK_VERSION}

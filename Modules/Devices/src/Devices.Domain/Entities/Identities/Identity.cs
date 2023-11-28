@@ -47,6 +47,9 @@ public class Identity
 
     public void ChangeTier(TierId id)
     {
+        if (id == Tier.QUEUED_FOR_DELETION.Id || TierId == Tier.QUEUED_FOR_DELETION.Id)
+            throw new DomainException(DomainErrors.CannotChangeTierQueuedForDeletion());
+
         if (TierId == id)
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
 

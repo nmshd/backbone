@@ -26,7 +26,6 @@ export class TierEditComponent {
     public selectionQuotas: SelectionModel<TierQuota>;
     public quotasTableDisplayedColumns: string[];
     public tierId?: string;
-    public disabled: boolean;
     public editMode: boolean;
     public tier: Tier;
     public loading: boolean;
@@ -49,12 +48,12 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.disabled = false;
         this.tier = {
             id: "",
             name: "",
             quotas: [],
-            isDeletable: false
+            isDeletable: false,
+            isReadOnly: false
         } as Tier;
     }
 
@@ -87,7 +86,6 @@ export class TierEditComponent {
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 this.tier = data.result;
-                this.tier.isDeletable = this.tier.name !== "Basic";
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -110,7 +108,8 @@ export class TierEditComponent {
                     name: data.result.name,
                     quotas: [],
                     numberOfIdentities: 0,
-                    isDeletable: true
+                    isDeletable: true,
+                    isReadOnly: false
                 } as Tier;
 
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
@@ -293,5 +292,17 @@ export class TierEditComponent {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+
+    public isNameInputDisabled(): boolean {
+        return this.editMode || this.tier.isReadOnly;
+    }
+
+    public isQuotaDeletionDisabled(): boolean {
+        return this.selectionQuotas.selected.length === 0 || this.tier.isReadOnly;
+    }
+
+    public isQuotaAssignmentDisabled(): boolean {
+        return this.tier.id === "" || this.tier.isReadOnly;
     }
 }

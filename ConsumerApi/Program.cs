@@ -112,6 +112,7 @@ static WebApplication CreateApp(string[] args)
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
+        .SeedDbContext<RelationshipsDbContext, RelationshipsDbContextSeeder>()
         .SeedDbContext<TokensDbContext, TokensDbContextSeeder>()
         .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>();
 
@@ -129,6 +130,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddTransient<DevicesDbContextSeeder>();
     services.AddTransient<QuotasDbContextSeeder>();
+    services.AddTransient<RelationshipsDbContextSeeder>();
     services.AddTransient<TokensDbContextSeeder>();
     services.AddTransient<MessagesDbContextSeeder>();
 

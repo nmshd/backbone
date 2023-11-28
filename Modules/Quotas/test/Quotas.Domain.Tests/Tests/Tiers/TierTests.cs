@@ -1,9 +1,10 @@
 ﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
+using Newtonsoft.Json;
 using Xunit;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -34,6 +35,18 @@ public class TierTests
     }
 
     [Fact]
+    public void Cannot_create_quota_for_queued_for_deletion_tier()
+    {
+        // Arrange & Act
+        var tier = Tier.QUEUED_FOR_DELETION.Clone();
+        var result = tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
+    }
+
+    [Fact]
     public void Can_delete_quota_on_tier()
     {
         // Arrange
@@ -45,6 +58,25 @@ public class TierTests
 
         // Assert
         tier.Quotas.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Cannot_delete_quota_on_queued_for_deletion_tier()
+    {
+        // Arrange
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+        };
+        var tier = Tier.QUEUED_FOR_DELETION.Clone();
+        var createdQuotaResults = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
+
+        // Act
+        var result = tier.DeleteQuota(createdQuotaResults.First().Value.Id);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
     }
 
     [Fact]
@@ -94,5 +126,54 @@ public class TierTests
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Error.Code.Should().Be("error.platform.quotas.duplicateQuota");
+    }
+
+    [Fact]
+    public void Create_quota_for_all_metrics_can_only_be_called_on_queued_for_deletion_tier()
+    {
+        // Arrange
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+        };
+        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+
+        // Act
+        Action act = () => tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>().Which.Message.Should().Be("Method can only be called for the 'Queued for Deletion' tier");
+    }
+
+    [Fact]
+    public void Create_quota_for_all_metrics_only_creates_missing_quotas()
+    {
+        // Arrange
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages")
+        };
+
+        var tier = Tier.QUEUED_FOR_DELETION.Clone();
+        var results = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
+        results.First().IsSuccess.Should().BeTrue();
+        metrics.Add(new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"));
+
+        // Act
+        var createdQuotaResults = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
+
+        // Assert
+        createdQuotaResults.Where(result => result.IsFailure).Should().BeEmpty();
+        createdQuotaResults.Should().HaveCount(1);
+    }
+}
+
+
+file static class TierExtensions
+{
+    public static Tier Clone(this Tier tier)
+    {
+        var serialized = JsonConvert.SerializeObject(tier);
+        return JsonConvert.DeserializeObject<Tier>(serialized)!;
     }
 }
