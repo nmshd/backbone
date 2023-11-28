@@ -46,21 +46,20 @@ public class HandlerTests
         // Assert
         quotas.Should().HaveCount(2);
 
-        var tierQuota = quotas.Single(q => q.Source == QuotaSource.Tier);
-        var individualQuota = quotas.Single(q => q.Source == QuotaSource.Individual);
+        quotas.Should().Contain(q => q.MetricKey == metric1.Key.Value);
+        quotas.Should().Contain(q => q.MetricKey == metric2.Key.Value);
+
+        var tierQuota = quotas.Single(q => q.MetricKey == metric1.Key.Value).Quotas.Single();
+        var individualQuota = quotas.Single(q => q.MetricKey == metric2.Key.Value).Quotas.Single();
 
         tierQuota.Should().NotBeNull();
         tierQuota.Max.Should().Be(5);
         tierQuota.Usage.Should().Be(1);
-        tierQuota.Period.Should().Be(identity.TierQuotas.First().Period.ToString());
-        tierQuota.Metric.Key.Should().Be(metric1.Key.Value);
-        tierQuota.Metric.DisplayName.Should().Be(metric1.DisplayName);
+        tierQuota.Period.Should().Be("Month");
 
         individualQuota.Should().NotBeNull();
         individualQuota.Max.Should().Be(5);
         individualQuota.Usage.Should().Be(1);
-        individualQuota.Period.Should().Be(identity.IndividualQuotas.First().Period.ToString());
-        individualQuota.Metric.Key.Should().Be(metric2.Key.Value);
-        individualQuota.Metric.DisplayName.Should().Be(metric2.DisplayName);
+        individualQuota.Period.Should().Be("Month");
     }
 }
