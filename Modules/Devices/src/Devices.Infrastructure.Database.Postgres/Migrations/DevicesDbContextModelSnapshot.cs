@@ -34,6 +34,13 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("DevicePushIdentifier")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
                     b.Property<int>("Environment")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")

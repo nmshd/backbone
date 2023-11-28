@@ -30,6 +30,7 @@ public static class Dependencies
         services.AddTransient<ChallengesApi>();
         services.AddTransient<IdentitiesApi>();
         services.AddTransient<DevicesApi>();
+        services.AddTransient<PushNotificationsApi>();
 
         return services;
     }
