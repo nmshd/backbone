@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
-using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres;
+//using PostgresModel = AdminUi.Infrastructure.CompiledModels.Postgres; TODO: Add this when issues with PostgreSQL compiled models are fixed https://github.com/npgsql/efcore.pg/issues/2972
 using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
 
 namespace Backbone.AdminUi.Infrastructure.Persistence;
@@ -49,8 +49,9 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "AdminUi"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
-                        }).UseModel(PostgresModel.AdminUiDbContextModel.Instance);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName,
+                                "AdminUi"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
+                        });//.UseModel(PostgresModel.AdminUiDbContextModel.Instance); TODO: Add this when issues with PostgreSQL compiled models are fixed
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
