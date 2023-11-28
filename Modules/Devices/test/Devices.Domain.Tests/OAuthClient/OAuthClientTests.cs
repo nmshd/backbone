@@ -11,10 +11,11 @@ public class OAuthClientTests
     {
         // Arrange
         var tierId = TierId.Generate();
-        var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow, 1);
+        var maxIdentities = 1;
+        var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow, maxIdentities);
 
         // Act
-        var error = client.Update(tierId, 1);
+        var error = client.Update(tierId, maxIdentities);
 
         // Assert
         error.Should().BeEquivalentTo(DomainErrors.CannotUpdateClient("No properties were changed for the Client."));
