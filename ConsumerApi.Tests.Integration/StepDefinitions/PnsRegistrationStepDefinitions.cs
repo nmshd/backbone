@@ -21,7 +21,7 @@ internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
 
     public PnsRegistrationStepDefinitions(
-        IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi, PushNotificationsApi pnsRegistrationsApi) : 
+        IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi, PushNotificationsApi pnsRegistrationsApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _pnsRegistrationsApi = pnsRegistrationsApi;
