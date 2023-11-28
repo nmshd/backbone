@@ -56,8 +56,8 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
         var tierQuotasForIdentity = await Task.WhenAll(tierQuotasForIdentityTasks);
 
-        var quotasForIdentity = individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList();
+        var quotasForIdentityDTOs = new QuotasForIdentityDTO(individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList()).Quotas;
 
-        return new ListQuotasForIdentityResponse(quotasForIdentity);
+        return new ListQuotasForIdentityResponse(quotasForIdentityDTOs);
     }
 }
