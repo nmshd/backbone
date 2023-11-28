@@ -9,6 +9,13 @@ $adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
 $consumerApiProject = "$repoRoot\ConsumerApi"
 
 function CompileModels {
+    switch($provider) {
+        "Postgres" {
+            Write-Host "Skipping Postgres compiled models..."
+            return;
+        }
+    }
+
     switch($moduleName){
         "AdminUi" {
             $startupProject = $adminUiProject
