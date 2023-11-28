@@ -21,8 +21,8 @@ public class HandlerTests
         var metric2 = new Metric(MetricKey.NumberOfTokens, "Number Of Tokens");
         var identity = new Identity(CreateRandomIdentityAddress(), new TierId("SomeTierId"));
 
-        var max = 5;
-        var period = QuotaPeriod.Month;
+        const int max = 5;
+        const QuotaPeriod period = QuotaPeriod.Month;
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric1.Key, max, period));
         identity.CreateIndividualQuota(metric2.Key, max, period);
