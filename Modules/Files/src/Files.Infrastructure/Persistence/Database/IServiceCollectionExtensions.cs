@@ -41,8 +41,9 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Files"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
-                        }).UseModel(Modules.Files.Infrastructure.CompiledModels.Postgres.FilesDbContextModel.Instance);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName,
+                                "Files"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
+                        });//.UseModel(Modules.Files.Infrastructure.CompiledModels.Postgres.FilesDbContextModel.Instance); TODO: Add this when issues with PostgreSQL compiled models are fixed https://github.com/npgsql/efcore.pg/issues/2972
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
