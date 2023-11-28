@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
@@ -35,9 +36,17 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
 
         foreach (var token in tokensWithMissingContent)
         {
-            var blobTokenContent = await _blobStorage!.FindAsync(_blobRootFolder!, token.Id);
-            token.LoadContent(blobTokenContent);
-            context.Tokens.Update(token);
+            try
+            {
+                var blobTokenContent = await _blobStorage!.FindAsync(_blobRootFolder!, token.Id);
+                token.LoadContent(blobTokenContent);
+                context.Tokens.Update(token);
+            }
+            catch (NotFoundException)
+            {
+                // due to missing validation, it was possible to create a relationship template without request content;
+                // therefore we cannot tell whether this exception is an error or not
+            }
         }
 
         await context.SaveChangesAsync();
