@@ -195,7 +195,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
-
+                        
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)
