@@ -34,7 +34,7 @@ public class HandlerTests
         A.CallTo(() => fakeIdentitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         var fakeMetricsRepository = A.Fake<IMetricsRepository>();
-        A.CallTo(() => fakeMetricsRepository.FindAll(CancellationToken.None, false)).Returns(new List<Metric> { metric1, metric2 });
+        A.CallTo(() => fakeMetricsRepository.FindAll(A<CancellationToken>._, false)).Returns(new List<Metric> { metric1, metric2 });
 
         var fakeMetricCalculationFactory = new FakeMetricCalculatorFactory(numberOfSentMessages: 1, numberOfTokens: 1);
 
@@ -52,12 +52,10 @@ public class HandlerTests
         var tierQuota = quotas.Single(q => q.MetricKey == metric1.Key.Value).Quotas.Single();
         var individualQuota = quotas.Single(q => q.MetricKey == metric2.Key.Value).Quotas.Single();
 
-        tierQuota.Should().NotBeNull();
         tierQuota.Max.Should().Be(5);
         tierQuota.Usage.Should().Be(1);
         tierQuota.Period.Should().Be("Month");
 
-        individualQuota.Should().NotBeNull();
         individualQuota.Max.Should().Be(5);
         individualQuota.Usage.Should().Be(1);
         individualQuota.Period.Should().Be("Month");
