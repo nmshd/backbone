@@ -1,14 +1,9 @@
-using System.Net;
 using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;
-using CSharpFunctionalExtensions;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2.Responses;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -62,13 +57,6 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _response = await _identitiesApi.StartDeletionProcess(requestConfiguration);
     }
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIsCreated(int statusCode)
-    {
-        ThrowHelpers.ThrowIfNull(_response);
-        _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
-    }
-
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
@@ -116,8 +104,17 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_identityResponse!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        if (_identityResponse != null)
+        {
+            var actualStatusCode = (int)_identityResponse!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_response != null)
+        {
+            var actualStatusCode = (int)_response!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
     }
 
     private async Task CreateChallenge()
