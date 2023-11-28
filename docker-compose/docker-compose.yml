@@ -65,6 +65,11 @@ services:
       - 5432:5432
     depends_on:
       - pg-admin
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pg-admin:
     container_name: bkb-pgadmin
