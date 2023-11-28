@@ -4,11 +4,11 @@ using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.Crypto;
+using Backbone.Crypto.Abstractions;
 using CSharpFunctionalExtensions;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2.Responses;
-using Backbone.Crypto;
-using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
