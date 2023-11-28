@@ -107,7 +107,7 @@ public class SignatureHelperTests : IDisposable
         var plaintext = ConvertibleString.FromUtf8("Test");
 
         // Act
-        var signature = _signatureHelper.GetSignature(_validPrivateKey, plaintext);
+        var signature = _signatureHelper.CreateSignature(_validPrivateKey, plaintext);
 
         // Assert
         var isValid = _signatureHelper.VerifySignature(plaintext, signature, _validPublicKey);
@@ -124,7 +124,7 @@ public class SignatureHelperTests : IDisposable
 
         // Act
         var exception =
-            Assert.Throws<ArgumentException>(() => _signatureHelper.GetSignature(plaintext, invalidPrivateKey));
+            Assert.Throws<ArgumentException>(() => _signatureHelper.CreateSignature(invalidPrivateKey, plaintext));
         Assert.Equal("privateKey", exception.ParamName);
         // Assert
     }
@@ -172,7 +172,7 @@ public class SignatureHelperTests : IDisposable
         var _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
         var privateKey = ConvertibleString.FromByteArray(key.Export(KeyBlobFormat.RawPrivateKey));
 
-        _signatureHelper.GetSignature(privateKey, ConvertibleString.FromUtf8("Test"));
+        _signatureHelper.CreateSignature(privateKey, ConvertibleString.FromUtf8("Test"));
         try
         {
             Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
@@ -228,7 +228,7 @@ public class SignatureHelperTests : IDisposable
     [Fact]
     public void CreateSignature()
     {
-        _signatureHelper.GetSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
+        _signatureHelper.CreateSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
     }
 
     #endregion
