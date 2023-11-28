@@ -16,7 +16,7 @@ public class QuotasController : ApiControllerBase
 {
     public QuotasController(IMediator mediator) : base(mediator) { }
 
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<QuotaDTO>>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListIndividualQuotas(CancellationToken cancellationToken)
