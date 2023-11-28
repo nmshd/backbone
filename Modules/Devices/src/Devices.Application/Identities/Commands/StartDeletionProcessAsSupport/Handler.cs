@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsSupportCommand, Sta
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new IdentityDeletionProcessStartedEvent(identity, deletionProcess));
+        _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity, deletionProcess));
 
         return new StartDeletionProcessAsSupportResponse(deletionProcess);
     }

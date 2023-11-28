@@ -3,9 +3,9 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 
-public class IdentityDeletionProcessStartedEvent : IntegrationEvent
+public class IdentityDeletionProcessStartedIntegrationEvent : IntegrationEvent
 {
-    public IdentityDeletionProcessStartedEvent(Identity identity, IdentityDeletionProcess deletionProcess) : base($"{identity.Address}/DeletionProcessStarted")
+    public IdentityDeletionProcessStartedIntegrationEvent(Identity identity, IdentityDeletionProcess deletionProcess) : base($"{identity.Address}/DeletionProcessStarted")
     {
         DeletionProcessId = deletionProcess.Id;
         Address = identity.Address;

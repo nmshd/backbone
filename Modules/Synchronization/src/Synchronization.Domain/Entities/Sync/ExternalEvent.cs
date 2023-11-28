@@ -54,5 +54,6 @@ public enum ExternalEventType
     MessageReceived,
     MessageDelivered,
     RelationshipChangeCreated,
-    RelationshipChangeCompleted
+    RelationshipChangeCompleted,
+    IdentityDeletionProcessStarted
 }
