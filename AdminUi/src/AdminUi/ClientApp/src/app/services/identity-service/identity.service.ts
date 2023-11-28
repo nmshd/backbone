@@ -2,11 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NGXLogger } from "ngx-logger";
 import { ODataFilterBuilder } from "odata-filter-builder";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { NumberFilter } from "src/app/utils/number-filter";
-import { ODataResponse } from "src/app/utils/odata-response";
+import { ODataResponseEnvelope } from "src/app/utils/odata-response-envelope";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
 import { TierDTO } from "../tier-service/tier.service";
@@ -26,9 +26,16 @@ export class IdentityService {
         this.odataUrl = `${environment.odataUrl}/Identities`;
     }
 
-    public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
+    public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponseEnvelope<IdentityOverview[]>> {
         const paginationFilter = `$top=${pageSize}&$skip=${pageNumber * pageSize}&$count=true`;
-        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`);
+        return this.http.get<any>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`).pipe(
+            map((response) => {
+                return {
+                    result: response["value"],
+                    count: response["@odata.count"]
+                } as ODataResponseEnvelope<IdentityOverview[]>;
+            })
+        );
     }
 
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
