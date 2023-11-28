@@ -55,7 +55,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance);
+                        //dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance); TODO: Add this when issues with PostgreSQL compiled models are fixed https://github.com/npgsql/efcore.pg/issues/2972
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
