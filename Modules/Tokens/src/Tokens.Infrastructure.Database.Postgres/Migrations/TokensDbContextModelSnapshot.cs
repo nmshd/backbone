@@ -31,7 +31,6 @@ namespace Tokens.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")

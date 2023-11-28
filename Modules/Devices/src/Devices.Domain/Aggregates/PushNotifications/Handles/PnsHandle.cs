@@ -14,7 +14,7 @@ public record PnsHandle
         Value = value;
     }
 
-    public static Result<PnsHandle, DomainError> Parse(string value, PushNotificationPlatform platform)
+    public static Result<PnsHandle, DomainError> Parse(PushNotificationPlatform platform, string value)
     {
         switch (platform)
         {

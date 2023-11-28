@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NGXLogger } from "ngx-logger";
-import ODataFilterBuilder from "odata-filter-builder";
+import { ODataFilterBuilder } from "odata-filter-builder";
 import { Observable } from "rxjs";
 import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";

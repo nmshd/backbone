@@ -53,7 +53,7 @@ public class SignatureHelper : ISignatureHelper
         return PublicKey.TryImport(_signatureAlgorithm, publicKey.BytesRepresentation, _publicKeyFormat, out _);
     }
 
-    public ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message)
+    public ConvertibleString CreateSignature(ConvertibleString privateKey, ConvertibleString message)
     {
         var key = ImportPrivateKey(privateKey);
         var signature = _signatureAlgorithm.Sign(key, message.BytesRepresentation);
