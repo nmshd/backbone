@@ -25,7 +25,7 @@ public class FakeMetricCalculatorFactory : MetricCalculatorFactory
 
     protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
     {
-        throw new NotImplementedException();
+        return _numberOfFiles.HasValue ? new FakeNumberOfFilesMetricCalculator(_numberOfFiles.Value) : throw new ArgumentNullException(nameof(_numberOfFiles));
     }
 
     protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
@@ -35,12 +35,12 @@ public class FakeMetricCalculatorFactory : MetricCalculatorFactory
 
     protected override IMetricCalculator CreateNumberOfRelationshipsMetricCalculator()
     {
-        throw new NotImplementedException();
+        return _numberOfRelationships.HasValue ? new FakeNumberOfRelationshipsMetricCalculator(_numberOfRelationships.Value) : throw new ArgumentNullException(nameof(_numberOfRelationships));
     }
 
     protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
     {
-        throw new NotImplementedException();
+        return _numberOfRelationshipTemplates.HasValue ? new FakeNumberOfRelationshipsMetricCalculator(_numberOfRelationshipTemplates.Value) : throw new ArgumentNullException(nameof(_numberOfRelationshipTemplates));
     }
 
     protected override IMetricCalculator CreateNumberOfTokensMetricCalculator()
@@ -50,7 +50,22 @@ public class FakeMetricCalculatorFactory : MetricCalculatorFactory
 
     protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
     {
-        throw new NotImplementedException();
+        return _amountOfUsedFileStorageSpace.HasValue ? new FakeUsedFileStorageSpaceMetricCalculator(_amountOfUsedFileStorageSpace.Value) : throw new ArgumentNullException(nameof(_amountOfUsedFileStorageSpace));
+    }
+}
+
+public class FakeNumberOfFilesMetricCalculator : IMetricCalculator
+{
+    public FakeNumberOfFilesMetricCalculator(int numberOfFiles)
+    {
+        NumberOfFiles = numberOfFiles;
+    }
+
+    public int NumberOfFiles { get; set; }
+
+    public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
+    {
+        return Task.FromResult((uint)NumberOfFiles);
     }
 }
 
@@ -69,6 +84,36 @@ public class FakeNumberOfSentMessagesMetricCalculator : IMetricCalculator
     }
 }
 
+public class FakeNumberOfRelationshipsMetricCalculator : IMetricCalculator
+{
+    public FakeNumberOfRelationshipsMetricCalculator(int numberOfRelationships)
+    {
+        NumberOfRelationships = numberOfRelationships;
+    }
+
+    public int NumberOfRelationships { get; set; }
+
+    public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
+    {
+        return Task.FromResult((uint)NumberOfRelationships);
+    }
+}
+
+public class FakeNumberOfRelationshipTemplatesMetricCalculator : IMetricCalculator
+{
+    public FakeNumberOfRelationshipTemplatesMetricCalculator(int numberOfRelationshipTemplates)
+    {
+        NumberOfRelationshipTemplates = numberOfRelationshipTemplates;
+    }
+
+    public int NumberOfRelationshipTemplates { get; set; }
+
+    public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
+    {
+        return Task.FromResult((uint)NumberOfRelationshipTemplates);
+    }
+}
+
 public class FakeNumberOfTokensMetricCalculator : IMetricCalculator
 {
     public FakeNumberOfTokensMetricCalculator(int numberOfTokens)
@@ -81,5 +126,20 @@ public class FakeNumberOfTokensMetricCalculator : IMetricCalculator
     public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
     {
         return Task.FromResult((uint)NumberOfTokens);
+    }
+}
+
+public class FakeUsedFileStorageSpaceMetricCalculator : IMetricCalculator
+{
+    public FakeUsedFileStorageSpaceMetricCalculator(int amountOfUsedFileStorageSpace)
+    {
+        AmountOfUsedFileStorageSpace = amountOfUsedFileStorageSpace;
+    }
+
+    public int AmountOfUsedFileStorageSpace { get; set; }
+
+    public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
+    {
+        return Task.FromResult((uint)AmountOfUsedFileStorageSpace);
     }
 }
