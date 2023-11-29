@@ -33,6 +33,7 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -114,9 +115,15 @@ static IHost CreateApp(string[] args)
 
     builder.ConfigureServices((context, services) => { ConfigureServices(services, context.Configuration, context.HostingEnvironment); });
 
-    var app = builder.Build();
+    builder.ConfigureWebHost(h =>
+    {
+        h.Configure((context, builder) =>
+        {
+            Configure(builder, context);
+        });
+    });
 
-    Configure(app);
+    var app = builder.Build();
 
     app
         .MigrateDbContext<ChallengesDbContext>()
@@ -202,7 +209,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
 }
 
-static void Configure(WebApplication app)
+static void Configure(IApplicationBuilder app, WebHostBuilderContext context)
 {
     app.UseSerilogRequestLogging(opts =>
     {
@@ -223,12 +230,12 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var configuration = app.ApplicationServices.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 
     if (configuration.SwaggerUi.Enabled)
         app.UseSwagger().UseSwaggerUI();
 
-    if (app.Environment.IsDevelopment())
+    if (context.HostingEnvironment.IsDevelopment())
         Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
@@ -243,8 +250,8 @@ static void Configure(WebApplication app)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 
-    var eventBus = app.Services.GetRequiredService<IEventBus>();
-    var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
+    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+    var modules = app.ApplicationServices.GetRequiredService<IEnumerable<AbstractModule>>();
 
     foreach (var module in modules)
     {
@@ -252,24 +259,4 @@ static void Configure(WebApplication app)
     }
 
     eventBus.StartConsuming();
-}
-
-static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
-{
-    webApplicationBuilder.Configuration.Sources.Clear();
-    var env = webApplicationBuilder.Environment;
-
-    webApplicationBuilder.Configuration
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
-        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
-
-    if (env.IsDevelopment())
-    {
-        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
-    }
-
-    webApplicationBuilder.Configuration.AddEnvironmentVariables();
-    webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
