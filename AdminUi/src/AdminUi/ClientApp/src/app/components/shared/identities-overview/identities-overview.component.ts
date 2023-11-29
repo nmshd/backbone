@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from "rxjs
 import { ClientOverview, ClientService } from "src/app/services/client-service/client-service";
 import { IdentityOverview, IdentityOverviewFilter, IdentityService } from "src/app/services/identity-service/identity.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
-import { ODataResponse } from "src/app/utils/odata-response";
+import { ODataResponseEnvelope } from "src/app/utils/odata-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
@@ -160,9 +160,9 @@ export class IdentitiesOverviewComponent {
     private getIdentities(): void {
         this.loading = true;
         this.identityService.getIdentities(this.filter, this.pageIndex, this.pageSize).subscribe({
-            next: (data: ODataResponse<IdentityOverview[]>) => {
-                this.identities = data.value;
-                this.totalRecords = data.value.length;
+            next: (data: ODataResponseEnvelope<IdentityOverview[]>) => {
+                this.identities = data.result;
+                this.totalRecords = data.count;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
