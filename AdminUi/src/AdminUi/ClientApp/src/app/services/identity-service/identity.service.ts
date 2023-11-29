@@ -2,11 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NGXLogger } from "ngx-logger";
 import { ODataFilterBuilder } from "odata-filter-builder";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { NumberFilter } from "src/app/utils/number-filter";
-import { ODataResponse } from "src/app/utils/odata-response";
+import { ODataResponseEnvelope } from "src/app/utils/odata-response-envelope";
 import { environment } from "src/environments/environment";
 import { Quota } from "../quotas-service/quotas.service";
 import { TierDTO } from "../tier-service/tier.service";
@@ -26,9 +26,16 @@ export class IdentityService {
         this.odataUrl = `${environment.odataUrl}/Identities`;
     }
 
-    public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponse<IdentityOverview[]>> {
-        const paginationFilter = `$top=${pageSize}&$skip=${pageNumber}`;
-        return this.http.get<ODataResponse<IdentityOverview[]>>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`);
+    public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponseEnvelope<IdentityOverview[]>> {
+        const paginationFilter = `$top=${pageSize}&$skip=${pageNumber * pageSize}&$count=true`;
+        return this.http.get<any>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`).pipe(
+            map((response) => {
+                return {
+                    result: response["value"],
+                    count: response["@odata.count"]
+                } as ODataResponseEnvelope<IdentityOverview[]>;
+            })
+        );
     }
 
     public getIdentityByAddress(address: string): Observable<HttpResponseEnvelope<Identity>> {
@@ -59,19 +66,19 @@ export class IdentityService {
         if (filter.createdAt.operator !== undefined && filter.createdAt.value !== undefined) {
             switch (filter.createdAt.operator) {
                 case ">":
-                    odataFilter.gt("createdAt", filter.createdAt.value);
+                    odataFilter.gt("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<":
-                    odataFilter.lt("createdAt", filter.createdAt.value);
+                    odataFilter.lt("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "=":
-                    odataFilter.eq("createdAt", filter.createdAt.value);
+                    odataFilter.eq("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<=":
-                    odataFilter.le("createdAt", filter.createdAt.value);
+                    odataFilter.le("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 case ">=":
-                    odataFilter.ge("createdAt", filter.createdAt.value);
+                    odataFilter.ge("createdAt", filter.createdAt.value.toISOString().slice(0, 10), false);
                     break;
                 default:
                     this.logger.error(`Invalid createdAt filter operator: ${filter.createdAt.operator}`);
@@ -82,19 +89,19 @@ export class IdentityService {
         if (filter.lastLoginAt.operator !== undefined && filter.lastLoginAt.value !== undefined) {
             switch (filter.lastLoginAt.operator) {
                 case ">":
-                    odataFilter.gt("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.gt("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<":
-                    odataFilter.lt("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.lt("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "=":
-                    odataFilter.eq("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.eq("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case "<=":
-                    odataFilter.le("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.le("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 case ">=":
-                    odataFilter.ge("lastLoginAt", filter.lastLoginAt.value);
+                    odataFilter.ge("lastLoginAt", filter.lastLoginAt.value.toISOString().slice(0, 10), false);
                     break;
                 default:
                     this.logger.error(`Invalid lastLoginAt filter operator: ${filter.lastLoginAt.operator}`);
