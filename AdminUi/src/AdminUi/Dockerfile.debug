@@ -3,6 +3,6 @@ EXPOSE 80
 
 WORKDIR /app
 
-ENV ASPNETCORE_PORT=80
+ENV ASPNETCORE_HTTP_PORTS=80
 
 ENTRYPOINT ["dotnet", "watch", "--non-interactive", "--project", "AdminUi/src/AdminUi/AdminUi.csproj"]

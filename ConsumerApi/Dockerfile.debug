@@ -1,8 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0
+
 EXPOSE 80
 
 WORKDIR /app
 
-ENV ASPNETCORE_PORT=80
+ENV ASPNETCORE_HTTP_PORTS=80
 
 ENTRYPOINT ["dotnet", "watch", "--non-interactive", "--project", "ConsumerApi/ConsumerApi.csproj"]
