@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.CreateAuditLog;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using MediatR;
 using DeleteIdentityChallengesCommand = Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 using DeleteIdentityFilesCommand = Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
@@ -42,7 +43,7 @@ public class Worker : IHostedService
             await mediator.Send(new DeleteIdentityFilesCommand(identityAddress), cancellationToken);
             await mediator.Send(new DeleteIdentityMessagesCommand(identityAddress), cancellationToken);
             await mediator.Send(new DeleteIdentityTokensCommand(identityAddress), cancellationToken);
-
+            await mediator.Send(new DeleteIdentityCommand(identityAddress), cancellationToken);
         }
 
         // for each of the identities
