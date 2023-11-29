@@ -143,8 +143,8 @@ internal class BaseApi
             request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
 
         var httpResponse = await _httpClient.SendAsync(request);
+        Console.WriteLine(httpResponse);
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine(responseRawContent);
 
         var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
 
