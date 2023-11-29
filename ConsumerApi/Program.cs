@@ -30,6 +30,7 @@ using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
@@ -68,19 +69,37 @@ finally
     Log.CloseAndFlush();
 }
 
-static WebApplication CreateApp(string[] args)
+static IHost CreateApp(string[] args)
 {
-    var builder = WebApplication.CreateBuilder(args);
-    builder.WebHost
-        .UseKestrel(options =>
+    var builder = Host.CreateDefaultBuilder(args);
+    builder.ConfigureWebHostDefaults(h =>
+        h.UseKestrel(options =>
         {
             options.AddServerHeader = false;
             options.Limits.MaxRequestBodySize = 20.Mebibytes();
-        });
+        }));
 
-    LoadConfiguration(builder, args);
+    builder.ConfigureAppConfiguration((hostingContext, configurationBuilder) =>
+    {
+        configurationBuilder.Sources.Clear();
+        var env = hostingContext.HostingEnvironment;
 
-    builder.Host
+        configurationBuilder
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+
+        if (env.IsDevelopment())
+        {
+            var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+            configurationBuilder.AddUserSecrets(appAssembly, optional: true);
+        }
+
+        configurationBuilder.AddEnvironmentVariables();
+        configurationBuilder.AddCommandLine(args);
+    });
+
+    builder
         .UseSerilog((context, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
             .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
@@ -93,9 +112,10 @@ static WebApplication CreateApp(string[] args)
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+    builder.ConfigureServices((context, services) => { ConfigureServices(services, context.Configuration, context.HostingEnvironment); });
 
     var app = builder.Build();
+
     Configure(app);
 
     app
