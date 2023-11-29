@@ -10,6 +10,21 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner. It was automatically approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), null, DeletionProcessStatus.Approved);
     }
 
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The first grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The second grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The third grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
+    }
+
     // EF Core needs the empty constructor
 #pragma warning disable CS8618
     // ReSharper disable once UnusedMember.Local

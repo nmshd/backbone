@@ -66,6 +66,24 @@ public class Identity
         return deletionProcess;
     }
 
+    public void DeletionGracePeriodReminder1Sent()
+    {
+        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        deletionProcess.GracePeriodReminder1Sent(Address);
+    }
+
+    public void DeletionGracePeriodReminder2Sent()
+    {
+        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        deletionProcess.GracePeriodReminder2Sent(Address);
+    }
+
+    public void DeletionGracePeriodReminder3Sent()
+    {
+        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        deletionProcess.GracePeriodReminder3Sent(Address);
+    }
+
     private void EnsureNoActiveProcessExists()
     {
         var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
