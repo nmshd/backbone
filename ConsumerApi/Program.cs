@@ -30,10 +30,8 @@ using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -70,37 +68,19 @@ finally
     Log.CloseAndFlush();
 }
 
-static IHost CreateApp(string[] args)
+static WebApplication CreateApp(string[] args)
 {
-    var builder = Host.CreateDefaultBuilder(args);
-    builder.ConfigureWebHostDefaults(h =>
-        h.UseKestrel(options =>
+    var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost
+        .UseKestrel(options =>
         {
             options.AddServerHeader = false;
             options.Limits.MaxRequestBodySize = 20.Mebibytes();
-        }));
+        });
 
-    builder.ConfigureAppConfiguration((hostingContext, configurationBuilder) =>
-    {
-        configurationBuilder.Sources.Clear();
-        var env = hostingContext.HostingEnvironment;
+    LoadConfiguration(builder, args);
 
-        configurationBuilder
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
-            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
-
-        if (env.IsDevelopment())
-        {
-            var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-            configurationBuilder.AddUserSecrets(appAssembly, optional: true);
-        }
-
-        configurationBuilder.AddEnvironmentVariables();
-        configurationBuilder.AddCommandLine(args);
-    });
-
-    builder
+    builder.Host
         .UseSerilog((context, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
             .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
@@ -113,17 +93,10 @@ static IHost CreateApp(string[] args)
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-    builder.ConfigureServices((context, services) => { ConfigureServices(services, context.Configuration, context.HostingEnvironment); });
-
-    builder.ConfigureWebHost(h =>
-    {
-        h.Configure((context, builder) =>
-        {
-            Configure(builder, context);
-        });
-    });
+    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
+    Configure(app);
 
     app
         .MigrateDbContext<ChallengesDbContext>()
@@ -209,7 +182,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
 }
 
-static void Configure(IApplicationBuilder app, WebHostBuilderContext context)
+static void Configure(WebApplication app)
 {
     app.UseSerilogRequestLogging(opts =>
     {
@@ -230,12 +203,12 @@ static void Configure(IApplicationBuilder app, WebHostBuilderContext context)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var configuration = app.ApplicationServices.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 
     if (configuration.SwaggerUi.Enabled)
         app.UseSwagger().UseSwaggerUI();
 
-    if (context.HostingEnvironment.IsDevelopment())
+    if (app.Environment.IsDevelopment())
         Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
@@ -250,8 +223,8 @@ static void Configure(IApplicationBuilder app, WebHostBuilderContext context)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 
-    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-    var modules = app.ApplicationServices.GetRequiredService<IEnumerable<AbstractModule>>();
+    var eventBus = app.Services.GetRequiredService<IEventBus>();
+    var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
 
     foreach (var module in modules)
     {
@@ -259,4 +232,24 @@ static void Configure(IApplicationBuilder app, WebHostBuilderContext context)
     }
 
     eventBus.StartConsuming();
+}
+
+static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
+{
+    webApplicationBuilder.Configuration.Sources.Clear();
+    var env = webApplicationBuilder.Environment;
+
+    webApplicationBuilder.Configuration
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+
+    if (env.IsDevelopment())
+    {
+        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
+    }
+
+    webApplicationBuilder.Configuration.AddEnvironmentVariables();
+    webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
