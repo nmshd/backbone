@@ -15,12 +15,12 @@ public class IdentityDeletionProcess
     {
     }
 
-    public static IdentityDeletionProcess CreateDeletionProcessAsSupport(IdentityAddress createdBy, DeviceId createdByDevice)
+    public static IdentityDeletionProcess CreateDeletionProcessAsSupport(IdentityAddress createdBy)
     {
-        return new IdentityDeletionProcess(createdBy, createdByDevice, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
     }
 
-    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice, DeletionProcessStatus status)
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
         CreatedAt = SystemTime.UtcNow;
@@ -28,7 +28,7 @@ public class IdentityDeletionProcess
 
         _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
         {
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy, createdByDevice)
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)
         };
     }
 

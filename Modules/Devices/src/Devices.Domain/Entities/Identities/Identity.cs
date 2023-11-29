@@ -54,11 +54,11 @@ public class Identity
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcessBySupport(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcessBySupport()
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsSupport(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsSupport(Address);
         _deletionProcesses.Add(deletionProcess);
 
         return deletionProcess;

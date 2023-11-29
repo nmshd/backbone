@@ -1,8 +1,9 @@
-﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
+﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
@@ -11,7 +12,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using GetIdentityQueryDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityResponseDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
@@ -23,14 +23,8 @@ namespace Backbone.AdminUi.Controllers;
 [Authorize("ApiKey")]
 public class IdentitiesController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
-    private readonly ApplicationOptions _options;
-
-    public IdentitiesController(
-        IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public IdentitiesController(IMediator mediator) : base(mediator)
     {
-        _adminUiDbContext = adminUiDbContext;
-        _options = options.Value;
     }
 
     [HttpPost("{identityAddress}/Quotas")]
@@ -86,6 +80,38 @@ public class IdentitiesController : ApiControllerBase
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
+    {
+        var command = new CreateIdentityCommand
+        {
+            ClientId = request.ClientId,
+            DevicePassword = request.DevicePassword,
+            IdentityPublicKey = request.IdentityPublicKey,
+            IdentityVersion = request.IdentityVersion,
+            SignedChallenge = new SignedChallengeDTO
+            {
+                Challenge = request.SignedChallenge.Challenge,
+                Signature = request.SignedChallenge.Signature
+            }
+        };
+
+        var response = await _mediator.Send(command, cancellationToken);
+
+        return Created(response);
+    }
+
+    [HttpPost("{address}/DeletionProcesses")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> StartDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
+        return Created("", response);
+    }
 }
 
 public class CreateQuotaForIdentityRequest
@@ -94,6 +120,7 @@ public class CreateQuotaForIdentityRequest
     public int Max { get; set; }
     public QuotaPeriod Period { get; set; }
 }
+
 public class UpdateIdentityTierRequest
 {
     public string TierId { get; set; }
@@ -104,16 +131,26 @@ public class GetIdentityResponse
     public string Address { get; set; }
     public string ClientId { get; set; }
     public byte[] PublicKey { get; set; }
-
     public string TierId { get; set; }
-
     public DateTime CreatedAt { get; set; }
-
     public byte IdentityVersion { get; set; }
-
     public int NumberOfDevices { get; set; }
-
     public IEnumerable<DeviceDTO> Devices { get; set; }
-
     public IEnumerable<QuotaDTO> Quotas { get; set; }
+}
+
+public class CreateIdentityRequest
+{
+    public required string ClientId { get; set; }
+    public required string ClientSecret { get; set; }
+    public required byte[] IdentityPublicKey { get; set; }
+    public required string DevicePassword { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
+}
+
+public class CreateIdentityRequestSignedChallenge
+{
+    public required string Challenge { get; set; }
+    public required byte[] Signature { get; set; }
 }

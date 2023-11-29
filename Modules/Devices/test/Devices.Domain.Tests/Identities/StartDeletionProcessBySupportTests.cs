@@ -17,12 +17,11 @@ public class StartDeletionProcessBySupportTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcessBySupport(activeDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcessBySupport();
 
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity);
@@ -31,7 +30,7 @@ public class StartDeletionProcessBySupportTests
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
         auditLogEntry.Message.Should().Be("The deletion process was started by support. It is now waiting for approval.");
-        auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.DeviceIdHash.Should().BeNull();
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }
 
@@ -40,12 +39,11 @@ public class StartDeletionProcessBySupportTests
     {
         // Arrange
         var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
 
-        activeIdentity.StartDeletionProcessBySupport(activeDevice);
+        activeIdentity.StartDeletionProcessBySupport();
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcessBySupport(activeDevice);
+        var acting = activeIdentity.StartDeletionProcessBySupport;
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
