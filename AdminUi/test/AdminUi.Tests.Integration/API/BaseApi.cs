@@ -144,6 +144,7 @@ internal class BaseApi
 
         var httpResponse = await _httpClient.SendAsync(request);
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine(responseRawContent);
 
         var responseData = JsonConvert.DeserializeObject<ResponseContent<T>>(responseRawContent);
 

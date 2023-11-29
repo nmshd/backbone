@@ -58,7 +58,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
             DevicePassword = "test",
             IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.Base64Representation,
             IdentityVersion = 1,
-            SignedChallenge = new CreateIdentityRequestSignedChallenge()
+            SignedChallenge = new CreateIdentityRequestSignedChallenge
             {
                 Challenge = "string.Empty",
                 Signature = "some-dummy-signature"
@@ -70,6 +70,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.SetContent(createIdentityRequest);
 
         _createIdentityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
+        _createIdentityResponse.IsSuccessStatusCode.Should().BeTrue();
     }
 
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
