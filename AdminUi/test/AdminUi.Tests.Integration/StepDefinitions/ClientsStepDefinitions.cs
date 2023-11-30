@@ -299,12 +299,13 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint without passing a maxIdentities")]
-    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithoutAMaxIdentities()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
         var updateClientRequest = new UpdateClientRequest()
         {
             DefaultTier = _tierId,
+            MaxIdentities = null
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -437,8 +438,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.Content.Result.MaxIdentities.Should().Be(_maxIdentitiesNew);
     }
 
-    [Then(@"the Client in the Backend has no max identities limit")]
-    public async Task ThenTheClientInTheBackendHasNoMaxIdentitiesLimit()
+    [Then(@"the Client in the Backend has a null value for maxIdentities")]
+    public async Task ThenTheClientInTheBackendHasNullIdentitiesLimit()
     {
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";

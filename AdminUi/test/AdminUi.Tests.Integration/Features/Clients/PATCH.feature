@@ -65,7 +65,7 @@ Scenario: Removing the max identities of an existing Client
 	Given a Tier t
 	And a MaxIdentities maxIdentities
 	And a Client c with Tier t and MaxIdentities maxIdentities
-	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint without passing a maxIdentities
+	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities
 	Then the response status code is 200 (OK)
 	And the response contains Client c
-	And the Client in the Backend has no max identities limit
+	And the Client in the Backend has a null value for maxIdentities
