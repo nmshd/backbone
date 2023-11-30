@@ -53,15 +53,18 @@ Scenario: Changing the default tier of an existing Client with the same tier id
 
 Scenario: Changing the max identities of an existing Client
 	Given a Tier t
-	And a Client c with Tier t and MaxIdentities mi1
-	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi2
+	And a MaxIdentities maxIdentities
+	And a MaxIdentities maxIdentitiesNew
+	And a Client c with Tier t and MaxIdentities maxIdentities
+	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities maxIdentitiesNew
 	Then the response status code is 200 (OK)
 	And the response contains Client c
 	And the Client in the Backend has the new maxIdentities
 
 Scenario: Removing the max identities of an existing Client
 	Given a Tier t
-	And a Client c with Tier t and MaxIdentities mi
+	And a MaxIdentities maxIdentities
+	And a Client c with Tier t and MaxIdentities maxIdentities
 	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint without passing a maxIdentities
 	Then the response status code is 200 (OK)
 	And the response contains Client c

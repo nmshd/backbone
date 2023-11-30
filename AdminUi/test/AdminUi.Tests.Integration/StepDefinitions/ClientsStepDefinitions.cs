@@ -18,9 +18,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     private string _tierId;
     private string _tier1Id;
     private string _tier2Id;
-    private readonly int _maxIdentities;
-    private readonly int _maxIdentities1;
-    private readonly int _maxIdentities2;
+    private int _maxIdentities;
+    private int _maxIdentitiesNew;
     private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
     private readonly HttpResponse<ClientDTO>? _getClientResponse;
     private readonly HttpResponse<CreateClientResponse>? _createClientResponse;
@@ -37,9 +36,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _tierId = string.Empty;
         _tier1Id = string.Empty;
         _tier2Id = string.Empty;
-        _maxIdentities = 1;
-        _maxIdentities1 = 1;
-        _maxIdentities2 = 2;
+        _maxIdentities = 0;
+        _maxIdentitiesNew = 0;
     }
 
     [Given(@"a non-existent Client c")]
@@ -68,6 +66,18 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
+    }
+
+    [Given(@"a MaxIdentities mi")]
+    public void GivenAMaxIdentitiesMi()
+    {
+        _maxIdentities = 1;
+    }
+
+    [Given(@"a MaxIdentities miNew")]
+    public void GivenAMaxIdentitiesMiNew()
+    {
+        _maxIdentitiesNew = 2;
     }
 
     [Given(@"a Tier t1")]
@@ -136,8 +146,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _clientId = response.Content.Result!.ClientId;
     }
 
-    [Given(@"a Client c with Tier t and MaxIdentities mi")]
-    public async Task GivenAClientCWithTierTAndMaxIdentitiesMi()
+    [Given(@"a Client c with Tier t and MaxIdentities maxIdentities")]
+    public async Task GivenAClientCWithTierTAndMaxIdentitiesMaxIdentities()
     {
         var createClientRequest = new CreateClientRequest
         {
@@ -168,29 +178,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             DisplayName = string.Empty,
             ClientSecret = string.Empty,
             DefaultTier = _tier1Id
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createClientRequest);
-
-        var response = await _clientsApi.CreateClient(requestConfiguration);
-
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
-        _clientId = response.Content.Result!.ClientId;
-    }
-
-    [Given(@"a Client c with Tier t and MaxIdentities mi1")]
-    public async Task GivenAClientCWithTierTAndMaxIdentitiesMi1()
-    {
-        var createClientRequest = new CreateClientRequest
-        {
-            ClientId = string.Empty,
-            DisplayName = string.Empty,
-            ClientSecret = string.Empty,
-            DefaultTier = _tierId,
-            MaxIdentities = _maxIdentities1
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -293,13 +280,13 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi2")]
-    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithMaxIdentities2()
+    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities maxIdentitiesNew")]
+    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithMaxIdentitiesNew()
     {
         var updateClientRequest = new UpdateClientRequest()
         {
             DefaultTier = _tierId,
-            MaxIdentities = _maxIdentities2
+            MaxIdentities = _maxIdentitiesNew
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -436,7 +423,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the Client in the Backend has the new maxIdentities")]
-    public async Task ThenTheClientInTheBackendHasNewMaxIdentities()
+    public async Task ThenTheClientInTheBackendHasMaxIdentitiesNew()
     {
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
@@ -447,7 +434,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.AssertStatusCodeIsSuccess();
         response.AssertContentTypeIs("application/json");
         response.AssertContentCompliesWithSchema();
-        response.Content.Result.MaxIdentities.Should().Be(_maxIdentities2);
+        response.Content.Result.MaxIdentities.Should().Be(_maxIdentitiesNew);
     }
 
     [Then(@"the Client in the Backend has no max identities limit")]
