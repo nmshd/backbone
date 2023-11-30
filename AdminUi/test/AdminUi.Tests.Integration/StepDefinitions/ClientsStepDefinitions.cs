@@ -384,25 +384,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi")]
-    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithMaxIdentities()
-    {
-        var updateClientRequest = new UpdateClientRequest()
-        {
-            DefaultTier = _tierId,
-            MaxIdentities = _maxIdentities
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
-    }
-
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {

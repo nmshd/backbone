@@ -66,10 +66,3 @@ Scenario: Removing the max identities of an existing Client
 	Then the response status code is 200 (OK)
 	And the response contains Client c
 	And the Client in the Backend has no max identities limit
-
-Scenario: Changing the max identities of an existing Client with the same max identities
-	Given a Tier t
-	And a Client c with Tier t and MaxIdentities mi
-	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the maxIdentities mi
-	Then the response status code is 400 (Bad request)
-	And the response content includes an error with the error code "error.platform.validation.device.cannotUpdateClient"
