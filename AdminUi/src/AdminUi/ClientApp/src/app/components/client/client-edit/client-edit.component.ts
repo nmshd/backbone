@@ -190,7 +190,8 @@ export class ClientEditComponent {
     }
 
     public canSaveClient(): boolean {
-        if (!this.client.defaultTier || (this.client.maxIdentities && this.client.maxIdentities < 0)) return false;
+        if (!this.client.defaultTier) return false;
+        if (this.client.maxIdentities !== undefined && this.client.maxIdentities < 0) return false;
         return true;
     }
 }
