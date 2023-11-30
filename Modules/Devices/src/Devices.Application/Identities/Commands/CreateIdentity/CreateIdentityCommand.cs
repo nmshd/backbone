@@ -10,4 +10,5 @@ public class CreateIdentityCommand : IRequest<CreateIdentityResponse>
     public string DevicePassword { get; set; }
     public byte IdentityVersion { get; set; }
     public SignedChallengeDTO SignedChallenge { get; set; }
+    public bool ShouldValidateChallenge { get; set; } = true;
 }

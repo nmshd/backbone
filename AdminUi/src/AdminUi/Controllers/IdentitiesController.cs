@@ -96,7 +96,8 @@ public class IdentitiesController : ApiControllerBase
             {
                 Challenge = request.SignedChallenge.Challenge,
                 Signature = request.SignedChallenge.Signature
-            }
+            },
+            ShouldValidateChallenge = false
         };
 
         var response = await _mediator.Send(command, cancellationToken);
