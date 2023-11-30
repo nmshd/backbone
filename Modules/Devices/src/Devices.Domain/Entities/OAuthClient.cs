@@ -19,22 +19,22 @@ public class OAuthClient
     public DateTime CreatedAt { get; }
     public int? MaxIdentities { get; private set; }
 
-    public DomainError? Update(TierId newDefaultTier, int? newMaxIdentities)
+    public bool Update(TierId newDefaultTier, int? newMaxIdentities)
     {
-        var isUpdated = false;
+        var hasChanges = false;
 
         if (DefaultTier != newDefaultTier)
         {
-            isUpdated = true;
+            hasChanges = true;
             DefaultTier = newDefaultTier;
         }
 
         if (MaxIdentities != newMaxIdentities)
         {
-            isUpdated = true;
+            hasChanges = true;
             MaxIdentities = newMaxIdentities;
         }
 
-        return isUpdated ? null : DomainErrors.CannotUpdateClient("No properties were changed for the Client.");
+        return hasChanges;
     }
 }

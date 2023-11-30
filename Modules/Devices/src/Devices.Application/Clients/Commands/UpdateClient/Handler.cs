@@ -30,11 +30,9 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        var updateClientError = client.Update(tierIdResult.Value, request.MaxIdentities);
-        if (updateClientError != null)
-            throw new DomainException(updateClientError);
-
-        await _oAuthClientsRepository.Update(client, cancellationToken);
+        var hasChanges = client.Update(tierIdResult.Value, request.MaxIdentities);
+        if (hasChanges)
+            await _oAuthClientsRepository.Update(client, cancellationToken);
 
         return new UpdateClientResponse(client);
     }

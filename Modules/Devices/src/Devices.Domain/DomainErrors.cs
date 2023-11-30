@@ -31,11 +31,4 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.usedTierCannotBeDeleted",
             string.IsNullOrEmpty(reason) ? $"The Tier cannot be deleted {formattedReason}" : reason);
     }
-
-    public static DomainError CannotUpdateClient(string reason = "")
-    {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.device.cannotUpdateClient",
-            string.IsNullOrEmpty(reason) ? $"The Client cannot be updated {formattedReason}" : reason);
-    }
 }
