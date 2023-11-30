@@ -18,12 +18,12 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                         CLIENTS."DefaultTier" AS "DefaultTierId",
                         TIERS."Name" AS "DefaultTierName",
                         CLIENTS."CreatedAt" AS "CreatedAt",
-                        CLIENTS."MaxIdentities" AS "MaxIdentities",
                         (
         		            SELECT COUNT("ClientId") 
         		            FROM "Devices"."Identities"
         		            WHERE "ClientId" = CLIENTS."ClientId"
-        	            ) AS "NumberOfIdentities"
+        	            ) AS "NumberOfIdentities",
+                        CLIENTS."MaxIdentities" AS "MaxIdentities"
                     FROM "Devices"."OpenIddictApplications" CLIENTS
                     LEFT JOIN "Devices"."Tiers" TIERS
                     ON TIERS."Id" = CLIENTS."DefaultTier"
@@ -33,8 +33,9 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(""" DROP VIEW "ClientOverviews" """);
             migrationBuilder.Sql("""
-                CREATE OR REPLACE VIEW "ClientOverviews" AS
+                CREATE VIEW "ClientOverviews" AS
                     SELECT
                         CLIENTS."ClientId" AS "ClientId",
                         CLIENTS."DisplayName" AS "DisplayName",
