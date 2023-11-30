@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application;
@@ -131,6 +132,16 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
                         r.Status != RelationshipStatus.Revoked)
             .AnyAsync(cancellationToken);
+    }
+
+    public async Task Delete(IEnumerable<RelationshipId> relationshipIds, CancellationToken cancellationToken)
+    {
+        await _relationships.WithIdIn(relationshipIds).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Relationship>> FindRelationshipsWithIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        return await _relationships.WithParticipant(identityAddress).ToListAsync(cancellationToken);
     }
 }
 
