@@ -48,8 +48,9 @@ Scenario: Changing the default tier of an existing Client with the same tier id
 	Given a Tier t
 	And a Client c with Tier t
 	When a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t.Id
-	Then the response status code is 400 (Bad request)
-	And the response content includes an error with the error code "error.platform.validation.device.cannotUpdateClient"
+	Then the response status code is 200 (OK)
+	And the response contains Client c
+	And the Client in the Backend has the same defaultTier
 
 Scenario: Changing the max identities of an existing Client
 	Given a Tier t

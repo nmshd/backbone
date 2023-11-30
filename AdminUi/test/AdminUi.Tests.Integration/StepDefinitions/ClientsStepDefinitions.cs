@@ -423,6 +423,21 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.Content.Result.DefaultTier.Should().Be(_tier2Id);
     }
 
+    [Then(@"the Client in the Backend has the same defaultTier")]
+    public async Task ThenTheClientInTheBackendHasSameDefaultTier()
+    {
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+
+        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
+
+        response.AssertHasValue();
+        response.AssertStatusCodeIsSuccess();
+        response.AssertContentTypeIs("application/json");
+        response.AssertContentCompliesWithSchema();
+        response.Content.Result.DefaultTier.Should().Be(_tierId);
+    }
+
     [Then(@"the Client in the Backend has the new maxIdentities")]
     public async Task ThenTheClientInTheBackendHasMaxIdentitiesNew()
     {
