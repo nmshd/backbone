@@ -20,6 +20,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     private string? _deviceIdD1;
     private string? _deviceIdD2;
+    private string _nonExistantDeviceId = "DVC00000000000000000";
 
     public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
@@ -56,9 +57,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     }
 
     [When(@"a DELETE request is sent to the Devices/\{id} endpoint with ""?(.*?)""?")]
-    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id(string id)
+    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id(string description)
     {
-        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
+        var deviceId = GetDeviceId(description);
+        _deletionResponse = await DeleteUnOnboardedDevice(deviceId);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -71,13 +73,46 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Then(@"d(.*) is deleted")]
     public async Task ThenDIsDeleted(int index)
     {
+        var deviceId = GetDeviceId(index);
         var response = await ListDevices();
 
         response.Content.Result!.Count.Should().Be(1);
-        response.Content.Result!.First().Id?.StringValue.Should().Be(_deviceIdD1);
+        response.Content.Result!.First().Id?.StringValue.Should().NotBe(deviceId);
+    }
+
+    [Then(@"d(.*) is not deleted")]
+    public async Task ThenDIsNotDeleted(int index)
+    {
+        var deviceId = GetDeviceId(index);
+        var response = await ListDevices();
+
+        response.Content.Result!.Where(d => d.Id!.StringValue == deviceId).Should().NotBeEmpty();
     }
 
     #endregion
+
+    private string? GetDeviceId(int index)
+    {
+        var deviceId = index switch
+        {
+            1 => _deviceIdD1,
+            2 => _deviceIdD2,
+            _ => throw new ArgumentOutOfRangeException(nameof(index))
+        };
+        return deviceId;
+    }
+
+    private string? GetDeviceId(string description)
+    {
+        var deviceId = description switch
+        {
+            "d1.Id" => _deviceIdD1,
+            "d2.Id" => _deviceIdD2,
+            "a non existent id" => _nonExistantDeviceId,
+            _ => throw new ArgumentOutOfRangeException(nameof(description))
+        };
+        return deviceId;
+    }
 
     protected async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(Challenge? challenge = null, KeyPair? keyPair = null)
     {
@@ -118,7 +153,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     protected async Task<HttpResponse> DeleteUnOnboardedDevice(string? id)
     {
         var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
-        response.IsSuccessStatusCode.Should().BeTrue();
+        //response.IsSuccessStatusCode.Should().BeTrue();
 
         return response;
     }
