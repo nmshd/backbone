@@ -49,7 +49,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     }
 
     [Given(@"an un-onboarded device d2")]
-    public async Task GivenAnUn_OnboardedDeviceD2()
+    public async Task GivenAnUnOnboardedDeviceD2()
     {
         var deviceResponse = await RegisterDevice(_challengeResponse!.Content.Result, _keyPair);
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
