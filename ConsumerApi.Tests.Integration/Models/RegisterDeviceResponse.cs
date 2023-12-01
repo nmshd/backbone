@@ -4,8 +4,8 @@ namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class RegisterDeviceResponse
 {
-    public DeviceId? Id { get; set; }
-    public string? Username { get; set; }
+    public required DeviceId Id { get; set; }
+    public required string Username { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DeviceId? CreatedByDevice { get; set; }
+    public required DeviceId CreatedByDevice { get; set; }
 }
