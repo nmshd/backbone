@@ -55,7 +55,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
     }
 
-    [When(@"a DELETE request is sent to the Device/\{id} endpoint with ""?(.*?)""?")]
+    [When(@"a DELETE request is sent to the Devices/\{id} endpoint with ""?(.*?)""?")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id(string id)
     {
         _response = await DeleteUnOnboardedDevice(_deviceIdD2);
