@@ -117,7 +117,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     protected async Task<HttpResponse> DeleteUnOnboardedDevice(string? id)
     {
-        var response = await _devicesApi.DeleteUnOnboardedDevice($"/Devices/{id}", _requestConfiguration, id);
+        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
         response.IsSuccessStatusCode.Should().BeTrue();
 
         return response;
