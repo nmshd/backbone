@@ -14,9 +14,9 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 {
     private readonly KeyPair? _keyPair;
 
-    private HttpResponse<Challenge>? _challengeResponse;
-    private HttpResponse<CreateIdentityResponse>? _identityResponse;
-    private HttpResponse? _response;
+    private HttpResponse<Challenge>? _createChallengeResponse;
+    private HttpResponse<CreateIdentityResponse>? _createIdentityResponse;
+    private HttpResponse? _deletionResponse;
 
     private string? _deviceIdD1;
     private string? _deviceIdD2;
@@ -32,39 +32,39 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i with a device d1")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
-        _challengeResponse = await CreateChallenge();
-        _challengeResponse.Should().NotBeNull();
+        _createChallengeResponse = await CreateChallenge();
+        _createChallengeResponse.Should().NotBeNull();
 
-        _identityResponse = await CreateIdentity(_challengeResponse.Content.Result, _keyPair);
-        _identityResponse.Should().NotBeNull();
+        _createIdentityResponse = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse.Should().NotBeNull();
 
-        _deviceIdD1 = _identityResponse.Content.Result!.Device.Id;
+        _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
     }
 
     [Given(@"the current user uses d1")]
     public void GivenTheCurrentUserUsesD1()
     {
-        var username = _identityResponse!.Content.Result!.Device.Username;
+        var username = _createIdentityResponse!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
 
     [Given(@"an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
-        var deviceResponse = await RegisterDevice(_challengeResponse!.Content.Result, _keyPair);
+        var deviceResponse = await RegisterDevice(_createChallengeResponse!.Content.Result, _keyPair);
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
     }
 
     [When(@"a DELETE request is sent to the Devices/\{id} endpoint with ""?(.*?)""?")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id(string id)
     {
-        _response = await DeleteUnOnboardedDevice(_deviceIdD2);
+        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response!.StatusCode;
+        var actualStatusCode = (int)_deletionResponse!.StatusCode;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
