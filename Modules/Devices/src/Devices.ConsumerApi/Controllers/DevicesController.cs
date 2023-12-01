@@ -80,14 +80,7 @@ public class DevicesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, }, cancellationToken);
-            return NoContent();
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, }, cancellationToken);
+        return NoContent();
     }
 }
