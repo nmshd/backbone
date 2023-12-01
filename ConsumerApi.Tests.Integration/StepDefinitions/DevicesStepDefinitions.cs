@@ -20,7 +20,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     private string? _deviceIdD1;
     private string? _deviceIdD2;
-    private string _nonExistantDeviceId = "DVC00000000000000000";
+    private readonly string _nonExistantDeviceId = "DVC00000000000000000";
 
     public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
