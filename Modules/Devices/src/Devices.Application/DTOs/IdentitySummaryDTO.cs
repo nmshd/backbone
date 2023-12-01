@@ -1,7 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Domain.Entities;
-using Device = Backbone.Modules.Devices.Application.Devices.DTOs;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
