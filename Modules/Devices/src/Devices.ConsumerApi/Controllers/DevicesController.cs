@@ -77,6 +77,7 @@ public class DevicesController : ApiControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, CancellationToken cancellationToken)
     {

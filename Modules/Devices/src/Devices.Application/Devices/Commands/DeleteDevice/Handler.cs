@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
@@ -26,6 +27,11 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         if (device.Identity.Address != _userContext.GetAddress())
         {
             throw new NotFoundException(nameof(device));
+        }
+
+        if (device.User.LastLoginAt.HasValue)
+        {
+            throw new ApplicationException(ApplicationErrors.Devices.DeviceCannotBeDeletedBecauseItIsAlreadyOnboarded());
         }
 
         _logger.LogTrace("Challenge successfully validated.");

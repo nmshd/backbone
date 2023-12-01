@@ -60,5 +60,10 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierIdInvalidOrDoesNotExist", "The passed tier ID is not valid or the tier does not exist.");
         }
+
+        public static ApplicationError DeviceCannotBeDeletedBecauseItIsAlreadyOnboarded()
+        {
+            return new ApplicationError("error.platform.validation.device.deviceCannotBeDeletedBecauseItIsAlreadyOnboarded", "The device cannot be deleted because it is already onboarded.");
+        }
     }
 }
