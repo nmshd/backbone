@@ -2,7 +2,7 @@
 
 namespace Backbone.BuildingBlocks.Application.Pagination;
 
-public class PagedResponse<T> : EnumerableResponseBase<T>
+public class PagedResponse<T> : CollectionResponseBase<T>
 {
     public PagedResponse(IEnumerable<T> data, PaginationFilter previousFilter, int totalRecords) : base(data)
     {
