@@ -13,7 +13,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Devices.Commands.Dele
 public class HandlerTests
 {
     [Fact]
-    public async Task Deletes_un_onboarded_device_owned_by_identity()
+    public async Task Deletes_unonboarded_device_owned_by_identity()
     {
         // Arrange
         var startTime = SystemTime.UtcNow;
@@ -32,13 +32,13 @@ public class HandlerTests
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
-        var deleteUnOnboardedDeviceCommand = new DeleteDeviceCommand()
+        var deleteDeviceCommand = new DeleteDeviceCommand()
         {
             DeviceId = unOnboardedDevice.Id
         };
 
         // Act
-        await handler.Handle(deleteUnOnboardedDeviceCommand, CancellationToken.None);
+        await handler.Handle(deleteDeviceCommand, CancellationToken.None);
 
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
