@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         if (device.User.LastLoginAt.HasValue)
         {
-            throw new ApplicationException(ApplicationErrors.Devices.DeviceCannotBeDeletedBecauseItIsAlreadyOnboarded());
+            throw new ApplicationException(ApplicationErrors.Devices.DeviceCannotBeDeleted("The device cannot be deleted because it is already onboarded."));
         }
 
         _logger.LogTrace("Challenge successfully validated.");
