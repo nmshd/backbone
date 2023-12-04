@@ -5,7 +5,7 @@ namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 
 public class IdentityDeletionProcessStartedIntegrationEvent : IntegrationEvent
 {
-    public IdentityDeletionProcessStartedIntegrationEvent(Identity identity, IdentityDeletionProcess deletionProcess) : base($"{identity.Address}/DeletionProcessStarted")
+    public IdentityDeletionProcessStartedIntegrationEvent(Identity identity, IdentityDeletionProcess deletionProcess) : base($"{identity.Address}/DeletionProcessStarted/{deletionProcess.Id}")
     {
         DeletionProcessId = deletionProcess.Id;
         Address = identity.Address;

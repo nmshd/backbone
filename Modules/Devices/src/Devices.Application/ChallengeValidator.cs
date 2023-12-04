@@ -20,7 +20,7 @@ public class ChallengeValidator
         _challengesRepository = challengesRepository;
     }
 
-    public virtual async Task Validate(SignedChallengeDTO signedChallenge, PublicKey publicKey)
+    public async Task Validate(SignedChallengeDTO signedChallenge, PublicKey publicKey)
     {
         ValidateSignature(signedChallenge.Challenge, Signature.FromBytes(signedChallenge.Signature).Bytes, publicKey.Key);
         await ValidateChallengeExpiracy(signedChallenge.Challenge);

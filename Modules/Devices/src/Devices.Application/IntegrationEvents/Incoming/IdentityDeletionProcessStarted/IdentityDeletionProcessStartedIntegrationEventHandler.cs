@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
@@ -15,11 +16,6 @@ public class IdentityDeletionProcessStartedIntegrationEventHandler : IIntegratio
 
     public async Task Handle(IdentityDeletionProcessStartedIntegrationEvent @event)
     {
-        var payload = new
-        {
-            Type = "IdentityDeletionProcessStarted",
-            Message = "Deletion process started"
-        };
-        await _pushNotificationSender.SendNotification(@event.Address, payload, CancellationToken.None);
+        await _pushNotificationSender.SendNotification(@event.Address, new DeletionProcessStartedPushNotification(), CancellationToken.None);
     }
 }

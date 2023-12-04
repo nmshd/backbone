@@ -20,6 +20,11 @@ public class IdentityDeletionProcess
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
     }
 
+    public static IdentityDeletionProcess CreateDeletionProcessAsUser(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
+    }
+
     private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
@@ -32,7 +37,7 @@ public class IdentityDeletionProcess
         };
     }
 
-    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
         CreatedAt = SystemTime.UtcNow;

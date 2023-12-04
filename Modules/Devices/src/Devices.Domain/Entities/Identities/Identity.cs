@@ -54,7 +54,7 @@ public class Identity
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcessBySupport()
+    public IdentityDeletionProcess StartDeletionProcessAsSupport()
     {
         EnsureNoActiveProcessExists();
 
@@ -68,7 +68,7 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsUser(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
@@ -87,6 +87,6 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    Approved,
-    WaitingForApproval
+    WaitingForApproval = 0,
+    Approved = 1
 }
