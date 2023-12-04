@@ -1,23 +1,19 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.CreateAuditLog;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using MediatR;
-using DeleteIdentityChallengesCommand = Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentityFilesCommand = Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentityMessagesCommand = Backbone.Modules.Messages.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentityQuotasCommand = Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentitySynchronizationCommand = Backbone.Modules.Synchronization.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
-using DeleteIdentityTokensCommand = Backbone.Modules.Tokens.Application.Identities.Commands.DeleteIdentity.DeleteIdentityCommand;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
 
-    public Worker(IHostApplicationLifetime host, IServiceScopeFactory serviceScopeFactory)
+    public Worker(IHostApplicationLifetime host, IServiceScopeFactory serviceScopeFactory, IEnumerable<IIdentityDeleter> identityDeleters)
     {
         _host = host;
         _serviceScopeFactory = serviceScopeFactory;
+        _identityDeleters = identityDeleters;
         using var scope = _serviceScopeFactory.CreateScope();
     }
 
@@ -31,19 +27,25 @@ public class Worker : IHostedService
         _host.StopApplication();
     }
 
-    internal static async Task StartProcessing(IMediator mediator, CancellationToken cancellationToken)
+    internal async Task StartProcessing(IMediator mediator, CancellationToken cancellationToken)
     {
         var identities = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
-            await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentityChallengesCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentityFilesCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentityMessagesCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentityTokensCommand(identityAddress), cancellationToken);
-            await mediator.Send(new DeleteIdentityCommand(identityAddress), cancellationToken);
+            foreach (var identityDeleter in _identityDeleters)
+            {
+                await identityDeleter.Delete(identityAddress);
+            }
+            //await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentityChallengesCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentityFilesCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentityMessagesCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentityTokensCommand(identityAddress), cancellationToken);
+            //await mediator.Send(new DeleteIdentityCommand(identityAddress), cancellationToken);
+
+
         }
 
         // for each of the identities

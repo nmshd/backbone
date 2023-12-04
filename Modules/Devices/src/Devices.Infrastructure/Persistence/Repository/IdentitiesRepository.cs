@@ -8,6 +8,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -96,7 +97,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionGracePeriodEndsAt > DateTime.Now)
+            .Where(i => i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt > SystemTime.UtcNow)
             .ToListAsync(cancellationToken);
     }
 
