@@ -6,6 +6,6 @@ public class RegisterDeviceResponse
 {
     public required DeviceId Id { get; set; }
     public required string Username { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 }
