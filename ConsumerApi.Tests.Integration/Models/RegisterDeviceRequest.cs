@@ -3,7 +3,7 @@
 public class RegisterDeviceRequest
 {
     public required string DevicePassword { get; set; }
-    public RegisterDeviceRequestSignedChallenge? SignedChallenge { get; set; }
+    public required RegisterDeviceRequestSignedChallenge SignedChallenge { get; set; }
 }
 
 public class RegisterDeviceRequestSignedChallenge
