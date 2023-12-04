@@ -3,26 +3,15 @@ using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionPro
 using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
-public class Worker : IHostedService
+public class Worker(IHostApplicationLifetime host, IEnumerable<IIdentityDeleter> identityDeleters, IMediator mediator) : IHostedService
 {
-    private readonly IHostApplicationLifetime _host;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
-
-    public Worker(IHostApplicationLifetime host, IServiceScopeFactory serviceScopeFactory, IEnumerable<IIdentityDeleter> identityDeleters)
-    {
-        _host = host;
-        _serviceScopeFactory = serviceScopeFactory;
-        _identityDeleters = identityDeleters;
-        using var scope = _serviceScopeFactory.CreateScope();
-    }
+    private readonly IHostApplicationLifetime _host = host;
+    private readonly IEnumerable<IIdentityDeleter> _identityDeleters = identityDeleters;
+    private readonly IMediator _mediator = mediator;
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        using var scope = _serviceScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
-        await StartProcessing(mediator, _identityDeleters, cancellationToken);
+        await StartProcessing(_mediator, _identityDeleters, cancellationToken);
 
         _host.StopApplication();
     }
@@ -37,6 +26,7 @@ public class Worker : IHostedService
             {
                 await identityDeleter.Delete(identityAddress);
             }
+            
             //await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
             //await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
             //await mediator.Send(new DeleteIdentityChallengesCommand(identityAddress), cancellationToken);

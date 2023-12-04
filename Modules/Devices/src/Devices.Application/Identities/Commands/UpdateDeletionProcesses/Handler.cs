@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
     {
         var response = new UpdateDeletionProcessesResponse
         {
-            IdentityAddresses = new()
+            IdentityAddresses = []
         };
 
         var identities = await _identitiesRepository.FindAllWithPastDeletionGracePeriod(cancellationToken, track: true);

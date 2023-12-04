@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionPro
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using MediatR;
-using Microsoft.AspNetCore.Components.Forms;
 using Xunit;
 using static Backbone.Modules.Devices.Jobs.IdentityDeletion.Worker;
 
