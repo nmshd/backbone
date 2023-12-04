@@ -2,10 +2,10 @@
     "name": "performance-test-challenges",
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "7.23.3",
+        "@babel/core": "7.23.5",
         "@babel/plugin-proposal-class-properties": "7.18.6",
         "@babel/plugin-proposal-object-rest-spread": "7.20.7",
-        "@babel/preset-env": "7.23.3",
+        "@babel/preset-env": "7.23.5",
         "@babel/preset-typescript": "7.23.3",
         "@types/k6": "~0.47.3",
         "@types/webpack": "5.28.5",
