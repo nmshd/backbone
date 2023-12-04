@@ -1,9 +1,10 @@
 ﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Domain.Tests.OAuthClient;
+namespace Backbone.Modules.Devices.Domain.Tests.OAuthClients;
 public class OAuthClientTests
 {
     [Fact]
@@ -13,7 +14,7 @@ public class OAuthClientTests
         var oldTierId = TierId.Generate();
         var oldMaxIdentities = 1;
 
-        var client = new Entities.OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
+        var client = new OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
 
         var newTierId = TierId.Generate();
         var newMaxIdentities = 2;
@@ -33,7 +34,7 @@ public class OAuthClientTests
         var oldTierId = TierId.Generate();
         var oldMaxIdentities = 1;
 
-        var client = new Entities.OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
+        var client = new OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
 
         var newTierId = TierId.Generate();
         var newMaxIdentities = 2;
@@ -51,7 +52,7 @@ public class OAuthClientTests
         // Arrange
         var tierId = TierId.Generate();
         var maxIdentities = 1;
-        var client = new Entities.OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow, maxIdentities);
+        var client = new OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow, maxIdentities);
 
         // Act
         var hasChanges = client.Update(tierId, maxIdentities);
