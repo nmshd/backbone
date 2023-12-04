@@ -30,7 +30,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #region StepDefinitions
 
-    [Given(@"an Identity i with a device d1")]
+    [Given(@"an Identity i with a device d1?")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
         _createChallengeResponse = await CreateChallenge();
@@ -42,7 +42,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
     }
 
-    [Given(@"the current user uses d1")]
+    [Given(@"the current user uses d1?")]
     public void GivenTheCurrentUserUsesD1()
     {
         var username = _createIdentityResponse!.Content.Result!.Device.Username;
@@ -70,20 +70,20 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
-    [Then(@"d(.*) is deleted")]
-    public async Task ThenDIsDeleted(int index)
+    [Then(@"(\w+) is deleted")]
+    public async Task ThenDIsDeleted(string deviceName)
     {
-        var deviceId = GetDeviceId(index);
+        var deviceId = GetDeviceId(deviceName);
         var response = await ListDevices();
 
         response.Content.Result!.Count.Should().Be(1);
         response.Content.Result!.First().Id?.StringValue.Should().NotBe(deviceId);
     }
 
-    [Then(@"d(.*) is not deleted")]
-    public async Task ThenDIsNotDeleted(int index)
+    [Then(@"(\w+) is not deleted")]
+    public async Task ThenDIsNotDeleted(string deviceName)
     {
-        var deviceId = GetDeviceId(index);
+        var deviceId = GetDeviceId(deviceName);
         var response = await ListDevices();
 
         response.Content.Result!.Where(d => d.Id!.StringValue == deviceId).Should().NotBeEmpty();
@@ -91,22 +91,15 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #endregion
 
-    private string? GetDeviceId(int index)
-    {
-        var deviceId = index switch
-        {
-            1 => _deviceIdD1,
-            2 => _deviceIdD2,
-            _ => throw new ArgumentOutOfRangeException(nameof(index))
-        };
-        return deviceId;
-    }
-
     private string? GetDeviceId(string description)
     {
         var deviceId = description switch
         {
+            "d" => _deviceIdD1,
+            "d.Id" => _deviceIdD1,
+            "d1" => _deviceIdD1,
             "d1.Id" => _deviceIdD1,
+            "d2" => _deviceIdD2,
             "d2.Id" => _deviceIdD2,
             "a non existent id" => _nonExistantDeviceId,
             _ => throw new ArgumentOutOfRangeException(nameof(description))
