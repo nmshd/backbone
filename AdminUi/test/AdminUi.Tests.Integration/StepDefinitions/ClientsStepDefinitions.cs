@@ -354,24 +354,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with the defaultTier t.Id")]
-    public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithTierId()
-    {
-        var updateClientRequest = new UpdateClientRequest()
-        {
-            DefaultTier = _tierId
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
-    }
-
     [Then(@"the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
@@ -421,21 +403,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.AssertContentTypeIs("application/json");
         response.AssertContentCompliesWithSchema();
         response.Content.Result.DefaultTier.Should().Be(_tier2Id);
-    }
-
-    [Then(@"the Client in the Backend has the same defaultTier")]
-    public async Task ThenTheClientInTheBackendHasSameDefaultTier()
-    {
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-
-        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
-
-        response.AssertHasValue();
-        response.AssertStatusCodeIsSuccess();
-        response.AssertContentTypeIs("application/json");
-        response.AssertContentCompliesWithSchema();
-        response.Content.Result.DefaultTier.Should().Be(_tierId);
     }
 
     [Then(@"the Client in the Backend has the new maxIdentities")]
