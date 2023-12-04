@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
         _logger.LogTrace("Challenge successfully validated.");
 
-        device.MarkAsDeleted(_userContext.GetDeviceId());
+        device.MarkAsDeleted(request.DeviceId);
 
         await _identitiesRepository.Update(device, cancellationToken);
 
