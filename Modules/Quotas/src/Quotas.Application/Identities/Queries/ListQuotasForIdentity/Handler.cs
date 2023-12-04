@@ -30,33 +30,45 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
         var metrics = await _metricsRepository.FindAll(cancellationToken);
 
-        var individualQuotasForIdentityTasks = identity.IndividualQuotas
+        //var individualQuotasForIdentityTasks = identity.IndividualQuotas
+        //    .Select(async q =>
+        //    {
+        //        var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
+        //        var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
+
+        //        var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
+
+        //        return new QuotaDTO(q, metric, usage);
+        //    });
+
+        //var individualQuotasForIdentity = await Task.WhenAll(individualQuotasForIdentityTasks);
+
+        //var tierQuotasForIdentityTasks = identity.TierQuotas
+        //    .Select(async q =>
+        //    {
+        //        var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
+        //        var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
+
+        //        var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
+
+        //        return new QuotaDTO(q, metric, usage);
+        //    });
+
+        //var tierQuotasForIdentity = await Task.WhenAll(tierQuotasForIdentityTasks);
+
+        //var quotasForIdentityDTOs = new QuotasForIdentityDTO(individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList()).Quotas;
+
+        var quotasTasks = identity.AllQuotas
             .Select(async q =>
             {
                 var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
                 var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
-
                 var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
-
                 return new QuotaDTO(q, metric, usage);
             });
+        var quotas = await Task.WhenAll(quotasTasks);
 
-        var individualQuotasForIdentity = await Task.WhenAll(individualQuotasForIdentityTasks);
-
-        var tierQuotasForIdentityTasks = identity.TierQuotas
-            .Select(async q =>
-            {
-                var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
-                var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
-
-                var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
-
-                return new QuotaDTO(q, metric, usage);
-            });
-
-        var tierQuotasForIdentity = await Task.WhenAll(tierQuotasForIdentityTasks);
-
-        var quotasForIdentityDTOs = new QuotasForIdentityDTO(individualQuotasForIdentity.Concat(tierQuotasForIdentity).ToList()).Quotas;
+        var quotasForIdentityDTOs = new QuotasForIdentityDTO(quotas.ToList()).Quotas;
 
         return new ListQuotasForIdentityResponse(quotasForIdentityDTOs);
     }
