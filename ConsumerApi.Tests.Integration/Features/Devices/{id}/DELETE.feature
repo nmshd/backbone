@@ -11,7 +11,7 @@ Scenario: Deleting an un-onboarded Device as an authenticated user
 	Then the response status code is 204 (Ok)
 	And d2 is deleted
 
-Scenario: Deleting an onboarded Device as an authenticated user
+Scenario: Deleting an onboarded Device as an authenticated user is not possible
 	Given an Identity i with a device d1
 	And the current user uses d1
 	When a DELETE request is sent to the Devices/{id} endpoint with d1.Id
