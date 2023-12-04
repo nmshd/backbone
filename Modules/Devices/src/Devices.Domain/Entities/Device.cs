@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
@@ -39,11 +41,23 @@ public class Device
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
 
+    public bool IsOnboarded => User.HasLoggedIn;
+
     public static Expression<Func<Device, bool>> IsNotDeleted =>
         device => device.DeletedAt == null && device.DeletedByDevice == null;
 
+    public DomainError? CanBeDeleted()
+    {
+        return IsOnboarded ? new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.") : null;
+    }
+
     public void MarkAsDeleted(DeviceId deletedByDevice)
     {
+        var error = CanBeDeleted();
+
+        if (error != null)
+            throw new DomainException(error);
+
         DeletedAt = SystemTime.UtcNow;
         DeletedByDevice = deletedByDevice;
     }
