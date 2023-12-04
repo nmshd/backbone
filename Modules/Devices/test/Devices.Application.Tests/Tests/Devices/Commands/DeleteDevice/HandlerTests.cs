@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Devices.Commands.DeleteDevice;
+
 public class HandlerTests
 {
     [Fact]
@@ -16,29 +17,71 @@ public class HandlerTests
     {
         // Arrange
         var startTime = SystemTime.UtcNow;
-        var deleteDeviceTestSetup = new IdentityWithOnboardedAndUnonboardedDevicesSetup();
+
+        var identity = TestDataGenerator.CreateIdentity();
+        var unOnboardedDevice = CreateUnOnboardedDevice(identity);
+        var onboardedDevice = CreateOnboardedDevice(identity);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(unOnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(unOnboardedDevice);
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(onboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(onboardedDevice);
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(onboardedDevice.Id);
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         var deleteUnOnboardedDeviceCommand = new DeleteDeviceCommand()
         {
-            DeviceId = deleteDeviceTestSetup.UnOnboardedDevice.Id
+            DeviceId = unOnboardedDevice.Id
         };
 
         // Act
-        await deleteDeviceTestSetup.Handler.Handle(deleteUnOnboardedDeviceCommand, CancellationToken.None);
+        await handler.Handle(deleteUnOnboardedDeviceCommand, CancellationToken.None);
 
         // Assert
-        deleteDeviceTestSetup.UnOnboardedDevice.DeletedAt.Should().NotBeNull();
-        deleteDeviceTestSetup.UnOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
-        deleteDeviceTestSetup.UnOnboardedDevice.DeletedByDevice.Should().Be(deleteDeviceTestSetup.OnboardedDevice.Id);
+        unOnboardedDevice.DeletedAt.Should().NotBeNull();
+        unOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
+        unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
 
-        A.CallTo(() => deleteDeviceTestSetup.MockIdentitiesRepository.Update(
-            deleteDeviceTestSetup.UnOnboardedDevice,
+        A.CallTo(() => mockIdentitiesRepository.Update(
+            unOnboardedDevice,
             A<CancellationToken>._
         )).MustHaveHappenedOnceExactly();
     }
+
+    private static Device CreateUnOnboardedDevice(Identity identity)
+    {
+        var unOnboardedDevice = new Device(identity);
+        var unOnboardedDeviceUser = new ApplicationUser(identity, unOnboardedDevice.Id)
+        {
+            LastLoginAt = null
+        };
+        unOnboardedDevice.User = unOnboardedDeviceUser;
+
+        return unOnboardedDevice;
+    }
+
+    private static Device CreateOnboardedDevice(Identity identity)
+    {
+        var onboardedDevice = new Device(identity);
+        var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id)
+        {
+            LastLoginAt = SystemTime.UtcNow
+        };
+        onboardedDevice.User = onboardedDeviceUser;
+
+        return onboardedDevice;
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext fakeUserContext)
+    {
+        return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());
+    }
 }
 
-public class IdentityWithOnboardedAndUnonboardedDevicesSetup
+public class IdentityWithOnboardedAndUnonboardedDevicesSetup1
 {
     public readonly Identity Identity;
     public readonly Device UnOnboardedDevice;
@@ -47,7 +90,7 @@ public class IdentityWithOnboardedAndUnonboardedDevicesSetup
     public readonly IUserContext FakeUserContext;
     public readonly Handler Handler;
 
-    public IdentityWithOnboardedAndUnonboardedDevicesSetup()
+    public IdentityWithOnboardedAndUnonboardedDevicesSetup1()
     {
         Identity = TestDataGenerator.CreateIdentity();
         UnOnboardedDevice = CreateUnOnboardedDevice(Identity);
