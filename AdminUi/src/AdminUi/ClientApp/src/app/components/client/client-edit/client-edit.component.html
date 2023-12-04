@@ -27,11 +27,13 @@
                     <mat-list-item class="mat-list-item-edit">
                         <span matListItemTitle>Max Identities</span>
                         <span matListItemLine>
-                            <mat-form-field class="form-field-edit">
+                            <mat-form-field class="form-field form-field-edit">
                                 <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" placeholder="No limit" [disabled]="disabled" />
                                 <button matSuffix mat-icon-button aria-label="Clear" (click)="client.maxIdentities = undefined">
                                     <mat-icon>close</mat-icon>
                                 </button>
+                                <mat-hint>The maximum number of Identities that can be created with this Client.</mat-hint>
+                                <mat-error>You must enter a positive value</mat-error>
                             </mat-form-field>
                         </span>
                     </mat-list-item>
@@ -73,7 +75,11 @@
                     <mat-form-field class="form-field">
                         <mat-label>Max Identities</mat-label>
                         <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" [disabled]="disabled || editMode" />
-                        <mat-hint>No Identity limit will be assigned if this field is left blank.</mat-hint>
+                        <mat-hint>
+                            <span>The maximum number of Identities that can be created with this Client.</span>
+                            <br />
+                            <span> No Identity limit will be assigned if this field is left blank. </span>
+                        </mat-hint>
                         <mat-error>You must enter a positive value</mat-error>
                     </mat-form-field>
                     <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
