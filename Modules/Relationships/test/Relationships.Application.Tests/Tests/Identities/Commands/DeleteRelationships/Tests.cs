@@ -63,7 +63,7 @@ public class Tests
     public async Task Command_calls_delete_for_returned_RelationshipTemplates()
     {
         // Arrange
-        
+
         var relationshipTemplatesRepository = A.Dummy<IRelationshipTemplatesRepository>();
         var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
         var deviceId = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
