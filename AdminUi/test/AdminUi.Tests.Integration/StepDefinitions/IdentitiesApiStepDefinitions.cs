@@ -1,7 +1,6 @@
 using Backbone.AdminUi.Tests.Integration.API;
 using Backbone.AdminUi.Tests.Integration.Extensions;
 using Backbone.AdminUi.Tests.Integration.Models;
-using Backbone.AdminUi.Tests.Integration.TestData;
 using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;
 using Newtonsoft.Json;
@@ -28,11 +27,6 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _existingIdentity = string.Empty;
     }
 
-    [Given(@"an Identity i")]
-    public void GivenAnIdentity()
-    {
-        _existingIdentity = Identities.IDENTITY_A;
-    }
 
     [Given("an active deletion process for Identity i exists")]
     public async Task GivenAnActiveDeletionProcessForIdentityAExists()
@@ -40,7 +34,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
-    [Given(@"a new Identity i")]
+    [Given(@"an Identity i")]
     public async Task GivenAnIdentityI()
     {
         var keyPair = _signatureHelper.CreateKeyPair();
@@ -71,6 +65,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 
         _createIdentityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
         _createIdentityResponse.IsSuccessStatusCode.Should().BeTrue();
+        _existingIdentity = _createIdentityResponse.Content.Result!.Address;
     }
 
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
