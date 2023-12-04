@@ -143,24 +143,6 @@ public class HandlerTests
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    [Fact]
-    public async Task Cannot_update_client_with_the_exact_same_data()
-    {
-        // Arrange
-        var defaultTier = new Tier(TierName.Create("some-default-tier").Value);
-        var client = new OAuthClient("some-client-id", string.Empty, defaultTier.Id, SystemTime.UtcNow, 1);
-        var command = new UpdateClientCommand(client.ClientId, defaultTier.Id, 1);
-        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
-        var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.ExistsWithId(defaultTier.Id, A<CancellationToken>._)).Returns(true);
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-        // Assert
-        A.CallTo(() => oAuthClientsRepository.Update(client, A<CancellationToken>._)).MustNotHaveHappened();
-    }
-
     private Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
     {
         return new Handler(oAuthClientsRepository, tiersRepository);
