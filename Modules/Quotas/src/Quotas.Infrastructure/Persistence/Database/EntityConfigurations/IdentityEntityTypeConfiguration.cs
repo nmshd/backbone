@@ -16,6 +16,5 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
         builder.HasMany(x => x.IndividualQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
         builder.Property(x => x.Address).IsUnicode(false).IsFixedLength().HasMaxLength(IdentityAddress.MAX_LENGTH);
         builder.Property(x => x.TierId).IsUnicode(false).IsFixedLength().HasMaxLength(20);
-        builder.Ignore(x => x.AllQuotas);
     }
 }
