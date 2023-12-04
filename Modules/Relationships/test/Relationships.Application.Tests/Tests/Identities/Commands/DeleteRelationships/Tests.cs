@@ -1,8 +1,10 @@
 ﻿using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationships;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Queries;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using FakeItEasy;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities.Commands.DeleteRelationships;
@@ -27,12 +29,14 @@ public class Tests
     }
 
     [Fact]
-    public async Task Command_calls_delete_for_right_relationships_in_from()
+    public async Task Command_calls_delete_for_returned_Relationships()
     {
         // Arrange
         var relationshipsRepository = A.Fake<IRelationshipsRepository>();
 
+        var identityAddressFrom = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+
         var deviceId = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
         var deviceId2 = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
         var relationshipTemplate = new RelationshipTemplate(identityAddress, deviceId, null, null, []);
@@ -52,6 +56,31 @@ public class Tests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => relationshipsRepository.Delete(A<IEnumerable<RelationshipId>>.That.Matches(it => it.All(r => relationships.Select(or => or.Id).Contains(r))), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => relationshipsRepository.Delete(relationships.Select(r => r.Id), A<CancellationToken>._)).MustHaveHappened();
+    }
+
+    [Fact]
+    public async Task Command_calls_delete_for_returned_RelationshipTemplates()
+    {
+        // Arrange
+        
+        var relationshipTemplatesRepository = A.Dummy<IRelationshipTemplatesRepository>();
+        var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var deviceId = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
+        var deviceId2 = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
+        var relationshipTemplate = new RelationshipTemplate(identityAddress, deviceId, null, null, []);
+
+        A.CallTo(() => relationshipTemplatesRepository.FindTemplatesCreatedByIdentityAddress(identityAddress, A<CancellationToken>._)).Returns([relationshipTemplate]);
+
+        var relationshipsRepository = A.Dummy<IRelationshipsRepository>();
+
+        var handler = new Handler(relationshipsRepository, relationshipTemplatesRepository);
+        var request = new DeleteRelationshipsCommand(identityAddress);
+
+        // Act
+        await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => relationshipTemplatesRepository.Delete(new List<RelationshipTemplateId>() { relationshipTemplate.Id }, A<CancellationToken>._)).MustHaveHappened();
     }
 }
