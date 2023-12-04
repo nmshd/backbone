@@ -60,10 +60,5 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierIdInvalidOrDoesNotExist", "The passed tier ID is not valid or the tier does not exist.");
         }
-
-        public static ApplicationError DeviceCannotBeDeleted(string message)
-        {
-            return new ApplicationError("error.platform.validation.device.deviceCannotBeDeleted", message);
-        }
     }
 }
