@@ -28,7 +28,7 @@ internal class IdentitiesApi : BaseApi
         return await GetOData<List<IdentityOverviewDTO>>("/Identities?$expand=Tier", requestConfiguration);
     }
 
-    internal async Task<HttpResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcessAsSupport(string identityAddress, RequestConfiguration requestConfiguration)
+    internal async Task<HttpResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string identityAddress, RequestConfiguration requestConfiguration)
     {
         return await Post<StartDeletionProcessAsSupportResponse>($"/Identities/{identityAddress}/DeletionProcesses", requestConfiguration);
     }

@@ -37,7 +37,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Given("an active deletion process for Identity i exists")]
     public async Task GivenAnActiveDeletionProcessForIdentityAExists()
     {
-        await _identitiesApi.StartDeletionProcessAsSupport(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
+        await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
     [Given(@"a new Identity i")]
@@ -76,7 +76,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
     {
-        _identityDeletionProcessResponse = await _identitiesApi.StartDeletionProcessAsSupport(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
+        _identityDeletionProcessResponse = await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
     [When(@"a GET request is sent to the /Identities endpoint")]

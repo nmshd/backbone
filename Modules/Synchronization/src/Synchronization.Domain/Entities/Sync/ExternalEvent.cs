@@ -51,9 +51,9 @@ public class ExternalEvent
 
 public enum ExternalEventType
 {
-    MessageReceived,
-    MessageDelivered,
-    RelationshipChangeCreated,
-    RelationshipChangeCompleted,
-    IdentityDeletionProcessStarted
+    MessageReceived = 0,
+    MessageDelivered = 1,
+    RelationshipChangeCreated = 2,
+    RelationshipChangeCompleted = 3,
+    IdentityDeletionProcessStarted = 4
 }

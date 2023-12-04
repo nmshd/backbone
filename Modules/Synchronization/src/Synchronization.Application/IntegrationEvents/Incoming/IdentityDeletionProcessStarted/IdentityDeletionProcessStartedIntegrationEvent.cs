@@ -4,6 +4,12 @@ namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incomin
 
 public class IdentityDeletionProcessStartedIntegrationEvent : IntegrationEvent
 {
+    public IdentityDeletionProcessStartedIntegrationEvent(string identityAddress, string deletionProcessId) : base($"{identityAddress}/DeletionProcessStarted/{deletionProcessId}")
+    {
+        DeletionProcessId = deletionProcessId;
+        Address = identityAddress;
+    }
+
     public string Address { get; }
     public string DeletionProcessId { get; }
 }

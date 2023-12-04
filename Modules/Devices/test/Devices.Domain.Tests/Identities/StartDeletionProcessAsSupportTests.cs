@@ -9,10 +9,10 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessBySupportTests
+public class StartDeletionProcessAsSupportTests
 {
     [Fact]
-    public void Start_deletion_process_as_support()
+    public void Start_deletion_process()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -21,7 +21,7 @@ public class StartDeletionProcessBySupportTests
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcessBySupport();
+        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
 
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity);
@@ -35,15 +35,15 @@ public class StartDeletionProcessBySupportTests
     }
 
     [Fact]
-    public void Only_one_active_deletion_process_is_allowed_when_started_by_support()
+    public void Only_one_active_deletion_process_is_allowed_when_started()
     {
         // Arrange
         var activeIdentity = CreateIdentity();
 
-        activeIdentity.StartDeletionProcessBySupport();
+        activeIdentity.StartDeletionProcessAsSupport();
 
         // Act
-        var acting = activeIdentity.StartDeletionProcessBySupport;
+        var acting = activeIdentity.StartDeletionProcessAsSupport;
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
