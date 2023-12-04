@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationshipCommand;
+using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationships;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Identities;

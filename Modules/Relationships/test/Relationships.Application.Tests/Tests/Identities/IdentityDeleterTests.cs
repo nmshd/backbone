@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Application.Identities;
-using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationshipCommand;
+using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationships;
 using FakeItEasy;
 using MediatR;
 using Xunit;

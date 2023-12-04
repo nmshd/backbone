@@ -11,4 +11,6 @@ public interface IRelationshipTemplatesRepository
     Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
+    Task<IEnumerable<RelationshipTemplate>> FindTemplatesCreatedByIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken);
+    Task Delete(IEnumerable<RelationshipTemplateId> templateIds, CancellationToken cancellationToken);
 }
