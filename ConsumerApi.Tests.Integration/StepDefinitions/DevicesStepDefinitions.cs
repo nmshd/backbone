@@ -6,6 +6,9 @@ using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
+// ReSharper disable InconsistentNaming
+#pragma warning disable IDE1006
+
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
@@ -18,9 +21,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse;
     private HttpResponse? _deletionResponse;
 
+    private string? _deviceIdD;
     private string? _deviceIdD1;
     private string? _deviceIdD2;
-    private readonly string _nonExistantDeviceId = "DVC00000000000000000";
+    private const string _nonExistentDeviceId = "DVC00000000000000000";
 
     public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
@@ -30,7 +34,19 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #region StepDefinitions
 
-    [Given(@"an Identity i with a device d1?")]
+    [Given(@"an Identity i with a device d")]
+    public async Task GivenAnIdentityIWithADeviceD()
+    {
+        _createChallengeResponse = await CreateChallenge();
+        _createChallengeResponse.Should().NotBeNull();
+
+        _createIdentityResponse = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse.Should().NotBeNull();
+
+        _deviceIdD = _createIdentityResponse.Content.Result!.Device.Id;
+    }
+
+    [Given(@"an Identity i with a device d1")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
         _createChallengeResponse = await CreateChallenge();
@@ -42,12 +58,23 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
     }
 
-    [Given(@"the current user uses d1?")]
+
+
+    [Given(@"the current user uses d")]
+    public void GivenTheCurrentUserUsesD()
+    {
+        var username = _createIdentityResponse!.Content.Result!.Device.Username;
+        Authenticate(username, "test");
+    }
+
+    [Given(@"the current user uses d1")]
     public void GivenTheCurrentUserUsesD1()
     {
         var username = _createIdentityResponse!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
+
+
 
     [Given(@"an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
@@ -56,12 +83,27 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
     }
 
-    [When(@"a DELETE request is sent to the Devices/\{id} endpoint with ""?(.*?)""?")]
-    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id(string description)
+
+
+    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
+    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithDId()
     {
-        var deviceId = GetDeviceId(description);
-        _deletionResponse = await DeleteUnOnboardedDevice(deviceId);
+        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD);
     }
+
+    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
+    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id()
+    {
+        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
+    }
+
+    [When(@"a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
+    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithNonExistantId()
+    {
+        _deletionResponse = await DeleteUnOnboardedDevice(_nonExistentDeviceId);
+    }
+
+
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
@@ -70,42 +112,32 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
-    [Then(@"(\w+) is deleted")]
-    public async Task ThenDIsDeleted(string deviceName)
-    {
-        var deviceId = GetDeviceId(deviceName);
-        var response = await ListDevices();
 
-        response.Content.Result!.Count.Should().Be(1);
-        response.Content.Result!.First().Id?.StringValue.Should().NotBe(deviceId);
+
+
+    [Then(@"d is not deleted")]
+    public async Task ThenDIsNotDeleted()
+    {
+        var response = await ListDevices();
+        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD).Should().NotBeEmpty();
     }
 
-    [Then(@"(\w+) is not deleted")]
-    public async Task ThenDIsNotDeleted(string deviceName)
+    [Then(@"d1 is not deleted")]
+    public async Task ThenD1IsNotDeleted()
     {
-        var deviceId = GetDeviceId(deviceName);
         var response = await ListDevices();
+        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
+    }
 
-        response.Content.Result!.Where(d => d.Id!.StringValue == deviceId).Should().NotBeEmpty();
+    [Then(@"d2 is deleted")]
+    public async Task ThenD2IsDeleted()
+    {
+        var response = await ListDevices();
+        response.Content.Result!.Count.Should().Be(1);
+        response.Content.Result!.First().Id?.StringValue.Should().NotBe(_deviceIdD2);
     }
 
     #endregion
-
-    private string? GetDeviceId(string description)
-    {
-        var deviceId = description switch
-        {
-            "d" => _deviceIdD1,
-            "d.Id" => _deviceIdD1,
-            "d1" => _deviceIdD1,
-            "d1.Id" => _deviceIdD1,
-            "d2" => _deviceIdD2,
-            "d2.Id" => _deviceIdD2,
-            "a non existent id" => _nonExistantDeviceId,
-            _ => throw new ArgumentOutOfRangeException(nameof(description))
-        };
-        return deviceId;
-    }
 
     protected async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(Challenge? challenge = null, KeyPair? keyPair = null)
     {
