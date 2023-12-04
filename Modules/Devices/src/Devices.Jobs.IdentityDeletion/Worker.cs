@@ -26,7 +26,7 @@ public class Worker(IHostApplicationLifetime host, IEnumerable<IIdentityDeleter>
             {
                 await identityDeleter.Delete(identityAddress);
             }
-            
+
             //await mediator.Send(new DeleteIdentityQuotasCommand(identityAddress), cancellationToken);
             //await mediator.Send(new DeleteIdentitySynchronizationCommand(identityAddress), cancellationToken);
             //await mediator.Send(new DeleteIdentityChallengesCommand(identityAddress), cancellationToken);
