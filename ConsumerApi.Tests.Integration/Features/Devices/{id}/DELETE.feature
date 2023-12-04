@@ -18,7 +18,7 @@ Scenario: Deleting an onboarded Device is not possible
 	Then the response status code is 400 (Bad Request)
 	And d1 is not deleted
 
-Scenario: Deleting a non existant Device
+Scenario: Deleting a non existent Device
 	Given an Identity i with a device d1
 	And the current user uses d1
 	When a DELETE request is sent to the Devices/{id} endpoint with a non existent id
