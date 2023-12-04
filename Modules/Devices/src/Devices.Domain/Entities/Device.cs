@@ -46,14 +46,19 @@ public class Device
     public static Expression<Func<Device, bool>> IsNotDeleted =>
         device => device.DeletedAt == null && device.DeletedByDevice == null;
 
-    public DomainError? CanBeDeleted()
+    public DomainError? CanBeDeleted(DeviceId deletedByDevice)
     {
-        return IsOnboarded ? new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.") : null;
+        if (IsOnboarded)
+            return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.");
+        else if (Id != deletedByDevice)
+            return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is not owned by current identity.");
+        else
+            return null;
     }
 
     public void MarkAsDeleted(DeviceId deletedByDevice)
     {
-        var error = CanBeDeleted();
+        var error = CanBeDeleted(deletedByDevice);
 
         if (error != null)
             throw new DomainException(error);
