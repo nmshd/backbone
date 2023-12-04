@@ -97,7 +97,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt > SystemTime.UtcNow)
+            .Where(i => i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow)
             .ToListAsync(cancellationToken);
     }
 
