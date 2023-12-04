@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
-using MediatR; 
+using MediatR;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService

@@ -1,9 +1,9 @@
-﻿using FakeItEasy;
+﻿using Backbone.BuildingBlocks.Application.Identities;
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using FakeItEasy;
 using MediatR;
 using Xunit;
 using static Backbone.Modules.Devices.Jobs.IdentityDeletion.Worker;
-using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion.Tests.Tests.Worker;
 public class WorkerTests
