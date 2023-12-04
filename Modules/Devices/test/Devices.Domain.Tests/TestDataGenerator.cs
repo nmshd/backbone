@@ -1,7 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
-
-namespace Backbone.Modules.Devices.Domain.Tests;
+﻿namespace Backbone.Modules.Devices.Domain.Tests;
 
 public static class TestDataGenerator
 {
