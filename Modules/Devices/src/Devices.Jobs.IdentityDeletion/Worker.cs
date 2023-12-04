@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
-using MediatR;
+using MediatR; 
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 public class Worker : IHostedService
@@ -22,18 +22,18 @@ public class Worker : IHostedService
         using var scope = _serviceScopeFactory.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        await StartProcessing(mediator, cancellationToken);
+        await StartProcessing(mediator, _identityDeleters, cancellationToken);
 
         _host.StopApplication();
     }
 
-    internal async Task StartProcessing(IMediator mediator, CancellationToken cancellationToken)
+    public static async Task StartProcessing(IMediator mediator, IEnumerable<IIdentityDeleter> identityDeleters, CancellationToken cancellationToken)
     {
         var identities = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
-            foreach (var identityDeleter in _identityDeleters)
+            foreach (var identityDeleter in identityDeleters)
             {
                 await identityDeleter.Delete(identityAddress);
             }
