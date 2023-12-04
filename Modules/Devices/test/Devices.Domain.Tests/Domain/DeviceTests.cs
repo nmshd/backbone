@@ -17,7 +17,7 @@ public class DeviceTests
         device.User = new ApplicationUser(identity, device.Id);
 
         // Act
-        device.MarkAsDeleted(DeviceId.New());
+        device.MarkAsDeleted(device.Id);
 
         // Assert
         device.DeletedAt.Should().NotBeNull();
@@ -25,7 +25,7 @@ public class DeviceTests
     }
 
     [Fact]
-    public void Test_deleting_an_onboarded_device_which_throws_DomainException()
+    public void Test_deleting_an_onboarded_device()
     {
         // Arrange
         var identity = UnitTestTools.Data.TestDataGenerator.CreateIdentity();
@@ -38,6 +38,22 @@ public class DeviceTests
         var action = () => device.MarkAsDeleted(device.Id);
 
         // Assert
-        action.Should().Throw<DomainException>();
+        action.Should().Throw<DomainException>().WithMessage("The device cannot be deleted because it is already onboarded.");
+    }
+
+    [Fact]
+    public void Test_deleting_a_device_not_owned_by_current_identity()
+    {
+        // Arrange
+        var identity = UnitTestTools.Data.TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+
+        device.User = new ApplicationUser(identity, device.Id);
+
+        // Act
+        var action = () => device.MarkAsDeleted(DeviceId.New());
+
+        // Assert
+        action.Should().Throw<DomainException>().WithMessage("The device cannot be deleted because it is not owned by current identity.");
     }
 }

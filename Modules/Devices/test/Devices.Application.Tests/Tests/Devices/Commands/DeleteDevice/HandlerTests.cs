@@ -43,7 +43,7 @@ public class HandlerTests
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
         unOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
-        unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
+        unOnboardedDevice.DeletedByDevice.Should().Be(unOnboardedDevice.Id);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
             unOnboardedDevice,
