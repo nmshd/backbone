@@ -419,7 +419,7 @@ public class RelationshipTests
     private static Relationship CreateActiveRelationship(IdentityAddress from = null, IdentityAddress to = null)
     {
         RelationshipTemplate template = null;
-        if(to is not null)
+        if (to is not null)
         {
             template = new(to, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
         }
