@@ -63,7 +63,7 @@ public class ClientsController : ApiControllerBase
         return Ok(changedClient);
     }
 
-    [HttpPatch("{clientId}")]
+    [HttpPut("{clientId}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateClientResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]

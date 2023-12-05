@@ -9,6 +9,7 @@ namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Clients")]
 [Scope(Feature = "DELETE Clients")]
 [Scope(Feature = "PATCH Clients")]
+[Scope(Feature = "PUT Clients")]
 internal class ClientsStepDefinitions : BaseStepDefinitions
 {
     private readonly ClientsApi _clientsApi;
@@ -176,7 +177,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint")]
+    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpoint()
     {
         _updatedTierId = await CreateTier();
@@ -198,7 +199,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
+    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -217,7 +218,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
+    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -236,7 +237,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
+    [When(@"a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
         var updateClientRequest = new UpdateClientRequest()

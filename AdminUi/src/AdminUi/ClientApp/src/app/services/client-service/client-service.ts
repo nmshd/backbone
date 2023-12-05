@@ -38,7 +38,7 @@ export class ClientService {
     }
 
     public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<Client>> {
-        return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
+        return this.http.put<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
     }
 }
 
