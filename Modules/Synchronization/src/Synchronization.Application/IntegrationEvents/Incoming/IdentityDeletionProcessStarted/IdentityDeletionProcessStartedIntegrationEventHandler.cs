@@ -22,8 +22,9 @@ public class IdentityDeletionProcessStartedIntegrationEventHandler : IIntegratio
 
     public async Task Handle(IdentityDeletionProcessStartedIntegrationEvent integrationEvent)
     {
-#pragma warning disable
+#pragma warning disable IDE0037
         var payload = new { DeletionProcessId = integrationEvent.DeletionProcessId };
+#pragma warning restore IDE0037
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(integrationEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);
