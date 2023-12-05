@@ -4,6 +4,6 @@ EXPOSE 80
 
 WORKDIR /app
 
-ENV ASPNETCORE_HTTP_PORTS=80
+ENV ASPNETCORE_URLS=http://0.0.0.0:80
 
 ENTRYPOINT ["dotnet", "watch", "--non-interactive", "--project", "ConsumerApi/ConsumerApi.csproj"]
