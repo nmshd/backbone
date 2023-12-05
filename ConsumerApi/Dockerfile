@@ -21,6 +21,4 @@ COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
-
 ENTRYPOINT ["dotnet", "Backbone.ConsumerApi.dll"]
