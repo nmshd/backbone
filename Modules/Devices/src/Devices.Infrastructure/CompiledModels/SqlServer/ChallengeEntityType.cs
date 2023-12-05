@@ -3,16 +3,21 @@ using System;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Modules.Devices.Domain.Entities;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class ChallengeEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Devices.Domain.Entities.Challenge",
@@ -27,6 +32,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 afterSaveBehavior: PropertySaveBehavior.Throw,
                 maxLength: 20,
                 unicode: false);
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -36,6 +58,28 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(Challenge).GetProperty("ExpiresAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Challenge).GetField("<ExpiresAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            expiresAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                keyComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                providerValueComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                converter: new ValueConverter<DateTime, DateTime>(
+                    (DateTime v) => v.ToUniversalTime(),
+                    (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime, DateTime>(
+                        (DateTime v) => v.ToUniversalTime(),
+                        (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc))));
+            expiresAt.SetSentinelFromProviderValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
             expiresAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(

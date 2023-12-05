@@ -11,13 +11,16 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
 
     public DateTime CreatedAt { get; set; }
 
+    public int? MaxIdentities { get; set; }
+
     public OAuthClient ToModel()
     {
-        return new OAuthClient(ClientId!, DisplayName!, DefaultTier, CreatedAt);
+        return new OAuthClient(ClientId!, DisplayName!, DefaultTier, CreatedAt, MaxIdentities);
     }
 
     public void UpdateFromModel(OAuthClient client)
     {
         DefaultTier = client.DefaultTier;
+        MaxIdentities = client.MaxIdentities;
     }
 }

@@ -24,6 +24,23 @@
                         <span matListItemTitle>Created At</span>
                         <span matListItemLine>{{ client.createdAt | date }}</span>
                     </mat-list-item>
+                    <mat-list-item class="mat-list-item-edit">
+                        <span matListItemTitle>Max Identities</span>
+                        <span matListItemLine>
+                            <mat-form-field class="form-field form-field-edit">
+                                <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" placeholder="No limit" [disabled]="disabled" />
+                                <button matSuffix mat-icon-button aria-label="Clear" (click)="client.maxIdentities = undefined">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <mat-hint>
+                                    <span>The maximum number of Identities that can be created with this Client.</span>
+                                    <br />
+                                    <span> No Identity limit will be assigned if this field is left blank. </span>
+                                </mat-hint>
+                                <mat-error>You must enter a positive value</mat-error>
+                            </mat-form-field>
+                        </span>
+                    </mat-list-item>
                     <mat-list-item class="auto-height">
                         <span matListItemTitle>Default Tier</span>
                         <span matListItemLine>
@@ -58,6 +75,16 @@
                             <mat-icon>file_copy</mat-icon>
                         </button>
                         <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>Max Identities</mat-label>
+                        <input matInput [(ngModel)]="client.maxIdentities" type="number" min="0" [disabled]="disabled || editMode" />
+                        <mat-hint>
+                            <span>The maximum number of Identities that can be created with this Client.</span>
+                            <br />
+                            <span> No Identity limit will be assigned if this field is left blank. </span>
+                        </mat-hint>
+                        <mat-error>You must enter a positive value</mat-error>
                     </mat-form-field>
                     <div *ngIf="displayClientSecretWarning" class="client-secret-warning-container">
                         <span class="client-secret-warning">Please save the Client Secret since it will be unaccessible after exiting.</span>
