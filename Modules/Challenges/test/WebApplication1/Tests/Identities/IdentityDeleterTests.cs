@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Challenges.Application.Identities;
-using Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity;
+using Backbone.Modules.Challenges.Application.Identities.Commands.DeleteChallengeByIdentity;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using MediatR;
@@ -20,6 +20,6 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<DeleteIdentityCommand>.That.Matches(it => it.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mediator.Send(A<DeleteChallengeByIdentityCommand>.That.Matches(it => it.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Challenges.Application.Identities.Commands.DeleteIdentity;
+namespace Backbone.Modules.Challenges.Application.Identities.Commands.DeleteChallengeByIdentity;
 
-public class Handler : IRequestHandler<DeleteIdentityCommand>
+public class Handler : IRequestHandler<DeleteChallengeByIdentityCommand>
 {
     private readonly IChallengesRepository _challengesRepository;
 
@@ -12,7 +12,7 @@ public class Handler : IRequestHandler<DeleteIdentityCommand>
         _challengesRepository = challengesRepository;
     }
 
-    public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteChallengeByIdentityCommand request, CancellationToken cancellationToken)
     {
         await _challengesRepository.DeleteChallengesByIdentityAddress(request.IdentityAddress, cancellationToken);
     }

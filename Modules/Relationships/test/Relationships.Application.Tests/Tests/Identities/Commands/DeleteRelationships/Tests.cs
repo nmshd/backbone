@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationships;
+﻿using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationshipsByIdentity;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Queries;
 using Backbone.Modules.Relationships.Domain.Entities;
@@ -7,7 +7,7 @@ using FakeItEasy;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities.Commands.DeleteRelationships;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities.Commands.DeleteRelationshipsByIdentity;
 public class Tests
 {
     [Fact]
@@ -18,7 +18,7 @@ public class Tests
         var templateRelationshipsRepository = A.Fake<IRelationshipTemplatesRepository>();
 
         var handler = new Handler(relationshipsRepository, templateRelationshipsRepository);
-        var request = new DeleteRelationshipsCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
+        var request = new DeleteRelationshipsByIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -50,7 +50,7 @@ public class Tests
         var templateRelationshipsRepository = A.Dummy<IRelationshipTemplatesRepository>();
 
         var handler = new Handler(relationshipsRepository, templateRelationshipsRepository);
-        var request = new DeleteRelationshipsCommand(identityAddress);
+        var request = new DeleteRelationshipsByIdentityCommand(identityAddress);
 
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -75,7 +75,7 @@ public class Tests
         var relationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
         var handler = new Handler(relationshipsRepository, relationshipTemplatesRepository);
-        var request = new DeleteRelationshipsCommand(identityAddress);
+        var request = new DeleteRelationshipsByIdentityCommand(identityAddress);
 
         // Act
         await handler.Handle(request, CancellationToken.None);
