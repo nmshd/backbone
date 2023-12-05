@@ -6,6 +6,7 @@ using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
 
@@ -13,16 +14,16 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
 
 public class RelationshipTests
 {
-    private static readonly IdentityAddress FROM_IDENTITY = IdentityAddress.Create(new byte[] { 1, 1, 1 }, "id1");
+    private static readonly IdentityAddress FROM_IDENTITY = IdentityAddress.Create([1, 1, 1], "id1");
     private static readonly DeviceId FROM_DEVICE = DeviceId.New();
 
-    private static readonly IdentityAddress TO_IDENTITY = IdentityAddress.Create(new byte[] { 2, 2, 2 }, "id1");
+    private static readonly IdentityAddress TO_IDENTITY = IdentityAddress.Create([2, 2, 2], "id1");
     private static readonly DeviceId TO_DEVICE = DeviceId.New();
 
-    private static readonly byte[] REQUEST_CONTENT = { 1, 1, 1 };
-    private static readonly byte[] RESPONSE_CONTENT = { 2, 2, 2 };
+    private static readonly byte[] REQUEST_CONTENT = [1, 1, 1];
+    private static readonly byte[] RESPONSE_CONTENT = [2, 2, 2];
 
-    private static readonly RelationshipTemplate TEMPLATE = new(TO_IDENTITY, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), new byte[] { 0 });
+    private static readonly RelationshipTemplate TEMPLATE = new(TO_IDENTITY, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
 
     #region Creation
 
@@ -415,6 +416,20 @@ public class RelationshipTests
         return relationship;
     }
 
+    private static Relationship CreateActiveRelationship(IdentityAddress from = null, IdentityAddress to = null)
+    {
+        RelationshipTemplate template = null;
+        if(to is not null)
+        {
+            template = new(to, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
+        }
+
+        var relationship = new Relationship(template ?? TEMPLATE, from ?? FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
+        var change = relationship.Changes.GetOpenCreation();
+        relationship.AcceptChange(change.Id, to ?? TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        return relationship;
+    }
+
     private static Relationship CreateRelationshipWithOpenTermination()
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
@@ -423,6 +438,73 @@ public class RelationshipTests
 
         relationship.RequestTermination(FROM_IDENTITY, FROM_DEVICE);
         return relationship;
+    }
+
+    #endregion
+
+    #region Selectors
+
+    [Fact]
+    public void WithParticipant_From()
+    {
+        var id1 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id2 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id3 = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationships = new List<Relationship>
+        {
+            CreateActiveRelationship(id1),
+            CreateActiveRelationship(id1),
+            CreateActiveRelationship(id2),
+            CreateActiveRelationship(id3)
+        };
+
+        var filter = Relationship.HasParticipant(id1);
+        var filteredList = relationships.AsQueryable().Where(filter).ToList();
+
+        filteredList.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void WithParticipant_To()
+    {
+        var id1 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id2 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id3 = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationships = new List<Relationship>
+        {
+            CreateActiveRelationship(null, id1),
+            CreateActiveRelationship(null, id1),
+            CreateActiveRelationship(null, id2),
+            CreateActiveRelationship(null, id3)
+        };
+
+        var filter = Relationship.HasParticipant(id1);
+        var filteredList = relationships.AsQueryable().Where(filter).ToList();
+
+        filteredList.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void WithParticipant_Mixed()
+    {
+        var id1 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id2 = TestDataGenerator.CreateRandomIdentityAddress();
+        var id3 = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationships = new List<Relationship>
+        {
+            CreateActiveRelationship(id1, id2),
+            CreateActiveRelationship(id2, id3),
+            CreateActiveRelationship(id3, id1),
+            CreateActiveRelationship(id3, id2)
+        };
+
+        var filter = Relationship.HasParticipant(id1);
+        var filteredList = relationships.AsQueryable().Where(filter).ToList();
+
+        filteredList.Should().HaveCount(2);
     }
 
     #endregion
