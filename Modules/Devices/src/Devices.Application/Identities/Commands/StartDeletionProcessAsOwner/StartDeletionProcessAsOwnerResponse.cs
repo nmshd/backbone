@@ -1,10 +1,11 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
-public class StartDeletionProcessResponse
+namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
+
+public class StartDeletionProcessAsOwnerResponse
 {
-    public StartDeletionProcessResponse(IdentityDeletionProcess deletionProcess)
+    public StartDeletionProcessAsOwnerResponse(IdentityDeletionProcess deletionProcess)
     {
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
