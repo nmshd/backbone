@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Challenges.Application.AutoMapper;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
+using Backbone.Modules.Challenges.Application.Identities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,8 @@ public static class ApplicationServiceCollectionExtensions
         );
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(CreateChallengeCommandValidator).Assembly);
+
+        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 }
 

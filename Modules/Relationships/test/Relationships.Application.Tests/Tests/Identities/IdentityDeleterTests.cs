@@ -11,7 +11,7 @@ public class IdentityDeleterTests
     public async Task Deleter_calls_correct_command()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomAddress();
+        var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
         var mediator = A.Fake<IMediator>();
         var deleter = new IdentityDeleter(mediator);
 
