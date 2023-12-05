@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
@@ -139,9 +140,9 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.WithIdIn(relationshipIds).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Relationship>> FindRelationshipsWithIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        return await _relationships.WithParticipant(identityAddress).ToListAsync(cancellationToken);
+        await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }
 

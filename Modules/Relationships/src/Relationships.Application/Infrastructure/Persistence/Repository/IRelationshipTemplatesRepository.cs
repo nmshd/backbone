@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Entities;
@@ -11,6 +12,6 @@ public interface IRelationshipTemplatesRepository
     Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
-    Task<IEnumerable<RelationshipTemplate>> FindTemplatesCreatedByIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken);
     Task Delete(IEnumerable<RelationshipTemplateId> templateIds, CancellationToken cancellationToken);
+    Task DeleteTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
 }

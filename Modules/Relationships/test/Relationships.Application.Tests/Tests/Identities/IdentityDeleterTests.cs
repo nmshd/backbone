@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Application.Identities;
-using Backbone.Modules.Relationships.Application.Identities.Commands.DeleteRelationshipsByIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipTemplatesByIdentity;
 using FakeItEasy;
 using MediatR;
 using Xunit;
@@ -19,6 +19,6 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<DeleteRelationshipsByIdentityCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mediator.Send(A<DeleteRelationshipTemplatesByIdentityCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 }

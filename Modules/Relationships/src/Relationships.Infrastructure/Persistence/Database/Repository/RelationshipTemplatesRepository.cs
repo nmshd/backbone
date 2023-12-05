@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -33,6 +34,11 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _templates.WithIdIn(templateIds).ExecuteDeleteAsync(cancellationToken);
     }
 
+    public async Task DeleteTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
@@ -42,11 +48,6 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
                     .FirstWithId(id, cancellationToken);
 
         return template;
-    }
-
-    public async Task<IEnumerable<RelationshipTemplate>> FindTemplatesCreatedByIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken)
-    {
-        return await _templates.CreatedBy(identityAddress).ToListAsync(cancellationToken);
     }
 
     public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)

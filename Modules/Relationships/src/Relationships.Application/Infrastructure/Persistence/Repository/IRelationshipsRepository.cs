@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Common;
@@ -17,6 +18,6 @@ public interface IRelationshipsRepository
     Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
     Task Delete(IEnumerable<RelationshipId> relationshipIds, CancellationToken cancellationToken);
-    Task<IEnumerable<Relationship>> FindRelationshipsWithIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken);
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
+    Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
 }

@@ -1,13 +1,8 @@
-﻿using MediatR;
+﻿using Backbone.BuildingBlocks.Application.Identities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Challenges.Application.Identities.Commands.DeleteChallengeByIdentity;
 
-public class DeleteChallengeByIdentityCommand : IRequest
+public class DeleteChallengeByIdentityCommand(IdentityAddress identityAddress) : RequestWithIdentityAddress(identityAddress)
 {
-    public string IdentityAddress { get; private set; }
-
-    public DeleteChallengeByIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
 }

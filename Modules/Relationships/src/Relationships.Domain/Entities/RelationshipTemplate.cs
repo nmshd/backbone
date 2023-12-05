@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
@@ -59,5 +60,10 @@ public class RelationshipTemplate
             throw new Exception("Cannot change the content of a relationship template.");
 
         Content = content;
+    }
+
+    public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return r => r.CreatedBy == identityAddress;
     }
 }
