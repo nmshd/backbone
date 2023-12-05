@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteIdentity;
+﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesByIdentity;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
