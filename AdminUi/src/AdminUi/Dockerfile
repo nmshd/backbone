@@ -36,7 +36,9 @@ FROM build AS publish
 RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "AdminUi.csproj"
 
 FROM base AS final
-ENV ASPNETCORE_PORT=80
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:80
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.AdminUi.dll"]
