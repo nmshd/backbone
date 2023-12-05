@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Challenges.Application.Identities.Commands.DeleteChallengeByIdentity;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengeByIdentity;
 
 public class Handler : IRequestHandler<DeleteChallengeByIdentityCommand>
 {

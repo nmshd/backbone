@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Challenges.Application.Identities;
-using Backbone.Modules.Challenges.Application.Identities.Commands.DeleteChallengeByIdentity;
+﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengeByIdentity;
+using Backbone.Modules.Challenges.Application.Identities;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using MediatR;
