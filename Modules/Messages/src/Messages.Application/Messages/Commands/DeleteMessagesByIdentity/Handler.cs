@@ -3,19 +3,13 @@ using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repositor
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Messages.Application.Identities.Commands.DeleteMessagesByIdentity;
+namespace Backbone.Modules.Messages.Application.Messages.Commands.DeleteMessagesByIdentity;
 
-public class Handler : IRequestHandler<DeleteMessagesByIdentityCommand>
+public class Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions) : IRequestHandler<DeleteMessagesByIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
-    private readonly IMessagesRepository _messagesRepository;
-    private readonly IOptions<ApplicationOptions> _applicationOptions;
-
-    public Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions)
-    {
-        _messagesRepository = messagesRepository;
-        _applicationOptions = applicationOptions;
-    }
+    private readonly IMessagesRepository _messagesRepository = messagesRepository;
+    private readonly IOptions<ApplicationOptions> _applicationOptions = applicationOptions;
 
     public async Task Handle(DeleteMessagesByIdentityCommand request, CancellationToken cancellationToken)
     {
