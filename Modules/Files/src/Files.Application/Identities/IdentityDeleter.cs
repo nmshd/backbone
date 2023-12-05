@@ -10,6 +10,6 @@ public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteFilesByIdentityCommand(identityAddress));    
+        await _mediator.Send(new DeleteFilesByIdentityCommand(identityAddress));
     }
 }
