@@ -16,10 +16,10 @@ public class HandlerTests
         var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await handler.Handle(new DeleteIdentityCommand(identityAddress), CancellationToken.None);
+        await handler.Handle(new DeleteFilesByIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => filesRepository.DeleteFilesByCreator(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => filesRepository.DeleteFilesByIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IFilesRepository filesRepository = null)
