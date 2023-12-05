@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsUserTests : IDisposable
+public class StartDeletionProcessAsOwnerTests : IDisposable
 {
     [Fact]
     public void Start_deletion_process()
@@ -22,7 +22,7 @@ public class StartDeletionProcessAsUserTests : IDisposable
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcess(activeDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
@@ -47,10 +47,10 @@ public class StartDeletionProcessAsUserTests : IDisposable
         var activeIdentity = CreateIdentity();
         var activeDevice = DeviceId.Parse("DVC");
 
-        activeIdentity.StartDeletionProcess(activeDevice);
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcess(activeDevice);
+        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");

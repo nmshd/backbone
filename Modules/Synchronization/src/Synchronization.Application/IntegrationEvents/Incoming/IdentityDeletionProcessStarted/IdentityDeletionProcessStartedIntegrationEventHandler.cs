@@ -22,6 +22,7 @@ public class IdentityDeletionProcessStartedIntegrationEventHandler : IIntegratio
 
     public async Task Handle(IdentityDeletionProcessStartedIntegrationEvent integrationEvent)
     {
+#pragma warning disable
         var payload = new { DeletionProcessId = integrationEvent.DeletionProcessId };
         try
         {

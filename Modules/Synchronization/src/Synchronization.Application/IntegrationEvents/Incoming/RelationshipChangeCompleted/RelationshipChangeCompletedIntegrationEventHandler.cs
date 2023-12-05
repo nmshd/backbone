@@ -26,6 +26,7 @@ public class RelationshipChangeCompletedIntegrationEventHandler : IIntegrationEv
 
     private async Task CreateExternalEvent(RelationshipChangeCompletedIntegrationEvent integrationEvent)
     {
+#pragma warning disable
         var payload = new { RelationshipId = integrationEvent.RelationshipId, ChangeId = integrationEvent.ChangeId };
         try
         {

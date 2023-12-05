@@ -29,6 +29,7 @@ public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<Me
     {
         foreach (var recipient in integrationEvent.Recipients)
         {
+#pragma warning disable
             var payload = new { Id = integrationEvent.Id };
             try
             {

@@ -64,11 +64,11 @@ public class Identity
         return deletionProcess;
     }
 
-    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = IdentityDeletionProcess.StartAsUser(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;

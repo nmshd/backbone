@@ -20,7 +20,7 @@ public class IdentityDeletionProcess
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
     }
 
-    public static IdentityDeletionProcess StartAsUser(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
     {
         return new IdentityDeletionProcess(createdBy, createdByDeviceId);
     }
