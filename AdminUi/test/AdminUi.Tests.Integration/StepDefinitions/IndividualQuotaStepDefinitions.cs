@@ -174,5 +174,8 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         var createIdentityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
         createIdentityResponse.IsSuccessStatusCode.Should().BeTrue();
         _identityAddress = createIdentityResponse.Content.Result!.Address;
+
+        // allow the event queue to trigger the creation of this Identity on the Quotas module
+        Thread.Sleep(2000);
     }
 }
