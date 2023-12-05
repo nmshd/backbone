@@ -11,13 +11,13 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Integratio
 public class IdentityDeletionProcessStartedIntegrationEventHandlerTests
 {
     [Fact]
-    public async Task Sends_notification_after_consuming_integration_event()
+    public async Task Sends_push_notification()
     {
         // Arrange
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var handler = new IdentityDeletionProcessStartedIntegrationEventHandler(mockPushNotificationSender);
         var identity = TestDataGenerator.CreateIdentity();
-        var identityDeletionProcessStartedIntegrationEvent = new IdentityDeletionProcessStartedIntegrationEvent(identity, IdentityDeletionProcess.CreateDeletionProcessAsSupport(identity.Address));
+        var identityDeletionProcessStartedIntegrationEvent = new IdentityDeletionProcessStartedIntegrationEvent(identity, IdentityDeletionProcess.StartAsSupport(identity.Address));
 
         // Act
         await handler.Handle(identityDeletionProcessStartedIntegrationEvent);

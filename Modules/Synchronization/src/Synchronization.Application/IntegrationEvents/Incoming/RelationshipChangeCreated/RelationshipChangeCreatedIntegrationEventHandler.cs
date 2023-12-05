@@ -26,7 +26,7 @@ public class RelationshipChangeCreatedIntegrationEventHandler : IIntegrationEven
 
     private async Task CreateExternalEvent(RelationshipChangeCreatedIntegrationEvent integrationEvent)
     {
-        var payload = new { integrationEvent.RelationshipId, integrationEvent.ChangeId };
+        var payload = new { RelationshipId = integrationEvent.RelationshipId, ChangeId = integrationEvent.ChangeId };
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(integrationEvent.ChangeRecipient, ExternalEventType.RelationshipChangeCreated, payload);

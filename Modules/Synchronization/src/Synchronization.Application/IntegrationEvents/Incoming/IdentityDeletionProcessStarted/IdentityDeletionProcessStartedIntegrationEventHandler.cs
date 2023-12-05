@@ -22,7 +22,7 @@ public class IdentityDeletionProcessStartedIntegrationEventHandler : IIntegratio
 
     public async Task Handle(IdentityDeletionProcessStartedIntegrationEvent integrationEvent)
     {
-        var payload = new { integrationEvent.DeletionProcessId };
+        var payload = new { DeletionProcessId = integrationEvent.DeletionProcessId };
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(integrationEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);

@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
-using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsUser;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +62,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new StartDeletionProcessCommand(), cancellationToken);
+        var response = await _mediator.Send(new StartDeletionProcessAsUserCommand(), cancellationToken);
         return Created("", response);
     }
 }

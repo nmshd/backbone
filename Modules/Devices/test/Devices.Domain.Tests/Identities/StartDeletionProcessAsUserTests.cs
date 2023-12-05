@@ -9,10 +9,10 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessTests : IDisposable
+public class StartDeletionProcessAsUserTests : IDisposable
 {
     [Fact]
-    public void Start_deletion_process_as_owner()
+    public void Start_deletion_process()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -41,7 +41,7 @@ public class StartDeletionProcessTests : IDisposable
     }
 
     [Fact]
-    public void Only_one_active_deletion_process_is_allowed_when_started_by_the_owner()
+    public void Only_one_active_deletion_process_is_allowed_when_started()
     {
         // Arrange
         var activeIdentity = CreateIdentity();

@@ -15,7 +15,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.S
 public class HandlerTests
 {
     [Fact]
-    public async Task Happy_path_as_support()
+    public async Task Happy_path()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();

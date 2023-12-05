@@ -13,7 +13,7 @@ namespace Backbone.Modules.Synchronization.Application.Tests.Tests.IntegrationEv
 public class IdentityDeletionProcessStartedIntegrationEventHandlerTests
 {
     [Fact]
-    public async Task Creates_external_events_after_consuming_integration_event()
+    public async Task Creates_an_external_event()
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();

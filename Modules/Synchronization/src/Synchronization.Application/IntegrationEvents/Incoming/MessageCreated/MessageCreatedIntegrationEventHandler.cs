@@ -29,7 +29,7 @@ public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<Me
     {
         foreach (var recipient in integrationEvent.Recipients)
         {
-            var payload = new { integrationEvent.Id };
+            var payload = new { Id = integrationEvent.Id };
             try
             {
                 var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(recipient), ExternalEventType.MessageReceived, payload);

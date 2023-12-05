@@ -1,8 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsUser;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
@@ -11,12 +10,12 @@ using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcess;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcessAsUser;
 
 public class HandlerTests
 {
     [Fact]
-    public async Task Happy_path_as_owner()
+    public async Task Happy_path()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
@@ -33,7 +32,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
-        var command = new StartDeletionProcessCommand();
+        var command = new StartDeletionProcessAsUserCommand();
         var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
@@ -69,11 +68,11 @@ public class HandlerTests
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var command = new StartDeletionProcessCommand();
+        var command = new StartDeletionProcessAsUserCommand();
         var acting = async () => await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
+        acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsUserResponse>().Which.Message.Should().Contain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)

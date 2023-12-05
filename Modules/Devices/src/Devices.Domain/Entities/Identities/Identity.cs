@@ -58,7 +58,7 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsSupport(Address);
+        var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
         _deletionProcesses.Add(deletionProcess);
 
         return deletionProcess;
@@ -68,7 +68,7 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = IdentityDeletionProcess.CreateDeletionProcessAsUser(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.StartAsUser(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;

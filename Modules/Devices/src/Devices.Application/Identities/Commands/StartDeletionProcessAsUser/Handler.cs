@@ -1,14 +1,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.Entities;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsUser;
 
-public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletionProcessResponse>
+public class Handler : IRequestHandler<StartDeletionProcessAsUserCommand, StartDeletionProcessAsUserResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -19,7 +17,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
         _userContext = userContext;
     }
 
-    public async Task<StartDeletionProcessResponse> Handle(StartDeletionProcessCommand request, CancellationToken cancellationToken)
+    public async Task<StartDeletionProcessAsUserResponse> Handle(StartDeletionProcessAsUserCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -27,6 +25,6 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        return new StartDeletionProcessResponse(deletionProcess);
+        return new StartDeletionProcessAsUserResponse(deletionProcess);
     }
 }

@@ -15,12 +15,12 @@ public class IdentityDeletionProcess
     {
     }
 
-    public static IdentityDeletionProcess CreateDeletionProcessAsSupport(IdentityAddress createdBy)
+    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
     }
 
-    public static IdentityDeletionProcess CreateDeletionProcessAsUser(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    public static IdentityDeletionProcess StartAsUser(IdentityAddress createdBy, DeviceId createdByDeviceId)
     {
         return new IdentityDeletionProcess(createdBy, createdByDeviceId);
     }
