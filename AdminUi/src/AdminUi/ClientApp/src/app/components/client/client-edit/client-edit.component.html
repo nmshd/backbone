@@ -32,7 +32,11 @@
                                 <button matSuffix mat-icon-button aria-label="Clear" (click)="client.maxIdentities = undefined">
                                     <mat-icon>close</mat-icon>
                                 </button>
-                                <mat-hint>The maximum number of Identities that can be created with this Client.</mat-hint>
+                                <mat-hint>
+                                    <span>The maximum number of Identities that can be created with this Client.</span>
+                                    <br />
+                                    <span> No Identity limit will be assigned if this field is left blank. </span>
+                                </mat-hint>
                                 <mat-error>You must enter a positive value</mat-error>
                             </mat-form-field>
                         </span>
