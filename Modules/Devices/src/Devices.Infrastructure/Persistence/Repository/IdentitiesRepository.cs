@@ -52,6 +52,14 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
+    public async Task<IEnumerable<Identity>> FindAllWithActiveDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    {
+        return await(track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(i => i.DeletionProcesses.Any(d => d.IsActive()))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task AddUser(ApplicationUser user, string password)
     {
         var createUserResult = await _userManager.CreateAsync(user, password);
