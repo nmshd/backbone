@@ -33,6 +33,19 @@ WORKDIR "/src/AdminUi/src/AdminUi"
 RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/build --no-restore "AdminUi.csproj"
 
 FROM build AS publish
+# upgrade all packages
+RUN apt update && apt upgrade --yes
+
+# install nodejs
+RUN apt install -y ca-certificates gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt update && \
+    apt install --yes nodejs
+
+# install angular cli
+RUN npm i -g @angular/cli
 RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "AdminUi.csproj"
 
 FROM base AS final
