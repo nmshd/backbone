@@ -14,6 +14,7 @@ public interface IIdentitiesRepository
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
 #nullable disable
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
+    Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     #endregion
 
     #region Users
