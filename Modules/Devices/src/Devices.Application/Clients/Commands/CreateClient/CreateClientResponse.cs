@@ -11,6 +11,7 @@ public class CreateClientResponse
         ClientSecret = clientSecret;
         DefaultTier = client.DefaultTier;
         CreatedAt = client.CreatedAt;
+        MaxIdentities = client.MaxIdentities;
     }
 
     public string ClientId { get; set; }
@@ -18,4 +19,5 @@ public class CreateClientResponse
     public string ClientSecret { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int? MaxIdentities { get; set; }
 }

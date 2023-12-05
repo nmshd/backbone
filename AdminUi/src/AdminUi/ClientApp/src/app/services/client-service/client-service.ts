@@ -38,7 +38,7 @@ export class ClientService {
     }
 
     public updateClient(clientId: string, request: UpdateClientRequest): Observable<HttpResponseEnvelope<Client>> {
-        return this.http.patch<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
+        return this.http.put<HttpResponseEnvelope<Client>>(`${this.apiUrl}/${clientId}`, request);
     }
 }
 
@@ -47,6 +47,7 @@ export interface ClientOverview {
     displayName: string;
     defaultTier: TierDTO;
     createdAt: Date;
+    maxIdentities?: number;
     numberOfIdentities: number;
 }
 
@@ -56,6 +57,7 @@ export interface Client {
     clientSecret?: string;
     defaultTier: string;
     createdAt: Date;
+    maxIdentities?: number;
 }
 
 export interface ChangeClientSecretRequest {
@@ -64,6 +66,7 @@ export interface ChangeClientSecretRequest {
 
 export interface UpdateClientRequest {
     defaultTier: string;
+    maxIdentities?: number;
 }
 
 export interface ClientOverviewFilter {
