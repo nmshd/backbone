@@ -1,4 +1,6 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -49,6 +51,43 @@ public class HandlerTests
             unOnboardedDevice,
             A<CancellationToken>._
         )).MustHaveHappenedOnceExactly();
+    }
+
+
+
+    [Fact]
+    public void Deleting_a_device_not_owned_by_the_current_identity_is_not_possible()
+    {
+        // Arrange
+        var identity1 = TestDataGenerator.CreateIdentity();
+        var onboardedDevice1 = CreateOnboardedDevice(identity1);
+
+        var identity2 = TestDataGenerator.CreateIdentity();
+        var onboardedDevice2 = CreateOnboardedDevice(identity2);
+        var unOnboardedDevice = CreateUnOnboardedDevice(identity2);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(onboardedDevice1.Id, A<CancellationToken>._, A<bool>._)).Returns(onboardedDevice1);
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(onboardedDevice2.Id, A<CancellationToken>._, A<bool>._)).Returns(onboardedDevice2);
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(unOnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(unOnboardedDevice);
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity1.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(onboardedDevice1.Id);
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+
+        var deleteDeviceCommand = new DeleteDeviceCommand()
+        {
+            DeviceId = unOnboardedDevice.Id
+        };
+
+        // Act
+        var action = async () => await handler.Handle(deleteDeviceCommand, CancellationToken.None);
+
+        // Assert
+        var exception = action.Should().ThrowAsync<NotFoundException>();
+        exception.WithMessage(nameof(unOnboardedDevice));
     }
 
     #region helpers
