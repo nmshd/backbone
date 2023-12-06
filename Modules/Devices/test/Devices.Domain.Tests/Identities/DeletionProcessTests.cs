@@ -16,7 +16,7 @@ public class DeletionProcessTests : IDisposable
         var currentDateTime = DateTime.Parse("2000-01-01 06:00:00");
         SystemTime.Set(currentDateTime);
         var activeIdentity = CreateIdentity();
-        activeIdentity.StartDeletionProcess(new Device(activeIdentity).Id);
+        activeIdentity.StartDeletionProcessAsOwner(new Device(activeIdentity).Id);
 
         // Act
         activeIdentity.DeletionStarted();

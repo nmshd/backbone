@@ -21,7 +21,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository();
 
         var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcess(new Device(anIdentity).Id);
+        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(30); // Future
 
         var handler = CreateHandler(identitiesRepository);
@@ -42,7 +42,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository();
 
         var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcess(new Device(anIdentity).Id);
+        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
@@ -64,11 +64,11 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository();
 
         var anIdentity = _identities.First();
-        // anIdentity.StartDeletionProcess(new Device(anIdentity).Id); // not called
+        // anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id); // not called
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var anotherIdentity = _identities.Second();
-        anotherIdentity.StartDeletionProcess(new Device(anIdentity).Id); // not called
+        anotherIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
@@ -90,11 +90,11 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository();
 
         var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcess(new Device(anIdentity).Id);
+        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var anotherIdentity = _identities.Second();
-        anotherIdentity.StartDeletionProcess(new Device(anotherIdentity).Id);
+        anotherIdentity.StartDeletionProcessAsOwner(new Device(anotherIdentity).Id);
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-2); // Past
 
         var pnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();

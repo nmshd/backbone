@@ -103,5 +103,8 @@ public enum IdentityStatus
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Deleting = 2,
+    Cancellled = 3,
+    Completed = 4
 }
