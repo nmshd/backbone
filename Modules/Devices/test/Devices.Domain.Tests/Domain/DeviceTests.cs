@@ -11,7 +11,7 @@ public class DeviceTests
     public void Device_can_be_deleted()
     {
         // Arrange
-        var identity = UnitTestTools.Data.TestDataGenerator.CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity);
 
         device.User = new ApplicationUser(identity, device.Id);
@@ -28,7 +28,7 @@ public class DeviceTests
     public void Test_deleting_an_onboarded_device()
     {
         // Arrange
-        var identity = UnitTestTools.Data.TestDataGenerator.CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity);
 
         device.User = new ApplicationUser(identity, device.Id);
@@ -45,7 +45,7 @@ public class DeviceTests
     public void Test_deleting_a_device_not_owned_by_current_identity()
     {
         // Arrange
-        var identity = UnitTestTools.Data.TestDataGenerator.CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity);
 
         device.User = new ApplicationUser(identity, device.Id);
