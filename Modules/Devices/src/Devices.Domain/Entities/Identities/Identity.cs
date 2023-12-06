@@ -54,11 +54,21 @@ public class Identity
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcessAsSupport()
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
+        _deletionProcesses.Add(deletionProcess);
+
+        return deletionProcess;
+    }
+
+    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
+    {
+        EnsureNoActiveProcessExists();
+
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
@@ -95,5 +105,6 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    Approved
+    WaitingForApproval = 0,
+    Approved = 1
 }

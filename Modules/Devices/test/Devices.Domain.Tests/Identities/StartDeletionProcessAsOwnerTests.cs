@@ -9,10 +9,10 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessTests : IDisposable
+public class StartDeletionProcessAsOwnerTests : IDisposable
 {
     [Fact]
-    public void Start_deletion_process_as_owner()
+    public void Start_deletion_process()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -22,7 +22,7 @@ public class StartDeletionProcessTests : IDisposable
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcess(activeDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
@@ -41,16 +41,16 @@ public class StartDeletionProcessTests : IDisposable
     }
 
     [Fact]
-    public void Only_one_active_deletion_process_is_allowed_when_started_by_the_owner()
+    public void Only_one_active_deletion_process_is_allowed_when_started()
     {
         // Arrange
         var activeIdentity = CreateIdentity();
         var activeDevice = DeviceId.Parse("DVC");
 
-        activeIdentity.StartDeletionProcess(activeDevice);
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcess(activeDevice);
+        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");

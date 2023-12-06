@@ -15,7 +15,29 @@ public class IdentityDeletionProcess
     {
     }
 
-    public IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
+    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
+    {
+        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
+    }
+
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
+    {
+        Id = IdentityDeletionProcessId.Generate();
+        CreatedAt = SystemTime.UtcNow;
+        Status = status;
+
+        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
+        {
+            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)
+        };
+    }
+
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
         CreatedAt = SystemTime.UtcNow;
@@ -53,7 +75,7 @@ public class IdentityDeletionProcess
 
     public bool IsActive()
     {
-        return Status is DeletionProcessStatus.Approved;
+        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
     }
 
     public void GracePeriodReminder1Sent(IdentityAddress address)
