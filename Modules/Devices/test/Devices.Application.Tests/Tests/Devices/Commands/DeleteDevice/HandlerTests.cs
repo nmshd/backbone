@@ -43,13 +43,15 @@ public class HandlerTests
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
         unOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
-        unOnboardedDevice.DeletedByDevice.Should().Be(unOnboardedDevice.Id);
+        unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
             unOnboardedDevice,
             A<CancellationToken>._
         )).MustHaveHappenedOnceExactly();
     }
+
+    #region helpers
 
     private static Device CreateUnOnboardedDevice(Identity identity)
     {
@@ -74,4 +76,6 @@ public class HandlerTests
     {
         return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());
     }
+
+    #endregion
 }
