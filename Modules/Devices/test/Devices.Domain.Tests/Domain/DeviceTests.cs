@@ -76,4 +76,21 @@ public class DeviceTests
         var domainException = action.Should().Throw<DomainException>().Which;
         domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
+
+    [Fact]
+    public void Deleting_a_device_by_itself_is_not_possible()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+
+        device.User = new ApplicationUser(identity, device.Id);
+
+        // Act
+        var action = () => device.MarkAsDeleted(device.Id);
+
+        // Assert
+        var domainException = action.Should().Throw<DomainException>().Which;
+        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
+    }
 }
