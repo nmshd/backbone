@@ -10,6 +10,7 @@ public class ClientDTO : IHaveCustomMapping
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int? MaxIdentities { get; set; }
 
     public void CreateMappings(Profile configuration)
     {
