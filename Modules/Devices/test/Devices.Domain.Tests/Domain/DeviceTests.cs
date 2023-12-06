@@ -5,8 +5,26 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
+
 public class DeviceTests
 {
+    [Fact]
+    public void Device_is_onboarded()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+
+        device.User = new ApplicationUser(identity, device.Id);
+        device.User.LoginOccurred();
+
+        // Act
+        var isOnboarded = device.IsOnboarded;
+
+        // Assert
+        isOnboarded.Should().BeTrue();
+    }
+
     [Fact]
     public void Device_can_be_deleted()
     {
@@ -25,7 +43,7 @@ public class DeviceTests
     }
 
     [Fact]
-    public void Test_deleting_an_onboarded_device()
+    public void Deleting_an_onboarded_device_is_not_possible()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
@@ -38,11 +56,12 @@ public class DeviceTests
         var action = () => device.MarkAsDeleted(device.Id);
 
         // Assert
-        action.Should().Throw<DomainException>().WithMessage("The device cannot be deleted because it is already onboarded.");
+        var domainException = action.Should().Throw<DomainException>().Which;
+        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
     [Fact]
-    public void Test_deleting_a_device_not_owned_by_current_identity()
+    public void Deleting_a_device_not_owned_by_the_current_identity_is_not_possible()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
@@ -54,6 +73,7 @@ public class DeviceTests
         var action = () => device.MarkAsDeleted(DeviceId.New());
 
         // Assert
-        action.Should().Throw<DomainException>().WithMessage("The device cannot be deleted because it is not owned by current identity.");
+        var domainException = action.Should().Throw<DomainException>().Which;
+        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
 }
