@@ -1,10 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
@@ -23,18 +21,19 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
-        var device = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
+        var deviceThatIsDeletingId = _userContext.GetDeviceId();
+        var deviceThatIsDeleting = await _identitiesRepository.GetDeviceById(deviceThatIsDeletingId, cancellationToken, track: true);
 
-        if (device.Identity.Address != _userContext.GetAddress())
-        {
-            throw new NotFoundException(nameof(device));
-        }
+        if (deviceThatIsDeleting.Identity.Address != _userContext.GetAddress())
+            throw new NotFoundException(nameof(deviceThatIsDeleting));
 
-        _logger.LogTrace("Challenge successfully validated.");
+        var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
 
-        device.MarkAsDeleted(request.DeviceId);
+        if (deviceThatIsBeingDeleted.Identity.Address != _userContext.GetAddress())
+            throw new NotFoundException(nameof(deviceThatIsBeingDeleted));
 
-        await _identitiesRepository.Update(device, cancellationToken);
+        deviceThatIsBeingDeleted.MarkAsDeleted(deviceThatIsDeletingId);
+        await _identitiesRepository.Update(deviceThatIsBeingDeleted, cancellationToken);
 
         _logger.MarkedDeviceAsDeleted(request.DeviceId);
     }
