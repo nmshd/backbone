@@ -6,9 +6,6 @@ using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-// ReSharper disable InconsistentNaming
-#pragma warning disable IDE1006
-
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
@@ -21,10 +18,9 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse;
     private HttpResponse? _deletionResponse;
 
-    private string? _deviceIdD;
     private string? _deviceIdD1;
     private string? _deviceIdD2;
-    private const string _nonExistentDeviceId = "DVC00000000000000000";
+    private const string NON_EXISTENT_DEVICE_ID = "DVC00000000000000000";
 
     public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
@@ -43,7 +39,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _createIdentityResponse = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
         _createIdentityResponse.Should().NotBeNull();
 
-        _deviceIdD = _createIdentityResponse.Content.Result!.Device.Id;
+        _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
     }
 
     [Given(@"an Identity i with a device d1")]
@@ -88,7 +84,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithDId()
     {
-        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD);
+        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD1);
     }
 
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
@@ -100,7 +96,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithNonExistantId()
     {
-        _deletionResponse = await DeleteUnOnboardedDevice(_nonExistentDeviceId);
+        _deletionResponse = await DeleteUnOnboardedDevice(NON_EXISTENT_DEVICE_ID);
     }
 
 
@@ -119,7 +115,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     public async Task ThenDIsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD).Should().NotBeEmpty();
+        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
     }
 
     [Then(@"d1 is not deleted")]
