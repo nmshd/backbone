@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities;
 using FluentAssertions;
 using Xunit;
@@ -30,7 +29,7 @@ public class DeviceTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        
+
         var onboardedDevice = new Device(identity);
         onboardedDevice.User = new ApplicationUser(identity, onboardedDevice.Id);
         onboardedDevice.User.LoginOccurred();
