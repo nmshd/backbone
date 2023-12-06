@@ -50,10 +50,11 @@ public class Device
     {
         if (IsOnboarded)
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.");
-        else if (Id != deletedByDevice)
+        
+        if (Id != deletedByDevice)
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is not owned by current identity.");
-        else
-            return null;
+        
+        return null;
     }
 
     public void MarkAsDeleted(DeviceId deletedByDevice)
