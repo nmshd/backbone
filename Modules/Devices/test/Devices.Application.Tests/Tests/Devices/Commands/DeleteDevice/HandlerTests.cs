@@ -54,10 +54,7 @@ public class HandlerTests
     private static Device CreateUnOnboardedDevice(Identity identity)
     {
         var unOnboardedDevice = new Device(identity);
-        var unOnboardedDeviceUser = new ApplicationUser(identity, unOnboardedDevice.Id)
-        {
-            LastLoginAt = null
-        };
+        var unOnboardedDeviceUser = new ApplicationUser(identity, unOnboardedDevice.Id);
         unOnboardedDevice.User = unOnboardedDeviceUser;
 
         return unOnboardedDevice;
@@ -66,67 +63,9 @@ public class HandlerTests
     private static Device CreateOnboardedDevice(Identity identity)
     {
         var onboardedDevice = new Device(identity);
-        var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id)
-        {
-            LastLoginAt = SystemTime.UtcNow
-        };
+        var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id);
         onboardedDevice.User = onboardedDeviceUser;
-
-        return onboardedDevice;
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext fakeUserContext)
-    {
-        return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());
-    }
-}
-
-public class IdentityWithOnboardedAndUnonboardedDevicesSetup1
-{
-    public readonly Identity Identity;
-    public readonly Device UnOnboardedDevice;
-    public readonly Device OnboardedDevice;
-    public readonly IIdentitiesRepository MockIdentitiesRepository;
-    public readonly IUserContext FakeUserContext;
-    public readonly Handler Handler;
-
-    public IdentityWithOnboardedAndUnonboardedDevicesSetup1()
-    {
-        Identity = TestDataGenerator.CreateIdentity();
-        UnOnboardedDevice = CreateUnOnboardedDevice(Identity);
-        OnboardedDevice = CreateOnboardedDevice(Identity);
-
-        MockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => MockIdentitiesRepository.GetDeviceById(UnOnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(UnOnboardedDevice);
-        A.CallTo(() => MockIdentitiesRepository.GetDeviceById(OnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(OnboardedDevice);
-
-        FakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => FakeUserContext.GetAddress()).Returns(Identity.Address);
-        A.CallTo(() => FakeUserContext.GetDeviceId()).Returns(OnboardedDevice.Id);
-
-        Handler = CreateHandler(MockIdentitiesRepository, FakeUserContext);
-    }
-
-    private static Device CreateUnOnboardedDevice(Identity identity)
-    {
-        var unOnboardedDevice = new Device(identity);
-        var unOnboardedDeviceUser = new ApplicationUser(identity, unOnboardedDevice.Id)
-        {
-            LastLoginAt = null
-        };
-        unOnboardedDevice.User = unOnboardedDeviceUser;
-
-        return unOnboardedDevice;
-    }
-
-    private static Device CreateOnboardedDevice(Identity identity)
-    {
-        var onboardedDevice = new Device(identity);
-        var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id)
-        {
-            LastLoginAt = SystemTime.UtcNow
-        };
-        onboardedDevice.User = onboardedDeviceUser;
+        onboardedDevice.User.LoginOccurred();
 
         return onboardedDevice;
     }
