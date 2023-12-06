@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Quotas.Application.AutoMapper;
+using Backbone.Modules.Quotas.Application.Identities;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain;
@@ -24,6 +26,8 @@ public static class IServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         services.AddMetricCalculators();
+
+        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 
     private static void AddEventHandlers(this IServiceCollection services)

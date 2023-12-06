@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Tokens.Application.AutoMapper;
+using Backbone.Modules.Tokens.Application.Identities;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Backbone.Modules.Tokens.Application.Identities;
 
 namespace Backbone.Modules.Tokens.Application.Extensions;
 

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using System.Linq.Expressions;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
@@ -11,4 +12,5 @@ public interface IIdentitiesRepository
     Task<Identity> Find(string address, CancellationToken cancellationToken, bool track = false);
     Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false);
     Task Delete(Identity identity, CancellationToken cancellationToken);
+    Task DeleteIdentities(Expression<Func<Identity, bool>> expression, CancellationToken cancellationToken);
 }

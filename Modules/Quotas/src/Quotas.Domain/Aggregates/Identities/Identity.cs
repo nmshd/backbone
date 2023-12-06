@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -152,4 +153,12 @@ public class Identity
 
         await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
     }
+
+    #region Selectors
+    public static Expression<Func<Identity, bool>> HasAddress(string identityAddress)
+    {
+        return i => i.Address == identityAddress;
+    }
+
+    #endregion
 }
