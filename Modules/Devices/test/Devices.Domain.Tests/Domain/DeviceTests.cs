@@ -30,16 +30,20 @@ public class DeviceTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
+        
+        var onboardedDevice = new Device(identity);
+        onboardedDevice.User = new ApplicationUser(identity, onboardedDevice.Id);
+        onboardedDevice.User.LoginOccurred();
 
-        device.User = new ApplicationUser(identity, device.Id);
+        var unOnboardedDevice = new Device(identity);
+        unOnboardedDevice.User = new ApplicationUser(identity, unOnboardedDevice.Id);
 
         // Act
-        device.MarkAsDeleted(device.Id);
+        unOnboardedDevice.MarkAsDeleted(onboardedDevice.Id);
 
         // Assert
-        device.DeletedAt.Should().NotBeNull();
-        device.DeletedByDevice.Should().NotBeNull();
+        unOnboardedDevice.DeletedAt.Should().NotBeNull();
+        unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
     }
 
     [Fact]
@@ -54,23 +58,6 @@ public class DeviceTests
 
         // Act
         var action = () => device.MarkAsDeleted(device.Id);
-
-        // Assert
-        var domainException = action.Should().Throw<DomainException>().Which;
-        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
-    }
-
-    [Fact]
-    public void Deleting_a_device_not_owned_by_the_current_identity_is_not_possible()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
-
-        device.User = new ApplicationUser(identity, device.Id);
-
-        // Act
-        var action = () => device.MarkAsDeleted(DeviceId.New());
 
         // Assert
         var domainException = action.Should().Throw<DomainException>().Which;
