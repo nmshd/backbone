@@ -19,7 +19,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
-        var deletionProcess = activeIdentity.StartDeletionProcess(new Device(activeIdentity).Id);
+        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(new Device(activeIdentity).Id);
 
         // Act
         activeIdentity.DeletionGracePeriodReminder1Sent();
