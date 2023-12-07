@@ -17,7 +17,7 @@ public class IdentityDeletionProcessStartedIntegrationEventHandlerTests
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var handler = new IdentityDeletionProcessStartedIntegrationEventHandler(mockPushNotificationSender);
         var identity = TestDataGenerator.CreateIdentity();
-        var identityDeletionProcessStartedIntegrationEvent = new IdentityDeletionProcessStartedIntegrationEvent(identity, IdentityDeletionProcess.StartAsSupport(identity.Address));
+        var identityDeletionProcessStartedIntegrationEvent = new IdentityDeletionProcessStartedIntegrationEvent(identity.Address, IdentityDeletionProcess.StartAsSupport(identity.Address).Id);
 
         // Act
         await handler.Handle(identityDeletionProcessStartedIntegrationEvent);
