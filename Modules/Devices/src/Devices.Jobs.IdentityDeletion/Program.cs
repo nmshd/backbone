@@ -1,14 +1,9 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.Application.AutoMapper;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.ConsumerApi;
-using Backbone.Modules.Devices.Infrastructure.Persistence;
-using Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
 using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Messages.ConsumerApi;
 using Backbone.Modules.Quotas.ConsumerApi;
@@ -51,24 +46,6 @@ public class Program
             {
                 var configuration = hostContext.Configuration;
                 services.AddHostedService<Worker>();
-
-                var eventBusConfiguration = configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().EventBus;
-                var databaseConfiguration = configuration.GetSection("Infrastructure").Get<InfrastructureConfiguration>().SqlDatabase;
-
-                services.AddEventBus(eventBusConfiguration);
-                services.AddDatabase(options =>
-                {
-                    options.Provider = databaseConfiguration.Provider;
-                    options.ConnectionString = databaseConfiguration.ConnectionString;
-                    options.RetryOptions = databaseConfiguration.RetryOptions;
-                });
-                services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-                services.AddMediatR(o =>
-                {
-                    o.RegisterServicesFromAssemblyContaining<UpdateDeletionProcessesCommand>()
-                    .AddOpenBehavior(typeof(LoggingBehavior<,>));
-                });
 
                 services.AddModule<DevicesModule>(configuration)
                 .AddModule<RelationshipsModule>(configuration)
