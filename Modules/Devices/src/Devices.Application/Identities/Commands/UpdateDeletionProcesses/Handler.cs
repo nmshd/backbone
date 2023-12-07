@@ -7,13 +7,11 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository, ILogger<Handler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger)
     {
         _identitiesRepository = identitiesRepository;
         _logger = logger;
-        _pnsRegistrationRepository = pnsRegistrationRepository;
     }
 
     public async Task<UpdateDeletionProcessesResponse> Handle(UpdateDeletionProcessesCommand request, CancellationToken cancellationToken)
@@ -31,10 +29,6 @@ public class Handler : IRequestHandler<UpdateDeletionProcessesCommand, UpdateDel
                 identity.DeletionStarted();
                 await _identitiesRepository.Update(identity, cancellationToken);
                 response.IdentityAddresses.Add(identity.Address);
-
-                await _pnsRegistrationRepository.DeleteByIdentityAddress(identity.Address, cancellationToken); // pnsRegistrations ✅
-
-
             }
             catch (Exception ex)
             {

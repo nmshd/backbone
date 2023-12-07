@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Devices.Application.AutoMapper;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Identities;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +24,9 @@ public static class IServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(DeleteClientCommandValidator).Assembly);
         services.AddScoped<ChallengeValidator>();
+
+        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
+
         AddEventHandlers(services);
     }
 

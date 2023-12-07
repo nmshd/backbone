@@ -113,6 +113,11 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
             _logger.UnregisteredDevice(deviceId);
         }
     }
+
+    public async Task DeleteRegistrationsByIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        await _pnsRegistrationsRepository.DeleteByIdentityAddress(identityAddress, cancellationToken);
+    }
 }
 
 internal static partial class DirectPushServiceLogs
