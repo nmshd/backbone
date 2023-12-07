@@ -33,4 +33,9 @@ public class DummyPushService : IPushNotificationRegistrationService, IPushNotif
         _logger.LogInformation("Unregistering from push notifications with device '{deviceId}.", deviceId);
         return Task.FromResult(DevicePushIdentifier.New());
     }
+
+    public Task DeleteRegistrationsByIdentityAddress(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

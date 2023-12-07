@@ -83,37 +83,10 @@ public class HandlerTests
         A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
-    [Fact]
-    public async Task Handler_calls_delete_for_PnsRegistrations_for_each_identity_to_be_deleted()
-    {
-        // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository();
-
-        var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
-        anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
-
-        var anotherIdentity = _identities.Second();
-        anotherIdentity.StartDeletionProcessAsOwner(new Device(anotherIdentity).Id);
-        anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-2); // Past
-
-        var pnsRegistrationRepository = A.Fake<IPnsRegistrationsRepository>();
-
-        var handler = CreateHandler(identitiesRepository, pnsRegistrationRepository);
-        var command = new UpdateDeletionProcessesCommand();
-
-        // Act
-        var result = await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => pnsRegistrationRepository.DeleteByIdentityAddress(A<IdentityAddress>._, A<CancellationToken>._)).MustHaveHappenedTwiceExactly();
-    }
-
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository = null)
     {
         return new Handler(
             identitiesRepository,
-            pnsRegistrationRepository ?? A.Dummy<IPnsRegistrationsRepository>(),
             A.Dummy<ILogger<Handler>>()
             );
     }
