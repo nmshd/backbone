@@ -32,7 +32,7 @@ public class HandlerTests
 
         // Assert
         result.IdentityAddresses.Should().BeEmpty();
-        A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class HandlerTests
         // Assert
         result.IdentityAddresses.Should().HaveCount(1);
         result.IdentityAddresses.First().Should().Be(anIdentity.Address);
-        A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public class HandlerTests
         // Assert
         result.IdentityAddresses.Should().HaveCount(1);
         result.IdentityAddresses.First().Should().Be(anotherIdentity.Address);
-        A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository = null)
@@ -103,7 +103,7 @@ public class HandlerTests
         }
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.FindAllWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).Returns(_identities.Where(i => i.DeletionGracePeriodEndsAt < SystemTime.UtcNow));
+        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).Returns(_identities.Where(i => i.DeletionGracePeriodEndsAt < SystemTime.UtcNow));
 
         return identitiesRepository;
     }

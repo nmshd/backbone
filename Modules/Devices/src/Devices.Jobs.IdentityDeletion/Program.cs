@@ -3,12 +3,18 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Devices.Application.AutoMapper;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
+using Backbone.Modules.Files.ConsumerApi;
+using Backbone.Modules.Messages.ConsumerApi;
+using Backbone.Modules.Quotas.ConsumerApi;
 using Backbone.Modules.Relationships.ConsumerApi;
+using Backbone.Modules.Synchronization.ConsumerApi;
+using Backbone.Modules.Tokens.ConsumerApi;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 
@@ -65,13 +71,13 @@ public class Program
                 });
 
                 services.AddModule<DevicesModule>(configuration)
-                        .AddModule<RelationshipsModule>(configuration);
-                //.AddModule<ChallengesModule>(configuration)
-                //.AddModule<FilesModule>(configuration)
-                //.AddModule<MessagesModule>(configuration)
-                //.AddModule<QuotasModule>(configuration)
-                //.AddModule<SynchronizationModule>(configuration)
-                //.AddModule<TokensModule>(configuration);
+                .AddModule<RelationshipsModule>(configuration)
+                .AddModule<ChallengesModule>(configuration)
+                .AddModule<FilesModule>(configuration)
+                .AddModule<MessagesModule>(configuration)
+                .AddModule<QuotasModule>(configuration)
+                .AddModule<SynchronizationModule>(configuration)
+                .AddModule<TokensModule>(configuration);
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
             })

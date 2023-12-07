@@ -93,11 +93,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> FindAllActiveWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow)
+            .Where(i => i.Status == IdentityStatus.Active && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow)
             .ToListAsync(cancellationToken);
     }
 

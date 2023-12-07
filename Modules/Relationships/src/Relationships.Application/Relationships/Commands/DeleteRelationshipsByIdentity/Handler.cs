@@ -6,10 +6,8 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Dele
 
 public class Handler(IRelationshipsRepository relationshipsRepository) : IRequestHandler<DeleteRelationshipsByIdentityCommand>
 {
-    private readonly IRelationshipsRepository _relationshipsRepository = relationshipsRepository;
-
     public async Task Handle(DeleteRelationshipsByIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _relationshipsRepository.DeleteRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
+        await relationshipsRepository.DeleteRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
     }
 }

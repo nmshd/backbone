@@ -6,10 +6,8 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Dele
 
 public class Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository) : IRequestHandler<DeleteRelationshipTemplatesByIdentityCommand>
 {
-    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository = relationshipTemplatesRepository;
-
     public async Task Handle(DeleteRelationshipTemplatesByIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _relationshipTemplatesRepository.DeleteTemplates(RelationshipTemplate.WasCreatedBy(request.IdentityAddress), cancellationToken);
+        await relationshipTemplatesRepository.DeleteTemplates(RelationshipTemplate.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }
 }

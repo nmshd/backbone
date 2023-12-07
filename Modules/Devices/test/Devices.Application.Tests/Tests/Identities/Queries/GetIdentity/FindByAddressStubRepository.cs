@@ -60,7 +60,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> FindAllActiveWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }

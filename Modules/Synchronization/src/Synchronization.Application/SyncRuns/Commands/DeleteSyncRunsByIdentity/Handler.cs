@@ -7,11 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncRunsByIdentity;
 public class Handler(ISynchronizationDbContext dbContext) : IRequestHandler<DeleteSyncRunsByIdentityCommand>
 {
-    private readonly ISynchronizationDbContext _dbContext = dbContext;
-
     public async Task Handle(DeleteSyncRunsByIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _dbContext.Set<Datawallet>().Where(d => d.Owner == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
-        await _dbContext.Set<SyncRun>().Where(d => d.CreatedBy == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
+        await dbContext.Set<Datawallet>().Where(d => d.Owner == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
+        await dbContext.Set<SyncRun>().Where(d => d.CreatedBy == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
     }
 }
