@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Modules.Synchronization.Application.Identities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,8 @@ public static class IServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(PushDatawalletModificationsCommand).Assembly);
         services.AddEventHandlers();
+
+        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 
     private static void AddEventHandlers(this IServiceCollection services)
