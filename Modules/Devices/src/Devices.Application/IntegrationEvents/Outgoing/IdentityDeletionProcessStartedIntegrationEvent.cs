@@ -10,6 +10,6 @@ public class IdentityDeletionProcessStartedIntegrationEvent : IntegrationEvent
         Address = identityAddress;
     }
 
-    public string Address { get; }
-    public string DeletionProcessId { get; }
+    public string Address { get; private set; }
+    public string DeletionProcessId { get; private set; }
 }
