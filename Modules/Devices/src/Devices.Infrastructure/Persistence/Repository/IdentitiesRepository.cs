@@ -56,7 +56,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionProcesses.Any(d => d.IsActive()))
+            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved || d.Status == DeletionProcessStatus.WaitingForApproval))
             .ToListAsync(cancellationToken);
     }
 
