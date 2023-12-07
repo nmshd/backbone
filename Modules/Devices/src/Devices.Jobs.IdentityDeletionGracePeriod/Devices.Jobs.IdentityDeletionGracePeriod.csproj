@@ -11,8 +11,10 @@
   </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
         <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\Devices.ConsumerApi\Devices.ConsumerApi.csproj" />
         <ProjectReference Include="..\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

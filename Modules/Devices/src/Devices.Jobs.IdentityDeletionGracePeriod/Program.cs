@@ -1,8 +1,15 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Modules.Devices.Application.AutoMapper;
 using Backbone.Modules.Devices.Application.Identities.Commands.DeletionProcessGracePeriod;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 using Backbone.Modules.Devices.Jobs.IdentityDeletionGracePeriod.Extensions;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletionGracePeriod;
@@ -37,6 +44,7 @@ public class Program
             })
             .ConfigureServices((hostContext, services) =>
             {
+                var env = hostContext.HostingEnvironment;
                 var configuration = hostContext.Configuration;
 
                 services.AddHostedService<Worker>();
@@ -57,6 +65,14 @@ public class Program
                 {
                     o.RegisterServicesFromAssemblyContaining<DeletionProcessGracePeriodCommand>();
                 });
+
+                services.AddModule<DevicesModule>(configuration);
+
+                services.AddCustomIdentity(env);;
+
+                services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+                services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+                services.AddTransient<IPushNotificationSender, DummyPushService>();
 
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
