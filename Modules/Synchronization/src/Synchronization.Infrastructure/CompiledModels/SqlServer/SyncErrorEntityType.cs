@@ -5,16 +5,21 @@ using System.Reflection;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class SyncErrorEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError",
@@ -30,6 +35,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new SyncErrorIdEntityFrameworkValueConverter());
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<SyncErrorId>(
+                    (SyncErrorId v1, SyncErrorId v2) => object.Equals(v1, v2),
+                    (SyncErrorId v) => v.GetHashCode(),
+                    (SyncErrorId v) => v),
+                keyComparer: new ValueComparer<SyncErrorId>(
+                    (SyncErrorId v1, SyncErrorId v2) => object.Equals(v1, v2),
+                    (SyncErrorId v) => v.GetHashCode(),
+                    (SyncErrorId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<SyncErrorId, string>(
+                    (SyncErrorId id) => id == null ? null : id.StringValue,
+                    (string value) => SyncErrorId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<SyncErrorId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<SyncErrorId, string>(
+                        (SyncErrorId id) => id == null ? null : id.StringValue,
+                        (string value) => SyncErrorId.Parse(value))));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -39,6 +69,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 propertyInfo: typeof(SyncError).GetProperty("ErrorCode", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(SyncError).GetField("<ErrorCode>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 50);
+            errorCode.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             errorCode.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var externalEventId = runtimeEntityType.AddProperty(
@@ -49,6 +96,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new ExternalEventIdEntityFrameworkValueConverter());
+            externalEventId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<ExternalEventId>(
+                    (ExternalEventId v1, ExternalEventId v2) => object.Equals(v1, v2),
+                    (ExternalEventId v) => v.GetHashCode(),
+                    (ExternalEventId v) => v),
+                keyComparer: new ValueComparer<ExternalEventId>(
+                    (ExternalEventId v1, ExternalEventId v2) => object.Equals(v1, v2),
+                    (ExternalEventId v) => v.GetHashCode(),
+                    (ExternalEventId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<ExternalEventId, string>(
+                    (ExternalEventId id) => id == null ? null : id.StringValue,
+                    (string value) => ExternalEventId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<ExternalEventId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<ExternalEventId, string>(
+                        (ExternalEventId id) => id == null ? null : id.StringValue,
+                        (string value) => ExternalEventId.Parse(value))));
             externalEventId.AddAnnotation("Relational:IsFixedLength", true);
             externalEventId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -60,6 +132,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new SyncRunIdEntityFrameworkValueConverter());
+            syncRunId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<SyncRunId>(
+                    (SyncRunId v1, SyncRunId v2) => object.Equals(v1, v2),
+                    (SyncRunId v) => v.GetHashCode(),
+                    (SyncRunId v) => v),
+                keyComparer: new ValueComparer<SyncRunId>(
+                    (SyncRunId v1, SyncRunId v2) => object.Equals(v1, v2),
+                    (SyncRunId v) => v.GetHashCode(),
+                    (SyncRunId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<SyncRunId, string>(
+                    (SyncRunId id) => id == null ? null : id.StringValue,
+                    (string value) => SyncRunId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<SyncRunId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<SyncRunId, string>(
+                        (SyncRunId id) => id == null ? null : id.StringValue,
+                        (string value) => SyncRunId.Parse(value))));
             syncRunId.AddAnnotation("Relational:IsFixedLength", true);
             syncRunId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -79,8 +176,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ExternalEventId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ExternalEventId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);
@@ -97,8 +194,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
 
         public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("SyncRunId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("SyncRunId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);

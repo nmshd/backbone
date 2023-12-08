@@ -6,16 +6,22 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class DatawalletModificationEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification",
@@ -31,6 +37,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new DatawalletModificationIdEntityFrameworkValueConverter());
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DatawalletModificationId>(
+                    (DatawalletModificationId v1, DatawalletModificationId v2) => object.Equals(v1, v2),
+                    (DatawalletModificationId v) => v.GetHashCode(),
+                    (DatawalletModificationId v) => v),
+                keyComparer: new ValueComparer<DatawalletModificationId>(
+                    (DatawalletModificationId v1, DatawalletModificationId v2) => object.Equals(v1, v2),
+                    (DatawalletModificationId v) => v.GetHashCode(),
+                    (DatawalletModificationId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<DatawalletModificationId, string>(
+                    (DatawalletModificationId id) => id == null ? null : id.StringValue,
+                    (string value) => DatawalletModificationId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DatawalletModificationId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<DatawalletModificationId, string>(
+                        (DatawalletModificationId id) => id == null ? null : id.StringValue,
+                        (string value) => DatawalletModificationId.Parse(value))));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -41,6 +72,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 fieldInfo: typeof(DatawalletModification).GetField("<BlobReference>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 32,
                 unicode: false);
+            blobReference.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(32)",
+                    size: 32,
+                    dbType: System.Data.DbType.AnsiStringFixedLength));
             blobReference.AddAnnotation("Relational:IsFixedLength", true);
             blobReference.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -50,6 +98,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 propertyInfo: typeof(DatawalletModification).GetProperty("Collection", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(DatawalletModification).GetField("<Collection>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 50);
+            collection.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             collection.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdAt = runtimeEntityType.AddProperty(
@@ -58,6 +123,28 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 propertyInfo: typeof(DatawalletModification).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(DatawalletModification).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            createdAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                keyComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                providerValueComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                converter: new ValueConverter<DateTime, DateTime>(
+                    (DateTime v) => v.ToUniversalTime(),
+                    (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime, DateTime>(
+                        (DateTime v) => v.ToUniversalTime(),
+                        (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc))));
+            createdAt.SetSentinelFromProviderValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdBy = runtimeEntityType.AddProperty(
@@ -68,6 +155,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 36,
                 unicode: false,
                 valueConverter: new IdentityAddressValueConverter());
+            createdBy.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                keyComparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(36)",
+                    size: 36,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<IdentityAddress, string>(
+                    (IdentityAddress id) => id.StringValue,
+                    (string value) => IdentityAddress.ParseUnsafe(value.Trim())),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityAddress, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<IdentityAddress, string>(
+                        (IdentityAddress id) => id.StringValue,
+                        (string value) => IdentityAddress.ParseUnsafe(value.Trim()))));
             createdBy.AddAnnotation("Relational:IsFixedLength", true);
             createdBy.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -79,6 +191,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new DeviceIdValueConverter());
+            createdByDevice.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DeviceId>(
+                    (DeviceId v1, DeviceId v2) => object.Equals(v1, v2),
+                    (DeviceId v) => v.GetHashCode(),
+                    (DeviceId v) => v),
+                keyComparer: new ValueComparer<DeviceId>(
+                    (DeviceId v1, DeviceId v2) => object.Equals(v1, v2),
+                    (DeviceId v) => v.GetHashCode(),
+                    (DeviceId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<DeviceId, string>(
+                    (DeviceId id) => id.StringValue,
+                    (string value) => DeviceId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DeviceId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<DeviceId, string>(
+                        (DeviceId id) => id.StringValue,
+                        (string value) => DeviceId.Parse(value))));
             createdByDevice.AddAnnotation("Relational:IsFixedLength", true);
             createdByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -89,6 +226,31 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new DatawalletIdEntityFrameworkValueConverter());
+            datawalletId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DatawalletId>(
+                    (DatawalletId v1, DatawalletId v2) => object.Equals(v1, v2),
+                    (DatawalletId v) => v.GetHashCode(),
+                    (DatawalletId v) => v),
+                keyComparer: new ValueComparer<DatawalletId>(
+                    (DatawalletId v1, DatawalletId v2) => object.Equals(v1, v2),
+                    (DatawalletId v) => v.GetHashCode(),
+                    (DatawalletId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<DatawalletId, string>(
+                    (DatawalletId id) => id == null ? null : id.StringValue,
+                    (string value) => DatawalletId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DatawalletId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<DatawalletId, string>(
+                        (DatawalletId id) => id == null ? null : id.StringValue,
+                        (string value) => DatawalletId.Parse(value))));
             datawalletId.AddAnnotation("Relational:IsFixedLength", true);
             datawalletId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -99,13 +261,52 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 fieldInfo: typeof(DatawalletModification).GetField("<DatawalletVersion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 unicode: false,
                 valueConverter: new DatawalletVersionEntityFrameworkValueConverter());
+            datawalletVersion.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<Datawallet.DatawalletVersion>(
+                    (Datawallet.DatawalletVersion v1, Datawallet.DatawalletVersion v2) => object.Equals(v1, v2),
+                    (Datawallet.DatawalletVersion v) => v.GetHashCode(),
+                    (Datawallet.DatawalletVersion v) => v),
+                keyComparer: new ValueComparer<Datawallet.DatawalletVersion>(
+                    (Datawallet.DatawalletVersion v1, Datawallet.DatawalletVersion v2) => object.Equals(v1, v2),
+                    (Datawallet.DatawalletVersion v) => v.GetHashCode(),
+                    (Datawallet.DatawalletVersion v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<Datawallet.DatawalletVersion, int>(
+                    (Datawallet.DatawalletVersion id) => (int)id.Value,
+                    (int v) => new Datawallet.DatawalletVersion((ushort)v)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<Datawallet.DatawalletVersion, ushort>(
+                    new JsonConvertedValueReaderWriter<ushort, int>(
+                        JsonInt32ReaderWriter.Instance,
+                        new ValueConverter<ushort, int>(
+                            (ushort v) => (int)v,
+                            (int v) => (ushort)v)),
+                    new ValueConverter<Datawallet.DatawalletVersion, int>(
+                        (Datawallet.DatawalletVersion id) => (int)id.Value,
+                        (int v) => new Datawallet.DatawalletVersion((ushort)v))));
             datawalletVersion.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var index = runtimeEntityType.AddProperty(
                 "Index",
                 typeof(long),
                 propertyInfo: typeof(DatawalletModification).GetProperty("Index", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(DatawalletModification).GetField("<Index>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(DatawalletModification).GetField("<Index>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                sentinel: 0L);
+            index.TypeMapping = SqlServerLongTypeMapping.Default.Clone(
+                comparer: new ValueComparer<long>(
+                    (long v1, long v2) => v1 == v2,
+                    (long v) => v.GetHashCode(),
+                    (long v) => v),
+                keyComparer: new ValueComparer<long>(
+                    (long v1, long v2) => v1 == v2,
+                    (long v) => v.GetHashCode(),
+                    (long v) => v),
+                providerValueComparer: new ValueComparer<long>(
+                    (long v1, long v2) => v1 == v2,
+                    (long v) => v.GetHashCode(),
+                    (long v) => v));
             index.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var objectIdentifier = runtimeEntityType.AddProperty(
@@ -114,6 +315,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 propertyInfo: typeof(DatawalletModification).GetProperty("ObjectIdentifier", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(DatawalletModification).GetField("<ObjectIdentifier>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 maxLength: 100);
+            objectIdentifier.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(100)",
+                    size: 100,
+                    dbType: System.Data.DbType.String));
             objectIdentifier.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var payloadCategory = runtimeEntityType.AddProperty(
@@ -123,6 +341,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 fieldInfo: typeof(DatawalletModification).GetField("<PayloadCategory>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 50);
+            payloadCategory.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             payloadCategory.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var type = runtimeEntityType.AddProperty(
@@ -130,6 +365,28 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
                 typeof(DatawalletModificationType),
                 propertyInfo: typeof(DatawalletModification).GetProperty("Type", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(DatawalletModification).GetField("<Type>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            type.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DatawalletModificationType>(
+                    (DatawalletModificationType v1, DatawalletModificationType v2) => object.Equals((object)v1, (object)v2),
+                    (DatawalletModificationType v) => v.GetHashCode(),
+                    (DatawalletModificationType v) => v),
+                keyComparer: new ValueComparer<DatawalletModificationType>(
+                    (DatawalletModificationType v1, DatawalletModificationType v2) => object.Equals((object)v1, (object)v2),
+                    (DatawalletModificationType v) => v.GetHashCode(),
+                    (DatawalletModificationType v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<DatawalletModificationType, int>(
+                    (DatawalletModificationType value) => (int)value,
+                    (int value) => (DatawalletModificationType)value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DatawalletModificationType, int>(
+                    JsonInt32ReaderWriter.Instance,
+                    new ValueConverter<DatawalletModificationType, int>(
+                        (DatawalletModificationType value) => (int)value,
+                        (int value) => (DatawalletModificationType)value)));
+            type.SetSentinelFromProviderValue(0);
             type.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
@@ -151,9 +408,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.CompiledModels.SqlServ
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DatawalletId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
-                principalEntityType);
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DatawalletId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade);
 
             var datawallet = declaringEntityType.AddNavigation("Datawallet",
                 runtimeForeignKey,
