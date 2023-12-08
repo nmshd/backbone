@@ -3,16 +3,21 @@ using System;
 using System.Reflection;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class TierEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier",
@@ -28,6 +33,31 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new TierIdEntityFrameworkValueConverter());
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<TierId>(
+                    (TierId v1, TierId v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (TierId v) => v.GetHashCode(),
+                    (TierId v) => v),
+                keyComparer: new ValueComparer<TierId>(
+                    (TierId v1, TierId v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (TierId v) => v.GetHashCode(),
+                    (TierId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<TierId, string>(
+                    (TierId id) => id.Value,
+                    (string value) => TierId.Create(value).Value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<TierId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<TierId, string>(
+                        (TierId id) => id.Value,
+                        (string value) => TierId.Create(value).Value)));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -39,6 +69,31 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 maxLength: 30,
                 unicode: true,
                 valueConverter: new TierNameEntityFrameworkValueConverter());
+            name.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<TierName>(
+                    (TierName v1, TierName v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (TierName v) => v.GetHashCode(),
+                    (TierName v) => v),
+                keyComparer: new ValueComparer<TierName>(
+                    (TierName v1, TierName v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (TierName v) => v.GetHashCode(),
+                    (TierName v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(30)",
+                    size: 30,
+                    dbType: System.Data.DbType.String),
+                converter: new ValueConverter<TierName, string>(
+                    (TierName id) => id.Value,
+                    (string value) => TierName.Create(value).Value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<TierName, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<TierName, string>(
+                        (TierName id) => id.Value,
+                        (string value) => TierName.Create(value).Value)));
             name.AddAnnotation("Relational:IsFixedLength", false);
             name.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 

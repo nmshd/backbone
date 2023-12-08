@@ -10,6 +10,6 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
     {
         builder.HasKey(x => x.Address);
         builder.Property(x => x.ClientId).HasMaxLength(200);
-        builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.SetNull);
     }
 }
