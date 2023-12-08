@@ -1,5 +1,5 @@
 # Build
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /src
 COPY . .
 
@@ -8,7 +8,7 @@ RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app --no-restore "ConsumerApi/ConsumerApi.csproj"
 
 # Run	
-FROM mcr.microsoft.com/dotnet/aspnet:7.0.3-alpine3.16
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
 EXPOSE 80
 WORKDIR /app
 ENV Logging__Console__FormatterName=

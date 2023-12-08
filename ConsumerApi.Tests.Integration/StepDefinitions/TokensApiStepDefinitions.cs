@@ -51,7 +51,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.AssertStatusCodeIsSuccess();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         var token = response.Content.Result!;
         _tokenId = token.Id;
@@ -76,7 +76,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.AssertStatusCodeIsSuccess();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         var token = response.Content.Result!;
         _peerTokenId = token.Id;
@@ -115,7 +115,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
-        _tokensResponse.AssertHasValue();
+        _tokensResponse.Should().NotBeNull();
 
         var tokens = _tokensResponse.Content.Result!.ToArray();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
@@ -222,18 +222,18 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains a CreateTokenResponse")]
     public void ThenTheResponseContainsACreateTokenResponse()
     {
-        _createTokenResponse!.AssertHasValue();
-        _createTokenResponse!.AssertStatusCodeIsSuccess();
-        _createTokenResponse!.AssertContentTypeIs("application/json");
+        _createTokenResponse!.Should().NotBeNull();
+        _createTokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _createTokenResponse!.ContentType.Should().Be("application/json");
         _createTokenResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
-        _tokenResponse!.AssertHasValue();
-        _tokenResponse!.AssertStatusCodeIsSuccess();
-        _tokenResponse!.AssertContentTypeIs("application/json");
+        _tokenResponse!.Should().NotBeNull();
+        _tokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _tokenResponse!.ContentType.Should().Be("application/json");
         _tokenResponse!.AssertContentCompliesWithSchema();
     }
 

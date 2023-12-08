@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence;
@@ -46,6 +47,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Devices"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
                         });
                         dbContextOptions.UseOpenIddict<
                             CustomOpenIddictEntityFrameworkCoreApplication,
@@ -53,7 +55,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance);
+                        //dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.Postgres.DevicesDbContextModel.Instance); TODO: Add this when issues with PostgreSQL compiled models are fixed https://github.com/npgsql/efcore.pg/issues/2972
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
@@ -70,7 +72,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<ITiersRepository, TiersRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
-        services.AddTransient<IPnsRegistrationRepository, PnsRegistrationRepository>();
+        services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
     }
 
     public class DbOptions

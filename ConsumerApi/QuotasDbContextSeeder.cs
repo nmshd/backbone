@@ -1,8 +1,10 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi;
@@ -10,16 +12,24 @@ namespace Backbone.ConsumerApi;
 public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 {
     private readonly DevicesDbContext _devicesDbContext;
+    private readonly IMediator _mediator;
 
-    public QuotasDbContextSeeder(DevicesDbContext devicesDbContext)
+    public QuotasDbContextSeeder(DevicesDbContext devicesDbContext, IMediator mediator)
     {
         _devicesDbContext = devicesDbContext;
+        _mediator = mediator;
     }
 
     public async Task SeedAsync(QuotasDbContext context)
     {
         await SeedTier(context);
         await AddTierToIdentities(context);
+        await EnsureQueuedForDeletionTierWithQuotas();
+    }
+
+    private async Task EnsureQueuedForDeletionTierWithQuotas()
+    {
+        await _mediator.Send(new SeedQueuedForDeletionTierCommand());
     }
 
     private async Task AddTierToIdentities(QuotasDbContext context)

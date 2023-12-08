@@ -6,11 +6,10 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
-using Environment = Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Environment;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
-public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
+public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDeviceRegistrationResponse>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushNotificationRegistrationService _pushRegistrationService;
@@ -25,27 +24,25 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, Unit>
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<Unit> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var parseHandleResult = PnsHandle.Parse(request.Handle, DeserializePlatform(request.Platform));
-        if (parseHandleResult.IsSuccess)
-        {
-            await _pushRegistrationService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT), cancellationToken);
-        }
-        else
-        {
-            throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
-        }
+        var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 
-        return Unit.Value;
+        if (parseHandleResult.IsFailure)
+            throw new ApplicationException(new ApplicationError(parseHandleResult.Error.Code, parseHandleResult.Error.Message));
+
+        var environment = DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT);
+        var devicePushIdentifier = await _pushRegistrationService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, environment, cancellationToken);
+
+        return new UpdateDeviceRegistrationResponse(devicePushIdentifier);
     }
 
-    private static Environment DeserializeEnvironment(string environment)
+    private static PushEnvironment DeserializeEnvironment(string environment)
     {
         return environment switch
         {
-            DEVELOPMENT_ENVIRONMENT => Environment.Development,
-            PRODUCTION_ENVIRONMENT => Environment.Production,
+            DEVELOPMENT_ENVIRONMENT => PushEnvironment.Development,
+            PRODUCTION_ENVIRONMENT => PushEnvironment.Production,
             _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
         };
     }

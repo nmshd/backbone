@@ -72,6 +72,7 @@ public static class IServiceCollectionExtensions
                         .GetAssemblies()
                         .SelectMany(x => x.ExportedTypes)
                         .Where(x => !x.IsAbstract)
+                        .Where(x => !x.ContainsGenericParameters)
                         .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
 
                 foreach (var jsonConverter in jsonConverters)
@@ -139,7 +140,7 @@ public static class IServiceCollectionExtensions
                     break;
                 case "Postgres":
                     services.AddHealthChecks().AddNpgSql(
-                        npgsqlConnectionString: connectionString,
+                        connectionString: connectionString,
                         name: moduleName);
                     break;
                 default:

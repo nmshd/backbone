@@ -45,17 +45,30 @@ public class Identity
 
     public void ChangeTier(TierId id)
     {
+        if (id == Tier.QUEUED_FOR_DELETION.Id || TierId == Tier.QUEUED_FOR_DELETION.Id)
+            throw new DomainException(DomainErrors.CannotChangeTierQueuedForDeletion());
+
         if (TierId == id)
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
 
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcessAsSupport()
     {
         EnsureNoActiveProcessExists();
 
-        var deletionProcess = new IdentityDeletionProcess(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
+        _deletionProcesses.Add(deletionProcess);
+
+        return deletionProcess;
+    }
+
+    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
+    {
+        EnsureNoActiveProcessExists();
+
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
@@ -74,5 +87,6 @@ public class Identity
 
 public enum DeletionProcessStatus
 {
-    Approved
+    WaitingForApproval = 0,
+    Approved = 1
 }
