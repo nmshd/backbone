@@ -39,7 +39,7 @@ public static class IServiceCollectionExtensions
                             CustomOpenIddictEntityFrameworkCoreScope,
                             CustomOpenIddictEntityFrameworkCoreToken,
                             string>();
-                        dbContextOptions.UseModel(Modules.Devices.Infrastructure.CompiledModels.SqlServer.DevicesDbContextModel.Instance);
+                        dbContextOptions.UseModel(CompiledModels.SqlServer.DevicesDbContextModel.Instance);
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
