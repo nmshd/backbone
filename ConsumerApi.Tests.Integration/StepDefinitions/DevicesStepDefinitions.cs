@@ -113,7 +113,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an un-onboarded device d3 belonging to i2")]
     public async Task GivenAnUnOnboardedDeviceD3BelongingToI2()
     {
-        var deviceResponse = await RegisterDevice(_createChallengeResponse2!.Content.Result, _keyPair2);
+        var username = _createIdentityResponse2!.Content.Result!.Device.Username;
+        Authenticate(username, "test");
+
+        var deviceResponse = await RegisterDevice(_createChallengeResponse2.Content.Result, _keyPair2);
         _deviceIdD3 = deviceResponse.Content.Result!.Id;
     }
 
