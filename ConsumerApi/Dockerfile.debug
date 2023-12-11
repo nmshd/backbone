@@ -1,9 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0
 
-EXPOSE 80
+EXPOSE 8080
 
 WORKDIR /app
 
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 
 ENTRYPOINT ["dotnet", "watch", "--non-interactive", "--project", "ConsumerApi/ConsumerApi.csproj"]
