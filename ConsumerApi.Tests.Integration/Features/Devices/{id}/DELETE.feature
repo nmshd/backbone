@@ -29,6 +29,7 @@ Scenario: Deleting an un-onboarded Device of another Identity
 	Given an Identity i1 with a device d1
 	And the current user uses d1
 	And an Identity i2 with a device d2
-	When a DELETE request is sent to the Devices/{id} endpoint with d2.Id
+	And an un-onboarded device d3 belonging to i2
+	When a DELETE request is sent to the Devices/{id} endpoint with d3.Id
 	Then the response status code is 404 (Not Found)
 	And d2 is not deleted

@@ -12,21 +12,25 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "DELETE Device")]
 internal class DevicesStepDefinitions : BaseStepDefinitions
 {
-    private readonly KeyPair? _keyPair;
+    private readonly KeyPair? _keyPair1;
+    private readonly KeyPair? _keyPair2;
 
-    private HttpResponse<Challenge>? _createChallengeResponse;
+    private HttpResponse<Challenge>? _createChallengeResponse1;
+    private HttpResponse<Challenge>? _createChallengeResponse2;
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse1;
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse2;
     private HttpResponse? _deletionResponse;
 
     private string? _deviceIdD1;
     private string? _deviceIdD2;
+    private string? _deviceIdD3;
     private const string NON_EXISTENT_DEVICE_ID = "DVC00000000000000000";
 
     public DevicesStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
         base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
-        _keyPair = signatureHelper.CreateKeyPair();
+        _keyPair1 = signatureHelper.CreateKeyPair();
+        _keyPair2 = signatureHelper.CreateKeyPair();
     }
 
     #region StepDefinitions
@@ -34,10 +38,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i with a device d")]
     public async Task GivenAnIdentityIWithADeviceD()
     {
-        _createChallengeResponse = await CreateChallenge();
-        _createChallengeResponse.Should().NotBeNull();
+        _createChallengeResponse1 = await CreateChallenge();
+        _createChallengeResponse1.Should().NotBeNull();
 
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -46,10 +50,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i with a device d1")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
-        _createChallengeResponse = await CreateChallenge();
-        _createChallengeResponse.Should().NotBeNull();
+        _createChallengeResponse1 = await CreateChallenge();
+        _createChallengeResponse1.Should().NotBeNull();
 
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -58,10 +62,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i1 with a device d1")]
     public async Task GivenAnIdentityI1WithADeviceD1()
     {
-        _createChallengeResponse = await CreateChallenge();
-        _createChallengeResponse.Should().NotBeNull();
+        _createChallengeResponse1 = await CreateChallenge();
+        _createChallengeResponse1.Should().NotBeNull();
 
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -70,10 +74,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i2 with a device d2")]
     public async Task GivenAnIdentityI2WithADeviceD2()
     {
-        _createChallengeResponse = await CreateChallenge();
-        _createChallengeResponse.Should().NotBeNull();
+        _createChallengeResponse2 = await CreateChallenge();
+        _createChallengeResponse2.Should().NotBeNull();
 
-        _createIdentityResponse2 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse2 = await CreateIdentity(_createChallengeResponse2.Content.Result, _keyPair2);
         _createIdentityResponse2.Should().NotBeNull();
 
         _deviceIdD2 = _createIdentityResponse2.Content.Result!.Device.Id;
@@ -100,8 +104,17 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
-        var deviceResponse = await RegisterDevice(_createChallengeResponse!.Content.Result, _keyPair);
+        var deviceResponse = await RegisterDevice(_createChallengeResponse1!.Content.Result, _keyPair1);
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
+    }
+
+
+
+    [Given(@"an un-onboarded device d3 belonging to i2")]
+    public async Task GivenAnUnOnboardedDeviceD3BelongingToI2()
+    {
+        var deviceResponse = await RegisterDevice(_createChallengeResponse2!.Content.Result, _keyPair2);
+        _deviceIdD3 = deviceResponse.Content.Result!.Id;
     }
 
 
@@ -116,6 +129,12 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id()
     {
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
+    }
+
+    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d3.Id")]
+    public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD3Id()
+    {
+        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD3);
     }
 
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
@@ -158,11 +177,11 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         response.Content.Result!.First().Id?.StringValue.Should().NotBe(_deviceIdD2);
     }
 
-    [Then(@"d2 is not deleted")]
-    public async Task ThenD2IsNotDeleted()
+    [Then(@"d3 is not deleted")]
+    public async Task ThenD3IsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD2).Should().NotBeEmpty();
+        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD3).Should().NotBeEmpty();
     }
 
     #endregion
