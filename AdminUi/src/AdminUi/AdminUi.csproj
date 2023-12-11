@@ -8,7 +8,7 @@
         <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..</DockerfileContext>
-    	<InvariantGlobalization>false</InvariantGlobalization>
+    	<InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
     <ItemGroup>
