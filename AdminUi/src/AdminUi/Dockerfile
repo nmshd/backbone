@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
@@ -50,8 +50,11 @@ RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --c
 
 FROM base AS final
 
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
-
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
+USER $APP_UID
+
 ENTRYPOINT ["dotnet", "Backbone.AdminUi.dll"]
