@@ -9,7 +9,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5000:80"
+      - "5000:8080"
     depends_on:
       database:
         condition: service_started
@@ -20,7 +20,7 @@ services:
       azure-storage-emulator:
         condition: service_started
     healthcheck:
-      test: ["CMD", "wget", "http://localhost/health"]
+      test: ["CMD", "wget", "http://localhost:8080/health"]
       interval: 5s
       timeout: 2s
       retries: 40
@@ -37,7 +37,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5173:80"
+      - "5173:8080"
     depends_on:
       database:
         condition: service_started
