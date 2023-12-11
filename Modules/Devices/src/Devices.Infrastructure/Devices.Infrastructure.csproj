@@ -30,8 +30,4 @@
         </ProjectReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="CompiledModels\SqlServer\" />
-    </ItemGroup>
-
 </Project>
