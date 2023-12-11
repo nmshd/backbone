@@ -38,7 +38,7 @@ public class DeviceTests
         unOnboardedDevice.User = new ApplicationUser(identity, unOnboardedDevice.Id);
 
         // Act
-        unOnboardedDevice.MarkAsDeleted(onboardedDevice.Id);
+        unOnboardedDevice.MarkAsDeleted(onboardedDevice.Id, identity.Address);
 
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
@@ -56,7 +56,7 @@ public class DeviceTests
         device.User.LoginOccurred();
 
         // Act
-        var action = () => device.MarkAsDeleted(device.Id);
+        var action = () => device.MarkAsDeleted(device.Id, identity.Address);
 
         // Assert
         var domainException = action.Should().Throw<DomainException>().Which;
@@ -73,7 +73,7 @@ public class DeviceTests
         device.User = new ApplicationUser(identity, device.Id);
 
         // Act
-        var action = () => device.MarkAsDeleted(device.Id);
+        var action = () => device.MarkAsDeleted(device.Id, identity.Address);
 
         // Assert
         var domainException = action.Should().Throw<DomainException>().Which;
