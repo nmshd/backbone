@@ -10,7 +10,7 @@ RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /ap
 RUN dotnet publish --configuration Release --output /app/health "HealthCheck/HealthCheck.csproj"
 
 # Run
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.0-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.0-jammy-chiseled-extra
 EXPOSE 8080
 WORKDIR /app
 
