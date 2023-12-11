@@ -9,7 +9,7 @@ RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /ap
 
 # Run
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
-EXPOSE 80
+EXPOSE 8080
 WORKDIR /app
 
 ENV Logging__Console__FormatterName=
