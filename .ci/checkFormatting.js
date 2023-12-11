@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx ts-node --esm -T
+#!/usr/bin/env node
 
 import { $ } from "zx";
 
