@@ -9,10 +9,8 @@ RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /ap
 
 # Run
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
-EXPOSE 80
+EXPOSE 8080
 WORKDIR /app
-
-ENV ASPNETCORE_URLS=http://0.0.0.0:80
 
 ENV Logging__Console__FormatterName=
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
@@ -20,5 +18,9 @@ RUN apk add icu-libs
 COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
+USER $APP_UID
 
 ENTRYPOINT ["dotnet", "Backbone.ConsumerApi.dll"]
