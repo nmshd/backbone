@@ -24,3 +24,11 @@ Scenario: Deleting a non existent Device
 	When a DELETE request is sent to the Devices/{id} endpoint with a non existent id
 	Then the response status code is 404 (Not Found)
 	And d1 is not deleted
+
+Scenario: Deleting an un-onboarded Device of another Identity
+	Given an Identity i1 with a device d1
+	And the current user uses d1
+	And an Identity i2 with a device d2
+	When a DELETE request is sent to the Devices/{id} endpoint with d2.Id
+	Then the response status code is 404 (Not Found)
+	And d2 is not deleted

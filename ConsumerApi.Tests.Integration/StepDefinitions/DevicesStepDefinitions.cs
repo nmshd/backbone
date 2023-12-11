@@ -15,7 +15,8 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     private readonly KeyPair? _keyPair;
 
     private HttpResponse<Challenge>? _createChallengeResponse;
-    private HttpResponse<CreateIdentityResponse>? _createIdentityResponse;
+    private HttpResponse<CreateIdentityResponse>? _createIdentityResponse1;
+    private HttpResponse<CreateIdentityResponse>? _createIdentityResponse2;
     private HttpResponse? _deletionResponse;
 
     private string? _deviceIdD1;
@@ -36,10 +37,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _createChallengeResponse = await CreateChallenge();
         _createChallengeResponse.Should().NotBeNull();
 
-        _createIdentityResponse = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
-        _createIdentityResponse.Should().NotBeNull();
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1.Should().NotBeNull();
 
-        _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
+        _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
     }
 
     [Given(@"an Identity i with a device d1")]
@@ -48,10 +49,34 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _createChallengeResponse = await CreateChallenge();
         _createChallengeResponse.Should().NotBeNull();
 
-        _createIdentityResponse = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
-        _createIdentityResponse.Should().NotBeNull();
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1.Should().NotBeNull();
 
-        _deviceIdD1 = _createIdentityResponse.Content.Result!.Device.Id;
+        _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
+    }
+
+    [Given(@"an Identity i1 with a device d1")]
+    public async Task GivenAnIdentityI1WithADeviceD1()
+    {
+        _createChallengeResponse = await CreateChallenge();
+        _createChallengeResponse.Should().NotBeNull();
+
+        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse1.Should().NotBeNull();
+
+        _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
+    }
+
+    [Given(@"an Identity i2 with a device d2")]
+    public async Task GivenAnIdentityI2WithADeviceD2()
+    {
+        _createChallengeResponse = await CreateChallenge();
+        _createChallengeResponse.Should().NotBeNull();
+
+        _createIdentityResponse2 = await CreateIdentity(_createChallengeResponse.Content.Result, _keyPair);
+        _createIdentityResponse2.Should().NotBeNull();
+
+        _deviceIdD2 = _createIdentityResponse2.Content.Result!.Device.Id;
     }
 
 
@@ -59,14 +84,14 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"the current user uses d")]
     public void GivenTheCurrentUserUsesD()
     {
-        var username = _createIdentityResponse!.Content.Result!.Device.Username;
+        var username = _createIdentityResponse1!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
 
     [Given(@"the current user uses d1")]
     public void GivenTheCurrentUserUsesD1()
     {
-        var username = _createIdentityResponse!.Content.Result!.Device.Username;
+        var username = _createIdentityResponse1!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
 
@@ -131,6 +156,13 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         var response = await ListDevices();
         response.Content.Result!.Count.Should().Be(1);
         response.Content.Result!.First().Id?.StringValue.Should().NotBe(_deviceIdD2);
+    }
+
+    [Then(@"d2 is not deleted")]
+    public async Task ThenD2IsNotDeleted()
+    {
+        var response = await ListDevices();
+        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD2).Should().NotBeEmpty();
     }
 
     #endregion
