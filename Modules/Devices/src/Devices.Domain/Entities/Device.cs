@@ -51,9 +51,6 @@ public class Device
         if (IsOnboarded)
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.");
 
-        if (Id == deletedByDevice)
-            return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted.");
-
         return null;
     }
 
