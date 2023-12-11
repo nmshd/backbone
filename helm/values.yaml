@@ -44,7 +44,7 @@ consumerapi:
 
   service:
     type: "ClusterIP"
-    port: 80
+    port: 8080
     loadBalancer:
       # ip - the static ip address the LoadBalancer should use
       ip: ""
@@ -119,7 +119,7 @@ adminui:
 
   service:
     type: "ClusterIP"
-    port: 80
+    port: 8080
 
   image:
     repository: "ghcr.io/nmshd/backbone-admin-ui"
