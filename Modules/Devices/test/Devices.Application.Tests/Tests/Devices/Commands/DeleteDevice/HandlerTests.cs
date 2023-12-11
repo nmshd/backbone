@@ -60,20 +60,17 @@ public class HandlerTests
     {
         // Arrange
         var identity1 = TestDataGenerator.CreateIdentity();
-        var onboardedDevice1 = CreateOnboardedDevice(identity1);
+        var onboardedDevice = CreateOnboardedDevice(identity1);
+        onboardedDevice.User.LoginOccurred();
 
         var identity2 = TestDataGenerator.CreateIdentity();
-        var onboardedDevice2 = CreateOnboardedDevice(identity2);
         var unOnboardedDevice = CreateUnOnboardedDevice(identity2);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(onboardedDevice1.Id, A<CancellationToken>._, A<bool>._)).Returns(onboardedDevice1);
-        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(onboardedDevice2.Id, A<CancellationToken>._, A<bool>._)).Returns(onboardedDevice2);
         A.CallTo(() => mockIdentitiesRepository.GetDeviceById(unOnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(unOnboardedDevice);
 
         var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity1.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(onboardedDevice1.Id);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(onboardedDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
