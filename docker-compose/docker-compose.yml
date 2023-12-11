@@ -13,7 +13,7 @@ services:
       - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
 
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       # - ms-sql-server
       - rabbitmq
@@ -102,7 +102,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Local
     ports:
-      - "5173:80"
+      - "5173:8080"
     depends_on:
       # - ms-sql-server
       - rabbitmq
