@@ -24,7 +24,7 @@
     "editor.formatOnPaste": true,
     "files.autoSave": "off",
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": "explicit"
     },
     "files.eol": "\n"
 }
