@@ -21,6 +21,4 @@ COPY --from=build-env /app .
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
-USER $APP_UID
-
 ENTRYPOINT ["dotnet", "Backbone.ConsumerApi.dll"]
