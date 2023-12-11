@@ -1,6 +1,6 @@
-import { chalk, $ } from "zx";
+import { $, chalk } from "zx";
 
-export function getRequiredEnvVar(envVarName: string) {
+export function getRequiredEnvVar(envVarName) {
     var envVar = $.env[envVarName];
     if (!envVar) {
         console.error(chalk.red(`The environment variable '${envVarName}' is required, but was not set.`));
@@ -9,7 +9,7 @@ export function getRequiredEnvVar(envVarName: string) {
     return envVar;
 }
 
-export function toCamelCase(input: string) {
+export function toCamelCase(input) {
     const first = input.charAt(0).toLowerCase();
     const remaining = input.substring(1);
     const result = first + remaining;

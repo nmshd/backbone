@@ -25,14 +25,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract version from git tag
         id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
         env:
           GIT_TAG: ${{ github.ref_name }}
       - name: Build Container Image
-        run: ./.ci/aapi/buildContainerImage.ts
+        run: ./.ci/aapi/buildContainerImage.js
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
       - name: Push Container Image
-        run: ./.ci/aapi/pushContainerImage.ts
+        run: ./.ci/aapi/pushContainerImage.js
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
