@@ -19,11 +19,6 @@ services:
         condition: service_completed_successfully
       azure-storage-emulator:
         condition: service_started
-    healthcheck:
-      test: ["CMD", "wget", "http://localhost:8080/health", "-O", "/dev/null"]
-      interval: 5s
-      timeout: 2s
-      retries: 40
     configs:
       - source: Config
         target: app/appsettings.override.json
