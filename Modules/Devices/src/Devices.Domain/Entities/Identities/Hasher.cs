@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
@@ -39,8 +40,11 @@ public static class Hasher
 
 internal class HasherImpl : IHasher
 {
+    private static readonly byte[] SALT = SHA256.HashData("enmeshed_identity_deletion_log"u8.ToArray());
     public byte[] HashUtf8(string input)
     {
-        return SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        // Salt: SHA128 von "enmeshed_identity_deletion_log"
+        var hash = KeyDerivation.Pbkdf2(input, SALT, KeyDerivationPrf.HMACSHA256, 100_000, 32);
+        return hash;
     }
 }
