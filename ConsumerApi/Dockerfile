@@ -1,19 +1,54 @@
 #### Build chisel binary ####
+################################################################################################################
+# The following lines are required to install libicu, which itself is required for the SQL Server client to work 
+# (see https://github.com/dotnet/dotnet-docker/discussions/4527).
+# They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
+################################################################################################################
 FROM golang:1.20 as chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
-### Build application ####
+#### Build application ####
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
 
-# copy chisel binary
-COPY --from=chisel /opt/chisel/chisel /usr/bin/
 # use chisel to install libicu
+RUN apt-get update \
+    && apt-get install -y fdupes \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=chisel /opt/chisel/chisel /usr/bin/
+COPY --from=mcr.microsoft.com/dotnet/nightly/runtime:8.0-jammy-chiseled / /runtime-ref
+
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-22.04" --root /rootfs \
-    libicu70_libs
+    libicu70_libs \
+    \
+    # Remove duplicates from rootfs that exist in runtime-ref
+    && fdupes /runtime-ref /rootfs -rdpN \
+    \
+    # Delete duplicate symlinks
+    # Function to find and format symlinks w/o including root dir (format: /path/to/symlink /path/to/target)
+    && getsymlinks() { find $1 -type l -printf '%p %l\n' | sed -n "s/^\\$1\\(.*\\)/\\1/p"; } \
+    # Combine set of symlinks between rootfs and runtime-ref
+    && (getsymlinks "/rootfs"; getsymlinks "/runtime-ref") \
+    # Sort them
+    | sort \
+    # Find the duplicates
+    | uniq -d \
+    # Extract just the path to the symlink
+    | cut -d' ' -f1 \
+    # Prepend the rootfs directory to the paths
+    | sed -e 's/^/\/rootfs/' \
+    # Delete the files
+    | xargs rm \
+    \
+    # Delete empty directories
+    && find /rootfs -type d -empty -delete
+################################################################################################################
+# end of libicu-related stuff
+################################################################################################################
 
 WORKDIR /src
 COPY . .
