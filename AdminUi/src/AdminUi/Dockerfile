@@ -1,8 +1,31 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
+#### Build chisel binary ####
+FROM golang:1.20 as chisel
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
+WORKDIR /opt/chisel
+RUN go build ./cmd/chisel
+
+#### Build application ####
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+
+# copy chisel binary
+COPY --from=chisel /opt/chisel/chisel /usr/bin/
+# use chisel to install libicu
+RUN mkdir /rootfs \
+    && chisel cut --release "ubuntu-22.04" --root /rootfs \
+    libicu70_libs
+
+RUN apt update && apt upgrade --yes
+
+# install nodejs
+RUN apt install --yes ca-certificates gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt update && \
+    apt install --yes nodejs
+
+RUN npm i -g @angular/cli
 
 WORKDIR /src
 COPY ["Directory.Build.props", "."]
@@ -28,32 +51,26 @@ COPY ["AdminUi/src/AdminUi.Infrastructure.Database.Postgres/AdminUi.Infrastructu
 COPY ["AdminUi/src/AdminUi.Infrastructure/AdminUi.Infrastructure.csproj", "AdminUi/src/AdminUi.Infrastructure/"]
 COPY ["AdminUi/src/AdminUi.Infrastructure.Database.SqlServer/AdminUi.Infrastructure.Database.SqlServer.csproj", "AdminUi/src/AdminUi.Infrastructure.Database.SqlServer/"]
 RUN dotnet restore "AdminUi/src/AdminUi/AdminUi.csproj"
+
 COPY . .
-WORKDIR "/src/AdminUi/src/AdminUi"
-RUN dotnet build /property:WarningLevel=0 --configuration Release --output /app/build --no-restore "AdminUi.csproj"
 
-FROM build AS publish
-# upgrade all packages
-RUN apt update && apt upgrade --yes
+RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminUi/src/AdminUi/AdminUi.csproj"
+RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
-# install nodejs
-RUN apt install -y ca-certificates gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt update && \
-    apt install --yes nodejs
+### Final ####
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.0-jammy-chiseled
 
-# install angular cli
-RUN npm i -g @angular/cli
-RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "AdminUi.csproj"
-
-FROM base AS final
-
-WORKDIR /app
-COPY --from=publish /app/publish .
+LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/publish/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
+EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+
+WORKDIR /app
+
+COPY --from=build-env /rootfs /
+COPY --from=build-env /app/publish .
 
 USER $APP_UID
 
