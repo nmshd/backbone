@@ -26,10 +26,10 @@ Scenario: Deleting a non existent Device
 	And d1 is not deleted
 
 Scenario: Deleting an un-onboarded Device of another Identity
-	Given an Identity i2 with a device d2
-	And an un-onboarded device d3 belonging to i2
-	And an Identity i1 with a device d1
+	Given an Identity i1 with a device d1
 	And the current user uses d1
+	And an Identity i2 with a device d2
+	And an un-onboarded device d3 belonging to i2
 	When a DELETE request is sent to the Devices/{id} endpoint with d2.Id
 	Then the response status code is 400 (Bad Request)
 	And d3 is not deleted
