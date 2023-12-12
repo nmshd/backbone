@@ -46,7 +46,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
         // Assert
         AssertAuditLogEntryWasCreated(deletionProcess);
-        deletionProcess.GracePeriodReminder1SentAt.Should().NotBeNull().And.Be(currentDateTime);
+        deletionProcess.GracePeriodReminder2SentAt.Should().NotBeNull().And.Be(currentDateTime);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
         // Assert
         AssertAuditLogEntryWasCreated(deletionProcess);
-        deletionProcess.GracePeriodReminder1SentAt.Should().NotBeNull().And.Be(currentDateTime);
+        deletionProcess.GracePeriodReminder3SentAt.Should().NotBeNull().And.Be(currentDateTime);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
