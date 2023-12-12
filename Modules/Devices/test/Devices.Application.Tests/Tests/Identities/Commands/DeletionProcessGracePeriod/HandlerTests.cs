@@ -37,7 +37,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task One_Active_First_Reminder()
+    public async Task Sends_First_Reminder()
     {
         // Arrange
         var beginProcessDate = DateTime.Parse("2000-01-01");
@@ -73,7 +73,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task One_Active_Second_Reminder()
+    public async Task Sends_Second_Reminder()
     {
         // Arrange
         var beginProcessDate = DateTime.Parse("2000-01-01");
@@ -109,7 +109,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task One_Active_Third_Reminder()
+    public async Task Sends_Third_Reminder()
     {
         // Arrange
         var beginProcessDate = DateTime.Parse("2000-01-01");
