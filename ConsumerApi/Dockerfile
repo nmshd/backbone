@@ -20,7 +20,7 @@ COPY . .
 
 RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish /property:WarningLevel=0 --configuration Release --output /app/publish --no-restore "ConsumerApi/ConsumerApi.csproj"
-RUN dotnet publish --configuration Release --output /app/health "HealthCheck/HealthCheck.csproj"
+RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.0-jammy-chiseled
