@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<DeletionProcessGracePeriodCommand, Deleti
 
     public async Task<DeletionProcessGracePeriodResponse> Handle(DeletionProcessGracePeriodCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithActiveDeletionProcess(cancellationToken, track: true);
+        var identities = await _identitiesRepository.FindAllWithApprovedDeletionProcess(cancellationToken, track: true);
 
         foreach (var identity in identities)
         {
