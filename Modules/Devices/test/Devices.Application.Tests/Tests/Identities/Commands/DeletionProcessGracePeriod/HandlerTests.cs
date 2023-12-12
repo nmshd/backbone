@@ -68,6 +68,8 @@ public class HandlerTests
             .MustHaveHappened();
         A.CallTo(() => mockIdentitiesRepository.Update(activeIdentity, A<CancellationToken>._))
             .MustHaveHappened();
+
+        deletionProcess.GracePeriodReminder1SentAt.Should().Be(reminderSentDate);
     }
 
     [Fact]
