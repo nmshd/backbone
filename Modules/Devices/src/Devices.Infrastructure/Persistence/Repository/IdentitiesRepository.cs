@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+
 public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identities;
@@ -37,6 +38,14 @@ public class IdentitiesRepository : IIdentitiesRepository
             .IncludeAll(_dbContext)
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
         return paginationResult;
+    }
+
+    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)

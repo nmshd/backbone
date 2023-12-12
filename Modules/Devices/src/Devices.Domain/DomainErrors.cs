@@ -51,4 +51,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
+
+    public static DomainError CannotSendReminderWithoutDeletionProcessWaitingForApproval()
+    {
+        return new DomainError("error.platform.validation.device.cannotSendReminderWithoutDeletionProcessWaitingForApproval", "Reminder can only be sent for deletion process waiting for approval.");
+    }
 }

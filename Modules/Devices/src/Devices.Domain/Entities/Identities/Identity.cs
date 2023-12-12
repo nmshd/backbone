@@ -76,6 +76,34 @@ public class Identity
         return deletionProcess;
     }
 
+    public void DeletionProcessApprovalReminder1Sent(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        deletionProcess.ApprovalReminder1Sent(Address);
+    }
+
+    public void DeletionProcessApprovalReminder2Sent(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        deletionProcess.ApprovalReminder2Sent(Address);
+    }
+
+    public void DeletionProcessApprovalReminder3Sent(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        deletionProcess.ApprovalReminder3Sent(Address);
+    }
+
+    private IdentityDeletionProcess GetDeletionProcessWaitingForApproval(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = _deletionProcesses.FirstOrDefault(d => d.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcessId)));
+
+        if (deletionProcess.Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.CannotSendReminderWithoutDeletionProcessWaitingForApproval());
+
+        return deletionProcess;
+    }
+
     private void EnsureNoActiveProcessExists()
     {
         var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());

@@ -15,6 +15,21 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by support. It is now waiting for approval.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 1 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 2 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 3 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+    }
+
     // EF Core needs the empty constructor
 #pragma warning disable CS8618
     // ReSharper disable once UnusedMember.Local

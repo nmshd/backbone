@@ -9,6 +9,7 @@ public interface IIdentitiesRepository
 {
     #region Identities
     Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false);
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);

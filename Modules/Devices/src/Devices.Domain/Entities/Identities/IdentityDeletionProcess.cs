@@ -61,6 +61,9 @@ public class IdentityDeletionProcess
     public IdentityDeletionProcessId Id { get; }
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
+    public DateTime? ApprovalReminder1SentAt { get; private set; }
+    public DateTime? ApprovalReminder2SentAt { get; private set; }
+    public DateTime? ApprovalReminder3SentAt { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
 
@@ -72,5 +75,23 @@ public class IdentityDeletionProcess
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
+    }
+
+    public void ApprovalReminder1Sent(IdentityAddress identityAddress)
+    {
+        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder1Sent(Id, identityAddress));
+    }
+
+    public void ApprovalReminder2Sent(IdentityAddress identityAddress)
+    {
+        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder2Sent(Id, identityAddress));
+    }
+
+    public void ApprovalReminder3Sent(IdentityAddress identityAddress)
+    {
+        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder3Sent(Id, identityAddress));
     }
 }

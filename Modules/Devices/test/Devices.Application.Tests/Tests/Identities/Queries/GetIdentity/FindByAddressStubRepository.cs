@@ -30,6 +30,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
