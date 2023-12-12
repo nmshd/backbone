@@ -6,7 +6,7 @@ WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
 
 # copy chisel binary
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
