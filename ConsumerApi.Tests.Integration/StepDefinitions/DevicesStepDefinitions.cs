@@ -142,7 +142,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Then(@"the error code is ""([^""]*)""")]
     public void ThenTheErrorCodeIs(string errorCode)
     {
-        string actualErrorCode = _deletionResponse.Content.Error.Code;
+        var actualErrorCode = _deletionResponse.Content.Error.Code;
         actualErrorCode.Should().Be(errorCode);
     }
 
