@@ -15,8 +15,6 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     private readonly KeyPair? _keyPair1;
     private readonly KeyPair? _keyPair2;
 
-    private HttpResponse<Challenge>? _createChallengeResponse1;
-    private HttpResponse<Challenge>? _createChallengeResponse2;
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse1;
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse2;
     private HttpResponse? _deletionResponse;
@@ -38,10 +36,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i with a device d")]
     public async Task GivenAnIdentityIWithADeviceD()
     {
-        _createChallengeResponse1 = await CreateChallenge();
-        _createChallengeResponse1.Should().NotBeNull();
-
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
+        _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -50,10 +45,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i with a device d1")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
-        _createChallengeResponse1 = await CreateChallenge();
-        _createChallengeResponse1.Should().NotBeNull();
-
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
+        _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -62,10 +54,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i1 with a device d1")]
     public async Task GivenAnIdentityI1WithADeviceD1()
     {
-        _createChallengeResponse1 = await CreateChallenge();
-        _createChallengeResponse1.Should().NotBeNull();
-
-        _createIdentityResponse1 = await CreateIdentity(_createChallengeResponse1.Content.Result, _keyPair1);
+        _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
         _createIdentityResponse1.Should().NotBeNull();
 
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
@@ -74,10 +63,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an Identity i2 with a device d2")]
     public async Task GivenAnIdentityI2WithADeviceD2()
     {
-        _createChallengeResponse2 = await CreateChallenge();
-        _createChallengeResponse2.Should().NotBeNull();
-
-        _createIdentityResponse2 = await CreateIdentity(_createChallengeResponse2.Content.Result, _keyPair2);
+        _createIdentityResponse2 = await CreateIdentity(keyPair: _keyPair2);
         _createIdentityResponse2.Should().NotBeNull();
 
         _deviceIdD2 = _createIdentityResponse2.Content.Result!.Device.Id;
@@ -104,7 +90,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
-        var deviceResponse = await RegisterDevice(_createChallengeResponse1!.Content.Result, _keyPair1);
+        var deviceResponse = await RegisterDevice(keyPair: _keyPair1);
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
     }
 
