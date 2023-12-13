@@ -49,6 +49,11 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken);
 
+        var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
+
+        if (clientIdentityCount >= client.MaxIdentities)
+            throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
+
         var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);

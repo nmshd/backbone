@@ -26,11 +26,11 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8.0.x"
       - name: Check formatting
-        run: ./.ci/checkFormatting.ts
+        run: ./.ci/checkFormatting.js
 
   test:
     runs-on: ubuntu-latest
@@ -41,11 +41,11 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8.0.x"
       - name: Run tests
-        run: ./.ci/test.ts
+        run: ./.ci/test.js
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
@@ -170,7 +170,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build Helm Chart
-        run: ./.ci/helm/buildChart.ts
+        run: ./.ci/helm/buildChart.js
         env:
           VERSION: 0.0.0
 
@@ -183,7 +183,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/capi/buildContainerImage.ts
+        run: ./.ci/capi/buildContainerImage.js
         env:
           TAG: test
 
@@ -196,7 +196,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/aui/buildContainerImage.ts
+        run: ./.ci/aui/buildContainerImage.js
         env:
           TAG: test
 
@@ -209,7 +209,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/acli/buildContainerImage.ts
+        run: ./.ci/acli/buildContainerImage.js
         env:
           TAG: test
 
@@ -222,79 +222,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
+        run: ./.ci/fsc/buildContainerImage.js
         env:
           TAG: test
           MODULE: Files
-
-  build-msc-container-image:
-    name: Build Messages Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
-        env:
-          TAG: test
-          MODULE: Messages
-
-  build-rtsc-container-image:
-    name: Build Relationship Templates Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
-        env:
-          TAG: test
-          MODULE: Relationships
-          PROJECT_SUFFIX: RelationshipTemplate
-
-  build-rcsc-container-image:
-    name: Build Relationship Changes Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
-        env:
-          TAG: test
-          MODULE: Relationships
-          PROJECT_SUFFIX: RelationshipChange
-
-  build-ssc-container-image:
-    name: Build Synchronization Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
-        env:
-          TAG: test
-          MODULE: Synchronization
-
-  build-tsc-container-image:
-    name: Build Tokens Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Build image
-        run: ./.ci/sc/buildContainerImage.ts
-        env:
-          TAG: test
-          MODULE: Tokens

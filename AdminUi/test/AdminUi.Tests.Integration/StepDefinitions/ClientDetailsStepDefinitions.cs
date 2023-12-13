@@ -10,6 +10,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
     private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _tierId;
+    private readonly int _maxIdentities;
     private HttpResponse<ClientDTO>? _response;
 
     public ClientDetailsStepDefinitions(ClientsApi clientsApi, TiersApi tiersApi)
@@ -18,6 +19,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _tiersApi = tiersApi;
         _clientId = string.Empty;
         _tierId = string.Empty;
+        _maxIdentities = 1;
     }
 
     [Given(@"a Tier t")]
@@ -50,7 +52,8 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
             ClientId = string.Empty,
             DisplayName = string.Empty,
             ClientSecret = string.Empty,
-            DefaultTier = _tierId
+            DefaultTier = _tierId,
+            MaxIdentities = _maxIdentities
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -80,6 +83,8 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _response!.Content.Result!.ClientId.Should().Be(_clientId);
         _response!.Content.Result!.DefaultTier.Should().NotBeNull();
         _response!.Content.Result!.DefaultTier.Should().Be(_tierId);
+        _response!.Content.Result!.MaxIdentities.Should().NotBeNull();
+        _response!.Content.Result!.MaxIdentities.Should().Be(_maxIdentities);
         _response!.AssertContentCompliesWithSchema();
     }
 

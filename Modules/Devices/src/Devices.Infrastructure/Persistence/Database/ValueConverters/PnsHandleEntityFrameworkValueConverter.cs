@@ -18,7 +18,7 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
     {
     }
 
-    private static string SerializeHandle(PnsHandle pnsHandle)
+    public static string SerializeHandle(PnsHandle pnsHandle)
     {
         var platformAsString = pnsHandle.Platform switch
         {
@@ -30,7 +30,7 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
         return $"{platformAsString}|{pnsHandle.Value}";
     }
 
-    private static PnsHandle DeserializeHandle(string pnsHandle)
+    public static PnsHandle DeserializeHandle(string pnsHandle)
     {
         var tokens = pnsHandle.Split('|');
         var platform = tokens[0] switch

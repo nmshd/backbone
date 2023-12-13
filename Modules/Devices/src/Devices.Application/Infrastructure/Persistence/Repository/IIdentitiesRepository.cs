@@ -12,6 +12,7 @@ public interface IIdentitiesRepository
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
+    Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     #endregion
 
     #region Users

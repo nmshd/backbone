@@ -60,6 +60,11 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.tierIdInvalidOrDoesNotExist", "The passed tier ID is not valid or the tier does not exist.");
         }
+
+        public static ApplicationError ClientReachedIdentitiesLimit()
+        {
+            return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
+        }
     }
     public static class Identities
     {

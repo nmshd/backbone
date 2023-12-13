@@ -81,8 +81,6 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            - name: ASPNETCORE_URLS
-              value: http://0.0.0.0:80
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__vendor
               value: RabbitMQ
