@@ -113,10 +113,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given(@"an un-onboarded device d3 belonging to i2")]
     public async Task GivenAnUnOnboardedDeviceD3BelongingToI2()
     {
-        var username = _createIdentityResponse2!.Content.Result!.Device.Username;
-        Authenticate(username, "test");
-
-        var deviceResponse = await RegisterDevice(_createChallengeResponse2.Content.Result, _keyPair2);
+        var deviceResponse = await RegisterDevice(keyPair: _keyPair2, username: _createIdentityResponse2!.Content.Result!.Device.Username);
         _deviceIdD3 = deviceResponse.Content.Result!.Id;
     }
 
@@ -125,7 +122,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithDId()
     {
-        _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD1);
+        _deletionResponse = await DeleteOnboardedDevice(_deviceIdD1);
     }
 
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
@@ -137,13 +134,14 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with d3.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD3Id()
     {
+        Authenticate(_createIdentityResponse1.Content.Result.Device.Username, "test");
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD3);
     }
 
     [When(@"a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithNonExistantId()
     {
-        _deletionResponse = await DeleteUnOnboardedDevice(NON_EXISTENT_DEVICE_ID);
+        _deletionResponse = await DeleteNonExistentDevice(NON_EXISTENT_DEVICE_ID);
     }
 
 
@@ -155,6 +153,12 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
+    [Then(@"the error code is ""([^""]*)""")]
+    public void ThenTheErrorCodeIs(string errorCode)
+    {
+        string actualErrorCode = _deletionResponse.Content.Error.Code;
+        actualErrorCode.Should().Be(errorCode);
+    }
 
 
 
@@ -189,7 +193,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #endregion
 
-    protected async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(Challenge? challenge = null, KeyPair? keyPair = null)
+    protected async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(Challenge? challenge = null, KeyPair? keyPair = null, string? username = null)
     {
         challenge ??= (await CreateChallenge()).Content.Result!;
         keyPair ??= _signatureHelper.CreateKeyPair();
@@ -217,6 +221,10 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
         var requestConfiguration = _requestConfiguration.Clone();
         requestConfiguration.ContentType = "application/json";
+
+        if (username != null)
+            requestConfiguration.AuthenticationParameters.Username = username;
+
         requestConfiguration.SetContent(registerDeviceRequest);
 
         var deviceResponse = await _devicesApi.RegisterDevice(requestConfiguration);
@@ -228,7 +236,23 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     protected async Task<HttpResponse> DeleteUnOnboardedDevice(string? id)
     {
         var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
-        //response.IsSuccessStatusCode.Should().BeTrue();
+        response.IsSuccessStatusCode.Should().BeTrue();
+
+        return response;
+    }
+
+    protected async Task<HttpResponse> DeleteOnboardedDevice(string? id)
+    {
+        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
+        response.IsSuccessStatusCode.Should().BeFalse();
+
+        return response;
+    }
+
+    protected async Task<HttpResponse> DeleteNonExistentDevice(string? id)
+    {
+        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
+        response.IsSuccessStatusCode.Should().BeFalse();
 
         return response;
     }
