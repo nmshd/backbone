@@ -27,11 +27,12 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderComman
             var waitingForApprovalDeletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!;
             var endOfApprovalPeriod = waitingForApprovalDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
             var daysUntilApprovalPeriodEnds = (endOfApprovalPeriod - SystemTime.UtcNow).Days;
+
             if (waitingForApprovalDeletionProcess.ApprovalReminder1SentAt == null
                 && endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder1.Time) <= SystemTime.UtcNow)
             {
                 await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), CancellationToken.None);
-                identity.DeletionProcessApprovalReminder1Sent(waitingForApprovalDeletionProcess.Id);
+                identity.DeletionProcessApprovalReminder1Sent();
                 await _identitiesRepository.Update(identity, cancellationToken);
             }
 
@@ -39,7 +40,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderComman
                 && endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder2.Time) <= SystemTime.UtcNow)
             {
                 await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), CancellationToken.None);
-                identity.DeletionProcessApprovalReminder2Sent(waitingForApprovalDeletionProcess.Id);
+                identity.DeletionProcessApprovalReminder2Sent();
                 await _identitiesRepository.Update(identity, cancellationToken);
             }
 
@@ -47,7 +48,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderComman
                 && endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder3.Time) <= SystemTime.UtcNow)
             {
                 await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), CancellationToken.None);
-                identity.DeletionProcessApprovalReminder3Sent(waitingForApprovalDeletionProcess.Id);
+                identity.DeletionProcessApprovalReminder3Sent();
                 await _identitiesRepository.Update(identity, cancellationToken);
             }
         }

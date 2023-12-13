@@ -17,17 +17,17 @@ public class IdentityDeletionProcessAuditLogEntry
 
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 1 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "First approval reminder was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
     }
 
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 2 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "Second approval reminder was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
     }
 
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "Approval reminder 3 was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
+        return new IdentityDeletionProcessAuditLogEntry(processId, "Third approval reminder was sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
     }
 
     // EF Core needs the empty constructor

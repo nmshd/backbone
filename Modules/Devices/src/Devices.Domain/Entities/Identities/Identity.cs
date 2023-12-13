@@ -76,32 +76,27 @@ public class Identity
         return deletionProcess;
     }
 
-    public void DeletionProcessApprovalReminder1Sent(IdentityDeletionProcessId deletionProcessId)
+    public void DeletionProcessApprovalReminder1Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        var deletionProcess = GetDeletionProcessWaitingForApproval();
         deletionProcess.ApprovalReminder1Sent(Address);
     }
 
-    public void DeletionProcessApprovalReminder2Sent(IdentityDeletionProcessId deletionProcessId)
+    public void DeletionProcessApprovalReminder2Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        var deletionProcess = GetDeletionProcessWaitingForApproval();
         deletionProcess.ApprovalReminder2Sent(Address);
     }
 
-    public void DeletionProcessApprovalReminder3Sent(IdentityDeletionProcessId deletionProcessId)
+    public void DeletionProcessApprovalReminder3Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval(deletionProcessId);
+        var deletionProcess = GetDeletionProcessWaitingForApproval();
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    private IdentityDeletionProcess GetDeletionProcessWaitingForApproval(IdentityDeletionProcessId deletionProcessId)
+    private IdentityDeletionProcess GetDeletionProcessWaitingForApproval()
     {
-        var deletionProcess = _deletionProcesses.FirstOrDefault(d => d.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcessId)));
-
-        if (deletionProcess.Status != DeletionProcessStatus.WaitingForApproval)
-            throw new DomainException(DomainErrors.CannotSendReminderWithoutDeletionProcessWaitingForApproval());
-
-        return deletionProcess;
+        return _deletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcessId)));
     }
 
     private void EnsureNoActiveProcessExists()

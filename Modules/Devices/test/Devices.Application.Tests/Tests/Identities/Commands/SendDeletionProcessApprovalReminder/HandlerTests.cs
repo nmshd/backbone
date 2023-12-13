@@ -27,7 +27,7 @@ public class HandlerTests
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(identitiesList);
 
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
@@ -62,7 +62,7 @@ public class HandlerTests
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(identitiesList);
 
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
@@ -98,7 +98,7 @@ public class HandlerTests
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(identitiesList);
 
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
