@@ -183,25 +183,25 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         return deviceResponse;
     }
 
-    protected async Task<HttpResponse> DeleteUnOnboardedDevice(string? id)
+    protected async Task<HttpResponse> DeleteUnOnboardedDevice(string id)
     {
-        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
+        var response = await _devicesApi.DeleteDevice(_requestConfiguration, id);
         response.IsSuccessStatusCode.Should().BeTrue();
 
         return response;
     }
 
-    protected async Task<HttpResponse> DeleteOnboardedDevice(string? id)
+    protected async Task<HttpResponse> DeleteOnboardedDevice(string id)
     {
-        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
+        var response = await _devicesApi.DeleteDevice(_requestConfiguration, id);
         response.IsSuccessStatusCode.Should().BeFalse();
 
         return response;
     }
 
-    protected async Task<HttpResponse> DeleteNonExistentDevice(string? id)
+    protected async Task<HttpResponse> DeleteNonExistentDevice(string id)
     {
-        var response = await _devicesApi.DeleteDevice($"/Devices/{id}", _requestConfiguration, id);
+        var response = await _devicesApi.DeleteDevice(_requestConfiguration, id);
         response.IsSuccessStatusCode.Should().BeFalse();
 
         return response;

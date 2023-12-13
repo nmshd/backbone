@@ -16,8 +16,8 @@ internal class DevicesApi : BaseApi
         return await Post<RegisterDeviceResponse>("/Devices", requestConfiguration);
     }
 
-    internal async Task<HttpResponse> DeleteDevice(string url, RequestConfiguration requestConfiguration, string? id)
+    internal async Task<HttpResponse> DeleteDevice(RequestConfiguration requestConfiguration, string id)
     {
-        return await Delete(url, requestConfiguration);
+        return await Delete($"/Devices/{id}", requestConfiguration);
     }
 }
