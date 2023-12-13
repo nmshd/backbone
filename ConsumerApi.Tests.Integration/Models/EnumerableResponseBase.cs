@@ -1,13 +1,10 @@
 ﻿using System.Collections;
-using MediatR;
 
-namespace Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
-public abstract class CollectionCommandBase<TResponse, TItem> : IRequest<TResponse>, ICollection<TItem>
+public abstract class EnumerableResponseBase<TItem> : ICollection<TItem>
 {
     private readonly ICollection<TItem> _items = new List<TItem>();
-
-    #region ICollection
 
     public IEnumerator<TItem> GetEnumerator()
     {
@@ -46,6 +43,4 @@ public abstract class CollectionCommandBase<TResponse, TItem> : IRequest<TRespon
 
     public int Count => _items.Count;
     public bool IsReadOnly => _items.IsReadOnly;
-
-    #endregion
 }
