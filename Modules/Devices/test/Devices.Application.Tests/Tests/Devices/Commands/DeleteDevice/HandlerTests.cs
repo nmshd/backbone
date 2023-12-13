@@ -61,7 +61,7 @@ public class HandlerTests
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => mockIdentitiesRepository.GetDeviceById(activeDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(activeDevice);
-        
+
         var handler = CreateHandler(mockIdentitiesRepository);
 
         var deleteDeviceCommand = new DeleteDeviceCommand()
