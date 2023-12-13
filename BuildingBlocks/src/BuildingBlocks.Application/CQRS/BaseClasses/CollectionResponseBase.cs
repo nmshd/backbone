@@ -2,11 +2,11 @@
 
 namespace Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 
-public abstract class EnumerableResponseBase<TItem> : IEnumerable<TItem>
+public abstract class CollectionResponseBase<TItem> : IEnumerable<TItem>
 {
     private readonly IEnumerable<TItem> _items;
 
-    protected EnumerableResponseBase(IEnumerable<TItem> items)
+    protected CollectionResponseBase(IEnumerable<TItem> items)
     {
         _items = items;
     }
