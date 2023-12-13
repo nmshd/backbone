@@ -42,24 +42,6 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
     }
 
-    [Given("an Identity i with a device d1")]
-    public async Task GivenAnIdentityIWithADeviceD1()
-    {
-        _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
-        _createIdentityResponse1.Should().NotBeNull();
-
-        _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
-    }
-
-    [Given("an Identity i1 with a device d1")]
-    public async Task GivenAnIdentityI1WithADeviceD1()
-    {
-        _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
-        _createIdentityResponse1.Should().NotBeNull();
-
-        _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
-    }
-
     [Given("an Identity i2 with a device d2")]
     public async Task GivenAnIdentityI2WithADeviceD2()
     {
@@ -69,14 +51,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD2 = _createIdentityResponse2.Content.Result!.Device.Id;
     }
 
-    [Given("the current user uses d")]
-    public void GivenTheCurrentUserUsesD()
-    {
-        var username = _createIdentityResponse1!.Content.Result!.Device.Username;
-        Authenticate(username, "test");
-    }
-
-    [Given("the current user uses d1")]
+    [Given("the current user uses d1?")]
     public void GivenTheCurrentUserUsesD1()
     {
         var username = _createIdentityResponse1!.Content.Result!.Device.Username;
