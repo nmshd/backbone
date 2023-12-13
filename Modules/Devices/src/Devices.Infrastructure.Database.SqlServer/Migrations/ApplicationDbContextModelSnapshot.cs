@@ -17,7 +17,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -197,9 +197,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("DeletionCertificate")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)
@@ -284,9 +281,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MaxIdentities")
-                        .HasColumnType("int");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");
