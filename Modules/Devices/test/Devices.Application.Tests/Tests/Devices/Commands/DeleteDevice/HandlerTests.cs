@@ -61,7 +61,6 @@ public class HandlerTests
         // Arrange
         var identity1 = TestDataGenerator.CreateIdentity();
         var onboardedDevice = CreateOnboardedDevice(identity1);
-        onboardedDevice.User.LoginOccurred();
 
         var identity2 = TestDataGenerator.CreateIdentity();
         var unOnboardedDevice = CreateUnOnboardedDevice(identity2);
