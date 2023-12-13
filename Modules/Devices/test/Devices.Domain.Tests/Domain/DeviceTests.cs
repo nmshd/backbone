@@ -71,6 +71,7 @@ public class DeviceTests
         var device = new Device(identity);
 
         device.User = new ApplicationUser(identity, device.Id);
+        device.User.LoginOccurred();
 
         // Act
         var action = () => device.MarkAsDeleted(device.Id, identity.Address);
