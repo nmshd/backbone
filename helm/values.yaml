@@ -131,8 +131,8 @@ adminui:
       cpu: "50m"
       memory: "64Mi"
     limits:
-      cpu: "100m"
-      memory: "128Mi"
+      cpu: "200m"
+      memory: "512Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
