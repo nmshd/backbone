@@ -12,8 +12,8 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "DELETE Device")]
 internal class DevicesStepDefinitions : BaseStepDefinitions
 {
-    private readonly KeyPair? _keyPair1;
-    private readonly KeyPair? _keyPair2;
+    private readonly KeyPair _keyPair1;
+    private readonly KeyPair _keyPair2;
 
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse1;
     private HttpResponse<CreateIdentityResponse>? _createIdentityResponse2;
@@ -33,7 +33,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #region StepDefinitions
 
-    [Given("an Identity i with a device d")]
+    [Given("an Identity i1? with a device d1?")]
     public async Task GivenAnIdentityIWithADeviceD()
     {
         _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
@@ -61,7 +61,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given("an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
-        var deviceResponse = await RegisterDevice(keyPair: _keyPair1);
+        var deviceResponse = await RegisterDevice(_keyPair1);
         _deviceIdD2 = deviceResponse.Content.Result!.Id;
     }
 
@@ -69,7 +69,8 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Given("an un-onboarded device d3 belonging to i2")]
     public async Task GivenAnUnOnboardedDeviceD3BelongingToI2()
     {
-        var deviceResponse = await RegisterDevice(keyPair: _keyPair2, username: _createIdentityResponse2!.Content.Result!.Device.Username);
+        var usernameD2 = _createIdentityResponse2!.Content.Result!.Device.Username;
+        var deviceResponse = await RegisterDevice(_keyPair2, usernameD2);
         _deviceIdD3 = deviceResponse.Content.Result!.Id;
     }
 
@@ -116,14 +117,14 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     public async Task ThenDIsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
+        response.Content.Result!.Where(d => d.Id == _deviceIdD1).Should().NotBeEmpty();
     }
 
     [Then("d1 is not deleted")]
     public async Task ThenD1IsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
+        response.Content.Result!.Where(d => d.Id == _deviceIdD1).Should().NotBeEmpty();
     }
 
     [Then("d2 is deleted")]
@@ -131,22 +132,21 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     {
         var response = await ListDevices();
         response.Content.Result!.Count.Should().Be(1);
-        response.Content.Result!.First().Id?.StringValue.Should().NotBe(_deviceIdD2);
+        response.Content.Result!.First().Id.Should().NotBe(_deviceIdD2);
     }
 
     [Then("d3 is not deleted")]
     public async Task ThenD3IsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Should().Contain(d => d.Id!.StringValue == _deviceIdD3);
+        response.Content.Result!.Should().Contain(d => d.Id == _deviceIdD3);
     }
 
     #endregion
 
-    protected async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(Challenge? challenge = null, KeyPair? keyPair = null, string? username = null)
+    private async Task<HttpResponse<RegisterDeviceResponse>> RegisterDevice(KeyPair keyPair, string? username = null)
     {
-        challenge ??= (await CreateChallenge()).Content.Result!;
-        keyPair ??= _signatureHelper.CreateKeyPair();
+        var challenge = (await CreateChallenge()).Content.Result!;
 
         var serializedChallenge = JsonConvert.SerializeObject(challenge);
 
