@@ -22,10 +22,11 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
+        var identityThatIsDeleting = _userContext.GetAddress();
         var deviceThatIsDeletingId = _userContext.GetDeviceId();
         var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
 
-        deviceThatIsBeingDeleted.MarkAsDeleted(deviceThatIsDeletingId, deviceThatIsBeingDeleted.Identity.Address);
+        deviceThatIsBeingDeleted.MarkAsDeleted(deviceThatIsDeletingId, identityThatIsDeleting);
         await _identitiesRepository.Update(deviceThatIsBeingDeleted, cancellationToken);
 
         _logger.MarkedDeviceAsDeleted(request.DeviceId);
