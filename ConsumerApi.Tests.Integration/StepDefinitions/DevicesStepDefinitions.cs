@@ -174,7 +174,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     public async Task ThenD3IsNotDeleted()
     {
         var response = await ListDevices();
-        response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD3).Should().NotBeEmpty();
+        response.Content.Result!.Should().Contain(d => d.Id!.StringValue == _deviceIdD3);
     }
 
     #endregion
