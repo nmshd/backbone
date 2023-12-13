@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -15,7 +14,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Devices.Commands.Dele
 public class HandlerTests
 {
     [Fact]
-    public async Task Deletes_unonboarded_device_owned_by_identity()
+    public async Task Deletes_unOnboarded_device_owned_by_identity()
     {
         // Arrange
         var startTime = SystemTime.UtcNow;
@@ -53,29 +52,21 @@ public class HandlerTests
         )).MustHaveHappenedOnceExactly();
     }
 
-
-
     [Fact]
-    public void Deleting_a_device_not_owned_by_the_current_identity_is_not_possible()
+    public void Throws_if_given_device_id_does_not_exist()
     {
         // Arrange
-        var identity1 = TestDataGenerator.CreateIdentity();
-        var onboardedDevice = CreateOnboardedDevice(identity1);
-
-        var identity2 = TestDataGenerator.CreateIdentity();
-        var unOnboardedDevice = CreateUnOnboardedDevice(identity2);
+        var activeDevice = CreateOnboardedDevice();
+        const string nonExistentDeviceId = "DVCnonExistingIdxxxx";
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(unOnboardedDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(unOnboardedDevice);
-
-        var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(onboardedDevice.Id);
-
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        A.CallTo(() => mockIdentitiesRepository.GetDeviceById(activeDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(activeDevice);
+        
+        var handler = CreateHandler(mockIdentitiesRepository);
 
         var deleteDeviceCommand = new DeleteDeviceCommand()
         {
-            DeviceId = unOnboardedDevice.Id
+            DeviceId = nonExistentDeviceId
         };
 
         // Act
@@ -83,7 +74,7 @@ public class HandlerTests
 
         // Assert
         var exception = action.Should().ThrowAsync<NotFoundException>();
-        exception.WithMessage(nameof(unOnboardedDevice));
+        exception.WithMessage(nameof(Device));
     }
 
     #region helpers
@@ -97,8 +88,9 @@ public class HandlerTests
         return unOnboardedDevice;
     }
 
-    private static Device CreateOnboardedDevice(Identity identity)
+    private static Device CreateOnboardedDevice(Identity identity = null)
     {
+        identity ??= TestDataGenerator.CreateIdentity();
         var onboardedDevice = new Device(identity);
         var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id);
         onboardedDevice.User = onboardedDeviceUser;
@@ -107,8 +99,9 @@ public class HandlerTests
         return onboardedDevice;
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext fakeUserContext)
+    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext? fakeUserContext = null)
     {
+        fakeUserContext ??= A.Dummy<IUserContext>();
         return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());
     }
 

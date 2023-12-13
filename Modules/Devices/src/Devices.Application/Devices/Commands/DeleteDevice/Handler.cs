@@ -1,5 +1,8 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +23,8 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
 
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
-        var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(request.DeviceId, cancellationToken, track: true);
+        var deviceId = DeviceId.Parse(request.DeviceId);
+        var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(deviceId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
         deviceThatIsBeingDeleted.MarkAsDeleted(_userContext.GetDeviceId(), _userContext.GetAddress());
         await _identitiesRepository.Update(deviceThatIsBeingDeleted, cancellationToken);
