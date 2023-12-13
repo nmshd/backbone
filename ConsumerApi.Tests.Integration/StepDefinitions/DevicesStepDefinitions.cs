@@ -5,6 +5,7 @@ using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -77,19 +78,23 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [When("a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithDId()
     {
+        ThrowIfNull(_deviceIdD1);
         _deletionResponse = await DeleteOnboardedDevice(_deviceIdD1);
     }
 
     [When("a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id()
     {
+        ThrowIfNull(_deviceIdD2);
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
     }
 
     [When("a DELETE request is sent to the Devices/{id} endpoint with d3.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD3Id()
     {
-        Authenticate(_createIdentityResponse1.Content.Result.Device.Username, "test");
+        ThrowIfNull(_createIdentityResponse1);
+        ThrowIfNull(_deviceIdD3);
+        Authenticate(_createIdentityResponse1.Content.Result!.Device.Username, "test");
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD3);
     }
 
@@ -109,7 +114,8 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     [Then(@"the error code is ""([^""]*)""")]
     public void ThenTheErrorCodeIs(string errorCode)
     {
-        var actualErrorCode = _deletionResponse.Content.Error.Code;
+        ThrowIfNull(_deletionResponse);
+        var actualErrorCode = _deletionResponse.Content!.Error?.Code;
         actualErrorCode.Should().Be(errorCode);
     }
 
