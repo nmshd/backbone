@@ -33,7 +33,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
 
     #region StepDefinitions
 
-    [Given(@"an Identity i with a device d")]
+    [Given("an Identity i with a device d")]
     public async Task GivenAnIdentityIWithADeviceD()
     {
         _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
@@ -42,7 +42,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
     }
 
-    [Given(@"an Identity i with a device d1")]
+    [Given("an Identity i with a device d1")]
     public async Task GivenAnIdentityIWithADeviceD1()
     {
         _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
@@ -51,7 +51,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
     }
 
-    [Given(@"an Identity i1 with a device d1")]
+    [Given("an Identity i1 with a device d1")]
     public async Task GivenAnIdentityI1WithADeviceD1()
     {
         _createIdentityResponse1 = await CreateIdentity(keyPair: _keyPair1);
@@ -60,7 +60,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD1 = _createIdentityResponse1.Content.Result!.Device.Id;
     }
 
-    [Given(@"an Identity i2 with a device d2")]
+    [Given("an Identity i2 with a device d2")]
     public async Task GivenAnIdentityI2WithADeviceD2()
     {
         _createIdentityResponse2 = await CreateIdentity(keyPair: _keyPair2);
@@ -69,25 +69,21 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         _deviceIdD2 = _createIdentityResponse2.Content.Result!.Device.Id;
     }
 
-
-
-    [Given(@"the current user uses d")]
+    [Given("the current user uses d")]
     public void GivenTheCurrentUserUsesD()
     {
         var username = _createIdentityResponse1!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
 
-    [Given(@"the current user uses d1")]
+    [Given("the current user uses d1")]
     public void GivenTheCurrentUserUsesD1()
     {
         var username = _createIdentityResponse1!.Content.Result!.Device.Username;
         Authenticate(username, "test");
     }
 
-
-
-    [Given(@"an un-onboarded device d2")]
+    [Given("an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
         var deviceResponse = await RegisterDevice(keyPair: _keyPair1);
@@ -95,42 +91,37 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
     }
 
 
-
-    [Given(@"an un-onboarded device d3 belonging to i2")]
+    [Given("an un-onboarded device d3 belonging to i2")]
     public async Task GivenAnUnOnboardedDeviceD3BelongingToI2()
     {
         var deviceResponse = await RegisterDevice(keyPair: _keyPair2, username: _createIdentityResponse2!.Content.Result!.Device.Username);
         _deviceIdD3 = deviceResponse.Content.Result!.Id;
     }
 
-
-
-    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
+    [When("a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithDId()
     {
         _deletionResponse = await DeleteOnboardedDevice(_deviceIdD1);
     }
 
-    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
+    [When("a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD2Id()
     {
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD2);
     }
 
-    [When(@"a DELETE request is sent to the Devices/{id} endpoint with d3.Id")]
+    [When("a DELETE request is sent to the Devices/{id} endpoint with d3.Id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithD3Id()
     {
         Authenticate(_createIdentityResponse1.Content.Result.Device.Username, "test");
         _deletionResponse = await DeleteUnOnboardedDevice(_deviceIdD3);
     }
 
-    [When(@"a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
+    [When("a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
     public async Task WhenADELETERequestIsSentToTheDeviceIdEndpointWithNonExistantId()
     {
         _deletionResponse = await DeleteNonExistentDevice(NON_EXISTENT_DEVICE_ID);
     }
-
-
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
@@ -146,23 +137,21 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         actualErrorCode.Should().Be(errorCode);
     }
 
-
-
-    [Then(@"d is not deleted")]
+    [Then("d is not deleted")]
     public async Task ThenDIsNotDeleted()
     {
         var response = await ListDevices();
         response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
     }
 
-    [Then(@"d1 is not deleted")]
+    [Then("d1 is not deleted")]
     public async Task ThenD1IsNotDeleted()
     {
         var response = await ListDevices();
         response.Content.Result!.Where(d => d.Id!.StringValue == _deviceIdD1).Should().NotBeEmpty();
     }
 
-    [Then(@"d2 is deleted")]
+    [Then("d2 is deleted")]
     public async Task ThenD2IsDeleted()
     {
         var response = await ListDevices();
@@ -170,7 +159,7 @@ internal class DevicesStepDefinitions : BaseStepDefinitions
         response.Content.Result!.First().Id?.StringValue.Should().NotBe(_deviceIdD2);
     }
 
-    [Then(@"d3 is not deleted")]
+    [Then("d3 is not deleted")]
     public async Task ThenD3IsNotDeleted()
     {
         var response = await ListDevices();
