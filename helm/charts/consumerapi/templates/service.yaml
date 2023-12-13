@@ -19,7 +19,7 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancer.ip }}
   {{- end }}
   ports:
-    - port: 80
-      targetPort: {{ .Values.service.port }}
+    - port: 8080
+      targetPort: 8080
   selector:
     app: {{ include "global.name" . }}
