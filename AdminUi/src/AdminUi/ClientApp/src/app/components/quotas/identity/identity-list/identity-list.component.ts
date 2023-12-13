@@ -9,12 +9,8 @@ export class IdentityListComponent {
     public header: string;
     public headerDescription: string;
 
-    public loading: boolean;
-
     public constructor() {
         this.header = "Identities";
         this.headerDescription = "A list of existing Identities";
-
-        this.loading = false;
     }
 }
