@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
@@ -30,6 +31,23 @@ public class DeletionProcessGracePeriodTests : IDisposable
     }
 
     [Fact]
+    public void Only_identities_with_an_approved_deletion_process_should_call_DeletionGracePeriodReminder1Sent()
+    {
+        // Arrange
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
+        var activeIdentity = CreateIdentity();
+
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
+        // Act
+        var acting = activeIdentity.DeletionGracePeriodReminder1Sent;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
+    }
+
+    [Fact]
     public void DeletionGracePeriodReminder2Sent_should_update_GracePeriodReminder2SentAt()
     {
         // Arrange
@@ -47,6 +65,24 @@ public class DeletionProcessGracePeriodTests : IDisposable
         // Assert
         AssertAuditLogEntryWasCreated(deletionProcess);
         deletionProcess.GracePeriodReminder2SentAt.Should().NotBeNull().And.Be(currentDateTime);
+    }
+
+
+    [Fact]
+    public void Only_identities_with_an_approved_deletion_process_should_call_DeletionGracePeriodReminder2Sent()
+    {
+        // Arrange
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
+        var activeIdentity = CreateIdentity();
+
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
+        // Act
+        var acting = activeIdentity.DeletionGracePeriodReminder2Sent;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
     }
 
     [Fact]
@@ -67,6 +103,24 @@ public class DeletionProcessGracePeriodTests : IDisposable
         // Assert
         AssertAuditLogEntryWasCreated(deletionProcess);
         deletionProcess.GracePeriodReminder3SentAt.Should().NotBeNull().And.Be(currentDateTime);
+    }
+
+
+    [Fact]
+    public void Only_identities_with_an_approved_deletion_process_should_call_DeletionGracePeriodReminder3Sent()
+    {
+        // Arrange
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
+        var activeIdentity = CreateIdentity();
+
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
+        // Act
+        var acting = activeIdentity.DeletionGracePeriodReminder3Sent;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
