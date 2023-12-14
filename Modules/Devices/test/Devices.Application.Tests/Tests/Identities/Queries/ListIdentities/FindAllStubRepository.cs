@@ -20,6 +20,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task AddUser(ApplicationUser user, string password)
     {
         throw new NotImplementedException();

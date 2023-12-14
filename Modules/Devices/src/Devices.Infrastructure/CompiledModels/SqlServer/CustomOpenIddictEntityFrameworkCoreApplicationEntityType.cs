@@ -274,6 +274,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 storeTypePostfix: StoreTypePostfix.None);
             displayNames.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var maxIdentities = runtimeEntityType.AddProperty(
+                "MaxIdentities",
+                typeof(int?),
+                propertyInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetProperty("MaxIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(CustomOpenIddictEntityFrameworkCoreApplication).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            maxIdentities.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<int?>(
+                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
+                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)),
+                keyComparer: new ValueComparer<int?>(
+                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
+                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)),
+                providerValueComparer: new ValueComparer<int?>(
+                    (Nullable<int> v1, Nullable<int> v2) => v1.HasValue && v2.HasValue && (int)v1 == (int)v2 || !v1.HasValue && !v2.HasValue,
+                    (Nullable<int> v) => v.HasValue ? (int)v : 0,
+                    (Nullable<int> v) => v.HasValue ? (Nullable<int>)(int)v : default(Nullable<int>)));
+            maxIdentities.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var permissions = runtimeEntityType.AddProperty(
                 "Permissions",
                 typeof(string),

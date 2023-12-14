@@ -42,6 +42,14 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(ClientOverview).GetField("<DisplayName>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
             displayName.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var maxIdentities = runtimeEntityType.AddProperty(
+                "MaxIdentities",
+                typeof(int?),
+                propertyInfo: typeof(ClientOverview).GetProperty("MaxIdentities", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(ClientOverview).GetField("<MaxIdentities>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
+            maxIdentities.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var numberOfIdentities = runtimeEntityType.AddProperty(
                 "NumberOfIdentities",
                 typeof(int),
