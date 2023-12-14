@@ -42,12 +42,12 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
     {
         var datawalletModifications = modifications as DatawalletModification[] ?? modifications.ToArray();
 
-        var mappingTasks = datawalletModifications.Select(m => MapToDto(m, payloads));
+        var mappingTasks = datawalletModifications.Select(MapToDto);
 
         return (await Task.WhenAll(mappingTasks)).ToList();
     }
 
-    private async Task<DatawalletModificationDTO> MapToDto(DatawalletModification modification, Dictionary<long, byte[]> payloads)
+    private async Task<DatawalletModificationDTO> MapToDto(DatawalletModification modification)
     {
         var dto = _mapper.Map<DatawalletModificationDTO>(modification);
         dto.EncryptedPayload = modification.EncryptedPayload;
