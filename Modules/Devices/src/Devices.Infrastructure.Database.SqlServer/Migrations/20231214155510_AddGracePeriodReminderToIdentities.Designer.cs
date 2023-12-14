@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231207170930_AddGracePeriodReminderToIdentities")]
+    [Migration("20231214155510_AddGracePeriodReminderToIdentities")]
     partial class AddGracePeriodReminderToIdentities
     {
         /// <inheritdoc />
@@ -379,6 +379,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("int");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");
