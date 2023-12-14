@@ -40,6 +40,10 @@ public class HandlerTests
     public async Task Sends_First_Reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
+        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
+        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
+
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
@@ -65,9 +69,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindAllWithApprovedDeletionProcess(A<CancellationToken>._, A<bool>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(activeIdentity, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
 
         deletionProcess.GracePeriodReminder1SentAt.Should().Be(reminderSentDate);
     }
@@ -76,6 +80,10 @@ public class HandlerTests
     public async Task Sends_Second_Reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
+        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
+        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
+
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
@@ -101,9 +109,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindAllWithApprovedDeletionProcess(A<CancellationToken>._, A<bool>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(activeIdentity, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
 
         deletionProcess.GracePeriodReminder2SentAt.Should().Be(reminderSentDate);
     }
@@ -112,6 +120,10 @@ public class HandlerTests
     public async Task Sends_Third_Reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
+        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
+        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
+
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
@@ -137,9 +149,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindAllWithApprovedDeletionProcess(A<CancellationToken>._, A<bool>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(activeIdentity, A<CancellationToken>._))
-            .MustHaveHappened();
+            .MustHaveHappenedOnceExactly();
 
         deletionProcess.GracePeriodReminder3SentAt.Should().Be(reminderSentDate);
     }
