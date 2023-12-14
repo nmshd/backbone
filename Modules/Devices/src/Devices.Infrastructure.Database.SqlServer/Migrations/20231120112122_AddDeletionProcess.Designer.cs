@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231213112122_AddDeletionProcess")]
+    [Migration("20231120112122_AddDeletionProcess")]
     partial class AddDeletionProcess
     {
         /// <inheritdoc />
