@@ -6,16 +6,21 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class IdentityDeletionProcessEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess",
@@ -31,6 +36,31 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new IdentityDeletionProcessIdEntityFrameworkValueConverter());
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityDeletionProcessId>(
+                    (IdentityDeletionProcessId v1, IdentityDeletionProcessId v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityDeletionProcessId v) => v.GetHashCode(),
+                    (IdentityDeletionProcessId v) => v),
+                keyComparer: new ValueComparer<IdentityDeletionProcessId>(
+                    (IdentityDeletionProcessId v1, IdentityDeletionProcessId v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityDeletionProcessId v) => v.GetHashCode(),
+                    (IdentityDeletionProcessId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<IdentityDeletionProcessId, string>(
+                    (IdentityDeletionProcessId id) => id.Value,
+                    (string value) => IdentityDeletionProcessId.Create(value).Value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityDeletionProcessId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<IdentityDeletionProcessId, string>(
+                        (IdentityDeletionProcessId id) => id.Value,
+                        (string value) => IdentityDeletionProcessId.Create(value).Value)));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -41,6 +71,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            approvedAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             approvedAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var approvedByDevice = runtimeEntityType.AddProperty(
@@ -52,6 +103,31 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new DeviceIdValueConverter());
+            approvedByDevice.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DeviceId>(
+                    (DeviceId v1, DeviceId v2) => object.Equals(v1, v2),
+                    (DeviceId v) => v.GetHashCode(),
+                    (DeviceId v) => v),
+                keyComparer: new ValueComparer<DeviceId>(
+                    (DeviceId v1, DeviceId v2) => object.Equals(v1, v2),
+                    (DeviceId v) => v.GetHashCode(),
+                    (DeviceId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<DeviceId, string>(
+                    (DeviceId id) => id.StringValue,
+                    (string value) => DeviceId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DeviceId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<DeviceId, string>(
+                        (DeviceId id) => id.StringValue,
+                        (string value) => DeviceId.Parse(value))));
             approvedByDevice.AddAnnotation("Relational:IsFixedLength", true);
             approvedByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -61,6 +137,28 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityDeletionProcess).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            createdAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                keyComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                providerValueComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                converter: new ValueConverter<DateTime, DateTime>(
+                    (DateTime v) => v.ToUniversalTime(),
+                    (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime, DateTime>(
+                        (DateTime v) => v.ToUniversalTime(),
+                        (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc))));
+            createdAt.SetSentinelFromProviderValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var gracePeriodEndsAt = runtimeEntityType.AddProperty(
@@ -70,6 +168,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<GracePeriodEndsAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            gracePeriodEndsAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             gracePeriodEndsAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var identityAddress = runtimeEntityType.AddProperty(
@@ -79,6 +198,31 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 maxLength: 36,
                 unicode: false,
                 valueConverter: new IdentityAddressValueConverter());
+            identityAddress.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                keyComparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(36)",
+                    size: 36,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<IdentityAddress, string>(
+                    (IdentityAddress id) => id.StringValue,
+                    (string value) => IdentityAddress.ParseUnsafe(value.Trim())),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityAddress, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<IdentityAddress, string>(
+                        (IdentityAddress id) => id.StringValue,
+                        (string value) => IdentityAddress.ParseUnsafe(value.Trim()))));
             identityAddress.AddAnnotation("Relational:IsFixedLength", true);
             identityAddress.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -87,6 +231,28 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 typeof(DeletionProcessStatus),
                 propertyInfo: typeof(IdentityDeletionProcess).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityDeletionProcess).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            status.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DeletionProcessStatus>(
+                    (DeletionProcessStatus v1, DeletionProcessStatus v2) => object.Equals((object)v1, (object)v2),
+                    (DeletionProcessStatus v) => v.GetHashCode(),
+                    (DeletionProcessStatus v) => v),
+                keyComparer: new ValueComparer<DeletionProcessStatus>(
+                    (DeletionProcessStatus v1, DeletionProcessStatus v2) => object.Equals((object)v1, (object)v2),
+                    (DeletionProcessStatus v) => v.GetHashCode(),
+                    (DeletionProcessStatus v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<DeletionProcessStatus, int>(
+                    (DeletionProcessStatus value) => (int)value,
+                    (int value) => (DeletionProcessStatus)value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DeletionProcessStatus, int>(
+                    JsonInt32ReaderWriter.Instance,
+                    new ValueConverter<DeletionProcessStatus, int>(
+                        (DeletionProcessStatus value) => (int)value,
+                        (int value) => (DeletionProcessStatus)value)));
+            status.SetSentinelFromProviderValue(0);
             status.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
@@ -101,8 +267,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IdentityAddress")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Address")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("IdentityAddress") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Address") }),
                 principalEntityType);
 
             var deletionProcesses = principalEntityType.AddNavigation("DeletionProcesses",

@@ -88,7 +88,8 @@ export class ClientEditComponent {
                     clientId: data.result.clientId,
                     displayName: data.result.displayName,
                     defaultTier: data.result.defaultTier,
-                    createdAt: data.result.createdAt
+                    createdAt: data.result.createdAt,
+                    maxIdentities: data.result.maxIdentities
                 } as Client;
             },
             complete: () => (this.loading = false),
@@ -152,7 +153,8 @@ export class ClientEditComponent {
         this.loading = true;
 
         const request = {
-            defaultTier: this.client.defaultTier
+            defaultTier: this.client.defaultTier,
+            maxIdentities: this.client.maxIdentities
         } as UpdateClientRequest;
 
         this.clientService.updateClient(this.client.clientId!, request).subscribe({
@@ -161,7 +163,8 @@ export class ClientEditComponent {
                     clientId: data.result.clientId,
                     displayName: data.result.displayName,
                     defaultTier: data.result.defaultTier,
-                    createdAt: data.result.createdAt
+                    createdAt: data.result.createdAt,
+                    maxIdentities: data.result.maxIdentities
                 } as Client;
 
                 this.snackBar.open("Successfully updated client.", "Dismiss", {
@@ -188,6 +191,7 @@ export class ClientEditComponent {
 
     public canSaveClient(): boolean {
         if (!this.client.defaultTier) return false;
+        if (this.client.maxIdentities !== undefined && this.client.maxIdentities < 0) return false;
         return true;
     }
 }

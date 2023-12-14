@@ -44,7 +44,7 @@ consumerapi:
 
   service:
     type: "ClusterIP"
-    port: 80
+    port: 8080
     loadBalancer:
       # ip - the static ip address the LoadBalancer should use
       ip: ""
@@ -119,7 +119,7 @@ adminui:
 
   service:
     type: "ClusterIP"
-    port: 80
+    port: 8080
 
   image:
     repository: "ghcr.io/nmshd/backbone-admin-ui"
@@ -357,11 +357,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
       messages:
         application:
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
@@ -378,11 +378,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
       quotas:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -409,11 +409,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
       synchronization:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -428,11 +428,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
       tokens:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -447,11 +447,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
     logging:
       minimumLevel:
         default: Error

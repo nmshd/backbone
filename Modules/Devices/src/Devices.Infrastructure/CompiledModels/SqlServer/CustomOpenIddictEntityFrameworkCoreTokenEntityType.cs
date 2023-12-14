@@ -4,17 +4,22 @@ using System.Collections.Generic;
 using System.Reflection;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenIddict.EntityFrameworkCore.Models;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class CustomOpenIddictEntityFrameworkCoreTokenEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken",
@@ -28,18 +33,69 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
                 afterSaveBehavior: PropertySaveBehavior.Throw);
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(450)",
+                    size: 450,
+                    dbType: System.Data.DbType.String));
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var applicationId = runtimeEntityType.AddProperty(
                 "ApplicationId",
                 typeof(string),
                 nullable: true);
+            applicationId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(450)",
+                    size: 450,
+                    dbType: System.Data.DbType.String));
             applicationId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var authorizationId = runtimeEntityType.AddProperty(
                 "AuthorizationId",
                 typeof(string),
                 nullable: true);
+            authorizationId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(450)",
+                    size: 450,
+                    dbType: System.Data.DbType.String));
             authorizationId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var concurrencyToken = runtimeEntityType.AddProperty(
@@ -50,6 +106,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 nullable: true,
                 concurrencyToken: true,
                 maxLength: 50);
+            concurrencyToken.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             concurrencyToken.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var creationDate = runtimeEntityType.AddProperty(
@@ -59,6 +132,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<CreationDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            creationDate.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             creationDate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var expirationDate = runtimeEntityType.AddProperty(
@@ -68,6 +162,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<ExpirationDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            expirationDate.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             expirationDate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var payload = runtimeEntityType.AddProperty(
@@ -76,6 +191,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetProperty("Payload", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Payload>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            payload.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             payload.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var properties = runtimeEntityType.AddProperty(
@@ -84,6 +216,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetProperty("Properties", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Properties>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            properties.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             properties.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var redemptionDate = runtimeEntityType.AddProperty(
@@ -93,6 +242,27 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<RedemptionDate>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            redemptionDate.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             redemptionDate.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var referenceId = runtimeEntityType.AddProperty(
@@ -102,6 +272,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<ReferenceId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 100);
+            referenceId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(100)",
+                    size: 100,
+                    dbType: System.Data.DbType.String));
             referenceId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var status = runtimeEntityType.AddProperty(
@@ -111,6 +298,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 50);
+            status.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             status.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var subject = runtimeEntityType.AddProperty(
@@ -120,6 +324,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Subject>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 400);
+            subject.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(400)",
+                    size: 400,
+                    dbType: System.Data.DbType.String));
             subject.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var type = runtimeEntityType.AddProperty(
@@ -129,6 +350,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(OpenIddictEntityFrameworkCoreToken<string, CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization>).GetField("<Type>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 maxLength: 50);
+            type.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(50)",
+                    size: 50,
+                    dbType: System.Data.DbType.String));
             type.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
@@ -150,8 +388,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ApplicationId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("ApplicationId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType);
 
             var application = declaringEntityType.AddNavigation("Application",
@@ -173,8 +411,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
         public static RuntimeForeignKey CreateForeignKey2(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorizationId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorizationId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType);
 
             var authorization = declaringEntityType.AddNavigation("Authorization",
