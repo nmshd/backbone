@@ -51,4 +51,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
+
+    public static DomainError NoApprovedDeletionProcessFound()
+    {
+        return new DomainError("error.platform.validation.device.noApprovedDeletionProcessFound", "No approved deletion process was found.");
+    }
 }

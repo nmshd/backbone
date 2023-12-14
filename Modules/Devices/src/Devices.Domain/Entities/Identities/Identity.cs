@@ -78,19 +78,25 @@ public class Identity
 
     public void DeletionGracePeriodReminder1Sent()
     {
-        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder1Sent(Address);
     }
 
     public void DeletionGracePeriodReminder2Sent()
     {
-        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder2Sent(Address);
     }
 
     public void DeletionGracePeriodReminder3Sent()
     {
-        var deletionProcess = DeletionProcesses.First(d => d.IsActive());
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder3Sent(Address);
     }
 
@@ -100,6 +106,14 @@ public class Identity
 
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
+    }
+
+    private void EnsureApprovedProcessExists()
+    {
+        var approvedProcessExists = DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved);
+
+        if (!approvedProcessExists)
+            throw new DomainException(DomainErrors.NoApprovedDeletionProcessFound());
     }
 }
 
