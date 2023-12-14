@@ -6,7 +6,7 @@ using Backbone.Tooling;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.DeletionProcessGracePeriod;
-public class Handler : IRequestHandler<DeletionProcessGracePeriodCommand, DeletionProcessGracePeriodResponse>
+public class Handler : IRequestHandler<DeletionProcessGracePeriodCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IPushNotificationSender _pushSenderService;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<DeletionProcessGracePeriodCommand, Deleti
         _pushSenderService = pushSenderService;
     }
 
-    public async Task<DeletionProcessGracePeriodResponse> Handle(DeletionProcessGracePeriodCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeletionProcessGracePeriodCommand request, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.FindAllWithApprovedDeletionProcess(cancellationToken, track: true);
 
@@ -64,7 +64,5 @@ public class Handler : IRequestHandler<DeletionProcessGracePeriodCommand, Deleti
                 }
             }
         }
-
-        return new DeletionProcessGracePeriodResponse();
     }
 }
