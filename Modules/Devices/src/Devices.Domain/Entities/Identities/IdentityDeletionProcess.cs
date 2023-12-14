@@ -85,13 +85,13 @@ public class IdentityDeletionProcess
 
     public void ApprovalReminder2Sent(IdentityAddress identityAddress)
     {
-        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        ApprovalReminder2SentAt = SystemTime.UtcNow;
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder2Sent(Id, identityAddress));
     }
 
     public void ApprovalReminder3Sent(IdentityAddress identityAddress)
     {
-        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        ApprovalReminder3SentAt = SystemTime.UtcNow;
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder3Sent(Id, identityAddress));
     }
 }
