@@ -47,13 +47,10 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
     private async Task FillEncryptedContentForModificationsWithBlobReference(SynchronizationDbContext context, List<DatawalletModification> modificationsWithMissingContent)
     {
         var modificationsWithBlobReferences = modificationsWithMissingContent
-            .Where(HasBlobReference)
-            .ToList();
+            .Where(m => !m.BlobReference.IsEmpty()).ToList();
 
         var blobReferences = modificationsWithBlobReferences
-            .Where(HasBlobReference)
-            .Select(m => m.BlobReference)
-            .Distinct();
+            .Select(m => m.BlobReference).Distinct();
 
         var blobs = await Task.WhenAll(blobReferences.Select(r =>
         {
@@ -86,7 +83,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
     private async Task FillEncryptedContentForModificationsWithoutBlobReference(SynchronizationDbContext context, List<DatawalletModification> modificationsWithMissingContent)
     {
-        var modificationsWithoutBlobReferences = modificationsWithMissingContent.Where(m => !HasBlobReference(m)).ToList();
+        var modificationsWithoutBlobReferences = modificationsWithMissingContent.Where(m => m.BlobReference.IsEmpty()).ToList();
 
         foreach (var datawalletModification in modificationsWithoutBlobReferences)
         {
@@ -104,10 +101,5 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         }
 
         await context.SaveChangesAsync();
-    }
-
-    private bool HasBlobReference(DatawalletModification datawalletModification)
-    {
-        return !datawalletModification.BlobReference.IsNullOrEmpty() && datawalletModification.BlobReference != "empty_blob_reference            ";
     }
 }
