@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231207151043_AddGracePeriodReminderToIdentities")]
+    [Migration("20231214154622_AddGracePeriodReminderToIdentities")]
     partial class AddGracePeriodReminderToIdentities
     {
         /// <inheritdoc />
@@ -378,6 +378,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("text");
+
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("text");
