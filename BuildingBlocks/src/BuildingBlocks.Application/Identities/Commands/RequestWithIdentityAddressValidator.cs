@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentValidation;
 
 namespace Backbone.BuildingBlocks.Application.Identities.Commands;
