@@ -3,16 +3,19 @@ using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class IdentityUserClaimEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Microsoft.AspNetCore.Identity.IdentityUserClaim<string>",
@@ -25,7 +28,21 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityUserClaim<string>).GetProperty("Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityUserClaim<string>).GetField("<Id>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueGenerated: ValueGenerated.OnAdd,
-                afterSaveBehavior: PropertySaveBehavior.Throw);
+                afterSaveBehavior: PropertySaveBehavior.Throw,
+                sentinel: 0);
+            id.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                keyComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v));
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             var claimType = runtimeEntityType.AddProperty(
@@ -34,6 +51,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityUserClaim<string>).GetProperty("ClaimType", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityUserClaim<string>).GetField("<ClaimType>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            claimType.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             claimType.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var claimValue = runtimeEntityType.AddProperty(
@@ -42,6 +76,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(IdentityUserClaim<string>).GetProperty("ClaimValue", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityUserClaim<string>).GetField("<ClaimValue>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            claimValue.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             claimValue.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var userId = runtimeEntityType.AddProperty(
@@ -49,6 +100,23 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 typeof(string),
                 propertyInfo: typeof(IdentityUserClaim<string>).GetProperty("UserId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(IdentityUserClaim<string>).GetField("<UserId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            userId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string l, string r) => string.Equals(l, r, StringComparison.OrdinalIgnoreCase),
+                    (string v) => v == null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(v),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(450)",
+                    size: 450,
+                    dbType: System.Data.DbType.String));
             userId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var key = runtimeEntityType.AddKey(
@@ -63,8 +131,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("UserId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Cascade,
                 required: true);

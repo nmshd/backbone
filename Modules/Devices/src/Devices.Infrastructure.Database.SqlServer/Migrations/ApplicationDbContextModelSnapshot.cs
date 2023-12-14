@@ -17,7 +17,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -168,25 +168,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Challenges", "Challenges", t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
@@ -386,6 +367,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("int");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("nvarchar(max)");

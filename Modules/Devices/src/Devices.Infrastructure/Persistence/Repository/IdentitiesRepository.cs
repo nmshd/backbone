@@ -61,12 +61,20 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
+
+    public async Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
+    {
+        return await _readonlyIdentities
+            .CountAsync(i => i.ClientId == clientId, cancellationToken);
+    }
+
     public async Task AddUser(ApplicationUser user, string password)
     {
         var createUserResult = await _userManager.CreateAsync(user, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
+
     public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices

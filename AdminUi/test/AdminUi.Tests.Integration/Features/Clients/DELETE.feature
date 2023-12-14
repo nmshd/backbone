@@ -4,8 +4,7 @@ Feature: DELETE Clients
 User deletes a Client
 
 Scenario: Deleting an existing Client
-	Given a Tier t
-	Given a Client c with Tier t
+	Given a Client c
 	When a DELETE request is sent to the /Clients endpoint
 	Then the response status code is 204 (NO CONTENT)
 

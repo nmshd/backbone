@@ -23,14 +23,14 @@ jobs:
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract version from git tag
         id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.ts)" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
         env:
           GIT_TAG: ${{ github.ref_name }}
       - name: Build Helm Chart
-        run: ./.ci/helm/buildChart.ts
+        run: ./.ci/helm/buildChart.js
         env:
           VERSION: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
       - name: Push Helm Chart
-        run: ./.ci/helm/pushChart.ts
+        run: ./.ci/helm/pushChart.js
         env:
           VERSION: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
