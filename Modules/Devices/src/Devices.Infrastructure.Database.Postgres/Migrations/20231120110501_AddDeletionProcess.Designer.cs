@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231213110501_AddDeletionProcess")]
+    [Migration("20231120110501_AddDeletionProcess")]
     partial class AddDeletionProcess
     {
         /// <inheritdoc />
