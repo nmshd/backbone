@@ -1,8 +1,6 @@
-﻿using System.Text.Json;
-using AutoMapper;
+﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -12,7 +10,6 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
@@ -21,8 +18,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
-    private readonly IBlobStorage _blobStorage;
-    private readonly BlobOptions _blobOptions;
+    //private readonly IBlobStorage _blobStorage;
+    //private readonly BlobOptions _blobOptions;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
@@ -34,12 +31,10 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private DatawalletModification[] _modifications;
     private PushDatawalletModificationsResponse _response;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _mapper = mapper;
-        _blobStorage = blobStorage;
-        _blobOptions = blobOptions.Value;
         _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
@@ -132,16 +127,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private async Task Save(DatawalletModification[] modifications, string blobName)
     {
         await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications, _cancellationToken);
-
-        var payloads = modifications
-            .Where(newModification => newModification.EncryptedPayload != null)
-            .ToDictionary(m => m.Index, m => m.EncryptedPayload);
-
-        var blobContent = JsonSerializer.SerializeToUtf8Bytes(payloads);
-
-        _blobStorage.Add(_blobOptions.RootFolder, blobName, blobContent);
-
-        await _blobStorage.SaveAsync();
 
         try
         {
