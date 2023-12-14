@@ -49,14 +49,12 @@ public class HandlerTests
 
         var newModifications = _testDataGenerator.CreateMany<PushDatawalletModificationItem>(1).ToArray();
 
-
         // Act
         var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand(newModifications, null, 1), CancellationToken.None);
         var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand(newModifications, null, 1), CancellationToken.None);
 
         var handleWithDelayedSave = () => taskWithImmediateSave;
         var handleWithImmediateSave = () => taskWithDelayedSave;
-
 
         // Assert
         await handleWithImmediateSave.Should().NotThrowAsync();
