@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,6 @@ public class Handler(ISynchronizationDbContext dbContext) : IRequestHandler<Dele
 {
     public async Task Handle(DeleteSyncRunsByIdentityCommand request, CancellationToken cancellationToken)
     {
-        await dbContext.Set<Datawallet>().Where(d => d.Owner == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
         await dbContext.Set<SyncRun>().Where(d => d.CreatedBy == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
     }
 }

@@ -7,6 +7,6 @@ public class Validator : AbstractValidator<SendTestNotificationCommand>
 {
     public Validator()
     {
-        RuleFor(r => r.Data).DetailedNotNull();
+        RuleFor(r => r.Data).ValidIdentityAddress();
     }
 }
