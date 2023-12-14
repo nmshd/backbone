@@ -10,6 +10,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Local
 
       - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
+      - Modules__Synchronization__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
 
     ports:
       - "8080:8080"
