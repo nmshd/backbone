@@ -40,10 +40,6 @@ public class HandlerTests
     public async Task Sends_First_Reminder()
     {
         // Arrange
-        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
-        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
-        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
-
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
@@ -80,10 +76,6 @@ public class HandlerTests
     public async Task Sends_Second_Reminder()
     {
         // Arrange
-        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
-        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
-        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
-
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
@@ -120,10 +112,6 @@ public class HandlerTests
     public async Task Sends_Third_Reminder()
     {
         // Arrange
-        IdentityDeletionConfiguration.GracePeriodNotification1.Time = 20;
-        IdentityDeletionConfiguration.GracePeriodNotification2.Time = 10;
-        IdentityDeletionConfiguration.GracePeriodNotification3.Time = 5;
-
         var beginProcessDate = DateTime.Parse("2000-01-01");
         SystemTime.Set(beginProcessDate);
 
