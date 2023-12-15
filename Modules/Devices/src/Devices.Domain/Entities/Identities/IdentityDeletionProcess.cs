@@ -59,7 +59,7 @@ public class IdentityDeletionProcess
     }
 
     public IdentityDeletionProcessId Id { get; }
-    public DeletionProcessStatus Status { get; internal set; }
+    public DeletionProcessStatus Status { get; private set; }
     public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
 
