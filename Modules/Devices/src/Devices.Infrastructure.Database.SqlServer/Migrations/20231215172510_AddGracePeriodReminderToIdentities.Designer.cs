@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231214155510_AddGracePeriodReminderToIdentities")]
+    [Migration("20231215172510_AddGracePeriodReminderToIdentities")]
     partial class AddGracePeriodReminderToIdentities
     {
         /// <inheritdoc />
@@ -199,9 +199,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
-
-                    b.Property<byte[]>("DeletionCertificate")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
