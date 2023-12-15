@@ -5,18 +5,18 @@ public static class IdentityDeletionConfiguration
 
     public static GracePeriodNotification GracePeriodNotification1 { get; set; } = new()
     {
-        Time = 0,
-        Message = string.Empty
+        Time = 20,
+        Message = "Your Identity will be deleted in a few days. You can still cancel up to this point."
     };
     public static GracePeriodNotification GracePeriodNotification2 { get; set; } = new()
     {
-        Time = 0,
-        Message = string.Empty
+        Time = 10,
+        Message = "Your Identity will be deleted in a few days. You can still cancel up to this point."
     };
     public static GracePeriodNotification GracePeriodNotification3 { get; set; } = new()
     {
-        Time = 0,
-        Message = string.Empty
+        Time = 5,
+        Message = "Your Identity will be deleted in a few days. You can still cancel up to this point."
     };
 }
 
