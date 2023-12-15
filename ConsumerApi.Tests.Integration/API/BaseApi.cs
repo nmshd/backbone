@@ -111,35 +111,6 @@ internal class BaseApi
         return response;
     }
 
-    private async Task<HttpResponse> ExecuteRequest(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
-    {
-        var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
-
-        if (!string.IsNullOrEmpty(requestConfiguration.Content))
-            request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
-
-        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
-            request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
-
-        if (requestConfiguration.Authenticate)
-        {
-            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
-            request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
-        }
-
-        var httpResponse = await _httpClient.SendAsync(request);
-
-        var response = new HttpResponse
-        {
-            Content = JsonConvert.DeserializeObject<ErrorResponseContent>(await httpResponse.Content.ReadAsStringAsync())!,
-            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
-            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
-            StatusCode = httpResponse.StatusCode
-        };
-
-        return response;
-    }
-
     private async Task<AccessTokenResponse> GetAccessToken(AuthenticationParameters authenticationParams)
     {
         if (_accessTokenResponse is { IsExpired: false })
