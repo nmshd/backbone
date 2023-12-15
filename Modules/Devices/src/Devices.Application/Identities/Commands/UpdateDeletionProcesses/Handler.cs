@@ -18,7 +18,7 @@ public class Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler
                 await identitiesRepository.Update(identity, cancellationToken);
                 response.IdentityAddresses.Add(identity.Address);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 logger.LogError(ex, "Identity with PastDeletionGracePeriod did not have any active deletionProcesses. Identity Address: {address}", identity.Address);
             }
