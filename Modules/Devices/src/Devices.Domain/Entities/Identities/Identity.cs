@@ -95,9 +95,8 @@ public class Identity
 }
 public enum IdentityStatus
 {
-    Active=0,
-    ToBeDeleted=1,
-    Deleting=2
+    Active = 0,
+    Deleting = 2
 }
 
 public enum DeletionProcessStatus
