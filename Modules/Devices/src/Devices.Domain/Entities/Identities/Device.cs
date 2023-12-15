@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
@@ -38,15 +40,31 @@ public class Device
 
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
-    public byte[]? DeletionCertificate { get; set; }
+
+    public bool IsOnboarded => User.HasLoggedIn;
 
     public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletionCertificate == null && device.DeletedAt == null && device.DeletedByDevice == null;
+        device => device.DeletedAt == null && device.DeletedByDevice == null;
 
-    public void MarkAsDeleted(byte[] deletionCertificate, DeviceId deletedByDevice)
+    private DomainError? CanBeDeletedBy(IdentityAddress addressOfActiveIdentity)
     {
+        if (IsOnboarded)
+            return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.");
+
+        if (Identity.Address != addressOfActiveIdentity)
+            return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "You are not allowed to delete this device as it belongs to another identity.");
+
+        return null;
+    }
+
+    public void MarkAsDeleted(DeviceId deletedByDevice, IdentityAddress addressOfActiveIdentity)
+    {
+        var error = CanBeDeletedBy(addressOfActiveIdentity);
+
+        if (error != null)
+            throw new DomainException(error);
+
         DeletedAt = SystemTime.UtcNow;
-        DeletionCertificate = deletionCertificate;
         DeletedByDevice = deletedByDevice;
     }
 }

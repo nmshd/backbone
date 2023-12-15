@@ -3,6 +3,7 @@ using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.Crypto.Abstractions;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -19,7 +20,9 @@ internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
     private readonly PushNotificationsApi _pnsRegistrationsApi;
     private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
 
-    public PnsRegistrationStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, PushNotificationsApi pnsRegistrationsApi) : base(httpConfiguration)
+    public PnsRegistrationStepDefinitions(
+        IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi, PushNotificationsApi pnsRegistrationsApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _pnsRegistrationsApi = pnsRegistrationsApi;
     }

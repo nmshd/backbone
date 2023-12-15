@@ -197,9 +197,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("DeletionCertificate")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)

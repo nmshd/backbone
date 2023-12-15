@@ -12,6 +12,7 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<Applicatio
         builder
             .Ignore(x => x.Email)
             .Ignore(x => x.EmailConfirmed)
+            .Ignore(x => x.HasLoggedIn)
             .Ignore(x => x.NormalizedEmail)
             .Ignore(x => x.PhoneNumber)
             .Ignore(x => x.PhoneNumberConfirmed)
