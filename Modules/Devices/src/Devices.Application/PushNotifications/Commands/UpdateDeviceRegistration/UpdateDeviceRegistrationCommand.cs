@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 

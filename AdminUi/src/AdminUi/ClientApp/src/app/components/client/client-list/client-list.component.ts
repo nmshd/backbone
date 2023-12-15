@@ -59,9 +59,7 @@ export class ClientListComponent {
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tiers = data.result;
             },
-            complete: () => (this.loading = false),
             error: (err: any) => {
-                this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",

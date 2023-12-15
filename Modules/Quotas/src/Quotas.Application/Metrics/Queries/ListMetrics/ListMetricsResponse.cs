@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Application.DTOs;
 
 namespace Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
-public class ListMetricsResponse : EnumerableResponseBase<MetricDTO>
+public class ListMetricsResponse : CollectionResponseBase<MetricDTO>
 {
     public ListMetricsResponse(IEnumerable<MetricDTO> items) : base(items) { }
 }

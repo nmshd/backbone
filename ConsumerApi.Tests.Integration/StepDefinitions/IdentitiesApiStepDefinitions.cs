@@ -14,19 +14,12 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Identity")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
-    private readonly ChallengesApi _challengeApi;
-    private readonly ISignatureHelper _signatureHelper;
-    private readonly IdentitiesApi _identitiesApi;
-    private HttpResponse<StartDeletionProcessResponse>? _response;
     private HttpResponse<CreateIdentityResponse>? _identityResponse;
     private HttpResponse<Challenge>? _challengeResponse;
 
-    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengeApi, ISignatureHelper signatureHelper) : base(httpConfiguration)
-    {
-        _identitiesApi = identitiesApi;
-        _challengeApi = challengeApi;
-        _signatureHelper = signatureHelper;
-    }
+    public IdentitiesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, IdentitiesApi identitiesApi, ChallengesApi challengesApi, ISignatureHelper signatureHelper, DevicesApi devicesApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
+    { }
 
     [Given("no active deletion process for the identity exists")]
     public void GivenNoActiveDeletionProcessForTheUserExists()
@@ -82,14 +75,14 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When(@"a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
-        await CreateIdentity();
+        _identityResponse = await CreateIdentity();
     }
 
     [Given(@"an Identity i")]
     public async Task GivenAnIdentityI()
     {
-        await CreateChallenge();
-        await CreateIdentity();
+        _challengeResponse = await CreateChallenge();
+        _identityResponse = await CreateIdentity();
     }
 
     [Then(@"the response contains a CreateIdentityResponse")]
@@ -104,62 +97,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_identityResponse != null)
-        {
-            var actualStatusCode = (int)_identityResponse!.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
-
-        if (_response != null)
-        {
-            var actualStatusCode = (int)_response!.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
-    }
-
-    private async Task CreateChallenge()
-    {
-        _challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
-        _challengeResponse!.IsSuccessStatusCode.Should().BeTrue();
-    }
-
-    private async Task CreateIdentity()
-    {
-        var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Content.Result!);
-
-        var keyPair = _signatureHelper.CreateKeyPair();
-        var signature = _signatureHelper.CreateSignature(keyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
-
-        dynamic publicKey = new
-        {
-            pub = keyPair.PublicKey.Base64Representation,
-            alg = 3
-        };
-
-        dynamic signedChallenge = new
-        {
-            sig = signature.BytesRepresentation,
-            alg = 2
-        };
-
-        var createIdentityRequest = new CreateIdentityRequest()
-        {
-            ClientId = "test",
-            ClientSecret = "test",
-            DevicePassword = "test",
-            IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.Base64Representation,
-            IdentityVersion = 1,
-            SignedChallenge = new CreateIdentityRequestSignedChallenge()
-            {
-                Challenge = serializedChallenge,
-                Signature = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(signedChallenge)) as ConvertibleString)!.Base64Representation
-            }
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createIdentityRequest);
-
-        _identityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
+        var actualStatusCode = (int)_identityResponse!.StatusCode;
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 }
