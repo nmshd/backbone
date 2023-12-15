@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20231213110501_AddDeletionProcess")]
+    [Migration("20231215102309_AddDeletionProcess")]
     partial class AddDeletionProcess
     {
         /// <inheritdoc />
@@ -198,9 +198,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
-
-                    b.Property<byte[]>("DeletionCertificate")
-                        .HasColumnType("bytea");
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()

@@ -17,702 +17,809 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.PnsRegistration", b =>
-            {
-                b.Property<string>("DeviceId")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                {
+                    b.Property<string>("DeviceId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<string>("AppId")
-                    .IsRequired()
-                    .HasColumnType("text");
+                    b.Property<string>("AppId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                b.Property<string>("DevicePushIdentifier")
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                    b.Property<string>("DevicePushIdentifier")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<int>("Environment")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("integer")
-                    .HasDefaultValue(1);
+                    b.Property<int>("Environment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
 
-                b.Property<string>("Handle")
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(true)
-                    .HasColumnType("character varying(200)")
-                    .IsFixedLength(false);
+                    b.Property<string>("Handle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(200)")
+                        .IsFixedLength(false);
 
-                b.Property<string>("IdentityAddress")
-                    .IsRequired()
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnType("character(36)")
-                    .IsFixedLength();
+                    b.Property<string>("IdentityAddress")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
 
-                b.Property<DateTime>("UpdatedAt")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                b.HasKey("DeviceId");
+                    b.HasKey("DeviceId");
 
-                b.ToTable("PnsRegistrations");
-            });
+                    b.ToTable("PnsRegistrations");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
-            {
-                b.Property<string>("Id")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<string>("Name")
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(true)
-                    .HasColumnType("character varying(30)")
-                    .IsFixedLength(false);
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(30)")
+                        .IsFixedLength(false);
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("Name")
-                    .IsUnique();
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                b.ToTable("Tiers");
-            });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
-            {
-                b.Property<string>("Id")
-                    .HasColumnType("text");
-
-                b.Property<int>("AccessFailedCount")
-                    .HasColumnType("integer");
-
-                b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken()
-                    .HasColumnType("text");
-
-                b.Property<DateTime>("CreatedAt")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<string>("DeviceId")
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
-
-                b.Property<DateTime?>("LastLoginAt")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<bool>("LockoutEnabled")
-                    .HasColumnType("boolean");
-
-                b.Property<DateTimeOffset?>("LockoutEnd")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<string>("NormalizedUserName")
-                    .HasMaxLength(256)
-                    .HasColumnType("character varying(256)");
-
-                b.Property<string>("PasswordHash")
-                    .HasColumnType("text");
-
-                b.Property<string>("SecurityStamp")
-                    .HasColumnType("text");
-
-                b.Property<string>("UserName")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
-
-                b.HasKey("Id");
-
-                b.HasIndex("DeviceId")
-                    .IsUnique();
-
-                b.HasIndex("NormalizedUserName")
-                    .IsUnique()
-                    .HasDatabaseName("UserNameIndex");
-
-                b.ToTable("AspNetUsers", (string)null);
-            });
+                    b.ToTable("Tiers");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
-            {
-                b.Property<string>("Id")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
-
-                b.Property<DateTime>("ExpiresAt")
-                    .HasColumnType("timestamp with time zone");
-
-                b.HasKey("Id");
-
-                b.ToTable("Challenges", "Challenges", t =>
                 {
-                    t.ExcludeFromMigrations();
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
-            });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
-            {
-                b.Property<string>("Id")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                b.Property<DateTime>("CreatedAt")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
 
-                b.Property<string>("CreatedByDevice")
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
-                b.Property<DateTime?>("DeletedAt")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<string>("DeletedByDevice")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<string>("IdentityAddress")
-                    .IsRequired()
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnType("character(36)")
-                    .IsFixedLength();
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("timestamp with time zone");
 
-                b.HasKey("Id");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
 
-                b.HasIndex("IdentityAddress");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
 
-                b.ToTable("Devices");
-            });
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
-            {
-                b.Property<string>("Address")
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnType("character(36)")
-                    .IsFixedLength();
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
 
-                b.Property<string>("ClientId")
-                    .HasMaxLength(200)
-                    .HasColumnType("character varying(200)");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
 
-                b.Property<DateTime>("CreatedAt")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<byte>("IdentityVersion")
-                    .HasColumnType("smallint");
+                    b.HasKey("Id");
 
-                b.Property<byte[]>("PublicKey")
-                    .IsRequired()
-                    .HasColumnType("bytea");
+                    b.HasIndex("DeviceId")
+                        .IsUnique();
 
-                b.Property<string>("TierId")
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
 
-                b.HasKey("Address");
+                    b.ToTable("AspNetUsers", (string)null);
+                });
 
-                b.ToTable("Identities");
-            });
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByDevice")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("IdentityAddress")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityAddress");
+
+                    b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
+                {
+                    b.Property<string>("Address")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletionGracePeriodEndsAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<byte>("IdentityVersion")
+                        .HasColumnType("smallint");
+
+                    b.Property<byte[]>("PublicKey")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("TierId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.HasKey("Address");
+
+                    b.ToTable("Identities");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ApprovedByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("GracePeriodEndsAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IdentityAddress")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityAddress");
+
+                    b.ToTable("IdentityDeletionProcesses", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<byte[]>("DeviceIdHash")
+                        .HasColumnType("bytea");
+
+                    b.Property<byte[]>("IdentityAddressHash")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("IdentityDeletionProcessId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("NewStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OldStatus")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityDeletionProcessId");
+
+                    b.ToTable("IdentityDeletionProcessAuditLog", (string)null);
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
-            {
-                b.Property<string>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                b.Property<string>("ClientId")
-                    .HasMaxLength(100)
-                    .HasColumnType("character varying(100)");
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                b.Property<string>("ClientSecret")
-                    .HasColumnType("text");
+                    b.Property<string>("ClientSecret")
+                        .HasColumnType("text");
 
-                b.Property<string>("ConcurrencyToken")
-                    .IsConcurrencyToken()
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("ConcurrencyToken")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<string>("ConsentType")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("ConsentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<DateTime>("CreatedAt")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<string>("DefaultTier")
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnType("character(20)")
-                    .IsFixedLength();
+                    b.Property<string>("DefaultTier")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                b.Property<string>("DisplayName")
-                    .HasColumnType("text");
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
 
-                b.Property<string>("DisplayNames")
-                    .HasColumnType("text");
+                    b.Property<string>("DisplayNames")
+                        .HasColumnType("text");
 
-                b.Property<string>("Permissions")
-                    .HasColumnType("text");
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("integer");
 
-                b.Property<string>("PostLogoutRedirectUris")
-                    .HasColumnType("text");
+                    b.Property<string>("Permissions")
+                        .HasColumnType("text");
 
-                b.Property<string>("Properties")
-                    .HasColumnType("text");
+                    b.Property<string>("PostLogoutRedirectUris")
+                        .HasColumnType("text");
 
-                b.Property<string>("RedirectUris")
-                    .HasColumnType("text");
+                    b.Property<string>("Properties")
+                        .HasColumnType("text");
 
-                b.Property<string>("Requirements")
-                    .HasColumnType("text");
+                    b.Property<string>("RedirectUris")
+                        .HasColumnType("text");
 
-                b.Property<string>("Type")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("Requirements")
+                        .HasColumnType("text");
 
-                b.HasKey("Id");
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.HasIndex("ClientId")
-                    .IsUnique();
+                    b.HasKey("Id");
 
-                b.HasIndex("DefaultTier");
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
-                b.ToTable("OpenIddictApplications", (string)null);
-            });
+                    b.HasIndex("DefaultTier");
+
+                    b.ToTable("OpenIddictApplications", (string)null);
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
-            {
-                b.Property<string>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                b.Property<string>("ApplicationId")
-                    .HasColumnType("text");
+                    b.Property<string>("ApplicationId")
+                        .HasColumnType("text");
 
-                b.Property<string>("ConcurrencyToken")
-                    .IsConcurrencyToken()
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("ConcurrencyToken")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<DateTime?>("CreationDate")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<string>("Properties")
-                    .HasColumnType("text");
+                    b.Property<string>("Properties")
+                        .HasColumnType("text");
 
-                b.Property<string>("Scopes")
-                    .HasColumnType("text");
+                    b.Property<string>("Scopes")
+                        .HasColumnType("text");
 
-                b.Property<string>("Status")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<string>("Subject")
-                    .HasMaxLength(400)
-                    .HasColumnType("character varying(400)");
+                    b.Property<string>("Subject")
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)");
 
-                b.Property<string>("Type")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("ApplicationId", "Status", "Subject", "Type");
+                    b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                b.ToTable("OpenIddictAuthorizations", (string)null);
-            });
+                    b.ToTable("OpenIddictAuthorizations", (string)null);
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
-            {
-                b.Property<string>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                b.Property<string>("ConcurrencyToken")
-                    .IsConcurrencyToken()
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("ConcurrencyToken")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<string>("Description")
-                    .HasColumnType("text");
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
-                b.Property<string>("Descriptions")
-                    .HasColumnType("text");
+                    b.Property<string>("Descriptions")
+                        .HasColumnType("text");
 
-                b.Property<string>("DisplayName")
-                    .HasColumnType("text");
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
 
-                b.Property<string>("DisplayNames")
-                    .HasColumnType("text");
+                    b.Property<string>("DisplayNames")
+                        .HasColumnType("text");
 
-                b.Property<string>("Name")
-                    .HasMaxLength(200)
-                    .HasColumnType("character varying(200)");
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
-                b.Property<string>("Properties")
-                    .HasColumnType("text");
+                    b.Property<string>("Properties")
+                        .HasColumnType("text");
 
-                b.Property<string>("Resources")
-                    .HasColumnType("text");
+                    b.Property<string>("Resources")
+                        .HasColumnType("text");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("Name")
-                    .IsUnique();
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                b.ToTable("OpenIddictScopes", (string)null);
-            });
+                    b.ToTable("OpenIddictScopes", (string)null);
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
-            {
-                b.Property<string>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                b.Property<string>("ApplicationId")
-                    .HasColumnType("text");
+                    b.Property<string>("ApplicationId")
+                        .HasColumnType("text");
 
-                b.Property<string>("AuthorizationId")
-                    .HasColumnType("text");
+                    b.Property<string>("AuthorizationId")
+                        .HasColumnType("text");
 
-                b.Property<string>("ConcurrencyToken")
-                    .IsConcurrencyToken()
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("ConcurrencyToken")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<DateTime?>("CreationDate")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<DateTime?>("ExpirationDate")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<string>("Payload")
-                    .HasColumnType("text");
+                    b.Property<string>("Payload")
+                        .HasColumnType("text");
 
-                b.Property<string>("Properties")
-                    .HasColumnType("text");
+                    b.Property<string>("Properties")
+                        .HasColumnType("text");
 
-                b.Property<DateTime?>("RedemptionDate")
-                    .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime?>("RedemptionDate")
+                        .HasColumnType("timestamp with time zone");
 
-                b.Property<string>("ReferenceId")
-                    .HasMaxLength(100)
-                    .HasColumnType("character varying(100)");
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                b.Property<string>("Status")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.Property<string>("Subject")
-                    .HasMaxLength(400)
-                    .HasColumnType("character varying(400)");
+                    b.Property<string>("Subject")
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)");
 
-                b.Property<string>("Type")
-                    .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("AuthorizationId");
+                    b.HasIndex("AuthorizationId");
 
-                b.HasIndex("ReferenceId")
-                    .IsUnique();
+                    b.HasIndex("ReferenceId")
+                        .IsUnique();
 
-                b.HasIndex("ApplicationId", "Status", "Subject", "Type");
+                    b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                b.ToTable("OpenIddictTokens", (string)null);
-            });
+                    b.ToTable("OpenIddictTokens", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-            {
-                b.Property<string>("Id")
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                b.Property<string>("ConcurrencyStamp")
-                    .IsConcurrencyToken()
-                    .HasColumnType("text");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
-                b.Property<string>("Name")
-                    .HasMaxLength(256)
-                    .HasColumnType("character varying(256)");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                b.Property<string>("NormalizedName")
-                    .HasMaxLength(256)
-                    .HasColumnType("character varying(256)");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("NormalizedName")
-                    .IsUnique()
-                    .HasDatabaseName("RoleNameIndex");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
 
-                b.ToTable("AspNetRoles", (string)null);
-            });
+                    b.ToTable("AspNetRoles", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("integer");
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                b.Property<string>("ClaimType")
-                    .HasColumnType("text");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                b.Property<string>("ClaimValue")
-                    .HasColumnType("text");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
-                b.Property<string>("RoleId")
-                    .IsRequired()
-                    .HasColumnType("text");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("RoleId");
+                    b.HasIndex("RoleId");
 
-                b.ToTable("AspNetRoleClaims", (string)null);
-            });
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("integer");
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                b.Property<string>("ClaimType")
-                    .HasColumnType("text");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                b.Property<string>("ClaimValue")
-                    .HasColumnType("text");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
-                b.Property<string>("UserId")
-                    .IsRequired()
-                    .HasColumnType("text");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.HasIndex("UserId");
+                    b.HasIndex("UserId");
 
-                b.ToTable("AspNetUserClaims", (string)null);
-            });
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-            {
-                b.Property<string>("LoginProvider")
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                b.Property<string>("ProviderKey")
-                    .HasColumnType("text");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
 
-                b.Property<string>("ProviderDisplayName")
-                    .HasColumnType("text");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
 
-                b.Property<string>("UserId")
-                    .IsRequired()
-                    .HasColumnType("text");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("LoginProvider", "ProviderKey");
 
-                b.HasIndex("UserId");
+                    b.HasIndex("UserId");
 
-                b.ToTable("AspNetUserLogins", (string)null);
-            });
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-            {
-                b.Property<string>("UserId")
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                b.Property<string>("RoleId")
-                    .HasColumnType("text");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
 
-                b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId");
 
-                b.HasIndex("RoleId");
+                    b.HasIndex("RoleId");
 
-                b.ToTable("AspNetUserRoles", (string)null);
-            });
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-            {
-                b.Property<string>("UserId")
-                    .HasColumnType("text");
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                b.Property<string>("LoginProvider")
-                    .HasColumnType("text");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                b.Property<string>("Name")
-                    .HasColumnType("text");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                b.Property<string>("Value")
-                    .HasColumnType("text");
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
 
-                b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
-                b.ToTable("AspNetUserTokens", (string)null);
-            });
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.Device", "Device")
-                    .WithOne("User")
-                    .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", "DeviceId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Device", "Device")
+                        .WithOne("User")
+                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", "DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                b.Navigation("Device");
-            });
+                    b.Navigation("Device");
+                });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identity", "Identity")
-                    .WithMany("Devices")
-                    .HasForeignKey("IdentityAddress")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", "Identity")
+                        .WithMany("Devices")
+                        .HasForeignKey("IdentityAddress")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                b.Navigation("Identity");
-            });
+                    b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
+                        .WithMany("DeletionProcesses")
+                        .HasForeignKey("IdentityAddress");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
+                        .WithMany("AuditLog")
+                        .HasForeignKey("IdentityDeletionProcessId");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
-                    .WithMany()
-                    .HasForeignKey("DefaultTier")
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .IsRequired();
-            });
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", null)
+                        .WithMany()
+                        .HasForeignKey("DefaultTier")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
-                    .WithMany("Authorizations")
-                    .HasForeignKey("ApplicationId");
+                {
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                        .WithMany("Authorizations")
+                        .HasForeignKey("ApplicationId");
 
-                b.Navigation("Application");
-            });
+                    b.Navigation("Application");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
-                    .WithMany("Tokens")
-                    .HasForeignKey("ApplicationId");
+                {
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", "Application")
+                        .WithMany("Tokens")
+                        .HasForeignKey("ApplicationId");
 
-                b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
-                    .WithMany("Tokens")
-                    .HasForeignKey("AuthorizationId");
+                    b.HasOne("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", "Authorization")
+                        .WithMany("Tokens")
+                        .HasForeignKey("AuthorizationId");
 
-                b.Navigation("Application");
+                    b.Navigation("Application");
 
-                b.Navigation("Authorization");
-            });
+                    b.Navigation("Authorization");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-            {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                    .WithMany()
-                    .HasForeignKey("RoleId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-            {
-                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                    .WithMany()
-                    .HasForeignKey("RoleId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-            {
-                b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
-            {
-                b.Navigation("User")
-                    .IsRequired();
-            });
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+                });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
-            {
-                b.Navigation("Devices");
-            });
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
+                {
+                    b.Navigation("DeletionProcesses");
+
+                    b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Navigation("AuditLog");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
-            {
-                b.Navigation("Authorizations");
+                {
+                    b.Navigation("Authorizations");
 
-                b.Navigation("Tokens");
-            });
+                    b.Navigation("Tokens");
+                });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
-            {
-                b.Navigation("Tokens");
-            });
+                {
+                    b.Navigation("Tokens");
+                });
 #pragma warning restore 612, 618
         }
     }
