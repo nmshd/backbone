@@ -2,10 +2,8 @@ using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Models;
-using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -14,6 +12,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Identity")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
+    private HttpResponse<StartDeletionProcessResponse>? _response;
     private HttpResponse<CreateIdentityResponse>? _identityResponse;
     private HttpResponse<Challenge>? _challengeResponse;
 
@@ -69,20 +68,20 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        await CreateChallenge();
+        _challengeResponse = await CreateChallenge();
     }
 
     [When(@"a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
-        _identityResponse = await CreateIdentity();
+        _identityResponse = await CreateIdentity(_challengeResponse!.Content.Result);
     }
 
     [Given(@"an Identity i")]
     public async Task GivenAnIdentityI()
     {
         _challengeResponse = await CreateChallenge();
-        _identityResponse = await CreateIdentity();
+        _identityResponse = await CreateIdentity(_challengeResponse.Content.Result);
     }
 
     [Then(@"the response contains a CreateIdentityResponse")]
@@ -97,7 +96,16 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_identityResponse!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        if (_identityResponse != null)
+        {
+            var actualStatusCode = (int)_identityResponse!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
+
+        if (_response != null)
+        {
+            var actualStatusCode = (int)_response!.StatusCode;
+            actualStatusCode.Should().Be(expectedStatusCode);
+        }
     }
 }
