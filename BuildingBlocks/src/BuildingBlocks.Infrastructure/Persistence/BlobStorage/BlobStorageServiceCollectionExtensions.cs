@@ -41,7 +41,7 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    public required string ConnectionInfo { get; set; }
-    public required string Container { get; set; }
-    public required string CloudProvider { get; set; }
+    public string ConnectionInfo { get; set; }
+    public string Container { get; set; }
+    public string CloudProvider { get; set; }
 }
