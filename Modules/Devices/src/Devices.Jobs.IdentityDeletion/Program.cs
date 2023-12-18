@@ -10,6 +10,7 @@ using Backbone.Modules.Quotas.ConsumerApi;
 using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
+using FluentValidation.AspNetCore;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 
@@ -57,6 +58,11 @@ public class Program
                 .AddModule<TokensModule>(configuration);
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+                services.AddFluentValidationAutoValidation(config =>
+                {
+                    config.DisableDataAnnotationsValidation = true;
+                });
+
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
