@@ -93,7 +93,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await (track ? _devices : _readonlyDevices)
             .NotDeleted()
             .IncludeAll(_dbContext)
-            .FirstWithId(deviceId, cancellationToken);
+            .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
 
     public async Task Update(Device device, CancellationToken cancellationToken)
