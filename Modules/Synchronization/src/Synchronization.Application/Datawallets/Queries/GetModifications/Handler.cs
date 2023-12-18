@@ -33,25 +33,23 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
 
         var dbPaginationResult = await _dbContext.GetDatawalletModifications(_activeIdentity, request.LocalIndex, request.PaginationFilter, cancellationToken);
 
-        var dtos = await MapToDtos(dbPaginationResult.ItemsOnPage);
+        var dtos = MapToDtos(dbPaginationResult.ItemsOnPage);
 
         return new GetModificationsResponse(dtos, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 
-    private async Task<List<DatawalletModificationDTO>> MapToDtos(IEnumerable<DatawalletModification> modifications)
+    private List<DatawalletModificationDTO> MapToDtos(IEnumerable<DatawalletModification> modifications)
     {
         var datawalletModifications = modifications as DatawalletModification[] ?? modifications.ToArray();
 
         var mappingTasks = datawalletModifications.Select(MapToDto);
 
-        return (await Task.WhenAll(mappingTasks)).ToList();
+        return mappingTasks.ToList();
     }
 
-    private async Task<DatawalletModificationDTO> MapToDto(DatawalletModification modification)
+    private DatawalletModificationDTO MapToDto(DatawalletModification modification)
     {
         var dto = _mapper.Map<DatawalletModificationDTO>(modification);
-        dto.EncryptedPayload = modification.EncryptedPayload;
-
         return dto;
     }
 }
