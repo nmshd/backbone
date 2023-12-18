@@ -12,11 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-<<<<<<<< HEAD:Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Migrations/20231120112122_AddDeletionProcess.Designer.cs
     [Migration("20231120112122_AddDeletionProcess")]
-========
-    [Migration("20231215111023_AddDeletionProcess")]
->>>>>>>> origin/identity-deletion:Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Migrations/20231215111023_AddDeletionProcess.Designer.cs
     partial class AddDeletionProcess
     {
         /// <inheritdoc />
