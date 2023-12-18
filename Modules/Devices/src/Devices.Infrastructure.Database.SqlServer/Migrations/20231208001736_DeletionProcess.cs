@@ -35,7 +35,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 column: "IdentityAddress",
                 principalTable: "Identities",
                 principalColumn: "Address",
-                onDelete: ReferentialAction.SetNull);
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
