@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens;
 
-public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : notnull
+public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     protected readonly IdentityAddress _activeIdentity;
     protected readonly IMapper _mapper;
