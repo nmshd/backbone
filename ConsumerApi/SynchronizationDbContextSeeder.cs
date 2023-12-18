@@ -89,8 +89,8 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         {
             try
             {
-                var blobTokenContent = await _blobStorage!.FindAsync(_blobRootFolder!, datawalletModification.Id);
-                datawalletModification.LoadEncryptedPayload(blobTokenContent);
+                var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, datawalletModification.Id);
+                datawalletModification.LoadEncryptedPayload(blobContent);
                 context.DatawalletModifications.Update(datawalletModification);
             }
             catch (NotFoundException)
