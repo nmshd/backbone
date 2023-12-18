@@ -196,9 +196,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("DeletionCertificate")
-                        .HasColumnType("bytea");
-
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)

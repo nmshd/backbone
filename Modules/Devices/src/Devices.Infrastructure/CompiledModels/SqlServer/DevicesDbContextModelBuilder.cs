@@ -406,11 +406,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase.Columns.Add("DeletedByDevice", deletedByDeviceColumnBase);
-            var deletionCertificateColumnBase = new ColumnBase<ColumnMappingBase>("DeletionCertificate", "varbinary(max)", backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase)
-            {
-                IsNullable = true
-            };
-            backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase.Columns.Add("DeletionCertificate", deletionCertificateColumnBase);
             var idColumnBase2 = new ColumnBase<ColumnMappingBase>("Id", "char(20)", backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase);
             backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase.Columns.Add("Id", idColumnBase2);
             var identityAddressColumnBase0 = new ColumnBase<ColumnMappingBase>("IdentityAddress", "char(36)", backboneModulesDevicesDomainEntitiesIdentitiesDeviceTableBase);
@@ -424,7 +419,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)createdByDeviceColumnBase, device.FindProperty("CreatedByDevice")!, backboneModulesDevicesDomainEntitiesIdentitiesDeviceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletedAtColumnBase, device.FindProperty("DeletedAt")!, backboneModulesDevicesDomainEntitiesIdentitiesDeviceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletedByDeviceColumnBase, device.FindProperty("DeletedByDevice")!, backboneModulesDevicesDomainEntitiesIdentitiesDeviceMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletionCertificateColumnBase, device.FindProperty("DeletionCertificate")!, backboneModulesDevicesDomainEntitiesIdentitiesDeviceMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)identityAddressColumnBase0, device.FindProperty("IdentityAddress")!, backboneModulesDevicesDomainEntitiesIdentitiesDeviceMappingBase);
 
             var tableMappings3 = new List<TableMapping>();
@@ -446,11 +440,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             devicesTable.Columns.Add("DeletedByDevice", deletedByDeviceColumn);
-            var deletionCertificateColumn = new Column("DeletionCertificate", "varbinary(max)", devicesTable)
-            {
-                IsNullable = true
-            };
-            devicesTable.Columns.Add("DeletionCertificate", deletionCertificateColumn);
             var identityAddressColumn0 = new Column("IdentityAddress", "char(36)", devicesTable);
             devicesTable.Columns.Add("IdentityAddress", identityAddressColumn0);
             var pK_Devices = new UniqueConstraint("PK_Devices", devicesTable, new[] { idColumn2 });
@@ -478,7 +467,6 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(createdByDeviceColumn, device.FindProperty("CreatedByDevice")!, devicesTableMapping);
             RelationalModel.CreateColumnMapping(deletedAtColumn, device.FindProperty("DeletedAt")!, devicesTableMapping);
             RelationalModel.CreateColumnMapping(deletedByDeviceColumn, device.FindProperty("DeletedByDevice")!, devicesTableMapping);
-            RelationalModel.CreateColumnMapping(deletionCertificateColumn, device.FindProperty("DeletionCertificate")!, devicesTableMapping);
             RelationalModel.CreateColumnMapping(identityAddressColumn0, device.FindProperty("IdentityAddress")!, devicesTableMapping);
 
             var identity = FindEntityType("Backbone.Modules.Devices.Domain.Entities.Identities.Identity")!;

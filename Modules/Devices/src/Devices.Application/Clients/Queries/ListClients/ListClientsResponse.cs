@@ -2,7 +2,7 @@
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
-public class ListClientsResponse : EnumerableResponseBase<ClientDTO>
+public class ListClientsResponse : CollectionResponseBase<ClientDTO>
 {
     public ListClientsResponse(IEnumerable<ClientDTO> items) : base(items) { }
 }

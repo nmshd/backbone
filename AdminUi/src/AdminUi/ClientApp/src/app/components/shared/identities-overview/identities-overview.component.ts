@@ -122,9 +122,7 @@ export class IdentitiesOverviewComponent {
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
                 this.tiers = data.result;
             },
-            complete: () => (this.loading = false),
             error: (err: any) => {
-                this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",
@@ -145,9 +143,7 @@ export class IdentitiesOverviewComponent {
             next: (data: PagedHttpResponseEnvelope<ClientOverview>) => {
                 this.clients = data.result;
             },
-            complete: () => (this.loading = false),
             error: (err: any) => {
-                this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
                     verticalPosition: "top",

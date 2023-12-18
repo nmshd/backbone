@@ -31,9 +31,6 @@ public class IdentitySummaryDTO
         {
             CreatedAt = it.CreatedAt,
             CreatedByDevice = it.CreatedByDevice,
-            DeletedAt = it.DeletedAt,
-            DeletedByDevice = it.DeletedByDevice,
-            DeletionCertificate = it.DeletionCertificate,
             Id = it.Id,
             LastLogin = new LastLoginInformation { Time = it.User.LastLoginAt },
             Username = it.User.UserName

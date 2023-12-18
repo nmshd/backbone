@@ -12,7 +12,7 @@ internal class BaseApi
 {
     protected const string ROUTE_PREFIX = "/api/v1";
     private readonly HttpClient _httpClient;
-    private static AccessTokenResponse? _accessTokenResponse;
+    private AccessTokenResponse? _accessTokenResponse;
 
     protected BaseApi(HttpClientFactory factory)
     {
@@ -42,6 +42,43 @@ internal class BaseApi
         return await ExecuteRequest<T>(HttpMethod.Put, endpoint, requestConfiguration);
     }
 
+    protected async Task<HttpResponse> Delete(string endpoint, RequestConfiguration requestConfiguration)
+    {
+        return await ExecuteRequest(HttpMethod.Delete, endpoint, requestConfiguration);
+    }
+
+    private async Task<HttpResponse> ExecuteRequest(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
+    {
+        var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
+
+        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+            request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
+
+        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
+            request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
+
+        if (requestConfiguration.Authenticate)
+        {
+            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
+            request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
+        }
+
+        var httpResponse = await _httpClient.SendAsync(request);
+        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+        var responseData = JsonConvert.DeserializeObject<ErrorResponseContent>(await httpResponse.Content.ReadAsStringAsync())!;
+
+        var response = new HttpResponse
+        {
+            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
+            StatusCode = httpResponse.StatusCode,
+            Content = responseData,
+            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
+            RawContent = responseRawContent
+        };
+
+        return response;
+    }
+
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
@@ -69,35 +106,6 @@ internal class BaseApi
             Content = responseData!,
             ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
             RawContent = responseRawContent
-        };
-
-        return response;
-    }
-
-    private async Task<HttpResponse> ExecuteRequest(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
-    {
-        var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
-
-        if (!string.IsNullOrEmpty(requestConfiguration.Content))
-            request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
-
-        if (!string.IsNullOrEmpty(requestConfiguration.AcceptHeader))
-            request.Headers.Add("Accept", requestConfiguration.AcceptHeader);
-
-        if (requestConfiguration.Authenticate)
-        {
-            var tokenResponse = await GetAccessToken(requestConfiguration.AuthenticationParameters);
-            request.Headers.Add("Authorization", $"Bearer {tokenResponse.AccessToken}");
-        }
-
-        var httpResponse = await _httpClient.SendAsync(request);
-
-        var response = new HttpResponse
-        {
-            Content = JsonConvert.DeserializeObject<ErrorResponseContent>(await httpResponse.Content.ReadAsStringAsync())!,
-            ContentType = httpResponse.Content.Headers.ContentType?.MediaType,
-            IsSuccessStatusCode = httpResponse.IsSuccessStatusCode,
-            StatusCode = httpResponse.StatusCode
         };
 
         return response;
