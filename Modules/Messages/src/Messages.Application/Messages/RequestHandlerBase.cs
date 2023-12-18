@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages;
 
-public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : notnull
+public abstract class RequestHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     protected readonly IdentityAddress _activeIdentity;
     protected readonly IEventBus _eventBus;
