@@ -7,10 +7,7 @@ public class Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler
 {
     public async Task<UpdateDeletionProcessesResponse> Handle(UpdateDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var response = new UpdateDeletionProcessesResponse
-        {
-            IdentityAddresses = []
-        };
+        var response = new UpdateDeletionProcessesResponse();
 
         var identities = await identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(cancellationToken, track: true);
         foreach (var identity in identities)
