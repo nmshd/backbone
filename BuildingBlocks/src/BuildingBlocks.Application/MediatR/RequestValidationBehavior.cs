@@ -6,7 +6,7 @@ using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exc
 namespace Backbone.BuildingBlocks.Application.MediatR;
 
 public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
