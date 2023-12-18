@@ -95,8 +95,8 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             }
             catch (NotFoundException)
             {
-                // due to missing validation, it was possible to create a relationship template without request content;
-                // therefore we cannot tell whether this exception is an error or not
+                // The encrypted payload of a datawallet modification is not required.
+                // Therefore we cannot tell whether this exception is an error or not
             }
         }
 
