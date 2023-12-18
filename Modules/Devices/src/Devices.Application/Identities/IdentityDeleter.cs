@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Commands.CreateAuditLog;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteRegistrationsByIdentityAddress;
 using MediatR;
 
@@ -11,5 +12,6 @@ public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteRegistrationsByIdentityAddressCommand(identityAddress));
+        await _mediator.Send(new DeleteIdentityCommand(identityAddress));
     }
 }
