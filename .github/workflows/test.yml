@@ -62,7 +62,7 @@ jobs:
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: integration-test-sqlserver-docker-logs
           path: docker-log.txt
@@ -82,7 +82,7 @@ jobs:
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: integration-test-postgres-docker-logs
           path: docker-log.txt
@@ -117,7 +117,7 @@ jobs:
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cns-transport-test-sqlserver-docker-logs
           path: docker-log.txt
@@ -154,7 +154,7 @@ jobs:
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cns-transport-test-postgres-docker-logs
           path: docker-log.txt
