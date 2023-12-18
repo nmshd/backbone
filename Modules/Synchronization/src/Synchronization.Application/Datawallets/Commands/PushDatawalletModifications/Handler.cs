@@ -18,8 +18,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
-    //private readonly IBlobStorage _blobStorage;
-    //private readonly BlobOptions _blobOptions;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
