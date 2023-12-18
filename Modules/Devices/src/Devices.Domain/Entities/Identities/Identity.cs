@@ -115,6 +115,11 @@ public class Identity
         if (!approvedProcessExists)
             throw new DomainException(DomainErrors.NoApprovedDeletionProcessFound());
     }
+
+    public IdentityDeletionProcess? GetDeletionProcessInStatus(DeletionProcessStatus deletionProcessStatus)
+    {
+        return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
+    }
 }
 
 public enum DeletionProcessStatus
