@@ -1,5 +1,4 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
@@ -32,6 +31,13 @@ public static class TestDataGenerator
             1);
         identity.Devices.Add(new Device(identity));
 
+        return identity;
+    }
+
+    public static Identity CreateIdentityWithApprovedDeletionProcess()
+    {
+        var identity = CreateIdentityWithOneDevice();
+        identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
         return identity;
     }
 }

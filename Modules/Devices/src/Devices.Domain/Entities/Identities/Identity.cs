@@ -76,6 +76,14 @@ public class Identity
         return deletionProcess;
     }
 
+    private void EnsureNoActiveProcessExists()
+    {
+        var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
+
+        if (activeProcessExists)
+            throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
+    }
+
     public void DeletionGracePeriodReminder1Sent()
     {
         EnsureApprovedProcessExists();
@@ -98,14 +106,6 @@ public class Identity
 
         var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder3Sent(Address);
-    }
-
-    private void EnsureNoActiveProcessExists()
-    {
-        var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
-
-        if (activeProcessExists)
-            throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
     }
 
     private void EnsureApprovedProcessExists()
