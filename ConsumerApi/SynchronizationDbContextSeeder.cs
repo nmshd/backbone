@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Linq;
+using System.Text.Json;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
@@ -12,19 +13,21 @@ namespace Backbone.ConsumerApi;
 
 public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext>
 {
-    private const int PAGE_SIZE = 5;
+    private const int PAGE_SIZE = 500;
 
     private readonly IBlobStorage? _blobStorage;
     private readonly string? _blobRootFolder;
     private readonly ILogger<SynchronizationDbContextSeeder> _logger;
 
-    private readonly List<DatawalletModificationId> _modificationIdsWithNoPayloadInBlobStorage = new();
+    private int _modificationsWithNoPayloadInBlobStorageCount;
 
     public SynchronizationDbContextSeeder(IServiceProvider serviceProvider, ILogger<SynchronizationDbContextSeeder> logger)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
         _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
         _logger = logger;
+
+        _modificationsWithNoPayloadInBlobStorageCount = 0;
     }
 
     public async Task SeedAsync(SynchronizationDbContext context)
@@ -43,8 +46,11 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
-                .Where(m => m.EncryptedPayload == null && !_modificationIdsWithNoPayloadInBlobStorage.Contains(m.Id))
-                .OrderBy(m => m.Id).Take(PAGE_SIZE).ToList();
+                .Where(m => m.EncryptedPayload == null)
+                .OrderBy(m => m.Id)
+                .Skip(_modificationsWithNoPayloadInBlobStorageCount)
+                .Take(PAGE_SIZE)
+                .ToList();
 
             foreach (var datawalletModification in modificationsWithoutEncryptedPayload)
                 await FillEncryptedContentForModification(context, datawalletModification);
@@ -66,7 +72,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             }
             catch (NotFoundException)
             {
-                _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                _modificationsWithNoPayloadInBlobStorageCount++;
                 _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
 
                 // The encrypted payload of a datawallet modification is not required.
@@ -88,12 +94,12 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
                 }
                 else
                 {
-                    _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                    _modificationsWithNoPayloadInBlobStorageCount++;
                 }
             }
             catch (NotFoundException)
             {
-                _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                _modificationsWithNoPayloadInBlobStorageCount++;
                 _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
             }
         }
