@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -71,6 +72,11 @@ public class FindAllStubRepository : IIdentitiesRepository
     }
 
     public Task Delete(Identity identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteDevices(Expression<Func<Device, bool>> expression, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

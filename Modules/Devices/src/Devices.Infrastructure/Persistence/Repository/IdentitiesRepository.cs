@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -113,5 +114,10 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identities.Remove(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteDevices(Expression<Func<Device, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _devices.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }
