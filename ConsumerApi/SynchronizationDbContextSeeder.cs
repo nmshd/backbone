@@ -2,8 +2,6 @@
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.BuildingBlocks.Application.Extensions;
-using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -14,15 +12,19 @@ namespace Backbone.ConsumerApi;
 
 public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext>
 {
-    private const int PAGE_SIZE = 500;
+    private const int PAGE_SIZE = 5;
 
     private readonly IBlobStorage? _blobStorage;
     private readonly string? _blobRootFolder;
+    private readonly ILogger<SynchronizationDbContextSeeder> _logger;
 
-    public SynchronizationDbContextSeeder(IServiceProvider serviceProvider)
+    private readonly List<DatawalletModificationId> _modificationIdsWithNoPayloadInBlobStorage = new();
+
+    public SynchronizationDbContextSeeder(IServiceProvider serviceProvider, ILogger<SynchronizationDbContextSeeder> logger)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
         _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
+        _logger = logger;
     }
 
     public async Task SeedAsync(SynchronizationDbContext context)
@@ -36,18 +38,18 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         if (_blobRootFolder == null)
             return;
 
-        var morePages = true;
+        var hasMorePages = true;
 
-        while (morePages)
+        while (hasMorePages)
         {
-            var paginationResult = await context.DatawalletModifications
-                .Where(t => t.EncryptedPayload == null)
-                .OrderAndPaginate(m => m.Id, new PaginationFilter(1, PAGE_SIZE), CancellationToken.None);
+            var modificationsWithoutEncryptedPayload = context.DatawalletModifications
+                .Where(m => m.EncryptedPayload == null && !_modificationIdsWithNoPayloadInBlobStorage.Contains(m.Id))
+                .OrderBy(m => m.Id).Take(PAGE_SIZE).ToList();
 
-            foreach (var datawalletModification in paginationResult.ItemsOnPage)
+            foreach (var datawalletModification in modificationsWithoutEncryptedPayload)
                 await FillEncryptedContentForModification(context, datawalletModification);
 
-            morePages = paginationResult.ItemsOnPage.Any();
+            hasMorePages = modificationsWithoutEncryptedPayload.Any();
         }
     }
 
@@ -64,6 +66,9 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             }
             catch (NotFoundException)
             {
+                _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
+
                 // The encrypted payload of a datawallet modification is not required.
                 // Therefore we cannot tell whether this exception is an error or not
             }
@@ -81,10 +86,15 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
                     datawalletModification.LoadEncryptedPayload(encryptedPayload);
                     context.DatawalletModifications.Update(datawalletModification);
                 }
+                else
+                {
+                    _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                }
             }
             catch (NotFoundException)
             {
-                throw new Exception($"Blob with reference '{datawalletModification.BlobReference}' not found.");
+                _modificationIdsWithNoPayloadInBlobStorage.Add(datawalletModification.Id);
+                _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
             }
         }
 
