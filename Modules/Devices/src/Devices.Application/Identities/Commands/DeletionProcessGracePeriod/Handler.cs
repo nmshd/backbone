@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodReminderCom
                 continue;
             }
 
-            if (deletionProcess.GracePeriodReminder1SentAt != null && daysToDeletion <= IdentityDeletionConfiguration.GracePeriodNotification1Time)
+            if (deletionProcess.GracePeriodReminder1SentAt == null && daysToDeletion <= IdentityDeletionConfiguration.GracePeriodNotification1Time)
             {
                 await SendReminder1(identity, daysToDeletion, cancellationToken);
             }

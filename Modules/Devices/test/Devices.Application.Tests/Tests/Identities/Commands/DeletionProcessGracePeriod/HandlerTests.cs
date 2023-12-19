@@ -39,7 +39,7 @@ public class HandlerTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        var reminderSentDate = DateTime.Parse("2050-01-01");
+        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-20);
         SystemTime.Set(reminderSentDate);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -67,8 +67,9 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        identity.DeletionGracePeriodReminder1Sent();
 
-        var reminderSentDate = DateTime.Parse("2000-01-01");
+        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
         SystemTime.Set(reminderSentDate);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -97,8 +98,10 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        identity.DeletionGracePeriodReminder1Sent();
+        identity.DeletionGracePeriodReminder2Sent();
 
-        var reminderSentDate = DateTime.Parse("2000-01-01");
+        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
         SystemTime.Set(reminderSentDate);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -117,6 +120,69 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == reminderSentDate
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Only_Sends_Second_Reminder_When_Date_Condition_Is_Met_And_First_Reminder_Has_Not_Been_Previously_Sent()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
+        SystemTime.Set(reminderSentDate);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindAllWithApprovedDeletionProcess(A<CancellationToken>._, A<bool>._))
+            .Returns(new List<Identity> { identity });
+
+        var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
+
+        // Act
+        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == null
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == reminderSentDate
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Only_Sends_Third_Reminder_When_Date_Condition_Is_Met_And_Others_Have_Not_Been_Previously_Sent()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
+        SystemTime.Set(reminderSentDate);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindAllWithApprovedDeletionProcess(A<CancellationToken>._, A<bool>._))
+            .Returns(new List<Identity> { identity });
+
+        var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
+
+        // Act
+        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == null
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == null
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == reminderSentDate
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
