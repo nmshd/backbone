@@ -5,13 +5,13 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class RelationshipTerminationChangeEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Relationships.Domain.Entities.RelationshipTerminationChange",

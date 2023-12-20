@@ -8,16 +8,21 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class RelationshipEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.Modules.Relationships.Domain.Entities.Relationship",
@@ -33,6 +38,31 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new RelationshipIdEntityFrameworkValueConverter());
+            id.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<RelationshipId>(
+                    (RelationshipId v1, RelationshipId v2) => object.Equals(v1, v2),
+                    (RelationshipId v) => v.GetHashCode(),
+                    (RelationshipId v) => v),
+                keyComparer: new ValueComparer<RelationshipId>(
+                    (RelationshipId v1, RelationshipId v2) => object.Equals(v1, v2),
+                    (RelationshipId v) => v.GetHashCode(),
+                    (RelationshipId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<RelationshipId, string>(
+                    (RelationshipId id) => id == null ? null : id.StringValue,
+                    (string value) => RelationshipId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<RelationshipId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<RelationshipId, string>(
+                        (RelationshipId id) => id == null ? null : id.StringValue,
+                        (string value) => RelationshipId.Parse(value))));
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -42,6 +72,28 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(Relationship).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Relationship).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            createdAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                keyComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                providerValueComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                converter: new ValueConverter<DateTime, DateTime>(
+                    (DateTime v) => v.ToUniversalTime(),
+                    (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime, DateTime>(
+                        (DateTime v) => v.ToUniversalTime(),
+                        (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc))));
+            createdAt.SetSentinelFromProviderValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var from = runtimeEntityType.AddProperty(
@@ -52,6 +104,31 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 maxLength: 36,
                 unicode: false,
                 valueConverter: new IdentityAddressValueConverter());
+            from.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                keyComparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(36)",
+                    size: 36,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<IdentityAddress, string>(
+                    (IdentityAddress id) => id.StringValue,
+                    (string value) => IdentityAddress.ParseUnsafe(value.Trim())),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityAddress, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<IdentityAddress, string>(
+                        (IdentityAddress id) => id.StringValue,
+                        (string value) => IdentityAddress.ParseUnsafe(value.Trim()))));
             from.AddAnnotation("Relational:IsFixedLength", true);
             from.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -63,6 +140,31 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 maxLength: 20,
                 unicode: false,
                 valueConverter: new RelationshipTemplateIdEntityFrameworkValueConverter());
+            relationshipTemplateId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<RelationshipTemplateId>(
+                    (RelationshipTemplateId v1, RelationshipTemplateId v2) => object.Equals(v1, v2),
+                    (RelationshipTemplateId v) => v.GetHashCode(),
+                    (RelationshipTemplateId v) => v),
+                keyComparer: new ValueComparer<RelationshipTemplateId>(
+                    (RelationshipTemplateId v1, RelationshipTemplateId v2) => object.Equals(v1, v2),
+                    (RelationshipTemplateId v) => v.GetHashCode(),
+                    (RelationshipTemplateId v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(20)",
+                    size: 20,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<RelationshipTemplateId, string>(
+                    (RelationshipTemplateId id) => id == null ? null : id.StringValue,
+                    (string value) => RelationshipTemplateId.Parse(value)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<RelationshipTemplateId, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<RelationshipTemplateId, string>(
+                        (RelationshipTemplateId id) => id == null ? null : id.StringValue,
+                        (string value) => RelationshipTemplateId.Parse(value))));
             relationshipTemplateId.AddAnnotation("Relational:IsFixedLength", true);
             relationshipTemplateId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -71,6 +173,28 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 typeof(RelationshipStatus),
                 propertyInfo: typeof(Relationship).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(Relationship).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            status.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<RelationshipStatus>(
+                    (RelationshipStatus v1, RelationshipStatus v2) => object.Equals((object)v1, (object)v2),
+                    (RelationshipStatus v) => v.GetHashCode(),
+                    (RelationshipStatus v) => v),
+                keyComparer: new ValueComparer<RelationshipStatus>(
+                    (RelationshipStatus v1, RelationshipStatus v2) => object.Equals((object)v1, (object)v2),
+                    (RelationshipStatus v) => v.GetHashCode(),
+                    (RelationshipStatus v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<RelationshipStatus, int>(
+                    (RelationshipStatus value) => (int)value,
+                    (int value) => (RelationshipStatus)value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<RelationshipStatus, int>(
+                    JsonInt32ReaderWriter.Instance,
+                    new ValueConverter<RelationshipStatus, int>(
+                        (RelationshipStatus value) => (int)value,
+                        (int value) => (RelationshipStatus)value)));
+            status.SetSentinelFromProviderValue(0);
             status.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var to = runtimeEntityType.AddProperty(
@@ -81,6 +205,31 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
                 maxLength: 36,
                 unicode: false,
                 valueConverter: new IdentityAddressValueConverter());
+            to.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                keyComparer: new ValueComparer<IdentityAddress>(
+                    (IdentityAddress v1, IdentityAddress v2) => v1 == null && v2 == null || v1 != null && v2 != null && v1.Equals(v2),
+                    (IdentityAddress v) => v.GetHashCode(),
+                    (IdentityAddress v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "char(36)",
+                    size: 36,
+                    dbType: System.Data.DbType.AnsiStringFixedLength),
+                converter: new ValueConverter<IdentityAddress, string>(
+                    (IdentityAddress id) => id.StringValue,
+                    (string value) => IdentityAddress.ParseUnsafe(value.Trim())),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityAddress, string>(
+                    JsonStringReaderWriter.Instance,
+                    new ValueConverter<IdentityAddress, string>(
+                        (IdentityAddress id) => id.StringValue,
+                        (string value) => IdentityAddress.ParseUnsafe(value.Trim()))));
             to.AddAnnotation("Relational:IsFixedLength", true);
             to.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
@@ -108,8 +257,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.CompiledModels.SqlServer
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RelationshipTemplateId")! },
-                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id")! })!,
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RelationshipTemplateId") },
+                principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
                 principalEntityType,
                 deleteBehavior: DeleteBehavior.Restrict,
                 required: true);
