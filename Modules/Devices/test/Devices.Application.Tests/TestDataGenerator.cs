@@ -37,9 +37,14 @@ public static class TestDataGenerator
 
     public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime approvalDate)
     {
+        var currentDateTime = SystemTime.UtcNow;
+
         var identity = CreateIdentityWithOneDevice();
         SystemTime.Set(approvalDate);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
+
+        SystemTime.Set(currentDateTime);
+
         return identity;
     }
 }

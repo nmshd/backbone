@@ -37,9 +37,9 @@ public class HandlerTests
     public async Task Sends_first_reminder()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-11");
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
+
+        var utcNow = DateTime.Parse("2000-01-11");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -66,11 +66,10 @@ public class HandlerTests
     public async Task Sends_second_reminder()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-21");
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
 
+        var utcNow = DateTime.Parse("2000-01-21");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -98,12 +97,11 @@ public class HandlerTests
     public async Task Sends_third_reminder()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-26");
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
         identity.DeletionGracePeriodReminder2Sent();
 
+        var utcNow = DateTime.Parse("2000-01-26");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -131,10 +129,9 @@ public class HandlerTests
     public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-21");
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
 
+        var utcNow = DateTime.Parse("2000-01-21");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -163,10 +160,9 @@ public class HandlerTests
     public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-26");
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
 
+        var utcNow = DateTime.Parse("2000-01-26");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
