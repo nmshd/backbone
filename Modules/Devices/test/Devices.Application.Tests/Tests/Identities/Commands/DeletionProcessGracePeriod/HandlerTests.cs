@@ -24,7 +24,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
@@ -37,9 +37,9 @@ public class HandlerTests
     public async Task Sends_first_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
 
-        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-20);
+        var utcNow = DateTime.Parse("2000-01-11");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -51,7 +51,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i.StringValue.Length == identity.Address.StringValue.Length), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
@@ -66,10 +66,10 @@ public class HandlerTests
     public async Task Sends_second_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
 
-        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
+        var utcNow = DateTime.Parse("2000-01-21");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -81,7 +81,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
@@ -97,11 +97,11 @@ public class HandlerTests
     public async Task Sends_third_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
         identity.DeletionGracePeriodReminder2Sent();
 
-        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
+        var utcNow = DateTime.Parse("2000-01-26");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -113,7 +113,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
@@ -129,9 +129,9 @@ public class HandlerTests
     public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
 
-        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
+        var utcNow = DateTime.Parse("2000-01-21");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -143,7 +143,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))
@@ -160,9 +160,9 @@ public class HandlerTests
     public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
 
-        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
+        var utcNow = DateTime.Parse("2000-01-26");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -174,7 +174,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessGracePeriodNotification>._, A<CancellationToken>._))

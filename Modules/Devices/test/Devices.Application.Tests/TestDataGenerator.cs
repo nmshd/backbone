@@ -1,5 +1,6 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests;
@@ -34,9 +35,10 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static Identity CreateIdentityWithApprovedDeletionProcess()
+    public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime approvalDate)
     {
         var identity = CreateIdentityWithOneDevice();
+        SystemTime.Set(approvalDate);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
         return identity;
     }

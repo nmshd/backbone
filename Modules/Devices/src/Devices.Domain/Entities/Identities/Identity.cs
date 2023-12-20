@@ -88,7 +88,7 @@ public class Identity
     {
         EnsureApprovedProcessExists();
 
-        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
         deletionProcess.GracePeriodReminder1Sent(Address);
     }
 
