@@ -50,7 +50,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
                 .ToList();
 
             var blobReferences = modificationsWithoutEncryptedPayload
-                .Where(m => !m.BlobReference.Trim().IsEmpty())
+                .Where(m => !string.IsNullOrWhiteSpace(m.BlobReference))
                 .Select(m => m.BlobReference)
                 .ToList();
 
@@ -104,7 +104,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
     private async Task<bool> FillPayload(DatawalletModification modification, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
     {
-        if (modification.BlobReference.Trim().IsEmpty())
+        if (string.IsNullOrWhiteSpace(modification.BlobReference))
         {
             // fill via blob id
             try
