@@ -111,6 +111,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             {
                 var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, modification.Id);
                 modification.LoadEncryptedPayload(blobContent);
+                return true;
             }
             catch (NotFoundException)
             {
@@ -128,7 +129,8 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
         if (!blob.TryGetValue(modification.Index, out var payload))
         {
-            _logger.LogInformation("Blob with Id '{id}' not found in blob reference. As the encrypted payload of a datawallet modification is not required, this is probably not an error.", modification.Id);
+            _logger.LogInformation("Blob with Id '{id}' not found in blob reference. As the encrypted payload of a datawallet modification is not required, this is probably not an error.",
+                modification.Id);
             return false;
         }
 
