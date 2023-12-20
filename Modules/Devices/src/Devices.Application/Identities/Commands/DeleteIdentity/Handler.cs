@@ -6,7 +6,7 @@ public class Handler(IIdentitiesRepository identitiesRepository) : IRequestHandl
 {
     public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = await identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken);
+        var identity = await identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, track: true);
         await identitiesRepository.Delete(identity, cancellationToken);
     }
 }
