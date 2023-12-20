@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Application.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipTemplatesByIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesByIdentity;
 using FakeItEasy;
 using MediatR;
 using Xunit;
