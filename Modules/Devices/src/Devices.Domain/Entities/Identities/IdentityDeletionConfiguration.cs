@@ -15,9 +15,16 @@ public static class IdentityDeletionConfiguration
     {
         Time = 5
     };
+
+    public static DeletionStartsNotification DeletionStartsNotification { get; set; } = new();
 }
 
 public class GracePeriodNotificationConfiguration
 {
     public int Time { get; set; }
+}
+
+public class DeletionStartsNotification
+{
+    public string Message { get; set; } = "";
 }
