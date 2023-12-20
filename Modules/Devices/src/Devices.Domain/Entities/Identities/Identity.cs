@@ -92,6 +92,43 @@ public class Identity
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
     }
+
+    public void DeletionGracePeriodReminder1Sent()
+    {
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
+        deletionProcess.GracePeriodReminder1Sent(Address);
+    }
+
+    public void DeletionGracePeriodReminder2Sent()
+    {
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        deletionProcess.GracePeriodReminder2Sent(Address);
+    }
+
+    public void DeletionGracePeriodReminder3Sent()
+    {
+        EnsureApprovedProcessExists();
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        deletionProcess.GracePeriodReminder3Sent(Address);
+    }
+
+    private void EnsureApprovedProcessExists()
+    {
+        var approvedProcessExists = DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved);
+
+        if (!approvedProcessExists)
+            throw new DomainException(DomainErrors.NoApprovedDeletionProcessFound());
+    }
+
+    public IdentityDeletionProcess? GetDeletionProcessInStatus(DeletionProcessStatus deletionProcessStatus)
+    {
+        return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
+    }
 }
 public enum IdentityStatus
 {

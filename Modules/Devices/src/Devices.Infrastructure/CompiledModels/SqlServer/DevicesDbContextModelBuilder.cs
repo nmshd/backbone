@@ -585,6 +585,21 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("GracePeriodEndsAt", gracePeriodEndsAtColumnBase);
+            var gracePeriodReminder1SentAtColumnBase = new ColumnBase<ColumnMappingBase>("GracePeriodReminder1SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("GracePeriodReminder1SentAt", gracePeriodReminder1SentAtColumnBase);
+            var gracePeriodReminder2SentAtColumnBase = new ColumnBase<ColumnMappingBase>("GracePeriodReminder2SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("GracePeriodReminder2SentAt", gracePeriodReminder2SentAtColumnBase);
+            var gracePeriodReminder3SentAtColumnBase = new ColumnBase<ColumnMappingBase>("GracePeriodReminder3SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("GracePeriodReminder3SentAt", gracePeriodReminder3SentAtColumnBase);
             var idColumnBase3 = new ColumnBase<ColumnMappingBase>("Id", "char(20)", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase);
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("Id", idColumnBase3);
             var identityAddressColumnBase1 = new ColumnBase<ColumnMappingBase>("IdentityAddress", "char(36)", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
@@ -604,6 +619,9 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)createdAtColumnBase2, identityDeletionProcess.FindProperty("CreatedAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletionStartedAtColumnBase, identityDeletionProcess.FindProperty("DeletionStartedAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodEndsAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodEndsAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodReminder1SentAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodReminder1SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodReminder2SentAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodReminder2SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodReminder3SentAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodReminder3SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)identityAddressColumnBase1, identityDeletionProcess.FindProperty("IdentityAddress")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase0, identityDeletionProcess.FindProperty("Status")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
 
@@ -631,6 +649,21 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             identityDeletionProcessesTable.Columns.Add("GracePeriodEndsAt", gracePeriodEndsAtColumn);
+            var gracePeriodReminder1SentAtColumn = new Column("GracePeriodReminder1SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("GracePeriodReminder1SentAt", gracePeriodReminder1SentAtColumn);
+            var gracePeriodReminder2SentAtColumn = new Column("GracePeriodReminder2SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("GracePeriodReminder2SentAt", gracePeriodReminder2SentAtColumn);
+            var gracePeriodReminder3SentAtColumn = new Column("GracePeriodReminder3SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("GracePeriodReminder3SentAt", gracePeriodReminder3SentAtColumn);
             var identityAddressColumn1 = new Column("IdentityAddress", "char(36)", identityDeletionProcessesTable)
             {
                 IsNullable = true
@@ -664,6 +697,9 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(createdAtColumn2, identityDeletionProcess.FindProperty("CreatedAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(deletionStartedAtColumn, identityDeletionProcess.FindProperty("DeletionStartedAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(gracePeriodEndsAtColumn, identityDeletionProcess.FindProperty("GracePeriodEndsAt")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(gracePeriodReminder1SentAtColumn, identityDeletionProcess.FindProperty("GracePeriodReminder1SentAt")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(gracePeriodReminder2SentAtColumn, identityDeletionProcess.FindProperty("GracePeriodReminder2SentAt")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(gracePeriodReminder3SentAtColumn, identityDeletionProcess.FindProperty("GracePeriodReminder3SentAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(identityAddressColumn1, identityDeletionProcess.FindProperty("IdentityAddress")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(statusColumn0, identityDeletionProcess.FindProperty("Status")!, identityDeletionProcessesTableMapping);
 
