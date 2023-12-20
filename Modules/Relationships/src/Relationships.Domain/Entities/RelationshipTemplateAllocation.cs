@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Linq.Expressions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
@@ -18,4 +19,9 @@ public class RelationshipTemplateAllocation
     public IdentityAddress AllocatedBy { get; set; }
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }
+
+    public static Expression<Func<RelationshipTemplateAllocation, bool>> WasAllocatedBy(IdentityAddress identityAddress)
+    {
+        return r => r.AllocatedBy == identityAddress;
+    }
 }

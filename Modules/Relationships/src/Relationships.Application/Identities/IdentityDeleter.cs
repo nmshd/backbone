@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsByIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplateAllocations.Commands.DeleteRelationshipTemplateAllocationsByIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesByIdentity;
 using MediatR;
 
@@ -13,5 +14,6 @@ public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
     {
         await _mediator.Send(new DeleteRelationshipsByIdentityCommand(identityAddress));
         await _mediator.Send(new DeleteRelationshipTemplatesByIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteRelationshipTemplateAllocationsByIdentityCommand(identityAddress));
     }
 }
