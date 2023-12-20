@@ -27,7 +27,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
     }
 
     [Fact]
-    public void Only_identities_with_an_approved_deletion_process_call_DeletionGracePeriodReminder1Sent()
+    public void DeletionGracePeriodReminder1Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
         SetupSystemTime();
@@ -58,7 +58,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
 
     [Fact]
-    public void Only_identities_with_an_approved_deletion_process_call_DeletionGracePeriodReminder2Sent()
+    public void DeletionGracePeriodReminder2Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
         SetupSystemTime();
@@ -89,7 +89,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
 
     [Fact]
-    public void Only_identities_with_an_approved_deletion_process_call_DeletionGracePeriodReminder3Sent()
+    public void DeletionGracePeriodReminder3Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
         SetupSystemTime();

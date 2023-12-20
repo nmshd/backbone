@@ -34,13 +34,13 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Sends_First_Reminder()
+    public async Task Sends_first_reminder()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-20);
-        SystemTime.Set(reminderSentDate);
+        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-20);
+        SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -58,19 +58,19 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
             i.Address == identity.Address
-            && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == reminderSentDate
+            && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == utcNow
         ), A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task Sends_Second_Reminder()
+    public async Task Sends_second_reminder()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
         identity.DeletionGracePeriodReminder1Sent();
 
-        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
-        SystemTime.Set(reminderSentDate);
+        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
+        SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -88,21 +88,21 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == reminderSentDate
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == utcNow
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task Sends_Third_Reminder()
+    public async Task Sends_third_reminder()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
         identity.DeletionGracePeriodReminder1Sent();
         identity.DeletionGracePeriodReminder2Sent();
 
-        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
-        SystemTime.Set(reminderSentDate);
+        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
+        SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -120,19 +120,19 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == reminderSentDate
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == utcNow
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task Only_Sends_Second_Reminder_When_Date_Condition_Is_Met_And_First_Reminder_Has_Not_Been_Previously_Sent()
+    public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
-        SystemTime.Set(reminderSentDate);
+        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-10);
+        SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -151,19 +151,19 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == null
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == reminderSentDate
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == utcNow
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task Only_Sends_Third_Reminder_When_Date_Condition_Is_Met_And_Others_Have_Not_Been_Previously_Sent()
+    public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        var reminderSentDate = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
-        SystemTime.Set(reminderSentDate);
+        var utcNow = identity.DeletionGracePeriodEndsAt!.Value.AddDays(-5);
+        SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -183,7 +183,7 @@ public class HandlerTests
                 i.Address == identity.Address
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == null
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder2SentAt == null
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == reminderSentDate
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder3SentAt == utcNow
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
