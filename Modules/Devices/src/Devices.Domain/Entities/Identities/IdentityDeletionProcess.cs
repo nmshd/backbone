@@ -69,8 +69,30 @@ public class IdentityDeletionProcess
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
+    public DateTime? GracePeriodReminder1SentAt { get; private set; }
+    public DateTime? GracePeriodReminder2SentAt { get; private set; }
+    public DateTime? GracePeriodReminder3SentAt { get; private set; }
+
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
+    }
+
+    public void GracePeriodReminder1Sent(IdentityAddress address)
+    {
+        GracePeriodReminder1SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder1Sent(Id, address));
+    }
+
+    public void GracePeriodReminder2Sent(IdentityAddress address)
+    {
+        GracePeriodReminder2SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder2Sent(Id, address));
+    }
+
+    public void GracePeriodReminder3Sent(IdentityAddress address)
+    {
+        GracePeriodReminder3SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
     }
 }

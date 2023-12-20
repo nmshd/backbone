@@ -20,6 +20,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<Identity>> FindAllWithApprovedDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
