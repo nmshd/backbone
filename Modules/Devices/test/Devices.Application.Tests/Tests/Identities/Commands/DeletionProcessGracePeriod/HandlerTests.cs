@@ -37,7 +37,7 @@ public class HandlerTests
     public async Task Sends_first_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
 
         var utcNow = DateTime.Parse("2000-01-11");
         SystemTime.Set(utcNow);
@@ -66,7 +66,7 @@ public class HandlerTests
     public async Task Sends_second_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
 
         var utcNow = DateTime.Parse("2000-01-21");
@@ -97,7 +97,7 @@ public class HandlerTests
     public async Task Sends_third_reminder()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
         identity.DeletionGracePeriodReminder1Sent();
         identity.DeletionGracePeriodReminder2Sent();
 
@@ -129,7 +129,7 @@ public class HandlerTests
     public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
 
         var utcNow = DateTime.Parse("2000-01-21");
         SystemTime.Set(utcNow);
@@ -160,7 +160,7 @@ public class HandlerTests
     public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
 
         var utcNow = DateTime.Parse("2000-01-26");
         SystemTime.Set(utcNow);
