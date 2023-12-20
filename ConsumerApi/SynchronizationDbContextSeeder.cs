@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
@@ -18,16 +17,13 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
     private readonly IBlobStorage? _blobStorage;
     private readonly string? _blobRootFolder;
     private readonly ILogger<SynchronizationDbContextSeeder> _logger;
-
-    private int _modificationsWithNoPayloadInBlobStorageCount;
+    private int _numberOfModificationsWithoutPayload;
 
     public SynchronizationDbContextSeeder(IServiceProvider serviceProvider, ILogger<SynchronizationDbContextSeeder> logger)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
         _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
         _logger = logger;
-
-        _modificationsWithNoPayloadInBlobStorageCount = 0;
     }
 
     public async Task SeedAsync(SynchronizationDbContext context)
@@ -43,67 +39,101 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
         var hasMorePages = true;
 
+
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
                 .Where(m => m.EncryptedPayload == null)
-                .OrderBy(m => m.Id)
-                .Skip(_modificationsWithNoPayloadInBlobStorageCount)
+                .OrderBy(m => m.Index)
+                .Skip(_numberOfModificationsWithoutPayload)
                 .Take(PAGE_SIZE)
                 .ToList();
 
-            foreach (var datawalletModification in modificationsWithoutEncryptedPayload)
-                await FillEncryptedContentForModification(context, datawalletModification);
+            var blobReferences = modificationsWithoutEncryptedPayload
+                .Where(m => !m.BlobReference.Trim().IsEmpty())
+                .Select(m => m.BlobReference)
+                .ToList();
 
-            hasMorePages = modificationsWithoutEncryptedPayload.Any();
+            var blobsFromReferences = await FindBlobsByReferences(blobReferences);
+
+            await FillPayloads(context, modificationsWithoutEncryptedPayload, blobsFromReferences);
+
+            await context.SaveChangesAsync();
+
+            hasMorePages = modificationsWithoutEncryptedPayload.Count != 0;
         }
     }
 
-    private async Task FillEncryptedContentForModification(SynchronizationDbContext context, DatawalletModification datawalletModification)
+    private async Task<Dictionary<string, Dictionary<long, byte[]>>> FindBlobsByReferences(IEnumerable<string> blobReferences)
     {
-        if (datawalletModification.BlobReference.Trim().IsEmpty())
+        var blobs = await Task.WhenAll(blobReferences.Select(async r =>
         {
-            // fetching the blob storage content for modifications whose encrypted content is saved individually and which do not have blob reference value
             try
             {
-                var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, datawalletModification.Id);
-                datawalletModification.LoadEncryptedPayload(blobContent);
-                context.DatawalletModifications.Update(datawalletModification);
+                var blobFromReference = await _blobStorage!.FindAsync(_blobRootFolder!, r);
+                return new KeyValuePair<string, byte[]?>(r, blobFromReference);
             }
             catch (NotFoundException)
             {
-                _modificationsWithNoPayloadInBlobStorageCount++;
-                _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
-
-                // The encrypted payload of a datawallet modification is not required.
-                // Therefore we cannot tell whether this exception is an error or not
+                return new KeyValuePair<string, byte[]?>(r, null);
             }
-        }
+        }));
+
+        var deserialized = blobs
+            .Where(b => b.Value != null)
+            .Select(b => new KeyValuePair<string, Dictionary<long, byte[]>>(b.Key, JsonSerializer.Deserialize<Dictionary<long, byte[]>>(b.Value!)!))
+            .ToDictionary(b => b.Key, b => b.Value);
+
+        return deserialized;
+    }
+
+    private async Task FillPayloads(SynchronizationDbContext context, List<DatawalletModification> modifications, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
+    {
+        await Task.WhenAll(modifications.Select(async m => await FillPayload(context, m, blobsFromReferences)));
+    }
+
+    private async Task FillPayload(SynchronizationDbContext context, DatawalletModification modification, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
+    {
+        var hadContent = await FillPayload(modification, blobsFromReferences);
+
+        if (hadContent)
+            context.DatawalletModifications.Update(modification);
         else
+            Interlocked.Increment(ref _numberOfModificationsWithoutPayload);
+    }
+
+    private async Task<bool> FillPayload(DatawalletModification modification, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
+    {
+        if (modification.BlobReference.Trim().IsEmpty())
         {
-            // fetching the blob storage content for modifications whose encrypted content is saved in bulk and which have blob reference value
+            // fill via blob id
             try
             {
-                var blob = await _blobStorage!.FindAsync(_blobRootFolder!, datawalletModification.BlobReference);
-                var payload = JsonSerializer.Deserialize<Dictionary<long, byte[]>>(blob);
-
-                if (payload != null && payload.TryGetValue(datawalletModification.Index, out var encryptedPayload))
-                {
-                    datawalletModification.LoadEncryptedPayload(encryptedPayload);
-                    context.DatawalletModifications.Update(datawalletModification);
-                }
-                else
-                {
-                    _modificationsWithNoPayloadInBlobStorageCount++;
-                }
+                var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, modification.Id);
+                modification.LoadEncryptedPayload(blobContent);
             }
             catch (NotFoundException)
             {
-                _modificationsWithNoPayloadInBlobStorageCount++;
-                _logger.LogInformation($"Blob with reference '{datawalletModification.BlobReference}' not found.");
+                _logger.LogInformation("Blob with Id '{id}' not found. As the encrypted payload of a datawallet modification is not required, this is probably not an error.", modification.Id);
+                return false;
             }
         }
 
-        await context.SaveChangesAsync();
+        // fill via blob reference
+        if (!blobsFromReferences.TryGetValue(modification.BlobReference, out var blob))
+        {
+            _logger.LogError("Blob with reference '{blobReference}' not found.", modification.BlobReference);
+            return false;
+        }
+
+        if (!blob.TryGetValue(modification.Index, out var payload))
+        {
+            _logger.LogInformation("Blob with Id '{id}' not found in blob reference. As the encrypted payload of a datawallet modification is not required, this is probably not an error.", modification.Id);
+            return false;
+        }
+
+        modification.LoadEncryptedPayload(payload);
+
+        return true;
     }
 }
