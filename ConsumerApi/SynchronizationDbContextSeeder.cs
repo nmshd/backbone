@@ -39,7 +39,6 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
         var hasMorePages = true;
 
-
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
@@ -52,6 +51,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             var blobReferences = modificationsWithoutEncryptedPayload
                 .Where(m => !string.IsNullOrWhiteSpace(m.BlobReference))
                 .Select(m => m.BlobReference)
+                .Distinct()
                 .ToList();
 
             var blobsFromReferences = await FindBlobsByReferences(blobReferences);
