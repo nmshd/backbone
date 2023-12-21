@@ -78,25 +78,34 @@ public class Identity
 
     public void DeletionProcessApprovalReminder1Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval();
+        EnsureWaitingForApprovalProcessExists();
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         deletionProcess.ApprovalReminder1Sent(Address);
     }
 
     public void DeletionProcessApprovalReminder2Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval();
+        EnsureWaitingForApprovalProcessExists();
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         deletionProcess.ApprovalReminder2Sent(Address);
     }
 
     public void DeletionProcessApprovalReminder3Sent()
     {
-        var deletionProcess = GetDeletionProcessWaitingForApproval();
+        EnsureWaitingForApprovalProcessExists();
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    private IdentityDeletionProcess GetDeletionProcessWaitingForApproval()
+    private void EnsureWaitingForApprovalProcessExists()
     {
-        return _deletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcessId)));
+        var waitingForApprovalProcessExists = DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval);
+
+        if (!waitingForApprovalProcessExists)
+            throw new DomainException(DomainErrors.NoWaitingForApprovalDeletionProcessFound());
     }
 
     private void EnsureNoActiveProcessExists()

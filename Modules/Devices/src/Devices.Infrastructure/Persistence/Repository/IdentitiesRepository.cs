@@ -40,14 +40,6 @@ public class IdentitiesRepository : IIdentitiesRepository
         return paginationResult;
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
-    {
-        return await (track ? _identities : _readonlyIdentities)
-            .IncludeAll(_dbContext)
-            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval))
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
@@ -69,6 +61,13 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval))
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {

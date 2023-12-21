@@ -2,9 +2,7 @@
 
 public class IdentityDeletionConfiguration
 {
-    public int Time { get; set; }
-    public string Message { get; set; }
-    public static int MaxApprovalTime { get; set; } = 5;
+    public static int MaxApprovalTime { get; set; } = 10;
     public static int LengthOfGracePeriod { get; set; } = 30;
     public static GracePeriodNotificationConfiguration GracePeriodNotification1 { get; set; } = new()
     {
@@ -20,15 +18,15 @@ public class IdentityDeletionConfiguration
     };
     public static ApprovalReminderNotificationConfiguration ApprovalReminder1 { get; set; } = new()
     {
-        Time = 0
+        Time = 10
     };
     public static ApprovalReminderNotificationConfiguration ApprovalReminder2 { get; set; } = new()
     {
-        Time = 0
+        Time = 5
     };
     public static ApprovalReminderNotificationConfiguration ApprovalReminder3 { get; set; } = new()
     {
-        Time = 0
+        Time = 2
     };
 }
 
