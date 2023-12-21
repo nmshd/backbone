@@ -144,6 +144,11 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _relationships.Where(filter).ToListAsync(cancellationToken);
+    }
 }
 
 internal static partial class RelationshipRepositoryLogs
