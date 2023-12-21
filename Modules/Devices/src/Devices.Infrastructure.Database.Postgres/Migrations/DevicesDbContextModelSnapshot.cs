@@ -269,6 +269,15 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime?>("GracePeriodEndsAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("GracePeriodReminder1SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("GracePeriodReminder2SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("GracePeriodReminder3SentAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(36)
                         .IsUnicode(false)

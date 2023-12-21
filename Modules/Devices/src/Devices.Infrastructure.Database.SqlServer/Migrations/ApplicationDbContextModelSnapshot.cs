@@ -270,6 +270,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<DateTime?>("GracePeriodEndsAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("GracePeriodReminder1SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodReminder2SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodReminder3SentAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(36)
                         .IsUnicode(false)
