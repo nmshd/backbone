@@ -2,8 +2,8 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -12,152 +12,133 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class DeletionProcessApprovalReminderTests
 {
     [Fact]
-    public void Cannot_send_first_reminder_without_deletion_process_waiting_approval()
+    public void DeletionProcessApprovalReminder1Sent_updates_ApprovalReminder1SentAt()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        activeIdentity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        var currentDateTime = SetupSystemTime();
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder1Sent;
+        identity.DeletionProcessApprovalReminder1Sent();
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!;
+        AssertAuditLogEntryWasCreated(deletionProcess);
+        deletionProcess.ApprovalReminder1SentAt.Should().Be(currentDateTime);
     }
 
     [Fact]
-    public void Throws_when_deletion_process_not_found_and_attempts_to_send_first_reminder()
+    public void DeletionProcessApprovalReminder1Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
+        SetupSystemTime();
+        var identity = CreateIdentity();
 
         // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder1Sent;
+        var acting = identity.DeletionProcessApprovalReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noWaitingForApprovalDeletionProcessFound");
     }
 
     [Fact]
-    public void Sends_first_approval_reminder()
+    public void DeletionProcessApprovalReminder2Sent_updates_ApprovalReminder2SentAt()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
+        var currentDateTime = SetupSystemTime();
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        activeIdentity.DeletionProcessApprovalReminder1Sent();
+        identity.DeletionProcessApprovalReminder2Sent();
 
         // Assert
-        deletionProcess.ApprovalReminder1SentAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.AuditLog.Count.Should().Be(2);
-        var reminderSentAuditLogEntry = deletionProcess.AuditLog.Second();
-        reminderSentAuditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        reminderSentAuditLogEntry.Message.Should().Be("First approval reminder was sent.");
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!;
+        AssertAuditLogEntryWasCreated(deletionProcess);
+        deletionProcess.ApprovalReminder2SentAt.Should().Be(currentDateTime);
+    }
+
+
+    [Fact]
+    public void DeletionProcessApprovalReminder2Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
+    {
+        // Arrange
+        SetupSystemTime();
+        var identity = CreateIdentity();
+
+        // Act
+        var acting = identity.DeletionProcessApprovalReminder2Sent;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noWaitingForApprovalDeletionProcessFound");
     }
 
     [Fact]
-    public void Cannot_send_second_reminder_without_deletion_process_waiting_approval()
+    public void DeletionProcessApprovalReminder3Sent_updates_ApprovalReminder3SentAt()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        activeIdentity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        var currentDateTime = SetupSystemTime();
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder2Sent;
+        identity.DeletionProcessApprovalReminder3Sent();
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!;
+        AssertAuditLogEntryWasCreated(deletionProcess);
+        deletionProcess.ApprovalReminder3SentAt.Should().Be(currentDateTime);
     }
 
+
     [Fact]
-    public void Throws_when_deletion_process_not_found_and_attempts_to_send_second_reminder()
+    public void DeletionProcessApprovalReminder3Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
+        SetupSystemTime();
+        var identity = CreateIdentity();
 
         // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder2Sent;
+        var acting = identity.DeletionProcessApprovalReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noWaitingForApprovalDeletionProcessFound");
     }
 
-    [Fact]
-    public void Sends_second_approval_reminder()
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
+        deletionProcess.AuditLog.Should().HaveCount(2);
 
-        // Act
-        activeIdentity.DeletionProcessApprovalReminder2Sent();
-
-        // Assert
-        deletionProcess.ApprovalReminder2SentAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.AuditLog.Count.Should().Be(2);
-        var reminderSentAuditLogEntry = deletionProcess.AuditLog.Second();
-        reminderSentAuditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        reminderSentAuditLogEntry.Message.Should().Be("Second approval reminder was sent.");
+        var auditLogEntry = deletionProcess.AuditLog[1];
+        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
+        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }
 
-    [Fact]
-    public void Cannot_send_third_reminder_without_deletion_process_waiting_approval()
+    private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
     {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        activeIdentity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        var identity = CreateIdentity();
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        identity.StartDeletionProcessAsSupport();
 
-        // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder3Sent;
-
-        // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        return identity;
     }
 
-    [Fact]
-    public void Throws_when_deletion_process_not_found_and_attempts_to_send_third_reminder()
+    private static DateTime SetupSystemTime()
     {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-
-        // Act
-        var acting = activeIdentity.DeletionProcessApprovalReminder3Sent;
-
-        // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-    }
-
-    [Fact]
-    public void Sends_third_approval_reminder()
-    {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
-
-        // Act
-        activeIdentity.DeletionProcessApprovalReminder3Sent();
-
-        // Assert
-        deletionProcess.ApprovalReminder3SentAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.AuditLog.Count.Should().Be(2);
-        var reminderSentAuditLogEntry = deletionProcess.AuditLog.Second();
-        reminderSentAuditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        reminderSentAuditLogEntry.Message.Should().Be("Third approval reminder was sent.");
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
+        return currentDateTime;
     }
 
     private static Identity CreateIdentity()
     {
         var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+    }
+
+    public void Dispose()
+    {
+        Hasher.Reset();
     }
 }

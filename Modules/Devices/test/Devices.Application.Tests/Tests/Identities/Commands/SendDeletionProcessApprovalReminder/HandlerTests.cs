@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminder;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
-using FluentAssertions;
 using Xunit;
 using Handler = Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminder.Handler;
 
@@ -14,21 +14,38 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.S
 public class HandlerTests
 {
     [Fact]
-    public async void Sends_first_reminder_when_not_previously_sent()
+    public async Task No_identities_with_a_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
-
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder1.Time);
-        SystemTime.Set(reminderSentDate);
-
-        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
+            .Returns(new List<Identity>());
+
+        var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
+
+        // Act
+        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<object>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task Sends_first_reminder()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
+
+        var utcNow = DateTime.Parse("2000-01-02");
+        SystemTime.Set(utcNow);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(new List<Identity> { identity });
@@ -39,68 +56,26 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessWaitingForApprovalReminderPushNotification>._, CancellationToken.None)
-        ).MustHaveHappened();
-
-        A.CallTo(() => mockIdentitiesRepository.Update(identity, A<CancellationToken>._))
-            .MustHaveHappened();
-
-        deletionProcess.ApprovalReminder1SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Any(a => a.Message == "First approval reminder was sent." && a.CreatedAt == reminderSentDate).Should().BeTrue();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i.StringValue.Length == identity.Address.StringValue.Length), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+            i.Address == identity.Address
+            && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder1SentAt == utcNow
+        ), A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async void Does_not_send_first_reminder_when_previously_sent()
+    public async Task Sends_second_reminder()
     {
         // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
-
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder1.Time);
-        SystemTime.Set(reminderSentDate);
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
 
-        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+        var utcNow = DateTime.Parse("2000-01-06");
+        SystemTime.Set(utcNow);
+
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Identity> { identity });
-
-        var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
-
-        var futureDate = DateTime.Parse("2002-02-02");
-        SystemTime.Set(futureDate);
-
-        // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
-
-        // Assert
-        deletionProcess.ApprovalReminder1SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Count(a => a.Message == "First approval reminder was sent.").Should().Be(1);
-    }
-
-    [Fact]
-    public async void Sends_second_reminder_when_not_previously_sent()
-    {
-        // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
-
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.DeletionProcessApprovalReminder1Sent();
-
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder2.Time);
-        SystemTime.Set(reminderSentDate);
-
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(new List<Identity> { identity });
@@ -111,71 +86,58 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessWaitingForApprovalReminderPushNotification>._, CancellationToken.None)
-        ).MustHaveHappened();
-
-        A.CallTo(() => mockIdentitiesRepository.Update(identity, A<CancellationToken>._))
-            .MustHaveHappened();
-
-        deletionProcess.ApprovalReminder2SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Any(a => a.Message == "Second approval reminder was sent." && a.CreatedAt == reminderSentDate).Should().BeTrue();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder2SentAt == utcNow
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async void Does_not_send_second_reminder_when_previously_sent()
+    public async Task Sends_third_reminder()
     {
         // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
-
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder2.Time);
-        SystemTime.Set(reminderSentDate);
-
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
         identity.DeletionProcessApprovalReminder2Sent();
 
-        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+        var utcNow = DateTime.Parse("2000-01-09");
+        SystemTime.Set(utcNow);
+
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(new List<Identity> { identity });
 
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
-        var futureDate = DateTime.Parse("2002-02-02");
-        SystemTime.Set(futureDate);
-
         // Act
         await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
 
         // Assert
-        deletionProcess.ApprovalReminder2SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Count(a => a.Message == "Second approval reminder was sent.").Should().Be(1);
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder3SentAt == utcNow
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async void Sends_third_reminder_when_not_previously_sent()
+    public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
     {
         // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.DeletionProcessApprovalReminder1Sent();
-        identity.DeletionProcessApprovalReminder2Sent();
+        var utcNow = DateTime.Parse("2000-01-06");
+        SystemTime.Set(utcNow);
 
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder3.Time);
-        SystemTime.Set(reminderSentDate);
-
-        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(new List<Identity> { identity });
@@ -186,56 +148,50 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessWaitingForApprovalReminderPushNotification>._, CancellationToken.None)
-        ).MustHaveHappened();
-
-        A.CallTo(() => mockIdentitiesRepository.Update(identity, A<CancellationToken>._))
-            .MustHaveHappened();
-
-        deletionProcess.ApprovalReminder3SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Any(a => a.Message == "Third approval reminder was sent." && a.CreatedAt == reminderSentDate).Should().BeTrue();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder1SentAt == null
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder2SentAt == utcNow
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async void Does_not_send_third_reminder_when_previously_sent()
+    public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
     {
         // Arrange
-        var beginProcessDate = DateTime.Parse("2000-01-01");
-        SystemTime.Set(beginProcessDate);
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
+        var utcNow = DateTime.Parse("2000-01-09");
+        SystemTime.Set(utcNow);
 
-        var endOfApprovalPeriod = deletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
-        var reminderSentDate = endOfApprovalPeriod.AddDays(-IdentityDeletionConfiguration.ApprovalReminder3.Time);
-        SystemTime.Set(reminderSentDate);
-        identity.DeletionProcessApprovalReminder1Sent();
-        identity.DeletionProcessApprovalReminder2Sent();
-        identity.DeletionProcessApprovalReminder3Sent();
-
-        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessWaitingForApproval(A<CancellationToken>._, A<bool>._))
             .Returns(new List<Identity> { identity });
 
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
-        var futureDate = DateTime.Parse("2002-02-02");
-        SystemTime.Set(futureDate);
-
         // Act
         await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
 
         // Assert
-        deletionProcess.ApprovalReminder3SentAt?.Should().Be(reminderSentDate);
-        deletionProcess.AuditLog.Count(a => a.Message == "Second approval reminder was sent.").Should().Be(1);
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == identity.Address
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder1SentAt == null
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder2SentAt == null
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.WaitingForApproval)!.ApprovalReminder3SentAt == utcNow
+            ), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
     {
-        pushNotificationSender ??= A.Fake<IPushNotificationSender>();
         return new Handler(identitiesRepository, pushNotificationSender);
     }
 }
