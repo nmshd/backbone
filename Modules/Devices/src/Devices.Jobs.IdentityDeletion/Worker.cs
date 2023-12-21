@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsByIdentity;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsByIdentity;
 using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
