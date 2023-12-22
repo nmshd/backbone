@@ -25,7 +25,7 @@ public class HandlerTests
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(30); // Future
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new UpdateDeletionProcessesCommand();
+        var command = new FindRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -46,7 +46,7 @@ public class HandlerTests
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new UpdateDeletionProcessesCommand();
+        var command = new FindRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -72,7 +72,7 @@ public class HandlerTests
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new UpdateDeletionProcessesCommand();
+        var command = new FindRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);

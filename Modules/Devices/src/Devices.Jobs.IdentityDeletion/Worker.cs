@@ -1,13 +1,19 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsByIdentity;
 using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
-public class Worker(IHostApplicationLifetime host, IEnumerable<IIdentityDeleter> identityDeleters, IMediator mediator, IPushNotificationSender pushNotificationSender) : IHostedService
+public class Worker(IHostApplicationLifetime host,
+                    IEnumerable<IIdentityDeleter> identityDeleters,
+                    IMediator mediator,
+                    IPushNotificationSender pushNotificationSender,
+                    IEventBus eventBus) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -18,7 +24,7 @@ public class Worker(IHostApplicationLifetime host, IEnumerable<IIdentityDeleter>
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await mediator.Send(new UpdateDeletionProcessesCommand(), cancellationToken);
+        var identities = await mediator.Send(new FindRipeDeletionProcessesCommand(), cancellationToken);
 
 
         foreach (var identityAddress in identities.IdentityAddresses)
@@ -29,7 +35,7 @@ public class Worker(IHostApplicationLifetime host, IEnumerable<IIdentityDeleter>
 
             foreach (var relationship in relationships)
             {
-                // send external event PeerIdentityDeleted 
+                eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
             }
 
             foreach (var identityDeleter in identityDeleters)
