@@ -64,6 +64,96 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             id.AddAnnotation("Relational:IsFixedLength", true);
             id.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var approvalReminder1SentAt = runtimeEntityType.AddProperty(
+                "ApprovalReminder1SentAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovalReminder1SentAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovalReminder1SentAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            approvalReminder1SentAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
+            approvalReminder1SentAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var approvalReminder2SentAt = runtimeEntityType.AddProperty(
+                "ApprovalReminder2SentAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovalReminder2SentAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovalReminder2SentAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            approvalReminder2SentAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
+            approvalReminder2SentAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
+            var approvalReminder3SentAt = runtimeEntityType.AddProperty(
+                "ApprovalReminder3SentAt",
+                typeof(DateTime?),
+                propertyInfo: typeof(IdentityDeletionProcess).GetProperty("ApprovalReminder3SentAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(IdentityDeletionProcess).GetField("<ApprovalReminder3SentAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true,
+                valueConverter: new NullableDateTimeValueConverter());
+            approvalReminder3SentAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
+            approvalReminder3SentAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var approvedAt = runtimeEntityType.AddProperty(
                 "ApprovedAt",
                 typeof(DateTime?),

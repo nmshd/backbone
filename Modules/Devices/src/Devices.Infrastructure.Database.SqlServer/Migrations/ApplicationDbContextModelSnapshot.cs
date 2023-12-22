@@ -255,6 +255,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTime?>("ApprovalReminder1SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ApprovalReminder2SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ApprovalReminder3SentAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("ApprovedAt")
                         .HasColumnType("datetime2");
 

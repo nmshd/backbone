@@ -560,6 +560,21 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             var defaultTableMappings5 = new List<TableMappingBase<ColumnMappingBase>>();
             identityDeletionProcess.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings5);
             var backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase = new TableBase("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null, relationalModel);
+            var approvalReminder1SentAtColumnBase = new ColumnBase<ColumnMappingBase>("ApprovalReminder1SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("ApprovalReminder1SentAt", approvalReminder1SentAtColumnBase);
+            var approvalReminder2SentAtColumnBase = new ColumnBase<ColumnMappingBase>("ApprovalReminder2SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("ApprovalReminder2SentAt", approvalReminder2SentAtColumnBase);
+            var approvalReminder3SentAtColumnBase = new ColumnBase<ColumnMappingBase>("ApprovalReminder3SentAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("ApprovalReminder3SentAt", approvalReminder3SentAtColumnBase);
             var approvedAtColumnBase = new ColumnBase<ColumnMappingBase>("ApprovedAt", "datetime2", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase)
             {
                 IsNullable = true
@@ -606,6 +621,9 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.AddTypeMapping(backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase, false);
             defaultTableMappings5.Add(backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase3, identityDeletionProcess.FindProperty("Id")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)approvalReminder1SentAtColumnBase, identityDeletionProcess.FindProperty("ApprovalReminder1SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)approvalReminder2SentAtColumnBase, identityDeletionProcess.FindProperty("ApprovalReminder2SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)approvalReminder3SentAtColumnBase, identityDeletionProcess.FindProperty("ApprovalReminder3SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)approvedAtColumnBase, identityDeletionProcess.FindProperty("ApprovedAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)approvedByDeviceColumnBase, identityDeletionProcess.FindProperty("ApprovedByDevice")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)createdAtColumnBase2, identityDeletionProcess.FindProperty("CreatedAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
@@ -621,6 +639,21 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             var identityDeletionProcessesTable = new Table("IdentityDeletionProcesses", null, relationalModel);
             var idColumn3 = new Column("Id", "char(20)", identityDeletionProcessesTable);
             identityDeletionProcessesTable.Columns.Add("Id", idColumn3);
+            var approvalReminder1SentAtColumn = new Column("ApprovalReminder1SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("ApprovalReminder1SentAt", approvalReminder1SentAtColumn);
+            var approvalReminder2SentAtColumn = new Column("ApprovalReminder2SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("ApprovalReminder2SentAt", approvalReminder2SentAtColumn);
+            var approvalReminder3SentAtColumn = new Column("ApprovalReminder3SentAt", "datetime2", identityDeletionProcessesTable)
+            {
+                IsNullable = true
+            };
+            identityDeletionProcessesTable.Columns.Add("ApprovalReminder3SentAt", approvalReminder3SentAtColumn);
             var approvedAtColumn = new Column("ApprovedAt", "datetime2", identityDeletionProcessesTable)
             {
                 IsNullable = true
@@ -681,6 +714,9 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             identityDeletionProcessesTable.AddTypeMapping(identityDeletionProcessesTableMapping, false);
             tableMappings5.Add(identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(idColumn3, identityDeletionProcess.FindProperty("Id")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(approvalReminder1SentAtColumn, identityDeletionProcess.FindProperty("ApprovalReminder1SentAt")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(approvalReminder2SentAtColumn, identityDeletionProcess.FindProperty("ApprovalReminder2SentAt")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(approvalReminder3SentAtColumn, identityDeletionProcess.FindProperty("ApprovalReminder3SentAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(approvedAtColumn, identityDeletionProcess.FindProperty("ApprovedAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(approvedByDeviceColumn, identityDeletionProcess.FindProperty("ApprovedByDevice")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(createdAtColumn2, identityDeletionProcess.FindProperty("CreatedAt")!, identityDeletionProcessesTableMapping);

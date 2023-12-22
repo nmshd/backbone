@@ -137,6 +137,7 @@ public class DeletionProcessApprovalReminderTests
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
     }
 
+    [Fact]
     public void Dispose()
     {
         Hasher.Reset();
