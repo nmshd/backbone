@@ -1,5 +1,4 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.CreateAuditLog;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;

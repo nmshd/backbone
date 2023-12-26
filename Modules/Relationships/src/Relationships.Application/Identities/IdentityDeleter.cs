@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsByIdentity;
-using Backbone.Modules.Relationships.Application.RelationshipTemplateAllocations.Commands.DeleteRelationshipTemplateAllocationsByIdentity;
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesByIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplateAllocations.Commands.DeleteRelationshipTemplateAllocationsOfIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Identities;
@@ -12,8 +12,8 @@ public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteRelationshipsByIdentityCommand(identityAddress));
-        await _mediator.Send(new DeleteRelationshipTemplatesByIdentityCommand(identityAddress));
-        await _mediator.Send(new DeleteRelationshipTemplateAllocationsByIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteRelationshipsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteRelationshipTemplateAllocationsOfIdentityCommand(identityAddress));
     }
 }

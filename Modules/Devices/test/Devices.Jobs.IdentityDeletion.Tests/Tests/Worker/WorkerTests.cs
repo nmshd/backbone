@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsByIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
@@ -48,7 +48,7 @@ public class WorkerTests
 
         var worker = GetWorker(mediator, identityDeleters, null);
 
-        A.CallTo(() => mediator.Send(A<FindRelationshipsByIdentityCommand>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityCommand>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -66,7 +66,7 @@ public class WorkerTests
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress3 = TestDataGenerator.CreateRandomIdentityAddress();
         RegisterFindRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2, identityAddress3);
-        A.CallTo(() => mediator.Send(A<FindRelationshipsByIdentityCommand>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityCommand>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
 
         var worker = GetWorker(mediator, null, null);
 
@@ -74,7 +74,7 @@ public class WorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<FindRelationshipsByIdentityCommand>._, A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly);
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityCommand>._, A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly);
     }
 
     [Fact]
@@ -90,13 +90,13 @@ public class WorkerTests
         var worker = GetWorker(mediator, null, eventBus);
 
         A.CallTo(() =>
-            mediator.Send(A<FindRelationshipsByIdentityCommand>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
+            mediator.Send(A<FindRelationshipsOfIdentityCommand>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
         ).Returns(
             new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress1) } }
         );
 
         A.CallTo(() =>
-            mediator.Send(A<FindRelationshipsByIdentityCommand>.That.Matches(x => x.IdentityAddress == identityAddress2), A<CancellationToken>._)
+            mediator.Send(A<FindRelationshipsOfIdentityCommand>.That.Matches(x => x.IdentityAddress == identityAddress2), A<CancellationToken>._)
         ).Returns(
             new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress2), CreateRelationship(identityAddress2) } }
         );

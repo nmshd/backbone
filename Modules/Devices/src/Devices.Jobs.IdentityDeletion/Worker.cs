@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsByIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
@@ -31,7 +31,7 @@ public class Worker(IHostApplicationLifetime host,
         {
             await pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
 
-            var relationships = (await mediator.Send(new FindRelationshipsByIdentityCommand(identityAddress), cancellationToken)).Relationships;
+            var relationships = (await mediator.Send(new FindRelationshipsOfIdentityCommand(identityAddress), cancellationToken)).Relationships;
 
             foreach (var relationship in relationships)
             {

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesByIdentity;
+﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
@@ -16,7 +16,7 @@ public class HandlerTests
         var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await handler.Handle(new DeleteFilesByIdentityCommand(identityAddress), CancellationToken.None);
+        await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
         A.CallTo(() => filesRepository.DeleteFilesByIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();

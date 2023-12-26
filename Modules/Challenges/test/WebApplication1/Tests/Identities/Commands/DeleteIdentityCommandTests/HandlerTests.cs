@@ -1,5 +1,4 @@
-﻿
-using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengeByIdentity;
+﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
@@ -16,7 +15,7 @@ public class HandlerTests
         var handler = CreateHandler(challengesRepository);
 
         // Act
-        await handler.Handle(new DeleteChallengeByIdentityCommand(identityAddress), CancellationToken.None);
+        await handler.Handle(new DeleteChallengesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
         A.CallTo(() => challengesRepository.DeleteChallengesByIdentityAddress(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();

@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateAuditLog;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
 public class Handler(IIdentitiesRepository identitiesRepository) : IRequestHandler<DeleteIdentityCommand>
 {
     public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)

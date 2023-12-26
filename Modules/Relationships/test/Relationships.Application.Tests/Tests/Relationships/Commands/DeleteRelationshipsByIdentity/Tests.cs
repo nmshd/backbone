@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsByIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using FakeItEasy;
 using Xunit;
@@ -15,7 +15,7 @@ public class Tests
         var templatesRepository = A.Fake<IRelationshipsRepository>();
 
         var handler = new Handler(templatesRepository);
-        var request = new DeleteRelationshipsByIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
+        var request = new DeleteRelationshipsOfIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);
