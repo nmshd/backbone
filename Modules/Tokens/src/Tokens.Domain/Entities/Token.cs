@@ -45,4 +45,9 @@ public class Token
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
+
+    public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return i => i.CreatedBy == identityAddress;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -72,9 +73,9 @@ public class TokensRepository : ITokensRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAllOfOwner(string identityAddress, CancellationToken cancellationToken)
+    public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
     {
-        await _tokensDbSet.Where(t => t.CreatedBy == identityAddress).ExecuteDeleteAsync(cancellationToken);
+        await _tokensDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
     #endregion
