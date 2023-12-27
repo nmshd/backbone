@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Application.Messages.Commands.DeleteMessagesOfIdentity;
+using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Identities;
@@ -10,6 +10,6 @@ public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteMessagesOfIdentityCommand(identityAddress));
+        await _mediator.Send(new AnonymizeMessagesOfIdentityCommand(identityAddress));
     }
 }
