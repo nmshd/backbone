@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
@@ -14,6 +15,6 @@ public class Handler : IRequestHandler<DeleteChallengesOfIdentityCommand>
 
     public async Task Handle(DeleteChallengesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _challengesRepository.DeleteChallengesByIdentityAddress(request.IdentityAddress, cancellationToken);
+        await _challengesRepository.DeleteChallenges(Challenge.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }
 }

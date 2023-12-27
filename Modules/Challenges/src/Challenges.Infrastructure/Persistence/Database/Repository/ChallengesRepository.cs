@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Challenges.Application.Extensions;
+﻿using System.Linq.Expressions;
+using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
@@ -32,8 +33,8 @@ public class ChallengesRepository : IChallengesRepository
         return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task DeleteChallengesByIdentityAddress(string identityAddress, CancellationToken cancellationToken)
+    public async Task DeleteChallenges(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
     {
-        await _challenges.Where(c => c.CreatedBy == identityAddress).ExecuteDeleteAsync(cancellationToken);
+        await _challenges.Where(filter).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
 }

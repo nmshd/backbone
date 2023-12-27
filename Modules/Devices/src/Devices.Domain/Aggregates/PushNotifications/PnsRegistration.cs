@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Linq.Expressions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
@@ -38,6 +39,11 @@ public class PnsRegistration
         // this may be the case for old registrations that were created before the introduction of DevicePushIdentifiers, because the identifier column has a default value of an empty string
         if (DevicePushIdentifier.StringValue.Trim().IsEmpty())
             DevicePushIdentifier = DevicePushIdentifier.New();
+    }
+
+    public static Expression<Func<PnsRegistration, bool>> HasAddress(string identityAddress)
+    {
+        return i => i.IdentityAddress == identityAddress;
     }
 }
 

@@ -34,4 +34,9 @@ public class Challenge
 
     public static Expression<Func<Challenge, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow.AddHours(-1);
+
+    public static Expression<Func<Challenge, bool>> WasCreatedBy(string identityAddress)
+    {
+        return i => i.CreatedBy != null && i.CreatedBy == identityAddress;
+    }
 }
