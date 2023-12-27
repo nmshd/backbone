@@ -1,5 +1,4 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Entities.Identities.Hashing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -102,7 +101,6 @@ public class IdentityDeletionProcess
     {
         Status = DeletionProcessStatus.Deleting;
         DeletionStartedAt = SystemTime.UtcNow;
-        return Status == DeletionProcessStatus.WaitingForApproval || Status == DeletionProcessStatus.Approved;
     }
 
     internal bool IsApproved()

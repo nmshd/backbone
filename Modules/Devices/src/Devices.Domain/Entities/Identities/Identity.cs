@@ -129,25 +129,11 @@ public class Identity
     {
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
-    
-    public void MarkAsToBeDeleted()
-    {
-        if (IdentityStatus == IdentityStatus.Deleting)
-        {
-            throw new DomainException(DomainErrors.CannotChangeIdentityStatusForIdentityUndergoingDeletion());
-        }
-
-        if (DeletionProcesses.Any(dp => dp.IsApproved()) == false)
-        {
-            throw new DomainException(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists());
-        }
-
-        IdentityStatus = IdentityStatus.ToBeDeleted;
-    }
 }
 public enum IdentityStatus
 {
     Active = 0,
+    ToBeDeleted = 1,
     Deleting = 2
 }
 
