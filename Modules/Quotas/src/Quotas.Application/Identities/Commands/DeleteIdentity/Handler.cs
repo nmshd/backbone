@@ -7,7 +7,6 @@ public class Handler(IIdentitiesRepository identitiesRepository) : IRequestHandl
 {
     public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        // Deletion of Individual Quotas, Tier Quotas and MetricStatuses is ensured by Cascade Deletion of Foreign Key 
         await identitiesRepository.DeleteIdentities(Identity.HasAddress(request.IdentityAddress), cancellationToken);
     }
 }
