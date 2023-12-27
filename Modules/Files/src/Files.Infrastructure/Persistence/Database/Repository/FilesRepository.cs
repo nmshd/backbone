@@ -38,7 +38,7 @@ public class FilesRepository : IFilesRepository
 
     }
 
-    public async Task DeleteFilesByIdentity(string identityAddress, CancellationToken cancellationToken)
+    public async Task DeleteFilesOfIdentity(string identityAddress, CancellationToken cancellationToken)
     {
         var files = _files.CreatedBy(identityAddress).ToList();
         foreach (var file in files)

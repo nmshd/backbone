@@ -7,6 +7,6 @@ public class Handler(IFilesRepository filesRepository) : IRequestHandler<DeleteF
 {
     public async Task Handle(DeleteFilesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await filesRepository.DeleteFilesByIdentity(request.IdentityAddress, cancellationToken);
+        await filesRepository.DeleteFilesOfIdentity(request.IdentityAddress, cancellationToken);
     }
 }

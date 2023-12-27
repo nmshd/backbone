@@ -19,7 +19,7 @@ public class HandlerTests
         await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => filesRepository.DeleteFilesByIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => filesRepository.DeleteFilesOfIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IFilesRepository filesRepository = null)
