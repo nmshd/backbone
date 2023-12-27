@@ -8,65 +8,65 @@ using Xunit;
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class IdentityTests
 {
-    //[Fact]
-    //public void CannotMarkIdentityAsToBeDeletedIfNoDeletionProcessesExist()
-    //{
-    //    // Arrange
-    //    var identity = GenerateIdentity();
-    //    identity.DeletionProcesses.Should().BeEmpty();
+    [Fact]
+    public void CannotMarkIdentityAsToBeDeletedIfNoDeletionProcessesExist()
+    {
+        // Arrange
+        var identity = GenerateIdentity();
+        identity.DeletionProcesses.Should().BeEmpty();
 
-    //    // Act
-    //    var acting = identity.MarkAsToBeDeleted;
+        // Act
+        var acting = identity.MarkAsToBeDeleted;
 
-    //    // Assert
-    //    acting.Should().Throw<DomainException>()
-    //        .WithMessage(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists().Message);
-    //}
+        // Assert
+        acting.Should().Throw<DomainException>()
+            .WithMessage(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists().Message);
+    }
 
-    //[Fact]
-    //public void CannotMarkIdentityAsToBeDeletedIfNoDeletionProcessesAreApproved()
-    //{
-    //    // Arrange
-    //    var identity = GenerateIdentity();
-    //    identity.StartDeletionProcess(DeviceId.New());
+    [Fact]
+    public void CannotMarkIdentityAsToBeDeletedIfNoDeletionProcessesAreApproved()
+    {
+        // Arrange
+        var identity = GenerateIdentity();
+        identity.StartDeletionProcess(DeviceId.New());
 
-    //    // Act
-    //    var acting = identity.MarkAsToBeDeleted;
+        // Act
+        var acting = identity.MarkAsToBeDeleted;
 
-    //    // Assert
-    //    acting.Should().Throw<DomainException>()
-    //        .WithMessage(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists().Message);
-    //}
+        // Assert
+        acting.Should().Throw<DomainException>()
+            .WithMessage(DomainErrors.CannotMarkIdentityAsToBeDeletedIfNoApprovedDeletionProcessExists().Message);
+    }
 
-    //[Fact]
-    //public void CannotMarkIdentityAsToBeDeletedIfIsAlreadyBeingDeleted()
-    //{
-    //    // Arrange
-    //    var identity = GenerateIdentity();
-    //    identity.IdentityStatus = IdentityStatus.Deleting;
+    [Fact]
+    public void CannotMarkIdentityAsToBeDeletedIfIsAlreadyBeingDeleted()
+    {
+        // Arrange
+        var identity = GenerateIdentity();
+        identity.IdentityStatus = IdentityStatus.Deleting;
 
-    //    // Act
-    //    var acting = identity.MarkAsToBeDeleted;
+        // Act
+        var acting = identity.MarkAsToBeDeleted;
 
-    //    // Assert
-    //    acting.Should().Throw<DomainException>()
-    //        .WithMessage(DomainErrors.CannotChangeIdentityStatusForIdentityUndergoingDeletion().Message);
-    //}
+        // Assert
+        acting.Should().Throw<DomainException>()
+            .WithMessage(DomainErrors.CannotChangeIdentityStatusForIdentityUndergoingDeletion().Message);
+    }
 
-    //[Fact]
-    //public void IdentityWithApprovedDeletionProcessCanBeMarkedAsToBeDeleted()
-    //{
-    //    // Arrange
-    //    var identity = GenerateIdentity();
-    //    identity.StartDeletionProcess(DeviceId.New());
-    //    identity.DeletionProcesses.First().Status = DeletionProcessStatus.Approved;
+    [Fact]
+    public void IdentityWithApprovedDeletionProcessCanBeMarkedAsToBeDeleted()
+    {
+        // Arrange
+        var identity = GenerateIdentity();
+        identity.StartDeletionProcess(DeviceId.New());
+        identity.DeletionProcesses.First().Status = DeletionProcessStatus.Approved;
 
-    //    // Act
-    //    identity.MarkAsToBeDeleted();
+        // Act
+        identity.MarkAsToBeDeleted();
 
-    //    // Assert
-    //    identity.IdentityStatus.Should().Be(IdentityStatus.ToBeDeleted);
-    //}
+        // Assert
+        identity.IdentityStatus.Should().Be(IdentityStatus.ToBeDeleted);
+    }
 
     private Identity GenerateIdentity()
     {
