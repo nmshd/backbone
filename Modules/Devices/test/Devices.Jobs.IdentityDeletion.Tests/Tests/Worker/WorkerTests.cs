@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
@@ -32,7 +32,7 @@ public class WorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<FindRipeDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -111,12 +111,12 @@ public class WorkerTests
 
     private void RegisterFindRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
     {
-        var commandResponse = new FindRipeDeletionProcessesResponse
+        var commandResponse = new TriggerRipeDeletionProcessesResponse
         {
             IdentityAddresses = [.. identityAddresses]
         };
 
-        A.CallTo(() => mediator.Send(A<FindRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
+        A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
     private static IdentityDeletionWorker GetWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)

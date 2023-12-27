@@ -2,12 +2,12 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
-public class Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger) : IRequestHandler<FindRipeDeletionProcessesCommand, FindRipeDeletionProcessesResponse>
+namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+public class Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger) : IRequestHandler<TriggerRipeDeletionProcessesCommand, TriggerRipeDeletionProcessesResponse>
 {
-    public async Task<FindRipeDeletionProcessesResponse> Handle(FindRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
+    public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var response = new FindRipeDeletionProcessesResponse();
+        var response = new TriggerRipeDeletionProcessesResponse();
 
         var identities = await identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(cancellationToken, track: true);
         foreach (var identity in identities)

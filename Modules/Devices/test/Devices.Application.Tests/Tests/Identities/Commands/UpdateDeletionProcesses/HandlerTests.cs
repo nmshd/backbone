@@ -1,5 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -25,7 +25,7 @@ public class HandlerTests
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(30); // Future
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new FindRipeDeletionProcessesCommand();
+        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -46,7 +46,7 @@ public class HandlerTests
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new FindRipeDeletionProcessesCommand();
+        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -72,7 +72,7 @@ public class HandlerTests
         anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new FindRipeDeletionProcessesCommand();
+        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);

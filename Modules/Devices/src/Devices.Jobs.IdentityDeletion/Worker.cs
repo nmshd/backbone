@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Identities.Commands.UpdateDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
@@ -24,7 +24,7 @@ public class Worker(IHostApplicationLifetime host,
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await mediator.Send(new FindRipeDeletionProcessesCommand(), cancellationToken);
+        var identities = await mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
 
         foreach (var identityAddress in identities.IdentityAddresses)
