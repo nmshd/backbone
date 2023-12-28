@@ -17,8 +17,6 @@ public class Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler
                 identity.DeletionStarted();
                 await identitiesRepository.Update(identity, cancellationToken);
                 response.IdentityAddresses.Add(identity.Address);
-                // _eventBus.Publish(new IdentityStatusChangedIntegrationEvent(identity.Address, identity.IdentityStatus));
-                // identity.MarkAsToBeDeleted();
             }
             catch (InvalidOperationException ex)
             {

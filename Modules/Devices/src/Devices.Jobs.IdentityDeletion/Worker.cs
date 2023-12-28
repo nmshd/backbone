@@ -26,7 +26,6 @@ public class Worker(IHostApplicationLifetime host,
     {
         var identities = await mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
-
         foreach (var identityAddress in identities.IdentityAddresses)
         {
             await pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
