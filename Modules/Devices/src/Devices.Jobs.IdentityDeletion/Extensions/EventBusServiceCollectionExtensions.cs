@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
-using Microsoft.Extensions.DependencyInjection;
+using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion.Extensions;
 

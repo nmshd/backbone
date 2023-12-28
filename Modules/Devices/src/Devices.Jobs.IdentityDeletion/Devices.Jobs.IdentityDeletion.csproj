@@ -16,6 +16,7 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
         <ProjectReference Include="..\..\..\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\Files\src\Files.Application\Files.Application.csproj" />
