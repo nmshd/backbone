@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
