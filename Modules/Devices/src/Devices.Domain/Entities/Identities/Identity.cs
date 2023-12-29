@@ -19,6 +19,7 @@ public class Identity
         CreatedAt = SystemTime.UtcNow;
         Devices = new List<Device>();
         TierId = tierId;
+        Status = IdentityStatus.Active;
         _deletionProcesses = new List<IdentityDeletionProcess>();
     }
 
@@ -37,6 +38,8 @@ public class Identity
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
+
+    public IdentityStatus Status { get; private set; }
 
     public bool IsNew()
     {
@@ -100,6 +103,20 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
+    public IdentityDeletionProcess ApproveDeletionProcess(DeviceId deviceId)
+    {
+        EnsureWaitingForApprovalProcessExists();
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        deletionProcess.Approve(Address, deviceId);
+
+        Status = IdentityStatus.ToBeDeleted;
+        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+
+        return deletionProcess;
+    }
+
     private void EnsureWaitingForApprovalProcessExists()
     {
         var waitingForApprovalProcessExists = DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval);
@@ -158,4 +175,10 @@ public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
     Approved = 1
+}
+
+public enum IdentityStatus
+{
+    Active = 0,
+    ToBeDeleted = 1
 }

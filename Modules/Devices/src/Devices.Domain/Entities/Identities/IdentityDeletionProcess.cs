@@ -116,4 +116,10 @@ public class IdentityDeletionProcess
         GracePeriodReminder3SentAt = SystemTime.UtcNow;
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
     }
+
+    public void Approve(IdentityAddress address, DeviceId approvedByDevice)
+    {
+        Approve(approvedByDevice);
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
+    }
 }
