@@ -1,0 +1,70 @@
+<div [ngClass]="{ 'disabled-container': loading }" class="container">
+    <div *ngIf="loading" class="loading">
+        <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+    </div>
+    <ng-container *ngIf="showSentMessages; then sentMessages; else receivedMessages"></ng-container>
+    <ng-template #sentMessages>
+        <table mat-table class="responsive" [dataSource]="sentMessagesTableData" *ngIf="!loading">
+            <ng-container matColumnDef="recipents">
+                <th mat-header-cell *matHeaderCellDef>Recipients</th>
+                <td mat-cell *matCellDef="let Message" data-label="Recipients:">
+                    {{ Message.recipients }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="sendDate">
+                <th mat-header-cell *matHeaderCellDef>Send Date</th>
+                <td mat-cell *matCellDef="let Message" data-label="Send Date:">
+                    {{ Message.sendDate | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="numberOfAttachments">
+                <th mat-header-cell *matHeaderCellDef>Number of Attachments</th>
+                <td mat-cell *matCellDef="let Message" data-label="Number of Attachments:">
+                    {{ Message.numberOfAttachments }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="sentMessagesTableDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: sentMessagesTableDisplayedColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell no-data" [attr.colspan]="sentMessagesTableDisplayedColumns.length">No messages found.</td>
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #receivedMessages>
+        <table mat-table class="responsive" [dataSource]="receivedMessagesTableData" *ngIf="!loading">
+            <ng-container matColumnDef="senderAddress">
+                <th mat-header-cell *matHeaderCellDef>Sender Address</th>
+                <td mat-cell *matCellDef="let Message" data-label="Sender Address:">
+                    {{ Message.senderAddress }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="senderDevice">
+                <th mat-header-cell *matHeaderCellDef>Sender Device</th>
+                <td mat-cell *matCellDef="let Message" data-label="Sender Device:">
+                    {{ Message.senderDevice }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="sendDate">
+                <th mat-header-cell *matHeaderCellDef>Send Date</th>
+                <td mat-cell *matCellDef="let Message" data-label="Send Date:">
+                    {{ Message.sendDate | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="numberOfAttachments">
+                <th mat-header-cell *matHeaderCellDef>Number of Attachments</th>
+                <td mat-cell *matCellDef="let Message" data-label="Number of Attachments:">
+                    {{ Message.numberOfAttachments }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="receivedMessagesTableDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: receivedMessagesTableDisplayedColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell no-data" [attr.colspan]="receivedMessagesTableDisplayedColumns.length">No messages found.</td>
+            </tr>
+        </table>
+    </ng-template>
+</div>

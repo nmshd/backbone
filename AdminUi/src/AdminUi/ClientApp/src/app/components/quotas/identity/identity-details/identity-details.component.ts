@@ -29,6 +29,12 @@ export class IdentityDetailsComponent {
     public headerRelationships: string;
     public headerRelationshipsDescription: string;
 
+    public headerReceivedMessages: string;
+    public headerReceivedMessagesDescription: string;
+
+    public headerSentMessages: string;
+    public headerSentMessagesDescription: string;
+
     public selectionQuotas: SelectionModel<IdentityQuota>;
     public quotasTableDisplayedColumns: string[];
     public quotasTableData: (Quota | MetricGroup)[];
@@ -60,6 +66,10 @@ export class IdentityDetailsComponent {
         this.headerDevicesDescription = "View devices for this Identity.";
         this.headerRelationships = "Relationships";
         this.headerRelationshipsDescription = "View relationships of this Identity.";
+        this.headerReceivedMessages = "Received Messages";
+        this.headerReceivedMessagesDescription = "View messages received by this Identity.";
+        this.headerSentMessages = "Sent Messages";
+        this.headerSentMessagesDescription = "View messages sent by this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
         this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
