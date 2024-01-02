@@ -196,6 +196,35 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 storeTypePostfix: StoreTypePostfix.None);
             publicKey.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
+            var status = runtimeEntityType.AddProperty(
+                "Status",
+                typeof(IdentityStatus),
+                propertyInfo: typeof(Identity).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(Identity).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            status.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<IdentityStatus>(
+                    (IdentityStatus v1, IdentityStatus v2) => object.Equals((object)v1, (object)v2),
+                    (IdentityStatus v) => v.GetHashCode(),
+                    (IdentityStatus v) => v),
+                keyComparer: new ValueComparer<IdentityStatus>(
+                    (IdentityStatus v1, IdentityStatus v2) => object.Equals((object)v1, (object)v2),
+                    (IdentityStatus v) => v.GetHashCode(),
+                    (IdentityStatus v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<IdentityStatus, int>(
+                    (IdentityStatus value) => (int)value,
+                    (int value) => (IdentityStatus)value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<IdentityStatus, int>(
+                    JsonInt32ReaderWriter.Instance,
+                    new ValueConverter<IdentityStatus, int>(
+                        (IdentityStatus value) => (int)value,
+                        (int value) => (IdentityStatus)value)));
+            status.SetSentinelFromProviderValue(0);
+            status.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
+
             var tierId = runtimeEntityType.AddProperty(
                 "TierId",
                 typeof(TierId),
