@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +16,7 @@ public class QuotasController : ApiControllerBase
     public QuotasController(IMediator mediator) : base(mediator) { }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<QuotaDTO>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IEnumerable<QuotaGroupDTO>>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListIndividualQuotas(CancellationToken cancellationToken)
     {
