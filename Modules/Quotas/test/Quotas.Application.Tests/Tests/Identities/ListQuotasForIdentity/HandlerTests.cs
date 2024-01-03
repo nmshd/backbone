@@ -9,6 +9,8 @@ using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
+// ReSharper disable InconsistentNaming
+
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.ListQuotasForIdentity;
 
 public class HandlerTests
@@ -21,11 +23,8 @@ public class HandlerTests
         var metric2 = new Metric(MetricKey.NumberOfTokens, "Number Of Tokens");
         var identity = new Identity(CreateRandomIdentityAddress(), new TierId("SomeTierId"));
 
-        const int max = 5;
-        const QuotaPeriod period = QuotaPeriod.Month;
-
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric1.Key, max, period));
-        identity.CreateIndividualQuota(metric2.Key, max, period);
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric1.Key, 5, QuotaPeriod.Month));
+        identity.CreateIndividualQuota(metric2.Key, 5, QuotaPeriod.Month);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
@@ -42,7 +41,7 @@ public class HandlerTests
 
         // Act
         var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
-        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas);
+        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas).ToList();
 
         // Assert
         singleQuotaDTOs.Should().HaveCount(2);
