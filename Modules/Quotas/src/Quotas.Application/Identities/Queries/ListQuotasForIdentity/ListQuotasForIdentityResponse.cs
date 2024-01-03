@@ -23,7 +23,7 @@ public class QuotasForIdentityDTO
         }
     }
 
-    public void AddQuota(QuotaDTO quota)
+    private void AddQuota(QuotaDTO quota)
     {
         var uniqueMetricKeysInQuotas = Quotas.Select(q => q.MetricKey).Distinct().ToList();
 
