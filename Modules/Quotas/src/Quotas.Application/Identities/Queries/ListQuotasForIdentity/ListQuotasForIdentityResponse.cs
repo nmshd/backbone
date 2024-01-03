@@ -3,9 +3,14 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 
-public class ListQuotasForIdentityResponse : EnumerableResponseBase<QuotaGroupDTO>
+public class ListQuotasForIdentityResponse
 {
-    public ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items) : base(items) { }
+    public ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items)
+    {
+        Items = items;
+    }
+
+    public IEnumerable<QuotaGroupDTO> Items { get; private set; }
 }
 
 public class SingleQuotaDTO
