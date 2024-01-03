@@ -41,16 +41,17 @@ public class HandlerTests
         var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricsRepository, fakeMetricCalculationFactory);
 
         // Act
-        var quotas = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
+        var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
+        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas);
 
         // Assert
-        quotas.Should().HaveCount(2);
+        singleQuotaDTOs.Should().HaveCount(2);
 
-        quotas.Should().Contain(q => q.MetricKey == metric1.Key.Value);
-        quotas.Should().Contain(q => q.MetricKey == metric2.Key.Value);
+        singleQuotaDTOs.Should().Contain(q => q.MetricKey == metric1.Key.Value);
+        singleQuotaDTOs.Should().Contain(q => q.MetricKey == metric2.Key.Value);
 
-        var tierQuota = quotas.Single(q => q.MetricKey == metric1.Key.Value).Quotas.Single();
-        var individualQuota = quotas.Single(q => q.MetricKey == metric2.Key.Value).Quotas.Single();
+        var tierQuota = singleQuotaDTOs.Single(q => q.MetricKey == metric1.Key.Value);
+        var individualQuota = singleQuotaDTOs.Single(q => q.MetricKey == metric2.Key.Value);
 
         tierQuota.Max.Should().Be(5);
         tierQuota.Usage.Should().Be(1);
