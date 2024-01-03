@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using MediatR;
 
@@ -27,21 +28,36 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-
         var metrics = await _metricsRepository.FindAll(cancellationToken);
+        var quotas = await identity.GetAllQuotas().AsDtos(identity.Address, _metricCalculatorFactory, metrics, cancellationToken);
 
-        var quotasTasks = identity.GetAllQuotas()
-            .Select(async q =>
-            {
-                var calculator = _metricCalculatorFactory.CreateFor(q.MetricKey);
-                var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identity.Address, cancellationToken);
-                var metric = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
-                return new QuotaDTO(q, metric, usage);
-            });
-        var quotas = await Task.WhenAll(quotasTasks);
-
+        // ReSharper disable once InconsistentNaming
         var quotasForIdentityDTOs = new QuotasForIdentityDTO(quotas.ToList()).Quotas;
 
         return new ListQuotasForIdentityResponse(quotasForIdentityDTOs);
+    }
+}
+
+file static class IdentityExtensions
+{
+    public static IEnumerable<Quota> GetAllQuotas(this Identity identity)
+    {
+        var individualQuotas = identity.IndividualQuotas;
+        var tierQuotas = identity.TierQuotas;
+
+        return new List<Quota>(individualQuotas).Concat(new List<Quota>(tierQuotas)).ToList();
+    }
+
+    public static Task<QuotaDTO[]> AsDtos(this IEnumerable<Quota> quotas, IdentityAddress identityAddress, MetricCalculatorFactory metricCalculatorFactory, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
+    {
+        var quotaDtos = quotas.Select(async q =>
+        {
+            var calculator = metricCalculatorFactory.CreateFor(q.MetricKey);
+            var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identityAddress, cancellationToken);
+            var metricDto = new MetricDTO(metrics.Single(m => m.Key == q.MetricKey));
+            return new QuotaDTO(q, metricDto, usage);
+        });
+
+        return Task.WhenAll(quotaDtos);
     }
 }

@@ -32,11 +32,6 @@ public class Identity
     public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
     internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
-    public List<Quota> GetAllQuotas()
-    {
-        return new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList();
-    }
-
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (max <= 0)
