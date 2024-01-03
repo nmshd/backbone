@@ -35,9 +35,9 @@ public class HandlerTests
         var fakeMetricsRepository = A.Fake<IMetricsRepository>();
         A.CallTo(() => fakeMetricsRepository.FindAll(A<CancellationToken>._, false)).Returns(new List<Metric> { metric1, metric2 });
 
-        var fakeMetricCalculationFactory = new FakeMetricCalculatorFactory(value: 1);
+        var fakeMetricCalculatorFactory = new FakeMetricCalculatorFactory(value: 1);
 
-        var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricsRepository, fakeMetricCalculationFactory);
+        var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricsRepository, fakeMetricCalculatorFactory);
 
         // Act
         var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
