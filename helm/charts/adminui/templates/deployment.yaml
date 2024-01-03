@@ -57,20 +57,20 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /health
+              port: 8080
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /health
+              port: 8080
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -81,8 +81,6 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            - name: ASPNETCORE_URLS
-              value: http://0.0.0.0:80
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__vendor
               value: RabbitMQ

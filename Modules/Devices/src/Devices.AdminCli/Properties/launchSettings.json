@@ -4,7 +4,7 @@
             "commandName": "Project",
             "commandLineArgs": "tier list", // enter an existing command here in order to debug it
             //"commandLineArgs": "client list", // enter an existing command here in order to debug it
-            //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic", // enter an existing command here in order to debug it
+            //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100", // enter an existing command here in order to debug it
             //"commandLineArgs": "client delete test", // enter an existing command here in order to debug it
             "environmentVariables": {
                 "Database__Provider": "SqlServer",

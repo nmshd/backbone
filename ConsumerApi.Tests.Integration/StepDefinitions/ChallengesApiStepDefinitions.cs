@@ -1,6 +1,7 @@
 using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
 
@@ -11,20 +12,21 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Challenge")]
 internal class ChallengesApiStepDefinitions : BaseStepDefinitions
 {
-    private readonly ChallengesApi _challengeApi;
+    private readonly ChallengesApi _challengesApi;
     private string _challengeId;
     private HttpResponse<Challenge>? _response;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi) : base(httpConfiguration)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
-        _challengeApi = challengeApi;
+        _challengesApi = challengesApi;
         _challengeId = string.Empty;
     }
 
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
+        var challengeResponse = await _challengesApi.CreateChallenge(_requestConfiguration);
         challengeResponse.IsSuccessStatusCode.Should().BeTrue();
 
         _challengeId = challengeResponse.Content.Result!.Id;
@@ -37,13 +39,13 @@ internal class ChallengesApiStepDefinitions : BaseStepDefinitions
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
         requestConfiguration.SupplementWith(_requestConfiguration);
 
-        _response = await _challengeApi.CreateChallenge(requestConfiguration);
+        _response = await _challengesApi.CreateChallenge(requestConfiguration);
     }
 
     [When(@"a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = await _challengeApi.CreateChallenge(_requestConfiguration);
+        _response = await _challengesApi.CreateChallenge(_requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
@@ -58,7 +60,7 @@ internal class ChallengesApiStepDefinitions : BaseStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = await _challengeApi.GetChallengeById(_requestConfiguration, id);
+        _response = await _challengesApi.GetChallengeById(_requestConfiguration, id);
     }
 
     [Then(@"the response contains a Challenge")]

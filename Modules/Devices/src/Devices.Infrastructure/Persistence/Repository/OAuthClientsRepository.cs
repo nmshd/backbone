@@ -62,6 +62,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             DisplayName = client.DisplayName,
             DefaultTier = client.DefaultTier,
             CreatedAt = client.CreatedAt,
+            MaxIdentities = client.MaxIdentities,
             Permissions = GetPermissions()
         };
 

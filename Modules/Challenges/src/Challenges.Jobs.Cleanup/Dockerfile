@@ -15,6 +15,6 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 RUN apk add icu-libs
 COPY --from=build-env /app .
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/bkb-challenges"
+LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 
 ENTRYPOINT ["dotnet", "Backbone.Modules.Challenges.Jobs.Cleanup.dll"]

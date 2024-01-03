@@ -13,7 +13,7 @@ public class HandlerTests
     public async Task Change_client_secret()
     {
         // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow);
+        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
 
         var newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);

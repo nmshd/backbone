@@ -5,52 +5,47 @@ namespace Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 
 public abstract class CollectionCommandBase<TResponse, TItem> : IRequest<TResponse>, ICollection<TItem>
 {
-    private readonly ICollection<TItem> _events;
-
-    protected CollectionCommandBase()
-    {
-        _events = new List<TItem>();
-    }
+    private readonly ICollection<TItem> _items = new List<TItem>();
 
     #region ICollection
 
     public IEnumerator<TItem> GetEnumerator()
     {
-        return _events.GetEnumerator();
+        return _items.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return _events.GetEnumerator();
+        return _items.GetEnumerator();
     }
 
     public void Add(TItem item)
     {
-        _events.Add(item);
+        _items.Add(item);
     }
 
     public void Clear()
     {
-        _events.Clear();
+        _items.Clear();
     }
 
     public bool Contains(TItem item)
     {
-        return _events.Contains(item);
+        return _items.Contains(item);
     }
 
     public void CopyTo(TItem[] array, int arrayIndex)
     {
-        _events.CopyTo(array, arrayIndex);
+        _items.CopyTo(array, arrayIndex);
     }
 
     public bool Remove(TItem item)
     {
-        return _events.Remove(item);
+        return _items.Remove(item);
     }
 
-    public int Count => _events.Count;
-    public bool IsReadOnly => _events.IsReadOnly;
+    public int Count => _items.Count;
+    public bool IsReadOnly => _items.IsReadOnly;
 
     #endregion
 }
