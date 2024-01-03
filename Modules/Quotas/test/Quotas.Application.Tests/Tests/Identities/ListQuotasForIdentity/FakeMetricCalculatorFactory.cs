@@ -3,36 +3,38 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.ListQuotasForIdentity;
 
-public class FakeMetricCalculatorFactory(int? value = null) : MetricCalculatorFactory
+public class FakeMetricCalculatorFactory(
+        int? numberOfFiles = null, int? numberOfSentMessages = null, int? numberOfRelationships = null, 
+        int? numberOfRelationshipTemplates = null, int? numberOfTokens = null, int? amountOfUsedFileStorageSpace = null) : MetricCalculatorFactory
 {
     protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return numberOfFiles.HasValue ? new FakeMetricCalculator(numberOfFiles.Value) : throw new ArgumentNullException(nameof(numberOfFiles));
     }
 
     protected override IMetricCalculator CreateNumberOfSentMessagesMetricCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return numberOfSentMessages.HasValue ? new FakeMetricCalculator(numberOfSentMessages.Value) : throw new ArgumentNullException(nameof(numberOfSentMessages));
     }
 
     protected override IMetricCalculator CreateNumberOfRelationshipsMetricCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return numberOfRelationships.HasValue ? new FakeMetricCalculator(numberOfRelationships.Value) : throw new ArgumentNullException(nameof(numberOfRelationships));
     }
 
     protected override IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return numberOfRelationshipTemplates.HasValue ? new FakeMetricCalculator(numberOfRelationshipTemplates.Value) : throw new ArgumentNullException(nameof(numberOfRelationshipTemplates));
     }
 
     protected override IMetricCalculator CreateNumberOfTokensMetricCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return numberOfTokens.HasValue ? new FakeMetricCalculator(numberOfTokens.Value) : throw new ArgumentNullException(nameof(numberOfTokens));
     }
 
     protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
     {
-        return value.HasValue ? new FakeMetricCalculator(value.Value) : throw new ArgumentNullException(nameof(value));
+        return amountOfUsedFileStorageSpace.HasValue ? new FakeMetricCalculator(amountOfUsedFileStorageSpace.Value) : throw new ArgumentNullException(nameof(amountOfUsedFileStorageSpace));
     }
 }
 
