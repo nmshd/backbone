@@ -1,7 +1,8 @@
 import { Component, Input } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MessageService, ReceivedMessage, SentMessage } from "src/app/services/message-service/message.service";
-import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { MessageOverview, MessageService } from "src/app/services/message-service/message.service";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
     selector: "app-identity-details-messages",
@@ -15,10 +16,13 @@ export class IdentityDetailsMessagesComponent {
     public showSentMessages: boolean;
 
     public receivedMessagesTableDisplayedColumns: string[];
-    public receivedMessagesTableData: ReceivedMessage[];
-
     public sentMessagesTableDisplayedColumns: string[];
-    public sentMessagesTableData: SentMessage[];
+
+    public messagesTableData: MessageOverview[];
+
+    public messagesTotalRecords: number;
+    public messagesPageSize: number;
+    public messagesPageIndex: number;
 
     public loading: boolean;
 
@@ -28,9 +32,11 @@ export class IdentityDetailsMessagesComponent {
     ) {
         this.showSentMessages = false;
         this.receivedMessagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
-        this.receivedMessagesTableData = [];
         this.sentMessagesTableDisplayedColumns = ["recipients", "sendDate", "numberOfAttachments"];
-        this.sentMessagesTableData = [];
+        this.messagesTableData = [];
+        this.messagesTotalRecords = 0;
+        this.messagesPageSize = 10;
+        this.messagesPageIndex = 0;
         this.loading = false;
     }
 
@@ -53,9 +59,10 @@ export class IdentityDetailsMessagesComponent {
         this.loading = true;
 
         if (this.showSentMessages) {
-            this.messageService.getSentMessagesByParticipantAddress(this.identityAddress!).subscribe({
-                next: (data: HttpResponseEnvelope<SentMessage[]>) => {
-                    this.sentMessagesTableData = data.result;
+            this.messageService.getSentMessagesByParticipantAddress(this.identityAddress!, this.messagesPageIndex, this.messagesPageSize).subscribe({
+                next: (data: PagedHttpResponseEnvelope<MessageOverview>) => {
+                    this.messagesTableData = data.result;
+                    this.messagesTotalRecords = data.pagination?.totalRecords ? data.pagination.totalRecords : data.result.length;
                 },
                 complete: () => (this.loading = false),
                 error: (err: any) => {
@@ -68,9 +75,10 @@ export class IdentityDetailsMessagesComponent {
                 }
             });
         } else {
-            this.messageService.getReceivedMessagesByParticipantAddress(this.identityAddress!).subscribe({
-                next: (data: HttpResponseEnvelope<ReceivedMessage[]>) => {
-                    this.receivedMessagesTableData = data.result;
+            this.messageService.getReceivedMessagesByParticipantAddress(this.identityAddress!, this.messagesPageIndex, this.messagesPageSize).subscribe({
+                next: (data: PagedHttpResponseEnvelope<MessageOverview>) => {
+                    this.messagesTableData = data.result;
+                    this.messagesTotalRecords = data.pagination?.totalRecords ? data.pagination.totalRecords : data.result.length;
                 },
                 complete: () => (this.loading = false),
                 error: (err: any) => {
@@ -83,5 +91,11 @@ export class IdentityDetailsMessagesComponent {
                 }
             });
         }
+    }
+
+    public messagesPageChangeEvent(event: PageEvent): void {
+        this.messagesPageIndex = event.pageIndex;
+        this.messagesPageSize = event.pageSize;
+        this.getMessages();
     }
 }

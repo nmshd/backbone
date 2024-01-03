@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -14,32 +14,35 @@ export class MessageService {
         this.apiUrl = `${environment.apiUrl}/Messages`;
     }
 
-    public getReceivedMessagesByParticipantAddress(address: string): Observable<HttpResponseEnvelope<ReceivedMessage[]>> {
+    public getReceivedMessagesByParticipantAddress(address: string, pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<MessageOverview>> {
         const httpOptions = {
-            params: new HttpParams().set("Participant", address).set("Type", "Incoming")
+            params: new HttpParams()
+                .set("Participant", address)
+                .set("Type", "Incoming")
+                .set("PageNumber", pageNumber + 1)
+                .set("PageSize", pageSize)
         };
 
-        return this.http.get<HttpResponseEnvelope<ReceivedMessage[]>>(this.apiUrl, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<MessageOverview>>(this.apiUrl, httpOptions);
     }
 
-    public getSentMessagesByParticipantAddress(address: string): Observable<HttpResponseEnvelope<SentMessage[]>> {
+    public getSentMessagesByParticipantAddress(address: string, pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<MessageOverview>> {
         const httpOptions = {
-            params: new HttpParams().set("Participant", address).set("Type", "Outgoing")
+            params: new HttpParams()
+                .set("Participant", address)
+                .set("Type", "Outgoing")
+                .set("PageNumber", pageNumber + 1)
+                .set("PageSize", pageSize)
         };
 
-        return this.http.get<HttpResponseEnvelope<SentMessage[]>>(this.apiUrl, httpOptions);
+        return this.http.get<PagedHttpResponseEnvelope<MessageOverview>>(this.apiUrl, httpOptions);
     }
 }
 
-export interface ReceivedMessage {
+export interface MessageOverview {
     senderAddress: string;
     senderDevice: string;
     sendDate: Date;
     numberOfAttachments: number;
-}
-
-export interface SentMessage {
-    recipents: string[];
-    sendDate: Date;
-    numberOfAttachments: number;
+    recipients: string[];
 }
