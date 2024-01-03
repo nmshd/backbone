@@ -25,6 +25,7 @@ public class HandlerTests
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric1.Key, 5, QuotaPeriod.Month));
         identity.CreateIndividualQuota(metric2.Key, 5, QuotaPeriod.Month);
+        identity.CreateIndividualQuota(metric1.Key, 10, QuotaPeriod.Week);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
@@ -41,23 +42,34 @@ public class HandlerTests
 
         // Act
         var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
-        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas).ToList();
 
         // Assert
-        singleQuotaDTOs.Should().HaveCount(2);
+        quotaGroupDTOs.Should().HaveCount(2);
 
-        singleQuotaDTOs.Should().Contain(q => q.MetricKey == metric1.Key.Value);
-        singleQuotaDTOs.Should().Contain(q => q.MetricKey == metric2.Key.Value);
+        quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric1.Key.Value);
+        quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric2.Key.Value);
 
-        var tierQuota = singleQuotaDTOs.Single(q => q.MetricKey == metric1.Key.Value);
-        var individualQuota = singleQuotaDTOs.Single(q => q.MetricKey == metric2.Key.Value);
+        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas).ToList();
+
+        singleQuotaDTOs.Should().HaveCount(3);
+
+        singleQuotaDTOs.Where(sq => sq.MetricKey == metric1.Key.Value).Should().HaveCount(2);
+        singleQuotaDTOs.Where(sq => sq.MetricKey == metric2.Key.Value).Should().HaveCount(1);
+
+        var tierQuota = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Tier && q.MetricKey == metric1.Key.Value);
+        var individualQuotaTokens = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric2.Key.Value);
+        var individualQuotaMessages = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric1.Key.Value);
 
         tierQuota.Max.Should().Be(5);
         tierQuota.Usage.Should().Be(1);
         tierQuota.Period.Should().Be("Month");
 
-        individualQuota.Max.Should().Be(5);
-        individualQuota.Usage.Should().Be(2);
-        individualQuota.Period.Should().Be("Month");
+        individualQuotaTokens.Max.Should().Be(5);
+        individualQuotaTokens.Usage.Should().Be(2);
+        individualQuotaTokens.Period.Should().Be("Month");
+
+        individualQuotaMessages.Max.Should().Be(10);
+        individualQuotaMessages.Usage.Should().Be(1);
+        individualQuotaMessages.Period.Should().Be("Week");
     }
 }
