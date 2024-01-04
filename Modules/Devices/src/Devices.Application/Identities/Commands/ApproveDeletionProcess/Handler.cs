@@ -23,9 +23,9 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand>
 
     public async Task Handle(ApproveDeletionProcessCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        var deletionProcess = identity.ApproveDeletionProcess(_userContext.GetDeviceId());
+        var deletionProcess = identity.ApproveDeletionProcess(_userContext.GetDeviceId(), request.DeletionProcessId);
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new PeerIdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));

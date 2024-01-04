@@ -103,11 +103,13 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    public IdentityDeletionProcess ApproveDeletionProcess(DeviceId deviceId)
+    public IdentityDeletionProcess ApproveDeletionProcess(DeviceId deviceId, string deletionProcessId)
     {
-        EnsureWaitingForApprovalProcessExists();
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        if (deletionProcess.Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessFoundInCorrectStatusForApproval());
+
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;

@@ -20,7 +20,7 @@ public class ApproveDeletionProcessTests
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        identity.ApproveDeletionProcess(DeviceId.Parse("DVC"));
+        identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
@@ -31,16 +31,30 @@ public class ApproveDeletionProcessTests
     }
 
     [Fact]
-    public void Throws_when_deletion_process_waiting_for_approval_does_not_exist()
+    public void Throws_when_deletion_process_does_not_exist()
     {
         // Arrange
         var identity = CreateIdentity();
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(DeviceId.Parse("DVC"));
+        var acting = () => identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), "someNonExistentProcess");
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noWaitingForApprovalDeletionProcessFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+    }
+
+    [Fact]
+    public void Throws_when_deletion_process_is_not_in_status_waiting_for_approval()
+    {
+        // Arrange
+        var identity = CreateIdentity();
+        var deletionProcess = identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+
+        // Act
+        var acting = () => identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), deletionProcess.Id);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessFoundInCorrectStatusForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
