@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 import { MessageOverview, MessageService } from "src/app/services/message-service/message.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
@@ -27,12 +28,13 @@ export class IdentityDetailsMessagesComponent {
     public loading: boolean;
 
     public constructor(
+        private readonly router: Router,
         private readonly snackBar: MatSnackBar,
         private readonly messageService: MessageService
     ) {
         this.showSentMessages = false;
         this.receivedMessagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
-        this.sentMessagesTableDisplayedColumns = ["recipients", "sendDate", "numberOfAttachments"];
+        this.sentMessagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments"];
         this.messagesTableData = [];
         this.messagesTotalRecords = 0;
         this.messagesPageSize = 10;
@@ -97,5 +99,9 @@ export class IdentityDetailsMessagesComponent {
         this.messagesPageIndex = event.pageIndex;
         this.messagesPageSize = event.pageSize;
         this.getMessages();
+    }
+
+    public async goToIdentity(identityAddress: string): Promise<void> {
+        await this.router.navigate([`/identities/${identityAddress}`]);
     }
 }

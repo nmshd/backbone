@@ -8,7 +8,13 @@
             <ng-container matColumnDef="recipents">
                 <th mat-header-cell *matHeaderCellDef>Recipients</th>
                 <td mat-cell *matCellDef="let Message" data-label="Recipients:">
-                    {{ Message.recipients }}
+                    <ng-container *ngFor="let recipient of Message.recipients">
+                        <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
+                            {{
+                                recipient.address
+                            }}
+                        </ul>
+                    </ng-container>
                 </td>
             </ng-container>
             <ng-container matColumnDef="sendDate">

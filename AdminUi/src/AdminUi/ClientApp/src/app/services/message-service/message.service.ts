@@ -40,9 +40,15 @@ export class MessageService {
 }
 
 export interface MessageOverview {
+    messageId: string;
     senderAddress: string;
     senderDevice: string;
     sendDate: Date;
     numberOfAttachments: number;
-    recipients: string[];
+    recipients: MessageRecipients[];
+}
+
+export interface MessageRecipients {
+    messageId: string;
+    address: string;
 }

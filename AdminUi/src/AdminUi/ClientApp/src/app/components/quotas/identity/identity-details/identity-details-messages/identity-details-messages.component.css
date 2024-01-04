@@ -41,6 +41,15 @@
     width: 10%;
 }
 
+.identity-navigation {
+    text-decoration: underline;
+    color: blue;
+}
+
+.identity-navigation:hover {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 960px) {
     .mat-mdc-table .mat-mdc-header-row {
         display: none;
