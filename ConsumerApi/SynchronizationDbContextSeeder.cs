@@ -42,8 +42,8 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
-                .Where(m => m.EncryptedPayload == null)
-                .OrderBy(m => m.Index)
+                .Where(m => m.EncryptedPayload == null && m.Type != DatawalletModificationType.CacheChanged && m.Type != DatawalletModificationType.Delete)
+                .OrderBy(m => m.CreatedAt)
                 .Skip(_numberOfModificationsWithoutPayload)
                 .Take(PAGE_SIZE)
                 .ToList();
@@ -89,7 +89,10 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
     private async Task FillPayloads(SynchronizationDbContext context, List<DatawalletModification> modifications, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
     {
-        await Task.WhenAll(modifications.Select(async m => await FillPayload(context, m, blobsFromReferences)));
+        foreach (var modification in modifications)
+        {
+            await FillPayload(context, modification, blobsFromReferences);
+        }
     }
 
     private async Task FillPayload(SynchronizationDbContext context, DatawalletModification modification, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
