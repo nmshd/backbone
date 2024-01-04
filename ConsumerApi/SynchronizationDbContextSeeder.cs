@@ -42,7 +42,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
-                .Where(m => m.EncryptedPayload == null)
+                .Where(m => m.EncryptedPayload == null && m.Type != DatawalletModificationType.CacheChanged && m.Type != DatawalletModificationType.Delete)
                 .OrderBy(m => m.CreatedAt)
                 .Skip(_numberOfModificationsWithoutPayload)
                 .Take(PAGE_SIZE)
