@@ -43,7 +43,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
                 .Where(m => m.EncryptedPayload == null)
-                .OrderBy(m => m.Index)
+                .OrderBy(m => m.CreatedAt)
                 .Skip(_numberOfModificationsWithoutPayload)
                 .Take(PAGE_SIZE)
                 .ToList();
