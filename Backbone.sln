@@ -274,8 +274,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain.Tests", "Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj", "{82EE0159-42A7-466F-A983-F3EBCA4E171D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devices.Jobs.IdentityDeletion.Tests", "Modules\Devices\test\Devices.Jobs.IdentityDeletion.Tests\Devices.Jobs.IdentityDeletion.Tests.csproj", "{00E401A8-E30E-49C5-8298-C3420D962A5E}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCheck", "HealthCheck\HealthCheck.csproj", "{EE910828-296B-45CD-BA01-DCABE27BCC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Jobs.IdentityDeletion.Tests", "Modules\Devices\test\Devices.Jobs.IdentityDeletion.Tests\Devices.Jobs.IdentityDeletion.Tests.csproj", "{00E401A8-E30E-49C5-8298-C3420D962A5E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "HealthCheck\HealthCheck.csproj", "{EE910828-296B-45CD-BA01-DCABE27BCC4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.Infrastructure.Tests", "Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj", "{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -675,6 +678,10 @@ Global
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -803,6 +810,7 @@ Global
 		{A421544C-0C34-47DF-98A1-CE00E32FD4D1} = {EFC1F89E-1C44-4385-A0F6-1F2124260561}
 		{82EE0159-42A7-466F-A983-F3EBCA4E171D} = {BBE908B0-D642-4002-8A88-9F1726BA8CB6}
 		{00E401A8-E30E-49C5-8298-C3420D962A5E} = {F31B1655-A11B-4F30-9BC7-7418B8B915D7}
+		{A9C4E330-5A3F-4F3D-9A5F-0A551FC150B2} = {2D0BC8E9-ED6B-49D9-937C-1616ED40FB3E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

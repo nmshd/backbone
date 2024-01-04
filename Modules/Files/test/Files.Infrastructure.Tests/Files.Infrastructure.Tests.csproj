@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FakeItEasy" Version="8.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="MockQueryable.FakeItEasy" Version="7.0.0" />
+        <PackageReference Include="xunit" Version="2.6.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+      <ProjectReference Include="..\..\src\Files.Domain\Files.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Files.Infrastructure\Files.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
