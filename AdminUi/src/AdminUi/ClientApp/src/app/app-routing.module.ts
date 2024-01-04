@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
@@ -10,13 +10,21 @@ import { IdentityDetailsComponent } from "./components/quotas/identity/identity-
 import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
 import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
 import { LoginComponent } from "./components/shared/login/login.component";
+import { CustomReuseStrategy } from "./utils/custom-route-reuse-strategy";
 
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
     { path: "login", component: LoginComponent },
     { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
     { path: "identities", component: IdentityListComponent, canActivate: [AuthGuard] },
-    { path: "identities/:address", component: IdentityDetailsComponent, canActivate: [AuthGuard] },
+    {
+        path: "identities/:address",
+        component: IdentityDetailsComponent,
+        canActivate: [AuthGuard],
+        data: {
+            reuseComponent: true
+        }
+    },
     { path: "tiers", component: TierListComponent, canActivate: [AuthGuard] },
     { path: "tiers/create", component: TierEditComponent, canActivate: [AuthGuard] },
     { path: "tiers/:id", component: TierEditComponent, canActivate: [AuthGuard] },
@@ -27,7 +35,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: "reload" })],
+    exports: [RouterModule],
+    providers: [{ provide: RouteReuseStrategy, useClass: CustomReuseStrategy }]
 })
 export class AppRoutingModule {}
