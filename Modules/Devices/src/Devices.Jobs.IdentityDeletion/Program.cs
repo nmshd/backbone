@@ -2,8 +2,10 @@
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Devices.ConsumerApi;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
 using Backbone.Modules.Messages.ConsumerApi;
 using Backbone.Modules.Quotas.ConsumerApi;
@@ -11,6 +13,8 @@ using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Options;
+using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
 
@@ -62,6 +66,19 @@ public class Program
                 {
                     config.DisableDataAnnotationsValidation = true;
                 });
+
+                services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
+
+#pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
+                var parsedConfiguration =
+                    services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+                services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+
+                var devicesConfiguration = new DevicesConfiguration();
+                configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
+                services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
 
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
