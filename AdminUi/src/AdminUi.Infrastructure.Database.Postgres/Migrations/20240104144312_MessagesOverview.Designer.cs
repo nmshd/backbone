@@ -3,17 +3,20 @@ using System;
 using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AdminUi.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    partial class AdminUiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240104144312_MessagesOverview")]
+    partial class MessagesOverview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
