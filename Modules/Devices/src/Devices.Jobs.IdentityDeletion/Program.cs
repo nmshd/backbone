@@ -67,6 +67,8 @@ public class Program
                     config.DisableDataAnnotationsValidation = true;
                 });
 
+                services.AddCustomIdentity(hostContext.HostingEnvironment);
+
                 services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
