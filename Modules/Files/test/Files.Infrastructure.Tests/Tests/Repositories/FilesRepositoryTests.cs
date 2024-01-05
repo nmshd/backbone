@@ -25,7 +25,7 @@ public class FilesRepositoryTests
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
         var files = new List<File>() { GenerateFile(identityAddress), GenerateFile(identityAddress) };
-        dbContext.FileMetadata = files.AsQueryable().BuildMockDbSet(); ;
+        dbContext.FileMetadata = files.AsQueryable().BuildMockDbSet();
 
         var repository = new FilesRepository(dbContext, blobStorage, blobStorageOptions);
 
