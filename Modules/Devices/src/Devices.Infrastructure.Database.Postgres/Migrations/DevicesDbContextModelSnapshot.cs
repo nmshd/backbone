@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -195,7 +195,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
-                        
+
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)
@@ -249,12 +249,20 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
+                    b.Property<string>("ApplicationType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<string>("ClientId")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("ClientSecret")
                         .HasColumnType("text");
+
+                    b.Property<string>("ClientType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("ConcurrencyToken")
                         .IsConcurrencyToken()
@@ -281,6 +289,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("DisplayNames")
                         .HasColumnType("text");
 
+                    b.Property<string>("JsonWebKeySet")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Permissions")
                         .HasColumnType("text");
 
@@ -296,9 +310,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Requirements")
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                    b.Property<string>("Settings")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

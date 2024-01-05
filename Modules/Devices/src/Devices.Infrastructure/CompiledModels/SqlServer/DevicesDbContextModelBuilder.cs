@@ -542,6 +542,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             var defaultTableMappings5 = new List<TableMappingBase<ColumnMappingBase>>();
             customOpenIddictEntityFrameworkCoreApplication.SetRuntimeAnnotation("Relational:DefaultMappings", defaultTableMappings5);
             var backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase = new TableBase("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", null, relationalModel);
+            var applicationTypeColumnBase = new ColumnBase<ColumnMappingBase>("ApplicationType", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("ApplicationType", applicationTypeColumnBase);
             var clientIdColumnBase0 = new ColumnBase<ColumnMappingBase>("ClientId", "nvarchar(100)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
             {
                 IsNullable = true
@@ -552,6 +557,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("ClientSecret", clientSecretColumnBase);
+            var clientTypeColumnBase = new ColumnBase<ColumnMappingBase>("ClientType", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("ClientType", clientTypeColumnBase);
             var concurrencyTokenColumnBase = new ColumnBase<ColumnMappingBase>("ConcurrencyToken", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
             {
                 IsNullable = true
@@ -578,6 +588,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("DisplayNames", displayNamesColumnBase);
             var idColumnBase3 = new ColumnBase<ColumnMappingBase>("Id", "nvarchar(450)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase);
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("Id", idColumnBase3);
+            var jsonWebKeySetColumnBase = new ColumnBase<ColumnMappingBase>("JsonWebKeySet", "nvarchar(max)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
+            {
+                IsNullable = true
+            };
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("JsonWebKeySet", jsonWebKeySetColumnBase);
             var maxIdentitiesColumnBase = new ColumnBase<ColumnMappingBase>("MaxIdentities", "int", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
             {
                 IsNullable = true
@@ -608,37 +623,45 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("Requirements", requirementsColumnBase);
-            var typeColumnBase = new ColumnBase<ColumnMappingBase>("Type", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
+            var settingsColumnBase = new ColumnBase<ColumnMappingBase>("Settings", "nvarchar(max)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase)
             {
                 IsNullable = true
             };
-            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("Type", typeColumnBase);
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.Columns.Add("Settings", settingsColumnBase);
             relationalModel.DefaultTables.Add("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase);
             var backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase = new TableMappingBase<ColumnMappingBase>(customOpenIddictEntityFrameworkCoreApplication, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase, true);
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationTableBase.AddTypeMapping(backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase, false);
             defaultTableMappings5.Add(backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)idColumnBase3, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Id")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)applicationTypeColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ApplicationType")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)clientIdColumnBase0, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientId")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)clientSecretColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientSecret")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)clientTypeColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientType")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)concurrencyTokenColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ConcurrencyToken")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)consentTypeColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ConsentType")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)createdAtColumnBase2, customOpenIddictEntityFrameworkCoreApplication.FindProperty("CreatedAt")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)defaultTierColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DefaultTier")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)displayNameColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DisplayName")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)displayNamesColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DisplayNames")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)jsonWebKeySetColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("JsonWebKeySet")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)maxIdentitiesColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("MaxIdentities")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)permissionsColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Permissions")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)postLogoutRedirectUrisColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("PostLogoutRedirectUris")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)propertiesColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Properties")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)redirectUrisColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("RedirectUris")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)requirementsColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Requirements")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)settingsColumnBase, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Settings")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreApplicationMappingBase);
 
             var tableMappings5 = new List<TableMapping>();
             customOpenIddictEntityFrameworkCoreApplication.SetRuntimeAnnotation("Relational:TableMappings", tableMappings5);
             var openIddictApplicationsTable = new Table("OpenIddictApplications", null, relationalModel);
             var idColumn3 = new Column("Id", "nvarchar(450)", openIddictApplicationsTable);
             openIddictApplicationsTable.Columns.Add("Id", idColumn3);
+            var applicationTypeColumn = new Column("ApplicationType", "nvarchar(50)", openIddictApplicationsTable)
+            {
+                IsNullable = true
+            };
+            openIddictApplicationsTable.Columns.Add("ApplicationType", applicationTypeColumn);
             var clientIdColumn0 = new Column("ClientId", "nvarchar(100)", openIddictApplicationsTable)
             {
                 IsNullable = true
@@ -649,6 +672,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictApplicationsTable.Columns.Add("ClientSecret", clientSecretColumn);
+            var clientTypeColumn = new Column("ClientType", "nvarchar(50)", openIddictApplicationsTable)
+            {
+                IsNullable = true
+            };
+            openIddictApplicationsTable.Columns.Add("ClientType", clientTypeColumn);
             var concurrencyTokenColumn = new Column("ConcurrencyToken", "nvarchar(50)", openIddictApplicationsTable)
             {
                 IsNullable = true
@@ -673,6 +701,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictApplicationsTable.Columns.Add("DisplayNames", displayNamesColumn);
+            var jsonWebKeySetColumn = new Column("JsonWebKeySet", "nvarchar(max)", openIddictApplicationsTable)
+            {
+                IsNullable = true
+            };
+            openIddictApplicationsTable.Columns.Add("JsonWebKeySet", jsonWebKeySetColumn);
             var maxIdentitiesColumn = new Column("MaxIdentities", "int", openIddictApplicationsTable)
             {
                 IsNullable = true
@@ -703,11 +736,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictApplicationsTable.Columns.Add("Requirements", requirementsColumn);
-            var typeColumn = new Column("Type", "nvarchar(50)", openIddictApplicationsTable)
+            var settingsColumn = new Column("Settings", "nvarchar(max)", openIddictApplicationsTable)
             {
                 IsNullable = true
             };
-            openIddictApplicationsTable.Columns.Add("Type", typeColumn);
+            openIddictApplicationsTable.Columns.Add("Settings", settingsColumn);
             var pK_OpenIddictApplications = new UniqueConstraint("PK_OpenIddictApplications", openIddictApplicationsTable, new[] { idColumn3 });
             openIddictApplicationsTable.PrimaryKey = pK_OpenIddictApplications;
             var pK_OpenIddictApplicationsUc = RelationalModel.GetKey(this,
@@ -737,21 +770,24 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             openIddictApplicationsTable.AddTypeMapping(openIddictApplicationsTableMapping, false);
             tableMappings5.Add(openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(idColumn3, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Id")!, openIddictApplicationsTableMapping);
+            RelationalModel.CreateColumnMapping(applicationTypeColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ApplicationType")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(clientIdColumn0, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientId")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(clientSecretColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientSecret")!, openIddictApplicationsTableMapping);
+            RelationalModel.CreateColumnMapping(clientTypeColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ClientType")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(concurrencyTokenColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ConcurrencyToken")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(consentTypeColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("ConsentType")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(createdAtColumn2, customOpenIddictEntityFrameworkCoreApplication.FindProperty("CreatedAt")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(defaultTierColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DefaultTier")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(displayNameColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DisplayName")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(displayNamesColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("DisplayNames")!, openIddictApplicationsTableMapping);
+            RelationalModel.CreateColumnMapping(jsonWebKeySetColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("JsonWebKeySet")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(maxIdentitiesColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("MaxIdentities")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(permissionsColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Permissions")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(postLogoutRedirectUrisColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("PostLogoutRedirectUris")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(propertiesColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Properties")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(redirectUrisColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("RedirectUris")!, openIddictApplicationsTableMapping);
             RelationalModel.CreateColumnMapping(requirementsColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Requirements")!, openIddictApplicationsTableMapping);
-            RelationalModel.CreateColumnMapping(typeColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Type")!, openIddictApplicationsTableMapping);
+            RelationalModel.CreateColumnMapping(settingsColumn, customOpenIddictEntityFrameworkCoreApplication.FindProperty("Settings")!, openIddictApplicationsTableMapping);
 
             var customOpenIddictEntityFrameworkCoreAuthorization = FindEntityType("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization")!;
 
@@ -795,11 +831,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Subject", subjectColumnBase);
-            var typeColumnBase0 = new ColumnBase<ColumnMappingBase>("Type", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase)
+            var typeColumnBase = new ColumnBase<ColumnMappingBase>("Type", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase)
             {
                 IsNullable = true
             };
-            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Type", typeColumnBase0);
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Type", typeColumnBase);
             relationalModel.DefaultTables.Add("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase);
             var backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase = new TableMappingBase<ColumnMappingBase>(customOpenIddictEntityFrameworkCoreAuthorization, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase, true);
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.AddTypeMapping(backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase, false);
@@ -812,7 +848,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)scopesColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Scopes")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)subjectColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Subject")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
 
             var tableMappings6 = new List<TableMapping>();
             customOpenIddictEntityFrameworkCoreAuthorization.SetRuntimeAnnotation("Relational:TableMappings", tableMappings6);
@@ -854,11 +890,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictAuthorizationsTable.Columns.Add("Subject", subjectColumn);
-            var typeColumn0 = new Column("Type", "nvarchar(50)", openIddictAuthorizationsTable)
+            var typeColumn = new Column("Type", "nvarchar(50)", openIddictAuthorizationsTable)
             {
                 IsNullable = true
             };
-            openIddictAuthorizationsTable.Columns.Add("Type", typeColumn0);
+            openIddictAuthorizationsTable.Columns.Add("Type", typeColumn);
             var pK_OpenIddictAuthorizations = new UniqueConstraint("PK_OpenIddictAuthorizations", openIddictAuthorizationsTable, new[] { idColumn4 });
             openIddictAuthorizationsTable.PrimaryKey = pK_OpenIddictAuthorizations;
             var pK_OpenIddictAuthorizationsUc = RelationalModel.GetKey(this,
@@ -868,7 +904,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.GetOrCreateUniqueConstraints(pK_OpenIddictAuthorizationsUc).Add(pK_OpenIddictAuthorizations);
             openIddictAuthorizationsTable.UniqueConstraints.Add("PK_OpenIddictAuthorizations", pK_OpenIddictAuthorizations);
             var iX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type = new TableIndex(
-            "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type", openIddictAuthorizationsTable, new[] { applicationIdColumn, statusColumn, subjectColumn, typeColumn0 }, false);
+            "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type", openIddictAuthorizationsTable, new[] { applicationIdColumn, statusColumn, subjectColumn, typeColumn }, false);
             var iX_OpenIddictAuthorizations_ApplicationId_Status_Subject_TypeIx = RelationalModel.GetIndex(this,
                 "Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization",
                 new[] { "ApplicationId", "Status", "Subject", "Type" });
@@ -887,7 +923,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(scopesColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Scopes")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(statusColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(subjectColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Subject")!, openIddictAuthorizationsTableMapping);
-            RelationalModel.CreateColumnMapping(typeColumn0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, openIddictAuthorizationsTableMapping);
+            RelationalModel.CreateColumnMapping(typeColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, openIddictAuthorizationsTableMapping);
 
             var customOpenIddictEntityFrameworkCoreScope = FindEntityType("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope")!;
 
@@ -1087,11 +1123,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("Subject", subjectColumnBase0);
-            var typeColumnBase1 = new ColumnBase<ColumnMappingBase>("Type", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase)
+            var typeColumnBase0 = new ColumnBase<ColumnMappingBase>("Type", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase)
             {
                 IsNullable = true
             };
-            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("Type", typeColumnBase1);
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("Type", typeColumnBase0);
             relationalModel.DefaultTables.Add("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase);
             var backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase = new TableMappingBase<ColumnMappingBase>(customOpenIddictEntityFrameworkCoreToken, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase, true);
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.AddTypeMapping(backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase, false);
@@ -1108,7 +1144,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)referenceIdColumnBase, customOpenIddictEntityFrameworkCoreToken.FindProperty("ReferenceId")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)subjectColumnBase0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Subject")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
 
             var tableMappings8 = new List<TableMapping>();
             customOpenIddictEntityFrameworkCoreToken.SetRuntimeAnnotation("Relational:TableMappings", tableMappings8);
@@ -1170,11 +1206,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictTokensTable.Columns.Add("Subject", subjectColumn0);
-            var typeColumn1 = new Column("Type", "nvarchar(50)", openIddictTokensTable)
+            var typeColumn0 = new Column("Type", "nvarchar(50)", openIddictTokensTable)
             {
                 IsNullable = true
             };
-            openIddictTokensTable.Columns.Add("Type", typeColumn1);
+            openIddictTokensTable.Columns.Add("Type", typeColumn0);
             var pK_OpenIddictTokens = new UniqueConstraint("PK_OpenIddictTokens", openIddictTokensTable, new[] { idColumn6 });
             openIddictTokensTable.PrimaryKey = pK_OpenIddictTokens;
             var pK_OpenIddictTokensUc = RelationalModel.GetKey(this,
@@ -1184,7 +1220,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.GetOrCreateUniqueConstraints(pK_OpenIddictTokensUc).Add(pK_OpenIddictTokens);
             openIddictTokensTable.UniqueConstraints.Add("PK_OpenIddictTokens", pK_OpenIddictTokens);
             var iX_OpenIddictTokens_ApplicationId_Status_Subject_Type = new TableIndex(
-            "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type", openIddictTokensTable, new[] { applicationIdColumn0, statusColumn0, subjectColumn0, typeColumn1 }, false);
+            "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type", openIddictTokensTable, new[] { applicationIdColumn0, statusColumn0, subjectColumn0, typeColumn0 }, false);
             var iX_OpenIddictTokens_ApplicationId_Status_Subject_TypeIx = RelationalModel.GetIndex(this,
                 "Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken",
                 new[] { "ApplicationId", "Status", "Subject", "Type" });
@@ -1223,7 +1259,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(referenceIdColumn, customOpenIddictEntityFrameworkCoreToken.FindProperty("ReferenceId")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(statusColumn0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(subjectColumn0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Subject")!, openIddictTokensTableMapping);
-            RelationalModel.CreateColumnMapping(typeColumn1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, openIddictTokensTableMapping);
+            RelationalModel.CreateColumnMapping(typeColumn0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, openIddictTokensTableMapping);
 
             var identityRole = FindEntityType("Microsoft.AspNetCore.Identity.IdentityRole")!;
 
