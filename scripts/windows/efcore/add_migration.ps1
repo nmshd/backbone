@@ -1,9 +1,14 @@
 Param(
     [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
-    [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
+    [parameter(Mandatory)][ValidateSet("s", "p", "SqlServer", "Postgres", "")] $provider
 )
 
+$provider = switch ($provider) {
+    "s" { "SqlServer" }
+    "p" { "Postgres" }
+    Default { $provider }
+}
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
 $adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
@@ -37,8 +42,12 @@ function AddMigration {
 dotnet build /property:WarningLevel=0 $startupProject
 
 switch ($provider) {
-    "SqlServer" { AddMigration $provider }
-    "Postgres" { AddMigration $provider }
+    "SqlServer" { 
+        AddMigration "SqlServer" 
+    }
+    "Postgres" { 
+        AddMigration "Postgres" 
+    }
     "" { 
         AddMigration "SqlServer" 
         AddMigration "Postgres" 
