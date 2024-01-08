@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
     private readonly IdentityAddress _identityAddress;
 
-    public Handler(IUserContext userContext, IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory metricCalculatorFactory)
+    public Handler(IUserContext userContext, IIdentitiesRepository identitiesRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identityAddress = userContext.GetAddress();
         _identitiesRepository = identitiesRepository;

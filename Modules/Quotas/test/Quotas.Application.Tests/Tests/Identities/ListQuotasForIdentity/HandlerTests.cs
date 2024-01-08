@@ -38,7 +38,7 @@ public class HandlerTests
 
         var fakeMetricCalculatorFactory = new FakeMetricCalculatorFactory(numberOfSentMessages: 1, numberOfTokens: 2);
 
-        var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricsRepository, fakeMetricCalculatorFactory);
+        var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricCalculatorFactory);
 
         // Act
         var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).Items.ToList();
