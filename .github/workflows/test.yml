@@ -184,8 +184,17 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: "jssoft/js-soft"
       - name: Build image
         run: ./.ci/capi/buildContainerImage.js
         env:
@@ -201,8 +210,17 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: "jssoft/js-soft"
       - name: Build image
         run: ./.ci/aui/buildContainerImage.js
         env:
@@ -218,8 +236,17 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: "jssoft/js-soft"
       - name: Build image
         run: ./.ci/acli/buildContainerImage.js
         env:
@@ -235,8 +262,17 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: "jssoft/js-soft"
       - name: Build image
         run: ./.ci/fsc/buildContainerImage.js
         env:
