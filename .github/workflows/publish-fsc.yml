@@ -43,4 +43,5 @@ jobs:
         run: ./.ci/sc/buildContainerImage.js
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          MODULE: Files
           PUSH: 1
