@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
-public class Handler : IRequestHandler<FindRelationshipsOfIdentityCommand, FindRelationshipsByIdentityResponse>
+public class Handler : IRequestHandler<FindRelationshipsOfIdentityQuery, FindRelationshipsByIdentityResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
 
@@ -12,7 +12,7 @@ public class Handler : IRequestHandler<FindRelationshipsOfIdentityCommand, FindR
     {
         _relationshipsRepository = relationshipsRepository;
     }
-    public async Task<FindRelationshipsByIdentityResponse> Handle(FindRelationshipsOfIdentityCommand request, CancellationToken cancellationToken) => new()
+    public async Task<FindRelationshipsByIdentityResponse> Handle(FindRelationshipsOfIdentityQuery request, CancellationToken cancellationToken) => new()
     {
         Relationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)
     };
