@@ -114,7 +114,8 @@ static WebApplication CreateApp(string[] args)
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
         .SeedDbContext<RelationshipsDbContext, RelationshipsDbContextSeeder>()
         .SeedDbContext<TokensDbContext, TokensDbContextSeeder>()
-        .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>();
+        .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>()
+        .SeedDbContext<SynchronizationDbContext, SynchronizationDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -133,6 +134,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<RelationshipsDbContextSeeder>();
     services.AddTransient<TokensDbContextSeeder>();
     services.AddTransient<MessagesDbContextSeeder>();
+    services.AddTransient<SynchronizationDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)
