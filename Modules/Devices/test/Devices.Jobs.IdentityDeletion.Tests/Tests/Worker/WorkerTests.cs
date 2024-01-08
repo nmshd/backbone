@@ -48,7 +48,7 @@ public class WorkerTests
 
         var worker = GetWorker(mediator, identityDeleters, null);
 
-        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -66,7 +66,7 @@ public class WorkerTests
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress3 = TestDataGenerator.CreateRandomIdentityAddress();
         RegisterFindRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2, identityAddress3);
-        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
 
         var worker = GetWorker(mediator, null, null);
 
@@ -92,13 +92,13 @@ public class WorkerTests
         A.CallTo(() =>
             mediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
         ).Returns(
-            new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress1) } }
+            new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress1) } }
         );
 
         A.CallTo(() =>
             mediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress2), A<CancellationToken>._)
         ).Returns(
-            new FindRelationshipsByIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress2), CreateRelationship(identityAddress2) } }
+            new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress2), CreateRelationship(identityAddress2) } }
         );
 
         // Act
