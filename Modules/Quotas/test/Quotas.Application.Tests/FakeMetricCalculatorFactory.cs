@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.ListQuotasForIdentity;
+namespace Backbone.Modules.Quotas.Application.Tests;
 
 public class FakeMetricCalculatorFactory(
         int? numberOfFiles = null, int? numberOfSentMessages = null, int? numberOfRelationships = null,
