@@ -102,9 +102,4 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.Deleting;
         DeletionStartedAt = SystemTime.UtcNow;
     }
-
-    internal bool IsApproved()
-    {
-        return Status is DeletionProcessStatus.Approved;
-    }
 }
