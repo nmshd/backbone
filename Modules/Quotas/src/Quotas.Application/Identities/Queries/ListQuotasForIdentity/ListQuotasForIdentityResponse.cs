@@ -1,16 +1,10 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
-using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 
-public class ListQuotasForIdentityResponse
+public class ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items)
 {
-    public ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items)
-    {
-        Items = items;
-    }
-
-    public IEnumerable<QuotaGroupDTO> Items { get; private set; }
+    public IEnumerable<QuotaGroupDTO> Items { get; private set; } = items;
 }
 
 public class SingleQuotaDTO
