@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
         var deletionProcess = identity.ApproveDeletionProcess(_userContext.GetDeviceId(), request.DeletionProcessId);
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new PeerIdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));
+        _eventBus.Publish(new IdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));
 
         return new ApproveDeletionProcessResponse(deletionProcess);
     }

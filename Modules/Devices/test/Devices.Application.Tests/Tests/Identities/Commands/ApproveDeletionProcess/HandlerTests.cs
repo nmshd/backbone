@@ -84,7 +84,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
-            A<PeerIdentityToBeDeletedIntegrationEvent>.That.Matches(
+            A<IdentityToBeDeletedIntegrationEvent>.That.Matches(
                 e => e.Address == identity.Address &&
                      e.DeletionProcessId == identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved).Id))
         ).MustHaveHappenedOnceExactly();

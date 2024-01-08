@@ -47,5 +47,6 @@ public class RelationshipsModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
+        eventBus.AddRelationshipsIntegrationEventSubscriptions();
     }
 }

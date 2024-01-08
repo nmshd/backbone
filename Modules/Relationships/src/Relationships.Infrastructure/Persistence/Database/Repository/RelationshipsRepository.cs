@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -131,6 +132,11 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
                         r.Status != RelationshipStatus.Revoked)
             .AnyAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _relationships.Where(filter).ToListAsync(cancellationToken);
     }
 }
 

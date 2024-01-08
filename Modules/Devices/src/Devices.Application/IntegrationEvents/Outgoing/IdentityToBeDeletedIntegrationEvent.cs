@@ -2,9 +2,9 @@
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 
-public class PeerIdentityToBeDeletedIntegrationEvent : IntegrationEvent
+public class IdentityToBeDeletedIntegrationEvent : IntegrationEvent
 {
-    public PeerIdentityToBeDeletedIntegrationEvent(string identityAddress, string deletionProcessId) : base($"{identityAddress}/IdentityToBeDeleted/{deletionProcessId}")
+    public IdentityToBeDeletedIntegrationEvent(string identityAddress, string deletionProcessId) : base($"{identityAddress}/IdentityToBeDeleted/{deletionProcessId}")
     {
         DeletionProcessId = deletionProcessId;
         Address = identityAddress;

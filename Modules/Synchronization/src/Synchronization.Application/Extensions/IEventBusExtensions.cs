@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.PeerIdentityToBeDeleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
 
@@ -12,6 +13,7 @@ public static class IEventBusExtensions
     {
         SubscribeToMessagesEvents(eventBus);
         SubscribeToRelationshipsEvents(eventBus);
+        SubscribeToIdentitiesEvents(eventBus);
 
         return eventBus;
     }
@@ -27,5 +29,10 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
+    }
+
+    private static void SubscribeToIdentitiesEvents(IEventBus eventBus)
+    {
+        eventBus.Subscribe<PeerIdentityToBeDeletedIntegrationEvent, PeerIdentityToBeDeletedIntegrationEventHandler>();
     }
 }
