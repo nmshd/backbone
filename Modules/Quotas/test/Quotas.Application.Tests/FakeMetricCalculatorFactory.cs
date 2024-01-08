@@ -40,10 +40,8 @@ public class FakeMetricCalculatorFactory(
 
 public class FakeMetricCalculator(int value) : IMetricCalculator
 {
-    private int Value { get; } = value;
-
     public Task<uint> CalculateUsage(DateTime from, DateTime to, string identityAddress, CancellationToken cancellationToken)
     {
-        return Task.FromResult((uint)Value);
+        return Task.FromResult((uint)value);
     }
 }
