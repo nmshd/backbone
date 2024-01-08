@@ -235,6 +235,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)

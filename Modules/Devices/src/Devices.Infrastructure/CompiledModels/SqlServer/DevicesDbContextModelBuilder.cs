@@ -492,6 +492,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase.Columns.Add("IdentityVersion", identityVersionColumnBase);
             var publicKeyColumnBase = new ColumnBase<ColumnMappingBase>("PublicKey", "varbinary(max)", backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase);
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase.Columns.Add("PublicKey", publicKeyColumnBase);
+            var statusColumnBase = new ColumnBase<ColumnMappingBase>("Status", "int", backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase);
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase.Columns.Add("Status", statusColumnBase);
             var tierIdColumnBase = new ColumnBase<ColumnMappingBase>("TierId", "char(20)", backboneModulesDevicesDomainEntitiesIdentitiesIdentityTableBase)
             {
                 IsNullable = true
@@ -507,6 +509,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)deletionGracePeriodEndsAtColumnBase, identity.FindProperty("DeletionGracePeriodEndsAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)identityVersionColumnBase, identity.FindProperty("IdentityVersion")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)publicKeyColumnBase, identity.FindProperty("PublicKey")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase, identity.FindProperty("Status")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)tierIdColumnBase, identity.FindProperty("TierId")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityMappingBase);
 
             var tableMappings4 = new List<TableMapping>();
@@ -530,6 +533,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             identitiesTable.Columns.Add("IdentityVersion", identityVersionColumn);
             var publicKeyColumn = new Column("PublicKey", "varbinary(max)", identitiesTable);
             identitiesTable.Columns.Add("PublicKey", publicKeyColumn);
+            var statusColumn = new Column("Status", "int", identitiesTable);
+            identitiesTable.Columns.Add("Status", statusColumn);
             var tierIdColumn = new Column("TierId", "char(20)", identitiesTable)
             {
                 IsNullable = true
@@ -553,6 +558,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(deletionGracePeriodEndsAtColumn, identity.FindProperty("DeletionGracePeriodEndsAt")!, identitiesTableMapping);
             RelationalModel.CreateColumnMapping(identityVersionColumn, identity.FindProperty("IdentityVersion")!, identitiesTableMapping);
             RelationalModel.CreateColumnMapping(publicKeyColumn, identity.FindProperty("PublicKey")!, identitiesTableMapping);
+            RelationalModel.CreateColumnMapping(statusColumn, identity.FindProperty("Status")!, identitiesTableMapping);
             RelationalModel.CreateColumnMapping(tierIdColumn, identity.FindProperty("TierId")!, identitiesTableMapping);
 
             var identityDeletionProcess = FindEntityType("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess")!;
@@ -614,8 +620,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("IdentityAddress", identityAddressColumnBase1);
-            var statusColumnBase = new ColumnBase<ColumnMappingBase>("Status", "int", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase);
-            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("Status", statusColumnBase);
+            var statusColumnBase0 = new ColumnBase<ColumnMappingBase>("Status", "int", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase);
+            backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.Columns.Add("Status", statusColumnBase0);
             relationalModel.DefaultTables.Add("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase);
             var backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase = new TableMappingBase<ColumnMappingBase>(identityDeletionProcess, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase, true);
             backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessTableBase.AddTypeMapping(backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase, false);
@@ -632,7 +638,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodReminder2SentAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodReminder2SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)gracePeriodReminder3SentAtColumnBase, identityDeletionProcess.FindProperty("GracePeriodReminder3SentAt")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)identityAddressColumnBase1, identityDeletionProcess.FindProperty("IdentityAddress")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase, identityDeletionProcess.FindProperty("Status")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase0, identityDeletionProcess.FindProperty("Status")!, backboneModulesDevicesDomainEntitiesIdentitiesIdentityDeletionProcessMappingBase);
 
             var tableMappings5 = new List<TableMapping>();
             identityDeletionProcess.SetRuntimeAnnotation("Relational:TableMappings", tableMappings5);
@@ -691,8 +697,8 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             identityDeletionProcessesTable.Columns.Add("IdentityAddress", identityAddressColumn1);
-            var statusColumn = new Column("Status", "int", identityDeletionProcessesTable);
-            identityDeletionProcessesTable.Columns.Add("Status", statusColumn);
+            var statusColumn0 = new Column("Status", "int", identityDeletionProcessesTable);
+            identityDeletionProcessesTable.Columns.Add("Status", statusColumn0);
             var pK_IdentityDeletionProcesses = new UniqueConstraint("PK_IdentityDeletionProcesses", identityDeletionProcessesTable, new[] { idColumn3 });
             identityDeletionProcessesTable.PrimaryKey = pK_IdentityDeletionProcesses;
             var pK_IdentityDeletionProcessesUc = RelationalModel.GetKey(this,
@@ -725,7 +731,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(gracePeriodReminder2SentAtColumn, identityDeletionProcess.FindProperty("GracePeriodReminder2SentAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(gracePeriodReminder3SentAtColumn, identityDeletionProcess.FindProperty("GracePeriodReminder3SentAt")!, identityDeletionProcessesTableMapping);
             RelationalModel.CreateColumnMapping(identityAddressColumn1, identityDeletionProcess.FindProperty("IdentityAddress")!, identityDeletionProcessesTableMapping);
-            RelationalModel.CreateColumnMapping(statusColumn, identityDeletionProcess.FindProperty("Status")!, identityDeletionProcessesTableMapping);
+            RelationalModel.CreateColumnMapping(statusColumn0, identityDeletionProcess.FindProperty("Status")!, identityDeletionProcessesTableMapping);
 
             var identityDeletionProcessAuditLogEntry = FindEntityType("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry")!;
 
@@ -1075,11 +1081,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Scopes", scopesColumnBase);
-            var statusColumnBase0 = new ColumnBase<ColumnMappingBase>("Status", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase)
+            var statusColumnBase1 = new ColumnBase<ColumnMappingBase>("Status", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase)
             {
                 IsNullable = true
             };
-            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Status", statusColumnBase0);
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase.Columns.Add("Status", statusColumnBase1);
             var subjectColumnBase = new ColumnBase<ColumnMappingBase>("Subject", "nvarchar(400)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationTableBase)
             {
                 IsNullable = true
@@ -1100,7 +1106,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)creationDateColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("CreationDate")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)propertiesColumnBase0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Properties")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)scopesColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Scopes")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase1, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)subjectColumnBase, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Subject")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreAuthorizationMappingBase);
 
@@ -1134,11 +1140,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictAuthorizationsTable.Columns.Add("Scopes", scopesColumn);
-            var statusColumn0 = new Column("Status", "nvarchar(50)", openIddictAuthorizationsTable)
+            var statusColumn1 = new Column("Status", "nvarchar(50)", openIddictAuthorizationsTable)
             {
                 IsNullable = true
             };
-            openIddictAuthorizationsTable.Columns.Add("Status", statusColumn0);
+            openIddictAuthorizationsTable.Columns.Add("Status", statusColumn1);
             var subjectColumn = new Column("Subject", "nvarchar(400)", openIddictAuthorizationsTable)
             {
                 IsNullable = true
@@ -1158,7 +1164,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.GetOrCreateUniqueConstraints(pK_OpenIddictAuthorizationsUc).Add(pK_OpenIddictAuthorizations);
             openIddictAuthorizationsTable.UniqueConstraints.Add("PK_OpenIddictAuthorizations", pK_OpenIddictAuthorizations);
             var iX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type = new TableIndex(
-            "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type", openIddictAuthorizationsTable, new[] { applicationIdColumn, statusColumn0, subjectColumn, typeColumn0 }, false);
+            "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type", openIddictAuthorizationsTable, new[] { applicationIdColumn, statusColumn1, subjectColumn, typeColumn0 }, false);
             var iX_OpenIddictAuthorizations_ApplicationId_Status_Subject_TypeIx = RelationalModel.GetIndex(this,
                 "Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization",
                 new[] { "ApplicationId", "Status", "Subject", "Type" });
@@ -1175,7 +1181,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(creationDateColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("CreationDate")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(propertiesColumn0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Properties")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(scopesColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Scopes")!, openIddictAuthorizationsTableMapping);
-            RelationalModel.CreateColumnMapping(statusColumn0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, openIddictAuthorizationsTableMapping);
+            RelationalModel.CreateColumnMapping(statusColumn1, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Status")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(subjectColumn, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Subject")!, openIddictAuthorizationsTableMapping);
             RelationalModel.CreateColumnMapping(typeColumn0, customOpenIddictEntityFrameworkCoreAuthorization.FindProperty("Type")!, openIddictAuthorizationsTableMapping);
 
@@ -1367,11 +1373,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("ReferenceId", referenceIdColumnBase);
-            var statusColumnBase1 = new ColumnBase<ColumnMappingBase>("Status", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase)
+            var statusColumnBase2 = new ColumnBase<ColumnMappingBase>("Status", "nvarchar(50)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase)
             {
                 IsNullable = true
             };
-            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("Status", statusColumnBase1);
+            backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase.Columns.Add("Status", statusColumnBase2);
             var subjectColumnBase0 = new ColumnBase<ColumnMappingBase>("Subject", "nvarchar(400)", backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenTableBase)
             {
                 IsNullable = true
@@ -1396,7 +1402,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)propertiesColumnBase2, customOpenIddictEntityFrameworkCoreToken.FindProperty("Properties")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)redemptionDateColumnBase, customOpenIddictEntityFrameworkCoreToken.FindProperty("RedemptionDate")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)referenceIdColumnBase, customOpenIddictEntityFrameworkCoreToken.FindProperty("ReferenceId")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
-            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
+            RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)statusColumnBase2, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)subjectColumnBase0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Subject")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
             RelationalModel.CreateColumnMapping((ColumnBase<ColumnMappingBase>)typeColumnBase1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, backboneModulesDevicesInfrastructureOpenIddictCustomOpenIddictEntityFrameworkCoreTokenMappingBase);
 
@@ -1450,11 +1456,11 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
                 IsNullable = true
             };
             openIddictTokensTable.Columns.Add("ReferenceId", referenceIdColumn);
-            var statusColumn1 = new Column("Status", "nvarchar(50)", openIddictTokensTable)
+            var statusColumn2 = new Column("Status", "nvarchar(50)", openIddictTokensTable)
             {
                 IsNullable = true
             };
-            openIddictTokensTable.Columns.Add("Status", statusColumn1);
+            openIddictTokensTable.Columns.Add("Status", statusColumn2);
             var subjectColumn0 = new Column("Subject", "nvarchar(400)", openIddictTokensTable)
             {
                 IsNullable = true
@@ -1474,7 +1480,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.GetOrCreateUniqueConstraints(pK_OpenIddictTokensUc).Add(pK_OpenIddictTokens);
             openIddictTokensTable.UniqueConstraints.Add("PK_OpenIddictTokens", pK_OpenIddictTokens);
             var iX_OpenIddictTokens_ApplicationId_Status_Subject_Type = new TableIndex(
-            "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type", openIddictTokensTable, new[] { applicationIdColumn0, statusColumn1, subjectColumn0, typeColumn1 }, false);
+            "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type", openIddictTokensTable, new[] { applicationIdColumn0, statusColumn2, subjectColumn0, typeColumn1 }, false);
             var iX_OpenIddictTokens_ApplicationId_Status_Subject_TypeIx = RelationalModel.GetIndex(this,
                 "Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken",
                 new[] { "ApplicationId", "Status", "Subject", "Type" });
@@ -1511,7 +1517,7 @@ namespace Backbone.Modules.Devices.Infrastructure.CompiledModels.SqlServer
             RelationalModel.CreateColumnMapping(propertiesColumn2, customOpenIddictEntityFrameworkCoreToken.FindProperty("Properties")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(redemptionDateColumn, customOpenIddictEntityFrameworkCoreToken.FindProperty("RedemptionDate")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(referenceIdColumn, customOpenIddictEntityFrameworkCoreToken.FindProperty("ReferenceId")!, openIddictTokensTableMapping);
-            RelationalModel.CreateColumnMapping(statusColumn1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, openIddictTokensTableMapping);
+            RelationalModel.CreateColumnMapping(statusColumn2, customOpenIddictEntityFrameworkCoreToken.FindProperty("Status")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(subjectColumn0, customOpenIddictEntityFrameworkCoreToken.FindProperty("Subject")!, openIddictTokensTableMapping);
             RelationalModel.CreateColumnMapping(typeColumn1, customOpenIddictEntityFrameworkCoreToken.FindProperty("Type")!, openIddictTokensTableMapping);
 
