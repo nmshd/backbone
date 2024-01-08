@@ -39,12 +39,11 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
         var hasMorePages = true;
 
-
         while (hasMorePages)
         {
             var modificationsWithoutEncryptedPayload = context.DatawalletModifications
-                .Where(m => m.EncryptedPayload == null)
-                .OrderBy(m => m.Index)
+                .Where(m => m.EncryptedPayload == null && m.Type != DatawalletModificationType.CacheChanged && m.Type != DatawalletModificationType.Delete)
+                .OrderBy(m => m.CreatedAt)
                 .Skip(_numberOfModificationsWithoutPayload)
                 .Take(PAGE_SIZE)
                 .ToList();
@@ -52,6 +51,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             var blobReferences = modificationsWithoutEncryptedPayload
                 .Where(m => !string.IsNullOrWhiteSpace(m.BlobReference))
                 .Select(m => m.BlobReference)
+                .Distinct()
                 .ToList();
 
             var blobsFromReferences = await FindBlobsByReferences(blobReferences);
@@ -89,7 +89,10 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
     private async Task FillPayloads(SynchronizationDbContext context, List<DatawalletModification> modifications, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
     {
-        await Task.WhenAll(modifications.Select(async m => await FillPayload(context, m, blobsFromReferences)));
+        foreach (var modification in modifications)
+        {
+            await FillPayload(context, modification, blobsFromReferences);
+        }
     }
 
     private async Task FillPayload(SynchronizationDbContext context, DatawalletModification modification, Dictionary<string, Dictionary<long, byte[]>> blobsFromReferences)
@@ -111,6 +114,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
             {
                 var blobContent = await _blobStorage!.FindAsync(_blobRootFolder!, modification.Id);
                 modification.LoadEncryptedPayload(blobContent);
+                return true;
             }
             catch (NotFoundException)
             {
@@ -128,7 +132,8 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
 
         if (!blob.TryGetValue(modification.Index, out var payload))
         {
-            _logger.LogInformation("Blob with Id '{id}' not found in blob reference. As the encrypted payload of a datawallet modification is not required, this is probably not an error.", modification.Id);
+            _logger.LogInformation("Blob with Id '{id}' not found in blob reference. As the encrypted payload of a datawallet modification is not required, this is probably not an error.",
+                modification.Id);
             return false;
         }
 
