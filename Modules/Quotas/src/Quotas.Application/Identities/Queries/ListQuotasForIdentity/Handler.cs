@@ -25,7 +25,8 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? 
+                       throw new Exception($"Identity with Id '{_identityAddress}' not found.");
         var quotaGroupDTOs = await identity.GetAllQuotas().AsQuotaGroupDTOs(identity.Address, _metricCalculatorFactory, cancellationToken);
 
         return new ListQuotasForIdentityResponse(quotaGroupDTOs);
