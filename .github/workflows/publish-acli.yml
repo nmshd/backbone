@@ -28,8 +28,6 @@ jobs:
         run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
         env:
           GIT_TAG: ${{ github.ref_name }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
