@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -25,7 +24,7 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
 
     public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ?? 
+        var identity = await _identitiesRepository.Find(_identityAddress, cancellationToken) ??
                        throw new Exception($"Identity with Id '{_identityAddress}' not found.");
         var quotaGroupDTOs = await identity.GetAllQuotas().AsQuotaGroupDTOs(identity.Address, _metricCalculatorFactory, cancellationToken);
 
