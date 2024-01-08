@@ -49,16 +49,15 @@ public class HandlerTests
         quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric1.Key.Value);
         quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric2.Key.Value);
 
-        var singleQuotaDTOs = quotaGroupDTOs.SelectMany(group => group.Quotas).ToList();
+        var metric1QuotaGroup = quotaGroupDTOs.Single(qg => qg.MetricKey == metric1.Key.Value);
+        var metric2QuotaGroup = quotaGroupDTOs.Single(qg => qg.MetricKey == metric2.Key.Value);
 
-        singleQuotaDTOs.Should().HaveCount(3);
+        metric1QuotaGroup.Quotas.Should().HaveCount(2);
+        metric2QuotaGroup.Quotas.Should().HaveCount(1);
 
-        singleQuotaDTOs.Where(sq => sq.MetricKey == metric1.Key.Value).Should().HaveCount(2);
-        singleQuotaDTOs.Where(sq => sq.MetricKey == metric2.Key.Value).Should().HaveCount(1);
-
-        var tierQuota = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Tier && q.MetricKey == metric1.Key.Value);
-        var individualQuotaTokens = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric2.Key.Value);
-        var individualQuotaMessages = singleQuotaDTOs.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric1.Key.Value);
+        var tierQuota = metric1QuotaGroup.Quotas.Single(q => q.Source == QuotaSource.Tier && q.MetricKey == metric1.Key.Value);
+        var individualQuotaTokens = metric2QuotaGroup.Quotas.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric2.Key.Value);
+        var individualQuotaMessages = metric1QuotaGroup.Quotas.Single(q => q.Source == QuotaSource.Individual && q.MetricKey == metric1.Key.Value);
 
         tierQuota.Max.Should().Be(5);
         tierQuota.Usage.Should().Be(1);
