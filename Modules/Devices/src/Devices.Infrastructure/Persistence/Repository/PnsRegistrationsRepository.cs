@@ -59,7 +59,7 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteIPnsRegistrations(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken)
+    public async Task DeletePnsRegistrations(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken)
     {
         await _registrations.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }

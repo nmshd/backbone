@@ -14,6 +14,6 @@ public class Handler : IRequestHandler<DeleteRegistrationsOfIdentityCommand>
 
     public async Task Handle(DeleteRegistrationsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _pnsRegistrationRepository.DeleteIPnsRegistrations(PnsRegistration.HasAddress(request.IdentityAddress), cancellationToken);
+        await _pnsRegistrationRepository.DeletePnsRegistrations(PnsRegistration.HasAddress(request.IdentityAddress), cancellationToken);
     }
 }
