@@ -25,7 +25,7 @@ public class MessagesModule : AbstractModule
         services.AddPersistence(options =>
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            options.DbOptions.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
             if (parsedConfiguration.Infrastructure.BlobStorage != null)
             {

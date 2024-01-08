@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;

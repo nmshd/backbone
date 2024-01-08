@@ -48,7 +48,7 @@ public class Program
 
                 services.AddPersistence(options =>
                 {
-                    options.DbOptions.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
+                    options.DbOptions.ConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
                     options.DbOptions.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
 
                     options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionInfo;

@@ -1,4 +1,5 @@
 ﻿using Backbone.AdminUi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SqlServerModel = AdminUi.Infrastructure.CompiledModels.SqlServer;
 
 namespace Backbone.AdminUi.Infrastructure.Persistence;
-
 public static class IServiceCollectionExtensions
 {
     private const string SQLSERVER = "SqlServer";
@@ -59,18 +59,5 @@ public static class IServiceCollectionExtensions
             });
 
         return services;
-    }
-
-    public class DbOptions
-    {
-        public string Provider { get; set; }
-        public string ConnectionString { get; set; }
-        public RetryOptions RetryOptions { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public byte MaxRetryCount { get; set; } = 15;
-        public int MaxRetryDelayInSeconds { get; set; } = 30;
     }
 }

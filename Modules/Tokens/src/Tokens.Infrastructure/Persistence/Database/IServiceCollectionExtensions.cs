@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,7 +28,7 @@ public static class IServiceCollectionExtensions
                     switch (options.Provider)
                     {
                         case SQLSERVER:
-                            dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                            dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                             {
                                 sqlOptions.CommandTimeout(20);
                                 sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
@@ -35,7 +36,7 @@ public static class IServiceCollectionExtensions
                             }).UseModel(Modules.Tokens.Infrastructure.CompiledModels.SqlServer.TokensDbContextModel.Instance);
                             break;
                         case POSTGRES:
-                            dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                            dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                             {
                                 sqlOptions.CommandTimeout(20);
                                 sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
@@ -49,17 +50,4 @@ public static class IServiceCollectionExtensions
                 }
             );
     }
-}
-
-public class DbOptions
-{
-    public string Provider { get; set; }
-    public string DbConnectionString { get; set; }
-    public RetryOptions RetryOptions { get; set; } = new();
-}
-
-public class RetryOptions
-{
-    public byte MaxRetryCount { get; set; } = 15;
-    public int MaxRetryDelayInSeconds { get; set; } = 30;
 }

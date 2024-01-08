@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -73,18 +74,5 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
         services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
-    }
-
-    public class DbOptions
-    {
-        public string Provider { get; set; }
-        public string ConnectionString { get; set; }
-        public RetryOptions RetryOptions { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public byte MaxRetryCount { get; set; } = 15;
-        public int MaxRetryDelayInSeconds { get; set; } = 30;
     }
 }

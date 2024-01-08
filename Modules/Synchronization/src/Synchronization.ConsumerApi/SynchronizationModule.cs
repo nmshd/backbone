@@ -25,7 +25,7 @@ public class SynchronizationModule : AbstractModule
         services.AddPersistence(options =>
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            options.DbOptions.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
             options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
             options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;

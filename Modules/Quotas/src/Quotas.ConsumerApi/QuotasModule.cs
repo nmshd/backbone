@@ -26,7 +26,7 @@ public class QuotasModule : AbstractModule
         services.AddDatabase(dbOptions =>
         {
             dbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            dbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            dbOptions.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);

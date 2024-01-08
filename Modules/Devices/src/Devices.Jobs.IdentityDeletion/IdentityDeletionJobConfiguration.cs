@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 
@@ -14,5 +15,5 @@ public class InfrastructureConfiguration
     [Required]
     public EventBusConfiguration EventBus { get; set; } = new();
     [Required]
-    public IServiceCollectionExtensions.DbOptions SqlDatabase { get; set; } = new();
+    public DbOptions SqlDatabase { get; set; } = new();
 }
