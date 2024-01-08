@@ -2,7 +2,12 @@
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.DeleteDatawalletsOfIdentity;
-public class DeleteDatawalletsOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteDatawalletsOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteDatawalletsOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

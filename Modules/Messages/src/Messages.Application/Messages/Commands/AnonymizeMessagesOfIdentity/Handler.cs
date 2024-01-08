@@ -6,21 +6,29 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
 
-public class Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions) : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
+public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
+    private readonly IMessagesRepository _messagesRepository;
+    private readonly IOptions<ApplicationOptions> _applicationOptions;
+
+    public Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions)
+    {
+        _messagesRepository = messagesRepository;
+        _applicationOptions = applicationOptions;
+    }
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var messages = await messagesRepository.FindMessagesWithParticipant(request.IdentityAddress, cancellationToken);
+        var messages = await _messagesRepository.FindMessagesWithParticipant(request.IdentityAddress, cancellationToken);
 
-        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), applicationOptions.Value.AddressPrefix);
+        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.Value.AddressPrefix);
 
         foreach (var message in messages)
         {
             message.ReplaceIdentityAddress(request.IdentityAddress, newIdentityAddress);
         }
 
-        await messagesRepository.Update(messages);
+        await _messagesRepository.Update(messages);
     }
 }

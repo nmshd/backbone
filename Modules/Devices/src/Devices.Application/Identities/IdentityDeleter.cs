@@ -5,10 +5,15 @@ using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteRegi
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities;
-public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
+public class IdentityDeleter : IIdentityDeleter
 {
+    private readonly IMediator _mediator;
 
-    private readonly IMediator _mediator = mediator;
+    public IdentityDeleter(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteRegistrationsOfIdentityCommand(identityAddress));

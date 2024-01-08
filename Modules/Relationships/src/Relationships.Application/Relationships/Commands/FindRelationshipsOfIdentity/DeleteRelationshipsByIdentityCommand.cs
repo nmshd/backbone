@@ -3,7 +3,12 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
-public class FindRelationshipsOfIdentityCommand(IdentityAddress identityAddress) : IRequest<FindRelationshipsByIdentityResponse>
+public class FindRelationshipsOfIdentityCommand : IRequest<FindRelationshipsByIdentityResponse>
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public FindRelationshipsOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

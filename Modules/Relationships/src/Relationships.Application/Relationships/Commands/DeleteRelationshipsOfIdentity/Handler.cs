@@ -4,10 +4,17 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
 
-public class Handler(IRelationshipsRepository relationshipsRepository) : IRequestHandler<DeleteRelationshipsOfIdentityCommand>
+public class Handler : IRequestHandler<DeleteRelationshipsOfIdentityCommand>
 {
+    private readonly IRelationshipsRepository _relationshipsRepository;
+
+    public Handler(IRelationshipsRepository relationshipsRepository)
+    {
+        _relationshipsRepository = relationshipsRepository;
+    }
+
     public async Task Handle(DeleteRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await relationshipsRepository.DeleteRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
+        await _relationshipsRepository.DeleteRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
     }
 }

@@ -2,7 +2,12 @@
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteRegistrationsOfIdentity;
-public class DeleteRegistrationsOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteRegistrationsOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteRegistrationsOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

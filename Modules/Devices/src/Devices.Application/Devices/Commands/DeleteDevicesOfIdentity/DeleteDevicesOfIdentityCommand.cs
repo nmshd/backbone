@@ -3,7 +3,12 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevicesOfIdentity;
 
-public class DeleteDevicesOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteDevicesOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteDevicesOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

@@ -2,7 +2,12 @@
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
-public class DeleteIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

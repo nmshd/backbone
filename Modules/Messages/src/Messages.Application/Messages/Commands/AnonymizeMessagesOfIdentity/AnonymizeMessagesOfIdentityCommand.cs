@@ -3,7 +3,12 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
 
-public class AnonymizeMessagesOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class AnonymizeMessagesOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public AnonymizeMessagesOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

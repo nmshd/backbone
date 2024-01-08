@@ -3,7 +3,12 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
 
-public class DeleteRelationshipsOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteRelationshipsOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteRelationshipsOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

@@ -3,7 +3,12 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
 
-public class DeleteChallengesOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteChallengesOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteChallengesOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

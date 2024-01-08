@@ -9,35 +9,50 @@ using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
-public class Worker(IHostApplicationLifetime host,
+public class Worker : IHostedService
+{
+    private readonly IEventBus _eventBus;
+    private readonly IHostApplicationLifetime _host;
+    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
+    private readonly IMediator _mediator;
+    private readonly IPushNotificationSender _pushNotificationSender;
+
+    public Worker(IHostApplicationLifetime host,
                     IEnumerable<IIdentityDeleter> identityDeleters,
                     IMediator mediator,
                     IPushNotificationSender pushNotificationSender,
-                    IEventBus eventBus) : IHostedService
-{
+                    IEventBus eventBus)
+    {
+        _host = host;
+        _identityDeleters = identityDeleters;
+        _mediator = mediator;
+        _pushNotificationSender = pushNotificationSender;
+        _eventBus = eventBus;
+    }
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await StartProcessing(cancellationToken);
 
-        host.StopApplication();
+        _host.StopApplication();
     }
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        var identities = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
-            await pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
+            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
 
-            var relationships = (await mediator.Send(new FindRelationshipsOfIdentityCommand(identityAddress), cancellationToken)).Relationships;
+            var relationships = (await _mediator.Send(new FindRelationshipsOfIdentityCommand(identityAddress), cancellationToken)).Relationships;
 
             foreach (var relationship in relationships)
             {
-                eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
+                _eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
             }
 
-            foreach (var identityDeleter in identityDeleters)
+            foreach (var identityDeleter in _identityDeleters)
             {
                 await identityDeleter.Delete(identityAddress);
             }

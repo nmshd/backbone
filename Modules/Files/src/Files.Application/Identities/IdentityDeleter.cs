@@ -4,9 +4,14 @@ using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdenti
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Identities;
-public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
+public class IdentityDeleter : IIdentityDeleter
 {
-    private readonly IMediator _mediator = mediator;
+    private readonly IMediator _mediator;
+
+    public IdentityDeleter(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public async Task Delete(IdentityAddress identityAddress)
     {

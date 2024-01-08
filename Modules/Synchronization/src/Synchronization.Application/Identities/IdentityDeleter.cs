@@ -5,9 +5,14 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncR
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Identities;
-public class IdentityDeleter(IMediator mediator) : IIdentityDeleter
+public class IdentityDeleter : IIdentityDeleter
 {
-    private readonly IMediator _mediator = mediator;
+    private readonly IMediator _mediator;
+
+    public IdentityDeleter(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public async Task Delete(IdentityAddress identityAddress)
     {

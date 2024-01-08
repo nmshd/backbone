@@ -2,7 +2,12 @@
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplateAllocations.Commands.DeleteRelationshipTemplateAllocationsOfIdentity;
-public class DeleteRelationshipTemplateAllocationsOfIdentityCommand(IdentityAddress identityAddress) : IRequest
+public class DeleteRelationshipTemplateAllocationsOfIdentityCommand : IRequest
 {
-    public IdentityAddress IdentityAddress { get; set; } = identityAddress;
+    public DeleteRelationshipTemplateAllocationsOfIdentityCommand(IdentityAddress identityAddress)
+    {
+        IdentityAddress = identityAddress;
+    }
+
+    public IdentityAddress IdentityAddress { get; set; }
 }

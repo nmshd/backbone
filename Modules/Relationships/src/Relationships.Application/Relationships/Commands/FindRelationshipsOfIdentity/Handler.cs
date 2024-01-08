@@ -4,10 +4,16 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
-public class Handler(IRelationshipsRepository relationshipsRepository) : IRequestHandler<FindRelationshipsOfIdentityCommand, FindRelationshipsByIdentityResponse>
+public class Handler : IRequestHandler<FindRelationshipsOfIdentityCommand, FindRelationshipsByIdentityResponse>
 {
+    private readonly IRelationshipsRepository _relationshipsRepository;
+
+    public Handler(IRelationshipsRepository relationshipsRepository)
+    {
+        _relationshipsRepository = relationshipsRepository;
+    }
     public async Task<FindRelationshipsByIdentityResponse> Handle(FindRelationshipsOfIdentityCommand request, CancellationToken cancellationToken) => new()
     {
-        Relationships = await relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)
+        Relationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)
     };
 }
