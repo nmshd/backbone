@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
@@ -39,7 +40,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
-        await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
+        var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
@@ -51,6 +52,11 @@ public class HandlerTests
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == identityDevice.Id
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
+
+        response.Id.Should().Be(deletionProcess.Id);
+        response.ApprovedAt.Should().Be(utcNow);
+        response.ApprovedByDevice.Should().Be(identityDevice.Id);
+        response.Status.Should().Be(DeletionProcessStatus.Approved);
     }
 
     [Fact]
@@ -84,27 +90,79 @@ public class HandlerTests
         ).MustHaveHappenedOnceExactly();
     }
 
-
     [Fact]
-    public void Cannot_start_when_given_identity_does_not_exist()
+    public void Throws_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
-
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(address);
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity>(null);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("some-deletion-process-id"), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException>().Which.Message.Should().Contain("Identity");
+        acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
     }
 
+    [Fact]
+    public void Throws_when_deletion_process_does_not_exist()
+    {
+        // Arrange
+        var utcNow = DateTime.Parse("2000-01-01");
+        SystemTime.Set(utcNow);
+
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
+        var identityDevice = identity.Devices[0];
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+
+        // Act
+        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("someNonExistentDeletionProcessId"), CancellationToken.None);
+
+        // Assert
+        acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.recordNotFound");
+    }
+
+    [Fact]
+    public void Throws_when_deletion_process_is_not_waiting_for_approval()
+    {
+        // Arrange
+        var utcNow = DateTime.Parse("2000-01-01");
+        SystemTime.Set(utcNow);
+
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-10"));
+        var identityDevice = identity.Devices[0];
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+
+        // Act
+        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand(identity.DeletionProcesses.FirstOrDefault()!.Id), CancellationToken.None);
+
+        // Assert
+        acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessFoundInCorrectStatusForApproval");
+    }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus = null)
     {

@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -63,6 +64,16 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new StartDeletionProcessAsOwnerCommand(), cancellationToken);
+        return Created("", response);
+    }
+
+    [HttpPut("Self/DeletionProcesses/{id}/Approve")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ApproveDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new ApproveDeletionProcessCommand(id), cancellationToken);
         return Created("", response);
     }
 }

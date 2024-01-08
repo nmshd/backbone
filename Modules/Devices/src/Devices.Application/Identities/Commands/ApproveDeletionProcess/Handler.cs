@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 
-public class Handler : IRequestHandler<ApproveDeletionProcessCommand>
+public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand>
         _eventBus = eventBus;
     }
 
-    public async Task Handle(ApproveDeletionProcessCommand request, CancellationToken cancellationToken)
+    public async Task<ApproveDeletionProcessResponse> Handle(ApproveDeletionProcessCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
@@ -29,5 +29,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand>
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new PeerIdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));
+
+        return new ApproveDeletionProcessResponse(deletionProcess);
     }
 }
