@@ -81,7 +81,8 @@ public class Identity
     public void DeletionStarted()
     {
         Status = IdentityStatus.Deleting;
-        var deletionProcess = DeletionProcesses.Single(dp => dp.IsActive());
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
+            ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
         deletionProcess.DeletionStarted();
     }
 
