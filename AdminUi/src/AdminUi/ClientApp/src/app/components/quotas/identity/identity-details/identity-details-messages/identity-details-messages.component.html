@@ -21,11 +21,10 @@
                 <ng-container *ngIf="Message.recipients.length <= 3; then recipientsInline; else recipientsDialog"></ng-container>
                 <ng-template #recipientsInline>
                     <ng-container *ngFor="let recipient of Message.recipients">
-                        <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
-                            {{
-                                recipient.address
-                            }}
-                        </ul>
+                        <a class="identity-navigation" (click)="goToIdentity(recipient.address)">
+                            {{ recipient.address }}
+                        </a>
+                        <br />
                     </ng-container>
                 </ng-template>
                 <ng-template #recipientsDialog>
