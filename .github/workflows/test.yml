@@ -236,5 +236,4 @@ jobs:
         run: ./.ci/fsc/buildContainerImage.js
         env:
           TAG: test
-          MODULE: Files
           PLATFORMS: linux/amd64
