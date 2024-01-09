@@ -3,16 +3,21 @@ using System;
 using System.Reflection;
 using Backbone.AdminUi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #pragma warning disable 219, 612, 618
-#nullable enable
+#nullable disable
 
 namespace AdminUi.Infrastructure.CompiledModels.SqlServer
 {
     internal partial class RelationshipOverviewEntityType
     {
-        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType? baseEntityType = null)
+        public static RuntimeEntityType Create(RuntimeModel model, RuntimeEntityType baseEntityType = null)
         {
             var runtimeEntityType = model.AddEntityType(
                 "Backbone.AdminUi.Infrastructure.DTOs.RelationshipOverview",
@@ -26,6 +31,27 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 fieldInfo: typeof(RelationshipOverview).GetField("<AnsweredAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true,
                 valueConverter: new NullableDateTimeValueConverter());
+            answeredAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                keyComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                providerValueComparer: new ValueComparer<DateTime?>(
+                    (Nullable<DateTime> v1, Nullable<DateTime> v2) => object.Equals((object)v1, (object)v2),
+                    (Nullable<DateTime> v) => v.GetHashCode(),
+                    (Nullable<DateTime> v) => v),
+                converter: new ValueConverter<DateTime?, DateTime?>(
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                    (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime?, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime?, DateTime?>(
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)v.Value.ToUniversalTime() : v,
+                        (Nullable<DateTime> v) => v.HasValue ? (Nullable<DateTime>)DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)));
             answeredAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var answeredByDevice = runtimeEntityType.AddProperty(
@@ -34,6 +60,23 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(RelationshipOverview).GetProperty("AnsweredByDevice", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<AnsweredByDevice>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
+            answeredByDevice.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             answeredByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdAt = runtimeEntityType.AddProperty(
@@ -42,6 +85,28 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 propertyInfo: typeof(RelationshipOverview).GetProperty("CreatedAt", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<CreatedAt>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 valueConverter: new DateTimeValueConverter());
+            createdAt.TypeMapping = SqlServerDateTimeTypeMapping.Default.Clone(
+                comparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                keyComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                providerValueComparer: new ValueComparer<DateTime>(
+                    (DateTime v1, DateTime v2) => v1.Equals(v2),
+                    (DateTime v) => v.GetHashCode(),
+                    (DateTime v) => v),
+                converter: new ValueConverter<DateTime, DateTime>(
+                    (DateTime v) => v.ToUniversalTime(),
+                    (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<DateTime, DateTime>(
+                    JsonDateTimeReaderWriter.Instance,
+                    new ValueConverter<DateTime, DateTime>(
+                        (DateTime v) => v.ToUniversalTime(),
+                        (DateTime v) => DateTime.SpecifyKind(v, DateTimeKind.Utc))));
+            createdAt.SetSentinelFromProviderValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
             createdAt.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var createdByDevice = runtimeEntityType.AddProperty(
@@ -49,6 +114,23 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("CreatedByDevice", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<CreatedByDevice>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            createdByDevice.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             createdByDevice.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var from = runtimeEntityType.AddProperty(
@@ -56,6 +138,23 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("From", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<From>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            from.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             from.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var relationshipTemplateId = runtimeEntityType.AddProperty(
@@ -63,6 +162,23 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("RelationshipTemplateId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<RelationshipTemplateId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            relationshipTemplateId.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             relationshipTemplateId.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var status = runtimeEntityType.AddProperty(
@@ -70,6 +186,28 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 typeof(RelationshipStatus),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("Status", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            status.TypeMapping = IntTypeMapping.Default.Clone(
+                comparer: new ValueComparer<RelationshipStatus>(
+                    (RelationshipStatus v1, RelationshipStatus v2) => object.Equals((object)v1, (object)v2),
+                    (RelationshipStatus v) => v.GetHashCode(),
+                    (RelationshipStatus v) => v),
+                keyComparer: new ValueComparer<RelationshipStatus>(
+                    (RelationshipStatus v1, RelationshipStatus v2) => object.Equals((object)v1, (object)v2),
+                    (RelationshipStatus v) => v.GetHashCode(),
+                    (RelationshipStatus v) => v),
+                providerValueComparer: new ValueComparer<int>(
+                    (int v1, int v2) => v1 == v2,
+                    (int v) => v,
+                    (int v) => v),
+                converter: new ValueConverter<RelationshipStatus, int>(
+                    (RelationshipStatus value) => (int)value,
+                    (int value) => (RelationshipStatus)value),
+                jsonValueReaderWriter: new JsonConvertedValueReaderWriter<RelationshipStatus, int>(
+                    JsonInt32ReaderWriter.Instance,
+                    new ValueConverter<RelationshipStatus, int>(
+                        (RelationshipStatus value) => (int)value,
+                        (int value) => (RelationshipStatus)value)));
+            status.SetSentinelFromProviderValue(0);
             status.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             var to = runtimeEntityType.AddProperty(
@@ -77,6 +215,23 @@ namespace AdminUi.Infrastructure.CompiledModels.SqlServer
                 typeof(string),
                 propertyInfo: typeof(RelationshipOverview).GetProperty("To", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RelationshipOverview).GetField("<To>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+            to.TypeMapping = SqlServerStringTypeMapping.Default.Clone(
+                comparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                keyComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                providerValueComparer: new ValueComparer<string>(
+                    (string v1, string v2) => v1 == v2,
+                    (string v) => v.GetHashCode(),
+                    (string v) => v),
+                mappingInfo: new RelationalTypeMappingInfo(
+                    storeTypeName: "nvarchar(max)",
+                    dbType: System.Data.DbType.String),
+                storeTypePostfix: StoreTypePostfix.None);
             to.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
             return runtimeEntityType;
