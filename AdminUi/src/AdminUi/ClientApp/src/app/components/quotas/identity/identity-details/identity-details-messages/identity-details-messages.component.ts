@@ -1,9 +1,11 @@
 import { Component, Input } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from "@angular/material/paginator";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { MessageOverview, MessageService } from "src/app/services/message-service/message.service";
+import { MessageOverview, MessageRecipients, MessageService } from "src/app/services/message-service/message.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+import { IdentityDetailsMessageRecipientsDialogComponent } from "../identity-details-message-recipients-dialog/identity-details-message-recipients-dialog.component";
 
 @Component({
     selector: "app-identity-details-messages",
@@ -29,6 +31,7 @@ export class IdentityDetailsMessagesComponent {
 
     public constructor(
         private readonly router: Router,
+        private readonly dialog: MatDialog,
         private readonly snackBar: MatSnackBar,
         private readonly messageService: MessageService
     ) {
@@ -99,6 +102,20 @@ export class IdentityDetailsMessagesComponent {
         this.messagesPageIndex = event.pageIndex;
         this.messagesPageSize = event.pageSize;
         this.getMessages();
+    }
+
+    public openRecipientsDialog(recipients: MessageRecipients[]): void {
+        const dialogRef = this.dialog.open(IdentityDetailsMessageRecipientsDialogComponent, {
+            data: { recipients: recipients },
+            minWidth: "50%",
+            maxWidth: "100%"
+        });
+
+        dialogRef.afterClosed().subscribe(async (result: string) => {
+            if (result) {
+                await this.goToIdentity(result);
+            }
+        });
     }
 
     public async goToIdentity(identityAddress: string): Promise<void> {

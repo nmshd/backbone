@@ -8,13 +8,19 @@
             <ng-container matColumnDef="recipents">
                 <th mat-header-cell *matHeaderCellDef>Recipients</th>
                 <td mat-cell *matCellDef="let Message" data-label="Recipients:">
-                    <ng-container *ngFor="let recipient of Message.recipients">
-                        <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
-                            {{
-                                recipient.address
-                            }}
-                        </ul>
-                    </ng-container>
+                    <ng-container *ngIf="Message.recipients.length <= 3; then recipientsInline; else recipientsDialog"></ng-container>
+                    <ng-template #recipientsInline>
+                        <ng-container *ngFor="let recipient of Message.recipients">
+                            <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
+                                {{
+                                    recipient.address
+                                }}
+                            </ul>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #recipientsDialog>
+                        <button mat-raised-button class="actions-button" color="primary" (click)="openRecipientsDialog(Message.recipients)">Show Recipients</button>
+                    </ng-template>
                 </td>
             </ng-container>
             <ng-container matColumnDef="sendDate">

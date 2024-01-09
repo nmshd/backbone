@@ -50,6 +50,12 @@
     cursor: pointer;
 }
 
+.action-buttons {
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+
 @media screen and (max-width: 960px) {
     .mat-mdc-table .mat-mdc-header-row {
         display: none;
