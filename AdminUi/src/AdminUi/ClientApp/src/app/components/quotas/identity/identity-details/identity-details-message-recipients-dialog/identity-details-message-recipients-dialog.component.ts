@@ -9,14 +9,17 @@ import { MessageRecipients } from "src/app/services/message-service/message.serv
 })
 export class IdentityDetailsMessageRecipientsDialogComponent {
     public header: string;
+    public reciepientsTableDisplayedColumns: string[];
+
     public messagesRecipients: MessageRecipients[];
 
     public constructor(
-        @Inject(MAT_DIALOG_DATA) public recipients: any,
+        @Inject(MAT_DIALOG_DATA) public data: any,
         public dialogRef: MatDialogRef<IdentityDetailsMessageRecipientsDialogComponent>
     ) {
         this.header = "Recipients";
-        this.messagesRecipients = recipients.recipients;
+        this.reciepientsTableDisplayedColumns = ["address"];
+        this.messagesRecipients = data.recipients;
     }
 
     public returnIdentity(identityAddress: string): void {
