@@ -10,7 +10,7 @@ import { IdentityDetailsComponent } from "./components/quotas/identity/identity-
 import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
 import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
 import { LoginComponent } from "./components/shared/login/login.component";
-import { CustomReuseStrategy } from "./utils/custom-route-reuse-strategy";
+import { CustomRouteReuseStrategy } from "./utils/custom-route-reuse-strategy";
 
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
@@ -37,6 +37,6 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: "reload" })],
     exports: [RouterModule],
-    providers: [{ provide: RouteReuseStrategy, useClass: CustomReuseStrategy }]
+    providers: [{ provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }]
 })
 export class AppRoutingModule {}
