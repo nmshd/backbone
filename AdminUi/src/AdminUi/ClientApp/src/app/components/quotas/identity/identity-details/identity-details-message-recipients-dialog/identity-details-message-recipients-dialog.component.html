@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ header }}</h2>
+<mat-dialog-content>
+    <ng-container *ngFor="let recipient of messagesRecipients">
+        <ul class="identity-navigation" (click)="returnIdentity(recipient.address)">
+            {{
+                recipient.address
+            }}
+        </ul>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-flat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
