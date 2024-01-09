@@ -26,7 +26,7 @@ public class ChallengesModule : AbstractModule
         services.AddDatabase(dbOptions =>
         {
             dbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            dbOptions.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            dbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);

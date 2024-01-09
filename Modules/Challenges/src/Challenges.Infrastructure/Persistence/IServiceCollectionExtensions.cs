@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,7 @@ public static class IServiceCollectionExtensions
                 switch (options.Provider)
                 {
                     case SQLSERVER:
-                        dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
+                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
@@ -34,7 +33,7 @@ public static class IServiceCollectionExtensions
                         }).UseModel(CompiledModels.SqlServer.ChallengesDbContextModel.Instance);
                         break;
                     case POSTGRES:
-                        dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
+                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
@@ -48,5 +47,18 @@ public static class IServiceCollectionExtensions
             });
 
         services.AddScoped<IChallengesRepository, ChallengesRepository>();
+    }
+
+    public class DbOptions
+    {
+        public string Provider { get; set; }
+        public string DbConnectionString { get; set; }
+        public RetryOptions RetryOptions { get; set; } = new();
+    }
+
+    public class RetryOptions
+    {
+        public byte MaxRetryCount { get; set; } = 15;
+        public int MaxRetryDelayInSeconds { get; set; } = 30;
     }
 }

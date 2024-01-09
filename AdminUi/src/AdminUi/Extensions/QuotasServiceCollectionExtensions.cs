@@ -13,7 +13,7 @@ public static class QuotasServiceCollectionExtensions
 
         services.AddDatabase(options =>
         {
-            options.ConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
+            options.DbConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
         });
 

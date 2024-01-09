@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;

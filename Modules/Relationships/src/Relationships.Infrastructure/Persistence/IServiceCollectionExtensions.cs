@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
@@ -37,6 +36,6 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public DbOptions DbOptions { get; set; } = new();
+    public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
     public BlobStorageOptions BlobStorageOptions { get; set; }
 }
