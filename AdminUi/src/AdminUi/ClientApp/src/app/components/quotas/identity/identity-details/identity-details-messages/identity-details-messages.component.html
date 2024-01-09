@@ -2,101 +2,65 @@
     <div *ngIf="loading" class="loading">
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
-    <ng-container *ngIf="showSentMessages; then sentMessages; else receivedMessages"></ng-container>
-    <ng-template #sentMessages>
-        <table mat-table class="responsive" [dataSource]="messagesTableData" *ngIf="!loading">
-            <ng-container matColumnDef="recipents">
-                <th mat-header-cell *matHeaderCellDef>Recipients</th>
-                <td mat-cell *matCellDef="let Message" data-label="Recipients:">
-                    <ng-container *ngIf="Message.recipients.length <= 3; then recipientsInline; else recipientsDialog"></ng-container>
-                    <ng-template #recipientsInline>
-                        <ng-container *ngFor="let recipient of Message.recipients">
-                            <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
-                                {{
-                                    recipient.address
-                                }}
-                            </ul>
-                        </ng-container>
-                    </ng-template>
-                    <ng-template #recipientsDialog>
-                        <button mat-raised-button class="actions-button" color="primary" (click)="openRecipientsDialog(Message.recipients)">Show Recipients</button>
-                    </ng-template>
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="sendDate">
-                <th mat-header-cell *matHeaderCellDef>Send Date</th>
-                <td mat-cell *matCellDef="let Message" data-label="Send Date:">
-                    {{ Message.sendDate | date }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="numberOfAttachments">
-                <th mat-header-cell *matHeaderCellDef>Number of Attachments</th>
-                <td mat-cell *matCellDef="let Message" data-label="Number of Attachments:">
-                    {{ Message.numberOfAttachments }}
-                </td>
-            </ng-container>
+    <table mat-table class="responsive" [dataSource]="messagesTableData" *ngIf="!loading">
+        <ng-container matColumnDef="senderAddress">
+            <th mat-header-cell *matHeaderCellDef>Sender Address</th>
+            <td mat-cell *matCellDef="let Message" data-label="Sender Address:">
+                {{ Message.senderAddress }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="senderDevice">
+            <th mat-header-cell *matHeaderCellDef>Sender Device</th>
+            <td mat-cell *matCellDef="let Message" data-label="Sender Device:">
+                {{ Message.senderDevice }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="recipents">
+            <th mat-header-cell *matHeaderCellDef>Recipients</th>
+            <td mat-cell *matCellDef="let Message" data-label="Recipients:">
+                <ng-container *ngIf="Message.recipients.length <= 3; then recipientsInline; else recipientsDialog"></ng-container>
+                <ng-template #recipientsInline>
+                    <ng-container *ngFor="let recipient of Message.recipients">
+                        <ul class="identity-navigation" (click)="goToIdentity(recipient.address)">
+                            {{
+                                recipient.address
+                            }}
+                        </ul>
+                    </ng-container>
+                </ng-template>
+                <ng-template #recipientsDialog>
+                    <button mat-raised-button class="actions-button" color="primary" (click)="openRecipientsDialog(Message.recipients)">Show Recipients</button>
+                </ng-template>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="sendDate">
+            <th mat-header-cell *matHeaderCellDef>Send Date</th>
+            <td mat-cell *matCellDef="let Message" data-label="Send Date:">
+                {{ Message.sendDate | date }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="numberOfAttachments">
+            <th mat-header-cell *matHeaderCellDef>Number of Attachments</th>
+            <td mat-cell *matCellDef="let Message" data-label="Number of Attachments:">
+                {{ Message.numberOfAttachments }}
+            </td>
+        </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="sentMessagesTableDisplayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: sentMessagesTableDisplayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="messagesTableDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: messagesTableDisplayedColumns"></tr>
 
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell no-data" [attr.colspan]="sentMessagesTableDisplayedColumns.length">No messages found.</td>
-            </tr>
-        </table>
-        <mat-paginator
-            *ngIf="!loading"
-            (page)="messagesPageChangeEvent($event)"
-            [length]="messagesTotalRecords"
-            [pageSize]="messagesPageSize"
-            [pageIndex]="messagesPageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of messages">
-        </mat-paginator>
-    </ng-template>
-    <ng-template #receivedMessages>
-        <table mat-table class="responsive" [dataSource]="messagesTableData" *ngIf="!loading">
-            <ng-container matColumnDef="senderAddress">
-                <th mat-header-cell *matHeaderCellDef>Sender Address</th>
-                <td mat-cell *matCellDef="let Message" data-label="Sender Address:">
-                    {{ Message.senderAddress }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="senderDevice">
-                <th mat-header-cell *matHeaderCellDef>Sender Device</th>
-                <td mat-cell *matCellDef="let Message" data-label="Sender Device:">
-                    {{ Message.senderDevice }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="sendDate">
-                <th mat-header-cell *matHeaderCellDef>Send Date</th>
-                <td mat-cell *matCellDef="let Message" data-label="Send Date:">
-                    {{ Message.sendDate | date }}
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="numberOfAttachments">
-                <th mat-header-cell *matHeaderCellDef>Number of Attachments</th>
-                <td mat-cell *matCellDef="let Message" data-label="Number of Attachments:">
-                    {{ Message.numberOfAttachments }}
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="receivedMessagesTableDisplayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: receivedMessagesTableDisplayedColumns"></tr>
-
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell no-data" [attr.colspan]="receivedMessagesTableDisplayedColumns.length">No messages found.</td>
-            </tr>
-        </table>
-        <mat-paginator
-            *ngIf="!loading"
-            (page)="messagesPageChangeEvent($event)"
-            [length]="messagesTotalRecords"
-            [pageSize]="messagesPageSize"
-            [pageIndex]="messagesPageIndex"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Select page of messages">
-        </mat-paginator>
-    </ng-template>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data" [attr.colspan]="messagesTableDisplayedColumns.length">No messages found.</td>
+        </tr>
+    </table>
+    <mat-paginator
+        *ngIf="!loading"
+        (page)="messagesPageChangeEvent($event)"
+        [length]="messagesTotalRecords"
+        [pageSize]="messagesPageSize"
+        [pageIndex]="messagesPageIndex"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        aria-label="Select page of messages">
+    </mat-paginator>
 </div>

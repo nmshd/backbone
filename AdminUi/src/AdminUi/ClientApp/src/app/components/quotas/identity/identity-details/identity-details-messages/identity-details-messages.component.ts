@@ -18,8 +18,7 @@ export class IdentityDetailsMessagesComponent {
 
     public showSentMessages: boolean;
 
-    public receivedMessagesTableDisplayedColumns: string[];
-    public sentMessagesTableDisplayedColumns: string[];
+    public messagesTableDisplayedColumns: string[];
 
     public messagesTableData: MessageOverview[];
 
@@ -36,8 +35,7 @@ export class IdentityDetailsMessagesComponent {
         private readonly messageService: MessageService
     ) {
         this.showSentMessages = false;
-        this.receivedMessagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
-        this.sentMessagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments"];
+        this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
         this.messagesTableData = [];
         this.messagesTotalRecords = 0;
         this.messagesPageSize = 10;
@@ -50,9 +48,11 @@ export class IdentityDetailsMessagesComponent {
             switch (this.type) {
                 case "Outgoing":
                     this.showSentMessages = true;
+                    this.messagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments"];
                     break;
                 case "Incoming":
                     this.showSentMessages = false;
+                    this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
                     break;
             }
         }
