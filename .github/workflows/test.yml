@@ -182,10 +182,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build image
         run: ./.ci/capi/buildContainerImage.js
         env:
           TAG: test
+          PLATFORMS: linux/amd64
 
   build-aui-container-image:
     name: Build Admin UI Container Image
@@ -195,10 +198,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build image
         run: ./.ci/aui/buildContainerImage.js
         env:
           TAG: test
+          PLATFORMS: linux/amd64
 
   build-acli-container-image:
     name: Build Admin CLI Container Image
@@ -208,10 +214,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build image
         run: ./.ci/acli/buildContainerImage.js
         env:
           TAG: test
+          PLATFORMS: linux/amd64
 
   build-fsc-container-image:
     name: Build Files Sanity Check Container Image
@@ -221,8 +230,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build image
         run: ./.ci/fsc/buildContainerImage.js
         env:
           TAG: test
-          MODULE: Files
+          PLATFORMS: linux/amd64
