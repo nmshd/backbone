@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +29,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
                 await _identitiesRepository.Update(identity, cancellationToken);
                 response.IdentityAddresses.Add(identity.Address);
             }
-            catch (InvalidOperationException ex)
+            catch (DomainException ex)
             {
                 _logger.LogError(ex, "Identity with PastDeletionGracePeriod did not have any active deletionProcesses. Identity Address: {address}", identity.Address);
             }
