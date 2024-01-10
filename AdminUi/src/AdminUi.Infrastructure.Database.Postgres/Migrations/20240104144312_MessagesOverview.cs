@@ -25,7 +25,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                     ON
         	            "Messages"."Id" = "Attachments"."MessageId"
                     GROUP BY
-        	            "Messages"."Id"
+        	            "Messages"."Id", "Messages"."CreatedBy", "Messages"."CreatedByDevice", "Messages"."CreatedAt"
         """);
 
             migrationBuilder.Sql("""
