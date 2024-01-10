@@ -16,8 +16,6 @@ export class IdentityDetailsMessagesComponent {
     @Input() public identityAddress?: string;
     @Input() public type?: string;
 
-    public showSentMessages: boolean;
-
     public messagesTableDisplayedColumns: string[];
 
     public messagesTableData: MessageOverview[];
@@ -34,8 +32,7 @@ export class IdentityDetailsMessagesComponent {
         private readonly snackBar: MatSnackBar,
         private readonly messageService: MessageService
     ) {
-        this.showSentMessages = false;
-        this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
+        this.messagesTableDisplayedColumns = [];
         this.messagesTableData = [];
         this.messagesTotalRecords = 0;
         this.messagesPageSize = 10;
@@ -47,11 +44,9 @@ export class IdentityDetailsMessagesComponent {
         if (this.type) {
             switch (this.type) {
                 case "Outgoing":
-                    this.showSentMessages = true;
                     this.messagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments"];
                     break;
                 case "Incoming":
-                    this.showSentMessages = false;
                     this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
                     break;
             }
@@ -62,25 +57,8 @@ export class IdentityDetailsMessagesComponent {
 
     public getMessages(): void {
         this.loading = true;
-
-        if (this.showSentMessages) {
-            this.messageService.getSentMessagesByParticipantAddress(this.identityAddress!, this.messagesPageIndex, this.messagesPageSize).subscribe({
-                next: (data: PagedHttpResponseEnvelope<MessageOverview>) => {
-                    this.messagesTableData = data.result;
-                    this.messagesTotalRecords = data.pagination?.totalRecords ? data.pagination.totalRecords : data.result.length;
-                },
-                complete: () => (this.loading = false),
-                error: (err: any) => {
-                    this.loading = false;
-                    const errorMessage = err.error?.error?.message ?? err.message;
-                    this.snackBar.open(errorMessage, "Dismiss", {
-                        verticalPosition: "top",
-                        horizontalPosition: "center"
-                    });
-                }
-            });
-        } else {
-            this.messageService.getReceivedMessagesByParticipantAddress(this.identityAddress!, this.messagesPageIndex, this.messagesPageSize).subscribe({
+        if (this.type) {
+            this.messageService.getMessagesByParticipantAddress(this.identityAddress!, this.type, this.messagesPageIndex, this.messagesPageSize).subscribe({
                 next: (data: PagedHttpResponseEnvelope<MessageOverview>) => {
                     this.messagesTableData = data.result;
                     this.messagesTotalRecords = data.pagination?.totalRecords ? data.pagination.totalRecords : data.result.length;

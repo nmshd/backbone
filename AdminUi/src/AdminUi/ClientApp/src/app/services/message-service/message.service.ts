@@ -14,23 +14,11 @@ export class MessageService {
         this.apiUrl = `${environment.apiUrl}/Messages`;
     }
 
-    public getReceivedMessagesByParticipantAddress(address: string, pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<MessageOverview>> {
+    public getMessagesByParticipantAddress(address: string, type: string, pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<MessageOverview>> {
         const httpOptions = {
             params: new HttpParams()
                 .set("Participant", address)
-                .set("Type", "Incoming")
-                .set("PageNumber", pageNumber + 1)
-                .set("PageSize", pageSize)
-        };
-
-        return this.http.get<PagedHttpResponseEnvelope<MessageOverview>>(this.apiUrl, httpOptions);
-    }
-
-    public getSentMessagesByParticipantAddress(address: string, pageNumber: number, pageSize: number): Observable<PagedHttpResponseEnvelope<MessageOverview>> {
-        const httpOptions = {
-            params: new HttpParams()
-                .set("Participant", address)
-                .set("Type", "Outgoing")
+                .set("Type", type)
                 .set("PageNumber", pageNumber + 1)
                 .set("PageSize", pageSize)
         };
