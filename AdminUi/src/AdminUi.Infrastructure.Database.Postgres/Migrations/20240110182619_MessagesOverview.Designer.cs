@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20240104144312_MessagesOverview")]
+    [Migration("20240110182619_MessagesOverview")]
     partial class MessagesOverview
     {
         /// <inheritdoc />
@@ -112,10 +112,9 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Address");
+                    b.HasKey("Address", "MessageId");
 
                     b.HasIndex("MessageId");
 

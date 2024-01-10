@@ -109,10 +109,9 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Address");
+                    b.HasKey("Address", "MessageId");
 
                     b.HasIndex("MessageId");
 
