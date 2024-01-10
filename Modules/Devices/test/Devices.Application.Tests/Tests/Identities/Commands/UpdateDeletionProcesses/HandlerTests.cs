@@ -20,10 +20,6 @@ public class HandlerTests
         // Arrange
         var identitiesRepository = CreateFakeIdentitiesRepository(0);
 
-        var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
-        anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(30); // Future
-
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
 
