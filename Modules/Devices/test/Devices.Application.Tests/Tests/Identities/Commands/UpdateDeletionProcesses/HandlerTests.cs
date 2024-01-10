@@ -18,7 +18,7 @@ public class HandlerTests
     public async Task Empty_response_if_no_identities_are_past_DeletionGracePeriodEndsAt()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository();
+        var identitiesRepository = CreateFakeIdentitiesRepository(0);
 
         var anIdentity = _identities.First();
         anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
@@ -32,14 +32,14 @@ public class HandlerTests
 
         // Assert
         result.IdentityAddresses.Should().BeEmpty();
-        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        A.CallTo(() => identitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     [Fact]
-    public async Task Response_contains_identities_which_are_past_DeletionGracePeriodEndsAt()
+    public async Task Response_contains_expected_identities()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository();
+        var identitiesRepository = CreateFakeIdentitiesRepository(1);
 
         var anIdentity = _identities.First();
         anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
@@ -52,24 +52,18 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.IdentityAddresses.Should().HaveCount(1);
-        result.IdentityAddresses.First().Should().Be(anIdentity.Address);
-        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        result.IdentityAddresses.Single().Should().Be(anIdentity.Address);
     }
 
     [Fact]
-    public async Task Handler_continues_if_Identity_without_IdentityDeletionProcess_has_past_DeletionGracePeriodEndsAt()
+    public async Task Handler_calls_DeletionStarted()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository();
+        var identitiesRepository = CreateFakeIdentitiesRepository(1);
 
         var anIdentity = _identities.First();
-        // anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id); // not called
+        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id); // not called
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
-
-        var anotherIdentity = _identities.Second();
-        anotherIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
-        anotherIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
@@ -79,11 +73,10 @@ public class HandlerTests
 
         // Assert
         result.IdentityAddresses.Should().HaveCount(1);
-        result.IdentityAddresses.First().Should().Be(anotherIdentity.Address);
-        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        _identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPnsRegistrationsRepository pnsRegistrationRepository = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
         return new Handler(
             identitiesRepository,
@@ -91,19 +84,19 @@ public class HandlerTests
             );
     }
 
-    private static IIdentitiesRepository CreateFakeIdentitiesRepository()
+    private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities)
     {
         var tierId = TestDataGenerator.CreateRandomTierId();
         _identities = new List<Identity>();
 
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < numberOfIdentities; i++)
         {
             var identity = TestDataGenerator.CreateIdentityWithTier(tierId);
             _identities.Add(identity);
         }
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.FindAllActiveWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).Returns(_identities.Where(i => i.DeletionGracePeriodEndsAt < SystemTime.UtcNow));
+        A.CallTo(() => identitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).Returns(_identities);
 
         return identitiesRepository;
     }
