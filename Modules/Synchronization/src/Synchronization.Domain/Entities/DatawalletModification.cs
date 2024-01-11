@@ -42,8 +42,16 @@ public class DatawalletModification
     public DeviceId CreatedByDevice { get; }
     public string Collection { get; }
     public DatawalletModificationType Type { get; }
-    public byte[]? EncryptedPayload { get; }
+    public byte[]? EncryptedPayload { get; private set; }
     public string BlobReference { get; }
+
+    public void LoadEncryptedPayload(byte[] encryptedPayload)
+    {
+        if (EncryptedPayload != null)
+            throw new Exception("Cannot change the encrypted payload of a datawallet modification.");
+
+        EncryptedPayload = encryptedPayload;
+    }
 }
 
 public enum DatawalletModificationType

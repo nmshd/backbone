@@ -36,7 +36,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(Modules.Quotas.Infrastructure.CompiledModels.SqlServer.QuotasDbContextModel.Instance);
+                        });
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -46,7 +46,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                             sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName,
                                 "Quotas"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
-                        });//.UseModel(Modules.Quotas.Infrastructure.CompiledModels.Postgres.QuotasDbContextModel.Instance); TODO: Add this when issues with PostgreSQL compiled models are fixed https://github.com/npgsql/efcore.pg/issues/2972
+                        });
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
