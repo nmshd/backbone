@@ -17,7 +17,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -95,6 +95,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.Property<ushort>("DatawalletVersion")
                         .IsUnicode(false)
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("EncryptedPayload")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
