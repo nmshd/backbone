@@ -41,7 +41,7 @@
         "@angular/cli": "^17.0.9",
         "@angular/compiler-cli": "^17.0.8",
         "@js-soft/eslint-config-ts": "^1.6.6",
-        "@js-soft/license-check": "^1.0.8",
+        "@js-soft/license-check": "^1.0.9",
         "@types/jasmine": "~5.1.4",
         "@types/jasminewd2": "~2.0.13",
         "@types/node": "^20.10.7",
