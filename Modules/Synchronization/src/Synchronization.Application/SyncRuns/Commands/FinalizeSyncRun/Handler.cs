@@ -1,8 +1,6 @@
-﻿using System.Text.Json;
-using AutoMapper;
+﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
@@ -11,7 +9,6 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
-using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
@@ -21,23 +18,19 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
-    private readonly IBlobStorage _blobStorage;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private Datawallet _datawallet;
     private SyncRun _syncRun;
-    private readonly BlobOptions _blobOptions;
 
-    public Handler(ISynchronizationDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _dbContext = dbContext;
-        _blobStorage = blobStorage;
         _mapper = mapper;
         _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
-        _blobOptions = blobOptions.Value;
     }
 
     public async Task<FinalizeDatawalletVersionUpgradeSyncRunResponse> Handle(FinalizeDatawalletVersionUpgradeSyncRunCommand request, CancellationToken cancellationToken)
@@ -67,7 +60,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         var newModifications = AddModificationsToDatawallet(request.DatawalletModifications);
 
-        await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         PublishDatawalletModifiedIntegrationEvent();
@@ -104,7 +96,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var newModifications = AddModificationsToDatawallet(request.DatawalletModifications);
         _dbContext.Set<Datawallet>().Update(_datawallet);
 
-        await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         PublishDatawalletModifiedIntegrationEvent();
@@ -159,8 +150,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
             if (newModification.EncryptedPayload != null)
                 payloads.Add(newModification.Index, modificationDto.EncryptedPayload);
         }
-
-        _blobStorage.Add(_blobOptions.RootFolder, blobName, JsonSerializer.SerializeToUtf8Bytes(payloads));
 
         return newModifications;
     }
