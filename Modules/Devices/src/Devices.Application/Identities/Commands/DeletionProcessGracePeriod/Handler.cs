@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     public async Task Handle(SendDeletionProcessGracePeriodRemindersCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithApprovedDeletionProcess(cancellationToken, track: true);
+        var identities = await _identitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.Approved, cancellationToken, track: true);
 
         foreach (var identity in identities)
         {
