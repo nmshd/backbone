@@ -9,13 +9,13 @@ public class ApproveDeletionProcessResponse
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
         CreatedAt = deletionProcess.CreatedAt;
-        ApprovedAt = deletionProcess.ApprovedAt;
+        ApprovedAt = deletionProcess.ApprovedAt!.Value;
         ApprovedByDevice = deletionProcess.ApprovedByDevice;
     }
 
     public string Id { get; }
     public DeletionProcessStatus Status { get; set; }
     public DateTime CreatedAt { get; }
-    public DateTime? ApprovedAt { get; set; }
+    public DateTime ApprovedAt { get; set; }
     public string ApprovedByDevice { get; set; }
 }
