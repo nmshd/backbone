@@ -96,6 +96,9 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("integer");
 
+                    b.Property<byte[]>("EncryptedPayload")
+                        .HasColumnType("bytea");
+
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
