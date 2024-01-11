@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminUiDbContext))]
-    [Migration("20240109113300_MessagesOverview")]
+    [Migration("20240111091759_MessagesOverview")]
     partial class MessagesOverview
     {
         /// <inheritdoc />
@@ -112,10 +112,9 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Address");
+                    b.HasKey("Address", "MessageId");
 
                     b.HasIndex("MessageId");
 

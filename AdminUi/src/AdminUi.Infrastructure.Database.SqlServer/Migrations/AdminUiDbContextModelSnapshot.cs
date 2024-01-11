@@ -109,10 +109,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Address");
+                    b.HasKey("Address", "MessageId");
 
                     b.HasIndex("MessageId");
 
