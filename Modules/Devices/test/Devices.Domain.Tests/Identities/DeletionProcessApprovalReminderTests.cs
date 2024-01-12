@@ -103,6 +103,20 @@ public class DeletionProcessApprovalReminderTests
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
+    [Fact]
+    public void GetEndOfApprovalPeriod_returns_expected_date()
+    {
+        // Arrange
+        SetupSystemTime();
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(IdentityAddress.Create(Array.Empty<byte>(), "id1"), DeviceId.Parse("DVC1"));
+
+        // Act
+        var endOfApprovalPeriod = deletionProcess.GetEndOfApprovalPeriod();
+
+        // Assert
+        endOfApprovalPeriod.Should().Be(DateTime.Parse("2000-01-11"));
+    }
+
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         deletionProcess.AuditLog.Should().HaveCount(2);
