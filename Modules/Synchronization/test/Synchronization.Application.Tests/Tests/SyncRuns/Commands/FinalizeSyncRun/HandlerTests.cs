@@ -1,17 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
@@ -246,14 +243,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
-        var blobStorage = A.Fake<IBlobStorage>();
-        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
-
         var mapper = AutoMapperProfile.CreateMapper();
 
         var eventBus = A.Fake<IEventBus>();
 
-        return new Handler(_actContext, blobStorage, blobOptions, userContext, mapper, eventBus);
+        return new Handler(_actContext, userContext, mapper, eventBus);
     }
 
     #endregion

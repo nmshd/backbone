@@ -1,19 +1,16 @@
 ﻿using AutoFixture;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
@@ -52,14 +49,12 @@ public class HandlerTests
 
         var newModifications = _testDataGenerator.CreateMany<PushDatawalletModificationItem>(1).ToArray();
 
-
         // Act
         var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand(newModifications, null, 1), CancellationToken.None);
         var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand(newModifications, null, 1), CancellationToken.None);
 
         var handleWithDelayedSave = () => taskWithImmediateSave;
         var handleWithImmediateSave = () => taskWithDelayedSave;
-
 
         // Assert
         await handleWithImmediateSave.Should().NotThrowAsync();
@@ -96,14 +91,10 @@ public class HandlerTests
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
-        var blobStorage = A.Fake<IBlobStorage>();
-
         var mapper = AutoMapperProfile.CreateMapper();
 
         var eventBus = A.Fake<IEventBus>();
 
-        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
-
-        return new Handler(dbContext, userContext, mapper, blobStorage, blobOptions, eventBus);
+        return new Handler(dbContext, userContext, mapper, eventBus);
     }
 }
