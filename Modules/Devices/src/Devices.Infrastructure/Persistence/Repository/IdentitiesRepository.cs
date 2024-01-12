@@ -53,19 +53,11 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithApprovedDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved))
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
-    {
-        return await (track ? _identities : _readonlyIdentities)
-            .IncludeAll(_dbContext)
-            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.WaitingForApproval))
+            .Where(i => i.DeletionProcesses.Any(d => d.Status == status))
             .ToListAsync(cancellationToken);
     }
 
