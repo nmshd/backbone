@@ -127,7 +127,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_sends_second_reminder_when_first_reminder_wasnt_sent_on_the_same_run()
+    public async Task Does_not_send_reminder_1_when_2_has_to_be_sent_as_well()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
@@ -158,7 +158,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_sends_third_reminder_when_no_other_reminder_was_sent_on_the_same_run()
+    public async Task Does_not_send_reminder_1_and_2_when_3_has_to_be_sent_as_well()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(approvalDate: DateTime.Parse("2000-01-01"));
