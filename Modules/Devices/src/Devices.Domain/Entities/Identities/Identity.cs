@@ -85,7 +85,7 @@ public class Identity
             ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
         deletionProcess.DeletionStarted();
     }
-    
+
     public void DeletionProcessApprovalReminder1Sent()
     {
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
