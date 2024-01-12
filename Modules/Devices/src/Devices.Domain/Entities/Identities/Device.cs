@@ -67,12 +67,4 @@ public class Device
         DeletedAt = SystemTime.UtcNow;
         DeletedByDevice = deletedByDevice;
     }
-
-    #region Selectors
-    public static Expression<Func<Device, bool>> HasAddress(string identityAddress)
-    {
-        return i => i.IdentityAddress == identityAddress;
-    }
-
-    #endregion
 }

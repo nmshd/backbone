@@ -80,9 +80,4 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
-
-    public Task DeleteDevices(Expression<Func<Device, bool>> expression, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }

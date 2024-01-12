@@ -122,9 +122,4 @@ public class IdentitiesRepository : IIdentitiesRepository
         _identities.Remove(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task DeleteDevices(Expression<Func<Device, bool>> filter, CancellationToken cancellationToken)
-    {
-        await _devices.Where(filter).ExecuteDeleteAsync(cancellationToken);
-    }
 }
