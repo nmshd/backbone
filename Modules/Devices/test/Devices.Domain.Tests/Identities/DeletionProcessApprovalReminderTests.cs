@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -15,7 +16,8 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder1Sent_updates_ApprovalReminder1SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
@@ -31,7 +33,7 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder1Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -45,7 +47,8 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder2Sent_updates_ApprovalReminder2SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
@@ -62,7 +65,7 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder2Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -76,7 +79,8 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder3Sent_updates_ApprovalReminder3SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
@@ -93,7 +97,7 @@ public class DeletionProcessApprovalReminderTests
     public void DeletionProcessApprovalReminder3Sent_fails_when_no_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -107,8 +111,10 @@ public class DeletionProcessApprovalReminderTests
     public void GetEndOfApprovalPeriod_returns_expected_date()
     {
         // Arrange
-        SetupSystemTime();
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(IdentityAddress.Create(Array.Empty<byte>(), "id1"), DeviceId.Parse("DVC1"));
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
+        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(CreateRandomIdentityAddress(), CreateRandomDeviceId());
 
         // Act
         var endOfApprovalPeriod = deletionProcess.GetEndOfApprovalPeriod();
@@ -136,13 +142,6 @@ public class DeletionProcessApprovalReminderTests
         identity.StartDeletionProcessAsSupport();
 
         return identity;
-    }
-
-    private static DateTime SetupSystemTime()
-    {
-        var currentDateTime = DateTime.Parse("2000-01-01");
-        SystemTime.Set(currentDateTime);
-        return currentDateTime;
     }
 
     private static Identity CreateIdentity()

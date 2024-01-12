@@ -15,7 +15,8 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithApprovedDeletionProcess();
 
         // Act
@@ -31,7 +32,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder1Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -45,7 +46,8 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder2Sent_updates_GracePeriodReminder2SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithApprovedDeletionProcess();
 
         // Act
@@ -62,7 +64,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder2Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -76,7 +78,8 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder3Sent_updates_GracePeriodReminder3SentAt()
     {
         // Arrange
-        var currentDateTime = SetupSystemTime();
+        var currentDateTime = DateTime.Parse("2000-01-01");
+        SystemTime.Set(currentDateTime);
         var identity = CreateIdentityWithApprovedDeletionProcess();
 
         // Act
@@ -93,7 +96,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
     public void DeletionGracePeriodReminder3Sent_fails_when_no_approved_deletion_process_exists()
     {
         // Arrange
-        SetupSystemTime();
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentity();
 
         // Act
@@ -122,13 +125,6 @@ public class DeletionProcessGracePeriodTests : IDisposable
         identity.StartDeletionProcessAsOwner(new Device(identity).Id);
 
         return identity;
-    }
-
-    private static DateTime SetupSystemTime()
-    {
-        var currentDateTime = DateTime.Parse("2000-01-01");
-        SystemTime.Set(currentDateTime);
-        return currentDateTime;
     }
 
     private static Identity CreateIdentity()
