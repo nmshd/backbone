@@ -21,7 +21,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithApprovedDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }

@@ -57,4 +57,17 @@ public static class TestDataGenerator
 
         return identity;
     }
+
+    public static Identity CreateIdentityWithDeletionProcessWaitingForApproval(DateTime deletionProcessStartedAt)
+    {
+        var currentDateTime = SystemTime.UtcNow;
+
+        var identity = CreateIdentityWithOneDevice();
+        SystemTime.Set(deletionProcessStartedAt);
+        identity.StartDeletionProcessAsSupport();
+
+        SystemTime.Set(currentDateTime);
+
+        return identity;
+    }
 }
