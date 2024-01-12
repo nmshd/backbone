@@ -45,11 +45,7 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Run tests
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          command: ./.ci/test.js
+        run: ./.ci/test.js
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
