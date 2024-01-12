@@ -6,9 +6,9 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminder;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
 
-public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderCommand>
+public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IPushNotificationSender _pushNotificationSender;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderComman
         _pushNotificationSender = pushNotificationSender;
     }
 
-    public async Task Handle(SendDeletionProcessApprovalReminderCommand request, CancellationToken cancellationToken)
+    public async Task Handle(SendDeletionProcessApprovalRemindersCommand request, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, track: true);
 

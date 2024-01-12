@@ -1,15 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminder;
+using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
 using Xunit;
-using Handler = Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminder.Handler;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.SendDeletionProcessApprovalReminder;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.SendDeletionProcessApprovalReminders;
 
 public class HandlerTests
 {
@@ -26,7 +25,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
@@ -53,7 +52,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i.StringValue.Length == identity.Address.StringValue.Length), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
@@ -83,7 +82,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
@@ -115,7 +114,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
@@ -145,7 +144,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
@@ -176,7 +175,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessApprovalReminderCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>.That.Matches(i => i == identity.Address), A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
