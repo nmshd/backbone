@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.DeletionProcessGracePeriod;
+using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -8,7 +8,7 @@ using Backbone.Tooling;
 using FakeItEasy;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.DeletionProcessGracePeriod;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.SendDeletionProcessGracePeriodReminders;
 public class HandlerTests
 {
     [Fact]

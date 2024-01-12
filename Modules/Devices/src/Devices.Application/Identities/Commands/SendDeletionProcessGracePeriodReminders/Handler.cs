@@ -6,7 +6,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.DeletionProcessGracePeriod;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
 
 public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCommand>
 {
