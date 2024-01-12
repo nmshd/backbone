@@ -8,6 +8,6 @@ public class MessageRecipientEntityTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<MessageRecipient> builder)
     {
         builder.ToView("MessageRecipients");
-        builder.HasKey(r => new { r.Address, r.MessageId});
+        builder.HasKey(r => new { r.Address, r.MessageId });
     }
 }
