@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalReminderComman
 
     public async Task Handle(SendDeletionProcessApprovalReminderCommand request, CancellationToken cancellationToken)
     {
-        var identitiesWithDeletionProcessWaitingForApproval = await _identitiesRepository.FindAllWithDeletionProcessWaitingForApproval(cancellationToken);
+        var identitiesWithDeletionProcessWaitingForApproval = await _identitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, track: true);
 
         foreach (var identity in identitiesWithDeletionProcessWaitingForApproval)
         {

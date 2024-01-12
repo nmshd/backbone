@@ -62,9 +62,6 @@ public class IdentityDeletionProcess
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
-    public DateTime? ApprovalReminder1SentAt { get; private set; }
-    public DateTime? ApprovalReminder2SentAt { get; private set; }
-    public DateTime? ApprovalReminder3SentAt { get; private set; }
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
