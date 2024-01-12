@@ -7,10 +7,7 @@ public class RedirectAntiforgeryValidationFailedResultFilter : IAlwaysRunResultF
 {
     public void OnResultExecuting(ResultExecutingContext context)
     {
-        if (context.Result is ObjectResult result
-            && result.StatusCode == 400
-            && result.Value is ProblemDetails problemDetails
-            )
+        if (context.Result is ObjectResult { StatusCode: 400, Value: ProblemDetails problemDetails })
         {
             problemDetails.Detail = "xsrf-token-may-be-invalid";
         }

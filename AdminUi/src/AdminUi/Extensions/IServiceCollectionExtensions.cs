@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Backbone.AdminUi.Authentication;
 using Backbone.AdminUi.Configuration;
-using Backbone.AdminUi.Controllers.Filters;
+using Backbone.AdminUi.Filters;
 using Backbone.AdminUi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
