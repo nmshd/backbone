@@ -2,4 +2,4 @@
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
 
-public class SendDeletionProcessApprovalRemindersCommand : IRequest; 
+public class SendDeletionProcessApprovalRemindersCommand : IRequest;
