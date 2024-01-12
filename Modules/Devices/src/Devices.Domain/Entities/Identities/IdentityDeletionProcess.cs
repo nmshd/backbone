@@ -59,13 +59,13 @@ public class IdentityDeletionProcess
     }
 
     public IdentityDeletionProcessId Id { get; }
+    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
+
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
     public DateTime? ApprovalReminder3SentAt { get; private set; }
-
-    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
 
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
@@ -75,6 +75,7 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder1SentAt { get; private set; }
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
+
 
     public bool IsActive()
     {
