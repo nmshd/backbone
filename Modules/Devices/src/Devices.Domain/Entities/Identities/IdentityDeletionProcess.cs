@@ -82,6 +82,11 @@ public class IdentityDeletionProcess
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
     }
 
+    public DateTime GetEndOfApprovalPeriod()
+    {
+        return CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
+    }
+
     public void ApprovalReminder1Sent(IdentityAddress address)
     {
         ApprovalReminder1SentAt = SystemTime.UtcNow;
