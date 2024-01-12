@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Backbone.AdminUi.Controllers.Filters;
+namespace Backbone.AdminUi.Filters;
 
 public class RedirectAntiforgeryValidationFailedResultFilter : IAlwaysRunResultFilter
 {
