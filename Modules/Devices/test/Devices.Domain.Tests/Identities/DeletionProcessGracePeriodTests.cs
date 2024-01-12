@@ -8,6 +8,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class DeletionProcessGracePeriodTests : IDisposable
 {
     [Fact]
@@ -37,7 +38,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
     [Fact]
@@ -99,7 +100,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noApprovedDeletionProcessFound");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

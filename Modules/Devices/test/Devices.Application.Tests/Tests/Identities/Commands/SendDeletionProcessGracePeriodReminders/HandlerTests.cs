@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Dele
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.SendDeletionProcessGracePeriodReminders;
@@ -190,6 +191,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
     {
-        return new Handler(identitiesRepository, pushNotificationSender);
+        return new Handler(identitiesRepository, pushNotificationSender, A.Fake<ILogger<Handler>>());
     }
 }
