@@ -76,6 +76,38 @@ public class Identity
         return deletionProcess;
     }
 
+    public void DeletionProcessApprovalReminder1Sent()
+    {
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        deletionProcess.ApprovalReminder1Sent(Address);
+    }
+
+    public void DeletionProcessApprovalReminder2Sent()
+    {
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        deletionProcess.ApprovalReminder2Sent(Address);
+    }
+
+    public void DeletionProcessApprovalReminder3Sent()
+    {
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
+
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        deletionProcess.ApprovalReminder3Sent(Address);
+    }
+
+    private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
+    {
+        var deletionProcess = DeletionProcesses.Any(d => d.Status == status);
+
+        if (!deletionProcess)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+    }
+
     private void EnsureNoActiveProcessExists()
     {
         var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
@@ -86,7 +118,7 @@ public class Identity
 
     public void DeletionGracePeriodReminder1Sent()
     {
-        EnsureApprovedProcessExists();
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
         deletionProcess.GracePeriodReminder1Sent(Address);
@@ -94,7 +126,7 @@ public class Identity
 
     public void DeletionGracePeriodReminder2Sent()
     {
-        EnsureApprovedProcessExists();
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder2Sent(Address);
@@ -102,18 +134,10 @@ public class Identity
 
     public void DeletionGracePeriodReminder3Sent()
     {
-        EnsureApprovedProcessExists();
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
         deletionProcess.GracePeriodReminder3Sent(Address);
-    }
-
-    private void EnsureApprovedProcessExists()
-    {
-        var approvedProcessExists = DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved);
-
-        if (!approvedProcessExists)
-            throw new DomainException(DomainErrors.NoApprovedDeletionProcessFound());
     }
 
     public IdentityDeletionProcess? GetDeletionProcessInStatus(DeletionProcessStatus deletionProcessStatus)

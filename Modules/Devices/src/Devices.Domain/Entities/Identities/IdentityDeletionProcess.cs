@@ -59,10 +59,13 @@ public class IdentityDeletionProcess
     }
 
     public IdentityDeletionProcessId Id { get; }
+    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
 
-    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
+    public DateTime? ApprovalReminder1SentAt { get; private set; }
+    public DateTime? ApprovalReminder2SentAt { get; private set; }
+    public DateTime? ApprovalReminder3SentAt { get; private set; }
 
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
@@ -73,9 +76,33 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
+
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
+    }
+
+    public DateTime GetEndOfApprovalPeriod()
+    {
+        return CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
+    }
+
+    public void ApprovalReminder1Sent(IdentityAddress address)
+    {
+        ApprovalReminder1SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder1Sent(Id, address));
+    }
+
+    public void ApprovalReminder2Sent(IdentityAddress address)
+    {
+        ApprovalReminder2SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder2Sent(Id, address));
+    }
+
+    public void ApprovalReminder3Sent(IdentityAddress address)
+    {
+        ApprovalReminder3SentAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder3Sent(Id, address));
     }
 
     public void GracePeriodReminder1Sent(IdentityAddress address)

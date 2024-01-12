@@ -12,6 +12,9 @@ public class IdentityDeletionProcessEntityTypeConfiguration : IEntityTypeConfigu
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Status);
         builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.ApprovalReminder1SentAt);
+        builder.Property(x => x.ApprovalReminder2SentAt);
+        builder.Property(x => x.ApprovalReminder3SentAt);
     }
 }
 
