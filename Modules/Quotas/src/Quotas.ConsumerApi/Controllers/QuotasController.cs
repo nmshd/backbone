@@ -22,6 +22,6 @@ public class QuotasController : ApiControllerBase
     {
         var response = await _mediator.Send(new ListQuotasForIdentityQuery(), cancellationToken);
 
-        return Ok(response.Items);
+        return Ok(response.ToList());
     }
 }
