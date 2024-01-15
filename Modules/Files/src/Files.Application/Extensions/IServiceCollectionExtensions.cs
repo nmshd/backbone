@@ -1,8 +1,6 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.BuildingBlocks.Application.MediatR;
+﻿using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Files.Application.AutoMapper;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
-using Backbone.Modules.Files.Application.Identities;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +18,5 @@ public static class IServiceCollectionExtensions
         );
         services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddValidatorsFromAssemblyContaining<CreateFileCommandValidator>();
-
-        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 }

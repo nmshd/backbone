@@ -1,7 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.BuildingBlocks.Application.MediatR;
+﻿using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Relationships.Application.AutoMapper;
-using Backbone.Modules.Relationships.Application.Identities;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +19,5 @@ public static class IServiceCollectionExtensions
 
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(CreateRelationshipTemplateCommandValidator).Assembly);
-
-        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 }

@@ -27,8 +27,6 @@ public static class IServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(PushDatawalletModificationsCommand).Assembly);
         services.AddEventHandlers();
-
-        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
     }
 
     private static void AddEventHandlers(this IServiceCollection services)

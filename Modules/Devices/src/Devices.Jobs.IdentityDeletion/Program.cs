@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
@@ -69,6 +70,8 @@ public class Program
 
                 services.AddCustomIdentity(hostContext.HostingEnvironment);
 
+                services.RegisterIdentityDeleters();
+
                 services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
@@ -85,5 +88,23 @@ public class Program
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
+    }
+
+}
+
+public static class ServicesExtensions
+{
+    public static IServiceCollection RegisterIdentityDeleters(this IServiceCollection services)
+    {
+        services.AddTransient<IIdentityDeleter, Challenges.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Devices.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Files.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Messages.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Quotas.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Relationships.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Synchronization.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Tokens.Application.Identities.IdentityDeleter>();
+
+        return services;
     }
 }
