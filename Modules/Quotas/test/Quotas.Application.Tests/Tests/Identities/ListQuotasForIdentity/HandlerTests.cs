@@ -38,7 +38,7 @@ public class HandlerTests
         var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricCalculatorFactory);
 
         // Act
-        var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).Items.ToList();
+        var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
 
         // Assert
         quotaGroupDTOs.Should().HaveCount(2);
