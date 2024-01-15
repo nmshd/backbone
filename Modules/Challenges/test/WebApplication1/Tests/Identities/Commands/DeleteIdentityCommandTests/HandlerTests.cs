@@ -23,7 +23,7 @@ public class HandlerTests
         A.CallTo(() => challengesRepository.DeleteChallenges(A<Expression<Func<Challenge, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IChallengesRepository challengesRepository = null)
+    private static Handler CreateHandler(IChallengesRepository challengesRepository)
     {
         return new Handler(challengesRepository ?? A.Fake<IChallengesRepository>());
     }

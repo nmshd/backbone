@@ -24,7 +24,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(CreateChallengeCommandValidator).Assembly);
 
-        services.AddSingleton<IIdentityDeleter, IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, IdentityDeleter>();
     }
 }
 

@@ -21,7 +21,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithApprovedDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
@@ -77,11 +77,6 @@ public class FindAllStubRepository : IIdentitiesRepository
     }
 
     public Task Delete(Identity identity, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteDevices(Expression<Func<Device, bool>> expression, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+
 public class IdentitiesRepository : IIdentitiesRepository
 {
     private readonly DbSet<Identity> _identities;
@@ -54,14 +55,13 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithApprovedDeletionProcess(CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Approved))
+            .Where(i => i.DeletionProcesses.Any(d => d.Status == status))
             .ToListAsync(cancellationToken);
     }
-
 
     public async Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {
@@ -121,10 +121,5 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identities.Remove(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task DeleteDevices(Expression<Func<Device, bool>> filter, CancellationToken cancellationToken)
-    {
-        await _devices.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }

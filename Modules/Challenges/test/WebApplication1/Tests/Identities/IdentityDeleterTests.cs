@@ -20,6 +20,6 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<DeleteChallengesOfIdentityCommand>.That.Matches(it => it.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mediator.Send(A<DeleteChallengesOfIdentityCommand>.That.Matches(r => r.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 }

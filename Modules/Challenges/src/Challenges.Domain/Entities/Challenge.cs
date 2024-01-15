@@ -37,6 +37,6 @@ public class Challenge
 
     public static Expression<Func<Challenge, bool>> WasCreatedBy(string identityAddress)
     {
-        return i => i.CreatedBy != null && i.CreatedBy == identityAddress;
+        return i => i.CreatedBy == identityAddress;
     }
 }
