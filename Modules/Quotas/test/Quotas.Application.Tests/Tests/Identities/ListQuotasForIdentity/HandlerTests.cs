@@ -9,8 +9,6 @@ using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-// ReSharper disable InconsistentNaming
-
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.ListQuotasForIdentity;
 
 public class HandlerTests
@@ -38,16 +36,16 @@ public class HandlerTests
         var handler = new Handler(fakeUserContext, fakeIdentitiesRepository, fakeMetricCalculatorFactory);
 
         // Act
-        var quotaGroupDTOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
+        var quotaGroupDtOs = (await handler.Handle(new ListQuotasForIdentityQuery(), CancellationToken.None)).ToList();
 
         // Assert
-        quotaGroupDTOs.Should().HaveCount(2);
+        quotaGroupDtOs.Should().HaveCount(2);
 
-        quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric1.Key.Value);
-        quotaGroupDTOs.Should().ContainSingle(qg => qg.MetricKey == metric2.Key.Value);
+        quotaGroupDtOs.Should().ContainSingle(qg => qg.MetricKey == metric1.Key.Value);
+        quotaGroupDtOs.Should().ContainSingle(qg => qg.MetricKey == metric2.Key.Value);
 
-        var metric1QuotaGroup = quotaGroupDTOs.Single(qg => qg.MetricKey == metric1.Key.Value);
-        var metric2QuotaGroup = quotaGroupDTOs.Single(qg => qg.MetricKey == metric2.Key.Value);
+        var metric1QuotaGroup = quotaGroupDtOs.Single(qg => qg.MetricKey == metric1.Key.Value);
+        var metric2QuotaGroup = quotaGroupDtOs.Single(qg => qg.MetricKey == metric2.Key.Value);
 
         metric1QuotaGroup.Quotas.Should().HaveCount(2);
         metric2QuotaGroup.Quotas.Should().HaveCount(1);
