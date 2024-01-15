@@ -24,7 +24,7 @@ public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]>, ILengthVa
 
     public override string Name => "NumberOfBytesValidator";
 
-    public override bool IsValid(ValidationContext<T> context, byte[] value)
+    public override bool IsValid(ValidationContext<T> context, byte[]? value)
     {
         var numberOfBytes = value?.Length ?? 0;
 

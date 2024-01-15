@@ -36,7 +36,7 @@ public class HttpError
 
 public class HttpErrorProd : HttpError
 {
-    public HttpErrorProd(string code, string message, string docs, dynamic? data = null) : base(code, message, docs, (object)data)
+    public HttpErrorProd(string code, string message, string docs, dynamic? data = null) : base(code, message, docs, data as object)
     {
     }
 }
@@ -44,7 +44,7 @@ public class HttpErrorProd : HttpError
 public class HttpErrorDev : HttpError
 {
     internal HttpErrorDev(string code, string message, string docs, IEnumerable<string> stacktrace, string details, dynamic? data = null)
-        : base(code, message, docs, (object)data)
+        : base(code, message, docs, data as object)
     {
         Stacktrace = stacktrace;
         Details = details;
@@ -110,8 +110,6 @@ public struct HttpErrorId
 
     public static bool IsValid(string stringValue)
     {
-        if (stringValue == null) return false;
-
         var hasPrefix = stringValue.StartsWith(PREFIX);
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
         var hasOnlyValidChars = stringValue.ContainsOnly(VALID_CHARS);
