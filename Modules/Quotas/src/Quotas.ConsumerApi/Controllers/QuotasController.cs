@@ -16,12 +16,12 @@ public class QuotasController : ApiControllerBase
     public QuotasController(IMediator mediator) : base(mediator) { }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IEnumerable<QuotaGroupDTO>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListQuotasForIdentityResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListIndividualQuotas(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new ListQuotasForIdentityQuery(), cancellationToken);
 
-        return Ok(response.ToList());
+        return Ok(response);
     }
 }
