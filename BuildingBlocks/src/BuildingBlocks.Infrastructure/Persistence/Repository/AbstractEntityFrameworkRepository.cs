@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Repository;
@@ -12,9 +13,12 @@ public abstract class AbstractEntityFrameworkRepository<T, TId> : IRepository<T,
         _dbSet = dbContext.Set<T>();
     }
 
+    /**
+     * Following the example of AzureStorageAccount.FindAsync method the NotFoundException is thrown in case _dbSet.FindAsync returns null.
+     */
     public async Task<T> Find(TId id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.FindAsync(id) ?? throw new NotFoundException(typeof(T).Name);
     }
 
     public void Add(T entity)
