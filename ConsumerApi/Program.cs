@@ -225,6 +225,8 @@ static void Configure(WebApplication app)
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
 
+    app.UseResponseCaching();
+
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
 
