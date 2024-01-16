@@ -23,15 +23,15 @@ public static class BlobStorageServiceCollectionExtensions
         if (options.CloudProvider == AZURE_CLOUD_PROVIDER)
             services.AddAzureStorageAccount(azureStorageAccountOptions =>
             {
-                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo;
+                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
             });
         else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
             {
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
-                googleCloudStorageOptions.BucketName = options.Container;
+                googleCloudStorageOptions.BucketName = options.Container!;
             });
-        else if (options.CloudProvider.IsEmpty())
+        else if (options.CloudProvider.IsNullOrEmpty())
             throw new NotSupportedException("No cloud provider was specified.");
         else
             throw new NotSupportedException(
