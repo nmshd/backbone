@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.UnitTestTools.Data;
-
+// test comment
 public static class TestDataGenerator
 {
     public static string GenerateString(int resultLength, char[]? chars = null)
