@@ -53,3 +53,5 @@ switch ($provider) {
         AddMigration "Postgres" 
     }
 }
+
+# test
