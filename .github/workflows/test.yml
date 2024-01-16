@@ -148,7 +148,7 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm run test:local:node:lokijs
+        run: npm run test:local:lokijs
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
