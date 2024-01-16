@@ -155,7 +155,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 {
                     ContractResolver = new ContractResolverWithPrivates()
                 })!;
-            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType!);
+            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
             try
             {
