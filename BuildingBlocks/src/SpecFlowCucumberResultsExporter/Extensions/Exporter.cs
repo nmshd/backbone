@@ -15,7 +15,7 @@ public class Exporter : ReportingStepDefinitions
             var file = new FileInfo(Path.Combine(path, fileName));
             if (file != null)
             {
-                file.Directory.Create();
+                file.Directory!.Create();
                 File.WriteAllText(file.FullName, args.Reporter.WriteToString());
             }
         };

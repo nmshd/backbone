@@ -17,7 +17,9 @@ public class ExhaustedMetricStatus
     public ExhaustedMetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
     {
         MetricKey = metricKey;
-        IsExhaustedUntil = isExhaustedUntil.Value;
+
+        if (isExhaustedUntil != null)
+            IsExhaustedUntil = isExhaustedUntil.Value;
     }
 
     public MetricKey MetricKey { get; }
