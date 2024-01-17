@@ -42,9 +42,14 @@ public static class BlobStorageServiceCollectionExtensions
 public class BlobStorageOptions
 {
     /** 
-     * These properties will never be null as it makes no sense, but are marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
+     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
      */
-    public string? ConnectionInfo { get; set; }
-    public string? Container { get; set; }
     public string? CloudProvider { get; set; }
+
+    /**
+     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
+     */
+    public string? Container { get; set; }
+
+    public string? ConnectionInfo { get; set; }
 }
