@@ -71,7 +71,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
-    public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
+    public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         ExecutionStrategy executionStrategy;
@@ -102,7 +102,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         await RunInTransaction(action, null!, isolationLevel);
     }
 
-    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int> errorNumbersToRetry,
+    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
         var response = default(T);
@@ -112,7 +112,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return response;
     }
 
-    public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
+    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> func, IsolationLevel isolationLevel)
     {
         return await RunInTransaction(func, null!, isolationLevel);
     }
