@@ -63,13 +63,14 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        ExecutionStrategy? executionStrategy;
+        ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
                 executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
                 break;
             case POSTGRES:
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : new List<string>();
                 executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
                 break;
@@ -87,7 +88,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public async Task RunInTransaction(Func<Task> action, IsolationLevel isolationLevel)
     {
-        await RunInTransaction(action, null, isolationLevel);
+        await RunInTransaction(action, null!, isolationLevel);
     }
 
     public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int> errorNumbersToRetry,
@@ -102,7 +103,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
     {
-        return await RunInTransaction(func, null, isolationLevel);
+        return await RunInTransaction(func, null!, isolationLevel);
     }
 
     public List<string> GetFcmAppIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
