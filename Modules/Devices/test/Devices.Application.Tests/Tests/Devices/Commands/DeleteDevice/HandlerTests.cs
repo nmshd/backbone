@@ -99,7 +99,7 @@ public class HandlerTests
         return onboardedDevice;
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext? fakeUserContext = null)
+    private static Handler CreateHandler(IIdentitiesRepository mockIdentitiesRepository, IUserContext fakeUserContext = null)
     {
         fakeUserContext ??= A.Dummy<IUserContext>();
         return new Handler(mockIdentitiesRepository, fakeUserContext, A.Dummy<ILogger<Handler>>());

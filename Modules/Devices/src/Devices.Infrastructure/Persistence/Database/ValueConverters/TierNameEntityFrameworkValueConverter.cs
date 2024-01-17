@@ -8,7 +8,7 @@ public class TierNameEntityFrameworkValueConverter : ValueConverter<TierName, st
     {
     }
 
-    public TierNameEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
+    public TierNameEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
             id => id.Value,
             value => TierName.Create(value).Value,
@@ -18,13 +18,13 @@ public class TierNameEntityFrameworkValueConverter : ValueConverter<TierName, st
     }
 }
 
-public class NullableTierNameValueConverter : ValueConverter<TierName?, string?>
+public class NullableTierNameValueConverter : ValueConverter<TierName, string>
 {
     public NullableTierNameValueConverter() : this(null)
     {
     }
 
-    public NullableTierNameValueConverter(ConverterMappingHints? mappingHints)
+    public NullableTierNameValueConverter(ConverterMappingHints mappingHints)
         : base(
             id => id == null ? null : id.Value,
             value => value == null ? null : TierName.Create(value).Value,

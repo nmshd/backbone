@@ -37,7 +37,7 @@ public class DirectPnsCommunicationOptions
             return serviceAccountForServiceAccountNameExists;
         }
 
-        public string? GetServiceAccountForAppId(string appId)
+        public string GetServiceAccountForAppId(string appId)
         {
             var app = Apps.GetValueOrDefault(appId);
 
