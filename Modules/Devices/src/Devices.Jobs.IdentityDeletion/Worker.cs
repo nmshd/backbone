@@ -16,18 +16,21 @@ public class Worker : IHostedService
     private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
+    private readonly ILogger<Worker> _logger;
 
     public Worker(IHostApplicationLifetime host,
                     IEnumerable<IIdentityDeleter> identityDeleters,
                     IMediator mediator,
                     IPushNotificationSender pushNotificationSender,
-                    IEventBus eventBus)
+                    IEventBus eventBus,
+                    ILogger<Worker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters;
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _eventBus = eventBus;
+        _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -43,6 +46,12 @@ public class Worker : IHostedService
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
+            if (identityAddress == null)
+            {
+                _logger.LogError("The command {commandName} returned a null Identity Address.", nameof(TriggerRipeDeletionProcessesCommand));
+                continue;
+            }
+
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
 
             var relationships = (await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken)).Relationships;
