@@ -7,5 +7,5 @@ public class UpdateDeviceRegistrationCommand : IRequest<UpdateDeviceRegistration
     public string Platform { get; set; }
     public string Handle { get; set; }
     public string AppId { get; set; }
-    public string Environment { get; set; }
+    public string? Environment { get; set; }
 }
