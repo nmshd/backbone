@@ -270,7 +270,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Jobs.IdentityDeleti
 		{F157A154-8E45-443C-8021-29BE9D32325F} = {F157A154-8E45-443C-8021-29BE9D32325F}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\WebApplication1\Challenges.Application.Tests.csproj", "{A421544C-0C34-47DF-98A1-CE00E32FD4D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj", "{A421544C-0C34-47DF-98A1-CE00E32FD4D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain.Tests", "Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj", "{82EE0159-42A7-466F-A983-F3EBCA4E171D}"
 EndProject
