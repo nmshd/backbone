@@ -29,11 +29,22 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
     {
+        Identities = null!;
+        Devices = null!;
+        Challenges = null!;
+        Tiers = null!;
+        PnsRegistrations = null!;
     }
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
         : base(options)
     {
+        Identities = null!;
+        Devices = null!;
+        Challenges = null!;
+        Tiers = null!;
+        PnsRegistrations = null!;
+
         _serviceProvider = serviceProvider;
     }
 
