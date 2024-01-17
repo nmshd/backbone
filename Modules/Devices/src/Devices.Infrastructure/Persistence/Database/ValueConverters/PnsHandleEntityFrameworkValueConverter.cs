@@ -9,7 +9,7 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
     {
     }
 
-    public PnsHandleEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public PnsHandleEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             pnsHandle => SerializeHandle(pnsHandle),
             value => DeserializeHandle(value),

@@ -9,7 +9,7 @@ public class TierIdEntityFrameworkValueConverter : ValueConverter<TierId, string
     {
     }
 
-    public TierIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public TierIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id.Value,
             value => TierId.Create(value).Value,
@@ -19,13 +19,13 @@ public class TierIdEntityFrameworkValueConverter : ValueConverter<TierId, string
     }
 }
 
-public class NullableTierIdValueConverter : ValueConverter<TierId, string>
+public class NullableTierIdValueConverter : ValueConverter<TierId?, string?>
 {
     public NullableTierIdValueConverter() : this(null)
     {
     }
 
-    public NullableTierIdValueConverter(ConverterMappingHints mappingHints)
+    public NullableTierIdValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id == null ? null : id.Value,
             value => value == null ? null : TierId.Create(value).Value,
