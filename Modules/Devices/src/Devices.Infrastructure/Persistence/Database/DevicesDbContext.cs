@@ -20,7 +20,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
