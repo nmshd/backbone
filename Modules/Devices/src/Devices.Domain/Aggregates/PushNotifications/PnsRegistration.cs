@@ -7,6 +7,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public class PnsRegistration
 {
+    // ReSharper disable once UnusedMember.Local
     private PnsRegistration() { }
 
     public PnsRegistration(IdentityAddress identityAddress, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment)
@@ -20,11 +21,11 @@ public class PnsRegistration
         Environment = environment;
     }
 
-    public IdentityAddress IdentityAddress { get; }
-    public DeviceId DeviceId { get; }
-    public DevicePushIdentifier DevicePushIdentifier { get; private set; }
-    public PnsHandle Handle { get; private set; }
-    public string AppId { get; private set; }
+    public IdentityAddress IdentityAddress { get; } = null!;
+    public DeviceId DeviceId { get; } = null!;
+    public DevicePushIdentifier DevicePushIdentifier { get; private set; } = null!;
+    public PnsHandle Handle { get; private set; } = null!;
+    public string AppId { get; private set; } = null!;
     public DateTime UpdatedAt { get; private set; }
     public PushEnvironment Environment { get; private set; }
 
