@@ -17,13 +17,13 @@ public static class FakeDbContextFactory
 
         object[] args = { options };
 
-        var context = (TContext)Activator.CreateInstance(typeof(TContext), args);
+        var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();
         context.Dispose();
 
-        var arrangeContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
-        var assertionContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
-        var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
+        var arrangeContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
+        var assertionContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
+        var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
 
         return (arrangeContext, assertionContext, actContext);
     }
