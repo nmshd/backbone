@@ -13,11 +13,8 @@ public class Exporter : ReportingStepDefinitions
         Reporters.FinishedReport += (sender, args) =>
         {
             var file = new FileInfo(Path.Combine(path, fileName));
-            if (file != null)
-            {
-                file.Directory!.Create();
-                File.WriteAllText(file.FullName, args.Reporter.WriteToString());
-            }
+            file.Directory?.Create();
+            File.WriteAllText(file.FullName, args.Reporter.WriteToString());
         };
     }
 }
