@@ -25,6 +25,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IChallengesRepository challengesRepository)
     {
-        return new Handler(challengesRepository ?? A.Fake<IChallengesRepository>());
+        return new Handler(challengesRepository);
     }
 }
