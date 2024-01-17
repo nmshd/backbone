@@ -51,7 +51,7 @@ public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]>, ILengthVa
 
 public static class NumberOfBytesValidatorRuleBuilderExtensions
 {
-    public static IRuleBuilderOptions<T, byte[]> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
+    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
         int minNumberOfBytes, int maxNumberOfBytes)
     {
         return ruleBuilder
@@ -59,7 +59,7 @@ public static class NumberOfBytesValidatorRuleBuilderExtensions
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 
-    public static IRuleBuilderOptions<T, byte[]> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
+    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
         int numberOfBytes)
     {
         return ruleBuilder
