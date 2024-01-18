@@ -95,9 +95,7 @@ describe("BreadcrumbService", function() {
     expectedHistory.forEach(trail => {
       breadcrumbService["breadcrumbHistory"].push(trail);
     });
-    const result = breadcrumbService.getBreadcrumbHistory();
-  
-    // Modify the result
+    const result = JSON.parse(JSON.stringify(breadcrumbService.getBreadcrumbHistory()));
     result[0].label = "Modified";
   
     // Assert
