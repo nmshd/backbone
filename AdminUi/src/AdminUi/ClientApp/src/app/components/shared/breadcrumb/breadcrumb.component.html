@@ -4,7 +4,7 @@
         <a *ngIf="!last" [routerLink]="trail.url" (click)="onBreadcrumbClick(i)">{{ trail.label }}</a>
         <span *ngIf="last">{{ trail.label }}</span>
       </ng-container>
-      <ng-container *ngIf="!last">&gt;</ng-container>
+      <ng-container *ngIf="!last"> &gt; </ng-container>
     </ng-container>
 </nav>
   
