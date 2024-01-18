@@ -165,11 +165,11 @@ public class OldFinalizeExternalEventSyncRequest
 
     public class FinalizeExternalEventSyncRequestDatawalletModification
     {
-        public string ObjectIdentifier { get; set; }
-        public string PayloadCategory { get; set; }
-        public string Collection { get; set; }
+        public string? ObjectIdentifier { get; set; }
+        public string? PayloadCategory { get; set; }
+        public string? Collection { get; set; }
         public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-        public byte[] EncryptedPayload { get; set; }
+        public byte[]? EncryptedPayload { get; set; }
         public ushort DatawalletVersion { get; set; }
     }
 }
