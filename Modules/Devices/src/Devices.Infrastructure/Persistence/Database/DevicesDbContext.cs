@@ -32,7 +32,9 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
         : base(options)
-    { }
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     public DbSet<Identity> Identities { get; set; }
 
