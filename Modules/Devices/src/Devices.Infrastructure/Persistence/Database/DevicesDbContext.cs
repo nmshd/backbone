@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
@@ -36,15 +38,15 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         _serviceProvider = serviceProvider;
     }
 
-    public required DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; }
 
-    public required DbSet<Device> Devices { get; set; }
+    public DbSet<Device> Devices { get; set; }
 
-    public required DbSet<Challenge> Challenges { get; set; }
+    public DbSet<Challenge> Challenges { get; set; }
 
-    public required DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; }
 
-    public required DbSet<PnsRegistration> PnsRegistrations { get; set; }
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
