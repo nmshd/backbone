@@ -105,7 +105,7 @@ public class DirectPnsCommunicationOptions
         {
             [Required]
             [MinLength(1)]
-            public string KeyName { get; set; }
+            public required string KeyName { get; set; }
         }
 
         public class Key
