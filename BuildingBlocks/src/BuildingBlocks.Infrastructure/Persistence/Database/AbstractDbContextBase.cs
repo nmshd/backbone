@@ -96,24 +96,4 @@ public class AbstractDbContextBase : DbContext, IDbContext
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
     }
-
-    protected void RollBack()
-    {
-        var changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged).ToList();
-
-        foreach (var entry in changedEntries)
-            switch (entry.State)
-            {
-                case EntityState.Modified:
-                    entry.CurrentValues.SetValues(entry.OriginalValues);
-                    entry.State = EntityState.Unchanged;
-                    break;
-                case EntityState.Added:
-                    entry.State = EntityState.Detached;
-                    break;
-                case EntityState.Deleted:
-                    entry.State = EntityState.Unchanged;
-                    break;
-            }
-    }
 }
