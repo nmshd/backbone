@@ -78,7 +78,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         else
         {
             var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
-            if (responseContent.reason == "Unregistered")
+            if (responseContent!.reason == "Unregistered")
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
             else
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
