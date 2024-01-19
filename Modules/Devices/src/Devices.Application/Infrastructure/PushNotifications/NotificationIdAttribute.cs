@@ -7,5 +7,5 @@ public class NotificationIdAttribute : Attribute
         Value = value;
     }
 
-    public int Value { get; }
+    public int? Value { get; }
 }
