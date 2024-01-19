@@ -32,7 +32,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_when_no_identity_found()
+    public void Fails_when_no_identity_found()
     {
         // Arrange
         var identityRepository = A.Fake<IIdentitiesRepository>();
