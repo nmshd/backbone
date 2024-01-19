@@ -84,11 +84,7 @@ public class DirectPnsCommunicationOptions
         public Key GetKeyInformationForBundleId(string bundleId)
         {
             var bundle = Bundles.GetValueOrDefault(bundleId);
-
-            if (bundle == null)
-                return null;
-
-            return Keys[bundle.KeyName];
+            return bundle == null ? throw new Exception($"No bundle configuration for bundle id '{bundleId}' was found.") : Keys[bundle.KeyName];
         }
 
         public Bundle GetBundleById(string bundleId)
