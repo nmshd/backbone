@@ -45,7 +45,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         if (track)
             Track(application);
 
-        return application?.ToModel();
+        return application?.ToModel()!;
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
