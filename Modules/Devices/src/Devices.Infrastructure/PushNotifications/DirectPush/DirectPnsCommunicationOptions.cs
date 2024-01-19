@@ -5,9 +5,9 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPnsCommunicationOptions
 {
-    public FcmOptions Fcm { get; set; }
+    public FcmOptions? Fcm { get; set; }
 
-    public ApnsOptions Apns { get; set; }
+    public ApnsOptions? Apns { get; set; }
 
     public class FcmOptions
     {
