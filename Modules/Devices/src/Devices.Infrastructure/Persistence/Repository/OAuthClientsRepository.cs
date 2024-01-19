@@ -138,7 +138,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         }
     }
 
-    private void Track(CustomOpenIddictEntityFrameworkCoreApplication application)
+    private void Track(CustomOpenIddictEntityFrameworkCoreApplication? application)
     {
         if (application != null)
         {
