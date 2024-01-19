@@ -81,7 +81,7 @@ public class DirectPnsCommunicationOptions
             return bundle != null && !bundle.KeyName.IsNullOrEmpty() && Keys.ContainsKey(bundle.KeyName) && !Keys[bundle.KeyName].PrivateKey.IsNullOrEmpty();
         }
 
-        public Key? GetKeyInformationForBundleId(string bundleId)
+        public Key GetKeyInformationForBundleId(string bundleId)
         {
             var bundle = Bundles.GetValueOrDefault(bundleId);
 
