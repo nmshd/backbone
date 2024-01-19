@@ -33,10 +33,15 @@ public class Signature
     {
         var signatureJsonString = Encoding.UTF8.GetString(bytes);
         var signatureObject = JsonSerializer.Deserialize<dynamic>(signatureJsonString, new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } });
+
+        if (signatureObject == null) 
+            throw new Exception("Could not deserialize signature.");
+
         var signature = Base64UrlEncoder.DecodeBytes((string)signatureObject.sig);
         var algorithm = (SignatureAlgorithm)signatureObject.alg;
 
         return new Signature(algorithm, signature);
+
     }
 }
 
