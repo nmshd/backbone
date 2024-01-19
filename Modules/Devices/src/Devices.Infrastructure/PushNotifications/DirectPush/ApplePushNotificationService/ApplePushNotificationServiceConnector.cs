@@ -60,7 +60,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
-        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId!);
+        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId);
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
