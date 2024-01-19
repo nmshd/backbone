@@ -30,8 +30,8 @@ public class DevicesModule : AbstractModule
 
         services.AddDatabase(options =>
         {
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
+            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
