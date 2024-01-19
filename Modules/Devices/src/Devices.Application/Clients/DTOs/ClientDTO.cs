@@ -6,9 +6,9 @@ namespace Backbone.Modules.Devices.Application.Clients.DTOs;
 
 public class ClientDTO : IHaveCustomMapping
 {
-    public string ClientId { get; set; }
-    public string DisplayName { get; set; }
-    public string DefaultTier { get; set; }
+    public string ClientId { get; set; } = null!;
+    public string DisplayName { get; set; } = null!;
+    public string DefaultTier { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public int? MaxIdentities { get; set; }
 
