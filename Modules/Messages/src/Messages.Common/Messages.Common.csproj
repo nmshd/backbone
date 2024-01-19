@@ -1,7 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="FluentValidation" Version="11.8.1" />
 	</ItemGroup>
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
 </Project>

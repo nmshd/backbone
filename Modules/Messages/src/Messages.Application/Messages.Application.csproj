@@ -10,4 +10,9 @@
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
 		<ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj" />
 	</ItemGroup>
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
 </Project>
