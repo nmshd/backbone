@@ -15,8 +15,8 @@ public interface IDbContext
 
     Task RunInTransaction(Func<Task> action, IsolationLevel isolationLevel);
 
-    Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
+    Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
 
-    Task<T?> RunInTransaction<T>(Func<Task<T?>> func, IsolationLevel isolationLevel);
+    Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel);
 }
