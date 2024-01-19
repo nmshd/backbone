@@ -88,7 +88,7 @@ public class HandlerTests
         return unOnboardedDevice;
     }
 
-    private static Device CreateOnboardedDevice(Identity identity = null)
+    private static Device CreateOnboardedDevice(Identity? identity = null)
     {
         identity ??= TestDataGenerator.CreateIdentity();
         var onboardedDevice = new Device(identity);
