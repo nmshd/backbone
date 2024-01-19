@@ -29,7 +29,7 @@ public class Identity
 
     public byte IdentityVersion { get; set; }
 
-    public TierId? TierId { get; set; }
+    public TierId TierId { get; set; }
 
     public bool IsNew()
     {
