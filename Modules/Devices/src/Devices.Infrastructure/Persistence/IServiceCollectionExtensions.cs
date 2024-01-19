@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
         var options = new DbOptions();
-        setupOptions?.Invoke(options);
+        setupOptions(options);
 
         services
             .AddDbContext<DevicesDbContext>(dbContextOptions =>
