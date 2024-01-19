@@ -75,7 +75,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
         // the '!' is safe here because the default value is only returned after the action is executed, which is setting the response
         var response = default(T)!;
 
-        await RunInTransaction(async () => response = await action(), errorNumbersToRetry, isolationLevel);
+        await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
         return response;
     }
