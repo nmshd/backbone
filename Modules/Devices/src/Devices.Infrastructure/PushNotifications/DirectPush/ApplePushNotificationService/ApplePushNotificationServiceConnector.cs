@@ -100,7 +100,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private static int GetNotificationId(object pushNotification)
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
-        return attribute.Value ?? 0;
+        return attribute?.Value ?? 0;
     }
 
     private static (string Title, string Body) GetNotificationText(object pushNotification)
