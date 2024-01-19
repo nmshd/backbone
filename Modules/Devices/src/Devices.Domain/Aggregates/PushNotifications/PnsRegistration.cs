@@ -7,6 +7,9 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public class PnsRegistration
 {
+    /**
+     * This constructor is only used by EF Core.
+     */
     // ReSharper disable once UnusedMember.Local
     private PnsRegistration()
     {
