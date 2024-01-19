@@ -1,14 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { BreadcrumbComponent } from "./breadcrumb.component";
 
-import { BreadcrumbComponent } from './breadcrumb.component';
-
-describe('BreadcrumbComponent', () => {
+describe("BreadcrumbComponent", function() {
   let component: BreadcrumbComponent;
   let fixture: ComponentFixture<BreadcrumbComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async function() {
     await TestBed.configureTestingModule({
-      imports: [BreadcrumbComponent]
+      declarations: [BreadcrumbComponent],
+      imports: [RouterTestingModule]
     })
     .compileComponents();
     
@@ -17,7 +18,7 @@ describe('BreadcrumbComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it("should create",async function() {
+    await expect(component).toBeTruthy();
   });
 });
