@@ -29,11 +29,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        ValidateRegistrations(registrations);
+        var pnsRegistrations = registrations.ToList();
+        ValidateRegistrations(pnsRegistrations);
 
         var sendResults = new SendResults();
 
-        var tasks = registrations.Select(r => SendNotification(r, notification, sendResults));
+        var tasks = pnsRegistrations.Select(r => SendNotification(r, notification, sendResults));
 
         await Task.WhenAll(tasks);
         return sendResults;
