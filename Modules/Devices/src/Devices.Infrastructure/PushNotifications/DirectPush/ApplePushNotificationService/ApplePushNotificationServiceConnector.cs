@@ -125,8 +125,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
 public static class TypeExtensions
 {
-    public static T GetCustomAttribute<T>(this Type type) where T : Attribute
+    public static T? GetCustomAttribute<T>(this Type type) where T : Attribute
     {
-        return (T)type.GetCustomAttribute(typeof(T));
+        return (T?)type.GetCustomAttribute(typeof(T));
     }
 }
