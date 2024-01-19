@@ -91,17 +91,18 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var response = default(T);
+        // the '!' is safe here because the default value is only returned after the action is executed, which is setting the response
+        var response = default(T)!;
 
         await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
         return response;
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> func, IsolationLevel isolationLevel)
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
     {
         return await RunInTransaction(func, null, isolationLevel);
     }
