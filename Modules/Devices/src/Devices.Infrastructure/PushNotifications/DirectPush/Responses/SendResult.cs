@@ -6,8 +6,8 @@ public class SendResult
 {
     public bool IsSuccess { get; private init; }
     public bool IsFailure => !IsSuccess;
-    public SendError Error { get; private init; }
-    public DeviceId DeviceId { get; private set; }
+    public SendError Error { get; private init; } = null!;
+    public DeviceId DeviceId { get; private set; } = null!;
 
     public static SendResult Success(DeviceId deviceId)
     {
