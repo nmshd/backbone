@@ -40,12 +40,12 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.CreatedDevice(user.DeviceId, user.Id, user.UserName);
+        _logger.CreatedDevice(user.DeviceId, user.Id, user.UserName!);
 
         return new RegisterDeviceResponse
         {
             Id = user.DeviceId,
-            Username = user.UserName,
+            Username = user.UserName!,
             CreatedByDevice = user.Device.CreatedByDevice,
             CreatedAt = user.Device.CreatedAt
         };
