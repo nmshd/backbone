@@ -35,7 +35,7 @@ public class TiersRepository : ITiersRepository
 
     public async Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
     {
-        return await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken);
+        return (await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken))!;
     }
 
     public async Task Remove(Tier tier)

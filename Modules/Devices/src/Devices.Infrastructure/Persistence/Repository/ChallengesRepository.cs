@@ -19,7 +19,7 @@ public class ChallengesRepository : IChallengesRepository
 
     public async Task<Challenge> FindById(string id, CancellationToken cancellationToken, bool track = false)
     {
-        return await (track ? _challenges : _readonlyChallenges)
-            .Where(c => c.Id == id).FirstOrDefaultAsync(cancellationToken);
+        return (await (track ? _challenges : _readonlyChallenges)
+            .Where(c => c.Id == id).FirstOrDefaultAsync(cancellationToken))!;
     }
 }
