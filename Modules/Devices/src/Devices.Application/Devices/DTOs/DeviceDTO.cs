@@ -7,15 +7,15 @@ namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class DeviceDTO : IHaveCustomMapping
 {
-    public DeviceId Id { get; set; }
+    public DeviceId? Id { get; set; }
 
-    public string Username { get; set; }
+    public string? Username { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
-    public DeviceId CreatedByDevice { get; set; }
+    public DeviceId? CreatedByDevice { get; set; }
 
-    public LastLoginInformation LastLogin { get; set; }
+    public LastLoginInformation? LastLogin { get; set; }
 
     public void CreateMappings(Profile configuration)
     {
