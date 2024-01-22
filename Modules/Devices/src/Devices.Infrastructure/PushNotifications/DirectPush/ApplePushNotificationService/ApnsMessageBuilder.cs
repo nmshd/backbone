@@ -70,7 +70,7 @@ public class ApnsMessageBuilder
         public int NotificationId { get; set; }
 
         [JsonPropertyName("content")]
-        public NotificationContent Content { get; set; }
+        public NotificationContent? Content { get; set; }
 
         [JsonPropertyName("aps")]
         public PayloadAps Aps { get; } = new();
@@ -78,7 +78,7 @@ public class ApnsMessageBuilder
         public class PayloadAps
         {
             [JsonPropertyName("content-available")]
-            public string ContentAvailable { get; set; }
+            public string? ContentAvailable { get; set; }
 
             [JsonPropertyName("alert")]
             public ApsAlert Alert { get; } = new();
@@ -86,10 +86,10 @@ public class ApnsMessageBuilder
             public class ApsAlert
             {
                 [JsonPropertyName("title")]
-                public string Title { get; set; }
+                public string? Title { get; set; }
 
                 [JsonPropertyName("body")]
-                public string Body { get; set; }
+                public string? Body { get; set; }
             }
         }
     }
