@@ -93,10 +93,10 @@ export class BreadcrumbService {
                 const dynamicData = this.extractDynamicData(routeURL);
 
                 breadcrumbs.push({
-                  label: dynamicData !== "" ? dynamicData : breadcrumbLabel,
-                  url: url
+                    label: dynamicData !== "" ? dynamicData : breadcrumbLabel,
+                    url: url
                 });
-              }
+            }
 
             this.generateBreadcrumbs(child, url, breadcrumbs);
         }
@@ -105,7 +105,7 @@ export class BreadcrumbService {
     private extractDynamicData(routeURL: string): string {
         const segments = routeURL.split("/");
         return segments.length === 2 ? segments[1] : "";
-      }
+    }
 }
 
 export interface Breadcrumb {
