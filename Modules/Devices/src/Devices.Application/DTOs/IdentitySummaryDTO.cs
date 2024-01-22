@@ -27,7 +27,9 @@ public class IdentitySummaryDTO
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = createdAt;
-        Devices = devices.Select(it => new DeviceDTO()
+
+        var devicesList = devices.ToList();
+        Devices = devicesList.Select(it => new DeviceDTO()
         {
             CreatedAt = it.CreatedAt,
             CreatedByDevice = it.CreatedByDevice,
@@ -35,7 +37,8 @@ public class IdentitySummaryDTO
             LastLogin = new LastLoginInformation { Time = it.User.LastLoginAt },
             Username = it.User.UserName!
         });
-        NumberOfDevices = devices.Count();
+
+        NumberOfDevices = devicesList.Count();
         TierId = tierId;
     }
 
