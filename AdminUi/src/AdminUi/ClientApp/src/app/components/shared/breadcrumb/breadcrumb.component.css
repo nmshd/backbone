@@ -1,29 +1,29 @@
 nav {
     font-size: 16px;
     margin: 10px 0;
-  }
-  
-  a {
+}
+
+a {
     color: #17428d;
     text-decoration: none;
     transition: color 0.3s ease;
-  }
-  
-  a:hover {
-    color: #076fde;
-  }
+}
 
-  span::after {
+a:hover {
+    color: #076fde;
+}
+
+span::after {
     content: " > ";
     margin: 0 5px;
     color: #999;
-  }
-  
-  span:last-child::after {
+}
+
+span:last-child::after {
     content: "";
-  }
-  
-  span.active {
+}
+
+span.active {
     color: #333;
     font-weight: bold;
-  }
+}
