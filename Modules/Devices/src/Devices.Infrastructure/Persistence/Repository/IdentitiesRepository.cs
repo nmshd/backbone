@@ -73,8 +73,10 @@ public class IdentitiesRepository : IIdentitiesRepository
             .IncludeAll(_dbContext)
             .OfIdentity(identity);
 
-        if (ids.Any())
-            query = query.WithIdIn(ids);
+        var deviceIds = ids.ToList();
+
+        if (deviceIds.Any())
+            query = query.WithIdIn(deviceIds);
 
         return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
