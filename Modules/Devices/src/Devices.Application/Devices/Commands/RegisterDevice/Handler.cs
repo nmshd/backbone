@@ -69,7 +69,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
 
     private object ReadObject(JsonElement jsonElement)
     {
-        IDictionary<string, object> expandoObject = new ExpandoObject()!;
+        IDictionary<string, object> expandoObject = new ExpandoObject();
         foreach (var obj in jsonElement.EnumerateObject())
         {
             var k = obj.Name;
