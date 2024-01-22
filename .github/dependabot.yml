@@ -51,8 +51,6 @@ updates:
       update-npm-dependencies:
         patterns:
           - "*"
-        exclude-patterns:
-          - "typescript" # There is currently an inconsistency between the latest typescript version and angularjs
     reviewers:
       - "tnotheis"
       - "daniel-almeida-konkconsulting"
