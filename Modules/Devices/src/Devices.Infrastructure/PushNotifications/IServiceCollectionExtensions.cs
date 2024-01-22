@@ -32,7 +32,7 @@ public class PushNotificationOptions
     [Required]
     [RegularExpression(
         $"{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
-    public required string Provider { get; set; }
+    public string Provider { get; set; }
 
     public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }
