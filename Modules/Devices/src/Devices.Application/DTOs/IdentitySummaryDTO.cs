@@ -33,7 +33,7 @@ public class IdentitySummaryDTO
             CreatedByDevice = it.CreatedByDevice,
             Id = it.Id,
             LastLogin = new LastLoginInformation { Time = it.User.LastLoginAt },
-            Username = it.User.UserName
+            Username = it.User.UserName!
         });
         NumberOfDevices = devices.Count();
         TierId = tierId;
