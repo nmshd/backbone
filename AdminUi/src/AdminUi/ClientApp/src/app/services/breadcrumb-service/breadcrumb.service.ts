@@ -13,13 +13,13 @@ export class BreadcrumbService {
         private readonly router: Router,
         private readonly activatedRoute: ActivatedRoute
     ) {
-        const storedHistory = localStorage.getItem("breadcrumb-history");
+        const storedHistory = sessionStorage.getItem("breadcrumb-history");
         if (storedHistory) {
             this.breadcrumbHistory = JSON.parse(storedHistory);
         }
         this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
             this.updateBreadcrumbHistory();
-            localStorage.setItem("breadcrumb-history", JSON.stringify(this.breadcrumbHistory));
+            sessionStorage.setItem("breadcrumb-history", JSON.stringify(this.breadcrumbHistory));
         });
     }
 

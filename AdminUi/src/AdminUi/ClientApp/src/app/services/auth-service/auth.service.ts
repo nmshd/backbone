@@ -49,7 +49,7 @@ export class AuthService {
 
     public async logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
-        localStorage.removeItem("breadcrumb-history");
+        sessionStorage.removeItem("breadcrumb-history");
         this.loggedIn.next(false);
         this.xsrfService.clearStoredToken();
         return await this.router.navigate(["/login"]);
