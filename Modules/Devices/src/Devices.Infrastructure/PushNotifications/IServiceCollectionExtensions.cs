@@ -34,6 +34,5 @@ public class PushNotificationOptions
         $"{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
     public string Provider { get; set; }
 
-#nullable enable
     public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }
