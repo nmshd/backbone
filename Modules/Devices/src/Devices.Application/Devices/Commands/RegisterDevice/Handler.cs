@@ -64,7 +64,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
             JsonTokenType.String => reader.TryGetDateTime(out var datetime) ? datetime.ToString(CultureInfo.InvariantCulture) : reader.GetString(),
             JsonTokenType.StartObject => ReadObject(JsonDocument.ParseValue(ref reader).RootElement),
             _ => JsonDocument.ParseValue(ref reader).RootElement.Clone() // use JsonElement as fallback.
-        } ?? throw new Exception("The type of the last processed JSON token could not be read.");
+        };
     }
 
     private object ReadObject(JsonElement jsonElement)
@@ -93,14 +93,14 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
             JsonValueKind.Undefined => null,
             JsonValueKind.Null => null,
             _ => throw new ArgumentOutOfRangeException()
-        } ?? throw new Exception("The type of the current JSON value could not be read.");
+        };
     }
 
     private object ReadList(JsonElement jsonElement)
     {
         var list = new List<object>();
         jsonElement.EnumerateArray().ToList().ForEach(j => list.Add(ReadValue(j)));
-        return (list.Count == 0 ? null : list) ?? throw new Exception("JSON list could not be read.");
+        return list.Count == 0 ? null : list;
     }
 
     public override void Write(Utf8JsonWriter writer,
