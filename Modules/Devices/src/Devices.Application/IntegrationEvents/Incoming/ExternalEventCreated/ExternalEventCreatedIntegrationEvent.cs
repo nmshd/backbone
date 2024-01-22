@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.Extern
 
 public class ExternalEventCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Owner { get; set; }
+    public string? Owner { get; set; }
 }
