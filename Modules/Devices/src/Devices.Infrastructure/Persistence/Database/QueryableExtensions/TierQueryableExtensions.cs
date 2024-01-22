@@ -9,6 +9,6 @@ public static class TierQueryableExtensions
     {
         var basicTier = await query.FirstOrDefaultAsync(t => t.Name == TierName.BASIC_DEFAULT_NAME, cancellationToken);
 
-        return basicTier;
+        return basicTier!;
     }
 }
