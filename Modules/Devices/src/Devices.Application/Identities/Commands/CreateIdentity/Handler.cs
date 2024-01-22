@@ -80,9 +80,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 internal static partial class CreatedIdentityLogs
 {
     [LoggerMessage(
-               EventId = 436321,
-                      EventName = "Devices.CreateIdentity.CreatedIdentity",
-                      Level = LogLevel.Information,
-                      Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
+        EventId = 436321,
+        EventName = "Devices.CreateIdentity.CreatedIdentity",
+        Level = LogLevel.Information,
+        Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
     public static partial void CreatedIdentity(this ILogger logger, IdentityAddress address, DeviceId deviceId, string userName);
 }
