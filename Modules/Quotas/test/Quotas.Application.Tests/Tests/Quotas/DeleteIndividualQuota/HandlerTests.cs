@@ -67,7 +67,7 @@ public class HandlerTests
         // Arrange
         var command = new DeleteQuotaForIdentityCommand("some-inexistent-identity", "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find("some-inexistent-identity", A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Identity>(null));
+        A.CallTo(() => identitiesRepository.Find("some-inexistent-identity", A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Identity>(null!));
         var handler = CreateHandler(identitiesRepository);
 
         // Act
