@@ -35,7 +35,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
         await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
-        _logger.LogTrace("Challenge sucessfully validated.");
+        _logger.LogTrace("Challenge successfully validated.");
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.AddressPrefix);
 
