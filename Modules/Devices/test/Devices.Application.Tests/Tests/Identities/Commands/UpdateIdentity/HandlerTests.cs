@@ -83,7 +83,7 @@ public class HandlerTests
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, oldTier.Id, 1);
 
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
-        A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
+        A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))!.Returns((Identity?)null);
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
         var request = BuildRequest(newTier, identity);
