@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:
-                if (options.DirectPnsCommunication != null) 
+                if (options.DirectPnsCommunication != null)
                     services.AddDirectPushNotifications(options.DirectPnsCommunication);
                 break;
             default:
