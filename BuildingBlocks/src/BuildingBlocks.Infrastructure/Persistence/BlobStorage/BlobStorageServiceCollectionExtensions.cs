@@ -23,15 +23,15 @@ public static class BlobStorageServiceCollectionExtensions
         if (options.CloudProvider == AZURE_CLOUD_PROVIDER)
             services.AddAzureStorageAccount(azureStorageAccountOptions =>
             {
-                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo;
+                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
             });
         else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
             {
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
-                googleCloudStorageOptions.BucketName = options.Container;
+                googleCloudStorageOptions.BucketName = options.Container!;
             });
-        else if (options.CloudProvider.IsEmpty())
+        else if (options.CloudProvider.IsNullOrEmpty())
             throw new NotSupportedException("No cloud provider was specified.");
         else
             throw new NotSupportedException(
@@ -41,7 +41,15 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    public string ConnectionInfo { get; set; }
-    public string Container { get; set; }
-    public string CloudProvider { get; set; }
+    /** 
+     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
+     */
+    public string? CloudProvider { get; set; }
+
+    /**
+     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
+     */
+    public string? Container { get; set; }
+
+    public string? ConnectionInfo { get; set; }
 }
