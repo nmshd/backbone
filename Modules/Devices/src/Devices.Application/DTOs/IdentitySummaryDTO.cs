@@ -7,7 +7,7 @@ namespace Backbone.Modules.Devices.Application.DTOs;
 public class IdentitySummaryDTO
 {
     public string Address { get; set; }
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
     public byte[] PublicKey { get; set; }
 
     public string TierId { get; set; }
@@ -20,10 +20,13 @@ public class IdentitySummaryDTO
 
     public IEnumerable<DeviceDTO> Devices { get; set; }
 
-    public IdentitySummaryDTO(IdentityAddress address, string clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices, string tierId)
+    public IdentitySummaryDTO(IdentityAddress address, string? clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices, string tierId)
     {
         Address = address.ToString();
+
+        if (clientId != null) 
         ClientId = clientId;
+
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = createdAt;
