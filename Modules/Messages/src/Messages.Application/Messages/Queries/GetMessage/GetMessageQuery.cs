@@ -6,6 +6,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 
 public class GetMessageQuery : IRequest<MessageDTO>
 {
-    public MessageId Id { get; init; }
+    public MessageId? Id { get; init; }
     public bool NoBody { get; init; }
 }
