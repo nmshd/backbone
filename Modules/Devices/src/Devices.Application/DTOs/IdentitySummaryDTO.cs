@@ -25,7 +25,7 @@ public class IdentitySummaryDTO
         Address = address.ToString();
 
         if (clientId != null) 
-        ClientId = clientId;
+            ClientId = clientId;
 
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
