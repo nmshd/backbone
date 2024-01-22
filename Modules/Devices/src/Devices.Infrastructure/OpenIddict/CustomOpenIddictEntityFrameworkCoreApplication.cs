@@ -7,7 +7,7 @@ namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFrameworkCoreApplication<string, CustomOpenIddictEntityFrameworkCoreAuthorization,
     CustomOpenIddictEntityFrameworkCoreToken>
 {
-    public TierId DefaultTier { get; set; }
+    public TierId? DefaultTier { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
