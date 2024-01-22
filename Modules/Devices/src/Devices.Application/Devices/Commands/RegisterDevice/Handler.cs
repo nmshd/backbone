@@ -56,7 +56,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
 {
     public override dynamic Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return reader.TokenType switch
+        return (reader.TokenType switch
         {
             JsonTokenType.True => true,
             JsonTokenType.False => false,
@@ -64,7 +64,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
             JsonTokenType.String => reader.TryGetDateTime(out var datetime) ? datetime.ToString(CultureInfo.InvariantCulture) : reader.GetString(),
             JsonTokenType.StartObject => ReadObject(JsonDocument.ParseValue(ref reader).RootElement),
             _ => JsonDocument.ParseValue(ref reader).RootElement.Clone() // use JsonElement as fallback.
-        };
+        })!;
     }
 
     private object ReadObject(JsonElement jsonElement)
@@ -82,7 +82,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
 
     private object ReadValue(JsonElement jsonElement)
     {
-        return jsonElement.ValueKind switch
+        return (jsonElement.ValueKind switch
         {
             JsonValueKind.Object => ReadObject(jsonElement),
             JsonValueKind.Array => ReadList(jsonElement),
@@ -93,14 +93,14 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
             JsonValueKind.Undefined => null,
             JsonValueKind.Null => null,
             _ => throw new ArgumentOutOfRangeException()
-        };
+        })!;
     }
 
     private object ReadList(JsonElement jsonElement)
     {
         var list = new List<object>();
         jsonElement.EnumerateArray().ToList().ForEach(j => list.Add(ReadValue(j)));
-        return list.Count == 0 ? null : list;
+        return (list.Count == 0 ? null : list)!;
     }
 
     public override void Write(Utf8JsonWriter writer,
