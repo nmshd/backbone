@@ -59,7 +59,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName);
+        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName!);
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
@@ -70,7 +70,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             Device = new CreateIdentityResponseDevice
             {
                 Id = user.DeviceId,
-                Username = user.UserName,
+                Username = user.UserName!,
                 CreatedAt = user.Device.CreatedAt
             }
         };
