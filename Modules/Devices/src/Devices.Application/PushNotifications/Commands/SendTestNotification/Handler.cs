@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
 
     public async Task<Unit> Handle(SendTestNotificationCommand request, CancellationToken cancellationToken)
     {
-        await _pushSenderService.SendNotification(_activeIdentity, request.Data, cancellationToken);
+        await _pushSenderService.SendNotification(_activeIdentity, request.Data!, cancellationToken);
         return Unit.Value;
     }
 }
