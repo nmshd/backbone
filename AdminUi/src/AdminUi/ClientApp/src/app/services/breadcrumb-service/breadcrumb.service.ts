@@ -55,8 +55,6 @@ export class BreadcrumbService {
                 this.trimBreadcrumbHistory();
             }
         }
-
-        localStorage.setItem("breadcrumbHistory", JSON.stringify(this.breadcrumbHistory));
     }
 
     private isMainLinkClicked(breadcrumbTrail: Breadcrumb[]): boolean {
