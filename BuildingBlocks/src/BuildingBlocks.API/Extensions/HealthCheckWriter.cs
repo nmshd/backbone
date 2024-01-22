@@ -34,7 +34,7 @@ public static class HealthCheckWriter
                     jsonWriter.WritePropertyName(item.Key);
 
                     JsonSerializer.Serialize(jsonWriter, item.Value,
-                        item.Value?.GetType() ?? typeof(object));
+                        item.Value.GetType());
                 }
 
                 jsonWriter.WriteEndObject();
