@@ -19,7 +19,7 @@ public static class IServiceCollectionExtensions
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:
-                services.AddDirectPushNotifications(options.DirectPnsCommunication);
+                if (options.DirectPnsCommunication != null) services.AddDirectPushNotifications(options.DirectPnsCommunication);
                 break;
             default:
                 throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
