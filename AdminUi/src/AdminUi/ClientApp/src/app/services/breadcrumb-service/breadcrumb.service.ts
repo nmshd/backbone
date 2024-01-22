@@ -43,13 +43,25 @@ export class BreadcrumbService {
       return;
     }
 
-    if (this.shouldPushBreadcrumbTrail(breadcrumbTrail)) {
-      this.breadcrumbHistory.push(...breadcrumbTrail);
-    }
 
-    if (this.breadcrumbHistory.length > this.maxHistorySize) {
-      this.trimBreadcrumbHistory();
+    if (this.isMainLinkClicked(breadcrumbTrail)) {
+      this.breadcrumbHistory = breadcrumbTrail;
+    } else {
+
+      if (this.shouldPushBreadcrumbTrail(breadcrumbTrail)) {
+        this.breadcrumbHistory.push(...breadcrumbTrail);
+      }
+  
+      if (this.breadcrumbHistory.length > this.maxHistorySize) {
+        this.trimBreadcrumbHistory();
+      }
     }
+    
+    localStorage.setItem("breadcrumbHistory", JSON.stringify(this.breadcrumbHistory));
+  }
+
+  private isMainLinkClicked(breadcrumbTrail: Breadcrumb[]): boolean {
+    return breadcrumbTrail.length === 1 && breadcrumbTrail[0].url.split("/").length === 2;
   }
 
   private shouldClearBreadcrumbHistory(trail: Breadcrumb[]): boolean {
