@@ -53,9 +53,12 @@ public class CreateClientCommand : AdminCliDbCommand
     {
         var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
 
-        var response = await mediator.Send(new Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities), CancellationToken.None);
+        if (clientId != null && displayName != null && clientSecret != null)
+        {
+            var response = await mediator.Send(new Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities), CancellationToken.None);
+            Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
+        }
 
-        Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");
     }
 }
