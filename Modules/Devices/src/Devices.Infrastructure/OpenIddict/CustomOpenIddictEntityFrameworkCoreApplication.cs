@@ -15,7 +15,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFr
 
     public OAuthClient ToModel()
     {
-        return new OAuthClient(ClientId!, DisplayName!, DefaultTier, CreatedAt, MaxIdentities);
+        return new OAuthClient(ClientId!, DisplayName!, DefaultTier!, CreatedAt, MaxIdentities);
     }
 
     public void UpdateFromModel(OAuthClient client)
