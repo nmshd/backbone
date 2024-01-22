@@ -90,12 +90,22 @@ export class BreadcrumbService {
 
             if (routeURL !== "") {
                 url += `/${routeURL}`;
-                breadcrumbs.push({ label: breadcrumbLabel, url: url });
-            }
+                const dynamicData = this.extractDynamicData(routeURL);
+
+                breadcrumbs.push({
+                  label: dynamicData !== "" ? dynamicData : breadcrumbLabel,
+                  url: url
+                });
+              }
 
             this.generateBreadcrumbs(child, url, breadcrumbs);
         }
     }
+
+    private extractDynamicData(routeURL: string): string {
+        const segments = routeURL.split("/");
+        return segments.length === 2 ? segments[1] : "";
+      }
 }
 
 export interface Breadcrumb {
