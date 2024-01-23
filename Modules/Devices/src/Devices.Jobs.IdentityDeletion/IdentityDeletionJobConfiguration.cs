@@ -13,6 +13,4 @@ public class InfrastructureConfiguration
 {
     [Required]
     public EventBusConfiguration EventBus { get; set; } = new();
-    [Required]
-    public IServiceCollectionExtensions.DbOptions SqlDatabase { get; set; } = new();
 }
