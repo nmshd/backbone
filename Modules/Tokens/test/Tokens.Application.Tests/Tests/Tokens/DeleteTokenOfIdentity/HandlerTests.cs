@@ -12,15 +12,15 @@ public class HandlerTests
     public async Task Command_calls_delete_on_repository()
     {
         // Arrange
-        var templateRelationshipsRepository = A.Fake<ITokensRepository>();
+        var mockRelationshipTemplatesRepository = A.Fake<ITokensRepository>();
 
-        var handler = new Handler(templateRelationshipsRepository);
+        var handler = new Handler(mockRelationshipTemplatesRepository);
         var request = new DeleteTokensOfIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => templateRelationshipsRepository.DeleteTokens(A<Expression<Func<Token, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockRelationshipTemplatesRepository.DeleteTokens(A<Expression<Func<Token, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
     }
 }

@@ -13,14 +13,14 @@ public class HandlerTests
     {
         // Arrange
         var identityAddress = "identity-address";
-        var challengesRepository = A.Fake<IChallengesRepository>();
-        var handler = CreateHandler(challengesRepository);
+        var mockChallengesRepository = A.Fake<IChallengesRepository>();
+        var handler = CreateHandler(mockChallengesRepository);
 
         // Act
         await handler.Handle(new DeleteChallengesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => challengesRepository.DeleteChallenges(A<Expression<Func<Challenge, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockChallengesRepository.DeleteChallenges(A<Expression<Func<Challenge, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IChallengesRepository challengesRepository)

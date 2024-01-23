@@ -6,21 +6,21 @@ using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.DeleteRelationshipTemplatesByIdentity;
-public class Tests
+public class HandlerTests
 {
     [Fact]
     public async Task Command_calls_delete_on_repository()
     {
         // Arrange
-        var templateRelationshipsRepository = A.Fake<IRelationshipTemplatesRepository>();
+        var mockRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
 
-        var handler = new Handler(templateRelationshipsRepository);
+        var handler = new Handler(mockRelationshipTemplatesRepository);
         var request = new DeleteRelationshipTemplatesOfIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => templateRelationshipsRepository.DeleteTemplates(A<Expression<Func<RelationshipTemplate, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockRelationshipTemplatesRepository.DeleteTemplates(A<Expression<Func<RelationshipTemplate, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
     }
 }

@@ -12,13 +12,13 @@ public class IdentityDeleterTests
     {
         // Arrange
         var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
-        var mediator = A.Fake<IMediator>();
-        var deleter = new IdentityDeleter(mediator);
+        var mockMediator = A.Fake<IMediator>();
+        var deleter = new IdentityDeleter(mockMediator);
 
         // Act
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mediator.Send(A<DeleteRelationshipTemplatesOfIdentityCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockMediator.Send(A<DeleteRelationshipTemplatesOfIdentityCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 }

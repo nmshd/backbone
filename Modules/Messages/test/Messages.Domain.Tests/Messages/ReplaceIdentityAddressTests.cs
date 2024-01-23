@@ -4,7 +4,6 @@ using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
-using Microsoft.Extensions.Azure;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
@@ -32,10 +31,10 @@ public class ReplaceIdentityAddressTests
     {
         // Arrange
         var recipientIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdBydentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdBydentityAddress, recipientIdentityAddress);
+        var message = CreateMessage(createdByIdentityAddress, recipientIdentityAddress);
 
         // Act
         message.ReplaceIdentityAddress(recipientIdentityAddress, newIdentityAddress);
@@ -78,8 +77,8 @@ public class ReplaceIdentityAddressTests
             createdBy,
             TestDataGenerator.CreateRandomDeviceId(),
             null,
-            Array.Empty<byte>(),
-            Array.Empty<Attachment>(),
+            [],
+            [],
             recipientInformation
         );
     }

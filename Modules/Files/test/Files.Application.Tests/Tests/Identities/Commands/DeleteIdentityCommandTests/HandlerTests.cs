@@ -11,15 +11,15 @@ public class HandlerTests
     public async Task Handler_calls_deletion_method_on_repository()
     {
         // Arrange
-        var filesRepository = A.Fake<IFilesRepository>();
-        var handler = CreateHandler(filesRepository);
+        var mockFilesRepository = A.Fake<IFilesRepository>();
+        var handler = CreateHandler(mockFilesRepository);
         var identityAddress = CreateRandomIdentityAddress();
 
         // Act
         await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => filesRepository.DeleteFilesOfIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IFilesRepository filesRepository = null)

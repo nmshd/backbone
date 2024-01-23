@@ -1,15 +1,14 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateDeletionProcesses;
+
 public class HandlerTests
 {
     private static List<Identity> _identities;
@@ -18,9 +17,9 @@ public class HandlerTests
     public async Task Empty_response_if_no_identities_are_past_DeletionGracePeriodEndsAt()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository(0);
+        var mockIdentitiesRepository = CreateFakeIdentitiesRepository(0);
 
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(mockIdentitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
@@ -28,7 +27,7 @@ public class HandlerTests
 
         // Assert
         result.IdentityAddresses.Should().BeEmpty();
-        A.CallTo(() => identitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
+        A.CallTo(() => mockIdentitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     [Fact]
@@ -77,7 +76,7 @@ public class HandlerTests
         return new Handler(
             identitiesRepository,
             A.Dummy<ILogger<Handler>>()
-            );
+        );
     }
 
     private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities)

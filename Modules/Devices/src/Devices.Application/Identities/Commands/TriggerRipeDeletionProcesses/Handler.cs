@@ -15,7 +15,6 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
         _logger = logger;
     }
 
-
     public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
         var response = new TriggerRipeDeletionProcessesResponse();

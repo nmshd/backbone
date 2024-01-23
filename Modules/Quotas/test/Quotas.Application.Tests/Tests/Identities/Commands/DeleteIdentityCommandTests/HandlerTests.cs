@@ -14,12 +14,12 @@ public class HandlerTests
     public async Task Handler_calls_deletion_method_on_repository()
     {
         var identity = new Identity(CreateRandomIdentityAddress(), new TierId("tier-id"));
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        var handler = CreateHandler(identitiesRepository);
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var handler = CreateHandler(mockIdentitiesRepository);
 
         await handler.Handle(new DeleteIdentityCommand(identity.Address), CancellationToken.None);
 
-        A.CallTo(() => identitiesRepository.DeleteIdentities(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.DeleteIdentities(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository = null)
