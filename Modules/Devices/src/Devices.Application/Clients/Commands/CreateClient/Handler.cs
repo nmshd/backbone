@@ -52,7 +52,6 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         {
             var tier = await _tiersRepository.FindByName(tierNameResult.Value, cancellationToken);
 
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (tier != null)
                 return tier.Id;
         }
