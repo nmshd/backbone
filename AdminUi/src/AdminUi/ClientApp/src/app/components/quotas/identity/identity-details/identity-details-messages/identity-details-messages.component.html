@@ -28,7 +28,7 @@
                     </ng-container>
                 </ng-template>
                 <ng-template #recipientsDialog>
-                    <ng-container *ngFor="let recipient of Message.recipients.slice(0,3)">
+                    <ng-container *ngFor="let recipient of Message.recipients.slice(0, 3)">
                         <a class="identity-navigation" (click)="goToIdentity(recipient.address)">
                             {{ recipient.address }}
                         </a>
