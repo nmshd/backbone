@@ -5,9 +5,9 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 
 public class CreateIdentityCommand : IRequest<CreateIdentityResponse>
 {
-    public string? ClientId { get; set; }
-    public byte[]? IdentityPublicKey { get; set; }
-    public string? DevicePassword { get; set; }
-    public byte IdentityVersion { get; set; }
-    public SignedChallengeDTO? SignedChallenge { get; set; }
+    public string ClientId { get; set; }
+    public required byte[] IdentityPublicKey { get; set; }
+    public required string DevicePassword { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required SignedChallengeDTO SignedChallenge { get; set; }
 }
