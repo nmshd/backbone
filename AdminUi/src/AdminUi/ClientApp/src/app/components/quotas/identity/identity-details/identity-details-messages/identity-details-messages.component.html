@@ -28,7 +28,13 @@
                     </ng-container>
                 </ng-template>
                 <ng-template #recipientsDialog>
-                    <button mat-raised-button class="actions-button" color="primary" (click)="openRecipientsDialog(Message.recipients)">Show Recipients</button>
+                    <ng-container *ngFor="let recipient of Message.recipients.slice(0,3)">
+                        <a class="identity-navigation" (click)="goToIdentity(recipient.address)">
+                            {{ recipient.address }}
+                        </a>
+                        <br />
+                    </ng-container>
+                    <button mat-raised-button class="actions-button" color="primary" (click)="openRecipientsDialog(Message.recipients)">+</button>
                 </ng-template>
             </td>
         </ng-container>
