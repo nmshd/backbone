@@ -40,7 +40,7 @@ public class SendMessageCommandRecipientInformationValidator : AbstractValidator
         RuleFor(r => r.Address).DetailedNotNull();
 
         RuleFor(r => r.EncryptedKey)
-            .DetailedNotNull()
+            .DetailedNotNull()!
             .NumberOfBytes(30, 300);
     }
 }

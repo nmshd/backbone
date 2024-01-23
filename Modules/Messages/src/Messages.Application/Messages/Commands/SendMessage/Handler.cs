@@ -88,7 +88,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
             }
 
-            var recipient = new RecipientInformation(recipientDto.Address, idOfRelationshipBetweenSenderAndRecipient, recipientDto.EncryptedKey);
+            var recipient = new RecipientInformation(recipientDto.Address, idOfRelationshipBetweenSenderAndRecipient, recipientDto.EncryptedKey ?? Array.Empty<byte>());
 
             recipients.Add(recipient);
         }
