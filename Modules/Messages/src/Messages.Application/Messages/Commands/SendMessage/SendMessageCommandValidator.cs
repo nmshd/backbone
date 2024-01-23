@@ -21,7 +21,7 @@ public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
         RuleFor(m => m.Recipients.Count)
             .InclusiveBetween(1, 50).When(m => m.Recipients != null).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
-        RuleFor(m => m.Body).DetailedNotNull().NumberOfBytes(1, 10.Mebibytes());
+        RuleFor(m => m.Body).DetailedNotNull()!.NumberOfBytes(1, 10.Mebibytes());
 
         RuleFor(m => m.Attachments)
             .ForEach(i => i

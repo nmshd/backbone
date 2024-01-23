@@ -44,19 +44,22 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     {
         var recipients = await ValidateRecipients(request, cancellationToken);
 
-        var message = new Message(
-            _userContext.GetAddress(),
-            _userContext.GetDeviceId(),
-            request.DoNotSendBefore,
-            request.Body,
-            request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
-            recipients);
+        if (request.Body != null)
+        {
+            var message = new Message(
+                _userContext.GetAddress(),
+                _userContext.GetDeviceId(),
+                request.DoNotSendBefore,
+                request.Body,
+                request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
+                recipients);
 
-        await _messagesRepository.Add(message, cancellationToken);
+            await _messagesRepository.Add(message, cancellationToken);
 
-        _eventBus.Publish(new MessageCreatedIntegrationEvent(message));
+            _eventBus.Publish(new MessageCreatedIntegrationEvent(message));
 
-        return _mapper.Map<SendMessageResponse>(message);
+            return _mapper.Map<SendMessageResponse>(message);
+        }
     }
 
     private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
