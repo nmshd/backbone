@@ -20,7 +20,7 @@ public class IdentitySummaryDTO
 
     public IEnumerable<DeviceDTO> Devices { get; set; }
 
-    public IdentitySummaryDTO(IdentityAddress address, string? clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, IEnumerable<Device> devices, string tierId)
+    public IdentitySummaryDTO(IdentityAddress address, string? clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, List<Device> devices, string tierId)
     {
         Address = address.ToString();
 
@@ -31,8 +31,7 @@ public class IdentitySummaryDTO
         IdentityVersion = identityVersion;
         CreatedAt = createdAt;
 
-        var devicesList = devices.ToList();
-        Devices = devicesList.Select(it => new DeviceDTO()
+        Devices = devices.Select(it => new DeviceDTO()
         {
             CreatedAt = it.CreatedAt,
             CreatedByDevice = it.CreatedByDevice,
@@ -41,8 +40,7 @@ public class IdentitySummaryDTO
             Username = it.User.UserName!
         });
 
-        NumberOfDevices = devicesList.Count();
+        NumberOfDevices = devices.Count;
         TierId = tierId;
     }
-
 }
