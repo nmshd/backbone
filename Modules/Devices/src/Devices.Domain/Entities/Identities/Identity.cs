@@ -166,7 +166,5 @@ public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
     Approved = 1,
-    Deleting = 2,
-    Cancelled = 3,
-    Completed = 4
+    Deleting = 2
 }
