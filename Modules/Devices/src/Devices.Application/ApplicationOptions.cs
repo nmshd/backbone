@@ -7,7 +7,7 @@ public class ApplicationOptions
     [Required]
     [MinLength(3)]
     [MaxLength(3)]
-    public string? AddressPrefix { get; set; }
+    public string AddressPrefix { get; set; } = "";
 
     [Required]
     public PaginationOptions Pagination { get; set; } = new();
@@ -17,9 +17,9 @@ public class PaginationOptions
 {
     [Required]
     [Range(1, 1000)]
-    public int MaxPageSize { get; set; }
+    public int MaxPageSize { get; set; } = 0;
 
     [Required]
     [Range(1, 1000)]
-    public int DefaultPageSize { get; set; }
+    public int DefaultPageSize { get; set; } = 0;
 }
