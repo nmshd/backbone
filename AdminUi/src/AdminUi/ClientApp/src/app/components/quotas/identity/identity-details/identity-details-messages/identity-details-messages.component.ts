@@ -85,7 +85,7 @@ export class IdentityDetailsMessagesComponent {
     public openRecipientsDialog(recipients: MessageRecipients[]): void {
         const dialogRef = this.dialog.open(IdentityDetailsMessageRecipientsDialogComponent, {
             data: { recipients: recipients },
-            minWidth: "50%",
+            width: "500px",
             maxWidth: "100%"
         });
 
