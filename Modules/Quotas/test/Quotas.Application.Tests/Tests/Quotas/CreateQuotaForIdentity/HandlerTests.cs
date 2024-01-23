@@ -115,7 +115,7 @@ public class HandlerTests
         ).MustHaveHappened();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, IMetricStatusesService metricStatusesService = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, IMetricStatusesService? metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<Handler>>();
         return new Handler(identitiesRepository, logger, metricsRepository, metricStatusesService ?? A.Fake<IMetricStatusesService>());
