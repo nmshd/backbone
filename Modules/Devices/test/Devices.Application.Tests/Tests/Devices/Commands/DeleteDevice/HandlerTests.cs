@@ -33,7 +33,7 @@ public class HandlerTests
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
-        var deleteDeviceCommand = new DeleteDeviceCommand()
+        var deleteDeviceCommand = new DeleteDeviceCommand
         {
             DeviceId = unOnboardedDevice.Id
         };
@@ -64,7 +64,7 @@ public class HandlerTests
 
         var handler = CreateHandler(mockIdentitiesRepository);
 
-        var deleteDeviceCommand = new DeleteDeviceCommand()
+        var deleteDeviceCommand = new DeleteDeviceCommand
         {
             DeviceId = nonExistentDeviceId
         };
