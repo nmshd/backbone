@@ -51,11 +51,8 @@ public class Message : IIdentifiable<MessageId>
             CreatedBy = newIdentityAddress;
         }
 
-        var recipients = Recipients.Where(r => r.Address == oldIdentityAddress);
+        var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
 
-        foreach (var recipient in recipients)
-        {
-            recipient.UpdateAddress(newIdentityAddress);
-        }
+        recipient?.UpdateAddress(newIdentityAddress);
     }
 }
