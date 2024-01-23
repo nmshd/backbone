@@ -44,7 +44,6 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     {
         var recipients = await ValidateRecipients(request, cancellationToken);
 
-
         var message = new Message(
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
