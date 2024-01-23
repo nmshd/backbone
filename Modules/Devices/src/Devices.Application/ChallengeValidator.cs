@@ -40,7 +40,7 @@ public class ChallengeValidator
     private async Task ValidateChallengeExpiracy(string serializedChallenge)
     {
         var deserializedChallenge = JsonSerializer.Deserialize<ChallengeDTO>(serializedChallenge, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? throw new NotFoundException(nameof(Challenge));
-        var challenge = await _challengesRepository.FindById(deserializedChallenge.Id!, CancellationToken.None) ?? throw new NotFoundException(nameof(Challenge));
+        var challenge = await _challengesRepository.FindById(deserializedChallenge.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Challenge));
         if (challenge.IsExpired())
             throw new OperationFailedException(ApplicationErrors.Devices.ChallengeHasExpired());
     }
