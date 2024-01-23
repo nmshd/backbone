@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             _userContext.GetDeviceId(),
             request.DoNotSendBefore,
             request.Body ?? Array.Empty<byte>(),
-            request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
+            request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id!))),
             recipients);
 
         await _messagesRepository.Add(message, cancellationToken);

@@ -22,9 +22,9 @@ public class FileId : StronglyTypedId
         return new FileId(stringValue);
     }
 
-    public static bool IsValid(string stringValue)
+    public static bool IsValid(string? stringValue)
     {
-        return UTILS.IsValid(stringValue);
+        return UTILS.IsValid(stringValue!);
     }
 
     public static FileId New()
