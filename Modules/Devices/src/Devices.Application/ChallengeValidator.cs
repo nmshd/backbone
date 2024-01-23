@@ -22,8 +22,8 @@ public class ChallengeValidator
 
     public async Task Validate(SignedChallengeDTO signedChallenge, PublicKey publicKey)
     {
-        ValidateSignature(signedChallenge.Challenge!, Signature.FromBytes(signedChallenge.Signature!).Bytes, publicKey.Key);
-        await ValidateChallengeExpiracy(signedChallenge.Challenge!);
+        ValidateSignature(signedChallenge.Challenge, Signature.FromBytes(signedChallenge.Signature).Bytes, publicKey.Key);
+        await ValidateChallengeExpiracy(signedChallenge.Challenge);
     }
 
     private void ValidateSignature(string challenge, byte[] signature, byte[] publicKey)

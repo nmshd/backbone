@@ -9,6 +9,6 @@ public class RegisterDeviceCommandValidator : AbstractValidator<RegisterDeviceCo
     public RegisterDeviceCommandValidator()
     {
         RuleFor(c => c.DevicePassword).DetailedNotEmpty();
-        RuleFor(c => c.SignedChallenge).DetailedNotEmpty().SetValidator(new SignedChallengeDTOValidator()!);
+        RuleFor(c => c.SignedChallenge).DetailedNotEmpty().SetValidator(new SignedChallengeDTOValidator());
     }
 }
