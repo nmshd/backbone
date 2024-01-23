@@ -10,19 +10,19 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
     private readonly IMessagesRepository _messagesRepository;
-    private readonly IOptions<ApplicationOptions> _applicationOptions;
+    private readonly ApplicationOptions _applicationOptions;
 
     public Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions)
     {
         _messagesRepository = messagesRepository;
-        _applicationOptions = applicationOptions;
+        _applicationOptions = applicationOptions.Value;
     }
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
         var messages = await _messagesRepository.FindMessagesWithParticipant(request.IdentityAddress, cancellationToken);
 
-        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.Value.AddressPrefix);
+        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.AddressPrefix);
 
         foreach (var message in messages)
         {

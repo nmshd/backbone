@@ -3,6 +3,7 @@ using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.
 using FakeItEasy;
 using MediatR;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities;
 public class IdentityDeleterTests
@@ -11,7 +12,7 @@ public class IdentityDeleterTests
     public async Task Deleter_calls_correct_command()
     {
         // Arrange
-        var identityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var mockMediator = A.Fake<IMediator>();
         var deleter = new IdentityDeleter(mockMediator);
 

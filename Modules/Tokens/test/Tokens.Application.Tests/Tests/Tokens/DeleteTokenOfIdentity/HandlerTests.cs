@@ -2,6 +2,7 @@
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using Xunit;
 
@@ -15,7 +16,7 @@ public class HandlerTests
         var mockRelationshipTemplatesRepository = A.Fake<ITokensRepository>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository);
-        var request = new DeleteTokensOfIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress());
+        var request = new DeleteTokensOfIdentityCommand(TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);

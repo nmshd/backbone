@@ -28,12 +28,6 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(Identity identity, CancellationToken cancellationToken)
-    {
-        _identitiesDbSet.Remove(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task DeleteIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identitiesDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionProcessTests : IDisposable
+public class DeletionProcessTests
 {
     [Fact]
     public void DeletionStarted_sets_status_and_creates_valid_DeletionProcess()
@@ -15,16 +15,16 @@ public class DeletionProcessTests : IDisposable
         // Arrange
         var currentDateTime = DateTime.Parse("2000-01-01 06:00:00");
         SystemTime.Set(currentDateTime);
-        var activeIdentity = CreateIdentity();
-        activeIdentity.StartDeletionProcessAsOwner(new Device(activeIdentity).Id);
+        var identity = CreateIdentity();
+        identity.StartDeletionProcessAsOwner(new Device(identity).Id);
 
         // Act
-        activeIdentity.DeletionStarted();
+        identity.DeletionStarted();
 
         // Assert
-        activeIdentity.Status.Should().Be(IdentityStatus.Deleting);
-        activeIdentity.DeletionProcesses.Should().HaveCount(1);
-        activeIdentity.DeletionProcesses.First().DeletionStartedAt.Should().Be(currentDateTime);
+        identity.Status.Should().Be(IdentityStatus.Deleting);
+        identity.DeletionProcesses.Should().HaveCount(1);
+        identity.DeletionProcesses.First().DeletionStartedAt.Should().Be(currentDateTime);
 
     }
 
@@ -32,10 +32,5 @@ public class DeletionProcessTests : IDisposable
     {
         var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
-    }
-
-    public void Dispose()
-    {
-        Hasher.Reset();
     }
 }

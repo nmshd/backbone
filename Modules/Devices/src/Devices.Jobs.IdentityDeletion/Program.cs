@@ -53,20 +53,18 @@ public class Program
                 var configuration = hostContext.Configuration;
                 services.AddHostedService<Worker>();
 
-                services.AddModule<DevicesModule>(configuration)
-                .AddModule<RelationshipsModule>(configuration)
-                .AddModule<ChallengesModule>(configuration)
-                .AddModule<FilesModule>(configuration)
-                .AddModule<MessagesModule>(configuration)
-                .AddModule<QuotasModule>(configuration)
-                .AddModule<SynchronizationModule>(configuration)
-                .AddModule<TokensModule>(configuration);
+                services
+                    .AddModule<DevicesModule>(configuration)
+                    .AddModule<RelationshipsModule>(configuration)
+                    .AddModule<ChallengesModule>(configuration)
+                    .AddModule<FilesModule>(configuration)
+                    .AddModule<MessagesModule>(configuration)
+                    .AddModule<QuotasModule>(configuration)
+                    .AddModule<SynchronizationModule>(configuration)
+                    .AddModule<TokensModule>(configuration);
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
-                services.AddFluentValidationAutoValidation(config =>
-                {
-                    config.DisableDataAnnotationsValidation = true;
-                });
+                services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
                 services.AddCustomIdentity(hostContext.HostingEnvironment);
 
@@ -84,12 +82,9 @@ public class Program
                 var devicesConfiguration = new DevicesConfiguration();
                 configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
                 services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
-
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
     }
-
 }
 
 public static class ServicesExtensions

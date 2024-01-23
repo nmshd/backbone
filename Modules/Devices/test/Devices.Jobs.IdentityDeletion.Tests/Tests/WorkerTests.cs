@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Jobs.IdentityDeletion.Tests.Tests;
 public class WorkerTests
 {
     [Fact]
-    public async Task Worker_Calls_Command_To_Get_Identities()
+    public async Task Proxies_deletion_to_command_handler()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
@@ -26,7 +26,7 @@ public class WorkerTests
         RegisterFindRipeDeletionProcessesCommand(mockMediator);
 
         var identityDeleters = new List<IIdentityDeleter>();
-        var worker = GetWorker(mockMediator, identityDeleters, null);
+        var worker = CreateWorker(mockMediator, identityDeleters, null);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -36,7 +36,7 @@ public class WorkerTests
     }
 
     [Fact]
-    public async Task Worker_Calls_Deleters_For_Each_Identity()
+    public async Task Calls_Deleters_For_Each_Identity()
     {
         // Arrange
         var mediator = A.Fake<IMediator>();
@@ -46,7 +46,7 @@ public class WorkerTests
         var mockIdentityDeleter = A.Dummy<IIdentityDeleter>();
         var identityDeleters = new List<IIdentityDeleter>([mockIdentityDeleter]);
 
-        var worker = GetWorker(mediator, identityDeleters, null);
+        var worker = CreateWorker(mediator, identityDeleters, null);
 
         A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
 
@@ -54,11 +54,11 @@ public class WorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockIdentityDeleter.Delete(A<IdentityAddress>._)).MustHaveHappened(2, Times.Exactly);
+        A.CallTo(() => mockIdentityDeleter.Delete(A<IdentityAddress>._)).MustHaveHappenedTwiceExactly();
     }
 
     [Fact]
-    public async Task Worker_Calls_FindRelationshipsByIdentityCommand_For_Each_Identity()
+    public async Task Calls_FindRelationshipsByIdentityCommand_For_Each_Identity()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
@@ -68,7 +68,7 @@ public class WorkerTests
         RegisterFindRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
 
-        var worker = GetWorker(mockMediator, null, null);
+        var worker = CreateWorker(mockMediator, null, null);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -78,7 +78,7 @@ public class WorkerTests
     }
 
     [Fact]
-    public async Task Worker_Publishes_PeerIdentityDeletedIntegrationEvent_For_Each_Pair_Identity_Relationship()
+    public async Task Publishes_PeerIdentityDeletedIntegrationEvent_For_Each_Pair_Identity_Relationship()
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
@@ -87,7 +87,7 @@ public class WorkerTests
         RegisterFindRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
         var mockEventBus = A.Fake<IEventBus>();
-        var worker = GetWorker(fakeMediator, null, mockEventBus);
+        var worker = CreateWorker(fakeMediator, null, mockEventBus);
 
         A.CallTo(() =>
             fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
@@ -105,8 +105,8 @@ public class WorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress1))).MustHaveHappened(1, Times.Exactly);
-        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress2))).MustHaveHappened(2, Times.Exactly);
+        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress1))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress2))).MustHaveHappenedTwiceExactly();
     }
 
     private void RegisterFindRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
@@ -119,7 +119,7 @@ public class WorkerTests
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
-    private static Worker GetWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)
+    private static Worker CreateWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
@@ -129,11 +129,11 @@ public class WorkerTests
         return new Worker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
     }
 
-    private static Relationship CreateRelationship(IdentityAddress identityAddress2)
+    private static Relationship CreateRelationship(IdentityAddress identityAddress)
     {
         var templateCreator = IdentityAddress.Create(new byte[2], "id0");
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, SystemTime.UtcNow, new byte[2]);
 
-        return new Relationship(template, identityAddress2, template.CreatedByDevice, TestDataGenerator.CreateRandomBytes());
+        return new Relationship(template, identityAddress, template.CreatedByDevice, TestDataGenerator.CreateRandomBytes());
     }
 }

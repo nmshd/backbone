@@ -135,11 +135,6 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
-    public async Task Delete(IEnumerable<RelationshipId> relationshipIds, CancellationToken cancellationToken)
-    {
-        await _relationships.WithIdIn(relationshipIds).ExecuteDeleteAsync(cancellationToken);
-    }
-
     public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);

@@ -13,8 +13,13 @@ public class Handler : IRequestHandler<FindRelationshipsOfIdentityQuery, FindRel
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task<FindRelationshipsOfIdentityResponse> Handle(FindRelationshipsOfIdentityQuery request, CancellationToken cancellationToken) => new()
+    public async Task<FindRelationshipsOfIdentityResponse> Handle(FindRelationshipsOfIdentityQuery request, CancellationToken cancellationToken)
     {
-        Relationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)
-    };
+        var relationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
+
+        return new FindRelationshipsOfIdentityResponse
+        {
+            Relationships = relationships
+        };
+    }
 }

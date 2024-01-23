@@ -2,7 +2,7 @@
 
 namespace Backbone.UnitTestTools.Data;
 
-public static class TestDataGenerator
+public class TestDataGenerator
 {
     public static string GenerateString(int resultLength, char[]? chars = null)
     {

@@ -17,8 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-        <ProjectReference Include="..\..\src\Messages.Application\Messages.Application.csproj" />
-        <ProjectReference Include="..\..\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\src\Messages.Domain\Messages.Domain.csproj" />
     </ItemGroup>
 
 </Project>

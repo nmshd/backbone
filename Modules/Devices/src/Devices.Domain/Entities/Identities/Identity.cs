@@ -22,11 +22,11 @@ public class Identity
         _deletionProcesses = new List<IdentityDeletionProcess>();
     }
 
-    public IdentityStatus Status { get; internal set; }
+    public IdentityStatus Status { get; private set; }
 
     public string? ClientId { get; private set; }
 
-    public IdentityAddress Address { get; private set; }
+    public IdentityAddress Address { get; }
     public byte[] PublicKey { get; private set; }
     public DateTime CreatedAt { get; private set; }
 

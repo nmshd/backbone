@@ -22,7 +22,7 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.DeleteIdentities(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
         return new Handler(identitiesRepository ?? A.Fake<IIdentitiesRepository>());
     }

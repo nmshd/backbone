@@ -14,13 +14,13 @@ public class ReplaceIdentityAddressTests
     public void CreatedBy_gets_updated()
     {
         // Arrange
-        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByIdentityAddress);
+        var message = CreateMessage(createdByAddress);
 
         // Act
-        message.ReplaceIdentityAddress(createdByIdentityAddress, newIdentityAddress);
+        message.ReplaceIdentityAddress(createdByAddress, newIdentityAddress);
 
         // Assert
         message.CreatedBy.Should().Be(newIdentityAddress);
@@ -30,48 +30,45 @@ public class ReplaceIdentityAddressTests
     public void Recipient_gets_updated()
     {
         // Arrange
-        var recipientIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByIdentityAddress, recipientIdentityAddress);
+        var message = CreateMessage(createdByAddress, recipientAddress);
 
         // Act
-        message.ReplaceIdentityAddress(recipientIdentityAddress, newIdentityAddress);
+        message.ReplaceIdentityAddress(recipientAddress, newAddress);
 
         // Assert
-        message.Recipients.Single().Address.Should().Be(newIdentityAddress);
+        message.Recipients.Single().Address.Should().Be(newAddress);
     }
 
     [Fact]
     public void Message_without_identity_to_be_replaced_stays_unaffected()
     {
         // Arrange
-        var recipient1IdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient2IdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
+        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var erroneousIdentityIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByIdentityAddress, recipient1IdentityAddress, recipient2IdentityAddress);
+        var message = CreateMessage(createdByAddress, recipient1Address, recipient2Address);
 
         // Act
-        message.ReplaceIdentityAddress(erroneousIdentityIdentityAddress, newIdentityAddress);
+        message.ReplaceIdentityAddress(erroneousIdentityIdentityAddress, newAddress);
 
         // Assert
-        message.Recipients.First().Address.Should().Be(recipient1IdentityAddress);
-        message.Recipients.Second().Address.Should().Be(recipient2IdentityAddress);
-        message.CreatedBy.Should().Be(createdByIdentityAddress);
+        message.Recipients.First().Address.Should().Be(recipient1Address);
+        message.Recipients.Second().Address.Should().Be(recipient2Address);
+        message.CreatedBy.Should().Be(createdByAddress);
     }
 
-    private static Message CreateMessage(IdentityAddress createdBy, params IdentityAddress[] recipientsIdentityAddresses)
+    private static Message CreateMessage(IdentityAddress createdBy, params IdentityAddress[] recipientsAddresses)
     {
-        var recipientInformation = new List<RecipientInformation>();
-
-        foreach (var recipientIdentityAddress in recipientsIdentityAddresses)
-        {
-            recipientInformation.Add(new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), Array.Empty<byte>()));
-        }
+        var recipientInformation = recipientsAddresses.Select(recipientIdentityAddress =>
+            new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), [])
+        ).ToList();
 
         return new Message(
             createdBy,
@@ -82,6 +79,4 @@ public class ReplaceIdentityAddressTests
             recipientInformation
         );
     }
-
 }
-

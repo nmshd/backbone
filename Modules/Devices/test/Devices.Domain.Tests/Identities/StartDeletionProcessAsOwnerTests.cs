@@ -16,21 +16,21 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
+        var identity = CreateIdentity();
+        var device = DeviceId.Parse("DVC");
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        var deletionProcess = identity.StartDeletionProcessAsOwner(device);
 
         // Assert
-        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
 
-        AssertDeletionProcessWasStarted(activeIdentity);
+        AssertDeletionProcessWasStarted(identity);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.ApprovedByDevice.Should().Be(activeDevice);
+        deletionProcess.ApprovedByDevice.Should().Be(device);
         deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
@@ -44,22 +44,22 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     public void Only_one_active_deletion_process_is_allowed_when_started()
     {
         // Arrange
-        var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
+        var identity = CreateIdentity();
+        var device = DeviceId.Parse("DVC");
 
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        identity.StartDeletionProcessAsOwner(device);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        var acting = () => identity.StartDeletionProcessAsOwner(device);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
-    private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
+    private static void AssertDeletionProcessWasStarted(Identity identity)
     {
-        activeIdentity.DeletionProcesses.Should().HaveCount(1);
-        var deletionProcess = activeIdentity.DeletionProcesses[0];
+        identity.DeletionProcesses.Should().HaveCount(1);
+        var deletionProcess = identity.DeletionProcesses[0];
         deletionProcess.Should().NotBeNull();
 
         deletionProcess.Id.Should().NotBeNull();

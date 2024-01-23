@@ -8,9 +8,9 @@ public class IdentityStatusChangedIntegrationEvent : IntegrationEvent
     public IdentityStatusChangedIntegrationEvent(IdentityAddress identityAddress, IdentityStatus newStatus) : base($"{identityAddress.StringValue}/StatusChanged")
     {
         IdentityAddress = identityAddress;
-        Status = newStatus;
+        NewStatus = newStatus;
     }
 
     public IdentityAddress IdentityAddress { get; set; }
-    public IdentityStatus Status { get; set; }
+    public IdentityStatus NewStatus { get; set; }
 }

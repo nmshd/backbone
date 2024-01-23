@@ -47,6 +47,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
+        result.IdentityAddresses.Should().HaveCount(1);
         result.IdentityAddresses.Single().Should().Be(anIdentity.Address);
     }
 
