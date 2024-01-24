@@ -26,8 +26,8 @@ public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
             .DetailedNotEmpty();
 
         RuleFor(m => m.OwnerSignature)
-            .NumberOfBytes(1, 512);
-        
+            .NumberOfBytes(1, 512); 
+
         RuleFor(r => r.EncryptedProperties)
             .NumberOfBytes(0, 1.Mebibytes());
     }
