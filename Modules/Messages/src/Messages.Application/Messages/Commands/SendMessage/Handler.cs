@@ -48,7 +48,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             request.DoNotSendBefore,
-            request.Body ?? Array.Empty<byte>(),
+            request.Body,
             request.Attachments.Select(a => new Attachment(FileId.Parse(a.Id))),
             recipients);
 
