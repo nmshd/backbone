@@ -10,8 +10,8 @@ public class Range<T>
         To = to;
     }
 
-    public T? From { get; set; }
-    public T? To { get; set; }
+    public T From { get; set; } = default!;
+    public T To { get; set; } = default!;
 
     public bool HasFrom()
     {
