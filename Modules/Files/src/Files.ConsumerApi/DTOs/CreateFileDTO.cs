@@ -6,7 +6,7 @@ namespace Backbone.Modules.Files.ConsumerApi.DTOs;
 public class CreateFileDTO
 {
     public required IFormFile Content { get; set; }
-    public IdentityAddress? Owner { get; set; }
+    public required IdentityAddress Owner { get; set; }
     public required byte[] OwnerSignature { get; set; }
 
     public required byte[] CipherHash { get; set; }
