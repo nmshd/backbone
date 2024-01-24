@@ -17,11 +17,11 @@ public class MessageDTO : IMapTo<Message>
     public required byte[] Body { get; set; }
 
     public required List<AttachmentDTO> Attachments { get; set; }
-    public List<RecipientInformationDTO>? Recipients { get; set; }
+    public required List<RecipientInformationDTO> Recipients { get; set; }
 
     public void PrepareForActiveIdentity(IdentityAddress activeIdentity)
     {
-        if (CreatedBy != activeIdentity && Recipients != null)
+        if (CreatedBy != activeIdentity)
             Recipients.RemoveAll(r => r.Address != activeIdentity);
     }
 }
