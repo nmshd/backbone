@@ -1,37 +1,32 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
+﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
 public class IdentitySummaryDTO
 {
-    public string Address { get; set; }
     public string? ClientId { get; set; }
+
+    public string Address { get; set; }
     public byte[] PublicKey { get; set; }
-
-    public string TierId { get; set; }
-
     public DateTime CreatedAt { get; set; }
+
+    public IEnumerable<DeviceDTO> Devices { get; set; }
+    public int NumberOfDevices { get; set; }
 
     public byte IdentityVersion { get; set; }
 
-    public int NumberOfDevices { get; set; }
+    public string TierId { get; set; }
 
-    public IEnumerable<DeviceDTO> Devices { get; set; }
-
-    public IdentitySummaryDTO(IdentityAddress address, string? clientId, byte[] publicKey, byte identityVersion, DateTime createdAt, List<Device> devices, string tierId)
+    public IdentitySummaryDTO(Identity identity)
     {
-        Address = address.ToString();
+        ClientId = identity.ClientId;
 
-        if (clientId != null)
-            ClientId = clientId;
+        Address = identity.Address.ToString();
+        PublicKey = identity.PublicKey;
+        CreatedAt = identity.CreatedAt;
 
-        PublicKey = publicKey;
-        IdentityVersion = identityVersion;
-        CreatedAt = createdAt;
-
-        Devices = devices.Select(it => new DeviceDTO()
+        Devices = identity.Devices.Select(it => new DeviceDTO()
         {
             CreatedAt = it.CreatedAt,
             CreatedByDevice = it.CreatedByDevice,
@@ -39,8 +34,10 @@ public class IdentitySummaryDTO
             LastLogin = new LastLoginInformation { Time = it.User.LastLoginAt },
             Username = it.User.UserName!
         });
+        NumberOfDevices = identity.Devices.Count;
 
-        NumberOfDevices = devices.Count;
-        TierId = tierId;
+        IdentityVersion = identity.IdentityVersion;
+
+        TierId = identity.TierId;
     }
 }
