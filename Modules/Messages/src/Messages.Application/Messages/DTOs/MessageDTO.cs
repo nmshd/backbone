@@ -7,7 +7,7 @@ namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
 public class MessageDTO : IMapTo<Message>
 {
-    public MessageId? Id { get; set; }
+    public required MessageId Id { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public IdentityAddress? CreatedBy { get; set; }
