@@ -22,7 +22,7 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; } = null!;
+    public DbSet<Tier> Tiers { get; set; }
 
     public DbSet<Message> Messages { get; set; } = null!;
 
