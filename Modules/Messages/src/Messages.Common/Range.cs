@@ -15,12 +15,12 @@ public class Range<T>
 
     public bool HasFrom()
     {
-        return From?.Equals(default(T)) ?? false;
+        return From != null && !From.Equals(default(T));
     }
 
     public bool HasTo()
     {
-        return To?.Equals(default(T)) ?? false;
+        return To != null && !To.Equals(default(T));
     }
 }
 
