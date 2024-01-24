@@ -6,8 +6,8 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 public class GetIdentityResponse
 {
-    public string? Address { get; set; }
-    public IEnumerable<QuotaDTO>? Quotas { get; set; }
+    public required string Address { get; set; }
+    public required IEnumerable<QuotaDTO> Quotas { get; set; }
 
     public static async Task<GetIdentityResponse> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
     {
