@@ -6,6 +6,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class SendMessageResponse : IMapTo<Message>
 {
-    public MessageId? Id { get; set; }
+    public required MessageId Id { get; set; }
     public DateTime CreatedAt { get; set; }
 }
