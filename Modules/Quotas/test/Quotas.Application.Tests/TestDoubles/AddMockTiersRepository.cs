@@ -5,7 +5,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 public class AddMockTiersRepository : ITiersRepository
 {
     public bool WasCalled { get; private set; }
-    public Tier WasCalledWith { get; private set; }
+    public Tier WasCalledWith { get; private set; } = null!;
 
     public Task Add(Tier tier, CancellationToken cancellationToken)
     {
