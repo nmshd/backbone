@@ -21,7 +21,7 @@ public class TierOfIdentityChangedIntegrationEventHandler : IIntegrationEventHan
         var identity = await _identitiesRepository.Find(@event.IdentityAddress, CancellationToken.None, track: true);
         var newTier = await _tiersRepository.Find(@event.NewTier, CancellationToken.None, track: true);
 
-        await identity.ChangeTier(newTier, _metricCalculatorFactory, CancellationToken.None);
+        await identity!.ChangeTier(newTier, _metricCalculatorFactory, CancellationToken.None);
 
         await _identitiesRepository.Update(identity, CancellationToken.None);
     }
