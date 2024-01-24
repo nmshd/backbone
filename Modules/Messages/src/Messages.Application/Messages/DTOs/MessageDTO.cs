@@ -16,7 +16,7 @@ public class MessageDTO : IMapTo<Message>
     public DateTime? DoNotSendBefore { get; set; }
     public required byte[] Body { get; set; }
 
-    public List<AttachmentDTO>? Attachments { get; set; }
+    public required List<AttachmentDTO> Attachments { get; set; }
     public List<RecipientInformationDTO>? Recipients { get; set; }
 
     public void PrepareForActiveIdentity(IdentityAddress activeIdentity)
