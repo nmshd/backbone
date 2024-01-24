@@ -27,7 +27,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Identity> Find(string address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false)
     {
         var identity = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
