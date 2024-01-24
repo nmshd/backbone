@@ -14,8 +14,8 @@ public class MetricDTO : IHaveCustomMapping
         DisplayName = metric.DisplayName;
     }
 
-    public string Key { get; set; }
-    public string DisplayName { get; set; }
+    public string Key { get; set; } = null!;
+    public string DisplayName { get; set; } = null!;
 
     public void CreateMappings(Profile configuration)
     {
