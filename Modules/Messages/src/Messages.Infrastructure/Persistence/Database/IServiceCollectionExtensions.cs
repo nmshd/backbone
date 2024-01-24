@@ -53,8 +53,8 @@ public static class IServiceCollectionExtensions
 
 public class DbOptions
 {
-    public string? Provider { get; set; }
-    public string? DbConnectionString { get; set; }
+    public string Provider { get; set; } = null!;
+    public string DbConnectionString { get; set; } = null!;
     public RetryOptions RetryOptions { get; set; } = new();
 }
 
