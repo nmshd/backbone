@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
 	</ItemGroup>
@@ -10,9 +14,5 @@
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
 		<ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj" />
 	</ItemGroup>
-
-    <PropertyGroup>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
 
 </Project>
