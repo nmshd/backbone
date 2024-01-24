@@ -15,8 +15,8 @@ public class TierQuotaDefinition
         Period = period;
     }
 
-    public TierQuotaDefinitionId Id { get; }
-    public MetricKey MetricKey { get; }
+    public TierQuotaDefinitionId Id { get; } = null!;
+    public MetricKey MetricKey { get; } = null!;
     public int Max { get; }
     public QuotaPeriod Period { get; }
 }
