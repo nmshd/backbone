@@ -15,8 +15,8 @@ public class SendMessageCommand : IRequest<SendMessageResponse>
 
 public class SendMessageCommandRecipientInformation
 {
-    public IdentityAddress? Address { get; set; }
-    public byte[]? EncryptedKey { get; set; }
+    public required IdentityAddress Address { get; set; }
+    public required byte[] EncryptedKey { get; set; }
 }
 
 public class SendMessageCommandAttachment
