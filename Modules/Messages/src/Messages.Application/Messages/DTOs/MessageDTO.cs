@@ -10,7 +10,7 @@ public class MessageDTO : IMapTo<Message>
     public required MessageId Id { get; set; }
 
     public DateTime CreatedAt { get; set; }
-    public IdentityAddress? CreatedBy { get; set; }
+    public required IdentityAddress CreatedBy { get; set; }
     public DeviceId? CreatedByDevice { get; set; }
 
     public DateTime? DoNotSendBefore { get; set; }
