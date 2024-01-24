@@ -11,7 +11,7 @@ public class MessageDTO : IMapTo<Message>
 
     public DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
-    public DeviceId? CreatedByDevice { get; set; }
+    public required DeviceId CreatedByDevice { get; set; }
 
     public DateTime? DoNotSendBefore { get; set; }
     public byte[]? Body { get; set; }
