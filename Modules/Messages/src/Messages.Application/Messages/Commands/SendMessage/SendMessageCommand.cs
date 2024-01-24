@@ -21,5 +21,5 @@ public class SendMessageCommandRecipientInformation
 
 public class SendMessageCommandAttachment
 {
-    public string? Id { get; set; }
+    public required string Id { get; set; }
 }
