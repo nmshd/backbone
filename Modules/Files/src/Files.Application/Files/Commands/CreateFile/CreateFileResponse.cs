@@ -17,7 +17,7 @@ public class CreateFileResponse : IHaveCustomMapping
     public required DateTime ModifiedAt { get; set; }
     public required IdentityAddress ModifiedBy { get; set; }
     public DateTime? DeletedAt { get; set; }
-    public IdentityAddress DeletedBy { get; set; }
+    public IdentityAddress? DeletedBy { get; set; }
 
     public required IdentityAddress Owner { get; set; }
     public required byte[] OwnerSignature { get; set; }
