@@ -19,7 +19,7 @@ public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
                 .SetValidator(new SendMessageCommandRecipientInformationValidator()));
 
         RuleFor(m => m.Recipients.Count)
-            .InclusiveBetween(1, 50).When(m => m.Recipients != null).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+            .InclusiveBetween(1, 50).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Body).DetailedNotNull().NumberOfBytes(1, 10.Mebibytes());
 
@@ -29,7 +29,7 @@ public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
                 .SetValidator(new SendMessageCommandAttachmentValidator()));
 
         RuleFor(m => m.Attachments.Count)
-            .InclusiveBetween(0, 20).When(m => m.Attachments != null).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+            .InclusiveBetween(0, 20).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 }
 
