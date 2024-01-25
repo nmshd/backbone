@@ -15,7 +15,7 @@ public class Identity
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
-        Devices = new List<Device>();
+        Devices = [];
         TierId = tierId;
     }
 
