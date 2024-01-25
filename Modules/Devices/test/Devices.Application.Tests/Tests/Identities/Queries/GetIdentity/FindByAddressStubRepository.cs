@@ -57,6 +57,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return Task.FromResult(_identity);
+        return Task.FromResult(_identity)!;
     }
 }
