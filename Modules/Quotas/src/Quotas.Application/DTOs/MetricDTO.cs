@@ -6,6 +6,12 @@ namespace Backbone.Modules.Quotas.Application.DTOs;
 
 public class MetricDTO : IHaveCustomMapping
 {
+    public MetricDTO()
+    {
+        Key = null!;
+        DisplayName = null!;
+    }
+
     public MetricDTO(Metric metric)
     {
         Key = metric.Key.Value;
