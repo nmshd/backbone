@@ -32,8 +32,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
-        var publicKey = PublicKey.FromBytes(command.IdentityPublicKey!);
-        await _challengeValidator.Validate(command.SignedChallenge!, publicKey);
+        var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
+        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
         _logger.LogTrace("Challenge successfully validated.");
 
@@ -53,7 +53,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (clientIdentityCount >= client.MaxIdentities)
             throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
 
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey!, client.DefaultTier, command.IdentityVersion);
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
 
         var user = new ApplicationUser(newIdentity);
 
