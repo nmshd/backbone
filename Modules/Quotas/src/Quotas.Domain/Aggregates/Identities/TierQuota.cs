@@ -5,9 +5,12 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class TierQuota : Quota
 {
-    private readonly TierQuotaDefinition _definition = null!;
+    private readonly TierQuotaDefinition _definition;
 
-    private TierQuota() { }
+    private TierQuota()
+    {
+        _definition = null!;
+    }
 
     public TierQuota(TierQuotaDefinition definition, string applyTo) : base(applyTo)
     {
