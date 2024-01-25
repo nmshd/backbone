@@ -6,10 +6,10 @@ namespace Backbone.Modules.Tokens.Application.Tokens.DTOs;
 
 public class TokenDTO : IMapTo<Token>
 {
-    public TokenId Id { get; set; }
+    public required TokenId Id { get; set; }
 
-    public IdentityAddress CreatedBy { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
+    public required IdentityAddress CreatedBy { get; set; }
+    public required DeviceId CreatedByDevice { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
