@@ -9,9 +9,9 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class Identity
 {
-    private readonly List<TierQuota> _tierQuotas = null!;
-    private readonly List<IndividualQuota> _individualQuotas = null!;
-    private readonly List<MetricStatus> _metricStatuses = null!;
+    private readonly List<TierQuota> _tierQuotas;
+    private readonly List<IndividualQuota> _individualQuotas;
+    private readonly List<MetricStatus> _metricStatuses;
 
     public Identity(string address, TierId tierId)
     {
@@ -21,7 +21,13 @@ public class Identity
         _individualQuotas = new List<IndividualQuota>();
         _metricStatuses = new List<MetricStatus>();
     }
-    private Identity() { }
+
+    private Identity()
+    {
+        _tierQuotas = null!;
+        _individualQuotas = null!;
+        _metricStatuses = null!;
+    }
 
     public string Address { get; } = null!;
     public TierId TierId { get; private set; } = null!;
