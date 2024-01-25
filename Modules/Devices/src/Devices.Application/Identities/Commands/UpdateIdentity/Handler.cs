@@ -33,9 +33,8 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
         var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
 
-        var tierList = tiers.ToList();
-        var oldTier = tierList.Single(t => t.Id == identity.TierId);
-        var newTier = tierList.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
+        var oldTier = tiers.Single(t => t.Id == identity.TierId);
+        var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
         identity.ChangeTier(newTier.Id);
         await _identitiesRepository.Update(identity, cancellationToken);
