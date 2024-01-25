@@ -17,6 +17,6 @@ public static class IdentityQueryableExtensions
     {
         var identity = await query.FirstOrDefaultAsync(e => e.Address == address, cancellationToken);
 
-        return identity!;
+        return identity;
     }
 }
