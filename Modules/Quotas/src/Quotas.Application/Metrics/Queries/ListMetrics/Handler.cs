@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<ListMetricsQuery, ListMetricsResponse>
     public async Task<ListMetricsResponse> Handle(ListMetricsQuery request, CancellationToken cancellationToken)
     {
         var metrics = await _metricsRepository.FindAll(cancellationToken);
-        var metricDtos = _mapper.Map<IEnumerable<MetricDTO>>(metrics);
+        var metricDtos = metrics.Select(m => new MetricDTO(m));
 
         return new ListMetricsResponse(metricDtos);
     }
