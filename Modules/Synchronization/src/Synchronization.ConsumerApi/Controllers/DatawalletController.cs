@@ -71,6 +71,6 @@ public class DatawalletController : ApiControllerBase
 
 public class PushDatawalletModificationsRequestBody
 {
-    public long? LocalIndex { get; set; }
-    public PushDatawalletModificationItem[]? Modifications { get; set; }
+    public required long LocalIndex { get; set; }
+    public required PushDatawalletModificationItem[] Modifications { get; set; }
 }
