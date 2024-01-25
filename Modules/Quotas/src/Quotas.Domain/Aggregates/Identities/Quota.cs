@@ -4,7 +4,11 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public abstract class Quota
 {
-    protected Quota() { }
+    protected Quota()
+    {
+        Id = null!;
+        ApplyTo = null!;
+    }
 
     protected Quota(string applyTo)
     {
@@ -12,8 +16,8 @@ public abstract class Quota
         ApplyTo = applyTo;
     }
 
-    public QuotaId Id { get; } = null!;
-    public string ApplyTo { get; } = null!;
+    public QuotaId Id { get; }
+    public string ApplyTo { get; }
     public abstract int Weight { get; }
     public abstract MetricKey MetricKey { get; }
     public abstract int Max { get; }
