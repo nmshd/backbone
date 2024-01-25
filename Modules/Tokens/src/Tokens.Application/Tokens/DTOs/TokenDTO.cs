@@ -14,5 +14,5 @@ public class TokenDTO : IMapTo<Token>
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 
-    public byte[] Content { get; set; }
+    public required byte[] Content { get; set; }
 }
