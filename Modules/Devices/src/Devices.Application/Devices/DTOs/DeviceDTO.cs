@@ -26,5 +26,5 @@ public class DeviceDTO : IHaveCustomMapping
 
 public class LastLoginInformation
 {
-    public required DateTime Time { get; set; }
+    public required DateTime? Time { get; set; }
 }
