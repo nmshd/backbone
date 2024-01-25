@@ -35,6 +35,6 @@ public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
 
     public int CompareTo(ExhaustionDate? other)
     {
-        return Value.CompareTo(other!.Value);
+        return other == null ? 1 : Value.CompareTo(other.Value);
     }
 }
