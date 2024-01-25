@@ -33,7 +33,11 @@ public class PublicKey
     public static PublicKey FromBytes(byte[] bytes)
     {
         var publicKeyJsonString = Encoding.UTF8.GetString(bytes);
-        var publicKeyObject = JsonSerializer.Deserialize<dynamic>(publicKeyJsonString, new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } }) ?? throw new Exception("Could not deserialize public key.");
+        var publicKeyObject = 
+            JsonSerializer.Deserialize<dynamic>(
+                publicKeyJsonString, 
+                new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } }) ?? 
+            throw new Exception("Could not deserialize public key.");
         var key = Base64UrlEncoder.DecodeBytes((string)publicKeyObject.pub);
         var algorithm = (SignatureAlgorithm)publicKeyObject.alg;
 
