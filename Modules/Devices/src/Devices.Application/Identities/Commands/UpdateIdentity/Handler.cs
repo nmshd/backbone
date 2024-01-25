@@ -23,13 +23,13 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
     public async Task Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
-        var newTierIdResult = TierId.Create(request.TierId!);
+        var newTierIdResult = TierId.Create(request.TierId);
         if (!newTierIdResult.IsSuccess)
         {
             throw new ApplicationException(new ApplicationError(newTierIdResult.Error.Code, newTierIdResult.Error.Message));
         }
 
-        var identity = await _identitiesRepository.FindByAddress(request.Address!, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
         var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
 
