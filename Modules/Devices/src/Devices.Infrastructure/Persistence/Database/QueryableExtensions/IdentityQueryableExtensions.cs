@@ -13,7 +13,7 @@ public static class IdentityQueryableExtensions
         return identity;
     }
 
-    public static async Task<Identity> FirstWithAddressOrDefault(this IQueryable<Identity> query, IdentityAddress address, CancellationToken cancellationToken)
+    public static async Task<Identity?> FirstWithAddressOrDefault(this IQueryable<Identity> query, IdentityAddress address, CancellationToken cancellationToken)
     {
         var identity = await query.FirstOrDefaultAsync(e => e.Address == address, cancellationToken);
 
