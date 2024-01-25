@@ -16,8 +16,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
@@ -30,7 +28,9 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
-    { }
+    {
+        _serviceProvider = null;
+    }
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
         : base(options)
