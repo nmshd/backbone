@@ -7,15 +7,15 @@ namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 public class CustomOpenIddictEntityFrameworkCoreApplication : OpenIddictEntityFrameworkCoreApplication<string, CustomOpenIddictEntityFrameworkCoreAuthorization,
     CustomOpenIddictEntityFrameworkCoreToken>
 {
-    public TierId? DefaultTier { get; set; }
+    public required TierId DefaultTier { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
 
     public int? MaxIdentities { get; set; }
 
     public OAuthClient ToModel()
     {
-        return new OAuthClient(ClientId!, DisplayName!, DefaultTier!, CreatedAt, MaxIdentities);
+        return new OAuthClient(ClientId!, DisplayName!, DefaultTier, CreatedAt, MaxIdentities);
     }
 
     public void UpdateFromModel(OAuthClient client)
