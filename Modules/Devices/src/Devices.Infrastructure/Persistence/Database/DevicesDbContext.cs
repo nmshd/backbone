@@ -38,15 +38,15 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         _serviceProvider = serviceProvider;
     }
 
-    public DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Device> Devices { get; set; }
+    public DbSet<Device> Devices { get; set; } = null!;
 
-    public DbSet<Challenge> Challenges { get; set; }
+    public DbSet<Challenge> Challenges { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; } = null!;
 
-    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
