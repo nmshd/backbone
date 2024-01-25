@@ -36,7 +36,7 @@ public class TokensRepository : ITokensRepository
 
     public async Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return await Find(null, ids, paginationFilter, cancellationToken);
+        return await Find(null!, ids, paginationFilter, cancellationToken);
     }
 
     public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken)
