@@ -7,7 +7,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipChangeQueryableExtensions
 {
-    public static IQueryable<RelationshipChange> CompletedAt(this IQueryable<RelationshipChange> query, OptionalDateRange completedAt)
+    public static IQueryable<RelationshipChange> CompletedAt(this IQueryable<RelationshipChange> query, OptionalDateRange? completedAt)
     {
         var newQuery = query;
 
@@ -15,10 +15,10 @@ public static class RelationshipChangeQueryableExtensions
             return newQuery;
 
         if (completedAt.From != default)
-            newQuery = newQuery.Where(r => r.Response.CreatedAt >= completedAt.From);
+            newQuery = newQuery.Where(r => r.Response != null && r.Response.CreatedAt >= completedAt.From);
 
         if (completedAt.To != default)
-            newQuery = newQuery.Where(r => r.Response.CreatedAt <= completedAt.To);
+            newQuery = newQuery.Where(r => r.Response != null && r.Response.CreatedAt <= completedAt.To);
 
         return newQuery;
     }
@@ -33,7 +33,7 @@ public static class RelationshipChangeQueryableExtensions
         return query.Where(c => ids.Contains(c.Id));
     }
 
-    public static IQueryable<RelationshipChange> CreatedAt(this IQueryable<RelationshipChange> query, OptionalDateRange createdAt)
+    public static IQueryable<RelationshipChange> CreatedAt(this IQueryable<RelationshipChange> query, OptionalDateRange? createdAt)
     {
         var newQuery = query;
 
@@ -49,7 +49,7 @@ public static class RelationshipChangeQueryableExtensions
         return newQuery;
     }
 
-    public static IQueryable<RelationshipChange> ModifiedAt(this IQueryable<RelationshipChange> query, OptionalDateRange modifiedAt)
+    public static IQueryable<RelationshipChange> ModifiedAt(this IQueryable<RelationshipChange> query, OptionalDateRange? modifiedAt)
     {
         var newQuery = query;
 
@@ -87,17 +87,17 @@ public static class RelationshipChangeQueryableExtensions
         return query.Where(r => r.Relationship.From == identityId || r.Relationship.To == identityId);
     }
 
-    public static IQueryable<RelationshipChange> CreatedBy(this IQueryable<RelationshipChange> query, IdentityAddress identityId)
+    public static IQueryable<RelationshipChange> CreatedBy(this IQueryable<RelationshipChange> query, IdentityAddress? identityId)
     {
         return identityId != null ? query.Where(r => r.Request.CreatedBy == identityId) : query;
     }
 
-    public static IQueryable<RelationshipChange> CompletedBy(this IQueryable<RelationshipChange> query, IdentityAddress identityId)
+    public static IQueryable<RelationshipChange> CompletedBy(this IQueryable<RelationshipChange> query, IdentityAddress? identityId)
     {
         return identityId != null ? query.Where(r => r.Response != null && r.Response.CreatedBy == identityId) : query;
     }
 
-    public static IQueryable<RelationshipChange> WithId(this IQueryable<RelationshipChange> query, RelationshipChangeId id)
+    public static IQueryable<RelationshipChange> WithId(this IQueryable<RelationshipChange> query, RelationshipChangeId? id)
     {
         return id != null ? query.Where(r => r.Id == id) : query;
     }
