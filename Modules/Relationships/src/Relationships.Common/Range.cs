@@ -2,7 +2,11 @@
 
 public class Range<T>
 {
-    public Range() { }
+    public Range()
+    {
+        From = default!;
+        To = default!;
+    }
 
     public Range(T from, T to)
     {
@@ -15,12 +19,12 @@ public class Range<T>
 
     public bool HasFrom()
     {
-        return !From.Equals(default(T));
+        return !From!.Equals(default(T));
     }
 
     public bool HasTo()
     {
-        return !To.Equals(default(T));
+        return !To!.Equals(default(T));
     }
 }
 
