@@ -27,12 +27,11 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
     {
-        var pnsRegistrations = registrations.ToList();
-        ValidateRegistrations(pnsRegistrations);
+        ValidateRegistrations(registrations);
 
         var sendResults = new SendResults();
 
-        var tasks = pnsRegistrations.Select(r => SendNotification(r, notification, sendResults));
+        var tasks = registrations.Select(r => SendNotification(r, notification, sendResults));
 
         await Task.WhenAll(tasks);
         return sendResults;
