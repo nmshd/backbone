@@ -5,7 +5,7 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Reje
 
 public class RejectRelationshipChangeRequestCommand : IRequest<RejectRelationshipChangeRequestResponse>
 {
-    public RelationshipId Id { get; set; }
-    public RelationshipChangeId ChangeId { get; set; }
-    public byte[] ResponseContent { get; set; }
+    public required RelationshipId Id { get; set; }
+    public required RelationshipChangeId ChangeId { get; set; }
+    public required byte[] ResponseContent { get; set; }
 }
