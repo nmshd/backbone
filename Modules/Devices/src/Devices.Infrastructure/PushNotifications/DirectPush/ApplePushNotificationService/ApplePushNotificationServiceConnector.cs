@@ -111,12 +111,12 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             case JsonElement jsonElement:
             {
                 var notification = jsonElement.Deserialize<NotificationTextAttribute>();
-                return notification == null ? ("", "") : (notification.Title!, notification.Body!);
+                return notification == null ? ("", "") : (notification.Title, notification.Body);
             }
             default:
             {
                 var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-                return attribute == null ? ("", "") : (attribute.Title!, attribute.Body!);
+                return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
             }
         }
     }
