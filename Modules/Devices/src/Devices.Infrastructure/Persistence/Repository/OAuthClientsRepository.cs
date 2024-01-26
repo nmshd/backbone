@@ -33,7 +33,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return oAuthClients;
     }
 
-    public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken, bool track = false)
+    public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
@@ -45,7 +45,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         if (track)
             Track(application);
 
-        return application?.ToModel()!;
+        return application?.ToModel();
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)
