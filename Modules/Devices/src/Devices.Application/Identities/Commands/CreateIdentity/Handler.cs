@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (addressAlreadyExists)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var client = await _oAuthClientsRepository.Find(command.ClientId!, cancellationToken);
+        var client = await _oAuthClientsRepository.Find(command.ClientId!, cancellationToken) ?? throw new Exception($"Client with ID '{command.ClientId}' could not be found.");
 
         var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
 
