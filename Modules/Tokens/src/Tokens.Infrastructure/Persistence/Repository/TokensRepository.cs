@@ -44,7 +44,7 @@ public class TokensRepository : ITokensRepository
         return await Find(owner, Array.Empty<TokenId>(), paginationFilter, cancellationToken);
     }
 
-    private async Task<DbPaginationResult<Token>> Find(IdentityAddress owner, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    private async Task<DbPaginationResult<Token>> Find(IdentityAddress? owner, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         if (paginationFilter == null)
             throw new Exception("A pagination filter has to be provided.");
