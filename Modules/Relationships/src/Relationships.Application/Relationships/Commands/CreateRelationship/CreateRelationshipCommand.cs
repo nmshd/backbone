@@ -7,6 +7,6 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 [ApplyQuotasForMetrics("NumberOfRelationships")]
 public class CreateRelationshipCommand : IRequest<CreateRelationshipResponse>
 {
-    public RelationshipTemplateId RelationshipTemplateId { get; set; }
-    public byte[] Content { get; set; }
+    public required RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public required byte[] Content { get; set; }
 }
