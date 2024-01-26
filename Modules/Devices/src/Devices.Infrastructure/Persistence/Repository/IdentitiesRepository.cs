@@ -81,10 +81,10 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
-        return await (track ? _devices : _readonlyDevices)
+        return (await (track ? _devices : _readonlyDevices)
             .NotDeleted()
             .IncludeAll(_dbContext)
-            .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken) ?? throw new Exception($"Device with ID '{deviceId}' not found.");
+            .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken))!;
     }
 
     public async Task Update(Device device, CancellationToken cancellationToken)
