@@ -36,5 +36,5 @@ public static class IServiceCollectionExtensions
 public class PersistenceOptions
 {
     public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions BlobStorageOptions { get; set; }
+    public BlobStorageOptions? BlobStorageOptions { get; set; }
 }
