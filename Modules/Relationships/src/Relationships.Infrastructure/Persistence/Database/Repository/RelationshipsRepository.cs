@@ -74,7 +74,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id,
+    public async Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id,
         IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var change = await (track ? _changes : _readOnlyChanges)
