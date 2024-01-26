@@ -54,7 +54,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         relationship.Status.Should().Be(RelationshipStatus.Active);
 
@@ -72,7 +72,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
+        Action acting = () => relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ContentIsRequiredForCompletingRelationships());
     }
 
@@ -81,7 +81,7 @@ public class RelationshipTests
     {
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -93,7 +93,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.AcceptChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+        Action acting = () => relationship.AcceptChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeAcceptedByCreator());
     }
 
@@ -107,7 +107,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.RejectChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         relationship.Status.Should().Be(RelationshipStatus.Rejected);
 
@@ -125,7 +125,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
+        Action acting = () => relationship.RejectChange(change!.Id, TO_IDENTITY, TO_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ContentIsRequiredForCompletingRelationships());
     }
 
@@ -134,7 +134,7 @@ public class RelationshipTests
     {
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
-        relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.RejectChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -146,7 +146,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.RejectChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+        Action acting = () => relationship.RejectChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeRejectedByCreator());
     }
 
@@ -160,7 +160,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+        relationship.RevokeChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
 
         relationship.Status.Should().Be(RelationshipStatus.Revoked);
 
@@ -178,7 +178,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
+        Action acting = () => relationship.RevokeChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ContentIsRequiredForCompletingRelationships());
     }
 
@@ -187,7 +187,7 @@ public class RelationshipTests
     {
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
-        relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+        relationship.RevokeChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -199,7 +199,7 @@ public class RelationshipTests
         var relationship = CreatePendingRelationship();
         var change = relationship.Changes.GetOpenCreation();
 
-        Action acting = () => relationship.RevokeChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        Action acting = () => relationship.RevokeChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCanOnlyBeRevokedByCreator());
     }
 
@@ -251,7 +251,7 @@ public class RelationshipTests
 
         var termination = relationship.Changes.GetOpenTermination();
         termination.Should().NotBeNull();
-        termination.Status.Should().Be(RelationshipChangeStatus.Pending);
+        termination!.Status.Should().Be(RelationshipChangeStatus.Pending);
         termination.Request.Should().NotBeNull();
         termination.Request.CreatedBy.Should().Be(FROM_IDENTITY);
         termination.Request.CreatedByDevice.Should().Be(FROM_DEVICE);
@@ -276,7 +276,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, null);
 
         relationship.Status.Should().Be(RelationshipStatus.Terminated);
 
@@ -293,7 +293,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -305,7 +305,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        Action acting = () => relationship.AcceptChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
+        Action acting = () => relationship.AcceptChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeAcceptedByCreator());
     }
 
@@ -319,7 +319,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
+        relationship.RejectChange(change!.Id, TO_IDENTITY, TO_DEVICE, null);
 
         relationship.Status.Should().Be(RelationshipStatus.Active);
 
@@ -336,7 +336,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.RejectChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -348,7 +348,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        Action acting = () => relationship.RejectChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
+        Action acting = () => relationship.RejectChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeRejectedByCreator());
     }
 
@@ -362,7 +362,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
+        relationship.RevokeChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, null);
 
         relationship.Status.Should().Be(RelationshipStatus.Active);
 
@@ -379,7 +379,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+        relationship.RevokeChange(change!.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
 
         Action acting = () => relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestIsAlreadyCompleted());
@@ -391,7 +391,7 @@ public class RelationshipTests
         var relationship = CreateRelationshipWithOpenTermination();
         var change = relationship.Changes.GetOpenTermination();
 
-        Action acting = () => relationship.RevokeChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
+        Action acting = () => relationship.RevokeChange(change!.Id, TO_IDENTITY, TO_DEVICE, null);
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCanOnlyBeRevokedByCreator());
     }
 
@@ -411,7 +411,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         return relationship;
     }
 
@@ -419,7 +419,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         relationship.RequestTermination(FROM_IDENTITY, FROM_DEVICE);
         return relationship;
