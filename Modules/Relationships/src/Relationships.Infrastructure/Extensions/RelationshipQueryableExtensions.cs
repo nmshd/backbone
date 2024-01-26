@@ -49,7 +49,7 @@ public static class RelationshipQueryableExtensions
         return query.Where(r => r.Id == relationshipId);
     }
 
-    public static IQueryable<Relationship> CreatedAt(this IQueryable<Relationship> query, OptionalDateRange createdAt)
+    public static IQueryable<Relationship> CreatedAt(this IQueryable<Relationship> query, OptionalDateRange? createdAt)
     {
         var newQuery = query;
 
@@ -65,7 +65,7 @@ public static class RelationshipQueryableExtensions
         return newQuery;
     }
 
-    public static async Task<Relationship> FirstWithIdOrDefault(this IQueryable<Relationship> query, RelationshipId relationshipId, CancellationToken cancellationToken)
+    public static async Task<Relationship?> FirstWithIdOrDefault(this IQueryable<Relationship> query, RelationshipId relationshipId, CancellationToken cancellationToken)
     {
         return await query.FirstOrDefaultAsync(r => r.Id == relationshipId, cancellationToken);
     }
