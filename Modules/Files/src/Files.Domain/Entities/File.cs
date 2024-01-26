@@ -45,7 +45,7 @@ public class File
     public IdentityAddress? DeletedBy { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
 
-    public IdentityAddress? Owner { get; set; }
+    public IdentityAddress Owner { get; set; }
     public byte[] OwnerSignature { get; set; }
 
     public long CipherSize { get; set; }
