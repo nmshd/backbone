@@ -33,5 +33,5 @@ public static class IServiceCollectionExtensions
 public class PersistenceOptions
 {
     public DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions? BlobStorageOptions { get; set; }
+    public BlobStorageOptions BlobStorageOptions { get; set; } = null!;
 }
