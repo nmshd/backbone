@@ -17,7 +17,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -94,6 +94,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("Owner")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .IsUnicode(false)
                         .HasColumnType("char(36)")
