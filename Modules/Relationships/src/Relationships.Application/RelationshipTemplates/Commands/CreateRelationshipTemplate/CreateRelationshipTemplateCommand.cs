@@ -10,5 +10,5 @@ public class CreateRelationshipTemplateCommand : IMapTo<RelationshipTemplate>, I
 {
     public DateTime? ExpiresAt { get; set; }
     public int? MaxNumberOfAllocations { get; set; }
-    public byte[]? Content { get; set; }
+    public required byte[] Content { get; set; }
 }
