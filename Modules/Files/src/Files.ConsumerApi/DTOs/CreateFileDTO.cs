@@ -5,13 +5,13 @@ namespace Backbone.Modules.Files.ConsumerApi.DTOs;
 
 public class CreateFileDTO
 {
-    public IFormFile Content { get; set; }
-    public IdentityAddress? Owner { get; set; }
-    public string? OwnerSignature { get; set; }
+    public required IFormFile Content { get; set; }
+    public required IdentityAddress Owner { get; set; }
+    public required string OwnerSignature { get; set; }
 
-    public string CipherHash { get; set; }
+    public required string CipherHash { get; set; }
 
-    public DateTime ExpiresAt { get; set; }
+    public required DateTime ExpiresAt { get; set; }
 
-    public string EncryptedProperties { get; set; }
+    public required string EncryptedProperties { get; set; }
 }

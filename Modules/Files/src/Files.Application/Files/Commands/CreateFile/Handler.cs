@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             request.Owner,
-            request.OwnerSignature ?? Array.Empty<byte>(),
+            request.OwnerSignature,
             request.CipherHash,
             request.FileContent,
             request.FileContent.LongLength,
