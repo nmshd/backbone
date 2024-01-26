@@ -28,6 +28,10 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _relationshipsRepository = relationshipsRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;
+
+        _relationship = null!;
+        _request = null!;
+        _template = null!;
     }
 
     public async Task<CreateRelationshipResponse> Handle(CreateRelationshipCommand request, CancellationToken cancellationToken)
