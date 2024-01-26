@@ -6,7 +6,7 @@ namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class ChangeHistoryExtensions
 {
-    public static RelationshipChange GetLatestOpenOfTypeOrNull(this IRelationshipChangeLog changes, RelationshipChangeType type)
+    public static RelationshipChange? GetLatestOpenOfTypeOrNull(this IRelationshipChangeLog changes, RelationshipChangeType type)
     {
         var change = changes.LastOrDefault(c => c.Type == type && c.Status == RelationshipChangeStatus.Pending);
         return change;
