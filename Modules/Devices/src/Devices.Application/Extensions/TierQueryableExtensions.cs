@@ -5,9 +5,9 @@ namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class TierQueryableExtensions
 {
-    public static async Task<Tier> GetBasicTier(this IQueryable<Tier> query, CancellationToken cancellationToken)
+    public static async Task<Tier?> GetBasicTier(this IQueryable<Tier> query, CancellationToken cancellationToken)
     {
         var basicTier = await query.FirstOrDefaultAsync(t => t.Name == TierName.BASIC_DEFAULT_NAME, cancellationToken);
-        return basicTier ?? throw new Exception("Basic tier was not found.");
+        return basicTier;
     }
 }
