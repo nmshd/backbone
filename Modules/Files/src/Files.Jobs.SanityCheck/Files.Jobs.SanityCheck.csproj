@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
         <UserSecretsId>dotnet-Files.Jobs.SanityCheck-9f22e8e4-eb64-498c-9599-b971e0419647</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..\..</DockerfileContext>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
