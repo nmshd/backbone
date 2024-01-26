@@ -33,8 +33,6 @@ function RemoveMigration {
 
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
-
-    & $PSScriptRoot/compile_models.ps1 $moduleName $provider
 }
 
 switch ($provider) {
