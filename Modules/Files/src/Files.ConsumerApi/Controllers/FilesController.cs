@@ -49,7 +49,7 @@ public class FilesController : ApiControllerBase
             ExpiresAt = dto.ExpiresAt,
             CipherHash = UrlBase64.Decode(dto.CipherHash),
             Owner = dto.Owner,
-            OwnerSignature = dto.OwnerSignature == null ? null : UrlBase64.Decode(dto.OwnerSignature),
+            OwnerSignature = UrlBase64.Decode(dto.OwnerSignature),
             EncryptedProperties = UrlBase64.Decode(dto.EncryptedProperties)
         };
 
