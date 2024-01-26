@@ -87,7 +87,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private void PublishIntegrationEvent()
     {
         var change = _relationship.Changes.FirstOrDefault();
-        var evt = new RelationshipChangeCreatedIntegrationEvent(change);
+        var evt = new RelationshipChangeCreatedIntegrationEvent(change!);
         _eventBus.Publish(evt);
     }
 
