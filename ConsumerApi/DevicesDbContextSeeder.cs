@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+
 namespace Backbone.ConsumerApi;
 
 public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
@@ -35,7 +36,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
     {
-        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? null;
+        return await context.Tiers.GetBasicTier(CancellationToken.None);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
