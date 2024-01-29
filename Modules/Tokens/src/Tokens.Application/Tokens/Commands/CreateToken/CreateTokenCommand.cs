@@ -9,5 +9,5 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 public class CreateTokenCommand : IRequest<CreateTokenResponse>, IMapTo<Token>
 {
     public required byte[] Content { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public required DateTime ExpiresAt { get; set; }
 }
