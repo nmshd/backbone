@@ -106,7 +106,7 @@ jobs:
         working-directory: ./runtime
         run: npm install
       - name: Run runtime Tests
-        working-directory: ./runtime/packages/runtime/transport
+        working-directory: ./packages/transport
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
@@ -143,7 +143,7 @@ jobs:
         working-directory: ./runtime
         run: npm install
       - name: Run runtime Tests
-        working-directory: ./runtime/packages/runtime/transport
+        working-directory: ./packages/transport
         env:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
