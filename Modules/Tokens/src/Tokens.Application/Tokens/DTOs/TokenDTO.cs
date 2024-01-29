@@ -11,8 +11,8 @@ public class TokenDTO : IMapTo<Token>
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required DateTime ExpiresAt { get; set; }
 
     public required byte[] Content { get; set; }
 }
