@@ -87,8 +87,8 @@ jobs:
           name: integration-test-postgres-docker-logs
           path: docker-log.txt
 
-  cns-transport-test-sqlserver:
-    name: Run cns-transport Tests (on SQL Server)
+  transport-test-sqlserver:
+    name: Run transport Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
@@ -124,8 +124,8 @@ jobs:
       - name: Stop Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml down
 
-  cns-transport-test-postgres:
-    name: Run cns-transport Tests (on Postgres)
+  transport-test-postgres:
+    name: Run transport Tests (on Postgres)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout backbone repository
