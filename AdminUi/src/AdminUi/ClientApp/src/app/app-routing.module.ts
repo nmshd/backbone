@@ -16,13 +16,13 @@ const routes: Routes = [
     { path: "login", component: LoginComponent },
     { path: "dashboard", component: DashboardComponent, data: { breadcrumb: "Dashboard" }, canActivate: [AuthGuard] },
     { path: "identities", component: IdentityListComponent, data: { breadcrumb: "Identities" }, canActivate: [AuthGuard] },
-    { path: "identities/:address", component: IdentityDetailsComponent, data: { breadcrumb: "Edit Identity" }, canActivate: [AuthGuard] },
+    { path: "identities/:address", component: IdentityDetailsComponent, canActivate: [AuthGuard] },
     { path: "tiers", component: TierListComponent, data: { breadcrumb: "Tiers" }, canActivate: [AuthGuard] },
     { path: "tiers/create", component: TierEditComponent, data: { breadcrumb: "Create Tier" }, canActivate: [AuthGuard] },
-    { path: "tiers/:id", component: TierEditComponent, data: { breadcrumb: "Edit Tier" }, canActivate: [AuthGuard] },
+    { path: "tiers/:id", component: TierEditComponent, canActivate: [AuthGuard] },
     { path: "clients", component: ClientListComponent, data: { breadcrumb: "Clients" }, canActivate: [AuthGuard] },
     { path: "clients/create", component: ClientEditComponent, data: { breadcrumb: "Create Client" }, canActivate: [AuthGuard] },
-    { path: "clients/:id", component: ClientEditComponent, data: { breadcrumb: "Edit Client" }, canActivate: [AuthGuard] },
+    { path: "clients/:id", component: ClientEditComponent, canActivate: [AuthGuard] },
     { path: "**", component: PageNotFoundComponent }
 ];
 
