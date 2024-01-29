@@ -34,10 +34,9 @@ export class BreadcrumbService {
     }
 
     private updateBreadcrumbHistory(): void {
-        const breadcrumbs: Breadcrumb[] = [];
-        this.generateBreadcrumbs(this.activatedRoute.root, "", breadcrumbs);
+        const breadcrumbHistory: Breadcrumb[] = this.generateBreadcrumbHistory(this.activatedRoute.root, "");
 
-        const breadcrumbTrail = [...breadcrumbs];
+        const breadcrumbTrail = [...breadcrumbHistory];
 
         if (this.shouldClearBreadcrumbHistory(breadcrumbTrail)) {
             this.breadcrumbHistory = [];
@@ -57,16 +56,16 @@ export class BreadcrumbService {
         }
     }
 
-    private isMainLinkClicked(breadcrumbTrail: Breadcrumb[]): boolean {
-        return breadcrumbTrail.length === 1 && breadcrumbTrail[0].url.split("/").length === 2;
+    private isMainLinkClicked(breadcrumbHistory: Breadcrumb[]): boolean {
+        return breadcrumbHistory.length === 1 && breadcrumbHistory[0].url.split("/").length === 2;
     }
 
     private shouldClearBreadcrumbHistory(trail: Breadcrumb[]): boolean {
         return trail.some((breadcrumb) => breadcrumb.url.includes("login"));
     }
 
-    private shouldPushBreadcrumbTrail(breadcrumbTrail: Breadcrumb[]): boolean {
-        return this.breadcrumbHistory.length === 0 || this.breadcrumbHistory[this.breadcrumbHistory.length - 1].url !== breadcrumbTrail[breadcrumbTrail.length - 1].url;
+    private shouldPushBreadcrumbTrail(breadcrumbHistory: Breadcrumb[]): boolean {
+        return this.breadcrumbHistory.length === 0 || this.breadcrumbHistory[this.breadcrumbHistory.length - 1].url !== breadcrumbHistory[breadcrumbHistory.length - 1].url;
     }
 
     private trimBreadcrumbHistory(): void {
@@ -76,30 +75,33 @@ export class BreadcrumbService {
         }
     }
 
-    private generateBreadcrumbs(route: ActivatedRoute | null, url = "", breadcrumbs: Breadcrumb[] = []): void {
+    private generateBreadcrumbHistory(route: ActivatedRoute | null, url = ""): Breadcrumb[] {
         if (!route?.children) {
-            return;
+            return [];
         }
+        const breadcrumbHistory: Breadcrumb[] = [];
 
-        const children: ActivatedRoute[] = route.children;
+        const children = route.children;
 
         for (const child of children) {
-            const routeURL: string = child.snapshot.url.map((segment) => segment.path).join("/");
+            const routeURL = child.snapshot.url.map((segment) => segment.path).join("/");
 
-            const breadcrumbLabel: string = child.snapshot.data.breadcrumb;
+            const breadcrumbLabel = child.snapshot.data.breadcrumb;
 
             if (routeURL !== "") {
                 url += `/${routeURL}`;
                 const dynamicData = this.extractDynamicData(routeURL);
 
-                breadcrumbs.push({
+                breadcrumbHistory.push({
                     label: dynamicData !== "" ? dynamicData : breadcrumbLabel,
                     url: url
                 });
             }
 
-            this.generateBreadcrumbs(child, url, breadcrumbs);
+            breadcrumbHistory.push(...this.generateBreadcrumbHistory(child, url));
         }
+
+        return breadcrumbHistory;
     }
 
     private extractDynamicData(routeURL: string): string {
