@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 namespace Backbone.ConsumerApi;
 
 public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
