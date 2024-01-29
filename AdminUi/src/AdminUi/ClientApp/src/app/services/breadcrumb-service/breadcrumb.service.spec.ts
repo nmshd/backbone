@@ -64,7 +64,7 @@ describe("BreadcrumbService", function () {
         ];
 
         // Act
-        breadcrumbService["breadcrumbHistory"] = expectedHistory.map(trail => ({ ...trail }));
+        breadcrumbService["breadcrumbHistory"] = expectedHistory.map((trail) => ({ ...trail }));
         const result = breadcrumbService.getBreadcrumbHistory();
 
         // Assert
@@ -97,7 +97,7 @@ describe("BreadcrumbService", function () {
         ];
 
         // Act
-        breadcrumbService["breadcrumbHistory"] = expectedHistory.map(trail => ({ ...trail }));
+        breadcrumbService["breadcrumbHistory"] = expectedHistory.map((trail) => ({ ...trail }));
         const result = JSON.parse(JSON.stringify(breadcrumbService.getBreadcrumbHistory()));
         result[0].label = "Modified";
 
