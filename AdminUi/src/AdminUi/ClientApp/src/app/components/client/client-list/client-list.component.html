@@ -3,7 +3,7 @@
     <p class="header-description">{{ headerDescription }}</p>
 </div>
 <mat-card [ngClass]="{ 'disabled-container': loading }">
-    <mat-card-content style="min-height: 400px">
+    <mat-card-content style="min-height: 400px; overflow-x: auto;">
         <div *ngIf="loading" class="loading">
             <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
         </div>
