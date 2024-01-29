@@ -59,9 +59,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
     {
         var basicTier = await GetBasicTier(context);
         if (basicTier == null)
-        {
             return;
-        }
 
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
