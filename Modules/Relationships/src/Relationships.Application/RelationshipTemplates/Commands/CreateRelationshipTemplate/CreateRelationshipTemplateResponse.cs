@@ -7,5 +7,5 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class CreateRelationshipTemplateResponse : IMapTo<RelationshipTemplate>
 {
     public required RelationshipTemplateId Id { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }
