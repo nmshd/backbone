@@ -35,14 +35,14 @@ public class RelationshipChangeMetadataDTO : IMapTo<RelationshipChange>
 
 public class RelationshipChangeRequestMetadataDTO : IMapTo<RelationshipChangeRequest>
 {
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 }
 
 public class RelationshipChangeResponseMetadataDTO : IMapTo<RelationshipChangeResponse>
 {
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 }
