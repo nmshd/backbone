@@ -13,6 +13,8 @@ import { TierOverview, TierService } from "src/app/services/tier-service/tier.se
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { ConfirmationDialogComponent } from "../../shared/confirmation-dialog/confirmation-dialog.component";
 import { ChangeSecretDialogComponent } from "../change-secret-dialog/change-secret-dialog.component";
+import { CreateClientDialogComponent } from "../create-client-dialog/create-client-dialog.component";
+
 @Component({
     selector: "app-client-list",
     templateUrl: "./client-list.component.html",
@@ -183,8 +185,11 @@ export class ClientListComponent {
         this.table.renderRows();
     }
 
-    public async addClient(): Promise<void> {
-        await this.router.navigate(["/clients/create"]);
+    public addClientDialog(): void {
+        this.dialog.open(CreateClientDialogComponent, {
+            width: "450px",
+            height: "750px"
+        });
     }
 
     public openConfirmationDialog(): void {
