@@ -7,5 +7,5 @@ public class RejectRelationshipChangeRequestCommand : IRequest<RejectRelationshi
 {
     public required RelationshipId Id { get; set; }
     public required RelationshipChangeId ChangeId { get; set; }
-    public required byte[] ResponseContent { get; set; }
+    public byte[]? ResponseContent { get; set; }
 }
