@@ -64,7 +64,9 @@ describe("BreadcrumbService", function () {
         ];
 
         // Act
-        breadcrumbService["breadcrumbHistory"] = expectedHistory.map((trail) => ({ ...trail }));
+        for (const e of expectedHistory) {
+            breadcrumbService["breadcrumbHistory"].push(e);
+        }
         const result = breadcrumbService.getBreadcrumbHistory();
 
         // Assert
@@ -97,7 +99,9 @@ describe("BreadcrumbService", function () {
         ];
 
         // Act
-        breadcrumbService["breadcrumbHistory"] = expectedHistory.map((trail) => ({ ...trail }));
+        for (const e of expectedHistory) {
+            breadcrumbService["breadcrumbHistory"].push(e);
+        }
         const result = JSON.parse(JSON.stringify(breadcrumbService.getBreadcrumbHistory()));
         result[0].label = "Modified";
 
@@ -114,9 +118,9 @@ describe("BreadcrumbService", function () {
         ];
 
         // Act
-        expectedHistory.forEach((trail) => {
-            breadcrumbService["breadcrumbHistory"].push(trail);
-        });
+        for (const e of expectedHistory) {
+            breadcrumbService["breadcrumbHistory"].push(e);
+        }
         const result = breadcrumbService.getBreadcrumbHistory();
 
         // Modify the result
