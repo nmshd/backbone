@@ -13,10 +13,8 @@ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-env
 })
 export class ClientEditComponent {
     public headerEdit: string;
-    public headerCreate: string;
 
     public headerDescriptionEdit: string;
-    public headerDescriptionCreate: string;
 
     public headerIdentities: string;
     public headerIdentitiesDescription: string;
@@ -36,9 +34,7 @@ export class ClientEditComponent {
         private readonly clientService: ClientService,
         private readonly tierService: TierService
     ) {
-        this.headerCreate = "Create Client";
         this.headerEdit = "Edit Client";
-        this.headerDescriptionCreate = "Please fill the form below to create your Client";
         this.headerDescriptionEdit = "Perform your desired changes and save to edit your Client";
         this.headerIdentities = "Identities";
         this.headerIdentitiesDescription = "View and manage Identities created by this Client.";
@@ -123,32 +119,6 @@ export class ClientEditComponent {
         });
     }
 
-    public createClient(): void {
-        this.loading = true;
-
-        this.clientService.createClient(this.client).subscribe({
-            next: (data: HttpResponseEnvelope<Client>) => {
-                this.client = data.result;
-                this.displayClientSecretWarning = true;
-                this.disabled = true;
-                this.snackBar.open("Successfully added client.", "Dismiss", {
-                    duration: 4000,
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-            }
-        });
-    }
-
     public updateClient(): void {
         this.loading = true;
 
@@ -184,11 +154,7 @@ export class ClientEditComponent {
             }
         });
     }
-
-    public togglePasswordVisibility(): void {
-        this.showPassword = !this.showPassword;
-    }
-
+    
     public canSaveClient(): boolean {
         if (!this.client.defaultTier) return false;
         if (this.client.maxIdentities !== undefined && this.client.maxIdentities < 0) return false;
