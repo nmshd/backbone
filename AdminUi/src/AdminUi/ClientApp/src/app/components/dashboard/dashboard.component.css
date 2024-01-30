@@ -1,3 +1,8 @@
+.dashboard-container {
+    max-width: 1350px !important;
+    margin: auto;
+}
+
 .dashboard-tile {
     color: #111111;
     background-color: #fff;
