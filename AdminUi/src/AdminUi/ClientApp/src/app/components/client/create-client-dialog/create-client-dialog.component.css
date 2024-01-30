@@ -13,17 +13,6 @@
     opacity: 0.4;
 }
 
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    position: absolute;
-    margin-top: -60px;
-    width: 100%;
-    height: 100%;
-}
-
 .client-secret-warning-container {
     display: flex;
     align-items: center;
@@ -39,7 +28,6 @@
     padding: 10px;
 }
 
-.update-form-details,
 .create-form-details {
     display: flex;
     flex-direction: column;
@@ -55,14 +43,6 @@
 .form-field {
     width: 100%;
     margin-bottom: 20px;
-}
-
-.form-field-edit {
-    margin-top: 10px;
-}
-
-.mat-list-item-edit {
-    min-height: 140px;
 }
 
 .form-card {
@@ -90,29 +70,6 @@
 
 .client-accordion {
     margin: 0px 0px 0px 5px !important;
-}
-
-.details-expansion-panel-header {
-    background: #17428d !important;
-}
-
-.details-expansion-panel-header:hover {
-    background: #11337a !important;
-}
-.details-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
-    border-radius: 4px 4px 0px 0px;
-}
-
-.details-panel-header-title {
-    color: white !important;
-}
-
-.details-panel-header-desc {
-    color: rgba(255, 255, 255, 0.54) !important;
-}
-
-:host ::ng-deep .details-expansion-panel-header > .mat-expansion-indicator::after {
-    color: white !important;
 }
 
 .auto-height {
