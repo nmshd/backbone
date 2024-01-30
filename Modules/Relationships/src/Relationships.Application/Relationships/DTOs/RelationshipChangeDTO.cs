@@ -14,9 +14,9 @@ public class RelationshipChangeDTO : IMapTo<RelationshipChange>
     public required RelationshipChangeRequestDTO Request { get; set; }
     public required RelationshipChangeResponseDTO Response { get; set; }
 
-    public RelationshipChangeType Type { get; set; }
+    public required RelationshipChangeType Type { get; set; }
 
-    public RelationshipChangeStatus Status { get; set; }
+    public required RelationshipChangeStatus Status { get; set; }
 }
 
 public class RelationshipChangeRequestDTO : IMapTo<RelationshipChangeRequest>
