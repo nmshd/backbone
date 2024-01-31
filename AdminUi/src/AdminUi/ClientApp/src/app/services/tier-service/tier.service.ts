@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
@@ -11,9 +11,15 @@ import { TierQuota } from "../quotas-service/quotas.service";
 })
 export class TierService {
     private readonly apiUrl: string;
+    private readonly refreshDataSubject = new BehaviorSubject<boolean>(false);
+    public refreshData$ = this.refreshDataSubject.asObservable();
 
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Tiers`;
+    }
+
+    public triggerRefresh(): void {
+        this.refreshDataSubject.next(true);
     }
 
     public getTiers(): Observable<PagedHttpResponseEnvelope<TierOverview>> {
