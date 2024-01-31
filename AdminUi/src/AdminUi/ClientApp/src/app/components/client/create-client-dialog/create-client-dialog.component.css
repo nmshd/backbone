@@ -1,3 +1,7 @@
+.container {
+    overflow-y: hidden;
+}
+
 .action-buttons {
     margin-top: 25px;
     display: flex;
