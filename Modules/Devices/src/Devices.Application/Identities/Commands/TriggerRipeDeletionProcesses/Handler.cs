@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
             }
             catch (DomainException ex)
             {
-                _logger.LogError(ex, "Identity with PastDeletionGracePeriod did not have any active deletionProcesses. Identity Address: {address}", identity.Address);
+                _logger.LogError(ex, "There was an error while triggering a deletion process.");
             }
         }
 

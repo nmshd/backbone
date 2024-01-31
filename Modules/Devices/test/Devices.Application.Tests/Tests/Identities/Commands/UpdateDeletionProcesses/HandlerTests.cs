@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -58,7 +59,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository(1);
 
         var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id); // not called
+        anIdentity.StartDeletionProcessAsOwner(DeviceId.New()); // not called
         anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);

@@ -80,9 +80,9 @@ public class Identity
 
     public void DeletionStarted()
     {
-        Status = IdentityStatus.Deleting;
         var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
             ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
+        Status = IdentityStatus.Deleting;
         deletionProcess.DeletionStarted();
     }
 
