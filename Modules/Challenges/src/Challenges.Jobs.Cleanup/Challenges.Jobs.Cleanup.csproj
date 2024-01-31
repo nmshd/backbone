@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<UserSecretsId>dotnet-Challenges.Jobs.Cleanup-F8105BA9-5DBC-4C57-A0D2-8CB9139CA849</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
