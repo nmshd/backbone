@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Backbone.AdminUi.Authentication;
 using Backbone.AdminUi.Configuration;
+using Backbone.AdminUi.Filters;
 using Backbone.AdminUi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
@@ -40,6 +41,7 @@ public static class IServiceCollectionExtensions
             {
                 options.Filters.Add(typeof(CustomExceptionFilter));
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
             })
             .ConfigureApiBehaviorOptions(options =>
             {

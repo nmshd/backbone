@@ -1,3 +1,8 @@
+.tier-container {
+    max-width: 1150px !important;
+    margin: auto;
+}
+
 .mat-column-name,
 .mat-column-numberOfIdentities {
     width: 50%;
