@@ -9,7 +9,7 @@ public class ChallengeIdEntityFrameworkValueConverter : ValueConverter<Challenge
 
     public ChallengeIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => ChallengeId.Parse(value),
             mappingHints
         )
