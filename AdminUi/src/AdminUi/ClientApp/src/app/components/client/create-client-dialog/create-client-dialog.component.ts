@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
 import { Client, ClientService } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
@@ -28,8 +27,7 @@ export class CreateClientDialogComponent {
         public readonly dialogRef: MatDialogRef<CreateClientDialogComponent>,
         private readonly clientService: ClientService,
         private readonly tierService: TierService,
-        private readonly snackBar: MatSnackBar,
-        private readonly router: Router
+        private readonly snackBar: MatSnackBar
     ) {
         this.headerCreate = "Create Client";
         this.headerDescriptionCreate = "Please fill the form below to create your Client";
@@ -86,7 +84,7 @@ export class CreateClientDialogComponent {
                 });
                 this.clientId = data.result.clientId;
             },
-            complete: async () => (await this.router.navigate([`/clients/${this.clientId}`]) && this.dialogRef.close()),
+            complete: () => this.clientService.triggerRefresh(),
             error: (err: any) => {
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
@@ -98,7 +96,7 @@ export class CreateClientDialogComponent {
     }
 
     public onDialogCancel(): void {
-      this.dialogRef.close()
+        this.dialogRef.close();
     }
 
     public togglePasswordVisibility(): void {

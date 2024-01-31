@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
@@ -20,8 +19,7 @@ export class CreateTierDialogComponent {
     public constructor(
         public readonly dialogRef: MatDialogRef<CreateTierDialogComponent>,
         private readonly tierService: TierService,
-        private readonly snackBar: MatSnackBar,
-        private readonly router: Router
+        private readonly snackBar: MatSnackBar
     ) {
         this.headerCreate = "Create Tier";
         this.headerDescriptionCreate = "Please fill the form below to create your Tier";
@@ -67,9 +65,11 @@ export class CreateTierDialogComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-                this.tierId = data.result.id;
             },
-            complete: async () => (await this.router.navigate([`/tiers/${this.tierId}`])) && this.dialogRef.close(),
+            complete: () => {
+                this.tierService.triggerRefresh();
+                this.dialogRef.close();
+            },
             error: (err: any) => {
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
