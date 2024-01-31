@@ -133,6 +133,9 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         }
         catch (DbUpdateException ex)
         {
+            if (ex.HasReason(DbUpdateExceptionReason.DuplicateIndex))
+                throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhenAnotherSyncRunIsRunning());
+
             if (ex.HasReason(DbUpdateExceptionReason.UniqueKeyViolation))
                 throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhenAnotherSyncRunIsRunning());
 
