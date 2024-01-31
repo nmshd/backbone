@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CreateClientComponent } from "./create-client-dialog.component";
+import { CreateClientDialogComponent } from "./create-client-dialog.component";
 
-describe("CreateClientComponent", () => {
-    let component: CreateClientComponent;
-    let fixture: ComponentFixture<CreateClientComponent>;
+describe("CreateClientDialogComponent", function() {
+    let component: CreateClientDialogComponent;
+    let fixture: ComponentFixture<CreateClientDialogComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
-            imports: [CreateClientComponent]
+            imports: [CreateClientDialogComponent]
         }).compileComponents();
 
-        fixture = TestBed.createComponent(CreateClientComponent);
+        fixture = TestBed.createComponent(CreateClientDialogComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function() {
+        await expect(component).toBeTruthy();
     });
 });

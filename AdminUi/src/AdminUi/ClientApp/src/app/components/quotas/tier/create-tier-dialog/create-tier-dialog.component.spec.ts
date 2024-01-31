@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { CreateTierDialogComponent } from "./create-tier-dialog.component";
 
-describe("CreateTierDialogComponent", () => {
+describe("CreateTierDialogComponent", function() {
     let component: CreateTierDialogComponent;
     let fixture: ComponentFixture<CreateTierDialogComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
             imports: [CreateTierDialogComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("CreateTierDialogComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function() {
+        await expect(component).toBeTruthy();
     });
 });
