@@ -52,7 +52,9 @@ export class ClientListComponent {
     }
 
     public ngOnInit(): void {
-        this.getPagedData();
+        this.clientService.refreshData$.subscribe(() => {
+            this.getPagedData();
+        });
         this.getTiers();
     }
 
@@ -188,7 +190,7 @@ export class ClientListComponent {
     public addClientDialog(): void {
         this.dialog.open(CreateClientDialogComponent, {
             width: "450px",
-            height: "750px"
+            maxHeight: "100%"
         });
     }
 
