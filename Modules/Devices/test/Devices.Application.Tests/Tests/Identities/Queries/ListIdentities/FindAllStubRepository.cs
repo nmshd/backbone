@@ -76,7 +76,7 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task Delete(Identity identity, CancellationToken cancellationToken)
+    public Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

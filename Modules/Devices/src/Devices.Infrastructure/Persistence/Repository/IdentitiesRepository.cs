@@ -117,9 +117,8 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task Delete(Identity identity, CancellationToken cancellationToken)
+    public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
-        _identities.Remove(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }
