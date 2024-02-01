@@ -11,7 +11,7 @@ public static class DomainErrors
 
     public static DomainError MaxValueCannotBeLowerOrEqualToZero()
     {
-        return new DomainError("error.platform.quotas.invalidValueForMaxLimitInQuota", "A quota max value cannot be lower or equal to zero.");
+        return new DomainError("error.platform.quotas.invalidValueForMaxLimitInQuota", "A quota max value cannot be lower than zero.");
     }
 
     public static DomainError DuplicateQuota()
