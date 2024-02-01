@@ -603,17 +603,22 @@ public class RelationshipTests
         return relationship;
     }
 
-    private static Relationship CreateActiveRelationship(IdentityAddress from, IdentityAddress to = null)
+    private static Relationship CreateActiveRelationship(IdentityAddress from)
+    {
+        return CreateActiveRelationship((from, null));
+    }
+
+    private static Relationship CreateActiveRelationship((IdentityAddress from, IdentityAddress to) parameters)
     {
         RelationshipTemplate template = null;
-        if (to is not null)
+        if (parameters.to is not null)
         {
-            template = new RelationshipTemplate(to, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
+            template = new RelationshipTemplate(parameters.to, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
         }
 
-        var relationship = new Relationship(template ?? TEMPLATE, from ?? FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
+        var relationship = new Relationship(template ?? TEMPLATE, parameters.from ?? FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, to ?? TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change.Id, parameters.to ?? TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         return relationship;
     }
 
