@@ -15,7 +15,7 @@ public interface IIdentitiesRepository
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> FindAllToBeDeletedWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false);
     Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
-    Task Delete(Identity identity, CancellationToken cancellationToken);
+    Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     #endregion
 
