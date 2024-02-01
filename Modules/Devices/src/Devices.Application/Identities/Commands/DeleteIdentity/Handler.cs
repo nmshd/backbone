@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
@@ -13,7 +14,6 @@ public class Handler : IRequestHandler<DeleteIdentityCommand>
 
     public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, track: true);
-        await _identitiesRepository.Delete(identity, cancellationToken);
+        await _identitiesRepository.Delete(Identity.IsWithAddress(request.IdentityAddress), cancellationToken);
     }
 }
