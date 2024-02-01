@@ -47,6 +47,7 @@ public class FilesRepository : IFilesRepository
         }
 
         _files.RemoveRange(files);
+        await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
