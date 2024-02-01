@@ -89,7 +89,7 @@ public class WorkerTests
         RegisterFindRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
         var mockEventBus = A.Fake<IEventBus>();
-        var worker = CreateWorker(fakeMediator, null, mockEventBus);
+        var worker = CreateWorker(fakeMediator, mockEventBus);
 
         A.CallTo(() =>
             fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
@@ -119,6 +119,11 @@ public class WorkerTests
         };
 
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
+    }
+
+    private static Worker CreateWorker(IMediator mediator, IEventBus? eventBus)
+    {
+        return CreateWorker(mediator, null, eventBus);
     }
 
     private static Worker CreateWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)
