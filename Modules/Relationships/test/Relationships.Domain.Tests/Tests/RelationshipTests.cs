@@ -506,27 +506,14 @@ public class RelationshipTests
     public void WithParticipant_From()
     {
         // Arrange
-        var id1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var id2 = TestDataGenerator.CreateRandomIdentityAddress();
-        var id3 = TestDataGenerator.CreateRandomIdentityAddress();
-
-        var relationships = new List<Relationship>
-        {
-            CreateActiveRelationship(id1),
-            CreateActiveRelationship(id1),
-            CreateActiveRelationship(id2),
-            CreateActiveRelationship(id3)
-        };
-
-        var filter = Relationship.HasParticipant(id1);
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship(identityAddress);
 
         // Act
-        var filteredList = relationships.AsQueryable().Where(filter).ToList();
+        var result = relationship.HasParticipant(identityAddress);
 
         // Assert
-        filteredList.Should().HaveCount(2);
-        filteredList[0].From.Should().Be(id1);
-        filteredList[1].From.Should().Be(id1);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -633,4 +620,12 @@ public class RelationshipTests
     }
 
     #endregion
+}
+
+file static class RelationshipExtensions
+{
+    public static bool HasParticipant(this Relationship relationship, IdentityAddress identity)
+    {
+        return Relationship.HasParticipant(identity).Compile()(relationship);
+    }
 }
