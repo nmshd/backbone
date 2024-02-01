@@ -539,10 +539,10 @@ public class RelationshipTests
 
         var relationships = new List<Relationship>
         {
-            CreateActiveRelationship(null, id1),
-            CreateActiveRelationship(null, id1),
-            CreateActiveRelationship(null, id2),
-            CreateActiveRelationship(null, id3)
+            CreateActiveRelationship((null, id1)),
+            CreateActiveRelationship((null, id1)),
+            CreateActiveRelationship((null, id2)),
+            CreateActiveRelationship((null, id3))
         };
 
         var filter = Relationship.HasParticipant(id1);
@@ -566,10 +566,10 @@ public class RelationshipTests
 
         var relationships = new List<Relationship>
         {
-            CreateActiveRelationship(id1, id2),
-            CreateActiveRelationship(id2, id3),
-            CreateActiveRelationship(id3, id1),
-            CreateActiveRelationship(id3, id2)
+            CreateActiveRelationship((id1, id2)),
+            CreateActiveRelationship((id2, id3)),
+            CreateActiveRelationship((id3, id1)),
+            CreateActiveRelationship((id3, id2))
         };
 
         var filter = Relationship.HasParticipant(id1);
