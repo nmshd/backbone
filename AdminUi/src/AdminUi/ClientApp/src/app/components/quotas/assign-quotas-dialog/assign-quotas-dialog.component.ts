@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { CreateQuotaForIdentityRequest, IdentityQuota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { Metric, MetricsService } from "src/app/services/metrics-service/metrics.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
@@ -21,6 +21,8 @@ export class AssignQuotasDialogComponent {
     public periods: string[];
 
     public loading: boolean;
+    public errorMessage: string;
+    private isAllOk: boolean;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
@@ -37,6 +39,8 @@ export class AssignQuotasDialogComponent {
         this.periods = [];
 
         this.loading = true;
+        this.errorMessage = "";
+        this.isAllOk = false;
     }
 
     public ngOnInit(): void {
@@ -62,6 +66,38 @@ export class AssignQuotasDialogComponent {
         });
     }
 
+    public createIdentityQuota(quotaData: AssignQuotaData): void {
+        this.loading = true;
+
+        const createQuotaRequest = {
+            metricKey: quotaData.metricKey,
+            max: quotaData.max,
+            period: quotaData.period
+        } as CreateQuotaForIdentityRequest;
+
+        this.quotasService.createIdentityQuota(createQuotaRequest, this.data.address).subscribe({
+            next: (_: HttpResponseEnvelope<IdentityQuota>) => {
+                this.quotasService.triggerRefresh();
+                this.isAllOk = true;
+                this.snackBar.open("Successfully assigned quota.", "Dismiss", {
+                    duration: 4000,
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            complete: () => {
+                this.loading = false;
+                if (this.isAllOk) {
+                    this.dialogRef.close();
+                }
+            },
+            error: (err: any) => {
+                this.loading = false;
+                this.errorMessage = err.error?.error?.message ?? err.message;
+            }
+        });
+    }
+
     public getPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
@@ -73,7 +109,7 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        this.dialogRef.close(quota);
+        this.createIdentityQuota(quota);
     }
 
     public isValid(): boolean {

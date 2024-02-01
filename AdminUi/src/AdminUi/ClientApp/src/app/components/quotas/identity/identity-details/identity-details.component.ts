@@ -6,10 +6,10 @@ import { ActivatedRoute } from "@angular/router";
 import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
-import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
     selector: "app-identity-details",
@@ -79,7 +79,9 @@ export class IdentityDetailsComponent {
             }
         });
 
-        this.loadIdentityAndTiers();
+        this.quotasService.refreshData$.subscribe(() => {
+            this.loadIdentityAndTiers();
+        });
     }
 
     public loadAdmissibleTiers(): void {
@@ -184,43 +186,10 @@ export class IdentityDetailsComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
-        });
-
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
-            if (result) {
-                this.createIdentityQuota(result);
-            }
-        });
-    }
-
-    public createIdentityQuota(quotaData: AssignQuotaData): void {
-        this.loading = true;
-
-        const createQuotaRequest = {
-            metricKey: quotaData.metricKey,
-            max: quotaData.max,
-            period: quotaData.period
-        } as CreateQuotaForIdentityRequest;
-
-        this.quotasService.createIdentityQuota(createQuotaRequest, this.identity.address).subscribe({
-            next: (_: HttpResponseEnvelope<IdentityQuota>) => {
-                this.loadIdentityAndTiers();
-                this.snackBar.open("Successfully assigned quota.", "Dismiss", {
-                    duration: 4000,
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
+        this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                address: this.identity.address
             }
         });
     }
