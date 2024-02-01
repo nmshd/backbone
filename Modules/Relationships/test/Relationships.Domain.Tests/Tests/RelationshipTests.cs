@@ -525,6 +525,8 @@ public class RelationshipTests
 
         // Assert
         filteredList.Should().HaveCount(2);
+        filteredList[0].From.Should().Be(id1);
+        filteredList[1].From.Should().Be(id1);
     }
 
     [Fact]
@@ -550,6 +552,8 @@ public class RelationshipTests
 
         // Assert
         filteredList.Should().HaveCount(2);
+        filteredList[0].To.Should().Be(id1);
+        filteredList[1].To.Should().Be(id1);
     }
 
     [Fact]
@@ -575,6 +579,10 @@ public class RelationshipTests
 
         // Assert
         filteredList.Should().HaveCount(2);
+        filteredList[0].From.Should().Be(id1);
+        filteredList[0].To.Should().Be(id2);
+        filteredList[1].From.Should().Be(id3);
+        filteredList[1].To.Should().Be(id1);
     }
 
     #endregion
