@@ -141,7 +141,7 @@ public class Relationship
     }
 
     #region Selectors
-    public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
+    public static Expression<Func<Relationship, bool>> HasParticipant(IdentityAddress identity)
     {
         return r => r.From == identity || r.To == identity;
     }
