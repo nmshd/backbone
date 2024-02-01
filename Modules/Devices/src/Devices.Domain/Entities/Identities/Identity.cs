@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -154,7 +155,13 @@ public class Identity
     {
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
+
+    public static Expression<Func<Identity, bool>> IsWithAddress(IdentityAddress address)
+    {
+        return i => i.Address == address;
+    }
 }
+
 public enum IdentityStatus
 {
     Active = 0,
