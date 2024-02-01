@@ -19,15 +19,10 @@ public class FilesRepositoryTests
     {
         // Arrange
         var mockBlobStorage = A.Fake<IBlobStorage>();
-        var fakeDbContext = A.Fake<FilesDbContext>();
-        var blobStorageOptions = Options.Create(new BlobOptions());
 
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-
         var files = new List<File> { GenerateFile(identityAddress), GenerateFile(identityAddress) };
-        fakeDbContext.FileMetadata = files.AsQueryable().BuildMockDbSet();
-
-        var repository = new FilesRepository(fakeDbContext, mockBlobStorage, blobStorageOptions);
+        var repository = CreateFilesRepository(files, mockBlobStorage);
 
         // Act
         await repository.DeleteFilesOfIdentity(identityAddress, CancellationToken.None);
@@ -42,5 +37,15 @@ public class FilesRepositoryTests
     private static File GenerateFile(IdentityAddress identityAddress)
     {
         return new File(identityAddress, TestDataGenerator.CreateRandomDeviceId(), identityAddress, [], [], [], 0, DateTime.Now, []);
+    }
+
+    private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)
+    {
+        var fakeDbContext = A.Fake<FilesDbContext>();
+        var blobStorageOptions = Options.Create(new BlobOptions());
+
+        fakeDbContext.FileMetadata = files.AsQueryable().BuildMockDbSet();
+
+        return new FilesRepository(fakeDbContext, mockBlobStorage, blobStorageOptions);
     }
 }
