@@ -54,7 +54,9 @@ public class WorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockIdentityDeleter.Delete(A<IdentityAddress>._)).MustHaveHappenedTwiceExactly();
+
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
