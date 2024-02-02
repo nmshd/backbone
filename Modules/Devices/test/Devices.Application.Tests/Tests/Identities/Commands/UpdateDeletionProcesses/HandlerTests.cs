@@ -39,7 +39,6 @@ public class HandlerTests
 
         var anIdentity = _identities.First();
         anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
-        anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
@@ -60,7 +59,6 @@ public class HandlerTests
 
         var anIdentity = _identities.First();
         anIdentity.StartDeletionProcessAsOwner(DeviceId.New()); // not called
-        anIdentity.DeletionGracePeriodEndsAt = SystemTime.UtcNow.AddDays(-1); // Past
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
