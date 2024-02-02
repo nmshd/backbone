@@ -129,4 +129,9 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.Deleting;
         DeletionStartedAt = SystemTime.UtcNow;
     }
+
+    internal bool IsReadyToStartDeletion()
+    {
+        return Status == DeletionProcessStatus.Approved;
+    }
 }

@@ -83,8 +83,12 @@ public class Identity
     {
         var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
             ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
-        Status = IdentityStatus.Deleting;
-        deletionProcess.DeletionStarted();
+
+        if (deletionProcess.IsReadyToStartDeletion())
+        {
+            Status = IdentityStatus.Deleting;
+            deletionProcess.DeletionStarted();
+        }
     }
 
     public void DeletionProcessApprovalReminder1Sent()
