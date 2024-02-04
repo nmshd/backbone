@@ -79,7 +79,7 @@ export class IdentityDetailsComponent {
             }
         });
 
-        this.quotasService.refreshData$.subscribe(() => {
+        this.quotasService.getRefreshData().subscribe(() => {
             this.loadIdentityAndTiers();
         });
     }
