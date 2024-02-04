@@ -22,7 +22,6 @@ export class AssignQuotasDialogComponent {
 
     public loading: boolean;
     public errorMessage: string;
-    private isAllOk: boolean;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
@@ -40,7 +39,6 @@ export class AssignQuotasDialogComponent {
 
         this.loading = true;
         this.errorMessage = "";
-        this.isAllOk = false;
     }
 
     public ngOnInit(): void {
@@ -78,18 +76,15 @@ export class AssignQuotasDialogComponent {
         this.quotasService.createIdentityQuota(createQuotaRequest, this.data.address).subscribe({
             next: (_: HttpResponseEnvelope<IdentityQuota>) => {
                 this.quotasService.triggerRefresh();
-                this.isAllOk = true;
                 this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
+                this.dialogRef.close();
             },
             complete: () => {
                 this.loading = false;
-                if (this.isAllOk) {
-                    this.dialogRef.close();
-                }
             },
             error: (err: any) => {
                 this.loading = false;
