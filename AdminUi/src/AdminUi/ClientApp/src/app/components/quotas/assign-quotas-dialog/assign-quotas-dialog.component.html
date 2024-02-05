@@ -31,8 +31,8 @@
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
 </mat-dialog-content>
-<div *ngIf="errorMessage !== ''" class="client-secret-warning-container">
-    <mat-error class="client-secret-warning">{{ errorMessage }}</mat-error>
+<div *ngIf="errorMessage !== ''" class="quota-error-container">
+    <mat-error class="quota-error-message">{{ errorMessage }}</mat-error>
 </div>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
