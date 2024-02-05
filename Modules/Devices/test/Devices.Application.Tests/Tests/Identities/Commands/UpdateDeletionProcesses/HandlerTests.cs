@@ -81,14 +81,10 @@ public class HandlerTests
 
     private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities)
     {
-        var tierId = TestDataGenerator.CreateRandomTierId();
         _identities = new List<Identity>();
 
         for (var i = 0; i < numberOfIdentities; i++)
-        {
-            var identity = TestDataGenerator.CreateIdentityWithTier(tierId);
-            _identities.Add(identity);
-        }
+            _identities.Add(TestDataGenerator.CreateIdentity());
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).Returns(_identities);
