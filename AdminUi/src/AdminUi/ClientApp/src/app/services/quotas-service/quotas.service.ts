@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
 
@@ -9,21 +9,9 @@ import { environment } from "src/environments/environment";
 })
 export class QuotasService {
     private readonly apiUrl: string;
-    private readonly refreshDataSubject = new Subject<void>();
-    private readonly refreshData$: Observable<void> = this.refreshDataSubject.asObservable();
-
-    
 
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
-    }
-  
-    public triggerRefresh(): void {
-      this.refreshDataSubject.next();
-    }
-  
-    public getRefreshData(): Observable<void> {
-      return this.refreshData$;
     }
 
     public getMetrics(): Observable<HttpResponseEnvelope<Metric>> {

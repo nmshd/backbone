@@ -64,28 +64,49 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    public createIdentityQuota(quotaData: AssignQuotaData): void {
+    public createQuota(quotaData: AssignQuotaData): void {
         this.loading = true;
 
+        if (this.data.address) {
+            this.createIdentityQuota(this.data.address, quotaData);
+        } else if (this.data.tierId) {
+            this.createTierQuota(this.data.tierId, quotaData);
+        }
+    }
+
+    private createIdentityQuota(address: string, quotaData: AssignQuotaData) {
         const createQuotaRequest = {
             metricKey: quotaData.metricKey,
             max: quotaData.max,
             period: quotaData.period
         } as CreateQuotaForIdentityRequest;
 
-        this.quotasService.createIdentityQuota(createQuotaRequest, this.data.address).subscribe({
+        this.quotasService.createIdentityQuota(createQuotaRequest, address).subscribe({
             next: (_: HttpResponseEnvelope<IdentityQuota>) => {
-                this.quotasService.triggerRefresh();
                 this.snackBar.open("Successfully assigned quota.", "Dismiss", {
                     duration: 4000,
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-                this.dialogRef.close();
+                this.dialogRef.close(true);
             },
             complete: () => {
                 this.loading = false;
             },
+            error: (err: any) => {
+                this.loading = false;
+                this.errorMessage = err.error?.error?.message ?? err.message;
+            }
+        });
+    }
+
+    private createTierQuota(tierId: string, quotaData: AssignQuotaData) {
+        this.quotasService.createTierQuota(quotaData, tierId).subscribe({
+            next: () => {
+                this.snackBar.open("Successfully assigned quota.", "Dismiss");
+                this.dialogRef.close(true);
+            },
+            complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 this.errorMessage = err.error?.error?.message ?? err.message;
@@ -104,7 +125,7 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        this.createIdentityQuota(quota);
+        this.createQuota(quota);
     }
 
     public isValid(): boolean {

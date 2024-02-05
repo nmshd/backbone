@@ -79,9 +79,7 @@ export class IdentityDetailsComponent {
             }
         });
 
-        this.quotasService.getRefreshData().subscribe(() => {
-            this.loadIdentityAndTiers();
-        });
+        this.loadIdentityAndTiers();
     }
 
     public loadAdmissibleTiers(): void {
@@ -186,12 +184,17 @@ export class IdentityDetailsComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%",
-            data: {
-                address: this.identity.address
-            }
-        });
+        this.dialog
+            .open(AssignQuotasDialogComponent, {
+                minWidth: "50%",
+                data: {
+                    address: this.identity.address
+                }
+            })
+            .afterClosed()
+            .subscribe((shouldRedload: boolean) => {
+                if (shouldRedload) this.loadIdentityAndTiers();
+            });
     }
 
     public openConfirmationDialogQuotaDeletion(): void {
