@@ -30,7 +30,7 @@ export class ClientListComponent {
     public tiers: TierOverview[];
     public selection = new SelectionModel<ClientOverview>(true, []);
     public operators: string[] = ["=", "<", ">", ">=", "<="];
-    public displayedColumns: string[] = ["select", "clientId", "displayName", "defaultTier", "numberOfIdentities", "createdAt", "actions"];
+    public displayedColumns: string[] = ["select", "displayName", "defaultTier", "numberOfIdentities", "createdAt", "clientId", "actions"];
 
     public constructor(
         private readonly router: Router,
