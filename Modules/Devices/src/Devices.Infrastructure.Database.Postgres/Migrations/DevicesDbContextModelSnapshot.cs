@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -42,9 +42,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<int>("Environment")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1);
+                        .HasColumnType("integer");
 
                     b.Property<string>("Handle")
                         .IsRequired()
@@ -195,7 +193,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
-                        
+
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
                         .HasMaxLength(36)
@@ -280,6 +278,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("DisplayNames")
                         .HasColumnType("text");
+
+                    b.Property<int?>("MaxIdentities")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Permissions")
                         .HasColumnType("text");
