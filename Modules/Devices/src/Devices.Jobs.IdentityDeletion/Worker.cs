@@ -46,12 +46,6 @@ public class Worker : IHostedService
 
         foreach (var identityAddress in identities.IdentityAddresses)
         {
-            if (identityAddress == null)
-            {
-                _logger.LogError("The command {commandName} returned a null Identity Address.", nameof(TriggerRipeDeletionProcessesCommand));
-                continue;
-            }
-
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
 
             var relationships = (await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken)).Relationships;
