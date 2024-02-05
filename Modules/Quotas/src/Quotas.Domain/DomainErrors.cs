@@ -9,7 +9,7 @@ public static class DomainErrors
         return new DomainError("error.platform.quotas.unsupportedMetricKey", $"The given metric key is not supported. The supported metric keys are: [{string.Join(", ", MetricKey.GetSupportedMetricKeyValues())}].");
     }
 
-    public static DomainError MaxValueCannotBeLowerOrEqualToZero()
+    public static DomainError MaxValueCannotBeLowerThanZero()
     {
         return new DomainError("error.platform.quotas.invalidValueForMaxLimitInQuota", "A quota max value cannot be lower than zero.");
     }
