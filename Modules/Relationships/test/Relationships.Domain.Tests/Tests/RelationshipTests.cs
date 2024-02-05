@@ -522,7 +522,7 @@ public class RelationshipTests
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship((null, identityAddress));
-        
+
         // Act
         var result = relationship.HasParticipant(identityAddress);
 
