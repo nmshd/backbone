@@ -52,7 +52,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Handler_calls_DeletionStarted()
+    public async Task Deletion_process_started_successfully()
     {
         // Arrange
         var identitiesRepository = CreateFakeIdentitiesRepository(1);
