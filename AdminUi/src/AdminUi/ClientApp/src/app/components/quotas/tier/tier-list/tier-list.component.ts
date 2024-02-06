@@ -61,14 +61,15 @@ export class TierListComponent {
     }
 
     public addTierDialog(): void {
-        this.dialog.open(CreateTierDialogComponent, {
-            width: "400px",
-            maxHeight: "100%"
-        })
-        .afterClosed()
-        .subscribe((shouldRedload: boolean) => {
-            if (shouldRedload) this.getTiers();
-        });
+        this.dialog
+            .open(CreateTierDialogComponent, {
+                width: "400px",
+                maxHeight: "100%"
+            })
+            .afterClosed()
+            .subscribe((shouldRedload: boolean) => {
+                if (shouldRedload) this.getTiers();
+            });
     }
 
     public async editTier(tier: Tier): Promise<void> {
