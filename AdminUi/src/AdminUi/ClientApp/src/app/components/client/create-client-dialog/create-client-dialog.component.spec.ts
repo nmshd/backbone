@@ -8,7 +8,7 @@ describe("CreateClientDialogComponent", function () {
 
     beforeEach(async function () {
         await TestBed.configureTestingModule({
-            imports: [CreateClientDialogComponent]
+            declarations: [CreateClientDialogComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(CreateClientDialogComponent);

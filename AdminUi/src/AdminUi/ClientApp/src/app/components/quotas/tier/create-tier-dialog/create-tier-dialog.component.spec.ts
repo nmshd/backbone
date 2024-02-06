@@ -8,7 +8,7 @@ describe("CreateTierDialogComponent", function () {
 
     beforeEach(async function () {
         await TestBed.configureTestingModule({
-            imports: [CreateTierDialogComponent]
+            declarations: [CreateTierDialogComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(CreateTierDialogComponent);
