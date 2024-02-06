@@ -31,7 +31,7 @@
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
 </mat-dialog-content>
-<div *ngIf="errorMessage !== ''" class="quota-error-container">
+<div *ngIf="errorMessage !== '' && loading" class="quota-error-container">
     <mat-error class="quota-error-message">{{ errorMessage }}</mat-error>
 </div>
 <mat-dialog-actions align="end">
