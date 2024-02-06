@@ -48,6 +48,7 @@ export interface Tier {
     name: string;
     quotas: TierQuota[];
     isDeletable: boolean;
+    numberOfIdentities: number;
 }
 
 export interface TierOverview {

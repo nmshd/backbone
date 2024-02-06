@@ -28,7 +28,8 @@ export class CreateTierDialogComponent {
             id: "",
             name: "",
             quotas: [],
-            isDeletable: false
+            isDeletable: false,
+            numberOfIdentities: 0
         } as Tier;
     }
 
@@ -56,8 +57,8 @@ export class CreateTierDialogComponent {
                     id: data.result.id,
                     name: data.result.name,
                     quotas: [],
-                    numberOfIdentities: 0,
-                    isDeletable: true
+                    numberOfIdentities: data.result.numberOfIdentities,
+                    isDeletable: data.result.isDeletable
                 } as Tier;
 
                 this.snackBar.open("Successfully added tier.", "Dismiss", {
