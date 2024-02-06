@@ -66,10 +66,7 @@ export class CreateTierDialogComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-            },
-            complete: () => {
-                this.tierService.triggerRefresh();
-                this.dialogRef.close();
+                this.dialogRef.close(true);
             },
             error: (err: any) => {
                 const errorMessage = err.error?.error?.message ?? err.message;

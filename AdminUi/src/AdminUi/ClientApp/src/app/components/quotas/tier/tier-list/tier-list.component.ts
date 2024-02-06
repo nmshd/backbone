@@ -39,9 +39,7 @@ export class TierListComponent {
     }
 
     public ngOnInit(): void {
-        this.tierService.refreshData$.subscribe(() => {
-            this.getTiers();
-        });
+        this.getTiers();
     }
 
     public getTiers(): void {
@@ -66,6 +64,10 @@ export class TierListComponent {
         this.dialog.open(CreateTierDialogComponent, {
             width: "400px",
             maxHeight: "100%"
+        })
+        .afterClosed()
+        .subscribe((shouldRedload: boolean) => {
+            if (shouldRedload) this.getTiers();
         });
     }
 
