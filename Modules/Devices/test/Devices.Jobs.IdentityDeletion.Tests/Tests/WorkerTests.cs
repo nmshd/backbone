@@ -23,7 +23,7 @@ public class WorkerTests
         // Arrange
         var mockMediator = A.Fake<IMediator>();
 
-        RegisterFindRipeDeletionProcessesCommand(mockMediator);
+        SetupRipeDeletionProcessesCommand(mockMediator);
 
         var identityDeleters = new List<IIdentityDeleter>();
         var worker = CreateWorker(mockMediator, identityDeleters, null);
@@ -42,7 +42,7 @@ public class WorkerTests
         var mediator = A.Fake<IMediator>();
         var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
-        RegisterFindRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2);
+        SetupRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2);
         var mockIdentityDeleter = A.Dummy<IIdentityDeleter>();
         var identityDeleters = new List<IIdentityDeleter>([mockIdentityDeleter]);
 
@@ -67,7 +67,7 @@ public class WorkerTests
         var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress3 = TestDataGenerator.CreateRandomIdentityAddress();
-        RegisterFindRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
+        SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
 
         var worker = CreateWorker(mockMediator, null, null);
@@ -86,7 +86,7 @@ public class WorkerTests
         var fakeMediator = A.Fake<IMediator>();
         var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
-        RegisterFindRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
+        SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
         var mockEventBus = A.Fake<IEventBus>();
         var worker = CreateWorker(fakeMediator, mockEventBus);
@@ -111,7 +111,7 @@ public class WorkerTests
         A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress2))).MustHaveHappenedTwiceExactly();
     }
 
-    private void RegisterFindRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
+    private void SetupRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
     {
         var commandResponse = new TriggerRipeDeletionProcessesResponse
         {
