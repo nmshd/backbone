@@ -39,7 +39,7 @@ public class GracePeriodNotificationConfiguration
 
 public class DeletionStartsNotification
 {
-    public string Message { get; set; } = "";
+    public string Message { get; set; } = "Deletion process has started.";
 }
 
 public class ApprovalReminderNotificationConfiguration
