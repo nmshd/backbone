@@ -27,7 +27,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.IdentityAddresses.Should().BeEmpty();
+        result.DeletedIdentityAddresses.Should().BeEmpty();
         A.CallTo(() => mockIdentitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
@@ -47,8 +47,8 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.IdentityAddresses.Should().HaveCount(1);
-        result.IdentityAddresses.Single().Should().Be(anIdentity.Address);
+        result.DeletedIdentityAddresses.Should().HaveCount(1);
+        result.DeletedIdentityAddresses.Single().Should().Be(anIdentity.Address);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.IdentityAddresses.Should().HaveCount(1);
+        result.DeletedIdentityAddresses.Should().HaveCount(1);
         _identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 

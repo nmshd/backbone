@@ -44,7 +44,7 @@ public class Worker : IHostedService
     {
         var identities = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
-        foreach (var identityAddress in identities.IdentityAddresses)
+        foreach (var identityAddress in identities.DeletedIdentityAddresses)
         {
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
 

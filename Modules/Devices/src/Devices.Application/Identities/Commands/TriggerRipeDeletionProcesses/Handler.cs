@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
             {
                 identity.DeletionStarted();
                 await _identitiesRepository.Update(identity, cancellationToken);
-                response.IdentityAddresses.Add(identity.Address);
+                response.DeletedIdentityAddresses.Add(identity.Address);
             }
             catch (DomainException ex)
             {
