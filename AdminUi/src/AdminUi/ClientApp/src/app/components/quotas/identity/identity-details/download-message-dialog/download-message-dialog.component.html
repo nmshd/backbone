@@ -21,8 +21,6 @@
             <button mat-flat-button mat-dialog-close>Cancel</button>
         </mat-dialog-actions>
     </div>
-    <!-- [(ngModel)]="max" -->
-    <!-- [(ngModel)]="client.clientSecret" -->
 </div>
 <div *ngIf="preview" class="preview-container">
     <h2 mat-dialog-title>{{ header }}</h2>
@@ -30,7 +28,7 @@
         {{ message }}
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button mat-flat-button color="primary" (click)="downloadMessage()" [disabled]="!isValid()">Preview</button>
+        <button mat-flat-button color="primary" (click)="downloadMessage()" [disabled]="!isValid()" style="text-align: center"><mat-icon>get_app</mat-icon></button>
         <button mat-flat-button mat-dialog-close>Close</button>
     </mat-dialog-actions>
 </div>
