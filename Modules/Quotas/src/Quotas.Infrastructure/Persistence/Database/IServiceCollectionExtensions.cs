@@ -53,7 +53,8 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
 
-                dbContextOptions.UseTriggers(triggerOptions => {
+                dbContextOptions.UseTriggers(triggerOptions =>
+                {
                     triggerOptions.AddTrigger<DeleteTierQuotaDefinitionsTrigger>();
                 });
             });
