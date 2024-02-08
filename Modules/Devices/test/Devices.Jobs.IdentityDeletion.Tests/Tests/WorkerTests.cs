@@ -80,7 +80,7 @@ public class WorkerTests
     }
 
     [Fact]
-    public async Task Publishes_PeerIdentityDeletedIntegrationEvent_For_Each_Pair_Identity_Relationship()
+    public async Task Publishes_PeerIdentityDeletedIntegrationEvent__Once_For_Each_Relationship_Of_Each_Identity()
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
