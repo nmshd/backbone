@@ -295,7 +295,7 @@ export class IdentityDetailsComponent {
     }
 
     public hasTierQuotas(): boolean {
-        return this.quotasTableData.some(quota => {
+        return this.quotasTableData.some((quota) => {
             const quotaTemp = quota as Quota;
             return quotaTemp.source === "Tier";
         });
