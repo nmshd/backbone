@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
     {
         var response = new TriggerRipeDeletionProcessesResponse();
 
-         var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
+        var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
         foreach (var identity in identities)
         {
             try
