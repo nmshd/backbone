@@ -164,6 +164,11 @@ public class Identity
     {
         return i => i.Address == address;
     }
+
+    public static Expression<Func<Identity, bool>> IsReadyForDeletion()
+    {
+        return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+    }
 }
 
 public enum IdentityStatus
