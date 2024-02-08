@@ -1,6 +1,7 @@
 .container {
-    min-width: 2400px;
+    max-width: 2100px;
     min-height: 200px;
+    overflow-x: auto;
 }
 
 .disabled-container {
