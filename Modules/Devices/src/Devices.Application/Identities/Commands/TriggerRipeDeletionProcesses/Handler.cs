@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -19,7 +20,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
     {
         var response = new TriggerRipeDeletionProcessesResponse();
 
-        var identities = await _identitiesRepository.FindAllToBeDeletedWithPastDeletionGracePeriod(cancellationToken, track: true);
+         var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
         foreach (var identity in identities)
         {
             try
