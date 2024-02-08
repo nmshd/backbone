@@ -1,5 +1,6 @@
-﻿using Backbone.Crypto;
-using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+using System.Text;
+using Backbone.Crypto;
+using Backbone.Crypto.Implementations;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
@@ -46,14 +47,11 @@ public class Message : IIdentifiable<MessageId>
         Body = bytes;
     }
 
-    public string DecryptBody(string symmetricKey)
+    public string Decrypt(string secretKey)
     {
-        return BitConverter.ToString(Body);
-    }
-
-    public ConvertibleString DecryptBodyWithSymmetricKey(ConvertibleString encrypted, ConvertibleString symmetricKey)
-    {
-        var aesEncryptionHelper = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-        return aesEncryptionHelper.Decrypt(encrypted, symmetricKey);
+        return new LibsodiumSymmetricEncrypter().Decrypt(
+                ConvertibleString.FromByteArray(Body),
+                ConvertibleString.FromUtf8(secretKey))
+            .Utf8Representation;
     }
 }
