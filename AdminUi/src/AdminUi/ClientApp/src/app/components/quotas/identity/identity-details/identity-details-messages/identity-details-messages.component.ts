@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { MessageOverview, MessageRecipients, MessageService } from "src/app/services/message-service/message.service";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { IdentityDetailsMessageRecipientsDialogComponent } from "../identity-details-message-recipients-dialog/identity-details-message-recipients-dialog.component";
+import { DownloadMessageDialogComponent } from "../download-message-dialog/download-message-dialog.component";
 
 @Component({
     selector: "app-identity-details-messages",
@@ -44,10 +45,10 @@ export class IdentityDetailsMessagesComponent {
         if (this.type) {
             switch (this.type) {
                 case "Outgoing":
-                    this.messagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments"];
+                    this.messagesTableDisplayedColumns = ["recipents", "sendDate", "numberOfAttachments", "downloadMessage"];
                     break;
                 case "Incoming":
-                    this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments"];
+                    this.messagesTableDisplayedColumns = ["senderAddress", "senderDevice", "sendDate", "numberOfAttachments", "downloadMessage"];
                     break;
             }
         }
@@ -98,5 +99,12 @@ export class IdentityDetailsMessagesComponent {
 
     public async goToIdentity(identityAddress: string): Promise<void> {
         await this.router.navigate([`/identities/${identityAddress}`]);
+    }
+
+    public openDownloadMessageDialog(): void {
+        this.dialog.open(DownloadMessageDialogComponent, {
+            maxWidth: "380px",
+            maxHeight: "250px"
+        });
     }
 }

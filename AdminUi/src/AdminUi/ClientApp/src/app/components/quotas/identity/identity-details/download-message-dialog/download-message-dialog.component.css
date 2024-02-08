@@ -1,0 +1,8 @@
+.container {
+    max-width: 400px;
+}
+
+.preview-container {
+    max-width: 800px;
+    max-height: 700px;
+}

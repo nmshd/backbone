@@ -43,6 +43,7 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
+import { DownloadMessageDialogComponent } from "./components/quotas/identity/identity-details/download-message-dialog/download-message-dialog.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsMessagesComponent } from "./components/quotas/identity/identity-details/identity-details-messages/identity-details-messages.component";
@@ -80,7 +81,8 @@ import { IdentityDetailsMessageRecipientsDialogComponent } from "./components/qu
         ClientEditComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
-        IdentityDetailsMessageRecipientsDialogComponent
+        IdentityDetailsMessageRecipientsDialogComponent,
+        DownloadMessageDialogComponent
     ],
     imports: [
         FormsModule,

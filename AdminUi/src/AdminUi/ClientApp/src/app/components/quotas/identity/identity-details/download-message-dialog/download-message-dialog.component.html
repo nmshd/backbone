@@ -1,0 +1,36 @@
+<div class="container">
+    <div *ngIf="!preview">
+        <h2 mat-dialog-title>{{ header }}</h2>
+        <mat-dialog-content>
+            <div class="form-details" *ngIf="!loading">
+                <mat-form-field class="form-field">
+                    <mat-label>Client Secret</mat-label>
+                    <input [type]="showSymetricKey ? 'text' : 'password'" [(ngModel)]="symetricKey" matInput />
+                    <button matSuffix mat-icon-button (click)="toggleSymetricKeyVisibility()" style="cursor: pointer">
+                        <mat-icon style="text-align: center">visibility</mat-icon>
+                    </button>
+                    <!-- <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint> -->
+                </mat-form-field>
+            </div>
+            <div *ngIf="loading" class="loading">
+                <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-flat-button color="primary" (click)="previewMessage()" [disabled]="!isValid()">Preview</button>
+            <button mat-flat-button mat-dialog-close>Cancel</button>
+        </mat-dialog-actions>
+    </div>
+    <!-- [(ngModel)]="max" -->
+    <!-- [(ngModel)]="client.clientSecret" -->
+</div>
+<div *ngIf="preview" class="preview-container">
+    <h2 mat-dialog-title>{{ header }}</h2>
+    <mat-dialog-content>
+        {{ message }}
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-flat-button color="primary" (click)="downloadMessage()" [disabled]="!isValid()">Preview</button>
+        <button mat-flat-button mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+</div>
