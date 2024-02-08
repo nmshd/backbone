@@ -17,7 +17,7 @@ public class ReplaceIdentityAddressTests
         var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByAddress);
+        var message = CreateMessage((createdByAddress, new List<IdentityAddress> { createdByAddress}));
 
         // Act
         message.ReplaceIdentityAddress(createdByAddress, newIdentityAddress);
@@ -31,10 +31,9 @@ public class ReplaceIdentityAddressTests
     {
         // Arrange
         var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByAddress, recipientAddress);
+        var message = CreateMessage((null, new List<IdentityAddress>{recipientAddress}));
 
         // Act
         message.ReplaceIdentityAddress(recipientAddress, newAddress);
@@ -53,7 +52,7 @@ public class ReplaceIdentityAddressTests
         var erroneousIdentityIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage(createdByAddress, recipient1Address, recipient2Address);
+        var message = CreateMessage((createdByAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
         message.ReplaceIdentityAddress(erroneousIdentityIdentityAddress, newAddress);
@@ -64,14 +63,14 @@ public class ReplaceIdentityAddressTests
         message.CreatedBy.Should().Be(createdByAddress);
     }
 
-    private static Message CreateMessage(IdentityAddress createdBy, params IdentityAddress[] recipientsAddresses)
+    private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)
     {
-        var recipientInformation = recipientsAddresses.Select(recipientIdentityAddress =>
+        var recipientInformation = parameters.recipients.Select(recipientIdentityAddress =>
             new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), [])
         ).ToList();
 
         return new Message(
-            createdBy,
+            parameters.createdBy,
             TestDataGenerator.CreateRandomDeviceId(),
             null,
             [],
