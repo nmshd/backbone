@@ -109,11 +109,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllToBeDeletedWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
-            .Where(i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow)
+            .Where(filter)
             .ToListAsync(cancellationToken);
     }
 

@@ -71,7 +71,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllToBeDeletedWithPastDeletionGracePeriod(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
