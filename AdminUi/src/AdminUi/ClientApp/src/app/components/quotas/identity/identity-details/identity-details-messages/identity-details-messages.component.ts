@@ -103,8 +103,8 @@ export class IdentityDetailsMessagesComponent {
 
     public openDownloadMessageDialog(): void {
         this.dialog.open(DownloadMessageDialogComponent, {
-            maxWidth: "380px",
-            maxHeight: "250px"
+            maxWidth: "420px",
+            maxHeight: "350px"
         });
     }
 }

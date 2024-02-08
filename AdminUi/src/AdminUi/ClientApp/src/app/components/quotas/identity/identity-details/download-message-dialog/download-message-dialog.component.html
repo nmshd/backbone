@@ -3,14 +3,17 @@
         <h2 mat-dialog-title>{{ header }}</h2>
         <mat-dialog-content>
             <div class="form-details" *ngIf="!loading">
-                <mat-form-field class="form-field">
+                <mat-form-field class="form-field full-width">
                     <mat-label>Client Secret</mat-label>
                     <input [type]="showSymetricKey ? 'text' : 'password'" [(ngModel)]="symetricKey" matInput />
                     <button matSuffix mat-icon-button (click)="toggleSymetricKeyVisibility()" style="cursor: pointer">
                         <mat-icon style="text-align: center">visibility</mat-icon>
                     </button>
-                    <!-- <mat-hint>A Client Secret will be generated if this field is left blank.</mat-hint> -->
+                    <!-- <mat-hint></mat-hint> -->
                 </mat-form-field>
+                <div class="warning-container" *ngIf="displayErrorMessage">
+                    <span class="warning">{{ errorMessage }}</span>
+                </div>
             </div>
             <div *ngIf="loading" class="loading">
                 <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
@@ -28,7 +31,7 @@
         {{ message }}
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button mat-flat-button color="primary" (click)="downloadMessage()" [disabled]="!isValid()" style="text-align: center"><mat-icon>get_app</mat-icon></button>
+        <button mat-flat-button color="primary" (click)="downloadMessage()" [disabled]="!isValid()"><mat-icon style="margin: auto; padding: auto">get_app</mat-icon></button>
         <button mat-flat-button mat-dialog-close>Close</button>
     </mat-dialog-actions>
 </div>

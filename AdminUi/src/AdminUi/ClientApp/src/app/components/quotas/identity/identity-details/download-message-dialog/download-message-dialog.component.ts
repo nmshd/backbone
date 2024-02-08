@@ -9,10 +9,12 @@ export class DownloadMessageDialogComponent {
     public header: string;
     public symetricKey: string;
     public message: string;
+    public errorMessage: string;
 
     public loading: boolean;
     public showSymetricKey: boolean;
     public preview: boolean;
+    public displayErrorMessage: boolean;
 
     public constructor() {
         this.header = "Download message";
@@ -21,11 +23,12 @@ export class DownloadMessageDialogComponent {
         this.preview = false;
         this.symetricKey = "";
         this.message = "This is a message that will be displayed when a correct symetric key is entered, and this message can be downloaded.";
+        this.errorMessage = "";
+        this.displayErrorMessage = false;
     }
 
     public isValid(): boolean {
-        // return this.metric !== undefined && this.period !== undefined && this.max !== null;
-        return true;
+        return this.symetricKey !== "";
     }
 
     public toggleSymetricKeyVisibility(): void {
@@ -35,6 +38,9 @@ export class DownloadMessageDialogComponent {
     public previewMessage(): void {
         if (this.symetricKey === "test") {
             this.preview = true;
+        } else {
+            this.displayErrorMessage = true;
+            this.errorMessage = "The symetric key you have entered is invalid.";
         }
     }
 
