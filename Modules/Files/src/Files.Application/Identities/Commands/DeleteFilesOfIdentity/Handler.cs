@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
+using static Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 
@@ -14,6 +15,6 @@ public class Handler : IRequestHandler<DeleteFilesOfIdentityCommand>
 
     public async Task Handle(DeleteFilesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _filesRepository.DeleteFilesOfIdentity(request.IdentityAddress, cancellationToken);
+        await _filesRepository.DeleteFilesOfIdentity(WasCreatedBy(request.IdentityAddress), cancellationToken);
     }
 }

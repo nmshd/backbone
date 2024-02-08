@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
+﻿using System.Linq.Expressions;
+using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
@@ -19,7 +20,7 @@ public class HandlerTests
         await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(identityAddress, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(A<Expression<Func<Domain.Entities.File, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IFilesRepository filesRepository = null)
