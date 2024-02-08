@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.3" />
+    <PackageReference Include="EntityFrameworkCore.Triggered" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>
