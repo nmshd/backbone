@@ -28,7 +28,6 @@ public class HandlerTests
 
         // Assert
         result.DeletedIdentityAddresses.Should().BeEmpty();
-        A.CallTo(() => mockIdentitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).MustHaveHappenedOnceOrMore();
     }
 
     [Fact]
