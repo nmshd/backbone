@@ -17,7 +17,7 @@ public class TokensDbContextSeeder : IDbSeeder<TokensDbContext>
     public TokensDbContextSeeder(IServiceProvider serviceProvider)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
-        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
+        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()?.Value.RootFolder;
     }
 
     public async Task SeedAsync(TokensDbContext context)
