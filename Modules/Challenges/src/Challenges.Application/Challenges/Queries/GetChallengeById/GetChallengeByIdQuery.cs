@@ -6,5 +6,5 @@ namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChalleng
 
 public class GetChallengeByIdQuery : IRequest<ChallengeDTO>
 {
-    public ChallengeId Id { get; set; }
+    public required ChallengeId Id { get; set; }
 }
