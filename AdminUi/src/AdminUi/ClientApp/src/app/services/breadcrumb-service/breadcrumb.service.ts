@@ -34,7 +34,7 @@ export class BreadcrumbService {
     }
 
     private updateBreadcrumbHistory(): void {
-        const breadcrumbHistory: Breadcrumb[] = this.generateBreadcrumbHistory(this.activatedRoute.root, "");
+        const breadcrumbHistory = this.generateBreadcrumbHistory(this.activatedRoute.root, "");
 
         const breadcrumbTrail = [...breadcrumbHistory];
 
