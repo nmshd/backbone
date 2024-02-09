@@ -14,6 +14,8 @@ public class Worker : IHostedService
     {
         _host = host;
         _serviceScopeFactory = serviceScopeFactory;
+
+        // the following fields are initialized in StartAsync, which is always called before any other method
         _dataSource = null!;
         _reporter = null!;
     }
