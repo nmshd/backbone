@@ -7,13 +7,19 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 
 public class TokensDbContext : AbstractDbContextBase
 {
-    public TokensDbContext() { }
+    public TokensDbContext()
+    {
+    }
 
-    public TokensDbContext(DbContextOptions<TokensDbContext> options) : base(options) { }
+    public TokensDbContext(DbContextOptions<TokensDbContext> options) : base(options)
+    {
+    }
 
-    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
-    public virtual DbSet<Token> Tokens { get; set; }
+    public virtual DbSet<Token> Tokens { get; set; } = null!;
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{

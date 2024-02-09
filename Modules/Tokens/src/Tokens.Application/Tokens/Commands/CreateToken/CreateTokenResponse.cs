@@ -5,6 +5,6 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class CreateTokenResponse : IMapTo<Token>
 {
-    public TokenId Id { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required TokenId Id { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }
