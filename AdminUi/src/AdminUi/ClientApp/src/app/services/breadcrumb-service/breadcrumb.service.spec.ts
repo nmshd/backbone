@@ -57,20 +57,20 @@ describe("BreadcrumbService", function () {
 
     it("should return the breadcrumb history array", async function () {
         // Arrange
-        const expectedHistory = [
+        const expectedHistorySteps = [
             { label: "Home", url: "/home" },
             { label: "Details", url: "/details" },
             { label: "Products", url: "/products" }
         ];
 
         // Act
-        for (const e of expectedHistory) {
-            breadcrumbService["breadcrumbHistory"].push(e);
+        for (const historyStep of expectedHistorySteps) {
+            breadcrumbService["breadcrumbHistory"].push(historyStep);
         }
         const result = breadcrumbService.getBreadcrumbHistory();
 
         // Assert
-        await expect(result).toEqual(expectedHistory);
+        await expect(result).toEqual(expectedHistorySteps);
     });
 
     it("should return a flat array when multiple trails are added", async function () {
@@ -92,34 +92,34 @@ describe("BreadcrumbService", function () {
 
     it("should return a copy of the breadcrumb history array", async function () {
         // Arrange
-        const expectedHistory = [
+        const expectedHistorySteps = [
             { label: "Home", url: "/home" },
             { label: "Details", url: "/details" },
             { label: "Products", url: "/products" }
         ];
 
         // Act
-        for (const e of expectedHistory) {
-            breadcrumbService["breadcrumbHistory"].push(e);
+        for (const historyStep of expectedHistorySteps) {
+            breadcrumbService["breadcrumbHistory"].push(historyStep);
         }
         const result = JSON.parse(JSON.stringify(breadcrumbService.getBreadcrumbHistory()));
         result[0].label = "Modified";
 
         // Assert
-        await expect(result).not.toEqual(expectedHistory);
+        await expect(result).not.toEqual(expectedHistorySteps);
     });
 
     it("should not modify the internal breadcrumb history array when modifying the result", async function () {
         // Arrange
-        const expectedHistory = [
+        const expectedHistorySteps = [
             { label: "Home", url: "/home" },
             { label: "Details", url: "/details" },
             { label: "Products", url: "/products" }
         ];
 
         // Act
-        for (const e of expectedHistory) {
-            breadcrumbService["breadcrumbHistory"].push(e);
+        for (const historyStep of expectedHistorySteps) {
+            breadcrumbService["breadcrumbHistory"].push(historyStep);
         }
         const result = breadcrumbService.getBreadcrumbHistory();
 
@@ -127,7 +127,7 @@ describe("BreadcrumbService", function () {
         result[0].label = "Modified";
 
         // Assert
-        await expect(breadcrumbService.getBreadcrumbHistory()).toEqual(expectedHistory);
+        await expect(breadcrumbService.getBreadcrumbHistory()).toEqual(expectedHistorySteps);
     });
 
     it("should do nothing if the index is negative", async function () {
@@ -155,7 +155,7 @@ describe("BreadcrumbService", function () {
 
     it("should clear history after the specified index", async function () {
         // Arrange
-        const expectedHistory = [
+        const expectedHistorySteps = [
             { label: "Home", url: "/home" },
             { label: "Details", url: "/details" }
         ];
@@ -166,6 +166,6 @@ describe("BreadcrumbService", function () {
         breadcrumbService.clearBreadcrumbHistoryAfterIndex(indexToClear);
 
         // Assert
-        await expect(breadcrumbService.getBreadcrumbHistory()).toEqual(expectedHistory);
+        await expect(breadcrumbService.getBreadcrumbHistory()).toEqual(expectedHistorySteps);
     });
 });
