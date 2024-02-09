@@ -51,8 +51,8 @@ public static class IServiceCollectionExtensions
 
     public class DbOptions
     {
-        public string Provider { get; set; } = string.Empty; //TODO Timo: same question as in #509 (string.Empty or null!)
-        public string DbConnectionString { get; set; } = string.Empty;
+        public string Provider { get; set; } = null!;
+        public string DbConnectionString { get; set; } = null!;
         public RetryOptions RetryOptions { get; set; } = new();
     }
 
