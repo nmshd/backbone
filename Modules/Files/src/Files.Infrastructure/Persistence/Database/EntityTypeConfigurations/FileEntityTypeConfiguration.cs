@@ -4,7 +4,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class FileEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Entities.File>
+public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
 {
     public void Configure(EntityTypeBuilder<File> builder)
     {
