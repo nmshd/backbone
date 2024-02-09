@@ -6,5 +6,5 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
 public class GetTokenQuery : IRequest<TokenDTO>
 {
-    public TokenId Id { get; set; }
+    public required TokenId Id { get; set; }
 }
