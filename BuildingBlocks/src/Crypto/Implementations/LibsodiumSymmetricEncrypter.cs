@@ -10,7 +10,7 @@ using Sodium;
 namespace Backbone.Crypto.Implementations;
 public class LibsodiumSymmetricEncrypter : ISymmetricEncrypter
 {
-    public static byte[] DecryptXChaCha20Poly1305(byte[] body, string serializedSecret)
+    public static byte[] DecryptXChaCha20Poly1305(byte[] body, byte[] key)
     {
         var bodyString = Encoding.UTF8.GetString(body);
         var deserializedBody = JsonSerializer.Deserialize<CryptoCipher>(bodyString,
@@ -21,11 +21,6 @@ public class LibsodiumSymmetricEncrypter : ISymmetricEncrypter
 
         var payload = Convert.FromBase64String(cipherText);
         var nonce = Convert.FromBase64String(deserializedBody.nnc);
-
-        var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
-            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
-
-        var key = Convert.FromBase64String(deserializedSecret!.key + "=");
 
         return DecryptXChaCha20Poly1305(payload, nonce, key);
     }
@@ -71,7 +66,7 @@ public class LibsodiumSymmetricEncrypter : ISymmetricEncrypter
         ArgumentNullException.ThrowIfNull(key);
 
         var body = encryptedMessage.BytesRepresentation;
-        var serializedSecret = key.Utf8Representation;
+        var serializedSecret = key.BytesRepresentation;
 
         try
         {
