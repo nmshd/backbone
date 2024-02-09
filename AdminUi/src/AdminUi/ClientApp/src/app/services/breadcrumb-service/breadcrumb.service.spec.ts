@@ -7,7 +7,7 @@ class MockActivatedRoute {
     private readonly subject = new BehaviorSubject(this.testParams);
     public params = this.subject.asObservable();
 
-    private _testParams!: {};
+    private _testParams = {};
     public get testParams() {
         return this._testParams;
     }
