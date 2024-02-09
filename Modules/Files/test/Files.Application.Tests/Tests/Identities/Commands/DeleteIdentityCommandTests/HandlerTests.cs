@@ -4,6 +4,7 @@ using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using FakeItEasy;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
 public class HandlerTests
@@ -20,7 +21,7 @@ public class HandlerTests
         await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(A<Expression<Func<Domain.Entities.File, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(A<Expression<Func<File, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IFilesRepository filesRepository = null)

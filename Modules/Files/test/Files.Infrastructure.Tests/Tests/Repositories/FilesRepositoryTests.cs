@@ -25,7 +25,7 @@ public class FilesRepositoryTests
         var repository = CreateFilesRepository(files, mockBlobStorage);
 
         // Act
-        await repository.DeleteFilesOfIdentity(identityAddress, CancellationToken.None);
+        await repository.DeleteFilesOfIdentity(File.WasCreatedBy(identityAddress), CancellationToken.None);
 
         // Assert
         foreach (var file in files)
