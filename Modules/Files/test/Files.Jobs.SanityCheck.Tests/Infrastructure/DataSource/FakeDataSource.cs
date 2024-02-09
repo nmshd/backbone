@@ -5,8 +5,8 @@ namespace Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.DataSourc
 
 public class FakeDataSource : IDataSource
 {
-    public List<FileId> DatabaseIds { get; } = new();
-    public List<string> BlobIds { get; } = new();
+    public List<FileId> DatabaseIds { get; } = [];
+    public List<string> BlobIds { get; } = [];
 
     public Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
     {
