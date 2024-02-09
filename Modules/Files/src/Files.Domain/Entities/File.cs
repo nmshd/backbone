@@ -6,9 +6,20 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File
 {
-#pragma warning disable CS8618
-    private File() { }
-#pragma warning restore CS8618
+    private File()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        ModifiedBy = null!;
+        ModifiedByDevice = null!;
+        Owner = null!;
+        OwnerSignature = null!;
+        CipherHash = null!;
+        Content = null!;
+        EncryptedProperties = null!;
+    }
 
     public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
     {
