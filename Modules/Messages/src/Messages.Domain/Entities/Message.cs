@@ -1,9 +1,11 @@
 using System.Text;
+using System.Text.Json;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
+using Backbone.Tooling.JsonConverters;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
@@ -47,11 +49,30 @@ public class Message : IIdentifiable<MessageId>
         Body = bytes;
     }
 
-    public string Decrypt(string secretKey)
+    public string Decrypt(string serializedSecret)
     {
+        var secretKey = ExtractSymmetricKey(serializedSecret);
+
         return new LibsodiumSymmetricEncrypter().Decrypt(
                 ConvertibleString.FromByteArray(Body),
-                ConvertibleString.FromUtf8(secretKey))
+                ConvertibleString.FromByteArray(secretKey))
             .Utf8Representation;
+    }
+
+    private static byte[] ExtractSymmetricKey(string serializedSecret)
+    {
+        var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
+            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
+
+        var key = Convert.FromBase64String(deserializedSecret!.key + "=");
+        return key;
+    }
+
+    private class Secret
+    {
+        /**
+         * Algorithm (`alg`) field is omitted due to not being used in the code.
+         */
+        public required string key { get; init; }
     }
 }
