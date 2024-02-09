@@ -36,18 +36,16 @@ export class BreadcrumbService {
     private updateBreadcrumbHistory(): void {
         const breadcrumbHistory = this.generateBreadcrumbHistory(this.activatedRoute.root, "");
 
-        const breadcrumbTrail = [...breadcrumbHistory];
-
-        if (this.shouldClearBreadcrumbHistory(breadcrumbTrail)) {
+        if (this.shouldClearBreadcrumbHistory(breadcrumbHistory)) {
             this.breadcrumbHistory = [];
             return;
         }
 
-        if (this.isMainLinkClicked(breadcrumbTrail)) {
-            this.breadcrumbHistory = breadcrumbTrail;
+        if (this.isMainLinkClicked(breadcrumbHistory)) {
+            this.breadcrumbHistory = breadcrumbHistory;
         } else {
-            if (this.shouldPushBreadcrumbTrail(breadcrumbTrail)) {
-                this.breadcrumbHistory.push(...breadcrumbTrail);
+            if (this.shouldPushBreadcrumbHistory(breadcrumbHistory)) {
+                this.breadcrumbHistory.push(...breadcrumbHistory);
             }
 
             if (this.breadcrumbHistory.length > this.maxHistorySize) {
@@ -64,7 +62,7 @@ export class BreadcrumbService {
         return trail.some((breadcrumb) => breadcrumb.url.includes("login"));
     }
 
-    private shouldPushBreadcrumbTrail(breadcrumbHistory: Breadcrumb[]): boolean {
+    private shouldPushBreadcrumbHistory(breadcrumbHistory: Breadcrumb[]): boolean {
         return this.breadcrumbHistory.length === 0 || this.breadcrumbHistory[this.breadcrumbHistory.length - 1].url !== breadcrumbHistory[breadcrumbHistory.length - 1].url;
     }
 
