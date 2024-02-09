@@ -45,5 +45,5 @@ public class BlobStorageOptions
 
     public string Container { get; set; } = null!;
 
-    public string? ConnectionInfo { get; set; } = null!;
+    public string? ConnectionInfo { get; set; } = null;
 }
