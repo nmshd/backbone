@@ -39,6 +39,7 @@ import { AppComponent } from "./app.component";
 import { ChangeSecretDialogComponent } from "./components/client/change-secret-dialog/change-secret-dialog.component";
 import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
 import { ClientListComponent } from "./components/client/client-list/client-list.component";
+import { CreateClientDialogComponent } from "./components/client/create-client-dialog/create-client-dialog.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
@@ -47,6 +48,7 @@ import { IdentityListComponent } from "./components/quotas/identity/identity-lis
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
+import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
 import { IdentitiesOverviewComponent } from "./components/shared/identities-overview/identities-overview.component";
 import { LoginComponent } from "./components/shared/login/login.component";
@@ -69,8 +71,10 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         IdentityDetailsComponent,
         TierListComponent,
         TierEditComponent,
+        CreateTierDialogComponent,
         ClientListComponent,
         ClientEditComponent,
+        CreateClientDialogComponent,
         AssignQuotasDialogComponent,
         ConfirmationDialogComponent,
         LoginComponent,
