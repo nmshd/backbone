@@ -29,7 +29,7 @@ public static class BlobStorageServiceCollectionExtensions
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
             {
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
-                googleCloudStorageOptions.BucketName = options.Container!;
+                googleCloudStorageOptions.BucketName = options.Container;
             });
         else if (options.CloudProvider.IsNullOrEmpty())
             throw new NotSupportedException("No cloud provider was specified.");
@@ -41,15 +41,9 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    /** 
-     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
-     */
-    public string? CloudProvider { get; set; }
+    public string CloudProvider { get; set; } = null!;
 
-    /**
-     * This property will never be null as it makes no sense, but is marked as nullable due to how AddBlobStorage method uses BlobStorageOptions.
-     */
-    public string? Container { get; set; }
+    public string Container { get; set; } = null!;
 
-    public string? ConnectionInfo { get; set; }
+    public string? ConnectionInfo { get; set; } = null!;
 }
