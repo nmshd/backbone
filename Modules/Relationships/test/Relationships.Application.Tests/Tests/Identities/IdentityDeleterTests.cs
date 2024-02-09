@@ -20,6 +20,8 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteRelationshipTemplatesOfIdentityCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockMediator.Send(
+            A<DeleteRelationshipTemplatesOfIdentityCommand>.That.Matches(i=> i.IdentityAddress == identityAddress),
+            A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 }
