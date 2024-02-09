@@ -24,7 +24,7 @@ export class XSRFInterceptor implements HttpInterceptor {
 
         return next.handle(req).pipe(
             catchError((err) => {
-                const xsrfError = err && err.status === 400 && (err.error.detail as string).includes("xsrf-token-may-be-invalid");
+                const xsrfError = err && err.status === 400 && err.error.detail && (err.error.detail as string).includes("xsrf-token-may-be-invalid");
                 if (xsrfError) {
                     this.xsrfService.clearStoredToken();
                     this.xsrfService.loadAndStoreXSRFToken();
