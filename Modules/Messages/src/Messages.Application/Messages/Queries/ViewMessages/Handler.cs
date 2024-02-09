@@ -48,7 +48,6 @@ public class Handler : IRequestHandler<GetViewMessageQuery, ViewMessageDTO>
 
         var decryptedBody = message.Decrypt(request.SymmetricKey);
 
-        // Create ViewMessageDTO object
         var response = new ViewMessageDTO
         {
             Id = message.Id,

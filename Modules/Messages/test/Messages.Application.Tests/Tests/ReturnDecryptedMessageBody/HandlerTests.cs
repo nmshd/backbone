@@ -62,8 +62,8 @@ public class HandlerTests
         var handler = new Handler(_userContext, _mapper, _messagesRepository);
 
         A.CallTo(() => _messagesRepository.Find(
-                request.MessageId, 
-                _userContext.GetAddress(), 
+                request.MessageId,
+                _userContext.GetAddress(),
                 CancellationToken.None, true, true))
                 .Returns(message);
 
