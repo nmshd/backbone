@@ -11,7 +11,6 @@ import { TierQuota } from "../quotas-service/quotas.service";
 })
 export class TierService {
     private readonly apiUrl: string;
-
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Tiers`;
     }
@@ -42,6 +41,7 @@ export interface Tier {
     name: string;
     quotas: TierQuota[];
     isDeletable: boolean;
+    numberOfIdentities: number;
 }
 
 export interface TierOverview {
