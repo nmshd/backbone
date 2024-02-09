@@ -31,9 +31,9 @@ public static class TestData
 
     public static class Payloads
     {
-        public static readonly byte[] EMPTY = Array.Empty<byte>();
-        public static readonly byte[] PAYLOAD_1 = { 1, 1, 1 };
-        public static readonly byte[] PAYLOAD_2 = { 2, 2, 2 };
-        public static readonly byte[] PAYLOAD_3 = { 3, 3, 3 };
+        public static readonly byte[] EMPTY = [];
+        public static readonly byte[] PAYLOAD_1 = [1, 1, 1];
+        public static readonly byte[] PAYLOAD_2 = [2, 2, 2];
+        public static readonly byte[] PAYLOAD_3 = [3, 3, 3];
     }
 }
