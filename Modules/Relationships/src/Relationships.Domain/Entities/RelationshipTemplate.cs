@@ -8,9 +8,14 @@ namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipTemplate
 {
-#pragma warning disable CS8618
-    private RelationshipTemplate() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipTemplate()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+    }
 
     public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content)
     {
