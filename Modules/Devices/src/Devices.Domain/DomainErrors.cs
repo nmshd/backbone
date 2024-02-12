@@ -49,14 +49,4 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "No deletion process with the required status was found.");
     }
-
-    public static DomainError NoWaitingForApprovalDeletionProcessFound()
-    {
-        return new DomainError("error.platform.validation.device.noWaitingForApprovalDeletionProcessFound", "No waiting for approval deletion process was found.");
-    }
-
-    public static DomainError NoDeletionProcessFoundInCorrectStatusForApproval()
-    {
-        return new DomainError("error.platform.validation.device.noDeletionProcessFoundInCorrectStatusForApproval", "No waiting for approval deletion process was found.");
-    }
 }
