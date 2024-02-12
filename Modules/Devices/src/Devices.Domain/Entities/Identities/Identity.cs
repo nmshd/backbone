@@ -108,7 +108,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         if (deletionProcess.Status != DeletionProcessStatus.WaitingForApproval)
-            throw new DomainException(DomainErrors.NoDeletionProcessFoundInCorrectStatusForApproval());
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
         deletionProcess.Approve(Address, deviceId);
 
