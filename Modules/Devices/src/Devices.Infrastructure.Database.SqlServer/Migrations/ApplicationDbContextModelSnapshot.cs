@@ -239,13 +239,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("TierIdBeforeDeletion")
+                    b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("TierId")
+                    b.Property<string>("TierIdBeforeDeletion")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
