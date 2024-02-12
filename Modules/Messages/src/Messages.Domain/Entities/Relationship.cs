@@ -5,6 +5,17 @@ namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Relationship
 {
+    // ReSharper disable once UnusedMember.Local
+    private Relationship()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        From = null!;
+        To = null!;
+        CreatedAt = default;
+        Status = default;
+    }
+
     public RelationshipId Id { get; }
 
     public IdentityAddress From { get; }
