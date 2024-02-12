@@ -14,14 +14,14 @@ import { LoginComponent } from "./components/shared/login/login.component";
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
     { path: "login", component: LoginComponent },
-    { path: "dashboard", component: DashboardComponent, data: { breadcrumb: "Dashboard" }, canActivate: [AuthGuard] },
-    { path: "identities", component: IdentityListComponent, data: { breadcrumb: "Identities" }, canActivate: [AuthGuard] },
+    { path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: "identities", component: IdentityListComponent, canActivate: [AuthGuard] },
     { path: "identities/:address", component: IdentityDetailsComponent, canActivate: [AuthGuard] },
-    { path: "tiers", component: TierListComponent, data: { breadcrumb: "Tiers" }, canActivate: [AuthGuard] },
-    { path: "tiers/create", component: TierEditComponent, data: { breadcrumb: "Create Tier" }, canActivate: [AuthGuard] },
+    { path: "tiers", component: TierListComponent, canActivate: [AuthGuard] },
+    { path: "tiers/create", component: TierEditComponent, canActivate: [AuthGuard] },
     { path: "tiers/:id", component: TierEditComponent, canActivate: [AuthGuard] },
-    { path: "clients", component: ClientListComponent, data: { breadcrumb: "Clients" }, canActivate: [AuthGuard] },
-    { path: "clients/create", component: ClientEditComponent, data: { breadcrumb: "Create Client" }, canActivate: [AuthGuard] },
+    { path: "clients", component: ClientListComponent, canActivate: [AuthGuard] },
+    { path: "clients/create", component: ClientEditComponent, canActivate: [AuthGuard] },
     { path: "clients/:id", component: ClientEditComponent, canActivate: [AuthGuard] },
     { path: "**", component: PageNotFoundComponent }
 ];

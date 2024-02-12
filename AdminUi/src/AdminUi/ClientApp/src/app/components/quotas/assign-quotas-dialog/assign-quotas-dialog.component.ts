@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CreateQuotaForIdentityRequest, IdentityQuota, QuotasService } from "src/app/services/quotas-service/quotas.service";
+import { QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { Metric, MetricsService } from "src/app/services/metrics-service/metrics.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
@@ -11,6 +11,7 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
     styleUrls: ["./assign-quotas-dialog.component.css"]
 })
 export class AssignQuotasDialogComponent {
+
     public header: string;
 
     public metric: Metric | undefined;
@@ -21,7 +22,6 @@ export class AssignQuotasDialogComponent {
     public periods: string[];
 
     public loading: boolean;
-    public errorMessage: string;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
@@ -38,7 +38,6 @@ export class AssignQuotasDialogComponent {
         this.periods = [];
 
         this.loading = true;
-        this.errorMessage = "";
     }
 
     public ngOnInit(): void {
@@ -125,7 +124,7 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        this.createQuota(quota);
+        this.dialogRef.close(quota);
     }
 
     public isValid(): boolean {

@@ -2,5 +2,5 @@
 
 public class GetFileContentResponse
 {
-    public required byte[] FileContent { get; set; }
+    public byte[] FileContent { get; set; }
 }

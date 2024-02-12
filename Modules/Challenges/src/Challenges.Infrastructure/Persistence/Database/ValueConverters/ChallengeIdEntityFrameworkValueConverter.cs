@@ -5,11 +5,11 @@ namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueC
 
 public class ChallengeIdEntityFrameworkValueConverter : ValueConverter<ChallengeId, string>
 {
-    public ChallengeIdEntityFrameworkValueConverter() : this(new ConverterMappingHints()) { }
+    public ChallengeIdEntityFrameworkValueConverter() : this(null) { }
 
     public ChallengeIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id.StringValue,
+            id => id == null ? null : id.StringValue,
             value => ChallengeId.Parse(value),
             mappingHints
         )

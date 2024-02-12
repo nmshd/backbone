@@ -8,6 +8,6 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 [ApplyQuotasForMetrics("NumberOfTokens")]
 public class CreateTokenCommand : IRequest<CreateTokenResponse>, IMapTo<Token>
 {
-    public required byte[] Content { get; set; }
-    public required DateTime ExpiresAt { get; set; }
+    public byte[] Content { get; set; }
+    public DateTime ExpiresAt { get; set; }
 }

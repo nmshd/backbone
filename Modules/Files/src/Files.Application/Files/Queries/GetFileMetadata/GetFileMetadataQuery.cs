@@ -6,5 +6,5 @@ namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 
 public class GetFileMetadataQuery : IRequest<FileMetadataDTO>
 {
-    public required FileId Id { get; set; }
+    public FileId Id { get; set; }
 }

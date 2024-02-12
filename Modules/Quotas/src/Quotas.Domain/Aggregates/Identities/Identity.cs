@@ -34,8 +34,8 @@ public class Identity
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (max < 0)
-            throw new DomainException(DomainErrors.MaxValueCannotBeLowerThanZero());
+        if (max <= 0)
+            throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         if (IndividualQuotaAlreadyExists(metricKey, period))
             throw new DomainException(DomainErrors.DuplicateQuota());

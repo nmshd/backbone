@@ -8,16 +8,3 @@
     justify-content: center;
     align-items: center;
 }
-
-.quota-error-container {
-    margin: auto;
-    border-radius: 5px;
-    background-color: #f35f5f;
-    opacity: 0.85;
-}
-
-.quota-error-message {
-    color: #ffffff;
-    font-weight: 500;
-    padding: 10px;
-}

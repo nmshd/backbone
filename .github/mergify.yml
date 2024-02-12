@@ -1,6 +1,0 @@
-pull_request_rules:
-  - name: update pull request
-    conditions:
-      - label!=wip
-    actions:
-      update:

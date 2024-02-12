@@ -20,8 +20,8 @@ public class Tier
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (max < 0)
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerThanZero());
+        if (max <= 0)
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
 
         if (TierQuotaAlreadyExists(metricKey, period))
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
