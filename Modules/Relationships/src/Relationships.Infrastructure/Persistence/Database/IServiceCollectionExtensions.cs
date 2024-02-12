@@ -47,8 +47,6 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
             });
-        services
-            .AddDbContext<RelationshipsDbContext>(dbContextOptions => { });
     }
 
     public class DbOptions

@@ -9,7 +9,7 @@ public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
     public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipId>? ids)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? [] : new List<RelationshipId>(ids);
+        Ids = ids == null ? [] : [..ids];
     }
 
     public PaginationFilter PaginationFilter { get; set; }

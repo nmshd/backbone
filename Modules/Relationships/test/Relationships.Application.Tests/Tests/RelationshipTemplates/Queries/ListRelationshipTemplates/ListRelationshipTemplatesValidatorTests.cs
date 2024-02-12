@@ -24,7 +24,7 @@ public class ListRelationshipTemplatesValidatorTests
     {
         var validator = new ListRelationshipTemplatesValidator();
 
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), null!));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), null));
 
         validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
         validationResult.Errors.Should().HaveCount(1);

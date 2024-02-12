@@ -13,16 +13,16 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
 
 public class RelationshipTests
 {
-    private static readonly IdentityAddress FROM_IDENTITY = IdentityAddress.Create(new byte[] { 1, 1, 1 }, "id1");
+    private static readonly IdentityAddress FROM_IDENTITY = IdentityAddress.Create([1, 1, 1], "id1");
     private static readonly DeviceId FROM_DEVICE = DeviceId.New();
 
-    private static readonly IdentityAddress TO_IDENTITY = IdentityAddress.Create(new byte[] { 2, 2, 2 }, "id1");
+    private static readonly IdentityAddress TO_IDENTITY = IdentityAddress.Create([2, 2, 2], "id1");
     private static readonly DeviceId TO_DEVICE = DeviceId.New();
 
-    private static readonly byte[] REQUEST_CONTENT = { 1, 1, 1 };
-    private static readonly byte[] RESPONSE_CONTENT = { 2, 2, 2 };
+    private static readonly byte[] REQUEST_CONTENT = [1, 1, 1];
+    private static readonly byte[] RESPONSE_CONTENT = [2, 2, 2];
 
-    private static readonly RelationshipTemplate TEMPLATE = new(TO_IDENTITY, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), new byte[] { 0 });
+    private static readonly RelationshipTemplate TEMPLATE = new(TO_IDENTITY, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
 
     #region Creation
 

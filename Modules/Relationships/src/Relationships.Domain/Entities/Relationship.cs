@@ -8,7 +8,7 @@ namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class Relationship
 {
-    private readonly RelationshipChangeLog _changes = new();
+    private readonly RelationshipChangeLog _changes = [];
 
     // ReSharper disable once UnusedMember.Local
     private Relationship()
@@ -143,6 +143,6 @@ public class Relationship
         var existingChange = GetPendingChangeOrNull();
 
         if (existingChange != null)
-            throw new DomainException(DomainErrors.PendingChangeAlreadyExisits(existingChange.Id));
+            throw new DomainException(DomainErrors.PendingChangeAlreadyExists(existingChange.Id));
     }
 }

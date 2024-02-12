@@ -42,7 +42,7 @@ public class RelationshipTemplate
     public DateTime CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public List<RelationshipTemplateAllocation> Allocations { get; set; } = new();
+    public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
     public void AllocateFor(IdentityAddress identity, DeviceId device)
     {
