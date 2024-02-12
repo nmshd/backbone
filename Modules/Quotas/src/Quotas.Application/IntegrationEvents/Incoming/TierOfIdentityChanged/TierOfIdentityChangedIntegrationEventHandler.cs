@@ -19,7 +19,7 @@ public class TierOfIdentityChangedIntegrationEventHandler : IIntegrationEventHan
     public async Task Handle(TierOfIdentityChangedIntegrationEvent @event)
     {
         var identity = await _identitiesRepository.Find(@event.IdentityAddress, CancellationToken.None, track: true);
-        var newTier = await _tiersRepository.Find(@event.NewTier, CancellationToken.None, track: true);
+        var newTier = await _tiersRepository.Find(@event.NewTierId, CancellationToken.None, track: true);
 
         await identity.ChangeTier(newTier, _metricCalculatorFactory, CancellationToken.None);
 
