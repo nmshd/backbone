@@ -6,7 +6,7 @@ public class QuotaExhaustedException : ApplicationException
 {
     public QuotaExhaustedException(MetricStatus[] exhaustedMetricStatuses) : base(GenericApplicationErrors.QuotaExhausted())
     {
-        ExhaustedMetricStatuses = exhaustedMetricStatuses.Select(it => new ExhaustedMetricStatus(it.MetricKey, it.IsExhaustedUntil));
+        ExhaustedMetricStatuses = exhaustedMetricStatuses.Select(it => new ExhaustedMetricStatus(it.MetricKey, it.IsExhaustedUntil!.Value));
     }
 
     public IEnumerable<ExhaustedMetricStatus> ExhaustedMetricStatuses { get; }
@@ -14,10 +14,10 @@ public class QuotaExhaustedException : ApplicationException
 
 public class ExhaustedMetricStatus
 {
-    public ExhaustedMetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
+    public ExhaustedMetricStatus(MetricKey metricKey, DateTime isExhaustedUntil)
     {
         MetricKey = metricKey;
-        IsExhaustedUntil = isExhaustedUntil.Value;
+        IsExhaustedUntil = isExhaustedUntil;
     }
 
     public MetricKey MetricKey { get; }

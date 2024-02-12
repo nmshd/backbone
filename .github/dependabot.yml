@@ -53,6 +53,6 @@ updates:
           - "*"
     reviewers:
       - "tnotheis"
+      - "daniel-almeida-konkconsulting"
     labels:
       - "dependencies"
-      

@@ -8,9 +8,10 @@
 
 .layout-content {
     padding: 1rem;
-    min-width: 1350px;
     margin: auto;
-    width: fit-content;
+    width: 100%;
+    max-width: 2150px;
+    box-sizing: border-box;
 }
 
 .login-layout {

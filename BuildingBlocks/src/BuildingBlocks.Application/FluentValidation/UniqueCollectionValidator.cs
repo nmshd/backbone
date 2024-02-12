@@ -19,7 +19,7 @@ public class UniqueCollectionValidator<T, TElement, TPropertyKey> : PropertyVali
     {
         if (value == null) return true;
 
-        if (value is not IEnumerable<TElement> enumerable)
+        if (value is not { } enumerable)
             throw new ArgumentException("PropertyValue must implement IEnumerable<T>.");
 
         var uniqueItemValues = new HashSet<object?>();
