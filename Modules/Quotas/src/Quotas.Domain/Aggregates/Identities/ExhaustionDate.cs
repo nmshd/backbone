@@ -35,6 +35,8 @@ public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
 
     public int CompareTo(ExhaustionDate? other)
     {
-        return other == null ? 1 : Value.CompareTo(other.Value);
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return Value.CompareTo(other.Value);
     }
 }
