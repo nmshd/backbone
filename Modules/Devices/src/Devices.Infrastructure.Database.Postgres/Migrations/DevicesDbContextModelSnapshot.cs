@@ -238,6 +238,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<string>("TierBeforeDeletionId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
                     b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
