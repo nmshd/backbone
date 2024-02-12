@@ -60,7 +60,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_PeerIdentityToBeDeletedIntegrationEvent()
+    public async void Publishes_IdentityToBeDeletedIntegrationEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
