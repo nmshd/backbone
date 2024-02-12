@@ -1,14 +1,24 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Net.Mail;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Message : IIdentifiable<MessageId>
 {
-#pragma warning disable CS8618
-    private Message() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Message()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        Body = null!;
+        Attachments = null!;
+        Recipients = null!;
+    }
 
     public Message(IdentityAddress createdBy, DeviceId createdByDevice, DateTime? doNotSendBefore, byte[] body, IEnumerable<Attachment> attachments, IEnumerable<RecipientInformation> recipients)
     {
