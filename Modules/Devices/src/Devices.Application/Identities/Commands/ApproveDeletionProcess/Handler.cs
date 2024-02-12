@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        var deletionProcess = identity.ApproveDeletionProcess(_userContext.GetDeviceId(), request.DeletionProcessId);
+        var deletionProcess = identity.ApproveDeletionProcess(request.DeletionProcessId, _userContext.GetDeviceId());
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new IdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));

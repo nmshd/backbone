@@ -20,7 +20,7 @@ public class ApproveDeletionProcessTests
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
+        identity.ApproveDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, DeviceId.Parse("DVC"));
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
@@ -37,7 +37,7 @@ public class ApproveDeletionProcessTests
         var identity = CreateIdentity();
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), "someNonExistentProcess");
+        var acting = () => identity.ApproveDeletionProcess("someNonExistentProcess", DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
@@ -51,7 +51,7 @@ public class ApproveDeletionProcessTests
         var deletionProcess = identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(DeviceId.Parse("DVC"), deletionProcess.Id);
+        var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessFoundInCorrectStatusForApproval");
