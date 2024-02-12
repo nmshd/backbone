@@ -114,7 +114,7 @@ public class HandlerTests
         var command = new DeleteTierQuotaDefinitionCommand(tierId, "SomeTierQuotaDefinitionId");
 
         var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Tier>(null!));
+        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Tier?>(null));
 
         var handler = CreateHandler(tiersRepository);
 

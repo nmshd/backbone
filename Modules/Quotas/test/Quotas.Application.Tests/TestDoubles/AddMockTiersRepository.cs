@@ -15,7 +15,7 @@ public class AddMockTiersRepository : ITiersRepository
         return Task.CompletedTask;
     }
 
-    public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
