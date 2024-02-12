@@ -16,7 +16,7 @@ public class Relationship
 
     public DateTime CreatedAt { get; }
 
-    public RelationshipStatus Status { get; private set; }
+    public RelationshipStatus Status { get; }
 }
 
 public enum RelationshipStatus
