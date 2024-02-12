@@ -29,13 +29,12 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         var oldTierId = identity.TierId;
         var deletionProcess = identity.ApproveDeletionProcess(request.DeletionProcessId, _userContext.GetDeviceId());
-        
         var newTierId = identity.TierId;
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
         _eventBus.Publish(new IdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
 
         return new ApproveDeletionProcessResponse(deletionProcess);
     }
