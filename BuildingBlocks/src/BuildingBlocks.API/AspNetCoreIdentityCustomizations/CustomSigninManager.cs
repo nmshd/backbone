@@ -49,10 +49,11 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
             user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
 
         var firstOf3FailedAt = (DateTimeOffset)user.FirstOf3FailedAt;
-        if (DateTimeOffset.Compare(firstOf3FailedAt.AddMinutes(3), DateTimeOffset.UtcNow) < 0)
+        if (DateTimeOffset.Compare(firstOf3FailedAt.AddHours(1), DateTimeOffset.UtcNow) < 0)
         {
             user.AccessFailedCount = 1;
             user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
+            user.LockoutEnd = null;
         }
 
         await UserManager.UpdateAsync(user);
