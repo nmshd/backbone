@@ -25,9 +25,7 @@ public class PeerIdentityToBeDeletedIntegrationEventHandler : IIntegrationEventH
 #pragma warning disable IDE0037
         var payload = new
         {
-            DeletionProcessId = integrationEvent.DeletionProcessId,
-            IdentityAddress = integrationEvent.Address,
-            RelationshipId = integrationEvent.RelationshipId
+            IdentityAddress = integrationEvent.Address
         };
 #pragma warning restore IDE0037
         try
