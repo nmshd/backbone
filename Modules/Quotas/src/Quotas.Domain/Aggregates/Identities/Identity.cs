@@ -20,6 +20,8 @@ public class Identity
         _tierQuotas = null!;
         _individualQuotas = null!;
         _metricStatuses = null!;
+        Address = null!;
+        TierId = null!;
     }
 
     public Identity(string address, TierId tierId)
@@ -31,8 +33,8 @@ public class Identity
         _metricStatuses = new List<MetricStatus>();
     }
 
-    public string Address { get; } = null!;
-    public TierId TierId { get; private set; } = null!;
+    public string Address { get; }
+    public TierId TierId { get; private set; }
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
 
