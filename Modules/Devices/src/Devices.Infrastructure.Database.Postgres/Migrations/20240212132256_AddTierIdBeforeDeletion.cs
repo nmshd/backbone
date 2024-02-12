@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
     public partial class AddTierBeforeDeletionId : Migration
@@ -11,9 +11,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "TierBeforeDeletionId",
+                name: "TierIdBeforeDeletion",
                 table: "Identities",
-                type: "char(20)",
+                type: "character(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
@@ -24,7 +24,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "TierBeforeDeletionId",
+                name: "TierIdBeforeDeletion",
                 table: "Identities");
         }
     }

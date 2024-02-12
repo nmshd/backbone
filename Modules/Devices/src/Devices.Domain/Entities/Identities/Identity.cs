@@ -33,7 +33,7 @@ public class Identity
 
     public byte IdentityVersion { get; private set; }
 
-    public TierId? TierBeforeDeletionId { get; private set; }
+    public TierId? TierIdBeforeDeletion { get; private set; }
     public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
@@ -62,7 +62,7 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        TierBeforeDeletionId = TierId;
+        TierIdBeforeDeletion = TierId;
 
         var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
         _deletionProcesses.Add(deletionProcess);
@@ -74,7 +74,7 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        TierBeforeDeletionId = TierId;
+        TierIdBeforeDeletion = TierId;
 
         var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);

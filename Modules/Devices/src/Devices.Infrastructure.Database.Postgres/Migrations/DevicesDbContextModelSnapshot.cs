@@ -238,7 +238,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("TierBeforeDeletionId")
+                    b.Property<string>("TierIdBeforeDeletion")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
