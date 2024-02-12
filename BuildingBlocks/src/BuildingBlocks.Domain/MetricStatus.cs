@@ -7,6 +7,7 @@ public class MetricStatus
 
     private MetricStatus()
     {
+        MetricKey = null!;
     }
 
     internal MetricStatus(MetricKey metricKey, DateTime? isExhaustedUntil)
@@ -17,6 +18,4 @@ public class MetricStatus
 
     public MetricKey MetricKey { get; }
     public DateTime? IsExhaustedUntil { get; }
-
-    public string Owner { get; }
 }
