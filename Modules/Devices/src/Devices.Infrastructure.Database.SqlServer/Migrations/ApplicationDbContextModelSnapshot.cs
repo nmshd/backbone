@@ -17,7 +17,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+<<<<<<< HEAD
                 .HasAnnotation("ProductVersion", "8.0.1")
+=======
+                .HasAnnotation("ProductVersion", "8.0.0")
+>>>>>>> main
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -42,9 +46,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<int>("Environment")
+<<<<<<< HEAD
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
+=======
+                        .HasColumnType("int");
+>>>>>>> main
 
                     b.Property<string>("Handle")
                         .IsRequired()
@@ -250,10 +258,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+<<<<<<< HEAD
                     b.Property<string>("ApplicationType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+=======
+>>>>>>> main
                     b.Property<string>("ClientId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -261,10 +272,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
+<<<<<<< HEAD
                     b.Property<string>("ClientType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+=======
+>>>>>>> main
                     b.Property<string>("ConcurrencyToken")
                         .IsConcurrencyToken()
                         .HasMaxLength(50)
@@ -290,9 +304,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
 
+<<<<<<< HEAD
                     b.Property<string>("JsonWebKeySet")
                         .HasColumnType("nvarchar(max)");
 
+=======
+>>>>>>> main
                     b.Property<int?>("MaxIdentities")
                         .HasColumnType("int");
 
@@ -311,8 +328,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Requirements")
                         .HasColumnType("nvarchar(max)");
 
+<<<<<<< HEAD
                     b.Property<string>("Settings")
                         .HasColumnType("nvarchar(max)");
+=======
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+>>>>>>> main
 
                     b.HasKey("Id");
 
