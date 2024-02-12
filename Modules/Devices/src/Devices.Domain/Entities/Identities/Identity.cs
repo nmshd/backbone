@@ -75,6 +75,8 @@ public class Identity
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+        Status = IdentityStatus.ToBeDeleted;
 
         return deletionProcess;
     }
