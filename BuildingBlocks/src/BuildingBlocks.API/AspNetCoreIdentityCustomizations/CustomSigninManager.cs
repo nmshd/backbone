@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +27,10 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
         var result = await base.CheckPasswordSignInAsync(user, password, lockoutOnFailure);
 
         if (!result.Succeeded)
+        {
+            await FailedLogin(user);
             return result;
+        }
 
         await UpdateLastLoginDate(user);
 
@@ -36,6 +40,21 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
     private async Task UpdateLastLoginDate(ApplicationUser user)
     {
         user.LoginOccurred();
+        await UserManager.UpdateAsync(user);
+    }
+
+    private async Task FailedLogin(ApplicationUser user)
+    {
+        if (!user.FirstOf3FailedAt.HasValue)
+            user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
+
+        var firstOf3FailedAt = (DateTimeOffset)user.FirstOf3FailedAt;
+        if (DateTimeOffset.Compare(firstOf3FailedAt.AddMinutes(3), DateTimeOffset.UtcNow) < 0)
+        {
+            user.AccessFailedCount = 1;
+            user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
+        }
+
         await UserManager.UpdateAsync(user);
     }
 }
