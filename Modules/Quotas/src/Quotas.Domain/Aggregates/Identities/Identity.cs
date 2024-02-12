@@ -13,6 +13,17 @@ public class Identity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
+    // ReSharper disable once UnusedMember.Local
+    private Identity()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _tierQuotas = null!;
+        _individualQuotas = null!;
+        _metricStatuses = null!;
+        Address = null!;
+        TierId = null!;
+    }
+
     public Identity(string address, TierId tierId)
     {
         Address = address;
@@ -21,7 +32,6 @@ public class Identity
         _individualQuotas = new List<IndividualQuota>();
         _metricStatuses = new List<MetricStatus>();
     }
-    private Identity() { }
 
     public string Address { get; }
     public TierId TierId { get; private set; }

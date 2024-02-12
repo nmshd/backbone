@@ -32,11 +32,11 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tier = await (track ? _tiers : _readOnlyTiers)
             .IncludeAll(_dbContext)
-            .FirstWithId(id, cancellationToken);
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
 
         return tier;
     }
