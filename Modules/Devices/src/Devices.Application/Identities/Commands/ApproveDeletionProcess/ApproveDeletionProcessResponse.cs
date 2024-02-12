@@ -14,8 +14,8 @@ public class ApproveDeletionProcessResponse
     }
 
     public string Id { get; }
-    public DeletionProcessStatus Status { get; set; }
+    public DeletionProcessStatus Status { get; }
     public DateTime CreatedAt { get; }
-    public DateTime ApprovedAt { get; set; }
-    public string ApprovedByDevice { get; set; }
+    public DateTime ApprovedAt { get; }
+    public string ApprovedByDevice { get; }
 }
