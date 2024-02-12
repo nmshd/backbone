@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities;
-using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -45,8 +44,7 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
 
     private async Task FailedLogin(ApplicationUser user)
     {
-        if (!user.FirstOf3FailedAt.HasValue)
-            user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
+        user.FirstOf3FailedAt ??= DateTimeOffset.UtcNow;
 
         var firstOf3FailedAt = (DateTimeOffset)user.FirstOf3FailedAt;
         if (DateTimeOffset.Compare(firstOf3FailedAt.AddHours(1), DateTimeOffset.UtcNow) < 0)
