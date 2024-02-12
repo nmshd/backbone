@@ -7,14 +7,14 @@ namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
 public class RelationshipDTO : IMapTo<Relationship>
 {
-    public RelationshipId Id { get; set; }
-    public RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public required RelationshipId Id { get; set; }
+    public required RelationshipTemplateId RelationshipTemplateId { get; set; }
 
-    public IdentityAddress From { get; set; }
-    public IdentityAddress To { get; set; }
-    public IEnumerable<RelationshipChangeDTO> Changes { get; set; }
+    public required IdentityAddress From { get; set; }
+    public required IdentityAddress To { get; set; }
+    public required IEnumerable<RelationshipChangeDTO> Changes { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
 
-    public RelationshipStatus Status { get; set; }
+    public required RelationshipStatus Status { get; set; }
 }

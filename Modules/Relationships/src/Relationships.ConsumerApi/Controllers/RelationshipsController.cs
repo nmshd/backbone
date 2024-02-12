@@ -68,12 +68,12 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> ListChanges(
         [FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<RelationshipChangeId> ids,
-        [FromQuery] OptionalDateRange createdAt,
-        [FromQuery] OptionalDateRange completedAt,
-        [FromQuery] OptionalDateRange modifiedAt,
+        [FromQuery] OptionalDateRange? createdAt,
+        [FromQuery] OptionalDateRange? completedAt,
+        [FromQuery] OptionalDateRange? modifiedAt,
         [FromQuery] bool? onlyPeerChanges,
-        [FromQuery] IdentityAddress createdBy,
-        [FromQuery] IdentityAddress completedBy,
+        [FromQuery] IdentityAddress? createdBy,
+        [FromQuery] IdentityAddress? completedBy,
         [FromQuery] string? status,
         [FromQuery] string? type, CancellationToken cancellationToken)
     {

@@ -4,7 +4,7 @@ using FluentValidation.Validators;
 
 namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
-public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]>, ILengthValidator
+public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]?>, ILengthValidator
 {
     public NumberOfBytesValidator(int min, int max)
     {
@@ -51,7 +51,7 @@ public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]>, ILengthVa
 
 public static class NumberOfBytesValidatorRuleBuilderExtensions
 {
-    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
+    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]?> ruleBuilder,
         int minNumberOfBytes, int maxNumberOfBytes)
     {
         return ruleBuilder
