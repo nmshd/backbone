@@ -2,8 +2,6 @@
 
 public class Range<T>
 {
-    public Range() { }
-
     public Range(T from, T to)
     {
         From = from;
@@ -15,22 +13,20 @@ public class Range<T>
 
     public bool HasFrom()
     {
-        return !From.Equals(default(T));
+        return !Equals(From, default(T));
     }
 
     public bool HasTo()
     {
-        return !To.Equals(default(T));
+        return !Equals(To, default(T));
     }
 }
 
 public class OptionalDateRange : Range<DateTime?>
 {
-    public OptionalDateRange() { }
+    public OptionalDateRange() : base(null, null) { }
 
     public OptionalDateRange(DateTime? from, DateTime? to) : base(from, to)
     {
-        From = from;
-        To = to;
     }
 }
