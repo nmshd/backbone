@@ -32,9 +32,9 @@ public static class DomainErrors
         return new DomainError("error.platform.relationships.onlyActiveRelationshipsCanBeTerminated", "Only active relationships can be terminated.");
     }
 
-    public static DomainError PendingChangeAlreadyExisits(RelationshipChangeId? changeId = null)
+    public static DomainError PendingChangeAlreadyExists(RelationshipChangeId? changeId = null)
     {
-        return new DomainError("error.platform.relationships.pendingChangeAlreadyExisits", $"There is already a pending change for this relationship. Change ID: {changeId}");
+        return new DomainError("error.platform.relationships.pendingChangeAlreadyExists", $"There is already a pending change for this relationship. Change ID: {changeId}");
     }
 
     public static DomainError ContentIsRequiredForCompletingRelationships()
