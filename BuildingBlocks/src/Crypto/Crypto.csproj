@@ -20,6 +20,9 @@
 	<ItemGroup>
 		<PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
 		<PackageReference Include="NSec.Cryptography" Version="22.4.0" />
+		<PackageReference Include="OpenIddict.AspNetCore" Version="5.2.0" />
+		<PackageReference Include="OpenIddict.Core" Version="5.2.0" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.2.0" />
 	</ItemGroup>
 
 </Project>
