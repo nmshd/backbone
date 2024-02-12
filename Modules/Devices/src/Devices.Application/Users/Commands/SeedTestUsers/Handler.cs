@@ -52,6 +52,22 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");
         await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
+        // user created for testing user lockout after 3 failed login attempts
+        user = new ApplicationUser
+        {
+            SecurityStamp = Guid.NewGuid().ToString("D"),
+            UserName = "USRc",
+            NormalizedUserName = "USRC",
+            Device = new Device(new Identity("test",
+                IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
+                new byte[] { 2, 2, 2, 2, 2 }, basicTier.Id, 1
+            )),
+            CreatedAt = SystemTime.UtcNow
+        };
+        user.PasswordHash = _passwordHasher.HashPassword(user, "c");
+        user.LockoutEnabled = true;
+        await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
