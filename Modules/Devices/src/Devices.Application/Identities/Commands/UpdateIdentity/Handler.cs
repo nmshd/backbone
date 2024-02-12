@@ -38,6 +38,6 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
         identity.ChangeTier(newTier.Id);
         await _identitiesRepository.Update(identity, cancellationToken);
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier.Id, newTier.Id));
     }
 }
