@@ -11,6 +11,6 @@ public class ListChangesQueryValidator : AbstractValidator<ListChangesQuery>
     public ListChangesQueryValidator()
     {
         RuleFor(query => query.CreatedAt)
-            .IsValidRange<ListChangesQuery, OptionalDateRange, DateTime?>().WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+            .IsValidRange<ListChangesQuery, OptionalDateRange?, DateTime?>().WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 }
