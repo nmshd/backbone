@@ -59,8 +59,8 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
             UserName = "USRc",
             NormalizedUserName = "USRC",
             Device = new Device(new Identity("test",
-                IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, basicTier.Id, 1
+                IdentityAddress.Create(new byte[] { 3, 3, 3, 3, 3 }, "id1"),
+                new byte[] { 3, 3, 3, 3, 3 }, basicTier.Id, 1
             )),
             CreatedAt = SystemTime.UtcNow
         };
