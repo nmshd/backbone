@@ -5,10 +5,10 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 public class TierOfIdentityChangedIntegrationEvent : IntegrationEvent
 {
-    public TierOfIdentityChangedIntegrationEvent(Identity identity, Tier oldTier, Tier newTier) : base($"{identity.Address}/TierOfIdentityChanged")
+    public TierOfIdentityChangedIntegrationEvent(Identity identity, TierId oldTierId, TierId newTierId) : base($"{identity.Address}/TierOfIdentityChanged")
     {
-        OldTier = oldTier.Id;
-        NewTier = newTier.Id;
+        OldTier = oldTierId;
+        NewTier = newTierId;
         IdentityAddress = identity.Address;
     }
 
