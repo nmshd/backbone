@@ -60,37 +60,6 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_IdentityToBeDeletedIntegrationEvent()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
-        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        var identityDevice = identity.Devices[0];
-
-        var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
-
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
-            .Returns(identity);
-
-        var mockEventBus = A.Fake<IEventBus>();
-
-        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
-
-        // Act
-        await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockEventBus.Publish(
-            A<IdentityToBeDeletedIntegrationEvent>.That.Matches(
-                e => e.Address == identity.Address &&
-                     e.DeletionProcessId == identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved).Id))
-        ).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public void Throws_when_given_identity_does_not_exist()
     {
         // Arrange

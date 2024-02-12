@@ -31,7 +31,6 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new IdentityToBeDeletedIntegrationEvent(identity.Address, deletionProcess.Id));
         _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
 
         return new ApproveDeletionProcessResponse(deletionProcess);
