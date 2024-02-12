@@ -6,6 +6,7 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File
 {
+    // ReSharper disable once UnusedMember.Local
     private File()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
