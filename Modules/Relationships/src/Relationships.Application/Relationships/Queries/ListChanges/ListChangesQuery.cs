@@ -9,7 +9,7 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListC
 
 public class ListChangesQuery : IRequest<ListChangesResponse>
 {
-    public ListChangesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipChangeId> ids, OptionalDateRange createdAt, OptionalDateRange completedAt, OptionalDateRange modifiedAt, RelationshipChangeStatus? status, RelationshipChangeType? type, IdentityAddress createdBy, IdentityAddress completedBy, bool onlyPeerChanges)
+    public ListChangesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipChangeId> ids, OptionalDateRange? createdAt, OptionalDateRange? completedAt, OptionalDateRange? modifiedAt, RelationshipChangeStatus? status, RelationshipChangeType? type, IdentityAddress? createdBy, IdentityAddress? completedBy, bool onlyPeerChanges)
     {
         PaginationFilter = paginationFilter;
         Ids = ids;
@@ -25,12 +25,12 @@ public class ListChangesQuery : IRequest<ListChangesResponse>
 
     public PaginationFilter PaginationFilter { get; set; }
     public IEnumerable<RelationshipChangeId> Ids { get; set; }
-    public OptionalDateRange CreatedAt { get; set; }
-    public OptionalDateRange CompletedAt { get; set; }
-    public OptionalDateRange ModifiedAt { get; }
+    public OptionalDateRange? CreatedAt { get; set; }
+    public OptionalDateRange? CompletedAt { get; set; }
+    public OptionalDateRange? ModifiedAt { get; }
     public RelationshipChangeStatus? Status { get; }
-    public IdentityAddress CreatedBy { get; set; }
-    public IdentityAddress CompletedBy { get; set; }
+    public IdentityAddress? CreatedBy { get; set; }
+    public IdentityAddress? CompletedBy { get; set; }
     public bool OnlyPeerChanges { get; set; }
     public RelationshipChangeType? Type { get; set; }
 }
