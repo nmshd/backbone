@@ -27,11 +27,11 @@ public class HandlerTests
 
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        var identityDevice = identity.Devices[0];
+        var device = identity.Devices[0];
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
@@ -49,13 +49,13 @@ public class HandlerTests
                 && i.TierId == Tier.QUEUED_FOR_DELETION.Id
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedAt == DateTime.Parse("2000-01-01")
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodEndsAt == DateTime.Parse("2000-01-31")
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == identityDevice.Id
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == device.Id
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
         response.ApprovedAt.Should().Be(utcNow);
-        response.ApprovedByDevice.Should().Be(identityDevice.Id);
+        response.ApprovedByDevice.Should().Be(device.Id);
         response.Status.Should().Be(DeletionProcessStatus.Approved);
     }
 
