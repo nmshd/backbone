@@ -74,7 +74,7 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> ApproveDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new ApproveDeletionProcessCommand(id), cancellationToken);
-        return Created("", response);
+        return Ok(response);
     }
 }
 
