@@ -7,8 +7,10 @@ public class TierQuota : Quota
 {
     private readonly TierQuotaDefinition _definition;
 
+    // ReSharper disable once UnusedMember.Local
     private TierQuota()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         _definition = null!;
     }
 
