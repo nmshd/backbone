@@ -6,10 +6,10 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListR
 
 public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
 {
-    public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipId> ids)
+    public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipId>? ids)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? null : new List<RelationshipId>(ids);
+        Ids = ids == null ? [] : new List<RelationshipId>(ids);
     }
 
     public PaginationFilter PaginationFilter { get; set; }

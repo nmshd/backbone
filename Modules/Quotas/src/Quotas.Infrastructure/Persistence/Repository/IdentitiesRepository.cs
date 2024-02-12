@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -27,11 +26,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Identity> Find(string address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false)
     {
         var identity = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
-            .FirstWithAddress(address, cancellationToken);
+            .FirstOrDefaultAsync(i => i.Address == address, cancellationToken);
 
         return identity;
     }
@@ -48,7 +47,8 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
-            .WithTier(tierId, cancellationToken);
+            .Where(i => i.TierId == tierId)
+            .ToListAsync(cancellationToken);
 
         return identities;
     }

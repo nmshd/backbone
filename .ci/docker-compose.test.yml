@@ -65,7 +65,9 @@ services:
 
   seed-client:
     container_name: seed-client-test
-    image: ghcr.io/nmshd/backbone-admin-cli:v2.2.0
+    build: 
+      context: ..
+      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
     depends_on:
       consumer-api:
         condition: service_healthy
