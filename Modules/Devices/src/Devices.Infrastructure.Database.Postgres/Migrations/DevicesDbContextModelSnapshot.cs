@@ -111,6 +111,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTimeOffset?>("FirstOf3FailedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("timestamp with time zone");
 
