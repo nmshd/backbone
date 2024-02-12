@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -125,6 +126,9 @@ public class IdentityDeletionProcess
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)
     {
+        if (Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+
         Approve(approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
