@@ -54,7 +54,7 @@ public class ApproveDeletionProcessTests
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessFoundInCorrectStatusForApproval");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
