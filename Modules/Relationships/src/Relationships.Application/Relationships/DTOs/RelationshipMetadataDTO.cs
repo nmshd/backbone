@@ -16,7 +16,7 @@ public class RelationshipMetadataDTO : IMapTo<Relationship>
 
     public required DateTime CreatedAt { get; set; }
 
-    public RelationshipStatus Status { get; private set; }
+    public RelationshipStatus Status { get; set; }
 }
 
 public class RelationshipChangeMetadataDTO : IMapTo<RelationshipChange>
@@ -26,7 +26,7 @@ public class RelationshipChangeMetadataDTO : IMapTo<RelationshipChange>
     public required RelationshipId RelationshipId { get; set; }
 
     public required RelationshipChangeRequestMetadataDTO Request { get; set; }
-    public required RelationshipChangeResponseMetadataDTO Response { get; set; }
+    public required RelationshipChangeResponseMetadataDTO? Response { get; set; }
 
     public required RelationshipChangeType Type { get; set; }
 

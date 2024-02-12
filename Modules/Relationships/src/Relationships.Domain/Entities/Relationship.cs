@@ -10,11 +10,18 @@ public class Relationship
 {
     private readonly RelationshipChangeLog _changes = new();
 
-#pragma warning disable CS8618
-    private Relationship() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Relationship()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        RelationshipTemplateId = null!;
+        RelationshipTemplate = null!;
+        From = null!;
+        To = null!;
+    }
 
-    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[] requestContent)
+    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[]? requestContent)
     {
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;

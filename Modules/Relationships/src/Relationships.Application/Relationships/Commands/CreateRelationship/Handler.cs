@@ -17,9 +17,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
     private CancellationToken _cancellationToken;
-    private Relationship _relationship;
     private CreateRelationshipCommand _request;
     private RelationshipTemplate _template;
+    private Relationship _relationship;
 
     public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
@@ -29,9 +29,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;
 
-        _relationship = null!;
         _request = null!;
         _template = null!;
+        _relationship = null!;
     }
 
     public async Task<CreateRelationshipResponse> Handle(CreateRelationshipCommand request, CancellationToken cancellationToken)
@@ -81,13 +81,12 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _request.Content);
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
-
     }
 
     private void PublishIntegrationEvent()
     {
-        var change = _relationship.Changes.FirstOrDefault();
-        var evt = new RelationshipChangeCreatedIntegrationEvent(change!);
+        var change = _relationship.Changes.First(); // there is always one change, because the relationship was just created
+        var evt = new RelationshipChangeCreatedIntegrationEvent(change);
         _eventBus.Publish(evt);
     }
 

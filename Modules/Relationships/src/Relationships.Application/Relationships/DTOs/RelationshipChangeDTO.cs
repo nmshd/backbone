@@ -12,7 +12,7 @@ public class RelationshipChangeDTO : IMapTo<RelationshipChange>
     public required RelationshipId RelationshipId { get; set; }
 
     public required RelationshipChangeRequestDTO Request { get; set; }
-    public required RelationshipChangeResponseDTO Response { get; set; }
+    public required RelationshipChangeResponseDTO? Response { get; set; }
 
     public required RelationshipChangeType Type { get; set; }
 
@@ -24,7 +24,7 @@ public class RelationshipChangeRequestDTO : IMapTo<RelationshipChangeRequest>
     public required DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
-    public required byte[] Content { get; set; }
+    public required byte[]? Content { get; set; }
 }
 
 public class RelationshipChangeResponseDTO : IMapTo<RelationshipChangeResponse>
@@ -32,5 +32,5 @@ public class RelationshipChangeResponseDTO : IMapTo<RelationshipChangeResponse>
     public required DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
-    public required byte[] Content { get; set; }
+    public required byte[]? Content { get; set; }
 }
