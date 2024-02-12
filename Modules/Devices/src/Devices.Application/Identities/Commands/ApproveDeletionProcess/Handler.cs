@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -18,7 +17,6 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
     public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus)
     {
         _identitiesRepository = identitiesRepository;
-        _tiersRepository = tiersRepository;
         _userContext = userContext;
         _eventBus = eventBus;
     }
