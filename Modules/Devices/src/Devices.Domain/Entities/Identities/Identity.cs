@@ -62,8 +62,6 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
-        TierIdBeforeDeletion = TierId;
-
         var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
         _deletionProcesses.Add(deletionProcess);
 
