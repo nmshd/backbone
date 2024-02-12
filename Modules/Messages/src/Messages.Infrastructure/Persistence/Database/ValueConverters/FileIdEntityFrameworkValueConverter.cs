@@ -9,7 +9,7 @@ public class FileIdEntityFrameworkValueConverter : ValueConverter<FileId, string
 
     public FileIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => FileId.Parse(value),
             mappingHints
         )

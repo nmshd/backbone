@@ -9,7 +9,7 @@ public class RelationshipIdEntityFrameworkValueConverter : ValueConverter<Relati
 
     public RelationshipIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => RelationshipId.Parse(value),
             mappingHints
         )
