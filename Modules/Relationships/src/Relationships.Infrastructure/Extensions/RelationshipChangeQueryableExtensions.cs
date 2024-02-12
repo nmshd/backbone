@@ -14,10 +14,10 @@ public static class RelationshipChangeQueryableExtensions
         if (completedAt == null)
             return newQuery;
 
-        if (completedAt.From != default)
+        if (completedAt.From.HasValue)
             newQuery = newQuery.Where(r => r.Response != null && r.Response.CreatedAt >= completedAt.From);
 
-        if (completedAt.To != default)
+        if (completedAt.To.HasValue)
             newQuery = newQuery.Where(r => r.Response != null && r.Response.CreatedAt <= completedAt.To);
 
         return newQuery;
@@ -33,12 +33,9 @@ public static class RelationshipChangeQueryableExtensions
         return query.Where(c => ids.Contains(c.Id));
     }
 
-    public static IQueryable<RelationshipChange> CreatedAt(this IQueryable<RelationshipChange> query, OptionalDateRange? createdAt)
+    public static IQueryable<RelationshipChange> CreatedAt(this IQueryable<RelationshipChange> query, OptionalDateRange createdAt)
     {
         var newQuery = query;
-
-        if (createdAt == null)
-            return newQuery;
 
         if (createdAt.From != default)
             newQuery = newQuery.Where(r => r.Request.CreatedAt >= createdAt.From);
@@ -49,12 +46,9 @@ public static class RelationshipChangeQueryableExtensions
         return newQuery;
     }
 
-    public static IQueryable<RelationshipChange> ModifiedAt(this IQueryable<RelationshipChange> query, OptionalDateRange? modifiedAt)
+    public static IQueryable<RelationshipChange> ModifiedAt(this IQueryable<RelationshipChange> query, OptionalDateRange modifiedAt)
     {
         var newQuery = query;
-
-        if (modifiedAt == null)
-            return newQuery;
 
         if (modifiedAt.From != default)
             newQuery = newQuery.Where(c => c.Request.CreatedAt >= modifiedAt.From ||
@@ -72,33 +66,33 @@ public static class RelationshipChangeQueryableExtensions
         return query.Where(r => r.Status == RelationshipChangeStatus.Pending);
     }
 
-    public static IQueryable<RelationshipChange> WithType(this IQueryable<RelationshipChange> query, RelationshipChangeType? type)
+    public static IQueryable<RelationshipChange> WithType(this IQueryable<RelationshipChange> query, RelationshipChangeType type)
     {
-        return type != null ? query.Where(r => r.Type == type) : query;
+        return query.Where(r => r.Type == type);
     }
 
-    public static IQueryable<RelationshipChange> WithStatus(this IQueryable<RelationshipChange> query, RelationshipChangeStatus? status)
+    public static IQueryable<RelationshipChange> WithStatus(this IQueryable<RelationshipChange> query, RelationshipChangeStatus status)
     {
-        return status != null ? query.Where(r => r.Status == status) : query;
+        return query.Where(r => r.Status == status);
     }
 
-    public static IQueryable<RelationshipChange> WithRelationshipParticipant(this IQueryable<RelationshipChange> query, IdentityAddress identityId)
+    public static IQueryable<RelationshipChange> WithRelationshipParticipant(this IQueryable<RelationshipChange> query, IdentityAddress identityAddress)
     {
-        return query.Where(r => r.Relationship.From == identityId || r.Relationship.To == identityId);
+        return query.Where(r => r.Relationship.From == identityAddress || r.Relationship.To == identityAddress);
     }
 
-    public static IQueryable<RelationshipChange> CreatedBy(this IQueryable<RelationshipChange> query, IdentityAddress? identityId)
+    public static IQueryable<RelationshipChange> CreatedBy(this IQueryable<RelationshipChange> query, IdentityAddress identityId)
     {
-        return identityId != null ? query.Where(r => r.Request.CreatedBy == identityId) : query;
+        return query.Where(r => r.Request.CreatedBy == identityId);
     }
 
-    public static IQueryable<RelationshipChange> CompletedBy(this IQueryable<RelationshipChange> query, IdentityAddress? identityId)
+    public static IQueryable<RelationshipChange> CompletedBy(this IQueryable<RelationshipChange> query, IdentityAddress identityId)
     {
-        return identityId != null ? query.Where(r => r.Response != null && r.Response.CreatedBy == identityId) : query;
+        return query.Where(r => r.Response != null && r.Response.CreatedBy == identityId);
     }
 
-    public static IQueryable<RelationshipChange> WithId(this IQueryable<RelationshipChange> query, RelationshipChangeId? id)
+    public static IQueryable<RelationshipChange> WithId(this IQueryable<RelationshipChange> query, RelationshipChangeId id)
     {
-        return id != null ? query.Where(r => r.Id == id) : query;
+        return query.Where(r => r.Id == id);
     }
 }
