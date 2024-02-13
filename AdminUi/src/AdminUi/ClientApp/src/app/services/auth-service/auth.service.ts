@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { XSRFService } from "../xsrf-service/xsrf.service";
+import { BreadcrumbService } from "../breadcrumb-service/breadcrumb.service";
 
 @Injectable({
     providedIn: "root"
@@ -19,7 +20,8 @@ export class AuthService {
     public constructor(
         private readonly router: Router,
         private readonly http: HttpClient,
-        private readonly xsrfService: XSRFService
+        private readonly xsrfService: XSRFService,
+        private readonly breadcrumbService: BreadcrumbService
     ) {
         this.apiUrl = environment.apiUrl;
     }
@@ -49,6 +51,7 @@ export class AuthService {
 
     public async logout(): Promise<boolean> {
         localStorage.removeItem("api-key");
+        this.breadcrumbService.clearBreadcrumbHistoryAfterIndex(0);
         this.loggedIn.next(false);
         this.xsrfService.clearStoredToken();
         return await this.router.navigate(["/login"]);
