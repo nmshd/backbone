@@ -26,7 +26,8 @@ public class DecryptTest
 
         var expectedBody = "{\"@type\":\"MessageSigned\",\"message\":\"{\\\"@type\\\":\\\"MessageContentWrapper\\\",\\\"attachments\\\":[],\\\"content\\\":{\\\"content\\\":\\\"TestContent\\\"},\\\"createdAt\\\":\\\"2024-02-06T22:18:39.470Z\\\",\\\"recipients\\\":[\\\"id19khDhsE7Ak18BgMHEba7iczUdcg4Zjmew\\\"]}\",\"signatures\":[{\"recipient\":\"id19khDhsE7Ak18BgMHEba7iczUdcg4Zjmew\",\"signature\":\"{\\\"sig\\\":\\\"S8wFVW_NHwmydRIpDGgjbnm5YXICimfjBaupZO7T3firEIuu_NWogZwcgXMzC5YehXyERasueSVOrkGR0PnaDg\\\",\\\"alg\\\":1}\"}]}";
 
-        var secretKey = "{\"key\":\"yS6vFC70epmYFoUAIopluLmJJUH58FVGnwI3AR1fPZ8\",\"alg\":3}";
+        // TODO: define how will symmetric key be passed into dialog box, as a string or json
+        var secretKey = "{\"Key\":\"yS6vFC70epmYFoUAIopluLmJJUH58FVGnwI3AR1fPZ8\",\"alg\":3}";
 
         // Act
         var decryptedBody = message.Decrypt(secretKey);

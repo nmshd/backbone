@@ -90,7 +90,7 @@ public class HandlerTests
         var request = new GetViewMessageQuery
         {
             MessageId = message.Id,
-            SymmetricKey = "{\"key\":\"yS6vFC70epmYFoUAIopluLmJJUH58FVGnwI3AR1fPZ8\",\"alg\":3}"
+            SymmetricKey = "{\"Key\":\"yS6vFC70epmYFoUAIopluLmJJUH58FVGnwI3AR1fPZ8\",\"alg\":3}"
         };
         return request;
     }

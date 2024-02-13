@@ -57,7 +57,7 @@ public class LibsodiumSymmetricEncrypter : ISymmetricEncrypter
         /**
          * Algorithm (`alg`) field is omitted due to not being used in the code.
          */
-        public required string key { get; init; }
+        public required string Key { get; init; }
     }
 
     public ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key)
