@@ -71,7 +71,7 @@ export class TierEditComponent {
         }
 
         this.quotaSubscription = this.quotasService.quota$.subscribe((quota: AssignQuotaData) => {
-            this.createTierQuota(quota)
+            this.createTierQuota(quota);
         });
     }
 
@@ -126,7 +126,7 @@ export class TierEditComponent {
     }
 
     public openAssignQuotaDialog(): void {
-       this.dialog.open(AssignQuotasDialogComponent, {
+        this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
     }

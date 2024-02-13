@@ -85,7 +85,7 @@ export class IdentityDetailsComponent {
         this.loadIdentityAndTiers();
 
         this.quotaSubscription = this.quotasService.quota$.subscribe((quota: AssignQuotaData) => {
-            this.createIdentityQuota(quota)
+            this.createIdentityQuota(quota);
         });
     }
 

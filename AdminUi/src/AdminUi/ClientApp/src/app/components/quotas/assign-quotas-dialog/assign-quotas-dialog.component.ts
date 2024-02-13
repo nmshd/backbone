@@ -44,10 +44,10 @@ export class AssignQuotasDialogComponent {
 
         this.errorMessage = "";
         this.errorMessageSubscription = new Subscription();
-    }   
+    }
 
     public ngOnInit(): void {
-        this.errorMessageSubscription = this.quotasService.errorMessage$.subscribe(message => {
+        this.errorMessageSubscription = this.quotasService.errorMessage$.subscribe((message) => {
             this.errorMessage = message;
         });
         this.getMetrics();
@@ -82,7 +82,7 @@ export class AssignQuotasDialogComponent {
             max: this.max!,
             period: this.period!
         };
-        
+
         this.quotasService.passQuota(quota);
     }
 

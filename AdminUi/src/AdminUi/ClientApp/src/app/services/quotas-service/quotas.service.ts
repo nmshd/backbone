@@ -27,7 +27,7 @@ export class QuotasService {
 
     public passQuota(quota: AssignQuotaData): void {
         this.quotaSubject.next(quota);
-      }
+    }
 
     public getMetrics(): Observable<HttpResponseEnvelope<Metric>> {
         return this.http.get<HttpResponseEnvelope<Metric>>(`${this.apiUrl}/Metrics`);
