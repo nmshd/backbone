@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, forkJoin } from "rxjs";
+import { Observable, Subscription, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
@@ -44,6 +44,8 @@ export class IdentityDetailsComponent {
     public updatedTier?: TierOverview;
     public tier?: TierOverview;
 
+    public quotaSubscription: Subscription;
+
     public constructor(
         private readonly route: ActivatedRoute,
         private readonly snackBar: MatSnackBar,
@@ -70,6 +72,7 @@ export class IdentityDetailsComponent {
         this.identity.quotas = [];
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.tiers = [];
+        this.quotaSubscription = new Subscription();
     }
 
     public ngOnInit(): void {
@@ -80,6 +83,10 @@ export class IdentityDetailsComponent {
         });
 
         this.loadIdentityAndTiers();
+
+        this.quotaSubscription = this.quotasService.quota$.subscribe((quota: AssignQuotaData) => {
+            this.createIdentityQuota(quota)
+        });
     }
 
     public loadAdmissibleTiers(): void {
@@ -183,19 +190,9 @@ export class IdentityDetailsComponent {
         return item.isGroup;
     }
 
-    public openAssignQuotaDialog(errorMessage?: any, quotaData?: AssignQuotaData): void {
-        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%",
-            data: {
-                errorMessage: errorMessage,
-                assignQuotaData: quotaData
-            }
-        });
-
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
-            if (result) {
-                this.createIdentityQuota(result);
-            }
+    public openAssignQuotaDialog(): void {
+        this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%"
         });
     }
 
@@ -216,12 +213,13 @@ export class IdentityDetailsComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
+                this.dialog.closeAll();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.openAssignQuotaDialog(errorMessage, quotaData);
+                this.quotasService.sendErrorMessage(errorMessage);
             }
         });
     }
