@@ -108,7 +108,7 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    public IdentityDeletionProcess ApproveDeletionProcess(string deletionProcessId, DeviceId deviceId)
+    public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
