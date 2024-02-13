@@ -98,7 +98,7 @@ public class SyncRunsController : ApiControllerBase
         var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id,
             request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
 
-        return Ok(response!);
+        return Ok(response);
     }
 
     [HttpGet("{id}/ExternalEvents")]
