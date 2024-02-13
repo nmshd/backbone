@@ -19,6 +19,7 @@ public class Identity
         CreatedAt = SystemTime.UtcNow;
         Devices = new List<Device>();
         TierId = tierId;
+        Status = IdentityStatus.Active;
         _deletionProcesses = new List<IdentityDeletionProcess>();
     }
 
@@ -32,11 +33,14 @@ public class Identity
 
     public byte IdentityVersion { get; private set; }
 
+    public TierId? TierIdBeforeDeletion { get; private set; }
     public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
+
+    public IdentityStatus Status { get; private set; }
 
     public bool IsNew()
     {
@@ -68,10 +72,14 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
+        TierIdBeforeDeletion = TierId;
+
         var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+        Status = IdentityStatus.ToBeDeleted;
 
         return deletionProcess;
     }
@@ -98,6 +106,19 @@ public class Identity
 
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         deletionProcess.ApprovalReminder3Sent(Address);
+    }
+
+    public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Approve(Address, deviceId);
+
+        Status = IdentityStatus.ToBeDeleted;
+        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+
+        return deletionProcess;
     }
 
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
@@ -150,4 +171,10 @@ public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
     Approved = 1
+}
+
+public enum IdentityStatus
+{
+    Active = 0,
+    ToBeDeleted = 1
 }

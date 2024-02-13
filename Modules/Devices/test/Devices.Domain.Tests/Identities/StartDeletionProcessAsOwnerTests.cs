@@ -26,6 +26,8 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        activeIdentity.TierId!.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
+        activeIdentity.Status.Should().Be(IdentityStatus.ToBeDeleted);
 
         AssertDeletionProcessWasStarted(activeIdentity);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);

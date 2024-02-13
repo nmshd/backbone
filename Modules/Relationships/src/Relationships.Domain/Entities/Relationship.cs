@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
@@ -145,4 +146,11 @@ public class Relationship
         if (existingChange != null)
             throw new DomainException(DomainErrors.PendingChangeAlreadyExists(existingChange.Id));
     }
+
+    #region Selectors
+    public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
+    {
+        return r => r.From == identity || r.To == identity;
+    }
+    #endregion
 }

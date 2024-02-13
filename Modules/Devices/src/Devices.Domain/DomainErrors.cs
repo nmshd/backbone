@@ -47,6 +47,6 @@ public static class DomainErrors
 
     public static DomainError NoDeletionProcessWithRequiredStatusExists()
     {
-        return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "No deletion process with the required status was found.");
+        return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "The deletion process does not have the correct status to perform this action.");
     }
 }

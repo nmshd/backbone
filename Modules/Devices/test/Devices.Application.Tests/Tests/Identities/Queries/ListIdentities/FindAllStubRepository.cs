@@ -40,6 +40,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         return Task.FromResult(_identities);
     }
 
+    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
