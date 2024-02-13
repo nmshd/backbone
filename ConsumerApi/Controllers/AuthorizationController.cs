@@ -59,6 +59,8 @@ public class AuthorizationController : ApiControllerBase
                 ApplicationErrors.Authentication.InvalidOAuthRequest("missing password"));
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, lockoutOnFailure: true);
+        if (result.IsLockedOut)
+            return UserLockedOut();
         if (!result.Succeeded)
             return InvalidUserCredentials();
 
@@ -90,6 +92,18 @@ public class AuthorizationController : ApiControllerBase
             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
             [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
                 "The username/password couple is invalid."
+        });
+
+        return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    private IActionResult UserLockedOut()
+    {
+        var properties = new AuthenticationProperties(new Dictionary<string, string?>
+        {
+            [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.AccessDenied,
+            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+                "The user is temporarily locked out, please try again in a few minutes."
         });
 
         return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
