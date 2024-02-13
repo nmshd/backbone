@@ -109,7 +109,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
     public async Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload)
     {
-        ExternalEvent externalEvent = null;
+        ExternalEvent? externalEvent = null;
 
         await RunInTransaction(async () =>
         {
