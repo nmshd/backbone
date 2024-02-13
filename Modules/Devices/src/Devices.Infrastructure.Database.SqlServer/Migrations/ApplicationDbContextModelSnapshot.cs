@@ -42,9 +42,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<int>("Environment")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Handle")
                         .IsRequired()
