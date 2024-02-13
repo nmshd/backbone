@@ -221,7 +221,7 @@ export class IdentityDetailsComponent {
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.openAssignQuotaDialog(errorMessage,quotaData)
+                this.openAssignQuotaDialog(errorMessage, quotaData);
             }
         });
     }

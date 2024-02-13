@@ -61,7 +61,7 @@ export class AssignQuotasDialogComponent {
             tap((data: HttpResponseEnvelope<Metric>) => {
                 this.metrics = data.result;
             }),
-            catchError(err => {
+            catchError((err) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
                 this.snackBar.open(errorMessage, "Dismiss", {
@@ -75,7 +75,7 @@ export class AssignQuotasDialogComponent {
             })
         );
     }
-    
+
     public getPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
