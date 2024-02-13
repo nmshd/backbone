@@ -65,9 +65,13 @@ jobs:
         continue-on-error: true
 
       - name: Install script dependencies
-        run: npm install --prefix ./.ci
+        run: npm install
+        working-directory: ./.ci
+
       - name: Run integration tests
-        run: ./.ci/integrationTest.sqlserver.sh
+        run: ./integrationTest.sqlserver.sh
+        working-directory: ./.ci
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
@@ -96,9 +100,13 @@ jobs:
         continue-on-error: true
 
       - name: Install script dependencies
-        run: npm install --prefix ./.ci
+        run: npm install
+        working-directory: ./.ci
+
       - name: Run integration tests
-        run: ./.ci/integrationTest.postgres.sh
+        run: ./integrationTest.sqlserver.sh
+        working-directory: ./.ci
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
