@@ -2,5 +2,5 @@
 
 public class BlobOptions
 {
-    public string RootFolder { get; set; }
+    public required string RootFolder { get; set; }
 }
