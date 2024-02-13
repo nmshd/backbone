@@ -253,7 +253,7 @@ public class HandlerTests
         return handler;
     }
 
-    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext dbContext = null)
+    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext? dbContext = null)
     {
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
