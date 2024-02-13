@@ -16,7 +16,7 @@ public class DatawalletModificationDTO : IHaveCustomMapping
         CacheChanged
     }
 
-    public DatawalletModificationId Id { get; set; }
+    public required DatawalletModificationId Id { get; set; }
     public ushort DatawalletVersion { get; set; }
     public long Index { get; set; }
     public string ObjectIdentifier { get; set; }
