@@ -6,5 +6,5 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class GetRelationshipTemplateQuery : IRequest<RelationshipTemplateDTO>
 {
-    public RelationshipTemplateId Id { get; set; }
+    public required RelationshipTemplateId Id { get; set; }
 }
