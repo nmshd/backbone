@@ -79,6 +79,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
-        return new Handler(identitiesRepository, userContext, A.Fake<IEventBus>());
+        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>());
     }
 }
