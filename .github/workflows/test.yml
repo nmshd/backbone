@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: 16
           cache: "npm"
-          cache-dependency-path: ./.ci/package-lock.json
+          cache-dependency-path: ../../.ci/package-lock.json
 
       # - name: Cache Node.js modules
       #   uses: actions/cache@v3
@@ -94,7 +94,7 @@ jobs:
         with:
           node-version: 16
           cache: "npm"
-          cache-dependency-path: ./.ci/package-lock.json
+          cache-dependency-path: ../../.ci/package-lock.json
 
       # - name: Cache Node.js modules
       #   uses: actions/cache@v3
