@@ -59,7 +59,7 @@ jobs:
         with:
           node-version: "16"
           cache: "npm"
-          cache-dependency-path: ./.ci/package-lock.json
+          cache-dependency-path: .ci/package-lock.json
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
@@ -90,7 +90,7 @@ jobs:
         with:
           node-version: "16"
           cache: "npm"
-          cache-dependency-path: ./.ci/package-lock.json
+          cache-dependency-path: .ci/package-lock.json
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
