@@ -26,10 +26,7 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
         var result = await base.CheckPasswordSignInAsync(user, password, lockoutOnFailure);
 
         if (!result.Succeeded)
-        {
-            await FailedLogin(user);
             return result;
-        }
 
         await UpdateLastLoginDate(user);
 
@@ -39,21 +36,6 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
     private async Task UpdateLastLoginDate(ApplicationUser user)
     {
         user.LoginOccurred();
-        await UserManager.UpdateAsync(user);
-    }
-
-    private async Task FailedLogin(ApplicationUser user)
-    {
-        user.FirstOf3FailedAt ??= DateTimeOffset.UtcNow;
-
-        var firstOf3FailedAt = (DateTimeOffset)user.FirstOf3FailedAt;
-        if (DateTimeOffset.Compare(firstOf3FailedAt.AddHours(1), DateTimeOffset.UtcNow) < 0)
-        {
-            user.AccessFailedCount = 1;
-            user.FirstOf3FailedAt = DateTimeOffset.UtcNow;
-            user.LockoutEnd = null;
-        }
-
         await UserManager.UpdateAsync(user);
     }
 }
