@@ -35,9 +35,10 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
+        var identityDeletionProcessId = IdentityDeletionProcessId.Create("someNonExistentProcess").Value;
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess("someNonExistentProcess", DeviceId.Parse("DVC"));
+        var acting = () => identity.ApproveDeletionProcess(identityDeletionProcessId, DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
