@@ -20,19 +20,19 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; } = null!;
 
-    public DbSet<Message> Messages { get; set; }
+    public DbSet<Message> Messages { get; set; } = null!;
 
-    public DbSet<FileMetadata> Files { get; set; }
+    public DbSet<FileMetadata> Files { get; set; } = null!;
 
-    public DbSet<Relationship> Relationships { get; set; }
+    public DbSet<Relationship> Relationships { get; set; } = null!;
 
-    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
+    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
-    public DbSet<Token> Tokens { get; set; }
+    public DbSet<Token> Tokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

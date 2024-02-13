@@ -32,7 +32,7 @@ public class HandlerTests
         var command = new CreateRelationshipTemplateCommand
         {
             ExpiresAt = DateTime.UtcNow,
-            Content = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1 }
+            Content = [1, 1, 1, 1, 1, 1, 1, 1]
         };
 
         var relationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();

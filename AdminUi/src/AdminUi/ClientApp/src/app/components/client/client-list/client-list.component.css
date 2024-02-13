@@ -94,7 +94,9 @@
 }
 
 .action-buttons {
-    margin-top: 50px;
+    margin-top: 60px;
+    margin-right: 30px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: flex-end;
 }

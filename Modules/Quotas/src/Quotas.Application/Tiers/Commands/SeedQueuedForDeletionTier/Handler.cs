@@ -22,12 +22,9 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
 
     public async Task Handle(SeedQueuedForDeletionTierCommand request, CancellationToken cancellationToken)
     {
-        Tier queuedForDeletionTier;
-        try
-        {
-            queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
-        }
-        catch (NotFoundException)
+        var queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
+
+        if (queuedForDeletionTier == null)
         {
             queuedForDeletionTier = new Tier(new TierId(Tier.QUEUED_FOR_DELETION.Id), Tier.QUEUED_FOR_DELETION.Name);
             await _tiersRepository.Add(queuedForDeletionTier, CancellationToken.None);

@@ -6,5 +6,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetRe
 
 public class GetRelationshipQuery : IRequest<RelationshipDTO>
 {
-    public RelationshipId Id { get; set; }
+    public required RelationshipId Id { get; set; }
 }

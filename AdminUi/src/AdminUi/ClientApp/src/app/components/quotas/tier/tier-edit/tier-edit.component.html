@@ -1,7 +1,7 @@
 <div class="card-header">
-    <h2 class="header-title">{{ editMode ? headerEdit : headerCreate }}</h2>
+    <h2 class="header-title">{{ headerEdit }}</h2>
     <p class="header-description">
-        {{ editMode ? headerDescriptionEdit : headerDescriptionCreate }}
+        {{ headerDescriptionEdit }}
     </p>
 </div>
 <div [ngClass]="{ 'disabled-container': loading }">
@@ -100,7 +100,6 @@
     </mat-accordion>
     <div class="action-buttons">
         <button *ngIf="editMode" mat-button color="warn" (click)="openConfirmationDialogTierDeletion()" [disabled]="!tier.isDeletable">Delete</button>
-        <button *ngIf="!editMode" mat-raised-button color="primary" (click)="createTier()" [disabled]="!validateTier()">Save</button>
         <button mat-raised-button routerLink="/tiers">Cancel</button>
     </div>
 </div>
