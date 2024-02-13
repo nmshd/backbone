@@ -60,7 +60,7 @@ public class AuthorizationController : ApiControllerBase
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, lockoutOnFailure: true);
         if (result.IsLockedOut)
-            return UserIsLockedOut();
+            return UserLockedOut();
         if (!result.Succeeded)
             return InvalidUserCredentials();
 
@@ -97,7 +97,7 @@ public class AuthorizationController : ApiControllerBase
         return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    private IActionResult UserIsLockedOut()
+    private IActionResult UserLockedOut()
     {
         var properties = new AuthenticationProperties(new Dictionary<string, string?>
         {
