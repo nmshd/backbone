@@ -85,9 +85,7 @@
                 <ng-container matColumnDef="metric">
                     <th mat-header-cell *matHeaderCellDef>Metric</th>
                     <td mat-cell *matCellDef="let Quota">
-                        <span *ngIf="Quota.source === 'Tier'">
-                            Tier quotas do not take effect if there is at least one individual quota on the same metric.
-                        </span>
+                        <span *ngIf="Quota.source === 'Tier'"> Tier quota does not take effect if there is at least one individual quota on the same metric. </span>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="source">
