@@ -54,24 +54,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: 16
           cache: "npm"
-          cache-dependency-path: .ci/package-lock.json
+          cache-dependency-path: ./.ci/package-lock.json
+
+      # - name: Cache Node.js modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./.ci/node_modules
+      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
 
       - name: Install script dependencies
-        run: npm install
-        working-directory: ./.ci
-
+        run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./integrationTest.sqlserver.sh
-        working-directory: ./.ci
-
+        run: ./.ci/integrationTest.sqlserver.sh
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
@@ -89,24 +90,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: 16
           cache: "npm"
-          cache-dependency-path: .ci/package-lock.json
+          cache-dependency-path: ./.ci/package-lock.json
+
+      # - name: Cache Node.js modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./.ci/node_modules
+      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
 
       - name: Install script dependencies
-        run: npm install
-        working-directory: ./.ci
-
+        run: npm install --prefix ./.ci
       - name: Run integration tests
-        run: ./integrationTest.sqlserver.sh
-        working-directory: ./.ci
-
+        run: ./.ci/integrationTest.postgres.sh
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
