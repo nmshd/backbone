@@ -1,9 +1,9 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, Subscription, forkJoin } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
@@ -44,7 +44,7 @@ export class IdentityDetailsComponent {
     public updatedTier?: TierOverview;
     public tier?: TierOverview;
 
-    public quotaSubscription: Subscription;
+    private dialogRef: MatDialogRef<AssignQuotasDialogComponent> | undefined;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -72,7 +72,6 @@ export class IdentityDetailsComponent {
         this.identity.quotas = [];
         this.selectionQuotas = new SelectionModel<IdentityQuota>(true, []);
         this.tiers = [];
-        this.quotaSubscription = new Subscription();
     }
 
     public ngOnInit(): void {
@@ -83,10 +82,6 @@ export class IdentityDetailsComponent {
         });
 
         this.loadIdentityAndTiers();
-
-        this.quotaSubscription = this.quotasService.quota$.subscribe((quota: AssignQuotaData) => {
-            this.createIdentityQuota(quota);
-        });
     }
 
     public loadAdmissibleTiers(): void {
@@ -191,8 +186,11 @@ export class IdentityDetailsComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
+        this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                callback: this.createIdentityQuota.bind(this)
+            }
         });
     }
 
@@ -213,13 +211,13 @@ export class IdentityDetailsComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
-                this.dialog.closeAll();
+                this.dialogRef?.close();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.quotasService.sendErrorMessage(errorMessage);
+                this.dialogRef?.componentInstance.updateErrorMessage(errorMessage);
             }
         });
     }

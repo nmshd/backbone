@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { AssignQuotaData } from "src/app/components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { Observable } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { environment } from "src/environments/environment";
 
@@ -11,22 +10,8 @@ import { environment } from "src/environments/environment";
 export class QuotasService {
     private readonly apiUrl: string;
 
-    private readonly errorMessageSubject = new Subject<string>();
-    public errorMessage$ = this.errorMessageSubject.asObservable();
-
-    private readonly quotaSubject = new Subject<AssignQuotaData>();
-    public quota$ = this.quotaSubject.asObservable();
-
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = environment.apiUrl;
-    }
-
-    public sendErrorMessage(message: string): void {
-        this.errorMessageSubject.next(message);
-    }
-
-    public passQuota(quota: AssignQuotaData): void {
-        this.quotaSubject.next(quota);
     }
 
     public getMetrics(): Observable<HttpResponseEnvelope<Metric>> {

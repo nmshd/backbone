@@ -4,7 +4,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { Metric, MetricsService } from "src/app/services/metrics-service/metrics.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { Subscription } from "rxjs";
 
 @Component({
     selector: "app-assign-quotas-dialog",
@@ -24,7 +23,6 @@ export class AssignQuotasDialogComponent {
     public loading: boolean;
 
     public errorMessage: string;
-    public errorMessageSubscription: Subscription;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
@@ -43,13 +41,9 @@ export class AssignQuotasDialogComponent {
         this.loading = true;
 
         this.errorMessage = "";
-        this.errorMessageSubscription = new Subscription();
     }
 
     public ngOnInit(): void {
-        this.errorMessageSubscription = this.quotasService.errorMessage$.subscribe((message) => {
-            this.errorMessage = message;
-        });
         this.getMetrics();
         this.getPeriods();
     }
@@ -83,7 +77,12 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        this.quotasService.passQuota(quota);
+        const callback = this.data.callback;
+        callback(quota);
+    }
+
+    public updateErrorMessage(errorMessage: string): void {
+        this.errorMessage = errorMessage;
     }
 
     public isValid(): boolean {

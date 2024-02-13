@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
@@ -30,6 +30,8 @@ export class TierEditComponent {
     public loading: boolean;
 
     public quotaSubscription: Subscription;
+
+    private dialogRef: MatDialogRef<AssignQuotasDialogComponent> | undefined;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -69,10 +71,6 @@ export class TierEditComponent {
         if (this.editMode) {
             this.getTier();
         }
-
-        this.quotaSubscription = this.quotasService.quota$.subscribe((quota: AssignQuotaData) => {
-            this.createTierQuota(quota);
-        });
     }
 
     public getTier(): void {
@@ -126,7 +124,7 @@ export class TierEditComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        this.dialog.open(AssignQuotasDialogComponent, {
+        this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
             minWidth: "50%"
         });
     }
@@ -144,7 +142,7 @@ export class TierEditComponent {
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.quotasService.sendErrorMessage(errorMessage);
+                this.dialogRef?.componentInstance.updateErrorMessage(errorMessage);
             }
         });
     }
