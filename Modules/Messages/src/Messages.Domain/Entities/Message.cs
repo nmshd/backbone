@@ -64,7 +64,7 @@ public class Message : IIdentifiable<MessageId>
         var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
             new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
 
-        var key = Convert.FromBase64String(deserializedSecret!.key + "=");
+        var key = Convert.FromBase64String(deserializedSecret!.Key + "=");
         return key;
     }
 
@@ -73,6 +73,6 @@ public class Message : IIdentifiable<MessageId>
         /**
          * Algorithm (`alg`) field is omitted due to not being used in the code.
          */
-        public required string key { get; init; }
+        public required string Key { get; init; }
     }
 }
