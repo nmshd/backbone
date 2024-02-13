@@ -18,7 +18,7 @@ public static class IEventBusExtensions
     private static void SubscribeToMessagesEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
-        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporaryly disabled to avoid an external event flood when the same message is sent to many recipients (s. JSSNMSHDD-2174)
+        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporarily disabled to avoid an external event flood when the same message is sent to many recipients (s. JSSNMSHDD-2174)
     }
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
