@@ -34,7 +34,6 @@ public class ApplicationUser : IdentityUser
 
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
-    public DateTimeOffset? FirstOf3FailedAt { get; set; }
 
     public bool HasLoggedIn => LastLoginAt.HasValue;
 
