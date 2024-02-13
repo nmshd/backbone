@@ -1,6 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -24,7 +26,13 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
     public async Task<ApproveDeletionProcessResponse> Handle(ApproveDeletionProcessCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        var identityDeletionProcessId = IdentityDeletionProcessId.Create(request.DeletionProcessId).Value;
+
+        var identityDeletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
+
+        if (identityDeletionProcessIdResult.IsFailure)
+            throw new DomainException(GenericDomainErrors.InvalidIdCharacters($@"Identity deletion process ID {request.DeletionProcessId} is invalid."));
+
+        var identityDeletionProcessId = identityDeletionProcessIdResult.Value;
 
         var oldTierId = identity.TierId;
         var deletionProcess = identity.ApproveDeletionProcess(identityDeletionProcessId, _userContext.GetDeviceId());
