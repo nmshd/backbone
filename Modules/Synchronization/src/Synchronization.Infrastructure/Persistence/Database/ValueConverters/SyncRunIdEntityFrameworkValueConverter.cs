@@ -9,7 +9,7 @@ public class SyncRunIdEntityFrameworkValueConverter : ValueConverter<SyncRunId, 
 
     public SyncRunIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => SyncRunId.Parse(value),
             mappingHints.With(new ConverterMappingHints(SyncRunId.MAX_LENGTH))
         )
