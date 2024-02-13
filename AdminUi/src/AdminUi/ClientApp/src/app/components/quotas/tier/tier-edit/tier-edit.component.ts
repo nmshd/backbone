@@ -125,7 +125,10 @@ export class TierEditComponent {
 
     public openAssignQuotaDialog(): void {
         this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
+            minWidth: "50%",
+            data: {
+                callback: this.createTierQuota.bind(this)
+            }
         });
     }
 
