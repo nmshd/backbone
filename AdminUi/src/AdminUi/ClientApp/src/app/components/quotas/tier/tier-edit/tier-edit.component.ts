@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Observable, forkJoin } from "rxjs";
@@ -118,18 +118,37 @@ export class TierEditComponent {
         return false;
     }
 
-    public openAssignQuotaDialog(): void {
-        this.dialog
-            .open(AssignQuotasDialogComponent, {
-                minWidth: "50%",
-                data: {
-                    tierId: this.tier.id
-                }
-            })
-            .afterClosed()
-            .subscribe((shouldRedload: boolean) => {
-                if (shouldRedload) this.getTier();
-            });
+    public openAssignQuotaDialog(errorMessage?: any, quotaData?: AssignQuotaData): void {
+        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                errorMessage: errorMessage,
+                assignQuotaData: quotaData
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
+            if (result) {
+                this.createTierQuota(result);
+            }
+        });
+    }
+
+    public createTierQuota(quota: AssignQuotaData): void {
+        this.loading = true;
+        this.quotasService.createTierQuota(quota, this.tier.id).subscribe({
+            next: (data: HttpResponseEnvelope<TierQuota>) => {
+                this.snackBar.open("Successfully assigned quota.", "Dismiss");
+                this.tier.quotas.push(data.result);
+                this.tier.quotas = [...this.tier.quotas];
+            },
+            complete: () => (this.loading = false),
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.openAssignQuotaDialog(errorMessage,quota);
+            }
+        });
     }
 
     public openConfirmationDialogQuotaDeletion(): void {
