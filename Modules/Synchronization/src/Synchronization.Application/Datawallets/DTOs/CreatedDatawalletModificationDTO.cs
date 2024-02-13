@@ -5,7 +5,7 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class CreatedDatawalletModificationDTO : IMapTo<DatawalletModification>
 {
-    public string Id { get; set; }
+    public required string Id { get; set; }
     public long Index { get; set; }
     public DateTime CreatedAt { get; set; }
 }
