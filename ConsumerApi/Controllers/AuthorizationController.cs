@@ -103,7 +103,7 @@ public class AuthorizationController : ApiControllerBase
         {
             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.AccessDenied,
             [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                "The user is temporarily locked out."
+                "The user is temporarily locked out, please try again in few minutes."
         });
 
         return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
