@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
         var identityDeletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 
         if (identityDeletionProcessIdResult.IsFailure)
-            throw new DomainException(GenericDomainErrors.InvalidIdCharacters($@"Identity deletion process ID {request.DeletionProcessId} is invalid."));
+            throw new DomainException(identityDeletionProcessIdResult.Error);
 
         var identityDeletionProcessId = identityDeletionProcessIdResult.Value;
 
