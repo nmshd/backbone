@@ -49,7 +49,8 @@ export class TierEditComponent {
             name: "",
             quotas: [],
             isDeletable: false,
-            isReadOnly: false
+            isReadOnly: false,
+            numberOfIdentities: 0
         } as Tier;
     }
 

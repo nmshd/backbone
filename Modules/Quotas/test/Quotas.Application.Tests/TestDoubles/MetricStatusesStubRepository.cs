@@ -8,13 +8,10 @@ internal class MetricStatusesStubRepository : IMetricStatusesRepository
 {
     public MetricStatusesStubRepository(List<MetricStatus> metricStatuses)
     {
-        if (metricStatuses != null)
-        {
-            MetricStatuses = metricStatuses;
-        }
+        MetricStatuses = metricStatuses;
     }
 
-    public List<MetricStatus> MetricStatuses { get; } = new();
+    public List<MetricStatus> MetricStatuses { get; }
 
     public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
     {

@@ -23,7 +23,7 @@ public class TierCreatedIntegrationEventHandlerTests
 
         // Assert
         mockTierRepository.WasCalled.Should().BeTrue();
-        mockTierRepository.WasCalledWith.Id.Should().Be(id);
+        mockTierRepository.WasCalledWith!.Id.Should().Be(id);
         mockTierRepository.WasCalledWith.Name.Should().Be(name);
     }
 
