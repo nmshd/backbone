@@ -54,11 +54,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ./.ci/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
+          node-version: "16"
+          cache: "npm"
+          cache-dependency-path: ./.ci/package-lock.json
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
@@ -84,11 +85,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ./.ci/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
+          node-version: "16"
+          cache: "npm"
+          cache-dependency-path: ./.ci/package-lock.json
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
