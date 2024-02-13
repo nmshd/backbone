@@ -110,7 +110,7 @@ public class Identity
 
     public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId.Value) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         deletionProcess.Approve(Address, deviceId);
 
