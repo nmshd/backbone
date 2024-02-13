@@ -35,7 +35,7 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        var identityDeletionProcessId = IdentityDeletionProcessId.Create("someNonExistentProcess").Value;
+        var identityDeletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(identityDeletionProcessId, DeviceId.Parse("DVC"));
