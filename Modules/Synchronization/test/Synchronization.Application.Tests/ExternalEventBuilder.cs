@@ -9,7 +9,7 @@ public class ExternalEventBuilder
     private byte _errorCount;
     private IdentityAddress _owner;
     private object _payload;
-    private SyncRun _syncRun;
+    private SyncRun? _syncRun;
     private ExternalEventType _type;
 
     private ExternalEventBuilder()
