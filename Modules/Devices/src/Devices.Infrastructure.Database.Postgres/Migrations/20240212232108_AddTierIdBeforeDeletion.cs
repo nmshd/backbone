@@ -5,13 +5,13 @@
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTierBeforeDeletionId : Migration
+    public partial class AddTierIdBeforeDeletion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "TierBeforeDeletionId",
+                name: "TierIdBeforeDeletion",
                 table: "Identities",
                 type: "character(20)",
                 unicode: false,
@@ -24,7 +24,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "TierBeforeDeletionId",
+                name: "TierIdBeforeDeletion",
                 table: "Identities");
         }
     }

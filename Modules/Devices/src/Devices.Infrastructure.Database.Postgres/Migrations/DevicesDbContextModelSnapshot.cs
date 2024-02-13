@@ -238,13 +238,13 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("TierBeforeDeletionId")
+                    b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("TierId")
+                    b.Property<string>("TierIdBeforeDeletion")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
