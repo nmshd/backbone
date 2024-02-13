@@ -57,17 +57,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+          check-latest: true
           cache: "npm"
-          cache-dependency-path: .ci/package.json
-
-      # - name: Cache Node.js modules
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ./.ci/node_modules
-      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
-
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
+          cache-dependency-path: "**/package.json"
 
       - name: Install script dependencies
         run: npm install --prefix ./.ci
@@ -93,17 +85,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+          check-latest: true
           cache: "npm"
-          cache-dependency-path: .ci/package.json
-
-      # - name: Cache Node.js modules
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ./.ci/node_modules
-      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('./.ci/package-lock.json') }}
-
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
+          cache-dependency-path: "**/package.json"
 
       - name: Install script dependencies
         run: npm install --prefix ./.ci
