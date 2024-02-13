@@ -14,6 +14,10 @@ public class Worker : IHostedService
     {
         _host = host;
         _serviceScopeFactory = serviceScopeFactory;
+
+        // the following fields are initialized in StartAsync, which is always called before any other method
+        _dataSource = null!;
+        _reporter = null!;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -33,7 +37,7 @@ public class Worker : IHostedService
         return Task.CompletedTask;
     }
 
-    public async Task RunSanityCheck(CancellationToken cancellationToken)
+    private async Task RunSanityCheck(CancellationToken cancellationToken)
     {
         var sanityCheck = new Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
 

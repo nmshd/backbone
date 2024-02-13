@@ -15,7 +15,7 @@ public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
 
     public FilesDbContext(DbContextOptions<FilesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<File> FileMetadata { get; set; }
+    public DbSet<File> FileMetadata { get; set; } = null!;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
