@@ -84,7 +84,11 @@
                 </ng-container>
                 <ng-container matColumnDef="metric">
                     <th mat-header-cell *matHeaderCellDef>Metric</th>
-                    <td mat-cell *matCellDef="let Quota"></td>
+                    <td mat-cell *matCellDef="let Quota">
+                        <span *ngIf="Quota.source === 'Tier'">
+                            Tier quotas do not take effect if there is at least one individual quota on the same metric.
+                        </span>
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="source">
                     <th mat-header-cell *matHeaderCellDef>Source</th>
@@ -128,7 +132,6 @@
                     <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
                 </tr>
             </table>
-            <span *ngIf="hasTierQuotas()">Tier quotas do not take effect if there is at least one individual quota on the same metric.</span>
         </mat-expansion-panel>
         <mat-expansion-panel class="details-expansion-panel">
             <mat-expansion-panel-header class="details-expansion-panel-header">
