@@ -62,7 +62,7 @@ export class IdentityDetailsComponent {
         this.headerRelationshipsDescription = "View relationships of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
-        this.devicesTableDisplayedColumns = ["username", "createdAt", "lastLogin", "createdByDevice", "id"];
+        this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
         this.devicesTableData = [];
         this.loading = true;
         this.disabled = false;
