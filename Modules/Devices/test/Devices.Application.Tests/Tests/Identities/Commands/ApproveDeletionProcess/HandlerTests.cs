@@ -100,7 +100,7 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("someNonExistentDeletionProcessId"), CancellationToken.None);
+        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("IDP00000000000000001"), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.recordNotFound");
