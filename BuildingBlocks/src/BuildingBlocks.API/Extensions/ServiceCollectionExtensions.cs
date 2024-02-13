@@ -63,6 +63,10 @@ public static class ServiceCollectionExtensions
                 options.Password.RequireNonAlphanumeric = false;
 
                 options.User.AllowedUserNameCharacters += " ";
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                options.Lockout.MaxFailedAccessAttempts = 3;
             }
             else
             {
@@ -71,6 +75,10 @@ public static class ServiceCollectionExtensions
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 3;
             }
         })
         .AddEntityFrameworkStores<DevicesDbContext>()
