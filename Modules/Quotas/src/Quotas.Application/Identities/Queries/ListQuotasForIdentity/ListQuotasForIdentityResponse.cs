@@ -10,15 +10,15 @@ public class ListQuotasForIdentityResponse : CollectionResponseBase<QuotaGroupDT
 
 public class SingleQuotaDTO
 {
-    public QuotaSource Source { get; set; }
-    public string MetricKey { get; set; }
-    public int Max { get; set; }
-    public uint Usage { get; set; }
-    public string Period { get; set; }
+    public required QuotaSource Source { get; set; }
+    public required string MetricKey { get; set; }
+    public required int Max { get; set; }
+    public required uint Usage { get; set; }
+    public required string Period { get; set; }
 }
 
 public class QuotaGroupDTO
 {
-    public string MetricKey { get; set; }
-    public List<SingleQuotaDTO> Quotas { get; set; }
+    public required string MetricKey { get; set; }
+    public required List<SingleQuotaDTO> Quotas { get; set; }
 }

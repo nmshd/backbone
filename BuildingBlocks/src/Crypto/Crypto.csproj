@@ -25,6 +25,9 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Tooling\Tooling.csproj" />
+		<PackageReference Include="OpenIddict.AspNetCore" Version="5.2.0" />
+		<PackageReference Include="OpenIddict.Core" Version="5.2.0" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.2.0" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
@@ -29,7 +30,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
     {
         _logger.LogTrace("Handling CreateQuotaForTierCommand ...");
 
-        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true);
+        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 

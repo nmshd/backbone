@@ -4,7 +4,12 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IndividualQuota : Quota
 {
-    private IndividualQuota() { }
+    // ReSharper disable once UnusedMember.Local
+    private IndividualQuota()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        MetricKey = null!;
+    }
 
     public IndividualQuota(MetricKey metricKey, int max, QuotaPeriod period, string applyTo) : base(applyTo)
     {
