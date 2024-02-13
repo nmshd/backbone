@@ -31,6 +31,15 @@ jobs:
           cache: "npm"
           cache-dependency-path: "**/package.json"
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install script dependencies
         run: npm install --prefix ./.ci
 
@@ -62,6 +71,15 @@ jobs:
           check-latest: true
           cache: "npm"
           cache-dependency-path: "**/package.json"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Install script dependencies
         run: npm install --prefix ./.ci
@@ -95,6 +113,15 @@ jobs:
           cache: "npm"
           cache-dependency-path: "**/package.json"
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Run integration tests
@@ -122,6 +149,15 @@ jobs:
           check-latest: true
           cache: "npm"
           cache-dependency-path: "**/package.json"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Install script dependencies
         run: npm install --prefix ./.ci
