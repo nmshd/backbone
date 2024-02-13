@@ -16,9 +16,9 @@ const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
     { path: "login", component: LoginComponent },
     { path: "dashboard", component: DashboardComponent, data: { breadcrumb: "Dashboard" }, canActivate: [AuthGuard] },
-    { path: "identities", component: IdentityListComponent, data: { breadcrumb: "Identities" }, canActivate: [AuthGuard] },    
+    { path: "identities", component: IdentityListComponent, data: { breadcrumb: "Identities" }, canActivate: [AuthGuard] },
     { path: "tiers", component: TierListComponent, data: { breadcrumb: "Tiers" }, canActivate: [AuthGuard] },
-    { path: "tiers/create", component: TierEditComponent,  data: { breadcrumb: "Create Tier" }, canActivate: [AuthGuard] },
+    { path: "tiers/create", component: TierEditComponent, data: { breadcrumb: "Create Tier" }, canActivate: [AuthGuard] },
     {
         path: "identities/:address",
         component: IdentityDetailsComponent,
