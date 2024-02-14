@@ -31,13 +31,13 @@ public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternal
         public ExternalEventResult(ExternalEventId externalEventId) : this(externalEventId, null) { }
 
         [JsonConstructor]
-        public ExternalEventResult(ExternalEventId externalEventId, string errorCode)
+        public ExternalEventResult(ExternalEventId externalEventId, string? errorCode)
         {
             ExternalEventId = externalEventId;
             ErrorCode = errorCode;
         }
 
         public ExternalEventId ExternalEventId { get; set; }
-        public string ErrorCode { get; set; }
+        public string? ErrorCode { get; set; }
     }
 }
