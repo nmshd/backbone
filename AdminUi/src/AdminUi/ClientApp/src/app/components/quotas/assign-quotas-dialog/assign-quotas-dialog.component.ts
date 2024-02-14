@@ -24,6 +24,8 @@ export class AssignQuotasDialogComponent {
 
     public errorMessage: string;
 
+    public callback: (quota: AssignQuotaData) => void;
+
     public constructor(
         private readonly snackBar: MatSnackBar,
         private readonly quotasService: QuotasService,
@@ -41,6 +43,8 @@ export class AssignQuotasDialogComponent {
         this.loading = true;
 
         this.errorMessage = "";
+
+        this.callback = this.data.callback;
     }
 
     public ngOnInit(): void {
@@ -77,8 +81,7 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        const callback = this.data.callback;
-        callback(quota);
+        this.callback(quota);
     }
 
     public showErrorMessage(errorMessage: string): void {
