@@ -44,11 +44,11 @@ export class AssignQuotasDialogComponent {
     }
 
     public ngOnInit(): void {
-        this.getMetrics();
-        this.getPeriods();
+        this.showMetrics();
+        this.showPeriods();
     }
 
-    public getMetrics(): void {
+    public showMetrics(): void {
         this.loading = true;
         this.metricsService.getMetrics().subscribe({
             next: (data: HttpResponseEnvelope<Metric>) => {
@@ -66,7 +66,7 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    public getPeriods(): void {
+    public showPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
 
