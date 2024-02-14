@@ -24,7 +24,7 @@ export class AssignQuotasDialogComponent {
 
     public errorMessage: string;
 
-    private callback: (quota: AssignQuotaData) => void;
+    private readonly callback: (quota: AssignQuotaData) => void;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
