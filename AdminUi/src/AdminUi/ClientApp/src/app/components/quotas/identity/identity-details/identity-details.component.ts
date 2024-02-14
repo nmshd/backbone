@@ -44,7 +44,7 @@ export class IdentityDetailsComponent {
     public updatedTier?: TierOverview;
     public tier?: TierOverview;
 
-    private dialogRef: MatDialogRef<AssignQuotasDialogComponent> | undefined;
+    private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
     public constructor(
         private readonly route: ActivatedRoute,

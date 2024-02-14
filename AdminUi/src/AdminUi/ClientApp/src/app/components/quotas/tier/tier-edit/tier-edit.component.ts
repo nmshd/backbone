@@ -31,7 +31,7 @@ export class TierEditComponent {
 
     public quotaSubscription: Subscription;
 
-    private dialogRef: MatDialogRef<AssignQuotasDialogComponent> | undefined;
+    private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
     public constructor(
         private readonly route: ActivatedRoute,
