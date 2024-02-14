@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private CancellationToken _cancellationToken;
     private Datawallet _datawallet;
-    private SyncRun _previousSyncRun;
+    private SyncRun? _previousSyncRun;
     private StartSyncRunCommand _request;
     private DatawalletVersion _supportedDatawalletVersion;
 
@@ -111,8 +111,12 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private async Task CancelPreviousSyncRun()
     {
-        _previousSyncRun.Cancel();
-        _dbContext.Set<SyncRun>().Update(_previousSyncRun);
+        if (_previousSyncRun != null)
+        {
+            _previousSyncRun.Cancel();
+            _dbContext.Set<SyncRun>().Update(_previousSyncRun);
+        }
+
         await _dbContext.SaveChangesAsync(_cancellationToken);
     }
 
@@ -150,7 +154,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return _previousSyncRun.Index + 1;
     }
 
-    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun newSyncRun = null)
+    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
         var syncRunDTO = _mapper.Map<SyncRunDTO>(newSyncRun);
 
