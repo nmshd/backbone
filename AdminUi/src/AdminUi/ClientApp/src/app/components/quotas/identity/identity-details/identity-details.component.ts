@@ -293,13 +293,6 @@ export class IdentityDetailsComponent {
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
     }
-
-    public hasTierQuotas(): boolean {
-        return this.quotasTableData.some((quota) => {
-            const quotaTemp = quota as Quota;
-            return quotaTemp.source === "Tier";
-        });
-    }
 }
 
 interface MetricGroup {
