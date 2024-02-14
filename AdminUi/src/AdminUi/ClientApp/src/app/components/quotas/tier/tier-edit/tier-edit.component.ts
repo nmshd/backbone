@@ -145,7 +145,7 @@ export class TierEditComponent {
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.dialogRef?.componentInstance.updateErrorMessage(errorMessage);
+                this.dialogRef?.componentInstance.showErrorMessage(errorMessage);
             }
         });
     }
