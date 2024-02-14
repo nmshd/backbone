@@ -81,7 +81,7 @@ export class AssignQuotasDialogComponent {
         callback(quota);
     }
 
-    public updateErrorMessage(errorMessage: string): void {
+    public showErrorMessage(errorMessage: string): void {
         this.errorMessage = errorMessage;
     }
 
