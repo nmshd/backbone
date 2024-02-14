@@ -24,7 +24,7 @@ export class AssignQuotasDialogComponent {
 
     public errorMessage: string;
 
-    public callback: (quota: AssignQuotaData) => void;
+    private callback: (quota: AssignQuotaData) => void;
 
     public constructor(
         private readonly snackBar: MatSnackBar,
@@ -48,11 +48,11 @@ export class AssignQuotasDialogComponent {
     }
 
     public ngOnInit(): void {
-        this.showMetrics();
-        this.showPeriods();
+        this.loadMetrics();
+        this.loadPeriods();
     }
 
-    public showMetrics(): void {
+    public loadMetrics(): void {
         this.loading = true;
         this.metricsService.getMetrics().subscribe({
             next: (data: HttpResponseEnvelope<Metric>) => {
@@ -70,7 +70,7 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    public showPeriods(): void {
+    public loadPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
 
