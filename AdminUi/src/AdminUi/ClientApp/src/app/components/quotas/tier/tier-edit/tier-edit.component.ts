@@ -8,7 +8,7 @@ import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { Observable, Subscription, forkJoin } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 
 @Component({
@@ -28,8 +28,6 @@ export class TierEditComponent {
     public editMode: boolean;
     public tier: Tier;
     public loading: boolean;
-
-    public quotaSubscription: Subscription;
 
     private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
@@ -57,7 +55,6 @@ export class TierEditComponent {
             isDeletable: false,
             numberOfIdentities: 0
         } as Tier;
-        this.quotaSubscription = new Subscription();
     }
 
     public ngOnInit(): void {
