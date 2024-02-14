@@ -32,6 +32,9 @@
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
 </mat-dialog-content>
+<div *ngIf="errorMessage !== '' && !loading" class="quota-error-container">
+    <mat-error class="quota-error-message">{{ errorMessage }}</mat-error>
+</div>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
     <button mat-flat-button color="primary" (click)="assignQuota()" [disabled]="!isValid()">Confirm</button>
