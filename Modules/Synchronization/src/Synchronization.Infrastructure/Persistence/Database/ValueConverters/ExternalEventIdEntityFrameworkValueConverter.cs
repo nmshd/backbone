@@ -9,7 +9,7 @@ public class ExternalEventIdEntityFrameworkValueConverter : ValueConverter<Exter
 
     public ExternalEventIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => ExternalEventId.Parse(value),
             mappingHints?.With(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
         )
