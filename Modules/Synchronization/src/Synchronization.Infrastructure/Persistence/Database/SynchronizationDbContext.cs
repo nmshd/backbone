@@ -26,11 +26,11 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
     public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<Datawallet> Datawallets { get; set; }
-    public virtual DbSet<DatawalletModification> DatawalletModifications { get; set; }
-    public DbSet<ExternalEvent> ExternalEvents { get; set; }
-    public DbSet<SyncRun> SyncRuns { get; set; }
-    public DbSet<SyncError> SyncErrors { get; set; }
+    public DbSet<Datawallet> Datawallets { get; set; } = null!;
+    public virtual DbSet<DatawalletModification> DatawalletModifications { get; set; } = null!;
+    public DbSet<ExternalEvent> ExternalEvents { get; set; } = null!;
+    public DbSet<SyncRun> SyncRuns { get; set; } = null!;
+    public DbSet<SyncError> SyncErrors { get; set; } = null!;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
