@@ -7,7 +7,7 @@ public class DatawalletModificationIdEntityFrameworkValueConverter : ValueConver
 {
     public DatawalletModificationIdEntityFrameworkValueConverter() : this(null) { }
 
-    public DatawalletModificationIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public DatawalletModificationIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id.StringValue,
             value => DatawalletModificationId.Parse(value),
