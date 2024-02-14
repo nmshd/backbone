@@ -62,10 +62,10 @@ public class SyncRunsController : ApiControllerBase
         {
             DatawalletVersion = 0,
             Type = m.Type,
-            Collection = m.Collection,
-            EncryptedPayload = m.EncryptedPayload,
-            ObjectIdentifier = m.ObjectIdentifier,
-            PayloadCategory = m.PayloadCategory
+            Collection = m.Collection ?? throw new ArgumentNullException(nameof(m.Collection)),
+            EncryptedPayload = m.EncryptedPayload ?? throw new ArgumentNullException(nameof(m.EncryptedPayload)),
+            ObjectIdentifier = m.ObjectIdentifier ?? throw new ArgumentNullException(nameof(m.ObjectIdentifier)),
+            PayloadCategory = m.PayloadCategory ?? throw new ArgumentNullException(nameof(m.PayloadCategory))
         }).ToList();
 
         var response =
