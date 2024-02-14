@@ -163,7 +163,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             .GetFirst(cancellationToken);
     }
 
-    public async Task<SyncRun> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
+    public async Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         var previousSyncRun = await SyncRuns
             .Include(s => s.ExternalEvents)
