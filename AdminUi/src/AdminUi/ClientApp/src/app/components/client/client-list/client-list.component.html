@@ -39,7 +39,7 @@
             <ng-container matColumnDef="clientId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by client ID" style="text-align: center">
                     <div class="header-container">
-                        <span>Client Id</span>
+                        <span>Client ID</span>
                         <mat-form-field style="width: 100%; padding-top: 10px">
                             <input matInput type="text" [(ngModel)]="filter.clientId" (input)="filterClients()" />
                             <button *ngIf="filter.clientId" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('clientId')">
