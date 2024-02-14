@@ -6,12 +6,12 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
 public class ExternalEventDTO : IHaveCustomMapping
 {
-    public ExternalEventId Id { get; set; }
-    public string Type { get; set; }
+    public required ExternalEventId Id { get; set; }
+    public required string Type { get; set; }
     public long Index { get; set; }
     public DateTime CreatedAt { get; set; }
     public byte SyncErrorCount { get; set; }
-    public object Payload { get; set; }
+    public required object Payload { get; set; }
 
     public void CreateMappings(Profile configuration)
     {
