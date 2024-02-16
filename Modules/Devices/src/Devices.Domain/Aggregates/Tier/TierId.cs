@@ -8,7 +8,6 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 public record TierId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
-
     private const string PREFIX = "TIR";
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);

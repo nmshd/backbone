@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Tiers.Commands.CreateQueuedForDeletionTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -28,6 +29,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         await context.Database.EnsureCreatedAsync();
 
         await SeedBasicTier(context);
+        await SeedQueuedForDeletionTier();
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
@@ -51,6 +53,11 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         {
             await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
         }
+    }
+
+    private async Task SeedQueuedForDeletionTier()
+    {
+        await _mediator.Send(new CreateQueuedForDeletionTierCommand());
     }
 
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
