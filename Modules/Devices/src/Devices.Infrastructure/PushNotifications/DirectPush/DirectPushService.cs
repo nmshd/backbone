@@ -45,7 +45,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         var deviceIdsToDelete = new List<DeviceId>();
         foreach (var sendResult in sendResults.Failures)
         {
-            switch (sendResult.Error.Reason)
+            switch (sendResult.Error!.Reason)
             {
                 case ErrorReason.InvalidHandle:
                     _logger.DeletingDeviceRegistration(sendResult.DeviceId);

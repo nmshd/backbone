@@ -1,21 +1,38 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
 
 public class SendResult
 {
-    public bool IsSuccess { get; private init; }
+    private SendResult(DeviceId deviceId)
+    {
+        DeviceId = deviceId;
+        IsSuccess = true;
+    }
+
+    private SendResult(DeviceId deviceId, SendError error)
+    {
+        DeviceId = deviceId;
+        Error = error;
+        IsSuccess = false;
+    }
+
+    public bool IsSuccess { get; }
+
+    [MemberNotNullWhen(true, nameof(Error))]
     public bool IsFailure => !IsSuccess;
-    public SendError Error { get; private init; } = null!;
-    public DeviceId DeviceId { get; private set; } = null!;
+
+    public DeviceId DeviceId { get; private set; }
+    public SendError? Error { get; private init; }
 
     public static SendResult Success(DeviceId deviceId)
     {
-        return new SendResult { IsSuccess = true, DeviceId = deviceId };
+        return new SendResult(deviceId);
     }
 
     public static SendResult Failure(DeviceId deviceId, ErrorReason reason, string message = "")
     {
-        return new SendResult { IsSuccess = false, Error = new SendError(reason, message), DeviceId = deviceId };
+        return new SendResult(deviceId, new SendError(reason, message));
     }
 }
