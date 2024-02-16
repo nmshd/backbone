@@ -7,8 +7,6 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-
 namespace Backbone.ConsumerApi;
 
 public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
@@ -61,6 +59,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         if (basicTier == null)
             return;
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }

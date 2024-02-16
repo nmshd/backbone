@@ -41,7 +41,6 @@ public class Signature
         var algorithm = (SignatureAlgorithm)signatureObject.alg;
 
         return new Signature(algorithm, signature);
-
     }
 }
 

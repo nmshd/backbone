@@ -6,8 +6,7 @@ public class CreateIdentityResponse
 {
     public required IdentityAddress Address { get; set; }
     public required DateTime CreatedAt { get; set; }
-
-    public CreateIdentityResponseDevice? Device { get; set; }
+    public required CreateIdentityResponseDevice Device { get; set; }
 }
 
 public class CreateIdentityResponseDevice

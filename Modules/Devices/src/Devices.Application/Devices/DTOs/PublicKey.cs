@@ -42,7 +42,6 @@ public class PublicKey
         var algorithm = (SignatureAlgorithm)publicKeyObject.alg;
 
         return new PublicKey(algorithm, key);
-
     }
 
     public class PublicKeyDTOJsonConverter : JsonConverter<PublicKey>
