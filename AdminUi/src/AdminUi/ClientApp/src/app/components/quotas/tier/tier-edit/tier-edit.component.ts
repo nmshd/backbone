@@ -1,6 +1,6 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, forkJoin } from "rxjs";
@@ -27,6 +27,8 @@ export class TierEditComponent {
     public editMode: boolean;
     public tier: Tier;
     public loading: boolean;
+
+    private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -117,13 +119,10 @@ export class TierEditComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
-        });
-
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
-            if (result) {
-                this.createTierQuota(result);
+        this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                callback: this.createTierQuota.bind(this)
             }
         });
     }
@@ -135,15 +134,13 @@ export class TierEditComponent {
                 this.snackBar.open("Successfully assigned quota.", "Dismiss");
                 this.tier.quotas.push(data.result);
                 this.tier.quotas = [...this.tier.quotas];
+                this.dialog.closeAll();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
+                this.dialogRef?.componentInstance.showErrorMessage(errorMessage);
             }
         });
     }
