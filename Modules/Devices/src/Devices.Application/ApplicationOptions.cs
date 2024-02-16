@@ -17,9 +17,9 @@ public class PaginationOptions
 {
     [Required]
     [Range(1, 1000)]
-    public int MaxPageSize { get; set; } = -1;
+    public int MaxPageSize { get; set; }
 
     [Required]
     [Range(1, 1000)]
-    public int DefaultPageSize { get; set; } = -1;
+    public int DefaultPageSize { get; set; }
 }
