@@ -87,9 +87,14 @@ public class RelationshipChange
 
 public class RelationshipChangeRequest
 {
-#pragma warning disable CS8618
-    private RelationshipChangeRequest() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipChangeRequest()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+    }
 
     public RelationshipChangeRequest(RelationshipChangeId changeId, IdentityAddress createdBy, DeviceId createdByDevice, byte[]? content = null)
     {
@@ -117,9 +122,14 @@ public class RelationshipChangeRequest
 
 public class RelationshipChangeResponse
 {
-#pragma warning disable CS8618
-    private RelationshipChangeResponse() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipChangeResponse()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+    }
 
     public RelationshipChangeResponse(RelationshipChangeId changeId, IdentityAddress createdBy, DeviceId createdByDevice, byte[]? content = null)
     {

@@ -22,6 +22,10 @@ export class AssignQuotasDialogComponent {
 
     public loading: boolean;
 
+    public errorMessage: string;
+
+    private readonly callback: (quota: AssignQuotaData) => void;
+
     public constructor(
         private readonly snackBar: MatSnackBar,
         private readonly quotasService: QuotasService,
@@ -37,14 +41,18 @@ export class AssignQuotasDialogComponent {
         this.periods = [];
 
         this.loading = true;
+
+        this.errorMessage = "";
+
+        this.callback = this.data.callback;
     }
 
     public ngOnInit(): void {
-        this.getMetrics();
-        this.getPeriods();
+        this.loadMetrics();
+        this.loadPeriods();
     }
 
-    public getMetrics(): void {
+    public loadMetrics(): void {
         this.loading = true;
         this.metricsService.getMetrics().subscribe({
             next: (data: HttpResponseEnvelope<Metric>) => {
@@ -62,7 +70,7 @@ export class AssignQuotasDialogComponent {
         });
     }
 
-    public getPeriods(): void {
+    public loadPeriods(): void {
         this.periods = this.quotasService.getPeriods();
     }
 
@@ -73,7 +81,11 @@ export class AssignQuotasDialogComponent {
             period: this.period!
         };
 
-        this.dialogRef.close(quota);
+        this.callback(quota);
+    }
+
+    public showErrorMessage(errorMessage: string): void {
+        this.errorMessage = errorMessage;
     }
 
     public isValid(): boolean {

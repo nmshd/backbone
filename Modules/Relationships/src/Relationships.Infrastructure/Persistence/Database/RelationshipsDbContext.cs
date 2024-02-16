@@ -14,9 +14,9 @@ public class RelationshipsDbContext : AbstractDbContextBase
 
     public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<Relationship> Relationships { get; set; }
-    public DbSet<RelationshipChange> RelationshipChanges { get; set; }
-    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
+    public DbSet<Relationship> Relationships { get; set; } = null!;
+    public DbSet<RelationshipChange> RelationshipChanges { get; set; } = null!;
+    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     // {
