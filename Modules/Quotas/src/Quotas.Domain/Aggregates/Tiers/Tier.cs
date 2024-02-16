@@ -28,7 +28,7 @@ public class Tier
         if (max < 0)
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerThanZero());
 
-        return CreateTierQuotaDefinition(metricKey, max, period);
+        return AddTierQuotaDefinition(metricKey, max, period);
     }
 
     public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
@@ -46,16 +46,24 @@ public class Tier
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
 
-    public IEnumerable<Result<TierQuotaDefinition, DomainError>> CreateQuotaForAllMetricsOnQueuedForDeletion(IEnumerable<Metric> metrics)
+    public IEnumerable<TierQuotaDefinition> AddQuotaForAllMetricsOnQueuedForDeletion(IEnumerable<Metric> metrics)
     {
         if (!IsQueuedForDeletionTier())
             throw new InvalidOperationException("Method can only be called for the 'Queued for Deletion' tier");
 
-        var missingMetrics = metrics.Where(metric => Quotas.All(quota => quota.MetricKey.Value != metric.Key.Value));
-        return missingMetrics.Select(metric => CreateTierQuotaDefinition(metric.Key, 0, QuotaPeriod.Total));
+        var missingMetrics = metrics.Where(metric => Quotas.All(q => q.MetricKey.Value != metric.Key.Value));
+
+        var addedQuotas = new List<TierQuotaDefinition>();
+        foreach (var metric in missingMetrics)
+        {
+            var result = AddTierQuotaDefinition(metric.Key, 0, QuotaPeriod.Total);
+            addedQuotas.Add(result.Value);
+        }
+
+        return addedQuotas;
     }
 
-    private Result<TierQuotaDefinition, DomainError> CreateTierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
+    private Result<TierQuotaDefinition, DomainError> AddTierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
     {
         if (TierQuotaAlreadyExists(metricKey, period))
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());

@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -31,10 +30,10 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         }
 
         var metrics = await _metricsRepository.FindAll(CancellationToken.None);
-        var createdQuotaResults = queuedForDeletionTier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
+        var addedQuotas = queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
         await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
 
-        foreach (var result in createdQuotaResults.ToList())
-            _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(queuedForDeletionTier.Id, result.Value.Id));
+        foreach (var quota in addedQuotas.ToList())
+            _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(queuedForDeletionTier.Id, quota.Id));
     }
 }
