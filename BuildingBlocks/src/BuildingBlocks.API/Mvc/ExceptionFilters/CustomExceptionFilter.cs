@@ -137,7 +137,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
             {
 #pragma warning disable IDE0037
-                MetricKey = m.MetricKey,
+                MetricKey = m.MetricKey.Value,
                 IsExhaustedUntil = m.IsExhaustedUntil
 #pragma warning restore IDE0037
             });
