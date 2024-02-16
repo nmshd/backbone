@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionProcessGracePeriodTests : IDisposable
+public class DeletionGracePeriodReminderTests : IDisposable
 {
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
