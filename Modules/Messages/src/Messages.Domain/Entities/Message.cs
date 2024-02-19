@@ -1,8 +1,6 @@
-﻿using System.Net.Mail;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
