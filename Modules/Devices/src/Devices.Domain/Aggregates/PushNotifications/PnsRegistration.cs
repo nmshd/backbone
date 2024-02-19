@@ -3,18 +3,14 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
-// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
-// ReSharper disable UnusedMember.Local
-
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public class PnsRegistration
 {
-    /**
-     * This constructor is only used by EF Core.
-     */
+    // ReSharper disable once UnusedMember.Local
     private PnsRegistration()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         IdentityAddress = null!;
         DeviceId = null!;
         DevicePushIdentifier = null!;

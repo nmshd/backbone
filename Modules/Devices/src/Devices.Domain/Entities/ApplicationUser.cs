@@ -8,9 +8,11 @@ public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
 
-#pragma warning disable CS8618
-    public ApplicationUser() : base(Username.New()) { }
-#pragma warning restore CS8618
+    public ApplicationUser(Device device) : base(Username.New())
+    {
+        _device = device;
+        DeviceId = null!;
+    }
 
     public ApplicationUser(Identity identity, DeviceId? createdByDevice = null) : base(Username.New())
     {
