@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -128,7 +128,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events ?? Array.Empty<ExternalEvent>(), _mapper.Map<SyncRun.SyncRunType>(_request.Type));
+        var syncRun = new SyncRun(newIndex, _request!.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
