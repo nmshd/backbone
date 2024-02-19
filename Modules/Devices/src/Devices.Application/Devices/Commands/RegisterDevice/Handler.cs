@@ -7,7 +7,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

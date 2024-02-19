@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
@@ -11,6 +12,7 @@ public static class IEventBusExtensions
     {
         SubscribeToMessagesEvents(eventBus);
         SubscribeToRelationshipsEvents(eventBus);
+        SubscribeToIdentitiesEvents(eventBus);
 
         return eventBus;
     }
@@ -18,12 +20,17 @@ public static class IEventBusExtensions
     private static void SubscribeToMessagesEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
-        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporarily disabled to avoid an external event flood when the same message is sent to many recipients (s. JSSNMSHDD-2174)
+        eventBus.Subscribe<IdentityDeletionProcessStartedIntegrationEvent, IdentityDeletionProcessStartedIntegrationEventHandler>();
+        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporaryly disabled to avoid an external event flood when the same message is sent to many recipients (s. JSSNMSHDD-2174)
     }
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
+    }
+
+    private static void SubscribeToIdentitiesEvents(IEventBus eventBus)
+    {
     }
 }

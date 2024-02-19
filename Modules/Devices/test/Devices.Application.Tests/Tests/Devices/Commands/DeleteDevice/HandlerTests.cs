@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
@@ -17,8 +18,6 @@ public class HandlerTests
     public async Task Deletes_unOnboarded_device_owned_by_identity()
     {
         // Arrange
-        var startTime = SystemTime.UtcNow;
-
         var identity = TestDataGenerator.CreateIdentity();
         var unOnboardedDevice = CreateUnOnboardedDevice(identity);
         var onboardedDevice = CreateOnboardedDevice(identity);
@@ -38,12 +37,14 @@ public class HandlerTests
             DeviceId = unOnboardedDevice.Id
         };
 
+        var utcNow = DateTime.Parse("2000-01-01");
+
         // Act
         await handler.Handle(deleteDeviceCommand, CancellationToken.None);
 
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
-        unOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
+        unOnboardedDevice.DeletedAt.Should().BeAfter(utcNow);
         unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
