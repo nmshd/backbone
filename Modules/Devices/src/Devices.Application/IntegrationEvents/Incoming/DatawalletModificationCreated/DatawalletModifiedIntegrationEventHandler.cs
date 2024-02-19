@@ -15,9 +15,7 @@ public class DatawalletModifiedIntegrationEventHandler : IIntegrationEventHandle
 
     public async Task Handle(DatawalletModifiedIntegrationEvent integrationEvent)
     {
-        await _pushSenderService.SendNotification(
-            integrationEvent.Identity,
-            new DatawalletModificationsCreatedPushNotification(integrationEvent.ModifiedByDevice),
-            CancellationToken.None);
+        var notification = new DatawalletModificationsCreatedPushNotification(integrationEvent.ModifiedByDevice);
+        await _pushSenderService.SendNotification(integrationEvent.Identity, notification, CancellationToken.None);
     }
 }
