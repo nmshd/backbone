@@ -33,7 +33,7 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken);
     }
@@ -71,12 +71,12 @@ public class TiersRepository : ITiersRepository
         return paginationResult;
     }
 
-    public async Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
+    public async Task<Tier?> FindById(TierId tierId, CancellationToken cancellationToken)
     {
         return await _tiers.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
-    public async Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    public async Task<Tier?> FindBasicTier(CancellationToken cancellationToken)
     {
         return await _tiers.GetBasicTier(cancellationToken);
     }

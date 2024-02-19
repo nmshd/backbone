@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;

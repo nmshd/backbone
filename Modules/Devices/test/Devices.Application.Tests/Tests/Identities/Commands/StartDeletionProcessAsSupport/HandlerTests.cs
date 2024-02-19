@@ -81,7 +81,7 @@ public class HandlerTests
                 address,
                 A<CancellationToken>._,
                 A<bool>._))
-            .Returns<Identity>(null);
+            .Returns<Identity?>(null);
 
         var handler = CreateHandler(fakeIdentitiesRepository);
 
@@ -92,7 +92,7 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus? eventBus = null)
     {
         eventBus ??= A.Fake<IEventBus>();
         return new Handler(identitiesRepository, eventBus);

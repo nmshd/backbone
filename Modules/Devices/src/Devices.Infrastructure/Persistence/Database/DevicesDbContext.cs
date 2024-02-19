@@ -21,7 +21,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -38,15 +38,15 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         _serviceProvider = serviceProvider;
     }
 
-    public DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Device> Devices { get; set; }
+    public DbSet<Device> Devices { get; set; } = null!;
 
-    public DbSet<Challenge> Challenges { get; set; }
+    public DbSet<Challenge> Challenges { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; } = null!;
 
-    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
@@ -61,17 +61,17 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
-    public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
+    public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        ExecutionStrategy? executionStrategy;
+        ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
                 executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
                 break;
             case POSTGRES:
-                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : new List<string>();
+                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : [];
                 executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
                 break;
             default:
@@ -91,10 +91,11 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int> errorNumbersToRetry,
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var response = default(T);
+        // the '!' is safe here because the default value is only returned after the action is executed, which is setting the response
+        var response = default(T)!;
 
         await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
