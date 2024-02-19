@@ -4,6 +4,6 @@ namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incomin
 
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Id { get; private set; }
-    public IEnumerable<string> Recipients { get; private set; }
+    public string? Id { get; private set; }
+    public IEnumerable<string>? Recipients { get; private set; }
 }
