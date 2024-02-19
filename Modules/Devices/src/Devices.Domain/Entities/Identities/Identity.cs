@@ -165,6 +165,19 @@ public class Identity
     {
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
+
+    public void CancelDeletionProcessDuringGracePeriod(IdentityDeletionProcess deletionProcess)
+    {
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+
+        // TODO: refactor this
+        if (deletionProcess.GracePeriodEndsAt < SystemTime.UtcNow)
+        {
+            throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
+        }
+
+        _deletionProcesses.Remove(deletionProcess);
+    }
 }
 
 public enum DeletionProcessStatus
