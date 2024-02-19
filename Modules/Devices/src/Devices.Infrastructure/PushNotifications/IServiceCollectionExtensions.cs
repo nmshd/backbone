@@ -19,8 +19,9 @@ public static class IServiceCollectionExtensions
                 services.AddDummyPushNotifications();
                 break;
             case PROVIDER_DIRECT:
-                if (options.DirectPnsCommunication != null)
-                    services.AddDirectPushNotifications(options.DirectPnsCommunication);
+                if (options.DirectPnsCommunication == null)
+                    throw new Exception($"The '{nameof(PushNotificationOptions.DirectPnsCommunication)}' property must be provided when using the provider '${PROVIDER_DIRECT}'.");
+                services.AddDirectPushNotifications(options.DirectPnsCommunication);
                 break;
             default:
                 throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
@@ -33,7 +34,7 @@ public class PushNotificationOptions
     [Required]
     [RegularExpression(
         $"{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
-    public string? Provider { get; set; }
+    public string Provider { get; set; } = null!;
 
     public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
 }

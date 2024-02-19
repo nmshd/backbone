@@ -36,7 +36,7 @@ public class HandlerTests
     {
         // Arrange
         var identityRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
+        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(identityRepository);
 

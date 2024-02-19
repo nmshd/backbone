@@ -11,11 +11,8 @@ public static class IServiceCollectionExtensions
 {
     public static void AddDirectPushNotifications(this IServiceCollection services, DirectPnsCommunicationOptions options)
     {
-        if (options.Apns != null)
-            services.AddSingleton<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(options.Apns));
-
-        if (options.Fcm != null)
-            services.AddSingleton<IOptions<DirectPnsCommunicationOptions.FcmOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.FcmOptions>(options.Fcm));
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(options.Apns));
+        services.AddSingleton<IOptions<DirectPnsCommunicationOptions.FcmOptions>>(new OptionsWrapper<DirectPnsCommunicationOptions.FcmOptions>(options.Fcm));
 
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
         services.AddFcm();
