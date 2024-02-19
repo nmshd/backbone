@@ -7,9 +7,6 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
 		<PackageReference Include="CSharpFunctionalExtensions" Version="2.40.3" />
-		<PackageReference Include="OpenIddict.AspNetCore" Version="5.2.0" />
-		<PackageReference Include="OpenIddict.Core" Version="5.2.0" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
