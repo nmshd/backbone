@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -24,10 +24,10 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private readonly IMapper _mapper;
 
     private CancellationToken _cancellationToken;
-    private Datawallet _datawallet;
+    private Datawallet? _datawallet;
     private SyncRun? _previousSyncRun;
-    private StartSyncRunCommand _request;
-    private DatawalletVersion _supportedDatawalletVersion;
+    private StartSyncRunCommand? _request;
+    private DatawalletVersion? _supportedDatawalletVersion;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
