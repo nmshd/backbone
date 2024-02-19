@@ -30,7 +30,6 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
         : base(options)
     {
-        _serviceProvider = null;
     }
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
