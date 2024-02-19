@@ -1,5 +1,5 @@
-﻿using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
