@@ -9,7 +9,7 @@ public class MessageDTO : IMapTo<Message>
 {
     public required MessageId Id { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 
