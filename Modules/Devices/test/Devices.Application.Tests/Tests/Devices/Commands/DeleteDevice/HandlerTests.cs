@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -36,13 +37,14 @@ public class HandlerTests
         };
 
         var utcNow = DateTime.Parse("2000-01-01");
+        SystemTime.Set(utcNow);
 
         // Act
         await handler.Handle(deleteDeviceCommand, CancellationToken.None);
 
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
-        unOnboardedDevice.DeletedAt.Should().BeAfter(utcNow);
+        unOnboardedDevice.DeletedAt.Should().Be(utcNow);
         unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
