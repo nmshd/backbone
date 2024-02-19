@@ -109,7 +109,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         }
         else
         {
-            await _pnsRegistrationsRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+            await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
             _logger.UnregisteredDevice(deviceId);
         }
     }

@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId!, newTierId!));
 
         return new ApproveDeletionProcessResponse(deletionProcess);
     }

@@ -9,8 +9,8 @@ public class ApproveDeletionProcessResponse
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
         CreatedAt = deletionProcess.CreatedAt;
-        ApprovedAt = deletionProcess.ApprovedAt!.Value;
-        ApprovedByDevice = deletionProcess.ApprovedByDevice;
+        ApprovedAt = deletionProcess.ApprovedAt ?? throw new Exception($"The '{nameof(IdentityDeletionProcess.ApprovedAt)}' property of the given deletion process must not be null.");
+        ApprovedByDevice = deletionProcess.ApprovedByDevice ?? throw new Exception($"The '{nameof(IdentityDeletionProcess.ApprovedByDevice)}' property of the given deletion process must not be null.");
     }
 
     public string Id { get; }

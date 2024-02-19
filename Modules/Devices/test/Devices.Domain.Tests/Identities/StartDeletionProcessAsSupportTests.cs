@@ -18,7 +18,7 @@ public class StartDeletionProcessAsSupportTests
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var activeIdentity = CreateIdentity();
 
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
         // Act
         var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();

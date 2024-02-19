@@ -37,6 +37,6 @@ public class IdentitySummaryDTO
 
         IdentityVersion = identity.IdentityVersion;
 
-        TierId = identity.TierId;
+        TierId = identity.TierId!;
     }
 }

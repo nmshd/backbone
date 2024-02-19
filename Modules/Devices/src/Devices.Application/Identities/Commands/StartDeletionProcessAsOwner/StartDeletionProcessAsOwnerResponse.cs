@@ -10,8 +10,8 @@ public class StartDeletionProcessAsOwnerResponse
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
         CreatedAt = deletionProcess.CreatedAt;
-        ApprovedAt = deletionProcess.ApprovedAt.GetValueOrDefault();
-        ApprovedByDevice = deletionProcess.ApprovedByDevice;
+        ApprovedAt = deletionProcess.ApprovedAt ?? throw new Exception($"The '{nameof(IdentityDeletionProcess.ApprovedAt)}' property of the given deletion process must not be null.");
+        ApprovedByDevice = deletionProcess.ApprovedByDevice ?? throw new Exception($"The '{nameof(IdentityDeletionProcess.ApprovedByDevice)}' property of the given deletion process must not be null.");
         GracePeriodEndsAt = deletionProcess.GracePeriodEndsAt.GetValueOrDefault();
     }
 
