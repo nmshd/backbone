@@ -52,7 +52,7 @@ public class TierTests
 
         // Assert
         error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
-        error!.Message.Should().Contain("Tier is assigned to one or more Identities");
+        error.Message.Should().Contain("Tier is assigned to one or more Identities");
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class TierTests
 
         // Assert
         error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
-        error!.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
+        error.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
 
     }
 }

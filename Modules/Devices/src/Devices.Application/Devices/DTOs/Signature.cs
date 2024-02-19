@@ -32,7 +32,11 @@ public class Signature
     public static Signature FromBytes(byte[] bytes)
     {
         var signatureJsonString = Encoding.UTF8.GetString(bytes);
-        var signatureObject = JsonSerializer.Deserialize<dynamic>(signatureJsonString, new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } });
+        var signatureObject =
+            JsonSerializer.Deserialize<dynamic>(
+                signatureJsonString,
+                new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } }) ??
+            throw new Exception("Could not deserialize signature.");
         var signature = Base64UrlEncoder.DecodeBytes((string)signatureObject.sig);
         var algorithm = (SignatureAlgorithm)signatureObject.alg;
 
