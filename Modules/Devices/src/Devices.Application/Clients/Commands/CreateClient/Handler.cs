@@ -51,6 +51,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         if (tierNameResult.IsSuccess)
         {
             var tier = await _tiersRepository.FindByName(tierNameResult.Value, cancellationToken);
+
             if (tier != null)
                 return tier.Id;
         }

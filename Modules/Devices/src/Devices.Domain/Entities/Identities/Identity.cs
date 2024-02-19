@@ -17,17 +17,17 @@ public class Identity
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
-        Devices = new List<Device>();
+        Devices = [];
         TierId = tierId;
         Status = IdentityStatus.Active;
-        _deletionProcesses = new List<IdentityDeletionProcess>();
+        _deletionProcesses = [];
     }
 
-    public string? ClientId { get; private set; }
+    public string? ClientId { get; }
 
-    public IdentityAddress Address { get; private set; }
-    public byte[] PublicKey { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public IdentityAddress Address { get; }
+    public byte[] PublicKey { get; }
+    public DateTime CreatedAt { get; }
 
     public List<Device> Devices { get; }
 
