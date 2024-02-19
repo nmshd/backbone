@@ -10,17 +10,17 @@ public class Range<T>
         To = to;
     }
 
-    public T From { get; set; }
-    public T To { get; set; }
+    public T From { get; set; } = default!;
+    public T To { get; set; } = default!;
 
     public bool HasFrom()
     {
-        return !From.Equals(default(T));
+        return Equals(From, default(T));
     }
 
     public bool HasTo()
     {
-        return !To.Equals(default(T));
+        return Equals(To, default(T));
     }
 }
 

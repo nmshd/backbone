@@ -7,9 +7,9 @@ public class MessageIdEntityFrameworkValueConverter : ValueConverter<MessageId, 
 {
     public MessageIdEntityFrameworkValueConverter() : this(null) { }
 
-    public MessageIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public MessageIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => MessageId.Parse(value),
             mappingHints
         )
