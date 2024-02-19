@@ -87,7 +87,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private void EnsureSufficientSupportedDatawalletVersion()
     {
-        if (_datawallet != null && _supportedDatawalletVersion < _datawallet.Version)
+        if (_datawallet != null && _supportedDatawalletVersion! < _datawallet.Version)
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
     }
 
@@ -97,7 +97,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
         if (IsPreviousSyncRunStillActive())
         {
-            if (!_previousSyncRun.IsExpired)
+            if (!_previousSyncRun!.IsExpired)
                 throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhenAnotherSyncRunIsRunning(_previousSyncRun.Id));
 
             await CancelPreviousSyncRun();
