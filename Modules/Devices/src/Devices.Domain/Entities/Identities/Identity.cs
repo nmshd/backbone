@@ -34,7 +34,7 @@ public class Identity
     public byte IdentityVersion { get; private set; }
 
     public TierId? TierIdBeforeDeletion { get; private set; }
-    public TierId TierId { get; private set; }
+    public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
