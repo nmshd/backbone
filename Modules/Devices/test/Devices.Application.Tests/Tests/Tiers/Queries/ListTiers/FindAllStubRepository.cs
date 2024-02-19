@@ -48,7 +48,7 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<Tier?> GetBasicTierAsync(CancellationToken cancellationToken)
+    public Task<Tier?> FindBasicTier(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

@@ -76,7 +76,7 @@ public class TiersRepository : ITiersRepository
         return await _tiers.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
-    public async Task<Tier?> GetBasicTierAsync(CancellationToken cancellationToken)
+    public async Task<Tier?> FindBasicTier(CancellationToken cancellationToken)
     {
         return await _tiers.GetBasicTier(cancellationToken);
     }

@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
 
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
     {
-        var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
+        var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
 
         var user = new ApplicationUser(new Device(new Identity("test",
             IdentityAddress.Create([1, 1, 1, 1, 1], "id1"),
