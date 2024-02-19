@@ -21,8 +21,8 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
-    private Datawallet _datawallet;
-    private SyncRun _syncRun;
+    private Datawallet? _datawallet;
+    private SyncRun? _syncRun;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
