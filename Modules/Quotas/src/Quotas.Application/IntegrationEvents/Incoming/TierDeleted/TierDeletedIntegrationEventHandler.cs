@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
@@ -17,7 +18,7 @@ public class TierDeletedIntegrationEventHandler : IIntegrationEventHandler<TierD
 
     public async Task Handle(TierDeletedIntegrationEvent integrationEvent)
     {
-        var tier = await _tiersRepository.Find(integrationEvent.Id, CancellationToken.None);
+        var tier = await _tiersRepository.Find(integrationEvent.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Tier));
 
         await _tiersRepository.RemoveById(tier.Id);
 

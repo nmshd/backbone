@@ -12,8 +12,9 @@
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Max</mat-label>
+            <mat-label>Max Amount</mat-label>
             <input [(ngModel)]="max" matInput required type="number" min="0" />
+            <mat-hint align="start">Only numbers greater or equal to 0 are valid.</mat-hint>
             <mat-error>You must enter a value</mat-error>
         </mat-form-field>
 
@@ -31,6 +32,9 @@
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
 </mat-dialog-content>
+<div *ngIf="errorMessage !== '' && !loading" class="quota-error-container">
+    <mat-error class="quota-error-message">{{ errorMessage }}</mat-error>
+</div>
 <mat-dialog-actions align="end">
     <button mat-flat-button mat-dialog-close>Cancel</button>
     <button mat-flat-button color="primary" (click)="assignQuota()" [disabled]="!isValid()">Confirm</button>

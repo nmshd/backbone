@@ -20,9 +20,17 @@ public static class DomainErrors
 
     public static DomainError CannotDeleteBasicTier(string reason = "")
     {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted",
-            string.IsNullOrEmpty(reason) ? $"The Basic Tier cannot be deleted {formattedReason}." : reason);
+        return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted", "The 'Basic' Tier cannot be deleted.");
+    }
+
+    public static DomainError CannotDeleteQueuedForDeletionTier()
+    {
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted", "The 'Queued for Deletion' Tier cannot be deleted.");
+    }
+
+    public static DomainError CannotChangeTierQueuedForDeletion()
+    {
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
     }
 
     public static DomainError CannotDeleteUsedTier(string reason = "")
@@ -30,5 +38,15 @@ public static class DomainErrors
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.device.usedTierCannotBeDeleted",
             string.IsNullOrEmpty(reason) ? $"The Tier cannot be deleted {formattedReason}" : reason);
+    }
+
+    public static DomainError OnlyOneActiveDeletionProcessAllowed()
+    {
+        return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
+    }
+
+    public static DomainError NoDeletionProcessWithRequiredStatusExists()
+    {
+        return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "The deletion process does not have the correct status to perform this action.");
     }
 }

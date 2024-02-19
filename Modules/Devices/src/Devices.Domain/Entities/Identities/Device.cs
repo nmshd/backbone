@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class Device
 {
