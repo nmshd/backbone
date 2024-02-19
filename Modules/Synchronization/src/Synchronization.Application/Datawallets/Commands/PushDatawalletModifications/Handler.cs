@@ -22,12 +22,12 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
 
-    private PushDatawalletModificationsCommand _request;
+    private PushDatawalletModificationsCommand? _request;
     private CancellationToken _cancellationToken;
-    private DatawalletVersion _supportedDatawalletVersion;
-    private Datawallet _datawallet;
-    private DatawalletModification[] _modifications;
-    private PushDatawalletModificationsResponse _response;
+    private DatawalletVersion? _supportedDatawalletVersion;
+    private Datawallet? _datawallet;
+    private DatawalletModification[]? _modifications;
+    private PushDatawalletModificationsResponse? _response;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
@@ -53,7 +53,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         PublishIntegrationEvent();
         BuildResponse();
 
-        return _response;
+        return _response!;
     }
 
     private async Task ReadDatawallet(CancellationToken cancellationToken)
@@ -77,7 +77,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureSufficientSupportedDatawalletVersion()
     {
-        if (_supportedDatawalletVersion < _datawallet.Version)
+        if (_supportedDatawalletVersion! < _datawallet!.Version)
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
     }
 
@@ -85,20 +85,20 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     {
         var blobName = Guid.NewGuid().ToString("N");
 
-        var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
+        var newModifications = _request!.Modifications.Select(m => CreateModification(m, blobName));
 
-        _dbContext.Set<Datawallet>().Update(_datawallet);
+        _dbContext.Set<Datawallet>().Update(_datawallet!);
 
         var modificationsArray = newModifications.ToArray();
 
-        await Save(modificationsArray, blobName);
+        await Save(modificationsArray);
 
         _modifications = modificationsArray;
     }
 
     private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
-        return _datawallet.AddModification(
+        return _datawallet!.AddModification(
             _mapper.Map<DatawalletModificationType>(modificationDto.Type),
             new DatawalletVersion(modificationDto.DatawalletVersion),
             modificationDto.Collection,
@@ -112,7 +112,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureDeviceIsUpToDate()
     {
-        if (_datawallet.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
+        if (_datawallet!.LatestModification != null && _datawallet.LatestModification.Index != _request!.LocalIndex)
             throw new OperationFailedException(ApplicationErrors.Datawallet.DatawalletNotUpToDate(_request.LocalIndex, _datawallet.LatestModification.Index));
     }
 
@@ -122,9 +122,9 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _response = new PushDatawalletModificationsResponse { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
     }
 
-    private async Task Save(DatawalletModification[] modifications, string blobName)
+    private async Task Save(DatawalletModification[] modifications)
     {
-        await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications, _cancellationToken);
+        await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications);
 
         try
         {
