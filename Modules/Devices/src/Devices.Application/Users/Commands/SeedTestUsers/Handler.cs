@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
+
 public class Handler : IRequestHandler<SeedTestUsersCommand>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
@@ -22,31 +23,29 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
 
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
     {
-        var basicTier = await _tiersRepository.GetBasicTierAsync(cancellationToken);
+        var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
 
-        var user = new ApplicationUser
+        var user = new ApplicationUser(new Device(new Identity("test",
+            IdentityAddress.Create([1, 1, 1, 1, 1], "id1"),
+            [1, 1, 1, 1, 1], basicTier!.Id, 1
+        )))
         {
             SecurityStamp = Guid.NewGuid().ToString("D"),
             UserName = "USRa",
             NormalizedUserName = "USRA",
-            Device = new Device(new Identity("test",
-                IdentityAddress.Create(new byte[] { 1, 1, 1, 1, 1 }, "id1"),
-                new byte[] { 1, 1, 1, 1, 1 }, basicTier.Id, 1
-            )),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "a");
         await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
-        user = new ApplicationUser
+        user = new ApplicationUser(new Device(new Identity("test",
+            IdentityAddress.Create([2, 2, 2, 2, 2], "id1"),
+            [2, 2, 2, 2, 2], basicTier.Id, 1
+        )))
         {
             SecurityStamp = Guid.NewGuid().ToString("D"),
             UserName = "USRb",
             NormalizedUserName = "USRB",
-            Device = new Device(new Identity("test",
-                IdentityAddress.Create(new byte[] { 2, 2, 2, 2, 2 }, "id1"),
-                new byte[] { 2, 2, 2, 2, 2 }, basicTier.Id, 1
-            )),
             CreatedAt = SystemTime.UtcNow
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, "b");

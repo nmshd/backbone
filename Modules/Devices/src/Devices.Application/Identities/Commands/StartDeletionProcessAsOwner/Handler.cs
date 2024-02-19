@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
         var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId());
         var newTierId = identity.TierId;
 
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId!, newTierId!));
 
         await _identitiesRepository.Update(identity, cancellationToken);
 

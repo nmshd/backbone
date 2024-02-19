@@ -23,7 +23,7 @@ public class ChallengeValidator
     public async Task Validate(SignedChallengeDTO signedChallenge, PublicKey publicKey)
     {
         ValidateSignature(signedChallenge.Challenge, Signature.FromBytes(signedChallenge.Signature).Bytes, publicKey.Key);
-        await ValidateChallengeExpiracy(signedChallenge.Challenge);
+        await ValidateChallengeExpiry(signedChallenge.Challenge);
     }
 
     private void ValidateSignature(string challenge, byte[] signature, byte[] publicKey)
@@ -37,7 +37,7 @@ public class ChallengeValidator
             throw new OperationFailedException(ApplicationErrors.Devices.InvalidSignature());
     }
 
-    private async Task ValidateChallengeExpiracy(string serializedChallenge)
+    private async Task ValidateChallengeExpiry(string serializedChallenge)
     {
         var deserializedChallenge = JsonSerializer.Deserialize<ChallengeDTO>(serializedChallenge, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? throw new NotFoundException(nameof(Challenge));
         var challenge = await _challengesRepository.FindById(deserializedChallenge.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Challenge));
