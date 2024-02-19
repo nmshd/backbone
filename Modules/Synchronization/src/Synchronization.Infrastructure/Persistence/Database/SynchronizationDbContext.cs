@@ -124,7 +124,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             await SaveChangesAsync(CancellationToken.None);
         }, new List<int> { DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS });
 
-        return externalEvent;
+        return externalEvent!;
     }
 
     public async Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
