@@ -114,7 +114,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
     private void CheckPreconditions()
     {
-        if (_syncRun.CreatedByDevice != _activeDevice)
+        if (_syncRun!.CreatedByDevice != _activeDevice)
             throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotFinalizeSyncRunStartedByAnotherDevice());
 
         if (_syncRun.IsFinalized)
