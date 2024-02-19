@@ -14,14 +14,14 @@ public class SyncRunDTO : IHaveCustomMapping
         DatawalletVersionUpgrade
     }
 
-    public SyncRunId Id { get; set; }
-    public SyncRunType Type { get; set; }
-    public DateTime ExpiresAt { get; set; }
-    public long Index { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public IdentityAddress CreatedBy { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
-    public int EventCount { get; set; }
+    public required SyncRunId Id { get; set; }
+    public required SyncRunType Type { get; set; }
+    public required DateTime ExpiresAt { get; set; }
+    public required long Index { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required IdentityAddress CreatedBy { get; set; }
+    public required DeviceId CreatedByDevice { get; set; }
+    public required int EventCount { get; set; }
 
     public void CreateMappings(Profile configuration)
     {
