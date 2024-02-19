@@ -8,7 +8,7 @@ public class DummyHasher : IHasher
 
     public DummyHasher()
     {
-        _bytes = new byte[] { 1, 2, 3 };
+        _bytes = [1, 2, 3];
     }
 
     public DummyHasher(byte[] bytes)

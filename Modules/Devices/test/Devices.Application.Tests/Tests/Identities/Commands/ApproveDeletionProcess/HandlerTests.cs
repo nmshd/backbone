@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -68,7 +67,7 @@ public class HandlerTests
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(address);
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity>(null);
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
@@ -133,7 +132,7 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null)
     {
         eventBus ??= A.Fake<IEventBus>();
         return new Handler(identitiesRepository, userContext, eventBus);

@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (command.ShouldValidateChallenge)
             await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
-        _logger.LogTrace("Challenge sucessfully validated.");
+        _logger.LogTrace("Challenge successfully validated.");
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.AddressPrefix);
 
@@ -47,7 +48,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (addressAlreadyExists)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
 
-        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken);
+        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
 
@@ -60,7 +61,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName);
+        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName!);
 
         _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
 
@@ -71,7 +72,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             Device = new CreateIdentityResponseDevice
             {
                 Id = user.DeviceId,
-                Username = user.UserName,
+                Username = user.UserName!,
                 CreatedAt = user.Device.CreatedAt
             }
         };
@@ -81,9 +82,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 internal static partial class CreatedIdentityLogs
 {
     [LoggerMessage(
-               EventId = 436321,
-                      EventName = "Devices.CreateIdentity.CreatedIdentity",
-                      Level = LogLevel.Information,
-                      Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
+        EventId = 436321,
+        EventName = "Devices.CreateIdentity.CreatedIdentity",
+        Level = LogLevel.Information,
+        Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
     public static partial void CreatedIdentity(this ILogger logger, IdentityAddress address, DeviceId deviceId, string userName);
 }

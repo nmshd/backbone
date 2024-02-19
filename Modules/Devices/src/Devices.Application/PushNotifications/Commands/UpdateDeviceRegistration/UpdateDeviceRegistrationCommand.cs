@@ -4,8 +4,8 @@ namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.Update
 
 public class UpdateDeviceRegistrationCommand : IRequest<UpdateDeviceRegistrationResponse>
 {
-    public string Platform { get; set; }
-    public string Handle { get; set; }
-    public string AppId { get; set; }
+    public required string Platform { get; set; }
+    public required string Handle { get; set; }
+    public required string AppId { get; set; }
     public string? Environment { get; set; }
 }

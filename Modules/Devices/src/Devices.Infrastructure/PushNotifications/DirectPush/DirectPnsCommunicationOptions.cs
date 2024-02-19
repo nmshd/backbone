@@ -5,19 +5,21 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
 public class DirectPnsCommunicationOptions
 {
-    public FcmOptions Fcm { get; set; }
+    [Required]
+    public required FcmOptions Fcm { get; set; } = null!;
 
-    public ApnsOptions Apns { get; set; }
+    [Required]
+    public required ApnsOptions Apns { get; set; } = null!;
 
     public class FcmOptions
     {
         [Required]
         [MinLength(1)]
-        public Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = new();
+        public required Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = [];
 
         [Required]
         [MinLength(1)]
-        public Dictionary<string, ServiceAccountInformation> Apps { get; set; } = new();
+        public required Dictionary<string, ServiceAccountInformation> Apps { get; set; } = [];
 
         public class ServiceAccountInformation
         {
@@ -46,10 +48,7 @@ public class DirectPnsCommunicationOptions
 
             var serviceAccount = ServiceAccounts.GetValueOrDefault(app.ServiceAccountName);
 
-            if (serviceAccount == null)
-                return null;
-
-            return serviceAccount.ServiceAccountJson;
+            return serviceAccount?.ServiceAccountJson;
         }
 
         public List<string> GetSupportedAppIds()
@@ -61,7 +60,7 @@ public class DirectPnsCommunicationOptions
         {
             [Required]
             [MinLength(1)]
-            public string ServiceAccountJson { get; set; } = string.Empty;
+            public required string ServiceAccountJson { get; set; } = string.Empty;
         }
     }
 
@@ -69,11 +68,11 @@ public class DirectPnsCommunicationOptions
     {
         [Required]
         [MinLength(1)]
-        public Dictionary<string, Key> Keys { get; set; } = new();
+        public required Dictionary<string, Key> Keys { get; set; } = new();
 
         [Required]
         [MinLength(1)]
-        public Dictionary<string, Bundle> Bundles { get; set; } = new();
+        public required Dictionary<string, Bundle> Bundles { get; set; } = new();
 
         public bool HasConfigForBundleId(string bundleId)
         {
@@ -84,11 +83,7 @@ public class DirectPnsCommunicationOptions
         public Key GetKeyInformationForBundleId(string bundleId)
         {
             var bundle = Bundles.GetValueOrDefault(bundleId);
-
-            if (bundle == null)
-                return null;
-
-            return Keys[bundle.KeyName];
+            return bundle == null ? throw new Exception($"No bundle configuration for bundle id '{bundleId}' was found.") : Keys[bundle.KeyName];
         }
 
         public Bundle GetBundleById(string bundleId)
@@ -105,22 +100,22 @@ public class DirectPnsCommunicationOptions
         {
             [Required]
             [MinLength(1)]
-            public string KeyName { get; set; }
+            public required string KeyName { get; set; }
         }
 
         public class Key
         {
             [Required]
             [MinLength(1)]
-            public string TeamId { get; set; } = string.Empty;
+            public required string TeamId { get; set; } = string.Empty;
 
             [Required]
             [MinLength(1)]
-            public string KeyId { get; set; } = string.Empty;
+            public required string KeyId { get; set; } = string.Empty;
 
             [Required]
             [MinLength(1)]
-            public string PrivateKey { get; set; } = string.Empty;
+            public required string PrivateKey { get; set; } = string.Empty;
         }
     }
 }
