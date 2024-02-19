@@ -72,14 +72,14 @@ public class ApproveDeletionProcessTests
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+        var address = IdentityAddress.Create([], "id1");
+        return new Identity("", address, [], TierId.Generate(), 1);
     }
 
     private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
     {
         var identity = CreateIdentity();
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
         identity.StartDeletionProcessAsSupport();
         return identity;
     }

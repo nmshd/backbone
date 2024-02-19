@@ -8,23 +8,36 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class Device
 {
-#pragma warning disable CS8618
-    private Device() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Device()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        IdentityAddress = null!;
+        Identity = null!;
+        User = null!;
+        CreatedByDevice = null!;
+    }
 
-#pragma warning disable CS8618
     public Device(Identity identity, DeviceId? createdByDevice = null)
-#pragma warning restore CS8618
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
 
-        // The following distinction is unfortunatly necessary in order to make EF recognize that the identity already exists
+        User = null!; // This is just to satisfy the compiler; the property is actually set by EF core
+
+        // The following distinction is unfortunately necessary in order to make EF recognize that the identity already exists
         if (identity.IsNew())
+        {
             Identity = identity;
+            IdentityAddress = null!; // This is just to satisfy the compiler; the property is actually set by EF core
+        }
         else
+        {
+            Identity = null!; // This is just to satisfy the compiler; the property is actually set by EF core
             IdentityAddress = identity.Address;
+        }
     }
 
     public DeviceId Id { get; set; }

@@ -41,7 +41,7 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
             .Where(registration => registration.IdentityAddress == address).ToListAsync(cancellationToken);
     }
 
-    public async Task<PnsRegistration> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    public async Task<PnsRegistration?> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
