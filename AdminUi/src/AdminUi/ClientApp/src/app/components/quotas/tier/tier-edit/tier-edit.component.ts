@@ -1,15 +1,15 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Observable, forkJoin } from "rxjs";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { SelectionModel } from "@angular/cdk/collections";
-import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { Observable, forkJoin } from "rxjs";
-import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 
 @Component({
     selector: "app-tier-edit",
@@ -24,7 +24,6 @@ export class TierEditComponent {
     public selectionQuotas: SelectionModel<TierQuota>;
     public quotasTableDisplayedColumns: string[];
     public tierId?: string;
-    public disabled: boolean;
     public editMode: boolean;
     public tier: Tier;
     public loading: boolean;
@@ -47,12 +46,12 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.disabled = false;
         this.tier = {
             id: "",
             name: "",
             quotas: [],
             isDeletable: false,
+            isReadOnly: false,
             numberOfIdentities: 0
         } as Tier;
     }
@@ -76,7 +75,6 @@ export class TierEditComponent {
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 this.tier = data.result;
-                this.tier.isDeletable = this.tier.name !== "Basic";
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -245,5 +243,17 @@ export class TierEditComponent {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+
+    public isNameInputDisabled(): boolean {
+        return this.editMode || this.tier.isReadOnly;
+    }
+
+    public isQuotaDeletionDisabled(): boolean {
+        return this.selectionQuotas.selected.length === 0 || this.tier.isReadOnly;
+    }
+
+    public isQuotaAssignmentDisabled(): boolean {
+        return this.tier.id === "" || this.tier.isReadOnly;
     }
 }

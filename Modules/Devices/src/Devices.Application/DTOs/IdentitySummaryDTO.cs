@@ -1,13 +1,12 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
 public class IdentitySummaryDTO
 {
-    public string? ClientId { get; set; }
-
     public string Address { get; set; }
+    public string? ClientId { get; set; }
     public byte[] PublicKey { get; set; }
     public DateTime CreatedAt { get; set; }
 

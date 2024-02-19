@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
-        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
+        if (command.ShouldValidateChallenge)
+            await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
         _logger.LogTrace("Challenge successfully validated.");
 

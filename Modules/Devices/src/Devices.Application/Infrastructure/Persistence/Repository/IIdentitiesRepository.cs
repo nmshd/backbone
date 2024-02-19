@@ -1,7 +1,7 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
@@ -11,8 +11,8 @@ public interface IIdentitiesRepository
     Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
-#nullable disable
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
+    Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     #endregion
 

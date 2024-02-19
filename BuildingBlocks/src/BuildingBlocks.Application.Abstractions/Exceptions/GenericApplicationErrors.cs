@@ -25,7 +25,7 @@ public static class GenericApplicationErrors
     public static ApplicationError QuotaExhausted()
     {
         return new ApplicationError("error.platform.quotaExhausted",
-            "You are not allowed to perform this action because one or more quotas have been exhausted.");
+            "You cannot to perform this action because one or more quotas are exhausted.");
     }
 
     public static class Validation

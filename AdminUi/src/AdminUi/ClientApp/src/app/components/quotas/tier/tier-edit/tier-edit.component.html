@@ -17,7 +17,7 @@
                 </mat-form-field>
                 <mat-form-field class="full-width">
                     <mat-label>Name</mat-label>
-                    <input matInput required [(ngModel)]="tier.name" [disabled]="disabled || editMode" />
+                    <input matInput required [(ngModel)]="tier.name" [disabled]="isNameInputDisabled()" />
                     <mat-error>You must enter a value</mat-error>
                 </mat-form-field>
             </div>
@@ -34,10 +34,10 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="action-buttons">
-                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="isQuotaDeletionDisabled()">
                     <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!tier.id">
+                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="isQuotaAssignmentDisabled()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
@@ -47,6 +47,7 @@
                         <mat-checkbox
                             (change)="$event ? toggleAllRowsQuotas() : null"
                             [checked]="selectionQuotas.hasValue() && isAllSelected()"
+                            [disabled]="tier.isReadOnly"
                             color="primary"
                             [indeterminate]="selectionQuotas.hasValue() && !isAllSelected()"
                             [aria-label]="checkboxLabelQuotas()">
@@ -56,6 +57,7 @@
                         <mat-checkbox
                             (click)="$event.stopPropagation()"
                             (change)="$event ? selectionQuotas.toggle(row) : null"
+                            [disabled]="tier.isReadOnly"
                             [checked]="selectionQuotas.isSelected(row)"
                             color="primary"
                             [aria-label]="checkboxLabelQuotas(i, row)">

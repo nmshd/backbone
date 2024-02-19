@@ -2,11 +2,18 @@
 using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 
-namespace Backbone.Modules.Devices.Domain.Entities;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
+
+    // This constructor is required by AspnetCoreIdentity
+    public ApplicationUser()
+    {
+        _device = null!;
+        DeviceId = null!;
+    }
 
     public ApplicationUser(Device device) : base(Username.New())
     {
