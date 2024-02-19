@@ -132,7 +132,10 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var blobName = Guid.NewGuid().ToString("N");
 
         var newModifications = new List<DatawalletModification>();
+
+        // ReSharper disable once CollectionNeverQueried.Local
         var payloads = new Dictionary<long, byte[]>();
+
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
