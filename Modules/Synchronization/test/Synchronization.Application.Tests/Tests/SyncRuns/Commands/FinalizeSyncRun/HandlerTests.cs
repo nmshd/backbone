@@ -153,7 +153,18 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var datawalletModifications = new List<PushDatawalletModificationItem> { new() { Type = DatawalletModificationDTO.DatawalletModificationType.Create, Collection = "someArbitraryCollection", EncryptedPayload = new byte[] { 0 }, ObjectIdentifier = "someArbitraryObjectIdentitfier", PayloadCategory = "someArbitraryObjectProperty" } };
+        var datawalletModifications = new List<PushDatawalletModificationItem>
+        {
+            new()
+            {
+                Type = DatawalletModificationDTO.DatawalletModificationType.Create,
+                Collection = "someArbitraryCollection",
+                EncryptedPayload = [0],
+                ObjectIdentifier = "someArbitraryObjectIdentitfier",
+                PayloadCategory = "someArbitraryObjectProperty",
+                DatawalletVersion = 1
+            }
+        };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, datawalletModifications), CancellationToken.None);
 
