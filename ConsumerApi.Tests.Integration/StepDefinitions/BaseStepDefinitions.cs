@@ -28,7 +28,8 @@ internal class BaseStepDefinitions
                 ClientSecret = httpConfiguration.Value.ClientCredentials.ClientSecret,
                 Username = "USRa",
                 Password = "a"
-            }
+            },
+            ContentType = "application/json"
         };
 
         _signatureHelper = signatureHelper;

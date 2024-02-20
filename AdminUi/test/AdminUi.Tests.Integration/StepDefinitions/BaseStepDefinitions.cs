@@ -9,7 +9,7 @@ public class BaseStepDefinitions
 
     public BaseStepDefinitions()
     {
-        _requestConfiguration = new RequestConfiguration();
+        _requestConfiguration = new RequestConfiguration { ContentType = "application/json" };
     }
 
     [Given("the user is authenticated")]
