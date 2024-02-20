@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -16,7 +16,7 @@ public class HandlerTests
     public async void Gets_identity_by_address()
     {
         // Arrange
-        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, TestDataGenerator.CreateRandomTierId(), 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], TestDataGenerator.CreateRandomTierId(), 1);
 
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
@@ -27,16 +27,16 @@ public class HandlerTests
         result.ClientId.Should().Be(identity.ClientId);
         result.Address.Should().Be(identity.Address);
         result.PublicKey.Should().BeEquivalentTo(identity.PublicKey);
-        result.TierId.Should().BeEquivalentTo(identity.TierId);
+        result.TierId.Should().BeEquivalentTo(identity.TierId!);
         result.IdentityVersion.Should().Be(1);
     }
 
     [Fact]
-    public async void Fails_when_no_identity_found()
+    public void Fails_when_no_identity_found()
     {
         // Arrange
         var identityRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
+        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(identityRepository);
 

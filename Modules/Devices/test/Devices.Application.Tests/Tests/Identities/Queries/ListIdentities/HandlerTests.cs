@@ -1,7 +1,7 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
@@ -36,19 +36,20 @@ public class HandlerTests
     {
         // Arrange
         var request = new PaginationFilter();
-        List<Identity> identitiesList = new()
-        {
-            new(CreateRandomDeviceId(),
-            CreateRandomIdentityAddress(),
-            CreateRandomBytes(),
-            TestDataGenerator.CreateRandomTierId(),
-            1),
-            new(CreateRandomDeviceId(),
-            CreateRandomIdentityAddress(),
-            CreateRandomBytes(),
-            TestDataGenerator.CreateRandomTierId(),
-            1)
-        };
+        List<Identity> identitiesList =
+        [
+            new Identity(CreateRandomDeviceId(),
+                CreateRandomIdentityAddress(),
+                CreateRandomBytes(),
+                TestDataGenerator.CreateRandomTierId(),
+                1),
+
+            new Identity(CreateRandomDeviceId(),
+                CreateRandomIdentityAddress(),
+                CreateRandomBytes(),
+                TestDataGenerator.CreateRandomTierId(),
+                1)
+        ];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 
@@ -67,10 +68,7 @@ public class HandlerTests
         var expectedClientId = CreateRandomDeviceId();
         var expectedAddress = CreateRandomIdentityAddress();
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
-        List<Identity> identitiesList = new()
-        {
-            new(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1)
-        };
+        List<Identity> identitiesList = [new(expectedClientId, expectedAddress, [], expectedTierId, 1)];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 

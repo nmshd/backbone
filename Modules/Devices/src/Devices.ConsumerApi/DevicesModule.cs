@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +30,8 @@ public class DevicesModule : AbstractModule
 
         services.AddDatabase(options =>
         {
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
+            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
