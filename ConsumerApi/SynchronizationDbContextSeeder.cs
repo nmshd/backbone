@@ -22,7 +22,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
     public SynchronizationDbContextSeeder(IServiceProvider serviceProvider, ILogger<SynchronizationDbContextSeeder> logger)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
-        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
+        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()?.Value.RootFolder;
         _logger = logger;
     }
 

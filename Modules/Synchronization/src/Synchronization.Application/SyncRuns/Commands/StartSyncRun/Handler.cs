@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
     private SyncRun? _previousSyncRun;
-    private StartSyncRunCommand? _request;
+    private StartSyncRunCommand _request = null!;
     private DatawalletVersion? _supportedDatawalletVersion;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
@@ -111,24 +111,21 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private async Task CancelPreviousSyncRun()
     {
-        if (_previousSyncRun != null)
-        {
-            _previousSyncRun.Cancel();
-            _dbContext.Set<SyncRun>().Update(_previousSyncRun);
-        }
+        _previousSyncRun!.Cancel();
+        _dbContext.Set<SyncRun>().Update(_previousSyncRun);
 
         await _dbContext.SaveChangesAsync(_cancellationToken);
     }
 
     private async Task<SyncRun> CreateNewSyncRun()
     {
-        return await CreateNewSyncRun(Array.Empty<ExternalEvent>());
+        return await CreateNewSyncRun([]);
     }
 
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request!.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
+        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
@@ -148,10 +145,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private long DetermineNextSyncRunIndex()
     {
-        if (_previousSyncRun == null)
-            return 0;
-
-        return _previousSyncRun.Index + 1;
+        return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
     }
 
     private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)

@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private Datawallet? _datawallet;
-    private SyncRun? _syncRun;
+    private SyncRun _syncRun = null!;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
@@ -114,7 +114,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
     private void CheckPreconditions()
     {
-        if (_syncRun!.CreatedByDevice != _activeDevice)
+        if (_syncRun.CreatedByDevice != _activeDevice)
             throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotFinalizeSyncRunStartedByAnotherDevice());
 
         if (_syncRun.IsFinalized)
@@ -126,7 +126,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (_datawallet == null)
             throw new NotFoundException(nameof(Datawallet));
 
-        if (!modifications.Any())
+        if (modifications.Count == 0)
             return [];
 
         var blobName = Guid.NewGuid().ToString("N");
