@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Reflection;
+﻿using System.Reflection;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Challenges.ConsumerApi;
@@ -14,9 +13,6 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Messages.Infrastructure.EventBus;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
@@ -70,8 +66,6 @@ namespace Backbone.Job.IdentityDeletion
                     services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
                     services.AddCustomIdentity(hostContext.HostingEnvironment);
-
-                    //services.RegisterIdentityDeleters(); // actual deletion....
 
                     services.ConfigureAndValidate<CancelDeletionProcessJobConfiguration>(configuration.Bind);
 
