@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Net;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -71,6 +72,7 @@ public class Identity
     public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
+        //EnsureDeletionProcessStartedByOwnDevice();
 
         TierIdBeforeDeletion = TierId;
 
@@ -83,6 +85,12 @@ public class Identity
 
         return deletionProcess;
     }
+
+    //private void EnsureDeletionProcessStartedByOwnDevice()
+    //{
+    //    // check if device that starts deletion actually belongs to identity
+    //    throw new NotImplementedException();
+    //}
 
     public void DeletionProcessApprovalReminder1Sent()
     {
@@ -166,24 +174,22 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public void CancelDeletionProcessDuringGracePeriod(IdentityDeletionProcess deletionProcess)
+    public void CancelDeletionProcessDuringGracePeriod(DeviceId canceledByDeviceId)
     {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
-
-        // TODO: refactor this
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+        
         if (deletionProcess.GracePeriodEndsAt < SystemTime.UtcNow)
-        {
             throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
-        }
 
-        _deletionProcesses.Remove(deletionProcess);
+        deletionProcess.Cancel(Address, canceledByDeviceId);
     }
 }
 
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Cancelled = 2
 }
 
 public enum IdentityStatus

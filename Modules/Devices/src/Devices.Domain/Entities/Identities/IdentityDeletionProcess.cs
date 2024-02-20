@@ -59,6 +59,13 @@ public class IdentityDeletionProcess
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
+    private void Cancel(DeviceId cancelledByDevice)
+    {
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
+        CancelledByDevice = cancelledByDevice;
+    }
+
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
@@ -70,6 +77,9 @@ public class IdentityDeletionProcess
 
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
+
+    public DateTime? CancelledAt { get; private set; }
+    public DeviceId? CancelledByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
@@ -131,5 +141,14 @@ public class IdentityDeletionProcess
 
         Approve(approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
+    }
+
+    public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
+    {
+        if (Status != DeletionProcessStatus.Approved)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+
+        Cancel(cancelledByDevice);
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelled(Id, address, cancelledByDevice));
     }
 }
