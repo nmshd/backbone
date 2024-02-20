@@ -16,16 +16,16 @@ public class DatawalletModificationDTO : IHaveCustomMapping
         CacheChanged
     }
 
-    public DatawalletModificationId Id { get; set; }
-    public ushort DatawalletVersion { get; set; }
-    public long Index { get; set; }
-    public string ObjectIdentifier { get; set; }
-    public string PayloadCategory { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
-    public string Collection { get; set; }
-    public string Type { get; set; }
-    public byte[] EncryptedPayload { get; set; }
+    public required DatawalletModificationId Id { get; set; }
+    public required ushort DatawalletVersion { get; set; }
+    public required long Index { get; set; }
+    public required string ObjectIdentifier { get; set; }
+    public string? PayloadCategory { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required DeviceId CreatedByDevice { get; set; }
+    public required string Collection { get; set; }
+    public required string Type { get; set; }
+    public byte[]? EncryptedPayload { get; set; }
 
 
     public void CreateMappings(Profile configuration)
