@@ -10,7 +10,7 @@ public partial class Reporters
 {
     #region Private/Internal
 
-    private static readonly List<Reporter> REPORTERS = new();
+    private static readonly List<Reporter> REPORTERS = [];
 
     /// <summary>
     ///     Returns the current date/time which is used during the test run. It can set to a fixed
@@ -30,7 +30,7 @@ public partial class Reporters
 
     private static void AddStepRows(ref Step step, Table table)
     {
-        step.Rows = new List<Row> { new() { Cells = table.Header.ToList() } };
+        step.Rows = [new() { Cells = table.Header.ToList() }];
         foreach (var tableRow in table.Rows)
         {
             step.Rows.Add(new Row() { Cells = tableRow.Select(x => x.Value).ToList() });

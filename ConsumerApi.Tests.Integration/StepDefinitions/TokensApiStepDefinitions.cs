@@ -33,8 +33,8 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
         _peerTokenId = string.Empty;
-        _givenOwnTokens = new List<CreateTokenResponse>();
-        _responseTokens = new List<Token>();
+        _givenOwnTokens = [];
+        _responseTokens = [];
     }
 
     [Given(@"an own Token t")]

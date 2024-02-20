@@ -64,8 +64,7 @@ public class QuotaEnforcerBehaviorTests
         var exhaustionDate2 = DateTime.UtcNow.AddDays(10);
         var exhaustedMetricStatus1 = new MetricStatus(new MetricKey("exhausted1"), exhaustionDate1);
         var exhaustedMetricStatus2 = new MetricStatus(new MetricKey("exhausted2"), exhaustionDate2);
-        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: new[]
-            { exhaustedMetricStatus1, exhaustedMetricStatus2 }
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: [exhaustedMetricStatus1, exhaustedMetricStatus2]
         );
 
         // Act

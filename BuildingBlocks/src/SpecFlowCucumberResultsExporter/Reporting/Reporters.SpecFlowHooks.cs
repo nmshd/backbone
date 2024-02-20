@@ -99,7 +99,7 @@ public partial class Reporters
             {
                 reporter.Report = new Report
                 {
-                    Features = new List<Feature>(),
+                    Features = [],
                     StartTime = startTime
                 };
 

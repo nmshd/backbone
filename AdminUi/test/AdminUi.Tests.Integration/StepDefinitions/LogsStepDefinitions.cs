@@ -23,7 +23,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
             LogLevel = LogLevel.Trace,
             Category = "Test Category",
             MessageTemplate = "The log request {0} has the following description: {1}",
-            Arguments = new object[] { "Request Name", "Request Description" }
+            Arguments = ["Request Name", "Request Description"]
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -41,7 +41,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
             LogLevel = (LogLevel)16,
             Category = "Test Category",
             MessageTemplate = "The log request {0} has the following description: {1}",
-            Arguments = new object[] { "Request Name", "Request Description" }
+            Arguments = ["Request Name", "Request Description"]
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
