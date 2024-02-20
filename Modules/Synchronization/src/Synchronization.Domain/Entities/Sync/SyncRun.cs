@@ -121,6 +121,6 @@ public class SyncRun
 
 public record ExternalEventResult
 {
-    public ExternalEventId ExternalEventId { get; set; } = null!; // these properties are currently set by AutoMapper
-    public string ErrorCode { get; set; } = null!; // these properties are currently set by AutoMapper
+    public required ExternalEventId ExternalEventId { get; set; }
+    public required string ErrorCode { get; set; }
 }
