@@ -5,12 +5,12 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class PushDatawalletModificationItem
 {
+    public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
     public required string ObjectIdentifier { get; set; }
-    public required string PayloadCategory { get; set; }
     public required string Collection { get; set; }
-    public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-    public required byte[] EncryptedPayload { get; set; }
-    public ushort DatawalletVersion { get; set; }
+    public string? PayloadCategory { get; set; }
+    public byte[]? EncryptedPayload { get; set; }
+    public required ushort DatawalletVersion { get; set; }
 }
 
 public class PushDatawalletModificationItemValidator : AbstractValidator<PushDatawalletModificationItem>

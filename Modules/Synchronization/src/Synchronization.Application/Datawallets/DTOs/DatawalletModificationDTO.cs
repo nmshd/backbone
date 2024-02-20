@@ -17,15 +17,15 @@ public class DatawalletModificationDTO : IHaveCustomMapping
     }
 
     public required DatawalletModificationId Id { get; set; }
-    public ushort DatawalletVersion { get; set; }
-    public long Index { get; set; }
+    public required ushort DatawalletVersion { get; set; }
+    public required long Index { get; set; }
     public required string ObjectIdentifier { get; set; }
-    public required string PayloadCategory { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public string? PayloadCategory { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
     public required string Collection { get; set; }
     public required string Type { get; set; }
-    public required byte[] EncryptedPayload { get; set; }
+    public byte[]? EncryptedPayload { get; set; }
 
 
     public void CreateMappings(Profile configuration)
