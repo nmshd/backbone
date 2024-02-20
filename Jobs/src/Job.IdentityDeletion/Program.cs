@@ -74,11 +74,11 @@ namespace Backbone.Job.IdentityDeletion
 
                     services.AddCustomIdentity(hostContext.HostingEnvironment);
 
-                    services.RegisterIdentityDeleters();
+                    //services.RegisterIdentityDeleters(); // actual deletion....
 
-                    services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
+                    services.ConfigureAndValidate<CancelDeletionProcessJobConfiguration>(configuration.Bind);
 
-                    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<IdnetityDeletionJobConfiguration>>().Value;
+                    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<CancelDeletionProcessJobConfiguration>>().Value;
 
                     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
