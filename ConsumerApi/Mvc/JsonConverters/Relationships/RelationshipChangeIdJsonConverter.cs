@@ -15,11 +15,7 @@ public class RelationshipChangeIdJsonConverter : JsonConverter<RelationshipChang
     public override RelationshipChangeId Read(ref Utf8JsonReader reader, Type typeToConvert,
         JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
-        if (id == null)
-            throw new JsonException("The id cannot be null.");
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return RelationshipChangeId.Parse(id);

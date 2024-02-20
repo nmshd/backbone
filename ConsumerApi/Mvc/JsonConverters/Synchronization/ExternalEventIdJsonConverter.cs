@@ -14,11 +14,7 @@ public class ExternalEventIdJsonConverter : JsonConverter<ExternalEventId>
 
     public override ExternalEventId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
-        if (id == null)
-            throw new JsonException("The id cannot be null.");
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return ExternalEventId.Parse(id);
