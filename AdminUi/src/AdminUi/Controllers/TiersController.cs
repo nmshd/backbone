@@ -91,7 +91,7 @@ public class TiersController : ApiControllerBase
 
 public class CreateQuotaForTierRequest
 {
-    public string MetricKey { get; set; }
-    public int Max { get; set; }
-    public QuotaPeriod Period { get; set; }
+    public required string MetricKey { get; set; }
+    public required int Max { get; set; }
+    public required QuotaPeriod Period { get; set; }
 }

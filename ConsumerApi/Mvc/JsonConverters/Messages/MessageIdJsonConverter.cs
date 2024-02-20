@@ -16,6 +16,9 @@ public class MessageIdJsonConverter : JsonConverter<MessageId>
     {
         var id = reader.GetString();
 
+        if (id == null)
+            throw new JsonException("The id cannot be null.");
+
         try
         {
             return MessageId.Parse(id);

@@ -2,7 +2,6 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile></DocumentationFile>
-        <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

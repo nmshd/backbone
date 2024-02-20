@@ -16,6 +16,9 @@ public class TokenIdJsonConverter : JsonConverter<TokenId>
     {
         var id = reader.GetString();
 
+        if (id == null)
+            throw new JsonException("The id cannot be null.");
+
         try
         {
             return TokenId.Parse(id);

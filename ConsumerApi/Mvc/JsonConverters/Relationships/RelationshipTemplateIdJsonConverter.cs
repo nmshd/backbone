@@ -17,6 +17,9 @@ public class RelationshipTemplateIdJsonConverter : JsonConverter<RelationshipTem
     {
         var id = reader.GetString();
 
+        if (id == null)
+            throw new JsonException("The id cannot be null.");
+
         try
         {
             return RelationshipTemplateId.Parse(id);

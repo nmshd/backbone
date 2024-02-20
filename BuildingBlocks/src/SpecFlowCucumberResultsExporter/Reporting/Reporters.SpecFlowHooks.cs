@@ -115,7 +115,7 @@ public partial class Reporters
             var feature = new Feature
             {
                 Tags = featureContext.FeatureInfo.Tags.Select(tag => new Tag() { Name = "@" + tag }).ToList(),
-                Elements = new List<Scenario>(),
+                Elements = [],
                 StartTime = starttime,
                 Name = featureContext.FeatureInfo.Title,
                 Description = featureContext.FeatureInfo.Description,
@@ -133,20 +133,20 @@ public partial class Reporters
     [BeforeScenario]
     internal static void BeforeScenario(ScenarioContext scenarioContext)
     {
-        var starttime = CurrentRunTime;
+        var startTime = CurrentRunTime;
 
         foreach (var reporter in REPORTERS)
         {
             var scenario = new Scenario
             {
                 Tags = scenarioContext.ScenarioInfo.Tags.Select(tag => new Tag() { Name = "@" + tag }).ToList(),
-                StartTime = starttime,
+                StartTime = startTime,
                 Name = scenarioContext.ScenarioInfo.Title,
-                Steps = new List<Step>(),
+                Steps = [],
                 Description = scenarioContext.ScenarioInfo.Title
             };
 
-            reporter.CurrentFeature.Elements.Add(scenario);
+            reporter.CurrentFeature!.Elements.Add(scenario);
             reporter.CurrentScenario = scenario;
 
             OnStartedScenario(reporter);

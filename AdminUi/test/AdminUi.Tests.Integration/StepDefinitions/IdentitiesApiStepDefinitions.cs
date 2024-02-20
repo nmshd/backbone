@@ -77,7 +77,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews(_requestConfiguration);
+        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews();
         _identityOverviewsResponse.Should().NotBeNull();
         _identityOverviewsResponse!.Content.Should().NotBeNull();
     }

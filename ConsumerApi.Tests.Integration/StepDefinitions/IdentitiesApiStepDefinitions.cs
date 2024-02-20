@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
+using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -52,8 +53,8 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _response!.Content.Should().NotBeNull();
-        _response.Content!.Error.Should().NotBeNull();
+        ThrowIfNull(_response);
+        _response.Content.Error.Should().NotBeNull();
         _response.Content.Error!.Code.Should().Be(errorCode);
     }
 

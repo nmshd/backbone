@@ -37,14 +37,14 @@ public partial class Reporters
         }
     }
 
-    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime starttime, MethodBase method = null, params object[] args)
+    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime startTime, MethodBase? method = null, params object[] args)
     {
         var stepInfo = ScenarioStepContext.Current.StepInfo;
 
         var step = new Step
         {
             Name = stepInfo.Text,
-            StartTime = starttime,
+            StartTime = startTime,
             Keyword = scenarioContext.CurrentScenarioBlock + " ",
             Id = stepInfo.Text.Replace(" ", "-").ToLower()
         };
@@ -136,18 +136,18 @@ public partial class Reporters
         await ExecuteStep(scenarioContext, stepFunc, null, args);
     }
 
-    internal static async Task ExecuteStep(ScenarioContext scenarioContext, Func<Task> stepFunc, MethodBase methodBase, params object[] args)
+    internal static async Task ExecuteStep(ScenarioContext scenarioContext, Func<Task> stepFunc, MethodBase? methodBase, params object[] args)
     {
-        methodBase = methodBase ?? stepFunc.Method;
+        methodBase ??= stepFunc.Method;
 
         var currentSteps = new Dictionary<Reporter, Step>();
 
-        var starttime = CurrentRunTime;
+        var startTime = CurrentRunTime;
         foreach (var reporter in GetAll())
         {
             currentSteps.Add(reporter, reporter.CurrentStep);
 
-            var step = CreateStep(scenarioContext, starttime, methodBase, args);
+            var step = CreateStep(scenarioContext, startTime, methodBase, args);
 
             var stepContainer = reporter.CurrentScenario;
             stepContainer.Steps.Add(step);
@@ -184,7 +184,7 @@ public partial class Reporters
             var endTime = CurrentRunTime;
 
             TestResult testResult;
-            if (actionException is PendingStepException)
+            if (actionException != null)
             {
                 testResult = TestResult.Pending;
             }

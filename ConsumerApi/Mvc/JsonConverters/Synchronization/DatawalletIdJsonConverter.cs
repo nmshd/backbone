@@ -16,6 +16,9 @@ public class DatawalletIdJsonConverter : JsonConverter<DatawalletId>
     {
         var id = reader.GetString();
 
+        if (id == null)
+            throw new JsonException("The id cannot be null.");
+
         try
         {
             return DatawalletId.Parse(id);

@@ -4,13 +4,13 @@ namespace Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 public abstract class Reporter
 {
-    public Feature CurrentFeature { get; internal set; }
+    public Feature? CurrentFeature { get; internal set; }
 
-    public Scenario CurrentScenario { get; internal set; }
+    public Scenario? CurrentScenario { get; internal set; }
 
-    public Step CurrentStep { get; internal set; }
+    public Step? CurrentStep { get; internal set; }
 
-    public virtual string Name => GetType().FullName;
+    public virtual string Name => GetType().FullName!;
 
     public Report Report { get; set; }
 

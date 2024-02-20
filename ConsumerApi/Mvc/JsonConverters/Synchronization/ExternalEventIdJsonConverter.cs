@@ -16,6 +16,9 @@ public class ExternalEventIdJsonConverter : JsonConverter<ExternalEventId>
     {
         var id = reader.GetString();
 
+        if (id == null)
+            throw new JsonException("The id cannot be null.");
+
         try
         {
             return ExternalEventId.Parse(id);
