@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.Job.IdentityDeletion;
-internal class CancelDeletionProcessJobConfiguration
+public class CancelDeletionProcessJobConfiguration
 {
+    [Required]
+    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+}
+
+public class InfrastructureConfiguration
+{
+    [Required]
+    public EventBusConfiguration EventBus { get; set; } = new();
 }
