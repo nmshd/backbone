@@ -11,7 +11,6 @@ using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -20,8 +19,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
-//
-using Microsoft.Extensions.Hosting;
 
 namespace Backbone.Job.IdentityDeletion
 {
