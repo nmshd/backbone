@@ -19,7 +19,7 @@ public class DatawalletModification
         BlobReference = null!;
     }
 
-    public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice, string blobReference)
+    public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         Id = DatawalletModificationId.New();
 

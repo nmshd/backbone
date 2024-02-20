@@ -12,7 +12,6 @@ public static class IEventBusExtensions
     {
         SubscribeToMessagesEvents(eventBus);
         SubscribeToRelationshipsEvents(eventBus);
-        SubscribeToIdentitiesEvents(eventBus);
 
         return eventBus;
     }
@@ -21,16 +20,12 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
         eventBus.Subscribe<IdentityDeletionProcessStartedIntegrationEvent, IdentityDeletionProcessStartedIntegrationEventHandler>();
-        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporaryly disabled to avoid an external event flood when the same message is sent to many recipients (s. JSSNMSHDD-2174)
+        // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporarily disabled to avoid an external event flood when the same message is sent to many recipients
     }
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
-    }
-
-    private static void SubscribeToIdentitiesEvents(IEventBus eventBus)
-    {
     }
 }

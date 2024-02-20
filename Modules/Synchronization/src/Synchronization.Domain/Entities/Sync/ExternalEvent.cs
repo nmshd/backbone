@@ -5,7 +5,7 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class ExternalEvent
 {
-    private readonly List<SyncError> _errors = new();
+    private readonly List<SyncError> _errors = [];
 
     // ReSharper disable once UnusedMember.Local
     private ExternalEvent()

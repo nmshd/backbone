@@ -160,7 +160,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
                 Type = DatawalletModificationDTO.DatawalletModificationType.Create,
                 Collection = "someArbitraryCollection",
                 EncryptedPayload = [0],
-                ObjectIdentifier = "someArbitraryObjectIdentitfier",
+                ObjectIdentifier = "someArbitraryObjectIdentifier",
                 PayloadCategory = "someArbitraryObjectProperty",
                 DatawalletVersion = 1
             }
@@ -173,7 +173,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     }
 
     [Fact]
-    public async Task Successful_item_results_dont_delete_sync_run_reference()
+    public async Task Successful_item_results_do_not_delete_sync_run_reference()
     {
         // Arrange
         var syncRun = SyncRunBuilder

@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private PushDatawalletModificationsCommand _request = null!;
     private CancellationToken _cancellationToken;
     private DatawalletVersion _supportedDatawalletVersion = null!;
-    private Datawallet _datawallet = null!;
+    private Datawallet? _datawallet;
     private DatawalletModification[] _modifications = null!;
     private PushDatawalletModificationsResponse _response = null!;
 
@@ -77,7 +77,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureSufficientSupportedDatawalletVersion()
     {
-        if (_supportedDatawalletVersion < _datawallet.Version)
+        if (_supportedDatawalletVersion < _datawallet!.Version)
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
     }
 
@@ -87,7 +87,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
         var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
 
-        _dbContext.Set<Datawallet>().Update(_datawallet);
+        _dbContext.Set<Datawallet>().Update(_datawallet!);
 
         var modificationsArray = newModifications.ToArray();
 
@@ -98,7 +98,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
-        return _datawallet.AddModification(
+        return _datawallet!.AddModification(
             _mapper.Map<DatawalletModificationType>(modificationDto.Type),
             new DatawalletVersion(modificationDto.DatawalletVersion),
             modificationDto.Collection,
@@ -112,7 +112,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureDeviceIsUpToDate()
     {
-        if (_datawallet.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
+        if (_datawallet!.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
             throw new OperationFailedException(ApplicationErrors.Datawallet.DatawalletNotUpToDate(_request.LocalIndex, _datawallet.LatestModification.Index));
     }
 

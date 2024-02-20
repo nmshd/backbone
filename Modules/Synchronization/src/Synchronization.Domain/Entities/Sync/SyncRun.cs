@@ -5,8 +5,8 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun
 {
-    private readonly List<SyncError> _errors = new();
-    private readonly List<ExternalEvent> _externalEvents = new();
+    private readonly List<SyncError> _errors = [];
+    private readonly List<ExternalEvent> _externalEvents = [];
 
     // ReSharper disable once UnusedMember.Local
     private SyncRun()

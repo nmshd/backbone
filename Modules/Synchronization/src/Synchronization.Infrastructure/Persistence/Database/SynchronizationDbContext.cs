@@ -76,7 +76,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return paginationResult;
     }
 
-    public async Task<Datawallet> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken)
+    public async Task<Datawallet?> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken)
     {
         var datawallet = await Datawallets
             .WithLatestModification(owner)
@@ -85,7 +85,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<Datawallet> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken)
+    public async Task<Datawallet?> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken)
     {
         var datawallet = await Datawallets
             .AsNoTracking()
@@ -93,7 +93,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
+    private async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
     {
         var latestIndex = await ExternalEvents
             .WithOwner(identity)

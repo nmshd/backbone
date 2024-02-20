@@ -127,14 +127,11 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
             throw new NotFoundException(nameof(Datawallet));
 
         if (!modifications.Any())
-            return new List<DatawalletModification>();
+            return [];
 
         var blobName = Guid.NewGuid().ToString("N");
 
         var newModifications = new List<DatawalletModification>();
-
-        // ReSharper disable once CollectionNeverQueried.Local
-        var payloads = new Dictionary<long, byte[]>();
 
         foreach (var modificationDto in modifications)
         {
@@ -149,9 +146,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
                 blobName);
 
             newModifications.Add(newModification);
-
-            if (newModification.EncryptedPayload != null)
-                payloads.Add(newModification.Index, modificationDto.EncryptedPayload);
         }
 
         return newModifications;

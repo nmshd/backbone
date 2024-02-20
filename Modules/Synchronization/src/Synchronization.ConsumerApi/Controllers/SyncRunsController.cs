@@ -62,10 +62,10 @@ public class SyncRunsController : ApiControllerBase
         {
             DatawalletVersion = 0,
             Type = m.Type,
-            Collection = m.Collection ?? throw new ArgumentNullException(nameof(m.Collection)),
-            EncryptedPayload = m.EncryptedPayload ?? throw new ArgumentNullException(nameof(m.EncryptedPayload)),
-            ObjectIdentifier = m.ObjectIdentifier ?? throw new ArgumentNullException(nameof(m.ObjectIdentifier)),
-            PayloadCategory = m.PayloadCategory ?? throw new ArgumentNullException(nameof(m.PayloadCategory))
+            Collection = m.Collection,
+            EncryptedPayload = m.EncryptedPayload,
+            ObjectIdentifier = m.ObjectIdentifier,
+            PayloadCategory = m.PayloadCategory
         }).ToList();
 
         var response =
@@ -149,27 +149,27 @@ public class StartSyncRunRequestBody
 public class FinalizeDatawalletVersionUpgradeRequest
 {
     public ushort NewDatawalletVersion { get; set; }
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }
 
 public class FinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
+    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }
 
 public class OldFinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = new();
+    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = [];
 
     public class FinalizeExternalEventSyncRequestDatawalletModification
     {
-        public string? ObjectIdentifier { get; set; }
+        public required string ObjectIdentifier { get; set; }
         public string? PayloadCategory { get; set; }
-        public string? Collection { get; set; }
-        public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
+        public required string Collection { get; set; }
+        public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
         public byte[]? EncryptedPayload { get; set; }
-        public ushort DatawalletVersion { get; set; }
+        public required ushort DatawalletVersion { get; set; }
     }
 }
