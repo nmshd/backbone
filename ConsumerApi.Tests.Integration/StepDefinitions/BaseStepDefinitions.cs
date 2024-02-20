@@ -39,19 +39,19 @@ internal class BaseStepDefinitions
 
     #region StepDefinitions
 
-    [Given(@"the user is authenticated")]
+    [Given("the user is authenticated")]
     public void GivenTheUserIsAuthenticated()
     {
         _requestConfiguration.Authenticate = true;
     }
 
-    [Given(@"the user is unauthenticated")]
+    [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
         _requestConfiguration.Authenticate = false;
     }
 
-    [Given(@"the Accept header is '([^']*)'")]
+    [Given("the Accept header is '([^']*)'")]
     public void GivenTheAcceptHeaderIs(string acceptHeader)
     {
         _requestConfiguration.AcceptHeader = acceptHeader;

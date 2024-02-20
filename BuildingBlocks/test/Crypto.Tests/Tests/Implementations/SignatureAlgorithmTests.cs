@@ -131,7 +131,7 @@ public class SignatureHelperTests
     [Fact]
     public void IsValidPublicKey_ReturnsTrue_WhenPublicKeyIsValid()
     {
-        var _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
+        _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
             ConvertibleString.FromBase64(""),
             ConvertibleString.FromBase64("Y8ZG4ikthK/Tvql7MwM9blvifnneN0nw5qQTVI7gvEw="));
 
@@ -164,7 +164,7 @@ public class SignatureHelperTests
     {
         var key = Key.Create(new Ed25519(),
             new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
-        var _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
+        _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
         var privateKey = ConvertibleString.FromByteArray(key.Export(KeyBlobFormat.RawPrivateKey));
 
         _signatureHelper.CreateSignature(privateKey, ConvertibleString.FromUtf8("Test"));

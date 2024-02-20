@@ -20,9 +20,9 @@ public partial class Reporters
 
             foreach (var scenarioOutlineGroup in scenarioOutlineGroups)
             {
-                for (var i = 0; i < scenarioOutlineGroup.Count(); i++)
+                for (var i = 0; i < scenarioOutlineGroup.Count; i++)
                 {
-                    scenarioOutlineGroup[i].Name = string.Format("{0} (example {1})", scenarioOutlineGroup[i].Name, i + 1);
+                    scenarioOutlineGroup[i].Name = $"{scenarioOutlineGroup[i].Name} (example {i + 1})";
                 }
             }
 

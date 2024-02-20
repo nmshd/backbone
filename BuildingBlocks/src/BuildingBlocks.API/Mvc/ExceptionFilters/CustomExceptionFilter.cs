@@ -146,7 +146,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return null;
     }
 
-    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException _)
     {
         return HttpStatusCode.BadRequest;
     }

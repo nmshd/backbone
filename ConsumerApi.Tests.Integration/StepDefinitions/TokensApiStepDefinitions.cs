@@ -37,7 +37,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens = [];
     }
 
-    [Given(@"an own Token t")]
+    [Given("an own Token t")]
     public async Task GivenAnOwnTokenT()
     {
         var createTokenRequest = new CreateTokenRequest
@@ -60,7 +60,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenId.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"a peer Token p")]
+    [Given("a peer Token p")]
     public async Task GivenAPeerTokenP()
     {
         var createTokenRequest = new CreateTokenRequest
@@ -85,7 +85,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"the user created multiple Tokens")]
+    [Given("the user created multiple Tokens")]
     public async Task GivenTheUserCreatedMultipleTokens()
     {
         for (var i = 0; i < 2; i++)
@@ -111,7 +111,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         }
     }
 
-    [When(@"a GET request is sent to the Tokens endpoint with a list of ids of own Tokens")]
+    [When("a GET request is sent to the Tokens endpoint with a list of ids of own Tokens")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListOfIdsOfOwnTokens()
     {
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
@@ -125,7 +125,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(tokens);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with")]
+    [When("a POST request is sent to the Tokens endpoint with")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(Table table)
     {
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
@@ -147,7 +147,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with no request content")]
+    [When("a POST request is sent to the Tokens endpoint with no request content")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
         _requestConfiguration.Content = null;
@@ -173,7 +173,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenResponse = await _tokensApi.GetTokenById(_requestConfiguration, id);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
+    [When("a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(string content, string expiresAt)
     {
         var createTokenRequest = new CreateTokenRequest
@@ -203,7 +203,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(tokens);
     }
 
-    [Then(@"the response contains both Tokens")]
+    [Then("the response contains both Tokens")]
     public void ThenTheResponseOnlyContainsTheOwnToken()
     {
         _responseTokens.Should().HaveCount(2)
@@ -212,7 +212,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     }
 
 
-    [Then(@"the response contains all Tokens with the given ids")]
+    [Then("the response contains all Tokens with the given ids")]
     public void ThenTheResponseContainsAllTokensWithTheGivenIds()
     {
         _responseTokens.Select(t => t.Id)
@@ -221,7 +221,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             .And.BeEquivalentTo(_givenOwnTokens.Select(t => t.Id), options => options.WithoutStrictOrdering());
     }
 
-    [Then(@"the response contains a CreateTokenResponse")]
+    [Then("the response contains a CreateTokenResponse")]
     public void ThenTheResponseContainsACreateTokenResponse()
     {
         _createTokenResponse!.Should().NotBeNull();
@@ -230,7 +230,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _createTokenResponse!.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the response contains a Token")]
+    [Then("the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
         _tokenResponse!.Should().NotBeNull();

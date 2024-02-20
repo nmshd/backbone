@@ -1,14 +1,9 @@
 ﻿using Backbone.Crypto.Abstractions;
-using NSec.Cryptography;
 
 namespace Backbone.Crypto.Implementations;
 
 public class KeyGenerator : IKeyGenerator
 {
-    public KeyGenerator()
-    {
-    }
-
     public ConvertibleString DeriveSymmetricKeyWithEcdh(ConvertibleString privateKey, ConvertibleString publicKey,
         int keyLengthInBits)
     {

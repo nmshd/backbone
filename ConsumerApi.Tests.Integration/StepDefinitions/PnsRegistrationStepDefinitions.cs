@@ -27,7 +27,7 @@ internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
         _pnsRegistrationsApi = pnsRegistrationsApi;
     }
 
-    [When(@"a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
+    [When("a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
     public async Task WhenAPUTRequestIsSentToTheDevicesSelfPushNotificationsEndpoint()
     {
         var requestConfiguration = new RequestConfiguration();
@@ -54,7 +54,7 @@ internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
         _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
     }
 
-    [Then(@"the response contains the push identifier for the device")]
+    [Then("the response contains the push identifier for the device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
         _response!.Content.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();

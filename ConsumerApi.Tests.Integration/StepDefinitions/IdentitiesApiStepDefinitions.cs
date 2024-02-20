@@ -66,26 +66,26 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _response!.AssertContentCompliesWithSchema();
     }
 
-    [Given(@"a Challenge c")]
+    [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
         _challengeResponse = await CreateChallenge();
     }
 
-    [When(@"a POST request is sent to the /Identities endpoint with a valid signature on c")]
+    [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
         _identityResponse = await CreateIdentity(_challengeResponse!.Content.Result);
     }
 
-    [Given(@"an Identity i")]
+    [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
         _challengeResponse = await CreateChallenge();
         _identityResponse = await CreateIdentity(_challengeResponse.Content.Result);
     }
 
-    [Then(@"the response contains a CreateIdentityResponse")]
+    [Then("the response contains a CreateIdentityResponse")]
     public void ThenTheResponseContainsACreateIdentityResponse()
     {
         _identityResponse!.Should().NotBeNull();
