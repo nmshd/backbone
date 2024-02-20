@@ -5,16 +5,22 @@ namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 public class Datawallet
 {
-#pragma warning disable CS8618
-    private Datawallet() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Datawallet()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        Owner = null!;
+        Version = null!;
+        Modifications = null!;
+    }
 
     public Datawallet(DatawalletVersion version, IdentityAddress owner) : this()
     {
         Id = DatawalletId.New();
         Version = version;
         Owner = owner;
-        Modifications = new List<DatawalletModification>();
+        Modifications = [];
     }
 
     public DatawalletId Id { get; }
