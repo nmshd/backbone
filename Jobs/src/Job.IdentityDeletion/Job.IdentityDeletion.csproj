@@ -1,9 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Messages\src\Messages.ConsumerApi\Messages.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj" />
+  </ItemGroup>
 
 </Project>
