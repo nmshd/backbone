@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Application.Tiers.Triggers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -52,11 +51,6 @@ public static class IServiceCollectionExtensions
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
-
-                dbContextOptions.UseTriggers(triggerOptions =>
-                {
-                    triggerOptions.AddTrigger<DeleteTierQuotaDefinitionsTrigger>();
-                });
             });
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<IMessagesRepository, MessagesRepository>();
