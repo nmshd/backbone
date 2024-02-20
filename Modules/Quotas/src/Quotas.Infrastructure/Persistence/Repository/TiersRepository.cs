@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Application.Extensions;
+﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
@@ -57,13 +55,6 @@ public class TiersRepository : ITiersRepository
 
     public async Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
-        //await _tierQuotaDefinitions.Where(t => t.Id == tierQuotaDefinitionId).ExecuteDeleteAsync();
-
-        //var allTierQuotaDefinitions = await _tierQuotaDefinitions.ToListAsync();
-        //var tierQuotaDefinitionsWithTierIdNull = allTierQuotaDefinitions.Where(t => _dbContext.Entry(t).Property("TierId").CurrentValue == null).ToList();
-        //var idsOfTierQuotasWithTierIdNull = tierQuotaDefinitionsWithTierIdNull.Select(t => t.Id).ToList();
-        //await _tierQuotaDefinitions.Where(t => idsOfTierQuotasWithTierIdNull.Contains(t.Id)).ExecuteDeleteAsync();
-
         var tierQuotaDefinition = await _tierQuotaDefinitions.FirstWithId(tierQuotaDefinitionId, CancellationToken.None);
 
         if (_dbContext.Entry(tierQuotaDefinition).Property("TierId").CurrentValue == null)
@@ -72,6 +63,12 @@ public class TiersRepository : ITiersRepository
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
+        _dbContext.RemoveRange(_dbContext.ChangeTracker
+            .Entries<TierQuotaDefinition>()
+            .Where(e => e.State == EntityState.Modified)
+            .Select(e => e.Entity)
+            .ToList());
+
         _tiers.Update(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
