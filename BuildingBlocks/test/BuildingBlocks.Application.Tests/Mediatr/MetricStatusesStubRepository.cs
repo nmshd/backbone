@@ -22,14 +22,3 @@ public class MetricStatusesStubRepository : IMetricStatusesRepository
         return Task.FromResult(MetricStatuses.AsEnumerable());
     }
 }
-
-public class MetricStatusesNoMatchStubRepository : IMetricStatusesRepository
-{
-    public MetricStatusesNoMatchStubRepository()
-    { }
-
-    public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
-    {
-        return Task.FromResult(Enumerable.Empty<MetricStatus>());
-    }
-}

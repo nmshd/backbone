@@ -5,7 +5,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.Models;
 public class RequestConfiguration
 {
     public AuthenticationParameters AuthenticationParameters { get; set; } = new();
-    public bool Authenticate { get; set; } = false;
+    public bool Authenticate { get; set; }
     public string? ContentType { get; set; }
     public string? AcceptHeader { get; set; }
     public string? Content { get; set; }

@@ -15,7 +15,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
         _logsApi = logsApi;
     }
 
-    [When(@"a POST request is sent to the /Logs endpoint")]
+    [When("a POST request is sent to the /Logs endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheLogsEndpoint()
     {
         var createTierRequest = new LogRequest
@@ -33,7 +33,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
         _postResponse = await _logsApi.CreateLog(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the /Logs endpoint with an invalid Log Level")]
+    [When("a POST request is sent to the /Logs endpoint with an invalid Log Level")]
     public async Task WhenAPOSTRequestIsSentToTheLogsEndpointWithAnInvalidLogLevel()
     {
         var createTierRequest = new LogRequest

@@ -5,11 +5,8 @@ namespace Backbone.Crypto.Implementations;
 
 public class KeyGenerator : IKeyGenerator
 {
-    private readonly KeyBlobFormat _keyFormat;
-
-    public KeyGenerator(KeyBlobFormat keyFormat)
+    public KeyGenerator()
     {
-        _keyFormat = keyFormat;
     }
 
     public ConvertibleString DeriveSymmetricKeyWithEcdh(ConvertibleString privateKey, ConvertibleString publicKey,

@@ -21,7 +21,7 @@ public class QuotaEnforcerBehaviorTests
         var nextMock = new NextMock<Unit>();
 
         // Act
-        Func<Task> acting = async () => await behavior.Handle(
+        var acting = async () => await behavior.Handle(
             new TestCommand(),
             nextMock.Value,
             CancellationToken.None);
@@ -113,6 +113,4 @@ internal class QuotaCheckerStub : IQuotaChecker
 /// all the metrics available in the repository unless where specified.
 /// </summary>
 [ApplyQuotasForMetrics("DoesNotApplyToTests")]
-internal class TestCommand : IRequest
-{
-}
+internal class TestCommand : IRequest;

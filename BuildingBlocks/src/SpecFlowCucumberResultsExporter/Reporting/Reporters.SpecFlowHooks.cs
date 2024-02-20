@@ -5,7 +5,7 @@ namespace Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 public partial class Reporters
 {
-    private static bool _testrunIsFirstFeature;
+    private static bool _testRunIsFirstFeature;
 
     [AfterFeature]
     internal static void AfterFeature()
@@ -14,9 +14,9 @@ public partial class Reporters
         {
             var feature = reporter.CurrentFeature;
 
-            var scenarioOutlineGroups = feature.Elements.GroupBy(scenario => scenario.Name)
-                .Where((scenarioGrp, key) => scenarioGrp.Count() > 1)
-                .Select((scenarioGrp, key) => scenarioGrp.ToList());
+            var scenarioOutlineGroups = feature!.Elements.GroupBy(scenario => scenario.Name)
+                .Where((scenarioGrp, _) => scenarioGrp.Count() > 1)
+                .Select((scenarioGrp, _) => scenarioGrp.ToList());
 
             foreach (var scenarioOutlineGroup in scenarioOutlineGroups)
             {
@@ -42,7 +42,7 @@ public partial class Reporters
         foreach (var reporter in REPORTERS.ToArray())
         {
             var scenario = reporter.CurrentScenario;
-            scenario.EndTime = CurrentRunTime;
+            scenario!.EndTime = CurrentRunTime;
             scenario.Result = scenario.Steps.Exists(o => o.Result.Status == TestResult.Failed)
                 ? TestResult.Failed
                 : TestResult.Passed;
@@ -64,7 +64,7 @@ public partial class Reporters
     [AfterStep]
     internal static void AfterStep(ScenarioContext scenarioContext)
     {
-        var endtime = CurrentRunTime;
+        var endTime = CurrentRunTime;
         var result = scenarioContext.ScenarioExecutionStatus.ToTestResult();
         var error = scenarioContext.TestError?.ToExceptionInfo().Message;
         error = error == null && result == TestResult.Pending ? new PendingStepException().ToExceptionInfo().Message : string.Empty;
@@ -72,10 +72,10 @@ public partial class Reporters
         foreach (var reporter in REPORTERS.ToArray())
         {
             var step = reporter.CurrentStep;
-            step.EndTime = CurrentRunTime;
+            step!.EndTime = CurrentRunTime;
             step.Result = new StepResult
             {
-                Duration = (long)((endtime - reporter.CurrentStep.StartTime).TotalMilliseconds * 1000000),
+                Duration = (long)((endTime - reporter.CurrentStep!.StartTime).TotalMilliseconds * 1000000),
                 Status = result,
                 Error = error
             };
@@ -88,25 +88,25 @@ public partial class Reporters
     [BeforeFeature]
     internal static void BeforeFeature(FeatureContext featureContext)
     {
-        var starttime = CurrentRunTime;
+        var startTime = CurrentRunTime;
 
         // Init reports when the first feature runs. This is intentionally not done in
         // BeforeTestRun(), to make sure other [BeforeTestRun] annotated methods can perform
         // initialization before the reports are created.
-        if (_testrunIsFirstFeature)
+        if (_testRunIsFirstFeature)
         {
             foreach (var reporter in REPORTERS)
             {
                 reporter.Report = new Report
                 {
                     Features = new List<Feature>(),
-                    StartTime = starttime
+                    StartTime = startTime
                 };
 
                 OnStartedReport(reporter);
             }
 
-            _testrunIsFirstFeature = false;
+            _testRunIsFirstFeature = false;
         }
 
         foreach (var reporter in REPORTERS)
@@ -116,7 +116,7 @@ public partial class Reporters
             {
                 Tags = featureContext.FeatureInfo.Tags.Select(tag => new Tag() { Name = "@" + tag }).ToList(),
                 Elements = [],
-                StartTime = starttime,
+                StartTime = startTime,
                 Name = featureContext.FeatureInfo.Title,
                 Description = featureContext.FeatureInfo.Description,
                 Id = featureId,
@@ -156,7 +156,7 @@ public partial class Reporters
     [BeforeTestRun]
     internal static void BeforeTestRun()
     {
-        _testrunIsFirstFeature = true;
+        _testRunIsFirstFeature = true;
     }
 
     [BeforeStep]
@@ -168,7 +168,7 @@ public partial class Reporters
         {
             var step = CreateStep(scenarioContext, startTime);
 
-            reporter.CurrentScenario.Steps.Add(step);
+            reporter.CurrentScenario!.Steps.Add(step);
             reporter.CurrentStep = step;
 
             OnStartedStep(reporter);

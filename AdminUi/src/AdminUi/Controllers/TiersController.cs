@@ -24,12 +24,10 @@ namespace Backbone.AdminUi.Controllers;
 public class TiersController : ApiControllerBase
 {
     private readonly AdminUiDbContext _adminUiDbContext;
-    private readonly ApplicationOptions _options;
 
-    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public TiersController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
-        _options = options.Value;
     }
 
     [HttpGet]

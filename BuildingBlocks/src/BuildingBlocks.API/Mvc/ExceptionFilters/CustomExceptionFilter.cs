@@ -67,7 +67,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 context.HttpContext.Response.StatusCode = (int)GetStatusCodeForDomainException(domainException);
 
                 break;
-            case BadHttpRequestException _:
+            case BadHttpRequestException:
                 _logger.RequestBodyTooLarge(ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
@@ -132,9 +132,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
     private dynamic? GetCustomData(ApplicationException applicationException)
     {
-        if (applicationException is QuotaExhaustedException quotaExhautedException)
+        if (applicationException is QuotaExhaustedException quotaExhaustedException)
         {
-            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
+            return quotaExhaustedException.ExhaustedMetricStatuses.Select(m => new
             {
 #pragma warning disable IDE0037
                 MetricKey = m.MetricKey.Value,
@@ -155,9 +155,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         return exception switch
         {
-            NotFoundException _ => HttpStatusCode.NotFound,
-            ActionForbiddenException _ => HttpStatusCode.Forbidden,
-            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
+            NotFoundException => HttpStatusCode.NotFound,
+            ActionForbiddenException => HttpStatusCode.Forbidden,
+            QuotaExhaustedException => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
     }

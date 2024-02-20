@@ -37,7 +37,7 @@ public partial class Reporters
         }
     }
 
-    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime startTime, MethodBase? method = null, params object[] args)
+    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime startTime, MethodBase method = null, params object[] args)
     {
         var stepInfo = ScenarioStepContext.Current.StepInfo;
 
@@ -57,9 +57,8 @@ public partial class Reporters
             {
                 step.Name = attr.Regex;
 
-                for (var i = 0; i < args.Length; i++)
+                foreach (var arg in args)
                 {
-                    var arg = args[i];
                     if (arg is Table table)
                     {
                         AddStepRows(ref step, table);
@@ -70,11 +69,11 @@ public partial class Reporters
                         var match = titleRegex.Match(step.Name);
                         if (match.Groups.Count > 1)
                         {
-                            step.Name = step.Name.ReplaceFirst(match.Groups[1].Value, args[i].ToString());
+                            step.Name = step.Name.ReplaceFirst(match.Groups[1].Value, arg.ToString());
                         }
                         else
                         {
-                            step.MultiLineParameter = args[i].ToString();
+                            step.MultiLineParameter = arg.ToString();
                         }
                     }
                 }
@@ -136,7 +135,7 @@ public partial class Reporters
         await ExecuteStep(scenarioContext, stepFunc, null, args);
     }
 
-    internal static async Task ExecuteStep(ScenarioContext scenarioContext, Func<Task> stepFunc, MethodBase? methodBase, params object[] args)
+    internal static async Task ExecuteStep(ScenarioContext scenarioContext, Func<Task> stepFunc, MethodBase methodBase, params object[] args)
     {
         methodBase ??= stepFunc.Method;
 
@@ -150,7 +149,7 @@ public partial class Reporters
             var step = CreateStep(scenarioContext, startTime, methodBase, args);
 
             var stepContainer = reporter.CurrentScenario;
-            stepContainer.Steps.Add(step);
+            stepContainer!.Steps.Add(step);
             reporter.CurrentStep = step;
             OnStartedStep(reporter);
         }
@@ -194,7 +193,7 @@ public partial class Reporters
 
             foreach (var reporter in GetAll())
             {
-                reporter.CurrentStep.EndTime = endTime;
+                reporter.CurrentStep!.EndTime = endTime;
                 reporter.CurrentStep.Result = new StepResult
                 {
                     Duration =
@@ -222,7 +221,7 @@ public partial class Reporters
     #region Public
 
     /// <summary>
-    ///     Set fixed start and end times. Usefull for automated tests.
+    ///     Set fixed start and end times. Useful for automated tests.
     /// </summary>
     public static DateTime? FixedRunTime { get; set; }
 

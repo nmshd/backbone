@@ -4,9 +4,9 @@ using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class SignatureHelperTests : IDisposable
+public class SignatureHelperTests
 {
-    private SignatureHelper _signatureHelper;
+    private readonly SignatureHelper _signatureHelper;
 
     #region Test Data
 
@@ -27,11 +27,6 @@ public class SignatureHelperTests : IDisposable
     public SignatureHelperTests()
     {
         _signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
-    }
-
-    public void Dispose()
-    {
-        _signatureHelper = null;
     }
 
     #endregion
