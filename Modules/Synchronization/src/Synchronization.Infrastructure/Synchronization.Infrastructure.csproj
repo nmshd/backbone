@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
 		<Compile Remove="Persistence\Migrations\**" />
 		<EmbeddedResource Remove="Persistence\Migrations\**" />
 		<None Remove="Persistence\Migrations\**" />

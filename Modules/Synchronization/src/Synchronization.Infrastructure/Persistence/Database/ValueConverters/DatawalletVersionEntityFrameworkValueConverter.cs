@@ -7,7 +7,7 @@ public class DatawalletVersionEntityFrameworkValueConverter : ValueConverter<Dat
 {
     public DatawalletVersionEntityFrameworkValueConverter() : this(null) { }
 
-    public DatawalletVersionEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public DatawalletVersionEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id.Value,
             value => new Datawallet.DatawalletVersion(value),

@@ -1,17 +1,25 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
+using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 public class DatawalletModification
 {
-#pragma warning disable CS8618
+    // ReSharper disable once UnusedMember.Local
     private DatawalletModification()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        DatawalletVersion = null!;
+        ObjectIdentifier = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        Collection = null!;
+        BlobReference = null!;
     }
-#pragma warning restore CS8618
 
-    public DatawalletModification(Datawallet datawallet, Datawallet.DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string payloadCategory, byte[] encryptedPayload, DeviceId createdByDevice, string blobReference)
+    public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         Id = DatawalletModificationId.New();
 
@@ -33,7 +41,7 @@ public class DatawalletModification
 
     public DatawalletModificationId Id { get; }
     public Datawallet? Datawallet { get; }
-    public Datawallet.DatawalletVersion DatawalletVersion { get; }
+    public DatawalletVersion DatawalletVersion { get; }
     public long Index { get; }
     public string ObjectIdentifier { get; }
     public string? PayloadCategory { get; }
