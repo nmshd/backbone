@@ -13,7 +13,7 @@ public class Tier
     {
         Id = id;
         Name = name;
-        Quotas = new List<TierQuotaDefinition>();
+        Quotas = [];
     }
 
     public TierId Id { get; }

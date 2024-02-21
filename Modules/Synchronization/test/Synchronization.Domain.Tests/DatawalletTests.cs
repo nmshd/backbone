@@ -8,7 +8,7 @@ namespace Backbone.Modules.Synchronization.Domain.Tests;
 public class DatawalletTests
 {
     [Fact]
-    public void Cannot_upgrade_to_version_lower_than_current_veresion()
+    public void Cannot_upgrade_to_version_lower_than_current_version()
     {
         var datawallet = CreateDatawallet(new Datawallet.DatawalletVersion(2));
 

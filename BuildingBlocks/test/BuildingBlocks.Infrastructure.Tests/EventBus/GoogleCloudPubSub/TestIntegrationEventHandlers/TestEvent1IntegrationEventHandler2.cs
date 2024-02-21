@@ -9,7 +9,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSu
 
 public class TestEvent1IntegrationEventHandler2 : IIntegrationEventHandler<TestEvent1IntegrationEvent>
 {
-    public static List<TestEvent1IntegrationEventHandler2> Instances { get; } = new();
+    public static List<TestEvent1IntegrationEventHandler2> Instances { get; } = [];
 
     public TestEvent1IntegrationEventHandler2()
     {

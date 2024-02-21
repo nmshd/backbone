@@ -7,6 +7,6 @@ public class ExternalEventIdPayloadEntityFrameworkValueConverter : ValueConverte
 {
     public ExternalEventIdPayloadEntityFrameworkValueConverter() : base(
         o => JsonConvert.SerializeObject(o),
-        s => JsonConvert.DeserializeObject<ExpandoObject>(s))
+        s => JsonConvert.DeserializeObject<ExpandoObject>(s)!)
     { }
 }

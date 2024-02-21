@@ -24,11 +24,11 @@ public class UserDataLoggingMiddleware
         var username = _userContext.GetUsernameOrNull() ?? context.GetOpenIddictServerRequest()?.Username;
 
         ILogEventEnricher[] enrichers =
-        {
+        [
             new PropertyEnricher("deviceId", deviceId ?? ""),
             new PropertyEnricher("identityAddress", identityAddress ?? ""),
             new PropertyEnricher("username", username ?? "")
-        };
+        ];
 
         using (LogContext.Push(enrichers))
         {

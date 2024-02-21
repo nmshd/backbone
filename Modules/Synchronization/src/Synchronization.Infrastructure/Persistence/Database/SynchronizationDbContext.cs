@@ -20,17 +20,23 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
 public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationDbContext
 {
-    public SynchronizationDbContext() { }
+    public SynchronizationDbContext()
+    {
+    }
 
-    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options) : base(options) { }
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options) : base(options)
+    {
+    }
 
-    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
-    public DbSet<Datawallet> Datawallets { get; set; }
-    public virtual DbSet<DatawalletModification> DatawalletModifications { get; set; }
-    public DbSet<ExternalEvent> ExternalEvents { get; set; }
-    public DbSet<SyncRun> SyncRuns { get; set; }
-    public DbSet<SyncError> SyncErrors { get; set; }
+    public DbSet<Datawallet> Datawallets { get; set; } = null!;
+    public DbSet<DatawalletModification> DatawalletModifications { get; set; } = null!;
+    public DbSet<ExternalEvent> ExternalEvents { get; set; } = null!;
+    public DbSet<SyncRun> SyncRuns { get; set; } = null!;
+    public DbSet<SyncError> SyncErrors { get; set; } = null!;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -38,7 +44,8 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
         configurationBuilder.Properties<DatawalletId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletId.MAX_LENGTH).HaveConversion<DatawalletIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<Datawallet.DatawalletVersion>().AreUnicode(false).HaveConversion<DatawalletVersionEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<DatawalletModificationId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletModificationId.MAX_LENGTH).HaveConversion<DatawalletModificationIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<DatawalletModificationId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletModificationId.MAX_LENGTH)
+            .HaveConversion<DatawalletModificationIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<SyncRunId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncRunId.MAX_LENGTH).HaveConversion<SyncRunIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<ExternalEventId>().AreUnicode(false).AreFixedLength().HaveMaxLength(ExternalEventId.MAX_LENGTH).HaveConversion<ExternalEventIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<SyncErrorId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncErrorId.MAX_LENGTH).HaveConversion<SyncErrorIdEntityFrameworkValueConverter>();
@@ -51,32 +58,37 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
     }
 
-    public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter,
+        CancellationToken cancellationToken)
     {
         // Use DbParameter here in order to define the type of the activeIdentity parameter explicitly. Otherwise nvarchar(4000) is used, which causes performance problems.
         // (https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/how-data-access-code-affects-database-performance)
         DbParameter activeIdentityParam;
         if (Database.IsSqlServer())
-            activeIdentityParam = new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default, activeIdentity.StringValue);
+            activeIdentityParam = new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default,
+                activeIdentity.StringValue);
         else if (Database.IsNpgsql())
-            activeIdentityParam = new NpgsqlParameter("createdBy", NpgsqlDbType.Char, IdentityAddress.MAX_LENGTH, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default, activeIdentity.StringValue);
+            activeIdentityParam = new NpgsqlParameter("createdBy", NpgsqlDbType.Char, IdentityAddress.MAX_LENGTH, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default,
+                activeIdentity.StringValue);
         else
             activeIdentityParam = new SqliteParameter("createdBy", activeIdentity.StringValue);
 
         var paginationResult = Database.IsNpgsql()
             ? await DatawalletModifications
-            .FromSqlInterpolated($"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1""")
-            .AsNoTracking()
-            .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
+                .FromSqlInterpolated(
+                    $"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1""")
+                .AsNoTracking()
+                .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
             : await DatawalletModifications
-            .FromSqlInterpolated($"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
-            .AsNoTracking()
-            .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
+                .FromSqlInterpolated(
+                    $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
+                .AsNoTracking()
+                .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
 
         return paginationResult;
     }
 
-    public async Task<Datawallet> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken)
+    public async Task<Datawallet?> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken)
     {
         var datawallet = await Datawallets
             .WithLatestModification(owner)
@@ -85,7 +97,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<Datawallet> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken)
+    public async Task<Datawallet?> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken)
     {
         var datawallet = await Datawallets
             .AsNoTracking()
@@ -93,7 +105,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
+    private async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
     {
         var latestIndex = await ExternalEvents
             .WithOwner(identity)
@@ -109,7 +121,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
     public async Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload)
     {
-        ExternalEvent externalEvent = null;
+        ExternalEvent? externalEvent = null;
 
         await RunInTransaction(async () =>
         {
@@ -122,9 +134,9 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
 
             await ExternalEvents.AddAsync(externalEvent);
             await SaveChangesAsync(CancellationToken.None);
-        }, new List<int> { DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS });
+        }, [DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS]);
 
-        return externalEvent;
+        return externalEvent!;
     }
 
     public async Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
@@ -163,7 +175,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             .GetFirst(cancellationToken);
     }
 
-    public async Task<SyncRun> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
+    public async Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         var previousSyncRun = await SyncRuns
             .Include(s => s.ExternalEvents)

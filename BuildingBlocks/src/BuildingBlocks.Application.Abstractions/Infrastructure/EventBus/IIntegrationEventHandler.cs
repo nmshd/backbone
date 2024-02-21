@@ -8,6 +8,4 @@ public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEv
     Task Handle(TIntegrationEvent @event);
 }
 
-public interface IIntegrationEventHandler
-{
-}
+public interface IIntegrationEventHandler;

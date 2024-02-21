@@ -82,13 +82,13 @@ public class IdentityAddressTests
 
 internal class TestData
 {
-    public string Realm { get; private set; }
-    public byte[] PublicKey { get; private set; }
+    public required string Realm { get; set; }
+    public required byte[] PublicKey { get; set; }
 
-    public string Address { get; private set; }
+    public required string Address { get; set; }
 
-    public string Checksum { get; private set; }
-    public string MainPart { get; private set; }
+    public required string Checksum { get; set; }
+    public required string MainPart { get; set; }
 
     public static TestData Valid()
     {

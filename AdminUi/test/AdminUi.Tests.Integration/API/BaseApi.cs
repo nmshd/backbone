@@ -58,9 +58,9 @@ internal class BaseApi
         }
     }
 
-    protected async Task<ODataResponse<T>> GetOData<T>(string endpoint, RequestConfiguration requestConfiguration)
+    protected async Task<ODataResponse<T>> GetOData<T>(string endpoint)
     {
-        return await ExecuteODataRequest<T>(HttpMethod.Get, endpoint, requestConfiguration);
+        return await ExecuteODataRequest<T>(HttpMethod.Get, endpoint);
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -97,6 +97,9 @@ internal class BaseApi
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
 
+        if (string.IsNullOrEmpty(requestConfiguration.ContentType))
+            throw new ArgumentNullException(nameof(requestConfiguration.ContentType));
+
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
 
@@ -116,7 +119,7 @@ internal class BaseApi
         return response;
     }
 
-    private async Task<ODataResponse<T>> ExecuteODataRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
+    private async Task<ODataResponse<T>> ExecuteODataRequest<T>(HttpMethod method, string endpoint)
     {
         var request = new HttpRequestMessage(method, ODATA_ROUTE_PREFIX + endpoint);
 
@@ -140,6 +143,9 @@ internal class BaseApi
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
+
+        if (string.IsNullOrEmpty(requestConfiguration.ContentType))
+            throw new ArgumentNullException(nameof(requestConfiguration.ContentType));
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
