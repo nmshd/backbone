@@ -4,7 +4,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class StartDeletionProcessAsSupportResponse
 {
-    public string Id { get; set; }
-    public DeletionProcessStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required string Id { get; set; }
+    public required DeletionProcessStatus Status { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }

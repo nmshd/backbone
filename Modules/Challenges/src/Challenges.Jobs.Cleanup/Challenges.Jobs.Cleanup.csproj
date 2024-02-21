@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -1,5 +1,3 @@
 ﻿namespace Backbone.Modules.Challenges.Application;
 
-public class ApplicationOptions
-{
-}
+public class ApplicationOptions;

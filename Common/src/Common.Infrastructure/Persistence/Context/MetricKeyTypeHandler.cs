@@ -10,8 +10,8 @@ internal class MetricKeyTypeHandler : SqlMapper.TypeHandler<MetricKey>
         return new MetricKey((string)value);
     }
 
-    public override void SetValue(IDbDataParameter parameter, MetricKey value)
+    public override void SetValue(IDbDataParameter parameter, MetricKey? value)
     {
-        parameter.Value = value.ToString();
+        parameter.Value = value?.ToString();
     }
 }

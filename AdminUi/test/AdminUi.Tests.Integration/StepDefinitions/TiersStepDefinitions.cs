@@ -26,7 +26,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = string.Empty;
     }
 
-    [Given(@"a Tier t")]
+    [Given("a Tier t")]
     public async Task GivenATier()
     {
         var createTierRequest = new CreateTierRequest
@@ -45,13 +45,13 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = response.Content.Result!.Id;
     }
 
-    [Given(@"the Tier T has one associated identity")]
+    [Given("the Tier T has one associated identity")]
     public void GivenTheTierTHasOneAssociatedIdentity()
     {
         throw new PendingStepException();
     }
 
-    [Given(@"the Basic Tier as t")]
+    [Given("the Basic Tier as t")]
     public async Task GivenTheBasicTierAsT()
     {
         var requestConfiguration = _requestConfiguration.Clone();
@@ -65,7 +65,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = basicTier.Id;
     }
 
-    [When(@"a GET request is sent to the /Tiers endpoint")]
+    [When("a GET request is sent to the /Tiers endpoint")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
         _tiersResponse = await _tiersApi.GetTiers(_requestConfiguration);
@@ -73,7 +73,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _tiersResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a POST request is sent to the /Tiers endpoint")]
+    [When("a POST request is sent to the /Tiers endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpoint()
     {
         var createTierRequest = new CreateTierRequest
@@ -88,7 +88,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _tierResponse = await _tiersApi.CreateTier(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the /Tiers endpoint with the name t.Name")]
+    [When("a POST request is sent to the /Tiers endpoint with the name t.Name")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpointWithAnAlreadyExistingName()
     {
         var createTierRequest = new CreateTierRequest
@@ -115,14 +115,14 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _deleteResponse = await _tiersApi.DeleteTier(_requestConfiguration, "TIR00000000000000000");
     }
 
-    [Then(@"the response contains a paginated list of Tiers")]
+    [Then("the response contains a paginated list of Tiers")]
     public void ThenTheResponseContainsAList()
     {
         _tiersResponse!.Content.Result.Should().NotBeNull();
         _tiersResponse!.Content.Result.Should().NotBeEmpty();
     }
 
-    [Then(@"the response contains a Tier")]
+    [Then("the response contains a Tier")]
     public void ThenTheResponseContainsATier()
     {
         _tierResponse!.AssertHasValue();

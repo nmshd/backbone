@@ -34,7 +34,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
-    [Given(@"an Identity i")]
+    [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
         var keyPair = _signatureHelper.CreateKeyPair();
@@ -74,15 +74,15 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityDeletionProcessResponse = await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
-    [When(@"a GET request is sent to the /Identities endpoint")]
+    [When("a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews(_requestConfiguration);
+        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews();
         _identityOverviewsResponse.Should().NotBeNull();
         _identityOverviewsResponse!.Content.Should().NotBeNull();
     }
 
-    [When(@"a GET request is sent to the /Identities/{i.address} endpoint")]
+    [When("a GET request is sent to the /Identities/{i.address} endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpoint()
     {
         _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, _existingIdentity);
@@ -90,7 +90,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
+    [When("a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
         _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, "inexistentIdentityAddress");
@@ -98,7 +98,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityResponse.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains a list of Identities")]
+    [Then("the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
         _identityOverviewsResponse!.Content.Value.Should().NotBeNull();
@@ -107,7 +107,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the response contains a Deletion Process")]
+    [Then("the response contains a Deletion Process")]
     public void ThenTheResponseContainsADeletionProcess()
     {
         _identityDeletionProcessResponse!.Content.Result.Should().NotBeNull();
@@ -115,7 +115,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityDeletionProcessResponse!.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the response contains Identity i")]
+    [Then("the response contains Identity i")]
     public void ThenTheResponseContainsAnIdentity()
     {
         _identityResponse!.AssertHasValue();

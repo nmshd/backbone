@@ -16,7 +16,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
         _metricsApi = metricsApi;
     }
 
-    [When(@"a GET request is sent to the /Metrics endpoint")]
+    [When("a GET request is sent to the /Metrics endpoint")]
     public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
         _response = await _metricsApi.GetAllMetrics(_requestConfiguration);
@@ -24,7 +24,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
         _response.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains a list of Metrics")]
+    [Then("the response contains a list of Metrics")]
     public void ThenTheResponseContainsAListOfMetrics()
     {
         _response!.Content.Result.Should().NotBeNullOrEmpty();

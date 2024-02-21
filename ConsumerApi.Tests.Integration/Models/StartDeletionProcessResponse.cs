@@ -2,12 +2,12 @@
 
 public class StartDeletionProcessResponse
 {
-    public string Id { get; set; }
-    public string Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required string Id { get; set; }
+    public required string Status { get; set; }
+    public required DateTime CreatedAt { get; set; }
 
-    public DateTime ApprovedAt { get; set; }
-    public string ApprovedByDevice { get; set; }
+    public required DateTime ApprovedAt { get; set; }
+    public required string ApprovedByDevice { get; set; }
 
-    public DateTime GracePeriodEndsAt { get; set; }
+    public required DateTime GracePeriodEndsAt { get; set; }
 }
