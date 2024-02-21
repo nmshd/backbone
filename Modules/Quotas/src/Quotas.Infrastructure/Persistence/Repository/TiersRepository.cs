@@ -53,23 +53,23 @@ public class TiersRepository : ITiersRepository
         await _tiers.Where(t => t.Id == tierId).ExecuteDeleteAsync();
     }
 
-    public async Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
-    {
-        var tierQuotaDefinition = await _tierQuotaDefinitions.FirstWithId(tierQuotaDefinitionId, CancellationToken.None);
-
-        if (_dbContext.Entry(tierQuotaDefinition).Property("TierId").CurrentValue == null)
-            await _tierQuotaDefinitions.Where(t => t.Id == tierQuotaDefinitionId).ExecuteDeleteAsync();
-    }
-
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
-        _dbContext.RemoveRange(_dbContext.ChangeTracker
+        RemoveModifiedAndOrphanedTierQuotaDefinitions();
+        _tiers.Update(tier);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private void RemoveModifiedAndOrphanedTierQuotaDefinitions()
+    {
+        var modifiedTierQuotaDefinitions = _dbContext.ChangeTracker
             .Entries<TierQuotaDefinition>()
             .Where(e => e.State == EntityState.Modified)
             .Select(e => e.Entity)
-            .ToList());
+            .ToList();
 
-        _tiers.Update(tier);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _dbContext.RemoveRange(modifiedTierQuotaDefinitions
+            .Where(tqd => _dbContext.Entry(tqd).Property("TierId").CurrentValue == null)
+            .ToList());
     }
 }
