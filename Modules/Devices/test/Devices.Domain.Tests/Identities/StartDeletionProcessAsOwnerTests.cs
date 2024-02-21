@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Xunit;
 
@@ -41,6 +42,23 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         auditLogEntry.Message.Should().Be("The deletion process was started by the owner. It was automatically approved.");
         auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
+    }
+
+    [Fact]
+    public void Start_deletion_process_as_owner_from_another_device()
+    {
+        // Arrange
+        var activeIdentity1 = CreateIdentity();
+        var activeIdentity2 = CreateIdentity();
+        var activeDevice1 = new Device(activeIdentity1);
+        var activeDevice2 = new Device(activeIdentity2);
+        activeIdentity1.Devices.Add(activeDevice1);
+
+        // Act
+        var result = () => activeIdentity1.StartDeletionProcessAsOwner(activeDevice2.Id);
+
+        // Assert
+        result.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deviceDoesNotBelongsToIdentity");
     }
 
     [Fact]
