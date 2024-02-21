@@ -121,6 +121,17 @@ public class Identity
         return deletionProcess;
     }
 
+    public IdentityDeletionProcess RejectDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Reject(Address, deviceId);
+
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
     {
         var deletionProcess = DeletionProcesses.Any(d => d.Status == status);
@@ -170,7 +181,8 @@ public class Identity
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Rejected = 3
 }
 
 public enum IdentityStatus
