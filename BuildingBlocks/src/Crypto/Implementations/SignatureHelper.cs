@@ -81,7 +81,6 @@ public class SignatureHelper : ISignatureHelper
 
     public static SignatureHelper CreateEd25519WithRawKeyFormat()
     {
-        new X25519();
         return new SignatureHelper(SignatureAlgorithm.Ed25519, KeyBlobFormat.RawPrivateKey,
             KeyBlobFormat.RawPublicKey);
     }

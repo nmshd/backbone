@@ -26,7 +26,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
         var options = new DbOptions();
-        setupOptions?.Invoke(options);
+        setupOptions.Invoke(options);
 
         services
             .AddDbContext<AdminUiDbContext>(dbContextOptions =>
@@ -61,8 +61,8 @@ public static class IServiceCollectionExtensions
 
     public class DbOptions
     {
-        public string Provider { get; set; }
-        public string ConnectionString { get; set; }
+        public string Provider { get; set; } = null!;
+        public string ConnectionString { get; set; } = null!;
         public RetryOptions RetryOptions { get; set; } = new();
     }
 

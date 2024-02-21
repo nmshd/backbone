@@ -3,9 +3,9 @@ using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
-public class EllipticCurveSignatureHelperTests : IDisposable
+public class EllipticCurveSignatureHelperTests
 {
-    private EllipticCurveSignatureHelper _signatureHelper;
+    private readonly EllipticCurveSignatureHelper _signatureHelper;
 
     #region Test Data
 
@@ -25,11 +25,6 @@ public class EllipticCurveSignatureHelperTests : IDisposable
     public EllipticCurveSignatureHelperTests()
     {
         _signatureHelper = EllipticCurveSignatureHelper.CreateSha512WithEcdsa();
-    }
-
-    public void Dispose()
-    {
-        _signatureHelper = null;
     }
 
     #endregion

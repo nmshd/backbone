@@ -85,11 +85,11 @@ public class ClientsController : ApiControllerBase
 
 public class ChangeClientSecretRequest
 {
-    public string NewSecret { get; set; }
+    public required string NewSecret { get; set; }
 }
 
 public class UpdateClientRequest
 {
-    public string DefaultTier { get; set; }
+    public required string DefaultTier { get; set; }
     public int? MaxIdentities { get; set; }
 }

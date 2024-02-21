@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi;

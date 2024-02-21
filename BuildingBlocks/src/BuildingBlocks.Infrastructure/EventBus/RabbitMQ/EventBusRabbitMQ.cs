@@ -55,7 +55,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         if (_consumer is null)
         {
-            throw new Exception("Cannnot start consuming without a consumer set.");
+            throw new Exception("Cannot start consuming without a consumer set.");
         }
 
         _consumerChannel.BasicConsume(_queueName, false, _consumer);
@@ -112,7 +112,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var eventName = _subsManager.GetEventKey<T>();
         DoInternalSubscription(eventName);
 
-        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).GetType().Name);
+        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subsManager.AddSubscription<T, TH>();
     }
@@ -216,7 +216,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
                     var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
-                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, new[] { integrationEvent })!;
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [integrationEvent])!;
                 });
             }
         }
