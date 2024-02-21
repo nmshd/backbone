@@ -19,13 +19,15 @@ public class CancelDeletionProcessWorker : IHostedService
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<CancelDeletionProcessWorker> _logger;
+    private readonly IReadOnlyList<IdentityDeletionProcess> _deletionProcesses;
 
     public CancelDeletionProcessWorker(IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
         IEventBus eventBus,
-        ILogger<CancelDeletionProcessWorker> logger)
+        ILogger<CancelDeletionProcessWorker> logger,
+        IReadOnlyList<IdentityDeletionProcess> deletionProcesses)
     {
         _host = host;
         _identityDeleters = identityDeleters;
@@ -33,6 +35,7 @@ public class CancelDeletionProcessWorker : IHostedService
         _pushNotificationSender = pushNotificationSender;
         _eventBus = eventBus;
         _logger = logger;
+        _deletionProcesses = deletionProcesses;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -60,6 +63,14 @@ public class CancelDeletionProcessWorker : IHostedService
             foreach (var identityDeleter in _identityDeleters)
             {
                 await identityDeleter.Delete(identityAddress);
+            }
+        }
+
+        foreach (var identityDeletionProcess in _deletionProcesses)
+        {
+            if (identityDeletionProcess.CreatedAt < DateTime.UtcNow)
+            {
+                //identityDeletionProcess.Status
             }
         }
     }
