@@ -1,5 +1,4 @@
-﻿using System;
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FluentAssertions;
@@ -17,16 +16,17 @@ public class CancelDeletionProcessDuringGracePeriodTests
 
         var activeIdentity = TestDataGenerator.CreateIdentity();
         var activeDevice = new Device(activeIdentity);
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        activeIdentity.Devices.Add(activeDevice);
 
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
         SystemTime.Set(currentDate.AddDays(5));
 
         // Act
         activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
 
         // Assert
-        var res = activeIdentity.DeletionProcesses.Where(dp => dp.Status == DeletionProcessStatus.Cancelled).ToList();
-        res.Count.Should().Be(1);
+        var result = activeIdentity.DeletionProcesses.Where(dp => dp.Status == DeletionProcessStatus.Cancelled).ToList();
+        result.Count.Should().Be(1);
     }
 
     [Fact]
@@ -38,15 +38,16 @@ public class CancelDeletionProcessDuringGracePeriodTests
 
         var activeIdentity = TestDataGenerator.CreateIdentity();
         var activeDevice = new Device(activeIdentity);
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        activeIdentity.Devices.Add(activeDevice);
 
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
         SystemTime.Set(currentDate.AddDays(35));
 
         // Act
-        var acting = () => activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
+        var result = () => activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessGracePeriodHasEnded");
+        result.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessGracePeriodHasEnded");
     }
 
     [Fact]

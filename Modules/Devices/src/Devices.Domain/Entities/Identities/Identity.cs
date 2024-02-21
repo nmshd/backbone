@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.Metrics;
+using System.Net;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -72,7 +74,7 @@ public class Identity
     public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
-        //EnsureDeletionProcessStartedByOwnDevice();
+        EnsureIdentityOwnsDevice(asDevice);
 
         TierIdBeforeDeletion = TierId;
 
@@ -86,11 +88,11 @@ public class Identity
         return deletionProcess;
     }
 
-    //private void EnsureDeletionProcessStartedByOwnDevice()
-    //{
-    //    // check if device that starts deletion actually belongs to identity
-    //    throw new NotImplementedException();
-    //}
+    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
+    {
+        if (Devices.All(device => device.Id != currentDeviceId))
+            throw new DomainException(DomainErrors.DeviceDoesNotBelongsToIdentity());
+    }
 
     public void DeletionProcessApprovalReminder1Sent()
     {
@@ -182,6 +184,8 @@ public class Identity
             throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
+        TierId = TierIdBeforeDeletion;
+        Status = IdentityStatus.Active;
     }
 }
 
