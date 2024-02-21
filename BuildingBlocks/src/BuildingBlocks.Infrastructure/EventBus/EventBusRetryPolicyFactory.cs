@@ -4,7 +4,7 @@ using Polly.Retry;
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 internal class EventBusRetryPolicyFactory
 {
-    static internal AsyncRetryPolicy Create(HandlerRetryBehavior handlerRetryBehavior, Action<Exception, TimeSpan> onRetry)
+    internal static AsyncRetryPolicy Create(HandlerRetryBehavior handlerRetryBehavior, Action<Exception, TimeSpan> onRetry)
     {
         return Policy.Handle<Exception>()
             .WaitAndRetryAsync(

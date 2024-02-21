@@ -9,6 +9,6 @@ internal class LogsApi : BaseApi
 
     internal async Task<HttpResponse> CreateLog(RequestConfiguration requestConfiguration)
     {
-        return await Post($"/Logs", requestConfiguration);
+        return await Post("/Logs", requestConfiguration);
     }
 }

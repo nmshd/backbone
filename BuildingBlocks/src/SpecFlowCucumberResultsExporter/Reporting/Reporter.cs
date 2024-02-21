@@ -10,7 +10,7 @@ public abstract class Reporter
 
     public Step CurrentStep { get; internal set; }
 
-    public virtual string Name => GetType().FullName;
+    public virtual string Name => GetType().FullName!;
 
     public Report Report { get; set; }
 

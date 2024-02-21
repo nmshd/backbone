@@ -18,13 +18,13 @@ public class AdminUiDbContext : AbstractDbContextBase
     {
     }
 
-    public DbSet<IdentityOverview> IdentityOverviews { get; set; }
+    public DbSet<IdentityOverview> IdentityOverviews { get; set; } = null!;
 
-    public DbSet<TierOverview> TierOverviews { get; set; }
+    public DbSet<TierOverview> TierOverviews { get; set; } = null!;
 
-    public DbSet<ClientOverview> ClientOverviews { get; set; }
+    public DbSet<ClientOverview> ClientOverviews { get; set; } = null!;
 
-    public DbSet<RelationshipOverview> RelationshipOverviews { get; set; }
+    public DbSet<RelationshipOverview> RelationshipOverviews { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

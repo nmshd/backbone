@@ -10,7 +10,7 @@ public class Exporter : ReportingStepDefinitions
 
         Reporters.Add(new JsonReporter());
 
-        Reporters.FinishedReport += (sender, args) =>
+        Reporters.FinishedReport += (_, args) =>
         {
             var file = new FileInfo(Path.Combine(path, fileName));
             file.Directory?.Create();

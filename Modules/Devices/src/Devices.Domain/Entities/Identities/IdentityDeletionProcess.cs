@@ -32,10 +32,7 @@ public class IdentityDeletionProcess
         CreatedAt = SystemTime.UtcNow;
         Status = status;
 
-        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
-        {
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)
-        };
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)];
     }
 
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
@@ -45,10 +42,7 @@ public class IdentityDeletionProcess
 
         Approve(createdByDevice);
 
-        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
-        {
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)
-        };
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
 
     private void Approve(DeviceId createdByDevice)

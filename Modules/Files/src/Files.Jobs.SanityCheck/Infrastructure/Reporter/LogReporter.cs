@@ -12,8 +12,8 @@ public class LogReporter : IReporter
     {
         _logger = logger;
 
-        _databaseIds = new List<FileId>();
-        _blobIds = new List<string>();
+        _databaseIds = [];
+        _blobIds = [];
     }
 
     public void Complete()

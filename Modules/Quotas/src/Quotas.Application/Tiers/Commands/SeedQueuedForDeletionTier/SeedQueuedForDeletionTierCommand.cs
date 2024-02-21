@@ -2,6 +2,4 @@
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 
-public class SeedQueuedForDeletionTierCommand : IRequest
-{
-}
+public class SeedQueuedForDeletionTierCommand : IRequest;
