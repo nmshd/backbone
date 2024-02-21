@@ -1,7 +1,9 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using System.Reflection;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
@@ -46,7 +48,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
         foreach (var identityAddress in identities.DeletedIdentityAddresses)
         {
-            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Message), cancellationToken);
+            await _pushNotificationSender.SendNotification(identityAddress, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
 
             var relationships = (await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken)).Relationships;
 
@@ -66,4 +68,14 @@ public class CancelDeletionProcessWorker : IHostedService
     {
         return Task.CompletedTask;
     }
+}
+
+[NotificationText(Title = "Deletion process canceled", Body = "Your Identity deletion process is canceled due to no response within the approval period")]
+public record DeletionCanceledNotification
+{
+    public DeletionCanceledNotification(string message) => GetType().GetCustomAttribute<NotificationTextAttribute>().Body = message;
+}
+
+public class TriggerRipeDeletionProcessesCommand : IRequest<TriggerRipeDeletionProcessesCommand>
+{
 }
