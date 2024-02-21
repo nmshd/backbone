@@ -7,13 +7,13 @@ using Backbone.Modules.Messages.ConsumerApi;
 using Backbone.Modules.Quotas.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
-using FluentValidation.AspNetCore;
-using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Microsoft.Extensions.Options;
+using FluentValidation.AspNetCore;
+using Autofac.Extensions.DependencyInjection;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.Job.IdentityDeletion
