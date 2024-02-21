@@ -7,6 +7,5 @@ public interface ITiersRepository
     Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false);
     Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false);
     Task RemoveById(TierId tierId);
-    Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId);
     Task Update(Tier tier, CancellationToken cancellationToken);
 }
