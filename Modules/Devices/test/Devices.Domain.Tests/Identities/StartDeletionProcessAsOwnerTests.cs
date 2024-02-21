@@ -17,12 +17,13 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
+        var activeDevice = new Device(activeIdentity);
+        activeIdentity.Devices.Add(activeDevice);
 
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
@@ -32,7 +33,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         AssertDeletionProcessWasStarted(activeIdentity);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.ApprovedByDevice.Should().Be(activeDevice);
+        deletionProcess.ApprovedByDevice.Should().Be(activeDevice.Id);
         deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
@@ -47,12 +48,13 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     {
         // Arrange
         var activeIdentity = CreateIdentity();
-        var activeDevice = DeviceId.Parse("DVC");
+        var activeDevice = new Device(activeIdentity);
+        activeIdentity.Devices.Add(activeDevice);
 
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice);
+        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
