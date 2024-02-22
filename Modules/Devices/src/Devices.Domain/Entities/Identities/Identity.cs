@@ -179,7 +179,7 @@ public class Identity
     public void CancelDeletionProcessDuringGracePeriod(DeviceId canceledByDeviceId)
     {
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
-        
+
         if (deletionProcess.GracePeriodEndsAt < SystemTime.UtcNow)
             throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
 

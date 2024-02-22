@@ -8,8 +8,8 @@ using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
-using Handler = Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod.Handler;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using Handler = Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod.Handler;
 
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessDuringGracePeriod;
