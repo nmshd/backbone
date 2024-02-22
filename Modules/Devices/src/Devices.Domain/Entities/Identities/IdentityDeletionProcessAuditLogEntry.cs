@@ -20,6 +20,11 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Approved);
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ProcessCanceled(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was canceled.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Canceled);
+    }
+
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(processId, "The first approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
