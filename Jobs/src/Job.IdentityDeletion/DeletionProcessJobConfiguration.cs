@@ -2,7 +2,7 @@
 using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.Job.IdentityDeletion;
-public class CancelDeletionProcessJobConfiguration
+public class DeletionProcessJobConfiguration
 {
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();

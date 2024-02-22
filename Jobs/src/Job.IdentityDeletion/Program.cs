@@ -67,9 +67,9 @@ namespace Backbone.Job.IdentityDeletion
 
                     services.AddCustomIdentity(hostContext.HostingEnvironment);
 
-                    services.ConfigureAndValidate<CancelDeletionProcessJobConfiguration>(configuration.Bind);
+                    services.ConfigureAndValidate<DeletionProcessJobConfiguration>(configuration.Bind);
 
-                    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<CancelDeletionProcessJobConfiguration>>().Value;
+                    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<DeletionProcessJobConfiguration>>().Value;
 
                     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
