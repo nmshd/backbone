@@ -55,21 +55,19 @@ public class TiersRepository : ITiersRepository
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
-        RemoveModifiedAndOrphanedTierQuotaDefinitions();
+        RemoveOrphanedTierQuotaDefinitions();
         _tiers.Update(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private void RemoveModifiedAndOrphanedTierQuotaDefinitions()
+    private void RemoveOrphanedTierQuotaDefinitions()
     {
-        var modifiedTierQuotaDefinitions = _dbContext.ChangeTracker
+        var removedQuotas = _dbContext.ChangeTracker
             .Entries<TierQuotaDefinition>()
             .Where(e => e.State == EntityState.Modified)
-            .Select(e => e.Entity)
-            .ToList();
+            .Where(e => _dbContext.Entry(e.Entity).Property("TierId").CurrentValue == null)
+            .Select(e => e.Entity);
 
-        _dbContext.RemoveRange(modifiedTierQuotaDefinitions
-            .Where(tqd => _dbContext.Entry(tqd).Property("TierId").CurrentValue == null)
-            .ToList());
+        _dbContext.RemoveRange(removedQuotas);
     }
 }
