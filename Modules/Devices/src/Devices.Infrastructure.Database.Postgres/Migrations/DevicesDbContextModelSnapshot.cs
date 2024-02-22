@@ -279,6 +279,15 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CancelledByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
