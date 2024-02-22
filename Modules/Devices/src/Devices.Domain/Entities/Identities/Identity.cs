@@ -170,7 +170,8 @@ public class Identity
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Canceled = 2
 }
 
 public enum IdentityStatus
