@@ -35,7 +35,7 @@ public class TierQuotaDeletionTests
 
         // Assert
         var repository = CreateRepository(ContextToUse.Assert);
-        var asserting = 
+        var asserting =
             async () => await repository.FindTierQuotaDefinition(_tierQuotaDefinitionId!.Value, CancellationToken.None);
 
         await asserting.Should().ThrowAsync<NotFoundException>();
