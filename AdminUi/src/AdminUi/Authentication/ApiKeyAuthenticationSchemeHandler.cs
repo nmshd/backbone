@@ -15,7 +15,7 @@ public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAut
     private readonly ApiKeyValidator _apiKeyValidator;
     private const string API_KEY_HEADER_NAME = "X-API-KEY";
 
-    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, ApiKeyValidator apiKeyValidator) : base(options, logger, encoder, clock)
+    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ApiKeyValidator apiKeyValidator) : base(options, logger, encoder)
     {
         _apiKeyValidator = apiKeyValidator;
     }

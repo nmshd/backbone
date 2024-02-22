@@ -19,7 +19,7 @@ internal class BaseApi
         _httpClient = factory.CreateClient();
 
         ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
+                (_, _, _, _) => true;
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -50,6 +50,9 @@ internal class BaseApi
     private async Task<HttpResponse> ExecuteRequest(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
+
+        if (string.IsNullOrEmpty(requestConfiguration.ContentType))
+            throw new ArgumentNullException(nameof(requestConfiguration.ContentType));
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));
@@ -82,6 +85,9 @@ internal class BaseApi
     private async Task<HttpResponse<T>> ExecuteRequest<T>(HttpMethod method, string endpoint, RequestConfiguration requestConfiguration)
     {
         var request = new HttpRequestMessage(method, ROUTE_PREFIX + endpoint);
+
+        if (string.IsNullOrEmpty(requestConfiguration.ContentType))
+            throw new ArgumentNullException(nameof(requestConfiguration.ContentType));
 
         if (!string.IsNullOrEmpty(requestConfiguration.Content))
             request.Content = new StringContent(requestConfiguration.Content, MediaTypeHeaderValue.Parse(requestConfiguration.ContentType));

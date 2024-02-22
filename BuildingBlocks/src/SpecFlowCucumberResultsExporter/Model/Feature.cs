@@ -8,8 +8,8 @@ public class Feature : TaggedReportItem
 
     public new string Description
     {
-        get { return _description; }
-        set { _description = string.IsNullOrEmpty(value) ? value : value.Replace("\r", ""); }
+        get => _description;
+        set => _description = string.IsNullOrEmpty(value) ? value : value.Replace("\r", "");
     }
     public string Uri { get; set; } = DEFAULT_URI;
 

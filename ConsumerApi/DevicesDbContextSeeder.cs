@@ -36,7 +36,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
     {
-        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? null;
+        return await context.Tiers.GetBasicTier(CancellationToken.None);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
@@ -64,10 +64,9 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
     {
         var basicTier = await GetBasicTier(context);
         if (basicTier == null)
-        {
             return;
-        }
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }

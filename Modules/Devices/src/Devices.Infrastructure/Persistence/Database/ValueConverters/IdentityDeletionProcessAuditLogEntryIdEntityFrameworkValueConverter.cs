@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;

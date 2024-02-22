@@ -5,9 +5,16 @@ namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Relationship
 {
-#pragma warning disable CS8618
-    private Relationship() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Relationship()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        From = null!;
+        To = null!;
+        CreatedAt = default;
+        Status = default;
+    }
 
     public RelationshipId Id { get; }
 
@@ -16,7 +23,7 @@ public class Relationship
 
     public DateTime CreatedAt { get; }
 
-    public RelationshipStatus Status { get; private set; }
+    public RelationshipStatus Status { get; }
 }
 
 public enum RelationshipStatus

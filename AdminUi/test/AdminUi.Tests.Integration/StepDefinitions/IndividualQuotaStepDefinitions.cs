@@ -27,13 +27,13 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _quotaId = string.Empty;
     }
 
-    [Given(@"an Identity i")]
+    [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
         await CreateIdentity();
     }
 
-    [Given(@"an Identity i with an IndividualQuota q")]
+    [Given("an Identity i with an IndividualQuota q")]
     public async Task GivenAnIdentityIWithAnIndividualQuotaQ()
     {
         await CreateIdentity();
@@ -53,21 +53,21 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _quotaId = response.Content.Result!.Id;
     }
 
-    [When(@"a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
+    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpoint()
     {
         _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, _quotaId, _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
-    [When(@"a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
+    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithAnInexistentQuotaId()
     {
         _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx", _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
-    [When(@"a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
+    [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpoint()
     {
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
@@ -84,7 +84,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _response = await _identitiesApi.CreateIndividualQuota(requestConfiguration, _identityAddress);
     }
 
-    [When(@"a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
+    [When("a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInexistentIdentityAddress()
     {
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
@@ -117,7 +117,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         }
     }
 
-    [Then(@"the response contains an IndividualQuota")]
+    [Then("the response contains an IndividualQuota")]
     public void ThenTheResponseContainsAnIndividualQuota()
     {
         _response!.AssertHasValue();

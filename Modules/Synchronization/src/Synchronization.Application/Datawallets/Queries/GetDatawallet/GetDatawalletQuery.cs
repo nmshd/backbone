@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
 
-public class GetDatawalletQuery : IRequest<DatawalletDTO> { }
+public class GetDatawalletQuery : IRequest<DatawalletDTO>;

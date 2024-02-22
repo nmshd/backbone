@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
   </ItemGroup>

@@ -45,7 +45,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         var deviceIdsToDelete = new List<DeviceId>();
         foreach (var sendResult in sendResults.Failures)
         {
-            switch (sendResult.Error.Reason)
+            switch (sendResult.Error!.Reason)
             {
                 case ErrorReason.InvalidHandle:
                     _logger.DeletingDeviceRegistration(sendResult.DeviceId);
@@ -109,7 +109,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         }
         else
         {
-            await _pnsRegistrationsRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+            await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
             _logger.UnregisteredDevice(deviceId);
         }
     }

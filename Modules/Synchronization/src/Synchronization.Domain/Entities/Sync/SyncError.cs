@@ -2,9 +2,17 @@
 
 public class SyncError
 {
-#pragma warning disable CS8618
-    private SyncError() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private SyncError()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        SyncRunId = null!;
+        ExternalEventId = null!;
+        SyncRun = null!;
+        ExternalEvent = null!;
+        ErrorCode = null!;
+    }
 
     public SyncError(SyncRun syncRun, ExternalEvent externalEvent, string errorCode)
     {

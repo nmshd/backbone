@@ -22,17 +22,15 @@ namespace Backbone.ConsumerApi.Controllers;
 public class AuthorizationController : ApiControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<AuthorizationController> _logger;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
     public AuthorizationController(
         IMediator mediator,
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager, ILogger<AuthorizationController> logger) : base(mediator)
+        UserManager<ApplicationUser> userManager) : base(mediator)
     {
         _signInManager = signInManager;
         _userManager = userManager;
-        _logger = logger;
     }
 
     [HttpPost("~/connect/token"), IgnoreAntiforgeryToken, Produces("application/json"),

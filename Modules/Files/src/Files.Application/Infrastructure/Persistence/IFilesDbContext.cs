@@ -2,6 +2,4 @@
 
 namespace Backbone.Modules.Files.Application.Infrastructure.Persistence;
 
-public interface IFilesDbContext : IDbContext
-{
-}
+public interface IFilesDbContext : IDbContext;

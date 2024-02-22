@@ -2,6 +2,6 @@
 
 public class SignedChallengeDTO
 {
-    public string Challenge { get; set; }
-    public byte[] Signature { get; set; }
+    public required string Challenge { get; set; }
+    public required byte[] Signature { get; set; }
 }

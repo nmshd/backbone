@@ -411,7 +411,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         return relationship;
     }
 
@@ -419,7 +419,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         relationship.RequestTermination(FROM_IDENTITY, FROM_DEVICE);
         return relationship;

@@ -21,7 +21,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         var activeDevice = new Device(activeIdentity);
         activeIdentity.Devices.Add(activeDevice);
 
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
         // Act
         var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
