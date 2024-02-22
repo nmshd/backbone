@@ -4,9 +4,9 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcesses;
 public class GetDeletionProcessesResponse
 {
-    public GetDeletionProcessesResponse(Identity identity)
+    public GetDeletionProcessesResponse(IReadOnlyList<IdentityDeletionProcess> processes)
     {
-        DeletionProcesses = identity.DeletionProcesses
+        DeletionProcesses = processes
             .Select(p => new IdentityDeletionProcessDTO(p))
             .ToList();
     }

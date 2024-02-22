@@ -20,7 +20,8 @@ public class Handler : IRequestHandler<GetDeletionProcessesQuery, GetDeletionPro
     public async Task<GetDeletionProcessesResponse> Handle(GetDeletionProcessesQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identityRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        var response = new GetDeletionProcessesResponse(identity);
+        var processes = identity.DeletionProcesses;
+        var response = new GetDeletionProcessesResponse(processes);
 
         return response;
     }
