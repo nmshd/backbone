@@ -27,7 +27,7 @@ public class IdentitiesController : ApiControllerBase
         IMediator mediator,
         OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
-        _applicationManager = applicationManager;
+        _applicationManager = applicationManager!;
     }
 
     [HttpPost]
