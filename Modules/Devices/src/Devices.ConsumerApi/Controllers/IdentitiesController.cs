@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -74,6 +75,15 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> ApproveDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new ApproveDeletionProcessCommand(id), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("Self/DeletionProcesses/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessQuery { Id = id }, cancellationToken);
         return Ok(response);
     }
 }
