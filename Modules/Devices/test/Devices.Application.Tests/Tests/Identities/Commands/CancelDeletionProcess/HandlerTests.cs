@@ -52,7 +52,7 @@ public class HandlerTests
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
                 address,
-                A<CancellationToken>._,
+                CancellationToken.None,
                 A<bool>._))
             .Returns<Identity>(null);
 
