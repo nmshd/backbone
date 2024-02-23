@@ -12,8 +12,8 @@ public class CancelDeletionProcessDuringGracePeriodCommand : IRequest<CancelDele
 {
     public CancelDeletionProcessDuringGracePeriodCommand(string id)
     {
-        CancelProcessId = id;
+        DeletionProcessId = id;
     }
 
-    public string CancelProcessId { get; set; }
+    public string DeletionProcessId { get; set; }
 }
