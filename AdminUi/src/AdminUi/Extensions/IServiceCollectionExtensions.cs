@@ -48,7 +48,7 @@ public static class IServiceCollectionExtensions
                 options.InvalidModelStateResponseFactory = context =>
                 {
                     var firstPropertyWithError =
-                        context.ModelState.First(p => p.Value != null && p.Value.Errors.Count > 0);
+                        context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
                     var nameOfPropertyWithError = firstPropertyWithError.Key;
                     var firstError = firstPropertyWithError.Value!.Errors.First();
                     var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)
@@ -125,12 +125,10 @@ public static class IServiceCollectionExtensions
         var modules = configuration.Modules.GetType().GetProperties();
         foreach (var moduleProperty in modules)
         {
-            if (moduleProperty is null) continue;
-
             var moduleName = moduleProperty.Name;
-            var module = configuration.Modules.GetType().GetProperty(moduleName).GetValue(configuration.Modules, null);
+            var module = configuration.Modules.GetType().GetProperty(moduleName)!.GetValue(configuration.Modules, null)!;
             var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString") as string;
+            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString");
 
             switch (provider)
             {
@@ -158,7 +156,7 @@ public static class IServiceCollectionExtensions
     private static object GetPropertyValue(object source, string propertyPath)
     {
         foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
-            source = property.GetValue(source, null);
+            source = property!.GetValue(source, null)!;
 
         return source;
     }

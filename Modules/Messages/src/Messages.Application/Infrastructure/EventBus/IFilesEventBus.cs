@@ -2,6 +2,4 @@
 
 namespace Backbone.Modules.Messages.Application.Infrastructure.EventBus;
 
-public interface IMessagesEventBus : IEventBus
-{
-}
+public interface IMessagesEventBus : IEventBus;

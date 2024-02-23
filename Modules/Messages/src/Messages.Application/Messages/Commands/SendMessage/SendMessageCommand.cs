@@ -9,17 +9,17 @@ public class SendMessageCommand : IRequest<SendMessageResponse>
 {
     public ICollection<SendMessageCommandRecipientInformation> Recipients { get; set; } = new List<SendMessageCommandRecipientInformation>();
     public DateTime? DoNotSendBefore { get; set; }
-    public byte[] Body { get; set; }
+    public required byte[] Body { get; set; }
     public ICollection<SendMessageCommandAttachment> Attachments { get; set; } = new List<SendMessageCommandAttachment>();
 }
 
 public class SendMessageCommandRecipientInformation
 {
-    public IdentityAddress Address { get; set; }
-    public byte[] EncryptedKey { get; set; }
+    public required IdentityAddress Address { get; set; }
+    public required byte[] EncryptedKey { get; set; }
 }
 
 public class SendMessageCommandAttachment
 {
-    public string Id { get; set; }
+    public required string Id { get; set; }
 }

@@ -38,7 +38,7 @@ public class AzureStorageAccountTests
 
     private static void CloseAzuriteContainer()
     {
-        var processInfo = new ProcessStartInfo("docker", $"stop azurite-test-container")
+        var processInfo = new ProcessStartInfo("docker", "stop azurite-test-container")
         {
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -71,7 +71,7 @@ public class AzureStorageAccountTests
         });
 
         var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetService<IBlobStorage>();
+        return serviceProvider.GetRequiredService<IBlobStorage>();
     }
 
     [Fact(Skip = "Fails because emulator container can't be started")]

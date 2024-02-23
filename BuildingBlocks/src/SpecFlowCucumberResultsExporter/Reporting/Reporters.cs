@@ -10,7 +10,7 @@ public partial class Reporters
 {
     #region Private/Internal
 
-    private static readonly List<Reporter> REPORTERS = new();
+    private static readonly List<Reporter> REPORTERS = [];
 
     /// <summary>
     ///     Returns the current date/time which is used during the test run. It can set to a fixed
@@ -30,21 +30,21 @@ public partial class Reporters
 
     private static void AddStepRows(ref Step step, Table table)
     {
-        step.Rows = new List<Row> { new() { Cells = table.Header.ToList() } };
+        step.Rows = [new() { Cells = table.Header.ToList() }];
         foreach (var tableRow in table.Rows)
         {
             step.Rows.Add(new Row() { Cells = tableRow.Select(x => x.Value).ToList() });
         }
     }
 
-    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime starttime, MethodBase method = null, params object[] args)
+    internal static Step CreateStep(ScenarioContext scenarioContext, DateTime startTime, MethodBase method = null, params object[] args)
     {
         var stepInfo = ScenarioStepContext.Current.StepInfo;
 
         var step = new Step
         {
             Name = stepInfo.Text,
-            StartTime = starttime,
+            StartTime = startTime,
             Keyword = scenarioContext.CurrentScenarioBlock + " ",
             Id = stepInfo.Text.Replace(" ", "-").ToLower()
         };
@@ -57,9 +57,8 @@ public partial class Reporters
             {
                 step.Name = attr.Regex;
 
-                for (var i = 0; i < args.Length; i++)
+                foreach (var arg in args)
                 {
-                    var arg = args[i];
                     if (arg is Table table)
                     {
                         AddStepRows(ref step, table);
@@ -70,11 +69,11 @@ public partial class Reporters
                         var match = titleRegex.Match(step.Name);
                         if (match.Groups.Count > 1)
                         {
-                            step.Name = step.Name.ReplaceFirst(match.Groups[1].Value, args[i].ToString());
+                            step.Name = step.Name.ReplaceFirst(match.Groups[1].Value, arg.ToString());
                         }
                         else
                         {
-                            step.MultiLineParameter = args[i].ToString();
+                            step.MultiLineParameter = arg.ToString();
                         }
                     }
                 }
@@ -138,19 +137,19 @@ public partial class Reporters
 
     internal static async Task ExecuteStep(ScenarioContext scenarioContext, Func<Task> stepFunc, MethodBase methodBase, params object[] args)
     {
-        methodBase = methodBase ?? stepFunc.Method;
+        methodBase ??= stepFunc.Method;
 
         var currentSteps = new Dictionary<Reporter, Step>();
 
-        var starttime = CurrentRunTime;
+        var startTime = CurrentRunTime;
         foreach (var reporter in GetAll())
         {
             currentSteps.Add(reporter, reporter.CurrentStep);
 
-            var step = CreateStep(scenarioContext, starttime, methodBase, args);
+            var step = CreateStep(scenarioContext, startTime, methodBase, args);
 
             var stepContainer = reporter.CurrentScenario;
-            stepContainer.Steps.Add(step);
+            stepContainer!.Steps.Add(step);
             reporter.CurrentStep = step;
             OnStartedStep(reporter);
         }
@@ -184,7 +183,7 @@ public partial class Reporters
             var endTime = CurrentRunTime;
 
             TestResult testResult;
-            if (actionException is PendingStepException)
+            if (actionException != null)
             {
                 testResult = TestResult.Pending;
             }
@@ -194,7 +193,7 @@ public partial class Reporters
 
             foreach (var reporter in GetAll())
             {
-                reporter.CurrentStep.EndTime = endTime;
+                reporter.CurrentStep!.EndTime = endTime;
                 reporter.CurrentStep.Result = new StepResult
                 {
                     Duration =
@@ -222,7 +221,7 @@ public partial class Reporters
     #region Public
 
     /// <summary>
-    ///     Set fixed start and end times. Usefull for automated tests.
+    ///     Set fixed start and end times. Useful for automated tests.
     /// </summary>
     public static DateTime? FixedRunTime { get; set; }
 

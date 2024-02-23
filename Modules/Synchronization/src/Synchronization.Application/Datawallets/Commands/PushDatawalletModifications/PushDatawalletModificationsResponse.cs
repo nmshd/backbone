@@ -5,14 +5,14 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.Push
 
 public class PushDatawalletModificationsResponse
 {
-    public long NewIndex { get; set; }
+    public required long NewIndex { get; set; }
 
-    public IEnumerable<PushDatawalletModificationsResponseItem> Modifications { get; set; }
+    public required IEnumerable<PushDatawalletModificationsResponseItem> Modifications { get; set; }
 }
 
 public class PushDatawalletModificationsResponseItem : IMapTo<DatawalletModification>
 {
-    public DatawalletModificationId Id { get; set; }
-    public long Index { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required DatawalletModificationId Id { get; set; }
+    public required long Index { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }

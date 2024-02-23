@@ -139,7 +139,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
                 var handleMethod = handler.GetType().GetMethod("Handle");
 
-                await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+                await (Task)handleMethod!.Invoke(handler, [integrationEvent])!;
 
                 return Task.CompletedTask;
             });

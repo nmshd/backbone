@@ -2,9 +2,9 @@
 
 public class Error
 {
-    public string Id { get; set; }
-    public string Code { get; set; }
-    public string Message { get; set; }
-    public string Docs { get; set; }
-    public DateTime Time { get; set; }
+    public required string Id { get; set; }
+    public required string Code { get; set; }
+    public required string Message { get; set; }
+    public required string Docs { get; set; }
+    public required DateTime Time { get; set; }
 }

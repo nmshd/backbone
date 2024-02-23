@@ -24,7 +24,7 @@ internal class ClientsApi : BaseApi
 
     internal async Task<HttpResponse<CreateClientResponse>> CreateClient(RequestConfiguration requestConfiguration)
     {
-        return await Post<CreateClientResponse>($"/Clients", requestConfiguration);
+        return await Post<CreateClientResponse>("/Clients", requestConfiguration);
     }
 
     internal async Task<HttpResponse<ChangeClientSecretResponse>> ChangeClientSecret(string clientId, RequestConfiguration requestConfiguration)

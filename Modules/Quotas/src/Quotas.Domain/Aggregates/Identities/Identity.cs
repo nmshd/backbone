@@ -28,9 +28,9 @@ public class Identity
     {
         Address = address;
         TierId = tierId;
-        _tierQuotas = new List<TierQuota>();
-        _individualQuotas = new List<IndividualQuota>();
-        _metricStatuses = new List<MetricStatus>();
+        _tierQuotas = [];
+        _individualQuotas = [];
+        _metricStatuses = [];
     }
 
     public string Address { get; }

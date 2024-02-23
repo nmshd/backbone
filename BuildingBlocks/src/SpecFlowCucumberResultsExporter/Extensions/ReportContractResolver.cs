@@ -15,7 +15,6 @@ public class ReportContractResolver : DefaultContractResolver
             property.PropertyName = ConvertPropertyName(property.PropertyName);
         }
 
-        // only seria
         return properties;
     }
 

@@ -4,9 +4,9 @@ using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class SignatureHelperTests : IDisposable
+public class SignatureHelperTests
 {
-    private SignatureHelper _signatureHelper;
+    private readonly SignatureHelper _signatureHelper;
 
     #region Test Data
 
@@ -27,11 +27,6 @@ public class SignatureHelperTests : IDisposable
     public SignatureHelperTests()
     {
         _signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
-    }
-
-    public void Dispose()
-    {
-        _signatureHelper = null;
     }
 
     #endregion
@@ -136,7 +131,7 @@ public class SignatureHelperTests : IDisposable
     [Fact]
     public void IsValidPublicKey_ReturnsTrue_WhenPublicKeyIsValid()
     {
-        var _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
+        _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
             ConvertibleString.FromBase64(""),
             ConvertibleString.FromBase64("Y8ZG4ikthK/Tvql7MwM9blvifnneN0nw5qQTVI7gvEw="));
 
@@ -169,7 +164,7 @@ public class SignatureHelperTests : IDisposable
     {
         var key = Key.Create(new Ed25519(),
             new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
-        var _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
+        _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
         var privateKey = ConvertibleString.FromByteArray(key.Export(KeyBlobFormat.RawPrivateKey));
 
         _signatureHelper.CreateSignature(privateKey, ConvertibleString.FromUtf8("Test"));
