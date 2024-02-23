@@ -25,9 +25,9 @@ public class HandlerTests
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = new Handler(mockIdentitiesRepository, fakeUserContext);
