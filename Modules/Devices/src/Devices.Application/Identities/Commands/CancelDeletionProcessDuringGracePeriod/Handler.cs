@@ -18,7 +18,7 @@ public class Handler
     public async Task Handle(CancelDeletionProcessDuringGracePeriodCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
-        identity.CancelDeletionProcessDuringGracePeriod(identity.Devices[0].Id);
+        identity.CancelDeletionProcessDuringGracePeriod(_userContext.GetDeviceId());
 
         await _identitiesRepository.Update(identity, cancellationToken);
     }
