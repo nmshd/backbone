@@ -1,4 +1,0 @@
-﻿namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod;
-public class CancelDeletionProcessDuringGracePeriodResponse
-{
-}

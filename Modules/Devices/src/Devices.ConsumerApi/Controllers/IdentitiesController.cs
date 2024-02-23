@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess;
@@ -103,7 +103,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CancelDeletionProcessDuringGracePeriodCommand(id), cancellationToken);
+        var response = await _mediator.Send(new CancelDeletionProcessCommand(id), cancellationToken);
         return Ok(response);
     }
 }

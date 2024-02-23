@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -9,10 +9,10 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
-using Handler = Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessDuringGracePeriod.Handler;
+using Handler = Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess.Handler;
 
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessDuringGracePeriod;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcess;
 public class HandlerTests
 {
     [Fact]
@@ -31,7 +31,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = new Handler(mockIdentitiesRepository, fakeUserContext);
-        var command = new CancelDeletionProcessDuringGracePeriodCommand(activeDevice.Id);
+        var command = new CancelDeletionProcessCommand(activeDevice.Id);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -59,7 +59,7 @@ public class HandlerTests
         var handler = new Handler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessDuringGracePeriodCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();

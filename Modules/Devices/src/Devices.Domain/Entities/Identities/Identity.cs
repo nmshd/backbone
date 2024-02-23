@@ -173,7 +173,7 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public void CancelDeletionProcessDuringGracePeriod(DeviceId canceledByDeviceId)
+    public void CancelDeletionProcess(DeviceId canceledByDeviceId)
     {
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 

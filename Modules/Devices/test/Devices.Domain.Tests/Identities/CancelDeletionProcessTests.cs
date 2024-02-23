@@ -5,7 +5,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
-public class CancelDeletionProcessDuringGracePeriodTests
+public class CancelDeletionProcessTests
 {
     [Fact]
     public void Should_cancel_deletion_process_during_grace_period()
@@ -22,7 +22,7 @@ public class CancelDeletionProcessDuringGracePeriodTests
         SystemTime.Set(currentDate.AddDays(5));
 
         // Act
-        activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
+        activeIdentity.CancelDeletionProcess(activeDevice.Id);
 
         // Assert
         var result = activeIdentity.DeletionProcesses.Where(dp => dp.Status == DeletionProcessStatus.Cancelled).ToList();
@@ -44,7 +44,7 @@ public class CancelDeletionProcessDuringGracePeriodTests
         SystemTime.Set(currentDate.AddDays(35));
 
         // Act
-        var result = () => activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
+        var result = () => activeIdentity.CancelDeletionProcess(activeDevice.Id);
 
         // Assert
         result.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessGracePeriodHasEnded");
@@ -58,7 +58,7 @@ public class CancelDeletionProcessDuringGracePeriodTests
         var activeDevice = new Device(activeIdentity);
 
         // Act
-        var acting = () => activeIdentity.CancelDeletionProcessDuringGracePeriod(activeDevice.Id);
+        var acting = () => activeIdentity.CancelDeletionProcess(activeDevice.Id);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
