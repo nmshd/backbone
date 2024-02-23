@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
-using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Xunit;
 
