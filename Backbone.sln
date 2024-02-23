@@ -275,6 +275,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4F812E23-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Job.IdentityDeletion", "Jobs\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj", "{34F64873-2412-4835-BA68-D2B278FD120E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Job.IdentityDeletion.Tests", "Jobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj", "{B996F6B2-D31E-4312-A98B-AD6D604B6825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -661,6 +663,10 @@ Global
 		{34F64873-2412-4835-BA68-D2B278FD120E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34F64873-2412-4835-BA68-D2B278FD120E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34F64873-2412-4835-BA68-D2B278FD120E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B996F6B2-D31E-4312-A98B-AD6D604B6825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B996F6B2-D31E-4312-A98B-AD6D604B6825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B996F6B2-D31E-4312-A98B-AD6D604B6825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B996F6B2-D31E-4312-A98B-AD6D604B6825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -788,6 +794,7 @@ Global
 		{9599F729-2B1F-4E96-83F4-C20D0CA1C61B} = {A960F984-B1A3-403E-B2BA-7C4F6287D91F}
 		{4F812E23-62EB-4B79-8ECA-5CA72CF5D3BC} = {A960F984-B1A3-403E-B2BA-7C4F6287D91F}
 		{34F64873-2412-4835-BA68-D2B278FD120E} = {9599F729-2B1F-4E96-83F4-C20D0CA1C61B}
+		{B996F6B2-D31E-4312-A98B-AD6D604B6825} = {4F812E23-62EB-4B79-8ECA-5CA72CF5D3BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
