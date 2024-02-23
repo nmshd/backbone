@@ -31,9 +31,9 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = new Handler(mockIdentitiesRepository, fakeUserContext);
+        var command = new CancelDeletionProcessDuringGracePeriodCommand(activeDevice.Id);
 
         // Act
-        var command = new CancelDeletionProcessDuringGracePeriodCommand(activeDevice.Id);
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
