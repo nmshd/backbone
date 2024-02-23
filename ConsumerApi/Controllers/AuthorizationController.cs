@@ -56,7 +56,7 @@ public class AuthorizationController : ApiControllerBase
             throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("missing password"));
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, lockoutOnFailure: true);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
         if (result.IsLockedOut)
             return UserLockedOut();
         if (!result.Succeeded)
