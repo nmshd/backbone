@@ -11,10 +11,10 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
-namespace Backbone.Modules.Quotas.Application.Tests.Tests.Repositories;
+namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
+
 public class MessagesRepositoryTests
 {
-
     private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly IdentityAddress _identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
 
@@ -28,6 +28,7 @@ public class MessagesRepositoryTests
      * </summary>
      */
     private static readonly DateTime TODAY = new(2020, 02, 15, 10, 30, 00);
+
     private static readonly DateTime YESTERDAY = TODAY.AddDays(-1);
     private static readonly DateTime TOMORROW = TODAY.AddDays(1);
     private static readonly DateTime LAST_YEAR = TODAY.AddYears(-1);
@@ -48,7 +49,8 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_within_timeframe_hour_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>() {
+        var messages = new List<Message>()
+        {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
@@ -70,7 +72,8 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>() {
+        var messages = new List<Message>()
+        {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
@@ -94,7 +97,8 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_total_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>() {
+        var messages = new List<Message>()
+        {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
@@ -116,7 +120,8 @@ public class MessagesRepositoryTests
     public async Task Counts_entities_only_for_requested_identityAddress()
     {
         // Arrange
-        var messages = new List<Message>() {
+        var messages = new List<Message>()
+        {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
             CreateMessage(NEXT_YEAR, _identityAddress1)
@@ -145,9 +150,9 @@ public class MessagesRepositoryTests
             DeviceId.New(),
             null,
             Array.Empty<byte>(),
-            new List<Attachment>(),
-            new List<RecipientInformation>()
-            );
+            [],
+            []
+        );
 
         SystemTime.Set(savedDateTime);
 
