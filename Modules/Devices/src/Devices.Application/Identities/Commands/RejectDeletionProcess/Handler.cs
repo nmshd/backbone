@@ -31,6 +31,6 @@ public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDelet
         var deletionProcess = identity.RejectDeletionProcess(identityDeletionProcessId, deviceId);
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        return new RejectDeletionProcessResponse(deletionProcess, identity.Address, deviceId);
+        return new RejectDeletionProcessResponse(deletionProcess, deviceId);
     }
 }

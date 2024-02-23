@@ -9,7 +9,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 namespace Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 public class RejectDeletionProcessResponse
 {
-    public RejectDeletionProcessResponse(IdentityDeletionProcess deletionProcess, IdentityAddress identityAddress, DeviceId deviceId)
+    public RejectDeletionProcessResponse(IdentityDeletionProcess deletionProcess, DeviceId deviceId)
     {
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
