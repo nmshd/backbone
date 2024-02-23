@@ -56,6 +56,8 @@ public class IdentityDeletionProcess
     private void Reject(DeviceId createdByDevice)
     {
         Status = DeletionProcessStatus.Rejected;
+        RejectedAt = SystemTime.UtcNow;
+        RejectedByDevice = createdByDevice;
     }
 
     public IdentityDeletionProcessId Id { get; }
@@ -69,6 +71,9 @@ public class IdentityDeletionProcess
 
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
+
+    public DateTime? RejectedAt { get; private set; }
+    public DeviceId? RejectedByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
