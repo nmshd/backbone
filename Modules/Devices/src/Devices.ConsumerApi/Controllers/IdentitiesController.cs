@@ -79,7 +79,7 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(new ApproveDeletionProcessCommand(id), cancellationToken);
         return Ok(response);
     }
-    
+
     [HttpGet("Self/DeletionProcesses/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
