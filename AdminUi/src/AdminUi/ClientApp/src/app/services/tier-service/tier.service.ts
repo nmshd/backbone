@@ -43,6 +43,32 @@ export class TierService {
     public deleteTierById(id: string): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
+
+    public createMockData(): TierOverview[] {
+        return [
+            {
+                id: "TIRFMDP9YJW0wk7E7PKn",
+                name: "Basic",
+                numberOfIdentities: 2,
+                canBeUsedAsDefaultTier: true,
+                isManualAssignmentAllowed: true
+            },
+            {
+                id: "TIR00000000000000001",
+                name: "Queued for Deletion",
+                numberOfIdentities: 0,
+                canBeUsedAsDefaultTier: false,
+                isManualAssignmentAllowed: false
+            },
+            {
+                id: "TIR00000002",
+                name: "Some Other tier",
+                numberOfIdentities: 0,
+                canBeUsedAsDefaultTier: false,
+                isManualAssignmentAllowed: true
+            }
+        ];
+    }
 }
 
 export interface Tier {
@@ -58,6 +84,8 @@ export interface TierOverview {
     id: string;
     name: string;
     numberOfIdentities: number;
+    canBeUsedAsDefaultTier: boolean;
+    isManualAssignmentAllowed: boolean; // Other possible names: canAssignManually, hasManualAssignmentOption, supportsManualAssignment
 }
 
 export interface TierDTO {

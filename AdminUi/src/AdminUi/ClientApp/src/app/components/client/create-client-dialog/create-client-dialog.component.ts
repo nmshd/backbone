@@ -59,7 +59,8 @@ export class CreateClientDialogComponent {
         this.tierList = [];
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
-                this.tierList = data.result;
+                // this.tierList = data.result;
+                this.tierList = this.tierService.createMockData().filter(tier => tier.canBeUsedAsDefaultTier);
             },
             error: (err: any) => {
                 const errorMessage = err.error?.error?.message ?? err.message;

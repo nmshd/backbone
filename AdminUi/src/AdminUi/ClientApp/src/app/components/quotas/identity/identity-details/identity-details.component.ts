@@ -87,11 +87,29 @@ export class IdentityDetailsComponent {
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
-                this.tiers = tiers.result;
+                // this.tiers = tiers.result;
+                this.tiers = this.tierService.createMockData();
+                if (this.identity.tierId !== this.getQfDTierId()) {
+                    this.tiers = this.tierService.createMockData().filter(tier => tier.id !== this.getQfDTierId());
+                }
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
             }
         });
+    }
+
+    public enablesManualAssignment(tier: TierOverview): boolean {
+        return tier.isManualAssignmentAllowed;;
+    }
+
+    public disabledTiers(tier: TierOverview): boolean {
+        const isQfDIdentityTierId = this.identity.tierId === this.getQfDTierId();
+        return isQfDIdentityTierId && this.enablesManualAssignment(tier);
+    }
+
+    public getQfDTierId(): string {
+        const qfdTier = this.tiers.find((tier) => tier.name === "Queued for Deletion");
+        return qfdTier ? qfdTier.id : "";
     }
 
     public loadIdentityAndTiers(): void {

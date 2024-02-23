@@ -32,7 +32,7 @@
                         <span matListItemTitle>Tier</span>
                         <span matListItemLine
                             ><mat-chip-listbox aria-label="Tier selection" selectable="false">
-                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [color]="t.name == 'Basic' ? 'accent' : ''"
+                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [color]="t.name == 'Basic' ? 'accent' : ''" [disabled]="disabledTiers(t)"
                                     >{{ t.name }}
                                 </mat-chip-option>
                             </mat-chip-listbox>
