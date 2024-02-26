@@ -37,14 +37,4 @@ internal class IdentitiesApi : BaseApi
     {
         return await Post<CreateIdentityResponse>("/Identities", requestConfiguration);
     }
-
-    internal async Task<HttpResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string identityAddress, RequestConfiguration requestConfiguration)
-    {
-        return await Post<StartDeletionProcessAsSupportResponse>($"/Identities/{identityAddress}/DeletionProcesses", requestConfiguration);
-    }
-
-    internal async Task<HttpResponse<CreateIdentityResponse>> CreateIdentity(RequestConfiguration requestConfiguration)
-    {
-        return await Post<CreateIdentityResponse>("/Identities", requestConfiguration);
-    }
 }

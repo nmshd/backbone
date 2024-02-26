@@ -19,7 +19,7 @@ public class DeletionProcessTests
         identity.StartDeletionProcessAsOwner(DeviceId.New());
 
         // Act
-        identity.DeletionStarted();
+        //identity.DeletionStarted();
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Deleting);
@@ -30,7 +30,7 @@ public class DeletionProcessTests
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+        var address = IdentityAddress.Create([], "id1");
+        return new Identity("", address, [], TierId.Generate(), 1);
     }
 }

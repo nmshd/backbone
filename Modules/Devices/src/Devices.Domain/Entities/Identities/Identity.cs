@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -187,5 +188,6 @@ public enum IdentityStatus
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Deleting = 2
 }
