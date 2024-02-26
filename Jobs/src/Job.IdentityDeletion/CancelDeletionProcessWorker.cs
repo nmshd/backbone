@@ -45,24 +45,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
-
-        foreach (var identityAddress in identities.DeletedIdentityAddresses)
-        {
-            //await _pushNotificationSender.SendNotification(identityAddress, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
-
-            //var relationships = (await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken)).Relationships;
-
-            foreach (var relationship in relationships)
-            {
-                _eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
-            }
-
-            //foreach (var identityDeleter in _identityDeleters)
-            //{
-            //    await identityDeleter.Delete(identityAddress);
-            //}
-        }
+        var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
 
         foreach (var identity in identities.Identities)
         {
@@ -76,14 +59,6 @@ public class CancelDeletionProcessWorker : IHostedService
                 }
             }
         }
-
-        //foreach (var identityDeletionProcess in _deletionProcesses)
-        //{
-        //    if (identityDeletionProcess.CreatedAt < DateTime.UtcNow)
-        //    {
-        //        identityDeletionProcess.Cancel();
-        //    }
-        //}
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -98,7 +73,7 @@ public record DeletionCanceledNotification
     public DeletionCanceledNotification(string message) => GetType().GetCustomAttribute<NotificationTextAttribute>().Body = message;
 }
 
-public class TriggerRipeDeletionProcessesCommand : IRequest<TriggerRipeDeletionProcessesCommand>
+public class TriggerStaleDeletionProcessesCommand : IRequest<TriggerStaleDeletionProcessesCommand>
 {
     public List<Identity> Identities { get; set; }
 }
