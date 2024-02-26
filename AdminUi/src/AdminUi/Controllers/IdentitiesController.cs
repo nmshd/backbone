@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GetIdentityQueryDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
 using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityQuery;
-using GetIdentityResponseDevices = Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
-using GetIdentityResponseQuotas = Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity.GetIdentityResponse;
 
 namespace Backbone.AdminUi.Controllers;
 
@@ -52,8 +50,8 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
-        var identity = await _mediator.Send<GetIdentityResponseDevices>(new GetIdentityQueryDevices(address), cancellationToken);
-        var quotas = await _mediator.Send<GetIdentityResponseQuotas>(new GetIdentityQueryQuotas(address), cancellationToken);
+        var identity = await _mediator.Send(new GetIdentityQueryDevices(address), cancellationToken);
+        var quotas = await _mediator.Send(new GetIdentityQueryQuotas(address), cancellationToken);
 
         var response = new GetIdentityResponse
         {
@@ -118,27 +116,43 @@ public class IdentitiesController : ApiControllerBase
 
 public class CreateQuotaForIdentityRequest
 {
-    public string MetricKey { get; set; }
-    public int Max { get; set; }
-    public QuotaPeriod Period { get; set; }
+    public required string MetricKey { get; set; }
+    public required int Max { get; set; }
+    public required QuotaPeriod Period { get; set; }
 }
 
 public class UpdateIdentityTierRequest
 {
-    public string TierId { get; set; }
+    public required string TierId { get; set; }
 }
 
 public class GetIdentityResponse
 {
-    public string Address { get; set; }
-    public string ClientId { get; set; }
-    public byte[] PublicKey { get; set; }
-    public string TierId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public byte IdentityVersion { get; set; }
-    public int NumberOfDevices { get; set; }
-    public IEnumerable<DeviceDTO> Devices { get; set; }
-    public IEnumerable<QuotaDTO> Quotas { get; set; }
+    public required string Address { get; set; }
+    public required string? ClientId { get; set; }
+    public required byte[] PublicKey { get; set; }
+    public required string TierId { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required int NumberOfDevices { get; set; }
+    public required IEnumerable<DeviceDTO> Devices { get; set; }
+    public required IEnumerable<QuotaDTO> Quotas { get; set; }
+}
+
+public class CreateIdentityRequest
+{
+    public required string ClientId { get; set; }
+    public required string ClientSecret { get; set; }
+    public required byte[] IdentityPublicKey { get; set; }
+    public required string DevicePassword { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
+}
+
+public class CreateIdentityRequestSignedChallenge
+{
+    public required string Challenge { get; set; }
+    public required byte[] Signature { get; set; }
 }
 
 public class CreateIdentityRequest

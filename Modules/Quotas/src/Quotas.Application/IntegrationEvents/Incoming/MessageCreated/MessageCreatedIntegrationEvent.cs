@@ -3,7 +3,7 @@
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Id { get; private set; }
-    public IEnumerable<string> Recipients { get; private set; }
-    public string CreatedBy { get; private set; }
+    public required string Id { get; set; }
+    public required IEnumerable<string> Recipients { get; set; }
+    public required string CreatedBy { get; set; }
 }

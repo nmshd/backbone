@@ -56,7 +56,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
@@ -77,7 +77,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
@@ -91,7 +91,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
         relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         // Act
@@ -106,7 +106,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.AcceptChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
@@ -124,7 +124,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
@@ -145,7 +145,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
@@ -159,8 +159,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
-
+        var change = relationship.Changes.GetOpenCreation()!;
         relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         // Act
@@ -175,7 +174,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.RejectChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
@@ -193,7 +192,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
@@ -214,7 +213,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
@@ -228,7 +227,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
         relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
 
         // Act
@@ -243,7 +242,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
 
         // Act
         Action acting = () => relationship.RevokeChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
@@ -313,7 +312,7 @@ public class RelationshipTests
         // Assert
         relationship.Changes.Should().HaveCount(2);
 
-        var termination = relationship.Changes.GetOpenTermination();
+        var termination = relationship.Changes.GetOpenTermination()!;
         termination.Should().NotBeNull();
         termination.Status.Should().Be(RelationshipChangeStatus.Pending);
         termination.Request.Should().NotBeNull();
@@ -343,7 +342,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
@@ -363,7 +362,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
@@ -379,7 +378,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         Action acting = () => relationship.AcceptChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
@@ -397,7 +396,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
@@ -417,7 +416,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
@@ -433,7 +432,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         Action acting = () => relationship.RejectChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
@@ -451,7 +450,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, null);
@@ -471,7 +470,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
 
@@ -487,7 +486,7 @@ public class RelationshipTests
     {
         // Arrange
         var relationship = CreateRelationshipWithOpenTermination();
-        var change = relationship.Changes.GetOpenTermination();
+        var change = relationship.Changes.GetOpenTermination()!;
 
         // Act
         Action acting = () => relationship.RevokeChange(change.Id, TO_IDENTITY, TO_DEVICE, null);
@@ -563,7 +562,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         return relationship;
     }
 
@@ -590,7 +589,7 @@ public class RelationshipTests
     {
         var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
         var change = relationship.Changes.GetOpenCreation();
-        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+        relationship.AcceptChange(change!.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
 
         relationship.RequestTermination(FROM_IDENTITY, FROM_DEVICE);
         return relationship;

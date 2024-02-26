@@ -2,6 +2,4 @@
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
 
-public class TestEvent2IntegrationEvent : IntegrationEvent
-{
-}
+public class TestEvent2IntegrationEvent : IntegrationEvent;

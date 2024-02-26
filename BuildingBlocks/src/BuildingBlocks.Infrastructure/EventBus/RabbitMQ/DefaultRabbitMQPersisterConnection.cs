@@ -26,7 +26,7 @@ public class DefaultRabbitMqPersistentConnection
         _retryCount = retryCount;
     }
 
-    public bool IsConnected => _connection != null && _connection.IsOpen && !_disposed;
+    public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
 
     public IModel CreateModel()
     {

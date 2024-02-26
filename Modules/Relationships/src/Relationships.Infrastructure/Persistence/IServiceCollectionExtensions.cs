@@ -12,7 +12,7 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
     {
         var options = new PersistenceOptions();
-        setupOptions?.Invoke(options);
+        setupOptions.Invoke(options);
 
         services.AddPersistence(options);
     }
@@ -36,6 +36,6 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions BlobStorageOptions { get; set; }
+    public Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
+    public BlobStorageOptions? BlobStorageOptions { get; set; }
 }

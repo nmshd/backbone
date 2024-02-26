@@ -52,7 +52,7 @@ public class FilesRepository : IFilesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<File> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<File?> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var file = await (track ? _files : _readOnlyFiles)
             .WithId(fileId)

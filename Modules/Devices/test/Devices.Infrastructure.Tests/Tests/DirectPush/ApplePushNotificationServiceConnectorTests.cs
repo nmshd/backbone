@@ -42,7 +42,13 @@ public class ApplePushNotificationServiceConnectorTests
         {
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key() {PrivateKey = "some-private-key"}}
+                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
+                    {
+                        PrivateKey = "some-private-key",
+                        TeamId = "some-team-id",
+                        KeyId = "some-key-id"
+                    }
+                }
             },
             Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
             {

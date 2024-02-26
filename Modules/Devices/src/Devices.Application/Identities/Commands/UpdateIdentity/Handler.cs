@@ -31,13 +31,13 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
-        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
+        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId!, newTierIdResult.Value }, cancellationToken);
 
         var oldTier = tiers.Single(t => t.Id == identity.TierId);
         var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
         identity.ChangeTier(newTier.Id);
         await _identitiesRepository.Update(identity, cancellationToken);
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier, newTier));
+        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTier.Id, newTier.Id));
     }
 }

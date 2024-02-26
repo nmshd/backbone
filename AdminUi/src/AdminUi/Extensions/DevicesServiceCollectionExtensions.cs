@@ -15,8 +15,8 @@ public static class DevicesServiceCollectionExtensions
 
         services.AddDatabase(options =>
         {
-            options.ConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
+            options.ConnectionString = configuration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());

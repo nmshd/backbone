@@ -69,10 +69,10 @@ public class TierTests
             new(MetricKey.NumberOfRelationships, "Number of Relationships")
         };
         var tier = Tier.QUEUED_FOR_DELETION.Clone();
-        var createdQuotaResults = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
+        var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Act
-        var result = tier.DeleteQuota(createdQuotaResults.First().Value.Id);
+        var result = tier.DeleteQuota(addedQuotas.First().Id);
 
         // Assert
         result.IsFailure.Should().BeTrue();
@@ -129,7 +129,7 @@ public class TierTests
     }
 
     [Fact]
-    public void Create_quota_for_all_metrics_can_only_be_called_on_queued_for_deletion_tier()
+    public void AddQuotaForAllMetricsOnQueuedForDeletion_can_only_be_called_on_queued_for_deletion_tier()
     {
         // Arrange
         var metrics = new List<Metric>
@@ -139,14 +139,34 @@ public class TierTests
         var tier = new Tier(new TierId("SomeTierId"), "some tier");
 
         // Act
-        Action act = () => tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics);
+        Action act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Assert
         act.Should().Throw<InvalidOperationException>().Which.Message.Should().Be("Method can only be called for the 'Queued for Deletion' tier");
     }
 
     [Fact]
-    public void Create_quota_for_all_metrics_only_creates_missing_quotas()
+    public void AddQuotaForAllMetricsOnQueuedForDeletion_adds_quotas()
+    {
+        // Arrange
+        var tier = Tier.QUEUED_FOR_DELETION.Clone();
+
+        var metrics = new List<Metric>
+        {
+            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages")
+        };
+
+        // Act
+        var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
+
+        // Assert
+        tier.Quotas.Should().HaveCount(1);
+        addedQuotas.Should().HaveCount(1);
+        addedQuotas.First().MetricKey.Should().Be(MetricKey.NumberOfSentMessages);
+    }
+
+    [Fact]
+    public void AddQuotaForAllMetricsOnQueuedForDeletion_only_creates_missing_quotas()
     {
         // Arrange
         var metrics = new List<Metric>
@@ -155,16 +175,15 @@ public class TierTests
         };
 
         var tier = Tier.QUEUED_FOR_DELETION.Clone();
-        var results = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
-        results.First().IsSuccess.Should().BeTrue();
+        tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
         metrics.Add(new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"));
 
         // Act
-        var createdQuotaResults = tier.CreateQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
+        var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
 
         // Assert
-        createdQuotaResults.Where(result => result.IsFailure).Should().BeEmpty();
-        createdQuotaResults.Should().HaveCount(1);
+        addedQuotas.Should().HaveCount(1);
+        tier.Quotas.Should().HaveCount(2);
     }
 }
 

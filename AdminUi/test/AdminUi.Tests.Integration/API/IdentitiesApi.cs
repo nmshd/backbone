@@ -23,9 +23,19 @@ internal class IdentitiesApi : BaseApi
         return await Delete($"/Identities/{identityAddress}/Quotas/{individualQuotaId}", requestConfiguration);
     }
 
-    internal async Task<ODataResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews(RequestConfiguration requestConfiguration)
+    internal async Task<ODataResponse<List<IdentityOverviewDTO>>?> GetIdentityOverviews()
     {
-        return await GetOData<List<IdentityOverviewDTO>>("/Identities?$expand=Tier", requestConfiguration);
+        return await GetOData<List<IdentityOverviewDTO>>("/Identities?$expand=Tier");
+    }
+
+    internal async Task<HttpResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string identityAddress, RequestConfiguration requestConfiguration)
+    {
+        return await Post<StartDeletionProcessAsSupportResponse>($"/Identities/{identityAddress}/DeletionProcesses", requestConfiguration);
+    }
+
+    internal async Task<HttpResponse<CreateIdentityResponse>> CreateIdentity(RequestConfiguration requestConfiguration)
+    {
+        return await Post<CreateIdentityResponse>("/Identities", requestConfiguration);
     }
 
     internal async Task<HttpResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string identityAddress, RequestConfiguration requestConfiguration)

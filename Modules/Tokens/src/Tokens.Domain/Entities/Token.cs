@@ -6,9 +6,15 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token
 {
-#pragma warning disable CS8618
-    private Token() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Token()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        Content = null!;
+    }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt)
     {

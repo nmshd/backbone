@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -18,28 +17,30 @@ public class Identity
         PublicKey = publicKey;
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
-        Devices = new List<Device>();
+        Devices = [];
         TierId = tierId;
-        _deletionProcesses = new List<IdentityDeletionProcess>();
+        Status = IdentityStatus.Active;
+        _deletionProcesses = [];
     }
 
-    public IdentityStatus Status { get; private set; }
-
-    public string? ClientId { get; private set; }
+    public string? ClientId { get; }
 
     public IdentityAddress Address { get; }
-    public byte[] PublicKey { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public byte[] PublicKey { get; }
+    public DateTime CreatedAt { get; }
 
     public List<Device> Devices { get; }
 
     public byte IdentityVersion { get; private set; }
 
+    public TierId? TierIdBeforeDeletion { get; private set; }
     public TierId? TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
+
+    public IdentityStatus Status { get; private set; }
 
     public bool IsNew()
     {
@@ -71,24 +72,16 @@ public class Identity
     {
         EnsureNoActiveProcessExists();
 
+        TierIdBeforeDeletion = TierId;
+
         var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+        Status = IdentityStatus.ToBeDeleted;
 
         return deletionProcess;
-    }
-
-    public void DeletionStarted()
-    {
-        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
-            ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
-
-        if (deletionProcess.IsReadyToStartDeletion())
-        {
-            Status = IdentityStatus.Deleting;
-            deletionProcess.DeletionStarted();
-        }
     }
 
     public void DeletionProcessApprovalReminder1Sent()
@@ -113,6 +106,19 @@ public class Identity
 
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         deletionProcess.ApprovalReminder3Sent(Address);
+    }
+
+    public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Approve(Address, deviceId);
+
+        Status = IdentityStatus.ToBeDeleted;
+        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
+        TierId = Tier.QUEUED_FOR_DELETION.Id;
+
+        return deletionProcess;
     }
 
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
@@ -181,6 +187,5 @@ public enum IdentityStatus
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1,
-    Deleting = 2
+    Approved = 1
 }

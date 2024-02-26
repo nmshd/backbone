@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { DateFilter } from "src/app/utils/date-filter";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { NumberFilter } from "src/app/utils/number-filter";
@@ -13,8 +13,15 @@ import { TierDTO } from "../tier-service/tier.service";
 })
 export class ClientService {
     private readonly apiUrl: string;
+    private readonly refreshDataSubject = new BehaviorSubject<boolean>(false);
+    public refreshData$ = this.refreshDataSubject.asObservable();
+
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Clients`;
+    }
+
+    public triggerRefresh(): void {
+        this.refreshDataSubject.next(true);
     }
 
     public getClientById(id: string): Observable<HttpResponseEnvelope<Client>> {

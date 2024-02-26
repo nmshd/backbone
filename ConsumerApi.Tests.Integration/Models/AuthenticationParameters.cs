@@ -2,9 +2,9 @@
 
 public class AuthenticationParameters
 {
-    public string GrantType { get; set; }
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public string GrantType { get; set; } = null!;
+    public string ClientId { get; set; } = null!;
+    public string ClientSecret { get; set; } = null!;
+    public string Username { get; set; } = null!;
+    public string Password { get; set; } = null!;
 }

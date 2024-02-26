@@ -16,15 +16,15 @@ public class StartDeletionProcessAsSupportTests
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var activeIdentity = CreateIdentity();
 
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
         // Act
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
+        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
 
         // Assert
-        AssertDeletionProcessWasStarted(identity);
+        AssertDeletionProcessWasStarted(activeIdentity);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
 
         AssertAuditLogEntryWasCreated(deletionProcess);
@@ -38,21 +38,21 @@ public class StartDeletionProcessAsSupportTests
     public void Only_one_active_deletion_process_is_allowed_when_started()
     {
         // Arrange
-        var identity = CreateIdentity();
+        var activeIdentity = CreateIdentity();
 
-        identity.StartDeletionProcessAsSupport();
+        activeIdentity.StartDeletionProcessAsSupport();
 
         // Act
-        var acting = identity.StartDeletionProcessAsSupport;
+        var acting = activeIdentity.StartDeletionProcessAsSupport;
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
-    private static void AssertDeletionProcessWasStarted(Identity identity)
+    private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
-        identity.DeletionProcesses.Should().HaveCount(1);
-        var deletionProcess = identity.DeletionProcesses[0];
+        activeIdentity.DeletionProcesses.Should().HaveCount(1);
+        var deletionProcess = activeIdentity.DeletionProcesses[0];
         deletionProcess.Should().NotBeNull();
 
         deletionProcess.Id.Should().NotBeNull();

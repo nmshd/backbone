@@ -13,6 +13,6 @@ public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<P
         builder.Property(x => x.Handle).IsRequired();
         builder.Property(x => x.UpdatedAt);
         builder.Property(x => x.AppId);
-        builder.Property(x => x.Environment).HasDefaultValue(PushEnvironment.Production);
+        builder.Property(x => x.Environment);
     }
 }

@@ -5,6 +5,6 @@ namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.Datawa
 
 public class DatawalletModifiedIntegrationEvent : IntegrationEvent
 {
-    public IdentityAddress Identity { get; set; }
-    public DeviceId ModifiedByDevice { get; set; }
+    public required IdentityAddress Identity { get; set; }
+    public required DeviceId ModifiedByDevice { get; set; }
 }

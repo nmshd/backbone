@@ -33,12 +33,12 @@ public class FindAllStubRepository : ITiersRepository
         return Task.FromResult(_tiers);
     }
 
-    public Task<Tier> FindById(TierId tierId, CancellationToken cancellationToken)
+    public Task<Tier?> FindById(TierId tierId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Tier> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    public Task<Tier?> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
@@ -48,7 +48,7 @@ public class FindAllStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<Tier> GetBasicTierAsync(CancellationToken cancellationToken)
+    public Task<Tier?> FindBasicTier(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

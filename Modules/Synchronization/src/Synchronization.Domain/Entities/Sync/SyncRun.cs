@@ -5,18 +5,17 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun
 {
-    public enum SyncRunType
+    private readonly List<SyncError> _errors = [];
+    private readonly List<ExternalEvent> _externalEvents = [];
+
+    // ReSharper disable once UnusedMember.Local
+    private SyncRun()
     {
-        ExternalEventSync = 0,
-        DatawalletVersionUpgrade = 1
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
     }
-
-    private readonly List<SyncError> _errors = new();
-    private readonly List<ExternalEvent> _externalEvents = new();
-
-#pragma warning disable CS8618
-    private SyncRun() { }
-#pragma warning restore CS8618
 
     public SyncRun(long index, ushort duration, IdentityAddress createdBy, DeviceId createdByDevice, IEnumerable<ExternalEvent> items, SyncRunType type)
     {
@@ -112,12 +111,16 @@ public class SyncRun
             ItemSyncFailed(item, "syncRunCanceled");
         }
     }
+
+    public enum SyncRunType
+    {
+        ExternalEventSync = 0,
+        DatawalletVersionUpgrade = 1
+    }
 }
 
 public record ExternalEventResult
 {
-#pragma warning disable CS8618
-    public ExternalEventId ExternalEventId { get; set; }
-    public string ErrorCode { get; set; }
-#pragma warning restore CS8618
+    public required ExternalEventId ExternalEventId { get; set; }
+    public required string ErrorCode { get; set; }
 }

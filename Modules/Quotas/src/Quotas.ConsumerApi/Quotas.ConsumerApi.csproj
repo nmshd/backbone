@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Quotas.Application\Quotas.Application.csproj" />
@@ -13,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
+    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2" />
   </ItemGroup>
 
 </Project>

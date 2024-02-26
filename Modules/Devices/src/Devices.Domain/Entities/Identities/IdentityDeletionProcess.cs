@@ -7,12 +7,12 @@ public class IdentityDeletionProcess
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
-    // EF Core needs the empty constructor
-#pragma warning disable CS8618
     // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcess()
-#pragma warning restore CS8618
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _auditLog = null!;
+        Id = null!;
     }
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
@@ -31,10 +31,7 @@ public class IdentityDeletionProcess
         CreatedAt = SystemTime.UtcNow;
         Status = status;
 
-        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
-        {
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)
-        };
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)];
     }
 
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
@@ -44,10 +41,7 @@ public class IdentityDeletionProcess
 
         Approve(createdByDevice);
 
-        _auditLog = new List<IdentityDeletionProcessAuditLogEntry>
-        {
-            IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)
-        };
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
 
     private void Approve(DeviceId createdByDevice)
@@ -133,5 +127,14 @@ public class IdentityDeletionProcess
     internal bool IsReadyToStartDeletion()
     {
         return Status == DeletionProcessStatus.Approved;
+    }
+
+    public void Approve(IdentityAddress address, DeviceId approvedByDevice)
+    {
+        if (Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+
+        Approve(approvedByDevice);
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 }

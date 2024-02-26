@@ -14,8 +14,7 @@ public class DatawalletModificationIdJsonConverter : JsonConverter<DatawalletMod
 
     public override DatawalletModificationId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return DatawalletModificationId.Parse(id);

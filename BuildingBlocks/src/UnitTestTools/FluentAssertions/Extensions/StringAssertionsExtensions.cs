@@ -18,7 +18,7 @@ public static class StringAssertionsExtensions
             JsonDocument.Parse(it.Subject);
             Execute.Assertion.Given(() => it);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             Execute.Assertion.FailWith("Invalid Json");
         }

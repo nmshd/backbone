@@ -2,7 +2,5 @@
 
 public static class ApplicationErrors
 {
-    public static class Files
-    {
-    }
+    public static class Files;
 }

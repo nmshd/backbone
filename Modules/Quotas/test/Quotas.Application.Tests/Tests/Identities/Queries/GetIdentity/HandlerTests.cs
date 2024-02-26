@@ -60,7 +60,7 @@ public class HandlerTests
     {
         // Arrange
         var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
+        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
 
         var handler = CreateHandler(stubIdentitiesRepository);
 

@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
@@ -62,7 +63,7 @@ public class HandlerTests
                 A<IdentityAddress>._,
                 A<CancellationToken>._,
                 A<bool>._))
-            .Returns<Identity>(null);
+            .Returns<Identity?>(null);
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(address);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
@@ -77,6 +78,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
-        return new Handler(identitiesRepository, userContext);
+        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>());
     }
 }

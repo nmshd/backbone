@@ -13,7 +13,12 @@ public class PushDatawalletModificationsCommandValidatorTests
         var validator = new PushDatawalletModificationsCommandValidator();
 
         var command = new PushDatawalletModificationsCommand(
-            new[] { new PushDatawalletModificationItem { Collection = "x", DatawalletVersion = 1, EncryptedPayload = new byte[0], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create } },
+            [
+                new PushDatawalletModificationItem
+                {
+                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
+                }
+            ],
             1);
         var validationResult = validator.TestValidate(command);
 
@@ -26,7 +31,12 @@ public class PushDatawalletModificationsCommandValidatorTests
         var validator = new PushDatawalletModificationsCommandValidator();
 
         var command = new PushDatawalletModificationsCommand(
-            new[] { new PushDatawalletModificationItem { Collection = "x", DatawalletVersion = 1, EncryptedPayload = new byte[0], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create } },
+            [
+                new PushDatawalletModificationItem
+                {
+                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
+                }
+            ],
             0);
         var validationResult = validator.TestValidate(command);
 

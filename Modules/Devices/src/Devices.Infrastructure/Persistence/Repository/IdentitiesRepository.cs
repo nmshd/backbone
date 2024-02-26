@@ -42,7 +42,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return paginationResult;
     }
 
-    public async Task<Identity> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
@@ -89,7 +89,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
 
-    public async Task<Device> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    public async Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
             .NotDeleted()

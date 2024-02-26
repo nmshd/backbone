@@ -1,14 +1,14 @@
 ﻿namespace Backbone.AdminUi.Infrastructure.DTOs;
 public class RelationshipOverview
 {
-    public string From { get; set; }
-    public string To { get; set; }
-    public string RelationshipTemplateId { get; set; }
-    public RelationshipStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required string From { get; set; }
+    public required string To { get; set; }
+    public required string RelationshipTemplateId { get; set; }
+    public required RelationshipStatus Status { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public DateTime? AnsweredAt { get; set; }
-    public string CreatedByDevice { get; set; }
-    public string? AnsweredByDevice { get; set; }
+    public required string CreatedByDevice { get; set; }
+    public required string? AnsweredByDevice { get; set; }
 }
 
 public enum RelationshipStatus
