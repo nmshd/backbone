@@ -62,6 +62,7 @@ public class IdentityDeletionProcess
     private void Cancel()
     {
         Status = DeletionProcessStatus.Canceled;
+        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main
     }
 
     public IdentityDeletionProcessId Id { get; }
