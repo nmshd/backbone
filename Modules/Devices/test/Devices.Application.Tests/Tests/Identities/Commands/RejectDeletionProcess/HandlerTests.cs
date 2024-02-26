@@ -18,7 +18,7 @@ public class HandlerTests
     public async void Happy_path()
     {
         // Arrange
-        var utcNow = DateTime.UtcNow;
+        var utcNow = SystemTime.UtcNow;
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(utcNow);
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         var device = identity.Devices[0];
