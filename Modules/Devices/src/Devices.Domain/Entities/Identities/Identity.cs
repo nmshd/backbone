@@ -87,7 +87,7 @@ public class Identity
 
     private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
     {
-        if (Devices.All(device => device.Id != currentDeviceId))
+        if (!Devices.Exists(device => device.Id == currentDeviceId))
             throw new DomainException(DomainErrors.DeviceDoesNotBelongsToIdentity());
     }
 
