@@ -110,7 +110,7 @@ public class Identity
 
     public IdentityDeletionProcess CancelStaleDeletionProcess(IdentityDeletionProcessId deletionProcessId)
     {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(i => i.Id == deletionProcessId) 
+        var deletionProcess = DeletionProcesses.FirstOrDefault(i => i.Id == deletionProcessId)
                               ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         deletionProcess.CancelAutomatically(Address);

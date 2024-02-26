@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediatR;
 using FakeItEasy;
+using MediatR;
 
 namespace Backbone.Job.IdentityDeletion.Tests
 {
@@ -14,7 +14,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
         public void Test1()
         {
             // Arrange
-            var mockMediator = A.Fake<IMediator>();
+            _ = A.Fake<IMediator>();
 
             //var commandResponse = new TriggerOldDeletionProcessesResponse
             //{

@@ -1,19 +1,19 @@
 ﻿using System.Reflection;
-using Backbone.Modules.Devices.ConsumerApi;
-using Backbone.Modules.Relationships.ConsumerApi;
-using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Files.ConsumerApi;
-using Backbone.Modules.Messages.ConsumerApi;
-using Backbone.Modules.Quotas.ConsumerApi;
-using Backbone.Modules.Synchronization.ConsumerApi;
-using Backbone.Modules.Tokens.ConsumerApi;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Challenges.ConsumerApi;
+using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Microsoft.Extensions.Options;
+using Backbone.Modules.Files.ConsumerApi;
+using Backbone.Modules.Messages.ConsumerApi;
+using Backbone.Modules.Quotas.ConsumerApi;
+using Backbone.Modules.Relationships.ConsumerApi;
+using Backbone.Modules.Synchronization.ConsumerApi;
+using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
-using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.Job.IdentityDeletion
