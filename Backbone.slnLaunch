@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Admin UI \u002B Consumer API",
+    "Projects": [
+      {
+        "Name": "ConsumerApi\\ConsumerApi.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "docker-compose\\docker-compose.dcproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "AdminUi\\src\\AdminUi\\AdminUi.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      }
+    ]
+  }
+]
