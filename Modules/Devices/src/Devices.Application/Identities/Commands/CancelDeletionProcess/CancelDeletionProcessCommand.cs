@@ -4,9 +4,9 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletio
 
 public class CancelDeletionProcessCommand : IRequest<CancelDeletionProcessResponse>
 {
-    public CancelDeletionProcessCommand(string id)
+    public CancelDeletionProcessCommand(string deletionProcessId)
     {
-        DeletionProcessId = id;
+        DeletionProcessId = deletionProcessId;
     }
 
     public string DeletionProcessId { get; set; }
