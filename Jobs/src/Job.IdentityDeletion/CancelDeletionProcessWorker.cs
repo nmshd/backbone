@@ -2,6 +2,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+
 
 //using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -45,20 +47,30 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
-
-        foreach (var identity in identities.Identities)
+        foreach (var identityDeletionProcess in _deletionProcesses)
         {
-            foreach (var identityDeletionProcess in _deletionProcesses)
+            if (identityDeletionProcess.Status == DeletionProcessStatus.WaitingForApproval 
+                && identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow)
             {
-                if (identityDeletionProcess.CreatedAt < DateTime.UtcNow)
-                {
-                    await _pushNotificationSender.SendNotification
-                        (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
-                    identityDeletionProcess.CancelAutomatically(identity.Address);
-                }
+                var identities = 
+                    await _mediator.Send(new TriggerStaleDeletionProcessesCommand("", identityDeletionProcess.Id), cancellationToken);
             }
         }
+
+        //var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
+
+        //foreach (var identity in identities.Identities)
+        //{
+        //    foreach (var identityDeletionProcess in _deletionProcesses)
+        //    {
+        //        if (identityDeletionProcess.CreatedAt < DateTime.UtcNow)
+        //        {
+        //            await _pushNotificationSender.SendNotification
+        //                (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
+        //            identityDeletionProcess.CancelAutomatically(identity.Address);
+        //        }
+        //    }
+        //}
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -71,9 +83,4 @@ public class CancelDeletionProcessWorker : IHostedService
 public record DeletionCanceledNotification
 {
     public DeletionCanceledNotification(string message) => GetType().GetCustomAttribute<NotificationTextAttribute>().Body = message;
-}
-
-public class TriggerStaleDeletionProcessesCommand : IRequest<TriggerStaleDeletionProcessesCommand>
-{
-    public List<Identity> Identities { get; set; }
 }
