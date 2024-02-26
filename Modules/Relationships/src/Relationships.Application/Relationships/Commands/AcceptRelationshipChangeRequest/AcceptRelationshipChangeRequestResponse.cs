@@ -2,4 +2,4 @@
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 
-public class AcceptRelationshipChangeRequestResponse : RelationshipMetadataDTO { }
+public class AcceptRelationshipChangeRequestResponse : RelationshipMetadataDTO;

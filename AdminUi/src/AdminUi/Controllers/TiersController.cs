@@ -3,7 +3,6 @@ using Backbone.AdminUi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Quotas.Application.DTOs;
@@ -15,7 +14,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminUi.Controllers;
 
@@ -24,12 +22,10 @@ namespace Backbone.AdminUi.Controllers;
 public class TiersController : ApiControllerBase
 {
     private readonly AdminUiDbContext _adminUiDbContext;
-    private readonly ApplicationOptions _options;
 
-    public TiersController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public TiersController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
-        _options = options.Value;
     }
 
     [HttpGet]
@@ -91,7 +87,7 @@ public class TiersController : ApiControllerBase
 
 public class CreateQuotaForTierRequest
 {
-    public string MetricKey { get; set; }
-    public int Max { get; set; }
-    public QuotaPeriod Period { get; set; }
+    public required string MetricKey { get; set; }
+    public required int Max { get; set; }
+    public required QuotaPeriod Period { get; set; }
 }

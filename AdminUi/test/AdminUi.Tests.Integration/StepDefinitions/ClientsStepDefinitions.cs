@@ -74,7 +74,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         return response.Content.Result!.Id;
     }
 
-    [Given(@"a Client c")]
+    [Given("a Client c")]
     public async Task GivenAClientC()
     {
         _tierId = await GetTier();
@@ -100,20 +100,20 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _clientId = response.Content.Result!.ClientId;
     }
 
-    [Given(@"a non-existent Client c")]
+    [Given("a non-existent Client c")]
     public void GivenANonExistentClientC()
     {
         _clientId = "some-non-existent-client-id";
     }
 
-    [When(@"a DELETE request is sent to the /Clients endpoint")]
+    [When("a DELETE request is sent to the /Clients endpoint")]
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
         _deleteResponse = await _clientsApi.DeleteClient(_clientId, _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
-    [When(@"a GET request is sent to the /Clients endpoint")]
+    [When("a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
         _getClientsResponse = await _clientsApi.GetAllClients(_requestConfiguration);
@@ -121,7 +121,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _getClientsResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
+    [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
@@ -141,7 +141,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
+    [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithoutASecret()
     {
         var changeClientSecretRequest = new ChangeClientSecretRequest
@@ -159,7 +159,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
+    [When("a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointForAnInexistentClient()
     {
         var changeClientSecretRequest = new ChangeClientSecretRequest
@@ -177,7 +177,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
+    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpoint()
     {
         _updatedTierId = await CreateTier();
@@ -199,7 +199,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
+    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -218,7 +218,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
+    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -237,7 +237,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [When(@"a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
+    [When("a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
         var updateClientRequest = new UpdateClientRequest()
@@ -256,14 +256,14 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains a paginated list of Clients")]
+    [Then("the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
         _getClientsResponse!.Content.Result.Should().NotBeNullOrEmpty();
         _getClientsResponse.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the response contains Client c with the new client secret")]
+    [Then("the response contains Client c with the new client secret")]
     public void ThenTheResponseContainsAClientWithNewSecret()
     {
         _changeClientSecretResponse!.AssertHasValue();
@@ -273,7 +273,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().Be(_clientSecret);
     }
 
-    [Then(@"the response contains Client c with a random secret generated by the backend")]
+    [Then("the response contains Client c with a random secret generated by the backend")]
     public void ThenTheResponseContainsAClientWithRandomGeneratedSecret()
     {
         _changeClientSecretResponse!.AssertHasValue();
@@ -283,7 +283,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().NotBeNullOrEmpty();
     }
 
-    [Then(@"the response contains Client c")]
+    [Then("the response contains Client c")]
     public void ThenTheResponseContainsAClient()
     {
         _updateClientResponse!.AssertHasValue();
@@ -292,7 +292,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updateClientResponse!.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the Client in the Backend was successfully updated")]
+    [Then("the Client in the Backend was successfully updated")]
     public async Task ThenTheClientInTheBackendWasUpdatedAsync()
     {
         var requestConfiguration = _requestConfiguration.Clone();
@@ -308,7 +308,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         response.Content.Result!.MaxIdentities.Should().Be(_updatedMaxIdentities);
     }
 
-    [Then(@"the Client in the Backend has a null value for maxIdentities")]
+    [Then("the Client in the Backend has a null value for maxIdentities")]
     public async Task ThenTheClientInTheBackendHasNullIdentitiesLimit()
     {
         var requestConfiguration = _requestConfiguration.Clone();

@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi;
@@ -22,7 +21,7 @@ public class SynchronizationDbContextSeeder : IDbSeeder<SynchronizationDbContext
     public SynchronizationDbContextSeeder(IServiceProvider serviceProvider, ILogger<SynchronizationDbContextSeeder> logger)
     {
         _blobStorage = serviceProvider.GetService<IBlobStorage>();
-        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()!.Value.RootFolder;
+        _blobRootFolder = serviceProvider.GetService<IOptions<BlobOptions>>()?.Value.RootFolder;
         _logger = logger;
     }
 

@@ -10,7 +10,7 @@ public class Step : ReportItem
     public List<Row> Rows { get; set; }
 
     [JsonProperty("embeddings")]
-    public List<Embedding> Embeddings { get; set; } = new();
+    public List<Embedding> Embeddings { get; set; } = [];
 
     public void AddEmbedding(string mimeType, string base64data)
     {

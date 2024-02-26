@@ -2,4 +2,4 @@
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
-public class CreateRelationshipResponse : RelationshipMetadataDTO { }
+public class CreateRelationshipResponse : RelationshipMetadataDTO;

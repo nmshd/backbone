@@ -5,8 +5,8 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSy
 
 public class StartSyncRunResponse
 {
-    public StartSyncRunStatus Status { get; set; }
-    public SyncRunDTO SyncRun { get; set; }
+    public required StartSyncRunStatus Status { get; set; }
+    public required SyncRunDTO SyncRun { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

@@ -51,12 +51,12 @@ public static class Extensions
         }
     }
 
-    internal static IEnumerable<string> GetPendingSteps(this ScenarioContext scenarioContenxt)
+    internal static IEnumerable<string> GetPendingSteps(this ScenarioContext scenarioContext)
     {
         return typeof(ScenarioContext)
-            .GetProperty("PendingSteps", BindingFlags.NonPublic | BindingFlags.Instance)
-            .GetValue(scenarioContenxt, null) as IEnumerable<string>
-               ?? new string[0];
+            .GetProperty("PendingSteps", BindingFlags.NonPublic | BindingFlags.Instance)!
+            .GetValue(scenarioContext, null) as IEnumerable<string>
+               ?? [];
     }
 
     internal static string ReplaceFirst(this string s, string find, string replace)

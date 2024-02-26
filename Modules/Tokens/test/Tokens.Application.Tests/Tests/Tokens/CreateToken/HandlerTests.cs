@@ -33,7 +33,7 @@ public class HandlerTests
         var command = new CreateTokenCommand
         {
             ExpiresAt = DateTime.UtcNow,
-            Content = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1 }
+            Content = [1, 1, 1, 1, 1, 1, 1, 1]
         };
 
         var tokenRepository = A.Fake<ITokensRepository>();

@@ -6,5 +6,5 @@ public class FinalizeDatawalletVersionUpgradeSyncRunResponse
 {
     public long? NewDatawalletModificationIndex { get; set; }
 
-    public IEnumerable<CreatedDatawalletModificationDTO> DatawalletModifications { get; set; }
+    public required IEnumerable<CreatedDatawalletModificationDTO> DatawalletModifications { get; set; }
 }
