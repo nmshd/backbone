@@ -108,6 +108,17 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
+    public IdentityDeletionProcess CancelStaleDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(i => i.Id == deletionProcessId);
+        deletionProcess.Cancel(Address);
+
+        TierId = TierIdBeforeDeletion;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
     public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
