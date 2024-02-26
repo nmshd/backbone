@@ -173,7 +173,7 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public void CancelDeletionProcess(DeviceId canceledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcess(DeviceId canceledByDeviceId)
     {
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
@@ -183,6 +183,8 @@ public class Identity
         deletionProcess.Cancel(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
         Status = IdentityStatus.Active;
+
+        return deletionProcess;
     }
 }
 
