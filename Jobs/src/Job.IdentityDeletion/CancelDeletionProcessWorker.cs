@@ -55,7 +55,7 @@ public class CancelDeletionProcessWorker : IHostedService
                 {
                     await _pushNotificationSender.SendNotification
                         (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
-                    identityDeletionProcess.Cancel(identity.Address);
+                    identityDeletionProcess.CancelAutomatically(identity.Address);
                 }
             }
         }
