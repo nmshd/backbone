@@ -11,7 +11,7 @@ public class CancelDeletionProcessTests
     public void Should_cancel_deletion_process_during_grace_period()
     {
         // Arrange
-        var currentDate = SystemTime.UtcNow.Date;
+        var currentDate = DateTime.Parse("2020-01-01");
         SystemTime.Set(currentDate);
 
         var activeIdentity = TestDataGenerator.CreateIdentity();
@@ -19,7 +19,7 @@ public class CancelDeletionProcessTests
         activeIdentity.Devices.Add(activeDevice);
 
         activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
-        SystemTime.Set(currentDate.AddDays(5));
+        SystemTime.Set(DateTime.Parse("2020-01-02"));
 
         // Act
         activeIdentity.CancelDeletionProcess(activeDevice.Id);
