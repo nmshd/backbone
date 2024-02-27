@@ -53,11 +53,11 @@ public class IdentityDeletionProcess
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
-    private void Reject(DeviceId createdByDevice)
+    private void Reject(DeviceId rejectedByDevice)
     {
         Status = DeletionProcessStatus.Rejected;
         RejectedAt = SystemTime.UtcNow;
-        RejectedByDevice = createdByDevice;
+        RejectedByDevice = rejectedByDevice;
     }
 
     public IdentityDeletionProcessId Id { get; }
