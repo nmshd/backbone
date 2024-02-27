@@ -20,6 +20,19 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 oldType: "integer",
                 oldDefaultValue: 1);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities",
+                type: "timestamp with time zone",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "Status",
+                table: "Identities",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
                 table: "Identities",
@@ -45,6 +58,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     GracePeriodReminder1SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     GracePeriodReminder2SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     GracePeriodReminder3SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletionStartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)),
                     IdentityAddress = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true)
                 },
                 constraints: table =>
