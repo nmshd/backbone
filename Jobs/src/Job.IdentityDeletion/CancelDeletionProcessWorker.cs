@@ -21,21 +21,22 @@ public class CancelDeletionProcessWorker : IHostedService
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<CancelDeletionProcessWorker> _logger;
-    private readonly IReadOnlyList<IdentityDeletionProcess> _deletionProcesses;
+    //private readonly IReadOnlyList<IdentityDeletionProcess> _deletionProcesses;
 
     public CancelDeletionProcessWorker(IHostApplicationLifetime host,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
         IEventBus eventBus,
-        ILogger<CancelDeletionProcessWorker> logger,
-        IReadOnlyList<IdentityDeletionProcess> deletionProcesses)
+        ILogger<CancelDeletionProcessWorker> logger
+        //IReadOnlyList<IdentityDeletionProcess> deletionProcesses
+        )
     {
         _host = host;
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _eventBus = eventBus;
         _logger = logger;
-        _deletionProcesses = deletionProcesses;
+        //_deletionProcesses = deletionProcesses;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -47,15 +48,19 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        foreach (var identityDeletionProcess in _deletionProcesses)
-        {
-            if (identityDeletionProcess.Status == DeletionProcessStatus.WaitingForApproval 
-                && identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow)
-            {
-                var identities = 
-                    await _mediator.Send(new TriggerStaleDeletionProcessesCommand("", identityDeletionProcess.Id), cancellationToken);
-            }
-        }
+        var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
+
+        //foreach (var identityDeletionProcess in _deletionProcesses)
+        //{
+        //    if (identityDeletionProcess.Status == DeletionProcessStatus.WaitingForApproval 
+        //        && identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow)
+        //    {
+        //        var identities = 
+        //            await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
+
+                
+        //    }
+        //}
 
         //var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
 
