@@ -27,6 +27,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 nullable: false,
                 defaultValue: 0);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities",
+                type: "datetime2",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
