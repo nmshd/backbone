@@ -29,8 +29,7 @@ public class HandlerTests
         // Assert
         response.Should().NotBeNull();
         response.IdentityDeletionProcesses.Count.Should().Be(1);
-        response.IdentityDeletionProcesses[0].Id.Should().Be(deletionProcess.Id);
-        response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        response.IdentityDeletionProcesses[0].Address.Should().Be(identity.Address);
     }
 
     [Fact]
@@ -49,7 +48,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_correct_deletion_processes_are_handled()
+    public async Task Only_identities_with_correct_deletion_process_are_handled()
     {
         // Arrange
         var mockIdentity = TestDataGenerator.CreateIdentity();
@@ -72,7 +71,6 @@ public class HandlerTests
 
         // Assert
         response.IdentityDeletionProcesses.Count.Should().Be(1);
-        response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        response.IdentityDeletionProcesses[0].Id.Should().Be(deletionProcess.Id);
+        response.IdentityDeletionProcesses[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
     }
 }
