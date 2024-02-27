@@ -34,7 +34,15 @@ public class IdentityDeletionProcess
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
-    
+
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
+
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
@@ -118,14 +126,6 @@ public class IdentityDeletionProcess
 
         Approve(approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
-    }
-
-    private void Approve(DeviceId createdByDevice)
-    {
-        Status = DeletionProcessStatus.Approved;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
     public void Reject(IdentityAddress address, DeviceId rejectedByDevice)
