@@ -3,12 +3,5 @@
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
 public class TriggerStaleDeletionProcessesResponse
 {
-    public TriggerStaleDeletionProcessesResponse(IdentityDeletionProcess deletionProcess)
-    {
-        Status = deletionProcess.Status;
-        Id = deletionProcess.Id;
-    }
-
-    public DeletionProcessStatus Status { get; set; }
-    public string Id { get; set; }
+    public List<IdentityDeletionProcess> IdentityDeletionProcesses { get; set; } = [];
 }
