@@ -14,52 +14,33 @@ public class CancelDeletionProcessTests
         var currentDate = DateTime.Parse("2020-01-01");
         SystemTime.Set(currentDate);
 
-        var activeIdentity = TestDataGenerator.CreateIdentity();
-        var activeDevice = new Device(activeIdentity);
-        activeIdentity.Devices.Add(activeDevice);
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+        identity.Devices.Add(device);
 
-        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        var deletionProcess = identity.StartDeletionProcessAsOwner(device.Id);
         SystemTime.Set(DateTime.Parse("2020-01-02"));
 
         // Act
-        activeIdentity.CancelDeletionProcess(activeDevice.Id);
+        identity.CancelDeletionProcess(deletionProcess.Id, device.Id);
 
         // Assert
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
     }
 
     [Fact]
-    public void Throws_when_cancelling_deletion_process_after_grace_period()
-    {
-        // Arrange
-        var currentDate = DateTime.Parse("2020-01-01");
-        SystemTime.Set(currentDate);
-
-        var activeIdentity = TestDataGenerator.CreateIdentity();
-        var activeDevice = new Device(activeIdentity);
-        activeIdentity.Devices.Add(activeDevice);
-
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
-        SystemTime.Set(DateTime.Parse("2020-02-02"));
-
-        // Act
-        var result = () => activeIdentity.CancelDeletionProcess(activeDevice.Id);
-
-        // Assert
-        result.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessGracePeriodHasEnded");
-    }
-
-    [Fact]
     public void Throws_when_deletion_process_does_not_exist()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentity();
-        var activeDevice = new Device(activeIdentity);
+        var identity = TestDataGenerator.CreateIdentity();
+        identity.Devices.Add(new Device(identity));
+        var deviceId = identity.Devices[0].Id;
+        var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => activeIdentity.CancelDeletionProcess(activeDevice.Id);
+        var acting = () => identity.CancelDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
     }
 }

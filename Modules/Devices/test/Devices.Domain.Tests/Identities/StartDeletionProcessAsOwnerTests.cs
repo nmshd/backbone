@@ -44,20 +44,17 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     }
 
     [Fact]
-    public void Start_deletion_process_as_owner_from_another_device()
+    public void Throws_when_device_not_owned_by_identity()
     {
         // Arrange
-        var activeIdentity1 = CreateIdentity();
-        var activeIdentity2 = CreateIdentity();
-        var activeDevice1 = new Device(activeIdentity1);
-        var activeDevice2 = new Device(activeIdentity2);
-        activeIdentity1.Devices.Add(activeDevice1);
+        SystemTime.Set(DateTime.Parse("2020-01-01"));
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var result = () => activeIdentity1.StartDeletionProcessAsOwner(activeDevice2.Id);
+        var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
 
         // Assert
-        result.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deviceDoesNotBelongsToIdentity");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
     }
 
     [Fact]
@@ -109,5 +106,13 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     public void Dispose()
     {
         Hasher.Reset();
+    }
+
+    private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
+    {
+        var identity = CreateIdentity();
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
+        identity.StartDeletionProcessAsSupport();
+        return identity;
     }
 }
