@@ -47,7 +47,6 @@ public class HandlerTests
         response.Status.Should().Be(DeletionProcessStatus.Rejected);
         response.CreatedAt.Should().Be(utcNow);
         response.RejectedByDevice.Should().Be(device.Id);
-        response.Status.Should().Be(DeletionProcessStatus.Rejected);
     }
 
     [Fact]
