@@ -18,15 +18,14 @@ public class CancelDeletionProcessTests
         var activeDevice = new Device(activeIdentity);
         activeIdentity.Devices.Add(activeDevice);
 
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
         SystemTime.Set(DateTime.Parse("2020-01-02"));
 
         // Act
         activeIdentity.CancelDeletionProcess(activeDevice.Id);
 
         // Assert
-        var result = activeIdentity.DeletionProcesses.Where(dp => dp.Status == DeletionProcessStatus.Cancelled).ToList();
-        result.Count.Should().Be(1);
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
     }
 
     [Fact]
