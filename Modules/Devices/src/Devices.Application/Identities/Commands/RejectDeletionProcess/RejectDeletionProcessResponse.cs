@@ -1,15 +1,14 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 public class RejectDeletionProcessResponse
 {
-    public RejectDeletionProcessResponse(IdentityDeletionProcess deletionProcess, DeviceId deviceId)
+    public RejectDeletionProcessResponse(IdentityDeletionProcess deletionProcess)
     {
         Id = deletionProcess.Id;
         Status = deletionProcess.Status;
         CreatedAt = deletionProcess.CreatedAt;
-        RejectedByDevice = deviceId;
+        RejectedByDevice = deletionProcess.RejectedByDevice;
     }
 
     public string Id { get; }
