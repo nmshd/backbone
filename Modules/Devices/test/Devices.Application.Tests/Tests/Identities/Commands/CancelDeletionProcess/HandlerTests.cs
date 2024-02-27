@@ -18,24 +18,30 @@ public class HandlerTests
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(SystemTime.UtcNow.Date);
         var activeDevice = activeIdentity.Devices[0];
+        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = new Handler(mockIdentitiesRepository, fakeUserContext);
-        var command = new CancelDeletionProcessCommand(activeDevice.Id);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
+        var command = new CancelDeletionProcessCommand(deletionProcess.Id);
 
         // Act
-        await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        var result = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Cancelled)!;
-        result.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        A.CallTo(() => fakeIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+                i.Address == activeIdentity.Address
+                && i.Status == IdentityStatus.Active
+                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+
+        response.Status.Should().Be(DeletionProcessStatus.Cancelled);
     }
 
     [Fact]
@@ -43,22 +49,27 @@ public class HandlerTests
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
+        var dummyUserContext = A.Fake<IUserContext>();
+        var dummyIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        var fakeUserContext = A.Fake<IUserContext>();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => dummyIdentitiesRepository.FindByAddress(address, CancellationToken.None, A<bool>._)).Returns<Identity>(null);
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
-                address,
-                CancellationToken.None,
-                A<bool>._))
-            .Returns<Identity>(null);
-
-        var handler = new Handler(fakeIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(dummyUserContext);
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionProcessCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();
+    }
+
+    private static Handler CreateHandler(IUserContext userContext)
+    {
+        return new Handler(A.Fake<IIdentitiesRepository>(), userContext);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identityRepository, IUserContext userContext)
+    {
+        return new Handler(identityRepository, userContext);
     }
 }
