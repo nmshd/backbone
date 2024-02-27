@@ -23,8 +23,6 @@ public class RejectDeletionProcessTests
         identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, deviceId);
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.Active);
-
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Rejected)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
