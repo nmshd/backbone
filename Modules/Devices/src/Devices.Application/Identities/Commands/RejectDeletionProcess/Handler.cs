@@ -22,12 +22,12 @@ public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDelet
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
         var deviceId = _userContext.GetDeviceId();
 
-        var identityDeletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
+        var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 
-        if (identityDeletionProcessIdResult.IsFailure)
-            throw new DomainException(identityDeletionProcessIdResult.Error);
+        if (deletionProcessIdResult.IsFailure)
+            throw new DomainException(deletionProcessIdResult.Error);
 
-        var identityDeletionProcessId = identityDeletionProcessIdResult.Value;
+        var identityDeletionProcessId = deletionProcessIdResult.Value;
         var deletionProcess = identity.RejectDeletionProcess(identityDeletionProcessId, deviceId);
         await _identitiesRepository.Update(identity, cancellationToken);
 
