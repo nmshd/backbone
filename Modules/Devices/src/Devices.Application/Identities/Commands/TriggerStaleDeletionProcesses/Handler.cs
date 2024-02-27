@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -22,19 +15,21 @@ public class Handler : IRequestHandler<TriggerStaleDeletionProcessesCommand, Tri
 
     public async Task<TriggerStaleDeletionProcessesResponse> Handle(TriggerStaleDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identityRepository.FindByAddress(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true); 
 
-        var identityDeletionProcessId = IdentityDeletionProcessId.Create(request.DeletionProcessId).Value;
+        var staleDeletionProcesses = new TriggerStaleDeletionProcessesResponse();
 
-        //var identityDeletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
+        foreach (var identity in identities)
+        {
+            foreach (var identityDeletionProcess in identity.DeletionProcesses)
+            {
+                if (identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) < DateTime.UtcNow)
+                {
+                    staleDeletionProcesses.IdentityDeletionProcesses.Add(identityDeletionProcess);
+                }
+            }
+        }
 
-        //if (identityDeletionProcessIdResult.IsFailure)
-        //    throw new DomainException(identityDeletionProcessIdResult.Error);
-
-        //var identityDeletionProcessId = identityDeletionProcessIdResult.Value;
-        var deletionProcess = identity.CancelStaleDeletionProcess(identityDeletionProcessId);
-        await _identityRepository.Update(identity, cancellationToken);
-
-        return new TriggerStaleDeletionProcessesResponse(deletionProcess);
+        return staleDeletionProcesses;
     }
 }
