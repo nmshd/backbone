@@ -20,12 +20,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 oldType: "int",
                 oldDefaultValue: 1);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities",
-                type: "datetime2",
-                nullable: true);
-
             migrationBuilder.AddColumn<int>(
                 name: "Status",
                 table: "Identities",
@@ -112,10 +106,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "Status",
