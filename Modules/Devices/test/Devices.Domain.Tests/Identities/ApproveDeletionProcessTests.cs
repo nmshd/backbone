@@ -15,9 +15,10 @@ public class ApproveDeletionProcessTests
     public void Approve_deletion_process_waiting_for_approval()
     {
         // Arrange
-        var currentDateTime = DateTime.Parse("2000-01-01");
-        SystemTime.Set(currentDateTime);
+        SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
+        identity.Devices.Add(new Device(identity));
+        var deviceId = identity.Devices[0].Id;
 
         // Act
         identity.ApproveDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, DeviceId.Parse("DVC"));
@@ -35,7 +36,9 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        var identityDeletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
+        identity.Devices.Add(new Device(identity));
+        var deviceId = identity.Devices[0].Id;
+        var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(identityDeletionProcessId, DeviceId.Parse("DVC"));
@@ -49,7 +52,9 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        var deletionProcess = identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        identity.Devices.Add(new Device(identity));
+        var deviceId = identity.Devices[0].Id;
+        var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
