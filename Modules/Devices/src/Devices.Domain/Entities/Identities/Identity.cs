@@ -173,11 +173,12 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public IdentityDeletionProcess CancelDeletionProcess(DeviceId canceledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
     {
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
+                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
-        if (deletionProcess.GracePeriodEndsAt < SystemTime.UtcNow)
+        if (Status == IdentityStatus.Active)
             throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
