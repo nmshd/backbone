@@ -89,11 +89,11 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
         var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("IDP00000000000000001"), CancellationToken.None);
@@ -106,9 +106,6 @@ public class HandlerTests
     public void Throws_when_deletion_process_is_not_waiting_for_approval()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-01");
-        SystemTime.Set(utcNow);
-
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-10"));
         var identityDevice = identity.Devices[0];
 
@@ -116,11 +113,11 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(identityDevice.Id);
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
         var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand(identity.DeletionProcesses.FirstOrDefault()!.Id), CancellationToken.None);
