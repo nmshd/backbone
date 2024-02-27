@@ -44,7 +44,7 @@ public class ApproveDeletionProcessTests
         var acting = () => identity.ApproveDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
     }
 
     [Fact]
