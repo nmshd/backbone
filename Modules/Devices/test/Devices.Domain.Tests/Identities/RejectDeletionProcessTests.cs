@@ -8,7 +8,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
-public class RejectDeletionProcessTest
+public class RejectDeletionProcessTests
 {
     [Fact]
     public void Reject_deletion_process_waiting_for_approval()
