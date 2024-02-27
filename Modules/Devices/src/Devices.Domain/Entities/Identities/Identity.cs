@@ -127,8 +127,6 @@ public class Identity
 
         deletionProcess.Reject(Address, deviceId);
 
-        Status = IdentityStatus.Active;
-
         return deletionProcess;
     }
 
