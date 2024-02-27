@@ -14,7 +14,7 @@ public class RejectDeletionProcessTests
     public void Reject_deletion_process_waiting_for_approval()
     {
         // Arrange
-        SystemTime.Set(SystemTime.UtcNow);
+        SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
         identity.Devices.Add(new Device(identity));
         var deviceId = identity.Devices[0].Id;
@@ -33,7 +33,7 @@ public class RejectDeletionProcessTests
     public void Throws_when_device_not_owned_by_identity()
     {
         // Arrange
-        SystemTime.Set(SystemTime.UtcNow);
+        SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
