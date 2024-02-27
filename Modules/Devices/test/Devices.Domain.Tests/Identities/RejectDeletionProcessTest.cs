@@ -16,7 +16,8 @@ public class RejectDeletionProcessTest
         // Arrange
         SystemTime.Set(SystemTime.UtcNow);
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
-        var deviceId = DeviceId.Parse("DVC"); // temporary solution until feature-cancellation-of-a... branch is merged
+        identity.Devices.Add(new Device(identity));
+        var deviceId = identity.Devices[0].Id;
 
         // Act
         identity.RejectDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, deviceId);
