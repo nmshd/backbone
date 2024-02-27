@@ -34,7 +34,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Empty_list_is_returned_if_there_are_no_stale_deletion_processes()
+    public async Task Empty_list_is_returned_if_no_deletion_process_approvals_are_past_due()
     {
         // Arrange
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
