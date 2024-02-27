@@ -1,29 +1,4 @@
 services:
-  consumer-api:
-    image: nmshd-consumerapi
-    container_name: consumerApi
-    hostname: consumerApi
-    build:
-      context: ..
-      dockerfile: ConsumerApi/Dockerfile.debug
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Local
-
-      - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo=${ENMESHED_BLOB_STORAGE_CONNECTION_STRING} # set this environment variable on your local system to an appropriate value (DefaultEndpointsProtocol=https;AccountName=<account-name>;AccountKey=<account-key>;EndpointSuffix=core.windows.net)
-      
-    ports:
-      - "8080:8080"
-    depends_on:
-      # - ms-sql-server
-      - rabbitmq
-      - azure-storage-emulator
-      - postgres
-      - seq
-    volumes:
-      - ../:/app
-      - /app/ConsumerApi/obj
-      - /app/ConsumerApi/bin
-
   ### infrastructure ###
 
   azure-storage-emulator:
@@ -59,21 +34,7 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  pg-admin:
-    container_name: bkb-pgadmin
-    image: dpage/pgadmin4
-    ports:
-      - 85:80
-    environment:
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_DEFAULT_EMAIL=admin@enmeshed.eu
-
+      
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
@@ -88,49 +49,13 @@ services:
     image: datalust/seq:latest
     container_name: seq
     ports:
-      - "8082:80"
+      - "8085:80"
       - "5341:5341"
     volumes:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
     restart: unless-stopped
-
-  admin-api:
-    image: nmshd-adminapi
-    container_name: admin-api
-    hostname: adminApi
-    build:
-      context: ..
-      dockerfile: AdminUi/src/AdminUi/Dockerfile.debug
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Local
-    ports:
-      - "5173:8080"
-    depends_on:
-      # - ms-sql-server
-      - rabbitmq
-      - postgres
-      - seq
-    volumes:
-      - ../:/app
-      - /app/AdminUi/src/AdminUi/obj
-      - /app/AdminUi/src/AdminUi/bin
-
-  admin-ui:
-    image: nmshd-adminui
-    container_name: admin-ui
-    hostname: adminUi
-    build:
-      context: ..
-      dockerfile: AdminUi/src/AdminUi/ClientApp/Dockerfile.debug
-    ports:
-      - "4200:4200"
-    depends_on:
-      - admin-api
-    volumes:
-      - ../AdminUi/src/AdminUi/ClientApp:/app
-      - /app/node_modules
 
   #elasticsearch:
   #  image: elasticsearch:${ELK_VERSION}
