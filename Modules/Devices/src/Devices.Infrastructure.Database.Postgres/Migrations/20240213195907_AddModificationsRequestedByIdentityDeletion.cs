@@ -20,19 +20,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 oldType: "integer",
                 oldDefaultValue: 1);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "Status",
-                table: "Identities",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
                 table: "Identities",
@@ -112,14 +99,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities");
-
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",

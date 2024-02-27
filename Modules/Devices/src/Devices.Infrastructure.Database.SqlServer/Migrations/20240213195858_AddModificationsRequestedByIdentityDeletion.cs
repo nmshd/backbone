@@ -20,13 +20,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 oldType: "int",
                 oldDefaultValue: 1);
 
-            migrationBuilder.AddColumn<int>(
-                name: "Status",
-                table: "Identities",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
                 table: "Identities",
@@ -106,10 +99,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",
