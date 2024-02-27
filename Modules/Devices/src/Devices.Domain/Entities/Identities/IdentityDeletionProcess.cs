@@ -53,13 +53,6 @@ public class IdentityDeletionProcess
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
-    private void Reject(DeviceId rejectedByDevice)
-    {
-        Status = DeletionProcessStatus.Rejected;
-        RejectedAt = SystemTime.UtcNow;
-        RejectedByDevice = rejectedByDevice;
-    }
-
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
@@ -142,6 +135,13 @@ public class IdentityDeletionProcess
 
         Reject(rejectedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
+    }
+
+    private void Reject(DeviceId rejectedByDevice)
+    {
+        Status = DeletionProcessStatus.Rejected;
+        RejectedAt = SystemTime.UtcNow;
+        RejectedByDevice = rejectedByDevice;
     }
 
     private void EnsureDeletionProcessIsInWaitingForApprovalStatus()
