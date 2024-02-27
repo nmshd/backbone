@@ -130,8 +130,7 @@ public class IdentityDeletionProcess
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)
     {
-        if (Status != DeletionProcessStatus.WaitingForApproval)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+        EnsureDeletionProcessIsInWaitingForApprovalStatus();
 
         Approve(approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
@@ -139,10 +138,15 @@ public class IdentityDeletionProcess
 
     public void Reject(IdentityAddress address, DeviceId rejectedByDevice)
     {
-        if (Status != DeletionProcessStatus.WaitingForApproval)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+        EnsureDeletionProcessIsInWaitingForApprovalStatus();
 
         Reject(rejectedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
+    }
+
+    private void EnsureDeletionProcessIsInWaitingForApprovalStatus()
+    {
+        if (Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
     }
 }
