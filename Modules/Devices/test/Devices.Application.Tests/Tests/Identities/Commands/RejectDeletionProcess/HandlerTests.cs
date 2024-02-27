@@ -40,7 +40,7 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
                 && i.Status == IdentityStatus.Active
-                && i.DeletionProcesses.Any(d => d.Status == DeletionProcessStatus.Rejected)), A<CancellationToken>._)) // todo: what if there are more than one rejected deletion process
+                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._)) // todo: what if there are more than one rejected deletion process
             .MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
