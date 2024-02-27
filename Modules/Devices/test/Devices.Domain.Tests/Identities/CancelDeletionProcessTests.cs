@@ -8,7 +8,7 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class CancelDeletionProcessTests
 {
     [Fact]
-    public void Should_cancel_deletion_process_during_grace_period()
+    public void Cancel_deletion_process()
     {
         // Arrange
         var currentDate = DateTime.Parse("2020-01-01");
@@ -30,7 +30,7 @@ public class CancelDeletionProcessTests
     }
 
     [Fact]
-    public void Should_throw_exception_when_cancelling_deletion_process_after_grace_period()
+    public void Throws_when_cancelling_deletion_process_after_grace_period()
     {
         // Arrange
         var currentDate = DateTime.Parse("2020-01-01");
@@ -51,7 +51,7 @@ public class CancelDeletionProcessTests
     }
 
     [Fact]
-    public void Should_throw_exception_when_deletion_process_does_not_exist()
+    public void Throws_when_deletion_process_does_not_exist()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentity();
