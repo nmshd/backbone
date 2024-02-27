@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
     }
 }
 
-internal static partial class CreatedTierLogs
+internal static partial class CreateTierLogs
 {
     [LoggerMessage(
         EventId = 383136,
