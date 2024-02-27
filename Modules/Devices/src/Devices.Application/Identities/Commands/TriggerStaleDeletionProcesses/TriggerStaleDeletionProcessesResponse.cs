@@ -3,5 +3,5 @@
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
 public class TriggerStaleDeletionProcessesResponse
 {
-    public List<IdentityDeletionProcess> IdentityDeletionProcesses { get; set; } = [];
+    public List<Identity> IdentityDeletionProcesses { get; set; } = [];
 }
