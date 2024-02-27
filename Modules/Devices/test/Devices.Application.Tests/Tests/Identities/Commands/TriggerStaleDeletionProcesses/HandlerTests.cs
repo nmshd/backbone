@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.ExternalEventCreated;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
@@ -18,51 +12,14 @@ public class HandlerTests
     public async Task Happy_Path()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        var activeIdentityRepository = new List<Identity>() { activeIdentity };
-        
-
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, A<CancellationToken>._, A<bool>._)).Returns(activeIdentityRepository);
-
-        var handler = new Handler(mockIdentitiesRepository);
-
-        // Act
-        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
-
-        // Assert
-        response.Should().NotBeNull();
-        response.IdentityDeletionProcesses.Count.Should().Be(1);
-        response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        response.IdentityDeletionProcesses[0].Id.Should().Be(deletionProcess.Id);
-        //response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.Canceled);
-
-        //A.CallTo(() => mockIdentitiesRepository.Update(
-        //        A<Identity>.That.Matches(
-        //            i => i.Address == activeIdentity.Address &&
-        //                 i.DeletionProcesses.Count == 1 &&
-        //                 i.DeletionProcesses[0].Id == response.IdentityDeletionProcesses[0].Id),
-        //        A<CancellationToken>._))
-        //    .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Test2()
-    {
-        // Arrange
-        var otherIdentity = TestDataGenerator.CreateIdentity();
-
-        var activeIdentity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        var activeIdentityRepository = new List<Identity>() { activeIdentity, otherIdentity };
-
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        var identities = new List<Identity>() { identity };        
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, A<CancellationToken>._, A<bool>._))
-            .Returns(activeIdentityRepository);
+            .Returns(identities);
 
         var handler = new Handler(mockIdentitiesRepository);
 
@@ -72,16 +29,50 @@ public class HandlerTests
         // Assert
         response.Should().NotBeNull();
         response.IdentityDeletionProcesses.Count.Should().Be(1);
+        response.IdentityDeletionProcesses[0].Id.Should().Be(deletionProcess.Id);
+        response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+    }
+
+    [Fact]
+    public async Task Empty_list_is_returned_if_there_are_no_stale_deletion_processes()
+    {
+        // Arrange
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+
+        var handler = new Handler(mockIdentitiesRepository);
+
+        // Act
+        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
+
+        // Assert
+        response.IdentityDeletionProcesses.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task Only_correct_deletion_processes_are_handled()
+    {
+        // Arrange
+        var mockIdentity = TestDataGenerator.CreateIdentity();
+        var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
+
+        var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var deletionProcess = identityWithStaleDeletionProcess.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+
+        var identities = new List<Identity>() { identityWithStaleDeletionProcess, mockIdentity, identityWithDeletionProcess };
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, A<CancellationToken>._, A<bool>._))
+            .Returns(identities);
+
+        var handler = new Handler(mockIdentitiesRepository);
+
+        // Act
+        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
+
+        // Assert
+        response.IdentityDeletionProcesses.Count.Should().Be(1);
         response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
         response.IdentityDeletionProcesses[0].Id.Should().Be(deletionProcess.Id);
-        //response.IdentityDeletionProcesses[0].Status.Should().Be(DeletionProcessStatus.Canceled);
-
-        //A.CallTo(() => mockIdentitiesRepository.Update(
-        //        A<Identity>.That.Matches(
-        //            i => i.Address == activeIdentity.Address &&
-        //                 i.DeletionProcesses.Count == 1 &&
-        //                 i.DeletionProcesses[0].Id == response.IdentityDeletionProcesses[0].Id),
-        //        A<CancellationToken>._))
-        //    .MustHaveHappenedOnceExactly();
     }
 }
