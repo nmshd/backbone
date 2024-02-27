@@ -20,7 +20,7 @@ public class RejectDeletionProcessTests
         var deviceId = identity.Devices[0].Id;
 
         // Act
-        identity.RejectDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, deviceId);
+        identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, deviceId);
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
@@ -37,7 +37,7 @@ public class RejectDeletionProcessTests
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = () => identity.RejectDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, DeviceId.Parse("DVC"));
+        var acting = () => identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
