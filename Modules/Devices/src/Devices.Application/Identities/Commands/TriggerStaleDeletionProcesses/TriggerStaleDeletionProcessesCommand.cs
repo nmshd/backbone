@@ -8,12 +8,4 @@ using MediatR;
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
 public class TriggerStaleDeletionProcessesCommand : IRequest<TriggerStaleDeletionProcessesResponse>
 {
-    public TriggerStaleDeletionProcessesCommand(string identityAddress, string deletionProcessId)
-    {
-        IdentityAddress = identityAddress;
-        DeletionProcessId = deletionProcessId;
-    }
-
-    public string IdentityAddress { get; set; }
-    public string DeletionProcessId { get; set; }
 }
