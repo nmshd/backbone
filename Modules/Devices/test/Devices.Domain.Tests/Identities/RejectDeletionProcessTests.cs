@@ -48,10 +48,10 @@ public class RejectDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        var identityDeletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
+        var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => identity.RejectDeletionProcess(identityDeletionProcessId, DeviceId.Parse("DVC"));
+        var acting = () => identity.RejectDeletionProcess(deletionProcessId, DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
