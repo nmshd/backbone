@@ -16,16 +16,6 @@ public class IdentityDeletionProcess
         Id = null!;
     }
 
-    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
-    {
-        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
-    {
-        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
-    }
-
     private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
@@ -44,13 +34,15 @@ public class IdentityDeletionProcess
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
-
-    private void Approve(DeviceId createdByDevice)
+    
+    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {
-        Status = DeletionProcessStatus.Approved;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
     }
 
     public IdentityDeletionProcessId Id { get; }
@@ -73,7 +65,6 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder1SentAt { get; private set; }
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
-
 
     public bool IsActive()
     {
@@ -129,6 +120,14 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
+
     public void Reject(IdentityAddress address, DeviceId rejectedByDevice)
     {
         EnsureDeletionProcessIsInWaitingForApprovalStatus();
@@ -137,16 +136,16 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
     }
 
+    private void EnsureDeletionProcessIsInWaitingForApprovalStatus()
+    {
+        if (Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+    }
+
     private void Reject(DeviceId rejectedByDevice)
     {
         Status = DeletionProcessStatus.Rejected;
         RejectedAt = SystemTime.UtcNow;
         RejectedByDevice = rejectedByDevice;
-    }
-
-    private void EnsureDeletionProcessIsInWaitingForApprovalStatus()
-    {
-        if (Status != DeletionProcessStatus.WaitingForApproval)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
     }
 }
