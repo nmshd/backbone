@@ -123,8 +123,9 @@ public class Identity
 
     public IdentityDeletionProcess RejectDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        EnsureIdentityOwnsDevice(deviceId);
 
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
         deletionProcess.Reject(Address, deviceId);
 
         return deletionProcess;
@@ -144,6 +145,12 @@ public class Identity
 
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
+    }
+
+    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
+    {
+        if (!Devices.Exists(device => device.Id == currentDeviceId))
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(Device)));
     }
 
     public void DeletionGracePeriodReminder1Sent()
