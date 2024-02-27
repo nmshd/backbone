@@ -67,7 +67,7 @@ public class RejectDeletionProcessTests
         var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 
         // Act
-        var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
+        var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
