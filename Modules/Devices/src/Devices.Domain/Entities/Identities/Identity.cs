@@ -182,6 +182,7 @@ public class Identity
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
+        TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
         return deletionProcess;
