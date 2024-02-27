@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<TriggerStaleDeletionProcessesCommand, Tri
             {
                 if (identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) < DateTime.UtcNow)
                 {
-                    staleDeletionProcesses.IdentityDeletionProcesses.Add(identityDeletionProcess);
+                    staleDeletionProcesses.IdentityDeletionProcesses.Add(identity);
                 }
             }
         }
