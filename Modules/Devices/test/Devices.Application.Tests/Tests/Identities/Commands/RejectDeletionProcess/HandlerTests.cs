@@ -73,9 +73,6 @@ public class HandlerTests
     public void Throws_when_deletion_process_does_not_exist()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-01");
-        SystemTime.Set(utcNow);
-
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
         var identityDevice = identity.Devices[0];
 
