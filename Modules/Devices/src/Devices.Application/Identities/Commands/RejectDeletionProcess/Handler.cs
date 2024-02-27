@@ -27,8 +27,8 @@ public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDelet
         if (deletionProcessIdResult.IsFailure)
             throw new DomainException(deletionProcessIdResult.Error);
 
-        var identityDeletionProcessId = deletionProcessIdResult.Value;
-        var deletionProcess = identity.RejectDeletionProcess(identityDeletionProcessId, deviceId);
+        var deletionProcessId = deletionProcessIdResult.Value;
+        var deletionProcess = identity.RejectDeletionProcess(deletionProcessId, deviceId);
         await _identitiesRepository.Update(identity, cancellationToken);
 
         return new RejectDeletionProcessResponse(deletionProcess, deviceId);
