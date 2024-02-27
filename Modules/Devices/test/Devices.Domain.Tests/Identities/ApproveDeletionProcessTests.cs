@@ -32,6 +32,20 @@ public class ApproveDeletionProcessTests
     }
 
     [Fact]
+    public void Throws_when_device_not_owned_by_identity()
+    {
+        // Arrange
+        SystemTime.Set(DateTime.Parse("2020-01-01"));
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
+
+        // Act
+        var acting = () => identity.ApproveDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+    }
+
+    [Fact]
     public void Throws_when_deletion_process_does_not_exist()
     {
         // Arrange
