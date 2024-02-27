@@ -49,4 +49,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "The deletion process does not have the correct status to perform this action.");
     }
+
+    public static DomainError NoActiveDeletionProcessFound()
+    {
+        return new DomainError("error.platform.validation.device.noActiveDeletionProcessFound", "No active deletion process was found.");
+    }
 }

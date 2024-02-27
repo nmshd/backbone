@@ -19,7 +19,7 @@ public class DeletionProcessTests
         identity.StartDeletionProcessAsOwner(DeviceId.New());
 
         // Act
-        //identity.DeletionStarted();
+        identity.DeletionStarted();
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Deleting);

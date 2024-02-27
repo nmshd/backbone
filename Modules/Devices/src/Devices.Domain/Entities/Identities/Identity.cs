@@ -176,6 +176,18 @@ public class Identity
     {
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     }
+
+    public void DeletionStarted()
+    {
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
+                              ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
+
+        if (deletionProcess.IsReadyToStartDeletion())
+        {
+            Status = IdentityStatus.Deleting;
+            deletionProcess.DeletionStarted();
+        }
+    }
 }
 
 public enum IdentityStatus
