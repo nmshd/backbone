@@ -23,10 +23,11 @@ public class Handler : IRequestHandler<CancelDeletionProcessCommand, CancelDelet
 
         var deviceId = _userContext.GetDeviceId();
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
-        var deletionProcessId = deletionProcessIdResult.Value;
 
         if (deletionProcessIdResult.IsFailure)
             throw new DomainException(deletionProcessIdResult.Error);
+
+        var deletionProcessId = deletionProcessIdResult.Value;
 
         var deletionProcess = identity.CancelDeletionProcess(deletionProcessId, deviceId);
 
