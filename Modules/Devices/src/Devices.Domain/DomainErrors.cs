@@ -50,9 +50,9 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "The deletion process does not have the correct status to perform this action.");
     }
 
-    public static DomainError DeviceDoesNotBelongsToIdentity()
+    public static DomainError DeviceDoesNotBelongToIdentity()
     {
-        return new DomainError("error.platform.validation.device.deviceDoesNotBelongsToIdentity", "This device does not belong to this identity.");
+        return new DomainError("error.platform.validation.device.deviceDoesNotBelongToIdentity", "This device does not belong to this identity.");
     }
 
     public static DomainError DeletionProcessGracePeriodHasEnded(DateTime gracePeriodHasEndedAt)

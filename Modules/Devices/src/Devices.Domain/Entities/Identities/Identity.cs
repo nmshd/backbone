@@ -88,7 +88,7 @@ public class Identity
     private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
     {
         if (!Devices.Exists(device => device.Id == currentDeviceId))
-            throw new DomainException(DomainErrors.DeviceDoesNotBelongsToIdentity());
+            throw new DomainException(DomainErrors.DeviceDoesNotBelongToIdentity());
     }
 
     public void DeletionProcessApprovalReminder1Sent()
