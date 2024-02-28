@@ -52,22 +52,22 @@ public class CancelDeletionProcessWorker : IHostedService
 
         foreach (var identity in identities)
         {
-            foreach (var deletionProcess in identity.DeletionProcesses)
-            {
-                if (deletionProcess.Status == DeletionProcessStatus.WaitingForApproval)
-                {
-                    identity.CancelStaleDeletionProcess(deletionProcess.Id);
-                    //var updateIdentity = new UpdateIdentityCommand()
-                    //{
-                    //    Address = identity.Address,
-                    //    TierId = identity.TierId
-                    //};
-                    //await _mediator.Send(updateIdentity, cancellationToken);
+            var staleDeletionProcess = identity.DeletionProcesses.First(d => d.Status == DeletionProcessStatus.WaitingForApproval);
+            identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
 
-                    await _pushNotificationSender.SendNotification
-                        (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
-                }
-            }
+            // todo: update repository?
+            // todo: sending notifications, also event buss?
+
+            //var updateIdentity = new UpdateIdentityCommand()
+            //{
+            //    Address = identity.Address,
+            //    TierId = identity.TierId
+            //};
+            //await _mediator.Send(updateIdentity, cancellationToken);
+
+
+            //await _pushNotificationSender.SendNotification
+            //    (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
         }
     }
 
