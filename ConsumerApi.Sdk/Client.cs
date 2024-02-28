@@ -7,6 +7,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -26,6 +27,7 @@ public class Client
         Messages = new MessagesEndpoint(endpointClient);
         PushNotifications = new PushNotificationsEndpoint(endpointClient);
         Quotas = new QuotasEndpoint(endpointClient);
+        Relationships = new RelationshipsEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
@@ -36,4 +38,5 @@ public class Client
     public MessagesEndpoint Messages { get; }
     public PushNotificationsEndpoint PushNotifications { get; }
     public QuotasEndpoint Quotas { get; }
+    public RelationshipsEndpoint Relationships { get; }
 }
