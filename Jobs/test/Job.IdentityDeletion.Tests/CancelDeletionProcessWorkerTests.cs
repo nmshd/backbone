@@ -78,6 +78,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
         {
             // Arrange
             var mockMediator = A.Fake<IMediator>();
+            var mockEventBus = A.Fake<IEventBus>();
 
             var identity = new Identity("", IdentityAddress.Create([], "id1"), [], TierId.Generate(), 1);
 
@@ -100,6 +101,8 @@ namespace Backbone.Job.IdentityDeletion.Tests
             await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
 
             // Assert
+            //A.CallTo(() => 
+            //    mockEventBus.Publish(A<DeletionCanceledNotification>.That.Matches(x => x.IdentityAddress == identity.Address))).MustHaveHappenedOnceExactly();
         }
 
         //public static Identity CreateIdentityWithDeletionProcessWaitingForApproval(DateTime deletionProcessStartedAt)

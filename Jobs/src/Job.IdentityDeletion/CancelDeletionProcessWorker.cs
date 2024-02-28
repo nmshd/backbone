@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
-
+using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 
 //using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -48,34 +48,27 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
+        var identities = (await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken)).IdentityDeletionProcesses;
 
-        //foreach (var identityDeletionProcess in _deletionProcesses)
-        //{
-        //    if (identityDeletionProcess.Status == DeletionProcessStatus.WaitingForApproval 
-        //        && identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow)
-        //    {
-        //        var identities = 
-        //            await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
+        foreach (var identity in identities)
+        {
+            foreach (var deletionProcess in identity.DeletionProcesses)
+            {
+                if (deletionProcess.Status == DeletionProcessStatus.WaitingForApproval)
+                {
+                    identity.CancelStaleDeletionProcess(deletionProcess.Id);
+                    //var updateIdentity = new UpdateIdentityCommand()
+                    //{
+                    //    Address = identity.Address,
+                    //    TierId = identity.TierId
+                    //};
+                    //await _mediator.Send(updateIdentity, cancellationToken);
 
-                
-        //    }
-        //}
-
-        //var identities = await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken);
-
-        //foreach (var identity in identities.Identities)
-        //{
-        //    foreach (var identityDeletionProcess in _deletionProcesses)
-        //    {
-        //        if (identityDeletionProcess.CreatedAt < DateTime.UtcNow)
-        //        {
-        //            await _pushNotificationSender.SendNotification
-        //                (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
-        //            identityDeletionProcess.CancelAutomatically(identity.Address);
-        //        }
-        //    }
-        //}
+                    await _pushNotificationSender.SendNotification
+                        (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
+                }
+            }
+        }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
