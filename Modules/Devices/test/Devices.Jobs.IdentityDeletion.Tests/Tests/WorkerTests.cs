@@ -48,7 +48,7 @@ public class WorkerTests
 
         var worker = CreateWorker(mediator, identityDeleters, null);
 
-        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -68,7 +68,7 @@ public class WorkerTests
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress3 = TestDataGenerator.CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
-        A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() });
+        A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         var worker = CreateWorker(mockMediator, null, null);
 
@@ -94,13 +94,13 @@ public class WorkerTests
         A.CallTo(() =>
             fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
         ).Returns(
-            new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress1) } }
+            new FindRelationshipsOfIdentityResponse([CreateRelationship(identityAddress1)])
         );
 
         A.CallTo(() =>
             fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress2), A<CancellationToken>._)
         ).Returns(
-            new FindRelationshipsOfIdentityResponse() { Relationships = new List<Relationship>() { CreateRelationship(identityAddress2), CreateRelationship(identityAddress2) } }
+            new FindRelationshipsOfIdentityResponse([CreateRelationship(identityAddress2), CreateRelationship(identityAddress2)])
         );
 
         // Act
