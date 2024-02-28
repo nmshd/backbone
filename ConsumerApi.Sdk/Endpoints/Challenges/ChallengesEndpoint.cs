@@ -4,22 +4,10 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 
-public class ChallengesEndpoint
+public class ChallengesEndpoint(EndpointClient client) : Endpoint(client)
 {
-    private readonly EndpointClient _client;
+    public async Task<ConsumerApiResponse<Challenge>> CreateChallenge() => await _client.Post<Challenge>("Challenges");
+    public async Task<ConsumerApiResponse<Challenge>> CreateChallengeUnauthenticated() => await _client.PostUnauthenticated<Challenge>("Challenges");
 
-    public ChallengesEndpoint(EndpointClient client)
-    {
-        _client = client;
-    }
-
-    public async Task<ConsumerApiResponse<Challenge>> CreateChallenge()
-    {
-        return await _client.Post<Challenge>("Challenges");
-    }
-
-    public async Task<ConsumerApiResponse<Challenge>> CreateChallengeUnauthenticated()
-    {
-        return await _client.PostUnauthenticated<Challenge>("Challenges");
-    }
+    public async Task<ConsumerApiResponse<Challenge>> GetChallenge(string id) => await _client.Get<Challenge>($"Challenges/{id}");
 }
