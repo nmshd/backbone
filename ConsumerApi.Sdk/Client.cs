@@ -14,9 +14,11 @@ public class Client
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
+        Files = new FilesEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }
+    public FilesEndpoint Files { get; }
 }
