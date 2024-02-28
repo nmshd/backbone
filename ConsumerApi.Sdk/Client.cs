@@ -10,6 +10,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -32,6 +33,7 @@ public class Client
         Relationships = new RelationshipsEndpoint(endpointClient);
         RelationshipTemplates = new RelationshipTemplatesEndpoint(endpointClient);
         SyncRuns = new SyncRunsEndpoint(endpointClient);
+        Tokens = new TokensEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
@@ -45,4 +47,5 @@ public class Client
     public RelationshipsEndpoint Relationships { get; }
     public RelationshipTemplatesEndpoint RelationshipTemplates { get; }
     public SyncRunsEndpoint SyncRuns { get; }
+    public TokensEndpoint Tokens { get; }
 }
