@@ -1,11 +1,6 @@
 ﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
 
-public abstract class Endpoint
+public abstract class Endpoint(EndpointClient client)
 {
-    protected readonly EndpointClient _client;
-
-    protected Endpoint(EndpointClient client)
-    {
-        _client = client;
-    }
+    protected readonly EndpointClient _client = client;
 }
