@@ -175,6 +175,8 @@ public class Identity
 
     public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
     {
+        EnsureIdentityOwnsDevice(canceledByDeviceId);
+
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
