@@ -48,7 +48,11 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01"));
-        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+
+        identity.Devices.Add(device);
+        identity.StartDeletionProcessAsOwner(device.Id);
 
         // Act
         var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
@@ -106,13 +110,5 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     public void Dispose()
     {
         Hasher.Reset();
-    }
-
-    private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
-    {
-        var identity = CreateIdentity();
-        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-        identity.StartDeletionProcessAsSupport();
-        return identity;
     }
 }
