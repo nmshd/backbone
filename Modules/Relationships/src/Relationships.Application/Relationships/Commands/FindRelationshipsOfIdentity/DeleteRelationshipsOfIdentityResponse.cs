@@ -3,4 +3,9 @@ using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
-public class FindRelationshipsOfIdentityResponse(IEnumerable<Relationship> items) : CollectionResponseBase<Relationship>(items);
+public class FindRelationshipsOfIdentityResponse : CollectionResponseBase<Relationship>
+{
+    public FindRelationshipsOfIdentityResponse(IEnumerable<Relationship> items) : base(items)
+    {
+    }
+}
