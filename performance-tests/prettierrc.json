@@ -1,0 +1,15 @@
+{
+    "endOfLine": "lf",
+    "printWidth": 120,
+    "tabWidth": 4,
+    "trailingComma": "none",
+    "semi": true,
+    "overrides": [
+        {
+            "files": ["*.yaml", "*.yml"],
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}
