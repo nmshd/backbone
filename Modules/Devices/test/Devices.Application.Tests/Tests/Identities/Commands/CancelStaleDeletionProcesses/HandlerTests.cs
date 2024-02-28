@@ -5,7 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.TriggerStaleDeletionProcesses;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelStaleDeletionProcesses;
 public class HandlerTests
 {
     [Fact]
@@ -13,7 +13,6 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         var identities = new List<Identity>() { identity };        
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -48,14 +47,13 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_identities_with_correct_deletion_process_are_handled()
+    public async Task Only_identities_with_correct_deletion_process_are_handled() // todo: rename ??? only correct deletion processes are canceled
     {
         // Arrange
         var mockIdentity = TestDataGenerator.CreateIdentity();
         var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
 
         var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var deletionProcess = identityWithStaleDeletionProcess.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
 
         var identities = new List<Identity>() { identityWithStaleDeletionProcess, mockIdentity, identityWithDeletionProcess };
 
