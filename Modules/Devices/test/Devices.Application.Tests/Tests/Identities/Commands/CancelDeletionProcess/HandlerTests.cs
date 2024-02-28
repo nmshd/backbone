@@ -28,7 +28,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(fakeUserContext, fakeIdentitiesRepository);
         var command = new CancelDeletionProcessCommand(deletionProcess.Id);
 
         // Act
@@ -49,12 +49,12 @@ public class HandlerTests
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
-        var dummyUserContext = A.Fake<IUserContext>();
-        var dummyIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => dummyIdentitiesRepository.FindByAddress(address, CancellationToken.None, A<bool>._)).Returns<Identity>(null);
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, CancellationToken.None, A<bool>._)).Returns<Identity>(null);
 
-        var handler = CreateHandler(dummyUserContext);
+        var handler = CreateHandler(fakeUserContext);
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionProcessCommand(address), CancellationToken.None);
@@ -63,13 +63,10 @@ public class HandlerTests
         acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private static Handler CreateHandler(IUserContext userContext)
+    private static Handler CreateHandler(IUserContext userContext, IIdentitiesRepository? identityRepository = null)
     {
-        return new Handler(A.Fake<IIdentitiesRepository>(), userContext);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identityRepository, IUserContext userContext)
-    {
-        return new Handler(identityRepository, userContext);
+        return identityRepository == null
+            ? new Handler(A.Fake<IIdentitiesRepository>(), userContext)
+            : new Handler(identityRepository, userContext);
     }
 }
