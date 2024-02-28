@@ -12,13 +12,11 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.U
 
 public class HandlerTests
 {
-    private static List<Identity> _identities;
-
     [Fact]
     public async Task Empty_response_if_no_identities_are_past_DeletionGracePeriodEndsAt()
     {
         // Arrange
-        var mockIdentitiesRepository = CreateFakeIdentitiesRepository(0);
+        var mockIdentitiesRepository = CreateFakeIdentitiesRepository(0, out _);
 
         var handler = CreateHandler(mockIdentitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
@@ -34,9 +32,9 @@ public class HandlerTests
     public async Task Response_contains_expected_identities()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository(1);
+        var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
-        var anIdentity = _identities.First();
+        var anIdentity = identities.First();
         anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
 
         var handler = CreateHandler(identitiesRepository);
@@ -54,9 +52,9 @@ public class HandlerTests
     public async Task Deletion_process_started_successfully()
     {
         // Arrange
-        var identitiesRepository = CreateFakeIdentitiesRepository(1);
+        var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
-        var anIdentity = _identities.First();
+        var anIdentity = identities.First();
         anIdentity.StartDeletionProcessAsOwner(DeviceId.New());
 
         var handler = CreateHandler(identitiesRepository);
@@ -67,7 +65,7 @@ public class HandlerTests
 
         // Assert
         result.DeletedIdentityAddresses.Should().HaveCount(1);
-        _identities.First().Status.Should().Be(IdentityStatus.Deleting);
+        identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
@@ -78,15 +76,15 @@ public class HandlerTests
         );
     }
 
-    private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities)
+    private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities, out List<Identity> returnedIdentities)
     {
-        _identities = new List<Identity>();
+        returnedIdentities = [];
 
         for (var i = 0; i < numberOfIdentities; i++)
-            _identities.Add(TestDataGenerator.CreateIdentity());
+            returnedIdentities.Add(TestDataGenerator.CreateIdentity());
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(_identities);
+        A.CallTo(() => identitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
 
         return identitiesRepository;
     }
