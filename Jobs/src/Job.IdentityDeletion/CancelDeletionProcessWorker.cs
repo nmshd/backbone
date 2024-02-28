@@ -5,11 +5,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 
-//using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-//using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using MediatR;
 //using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
@@ -22,22 +20,18 @@ public class CancelDeletionProcessWorker : IHostedService
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<CancelDeletionProcessWorker> _logger;
-    //private readonly IReadOnlyList<IdentityDeletionProcess> _deletionProcesses;
 
     public CancelDeletionProcessWorker(IHostApplicationLifetime host,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
         IEventBus eventBus,
-        ILogger<CancelDeletionProcessWorker> logger
-        //IReadOnlyList<IdentityDeletionProcess> deletionProcesses
-        )
+        ILogger<CancelDeletionProcessWorker> logger)
     {
         _host = host;
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _eventBus = eventBus;
         _logger = logger;
-        //_deletionProcesses = deletionProcesses;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -53,22 +47,14 @@ public class CancelDeletionProcessWorker : IHostedService
 
         foreach (var identity in identities)
         {
+            // todo: move this logic to handler
             var staleDeletionProcess = identity.DeletionProcesses.First(d => d.Status == DeletionProcessStatus.WaitingForApproval);
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
+            // todo: also update repository
 
-            // todo: update repository?
-            // todo: sending notifications, also use event buss?
-
-            //var updateIdentity = new UpdateIdentityCommand()
-            //{
-            //    Address = identity.Address,
-            //    TierId = identity.TierId
-            //};
-            //await _mediator.Send(updateIdentity, cancellationToken);
-
-
-            await _pushNotificationSender.SendNotification
-                (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
+            // todo: sending notifications by using event buss
+            //await _pushNotificationSender.SendNotification
+            //    (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
         }
     }
 
