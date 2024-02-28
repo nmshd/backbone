@@ -16,17 +16,17 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityDeletionProcessStartedIntegrationEvent = new IdentityDeletionProcessStatusChangedIntegrationEvent(identityAddress, "someDeletionProcessId");
+        var identityDeletionProcessStatusChangedIntegrationEvent = new IdentityDeletionProcessStatusChangedIntegrationEvent(identityAddress, "someDeletionProcessId");
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(identityAddress), 1,
-            new { identityDeletionProcessStartedIntegrationEvent.DeletionProcessId });
+        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStatusChanged, IdentityAddress.Parse(identityAddress), 1,
+            new { identityDeletionProcessStatusChangedIntegrationEvent.DeletionProcessId });
 
         A.CallTo(() => fakeDbContext.CreateExternalEvent(
             A<IdentityAddress>.That.Matches(i => i.StringValue == identityAddress),
-            ExternalEventType.IdentityDeletionProcessStarted,
+            ExternalEventType.IdentityDeletionProcessStatusChanged,
             A<object>._)
         ).Returns(externalEvent);
 
@@ -35,7 +35,7 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
             A.Fake<ILogger<IdentityDeletionProcessStatusChangedIntegrationEventHandler>>());
 
         // Act
-        await handler.Handle(identityDeletionProcessStartedIntegrationEvent);
+        await handler.Handle(identityDeletionProcessStatusChangedIntegrationEvent);
 
         // Handle
         A.CallTo(() => mockEventBus.Publish(
