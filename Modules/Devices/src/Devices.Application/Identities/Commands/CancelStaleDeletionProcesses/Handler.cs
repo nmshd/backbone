@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
 
     public async Task<CancelStaleDeletionProcessesResponse> Handle(CancelStaleDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true); 
+        var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true);
 
         var staleDeletionProcesses = new CancelStaleDeletionProcessesResponse();
 

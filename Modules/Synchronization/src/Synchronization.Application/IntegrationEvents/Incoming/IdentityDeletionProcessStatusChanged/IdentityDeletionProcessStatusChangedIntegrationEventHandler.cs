@@ -18,8 +18,8 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandler : IInte
     private readonly IEventBus _eventBus;
     private readonly ILogger<IdentityDeletionProcessStatusChangedIntegrationEventHandler> _logger;
 
-    public IdentityDeletionProcessStatusChangedIntegrationEventHandler(ISynchronizationDbContext dbContext, 
-        IEventBus eventBus, 
+    public IdentityDeletionProcessStatusChangedIntegrationEventHandler(ISynchronizationDbContext dbContext,
+        IEventBus eventBus,
         ILogger<IdentityDeletionProcessStatusChangedIntegrationEventHandler> logger)
     {
         _dbContext = dbContext;

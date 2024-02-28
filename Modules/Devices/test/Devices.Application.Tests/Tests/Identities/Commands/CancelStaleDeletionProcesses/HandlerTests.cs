@@ -13,7 +13,7 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var identities = new List<Identity>() { identity };        
+        var identities = new List<Identity>() { identity };
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 

@@ -4,13 +4,12 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
-
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+//using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
-//using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
 namespace Backbone.Job.IdentityDeletion;
 public class CancelDeletionProcessWorker : IHostedService

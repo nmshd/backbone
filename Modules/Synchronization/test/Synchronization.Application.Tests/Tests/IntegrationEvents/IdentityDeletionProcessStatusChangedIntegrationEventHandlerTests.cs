@@ -30,8 +30,8 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
             A<object>._)
         ).Returns(externalEvent);
 
-        var handler = new IdentityDeletionProcessStatusChangedIntegrationEventHandler(fakeDbContext, 
-            mockEventBus, 
+        var handler = new IdentityDeletionProcessStatusChangedIntegrationEventHandler(fakeDbContext,
+            mockEventBus,
             A.Fake<ILogger<IdentityDeletionProcessStatusChangedIntegrationEventHandler>>());
 
         // Act
