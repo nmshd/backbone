@@ -1,5 +1,10 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common;
+using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files;
+using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -16,6 +21,7 @@ public class Client
         Devices = new DevicesEndpoint(endpointClient);
         Files = new FilesEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
+        Messages = new MessagesEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
@@ -23,4 +29,5 @@ public class Client
     public DevicesEndpoint Devices { get; }
     public FilesEndpoint Files { get; }
     public IdentitiesEndpoint Identities { get; }
+    public MessagesEndpoint Messages { get; }
 }
