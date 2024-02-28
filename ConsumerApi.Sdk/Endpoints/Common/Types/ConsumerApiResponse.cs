@@ -13,7 +13,11 @@ public class ConsumerApiResponse<TResult>
     [MemberNotNullWhen(true, nameof(Error))]
     public bool IsError => !IsSuccess;
 
+    [MemberNotNullWhen(true, nameof(Pagination))]
+    public bool IsPaginated => Pagination != null;
+
     public TResult? Result { get; set; }
     public ConsumerApiError? Error { get; set; }
+    public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }
 }
