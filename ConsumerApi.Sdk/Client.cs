@@ -6,6 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
+using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -24,6 +25,7 @@ public class Client
         Identities = new IdentitiesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
         PushNotifications = new PushNotificationsEndpoint(endpointClient);
+        Quotas = new QuotasEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
@@ -33,4 +35,5 @@ public class Client
     public IdentitiesEndpoint Identities { get; }
     public MessagesEndpoint Messages { get; }
     public PushNotificationsEndpoint PushNotifications { get; }
+    public QuotasEndpoint Quotas { get; }
 }
