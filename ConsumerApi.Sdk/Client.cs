@@ -5,6 +5,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -22,6 +23,7 @@ public class Client
         Files = new FilesEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
+        PushNotifications = new PushNotificationsEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
@@ -30,4 +32,5 @@ public class Client
     public FilesEndpoint Files { get; }
     public IdentitiesEndpoint Identities { get; }
     public MessagesEndpoint Messages { get; }
+    public PushNotificationsEndpoint PushNotifications { get; }
 }
