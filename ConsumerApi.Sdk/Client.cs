@@ -12,7 +12,9 @@ public class Client
         var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
 
         Challenges = new ChallengesEndpoint(endpointClient);
+        Datawallet = new DatawalletEndpoint(endpointClient);
     }
 
     public ChallengesEndpoint Challenges { get; }
+    public DatawalletEndpoint Datawallet { get; }
 }
