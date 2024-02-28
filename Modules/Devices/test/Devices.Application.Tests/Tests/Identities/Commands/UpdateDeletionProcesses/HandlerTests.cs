@@ -57,7 +57,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository(1);
 
         var anIdentity = _identities.First();
-        anIdentity.StartDeletionProcessAsOwner(DeviceId.New()); // not called
+        anIdentity.StartDeletionProcessAsOwner(DeviceId.New());
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
