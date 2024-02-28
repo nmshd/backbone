@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 
 //using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
@@ -12,6 +12,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 //using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using MediatR;
 //using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
 namespace Backbone.Job.IdentityDeletion;
 public class CancelDeletionProcessWorker : IHostedService
@@ -48,7 +49,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = (await _mediator.Send(new TriggerStaleDeletionProcessesCommand(), cancellationToken)).IdentityDeletionProcesses;
+        var identities = (await _mediator.Send(new CancelStaleDeletionProcessesCommand(), cancellationToken)).IdentityDeletionProcesses;
 
         foreach (var identity in identities)
         {
@@ -56,7 +57,7 @@ public class CancelDeletionProcessWorker : IHostedService
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
 
             // todo: update repository?
-            // todo: sending notifications, also event buss?
+            // todo: sending notifications, also use event buss?
 
             //var updateIdentity = new UpdateIdentityCommand()
             //{
@@ -66,8 +67,8 @@ public class CancelDeletionProcessWorker : IHostedService
             //await _mediator.Send(updateIdentity, cancellationToken);
 
 
-            //await _pushNotificationSender.SendNotification
-            //    (identity.Address, new DeletionCanceledNotification(IdentityDeletionConfiguration.DeletionCanceledNotification.Message), cancellationToken);
+            await _pushNotificationSender.SendNotification
+                (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
         }
     }
 
@@ -75,10 +76,4 @@ public class CancelDeletionProcessWorker : IHostedService
     {
         return Task.CompletedTask;
     }
-}
-
-[NotificationText(Title = "Deletion process canceled", Body = "Your Identity deletion process is canceled due to no response within the approval period")]
-public record DeletionCanceledNotification
-{
-    public DeletionCanceledNotification(string message) => GetType().GetCustomAttribute<NotificationTextAttribute>().Body = message;
 }

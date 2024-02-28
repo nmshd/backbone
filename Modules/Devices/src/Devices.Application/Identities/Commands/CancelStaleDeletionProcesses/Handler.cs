@@ -2,9 +2,9 @@
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 
-public class Handler : IRequestHandler<TriggerStaleDeletionProcessesCommand, TriggerStaleDeletionProcessesResponse>
+public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, CancelStaleDeletionProcessesResponse>
 {
     private readonly IIdentitiesRepository _identityRepository;
 
@@ -13,11 +13,11 @@ public class Handler : IRequestHandler<TriggerStaleDeletionProcessesCommand, Tri
         _identityRepository = identityRepository;
     }
 
-    public async Task<TriggerStaleDeletionProcessesResponse> Handle(TriggerStaleDeletionProcessesCommand request, CancellationToken cancellationToken)
+    public async Task<CancelStaleDeletionProcessesResponse> Handle(CancelStaleDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
         var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true); 
 
-        var staleDeletionProcesses = new TriggerStaleDeletionProcessesResponse();
+        var staleDeletionProcesses = new CancelStaleDeletionProcessesResponse();
 
         foreach (var identity in identities)
         {

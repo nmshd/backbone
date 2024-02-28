@@ -7,7 +7,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.UnitTestTools;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -40,7 +40,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
             await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
 
             // Assert
-            A.CallTo(() => mockMediator.Send(A<TriggerStaleDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
             var identity = new Identity("", IdentityAddress.Create([], "id1"), [], TierId.Generate(), 1);
 
             var identityDeletion = identity.StartDeletionProcessAsSupport();
-            var identityDeleters = new TriggerStaleDeletionProcessesResponse();
+            var identityDeleters = new CancelStaleDeletionProcessesResponse();
             identityDeleters.IdentityDeletionProcesses.Add(identity);
 
             var cancelDeletionProcessWorker = new CancelDeletionProcessWorker(
@@ -62,7 +62,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
                 A.Dummy<IEventBus>(),
                 A.Dummy<ILogger<CancelDeletionProcessWorker>>());
 
-            A.CallTo(() => mockMediator.Send(A<TriggerStaleDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(identityDeleters);
+            A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(identityDeleters);
 
             var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
@@ -74,7 +74,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
         }
 
         [Fact(Skip = "next step")]
-        public async void Sends_notification_of_cancelation_event()
+        public async void Sends_notification_of_deletion_process_canceled_event()
         {
             // Arrange
             var mockMediator = A.Fake<IMediator>();
@@ -83,7 +83,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
             var identity = new Identity("", IdentityAddress.Create([], "id1"), [], TierId.Generate(), 1);
 
             var identityDeletion = identity.StartDeletionProcessAsSupport();
-            var identityDeleters = new TriggerStaleDeletionProcessesResponse();
+            var identityDeleters = new CancelStaleDeletionProcessesResponse();
             identityDeleters.IdentityDeletionProcesses.Add(identity);
 
             var cancelDeletionProcessWorker = new CancelDeletionProcessWorker(
@@ -93,7 +93,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
                 A.Dummy<IEventBus>(),
                 A.Dummy<ILogger<CancelDeletionProcessWorker>>());
 
-            A.CallTo(() => mockMediator.Send(A<TriggerStaleDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(identityDeleters);
+            A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(identityDeleters);
 
             var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 

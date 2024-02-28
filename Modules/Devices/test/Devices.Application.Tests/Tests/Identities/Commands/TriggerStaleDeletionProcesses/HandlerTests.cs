@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.TriggerStaleDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
@@ -24,7 +24,7 @@ public class HandlerTests
         var handler = new Handler(mockIdentitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
@@ -41,7 +41,7 @@ public class HandlerTests
         var handler = new Handler(mockIdentitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.IdentityDeletionProcesses.Count.Should().Be(0);
@@ -67,7 +67,7 @@ public class HandlerTests
         var handler = new Handler(mockIdentitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerStaleDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.IdentityDeletionProcesses.Count.Should().Be(1);
