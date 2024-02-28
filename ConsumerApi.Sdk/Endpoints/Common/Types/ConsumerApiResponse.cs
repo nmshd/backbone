@@ -22,9 +22,9 @@ public class ConsumerApiResponse<TResult>
     public HttpStatusCode Status { get; set; }
 }
 
-public class EmptyResponse {}
+public class EmptyResponse { }
 
-public class EmptyConsumerApiResponse : ConsumerApiResponse<EmptyResponse> {}
+public class EmptyConsumerApiResponse : ConsumerApiResponse<EmptyResponse> { }
 
 public class RawConsumerApiResponse
 {
