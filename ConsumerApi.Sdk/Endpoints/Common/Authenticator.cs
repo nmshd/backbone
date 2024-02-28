@@ -6,6 +6,8 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
 
 public class Authenticator
 {
+    private static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { PropertyNameCaseInsensitive = true };
+
     private readonly Configuration.AuthenticationConfiguration _config;
     private readonly HttpClient _httpClient;
     private string? _jwt;
@@ -30,7 +32,7 @@ public class Authenticator
     [MemberNotNull(nameof(_jwt))]
     private async Task RefreshToken()
     {
-        var form = new Dictionary<string, string>()
+        var form = new Dictionary<string, string>
         {
             { "grant_type", "password" },
             { "username", _config.Username },
@@ -43,7 +45,7 @@ public class Authenticator
         var httpResponse = await _httpClient.SendAsync(request);
 
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
-        var accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(responseRawContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        var accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(responseRawContent, SERIALIZER_OPTIONS)!;
 
         _expiresAt = accessTokenResponse.ExpiresAt;
         _jwt = accessTokenResponse.AccessToken;
