@@ -17,7 +17,6 @@ public class RelationshipsDbContext : AbstractDbContextBase
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<RelationshipChange> RelationshipChanges { get; set; }
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
-    public DbSet<RelationshipTemplateAllocation> RelationshipTemplateAllocations { get; set; }
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     // {

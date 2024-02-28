@@ -30,7 +30,6 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
-        services.AddTransient<IRelationshipTemplateAllocationsRepository, RelationshipTemplateAllocationsRepository>();
     }
 }
 

@@ -17,9 +17,6 @@ public class Handler : IRequestHandler<FindRelationshipsOfIdentityQuery, FindRel
     {
         var relationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
 
-        return new FindRelationshipsOfIdentityResponse
-        {
-            Relationships = relationships
-        };
+        return new FindRelationshipsOfIdentityResponse(relationships);
     }
 }
