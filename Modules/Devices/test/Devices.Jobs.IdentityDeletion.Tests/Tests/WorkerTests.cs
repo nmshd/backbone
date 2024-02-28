@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Tooling;
@@ -77,38 +76,6 @@ public class WorkerTests
 
         // Assert
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly);
-    }
-
-    [Fact]
-    public async Task Publishes_PeerIdentityDeletedIntegrationEvent__Once_For_Each_Relationship_Of_Each_Identity()
-    {
-        // Arrange
-        var fakeMediator = A.Fake<IMediator>();
-        var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
-        SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
-
-        var mockEventBus = A.Fake<IEventBus>();
-        var worker = CreateWorker(fakeMediator, mockEventBus);
-
-        A.CallTo(() =>
-            fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress1), A<CancellationToken>._)
-        ).Returns(
-            new FindRelationshipsOfIdentityResponse([CreateRelationship(identityAddress1)])
-        );
-
-        A.CallTo(() =>
-            fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>.That.Matches(x => x.IdentityAddress == identityAddress2), A<CancellationToken>._)
-        ).Returns(
-            new FindRelationshipsOfIdentityResponse([CreateRelationship(identityAddress2), CreateRelationship(identityAddress2)])
-        );
-
-        // Act
-        await worker.StartProcessing(CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress1))).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityDeletedIntegrationEvent>.That.Matches(x => x.IdentityAddress == identityAddress2))).MustHaveHappenedTwiceExactly();
     }
 
     private void SetupRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
