@@ -86,7 +86,8 @@ export class IdentityDetailsComponent {
 
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
-            next: (tiers) => {
+            next: () => {
+                // tiers
                 // this.tiers = tiers.result;
                 this.tiers = this.tierService.createMockData();
                 if (this.identity.tierId !== this.getQfDTierId()) {
