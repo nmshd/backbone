@@ -3,12 +3,11 @@ using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
-namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
+namespace Backbone.Job.IdentityDeletion;
 public class Worker : IHostedService
 {
     private readonly IEventBus _eventBus;

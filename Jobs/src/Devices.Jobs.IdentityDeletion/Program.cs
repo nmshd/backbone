@@ -17,7 +17,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
-namespace Backbone.Modules.Devices.Jobs.IdentityDeletion;
+namespace Backbone.Job.IdentityDeletion;
 
 public class Program
 {
@@ -91,14 +91,14 @@ public static class ServicesExtensions
 {
     public static IServiceCollection RegisterIdentityDeleters(this IServiceCollection services)
     {
-        services.AddTransient<IIdentityDeleter, Challenges.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Devices.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Files.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Messages.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Quotas.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Relationships.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Synchronization.Application.Identities.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Tokens.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Challenges.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Devices.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Files.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Messages.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Quotas.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Relationships.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Synchronization.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Tokens.Application.Identities.IdentityDeleter>();
 
         return services;
     }
