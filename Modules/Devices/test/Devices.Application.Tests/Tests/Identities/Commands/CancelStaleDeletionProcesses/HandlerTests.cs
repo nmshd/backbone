@@ -15,17 +15,19 @@ public class HandlerTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
         var identities = new List<Identity>() { identity };
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns(identities);
 
-        var handler = new Handler(mockIdentitiesRepository);
+        var handler = new Handler(fakeIdentitiesRepository);
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
+        A.CallTo(() => fakeIdentitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+
         response.Should().NotBeNull();
         response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
         response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identity.Address);
@@ -35,19 +37,18 @@ public class HandlerTests
     public async Task Empty_list_is_returned_if_no_deletion_process_approvals_are_past_due()
     {
         // Arrange
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        var handler = new Handler(mockIdentitiesRepository);
+        var handler = new Handler(A.Fake<IIdentitiesRepository>());
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
+        response.Should().NotBeNull();
         response.StaleDeletionPrecessIdentities.Count.Should().Be(0);
     }
 
     [Fact]
-    public async Task Only_correct_deletion_process_are_canceled()
+    public async Task Only_correct_deletion_processes_are_canceled()
     {
         // Arrange
         var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
@@ -55,12 +56,12 @@ public class HandlerTests
 
         var identities = new List<Identity>() { identityWithStaleDeletionProcess, identityWithDeletionProcess };
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns(identities);
 
-        var handler = new Handler(mockIdentitiesRepository);
+        var handler = new Handler(fakeIdentitiesRepository);
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
