@@ -14,7 +14,6 @@ public class Handler : IRequestHandler<DeleteSyncRunsOfIdentityCommand>
     }
     public async Task Handle(DeleteSyncRunsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _dbContext.Set<ExternalEvent>().Where(d => d.Owner == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
         await _dbContext.Set<SyncRun>().Where(d => d.CreatedBy == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
     }
 }

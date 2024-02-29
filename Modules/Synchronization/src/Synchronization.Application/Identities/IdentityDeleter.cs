@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.DeleteDatawalletsOfIdentity;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteExternalEventsOfIdentity;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncRunsOfIdentity;
 using MediatR;
 
@@ -17,6 +18,7 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
         await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
     }
 }
