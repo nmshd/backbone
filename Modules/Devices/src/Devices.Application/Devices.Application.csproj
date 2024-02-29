@@ -11,6 +11,7 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
+        <ProjectReference Include="..\..\..\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
         <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
     </ItemGroup>
 </Project>
