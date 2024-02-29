@@ -90,7 +90,7 @@ export class IdentityDetailsComponent {
                 // this.tiers = tiers.result;
                 this.tiers = this.tierService.createMockData();
                 if (this.identity.tierId !== this.getQfDTierId()) {
-                    this.tiers = this.tierService.createMockData().filter(tier => tier.id !== this.getQfDTierId());
+                    this.tiers = this.tierService.createMockData().filter((tier) => tier.id !== this.getQfDTierId());
                 }
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
@@ -99,7 +99,7 @@ export class IdentityDetailsComponent {
     }
 
     public enablesManualAssignment(tier: TierOverview): boolean {
-        return tier.isManualAssignmentAllowed;;
+        return tier.isManualAssignmentAllowed;
     }
 
     public disabledTiers(tier: TierOverview): boolean {
