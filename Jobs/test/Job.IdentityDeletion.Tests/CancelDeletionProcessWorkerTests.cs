@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
-using Backbone.Tooling;
-using Backbone.UnitTestTools;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
@@ -64,8 +56,6 @@ namespace Backbone.Job.IdentityDeletion.Tests
                 A.Dummy<ILogger<CancelDeletionProcessWorker>>());
 
             A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(identityDeleters);
-
-            var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
             // Act
             await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
