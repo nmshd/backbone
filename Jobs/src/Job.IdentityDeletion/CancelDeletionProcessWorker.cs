@@ -47,10 +47,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
         foreach (var identity in identities)
         {
-            // todo: move this logic to handler
             var staleDeletionProcess = identity.DeletionProcesses.First(d => d.Status == DeletionProcessStatus.WaitingForApproval);
-            identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
-            // todo: also update repository
 
             _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
 
