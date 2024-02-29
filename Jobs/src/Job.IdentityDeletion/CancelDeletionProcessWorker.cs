@@ -9,6 +9,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion;
@@ -51,7 +52,8 @@ public class CancelDeletionProcessWorker : IHostedService
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
             // todo: also update repository
 
-            // todo: sending notifications by using event buss
+            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
+
             //await _pushNotificationSender.SendNotification
             //    (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
         }
