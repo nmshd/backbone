@@ -21,13 +21,15 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
 
         foreach (var identity in identities)
         {
-            foreach (var identityDeletionProcess in identity.DeletionProcesses)
-            {
-                if (identityDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) < DateTime.UtcNow)
-                {
-                    staleDeletionProcesses.IdentityDeletionProcesses.Add(identity);
-                }
-            }
+            var staleDeletionProcess = identity.DeletionProcesses.First(dp=>dp.Status == DeletionProcessStatus.WaitingForApproval);
+
+            if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow) 
+                continue;
+
+            staleDeletionProcess.CancelAutomatically(identity.Address);
+            staleDeletionProcesses.IdentityDeletionProcesses.Add(identity);
+
+            await _identityRepository.Update(identity, cancellationToken);
         }
 
         return staleDeletionProcesses;
