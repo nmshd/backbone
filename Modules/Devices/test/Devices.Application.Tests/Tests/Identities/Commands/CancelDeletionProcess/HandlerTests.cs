@@ -16,7 +16,7 @@ public class HandlerTests
     public async Task Happy_path()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(SystemTime.UtcNow.Date);
+        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
         var activeDevice = activeIdentity.Devices[0];
         var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
