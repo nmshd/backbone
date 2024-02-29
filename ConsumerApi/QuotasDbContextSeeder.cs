@@ -22,7 +22,7 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 
     public async Task SeedAsync(QuotasDbContext context)
     {
-        await SeedTier(context);
+        await SeedTiers(context);
         await AddTierToIdentities(context);
         await EnsureQueuedForDeletionTierWithQuotas();
     }
@@ -45,7 +45,7 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
         await context.SaveChangesAsync();
     }
 
-    private async Task SeedTier(QuotasDbContext context)
+    private async Task SeedTiers(QuotasDbContext context)
     {
         if (await context.Tiers.AnyAsync())
             return;
