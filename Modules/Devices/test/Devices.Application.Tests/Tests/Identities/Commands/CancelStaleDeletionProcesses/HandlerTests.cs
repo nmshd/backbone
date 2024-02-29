@@ -47,11 +47,10 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_correct_deletion_process_are_canceled() // todo: rename ??? only correct deletion processes are canceled
+    public async Task Only_correct_deletion_process_are_canceled()
     {
         // Arrange
         var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
-
         var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
 
         var identities = new List<Identity>() { identityWithStaleDeletionProcess, identityWithDeletionProcess };
