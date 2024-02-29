@@ -180,7 +180,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
-        if (Status == IdentityStatus.Active)
+        if (Status != IdentityStatus.ToBeDeleted)
             throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
