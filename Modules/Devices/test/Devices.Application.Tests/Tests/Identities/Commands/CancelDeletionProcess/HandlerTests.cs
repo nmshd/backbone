@@ -20,22 +20,22 @@ public class HandlerTests
         var activeDevice = activeIdentity.Devices[0];
         var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
         var command = new CancelDeletionProcessCommand(deletionProcess.Id);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => fakeIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
+        A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == activeIdentity.Address
                 && i.Status == IdentityStatus.Active
                 && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
