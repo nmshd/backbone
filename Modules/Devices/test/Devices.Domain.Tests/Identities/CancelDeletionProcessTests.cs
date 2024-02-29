@@ -15,17 +15,15 @@ public class CancelDeletionProcessTests
         var currentDate = DateTime.Parse("2020-01-01");
         SystemTime.Set(currentDate);
 
-        var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
-        identity.Devices.Add(device);
-
-        var deletionProcess = identity.StartDeletionProcessAsOwner(device.Id);
+        var identity = CreateIdentityWithApprovedDeletionProcess();
         SystemTime.Set(DateTime.Parse("2020-01-02"));
 
         // Act
-        identity.CancelDeletionProcess(deletionProcess.Id, device.Id);
+        var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
+        identity.TierIdBeforeDeletion.Should().Be(null);
+        identity.Status.Should().Be(IdentityStatus.Active);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
     }
 
@@ -57,6 +55,15 @@ public class CancelDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+    }
+
+    private static Identity CreateIdentityWithApprovedDeletionProcess()
+    {
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+        identity.Devices.Add(device);
+        identity.StartDeletionProcessAsOwner(device.Id);
+        return identity;
     }
 
     private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
