@@ -28,8 +28,8 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
 
             if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow) 
                 continue;
-            
-            staleDeletionProcess.CancelAutomatically(identity.Address);
+
+            identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
             staleDeletionProcesses.StaleDeletionPrecessIdentities.Add(identity);
 
             //_eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
