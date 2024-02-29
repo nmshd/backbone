@@ -53,12 +53,6 @@ public class IdentityDeletionProcess
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
-    private void CancelAutomatically()
-    {
-        Status = DeletionProcessStatus.Canceled;
-        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main
-    }
-
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
@@ -138,7 +132,9 @@ public class IdentityDeletionProcess
         if (Status != DeletionProcessStatus.WaitingForApproval)
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
-        CancelAutomatically();
+        Status = DeletionProcessStatus.Canceled;
+        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main
+
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
     }
 }
