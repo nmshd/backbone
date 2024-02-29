@@ -181,7 +181,7 @@ public class Identity
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         if (Status != IdentityStatus.ToBeDeleted)
-            throw new DomainException(DomainErrors.DeletionProcessGracePeriodHasEnded((DateTime)deletionProcess.GracePeriodEndsAt));
+            throw new DomainException(DomainErrors.NoIdentityWithRequiredStatusExists());
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
