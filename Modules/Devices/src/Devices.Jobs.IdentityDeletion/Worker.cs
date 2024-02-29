@@ -46,7 +46,7 @@ public class Worker : IHostedService
 
         foreach (var identityAddress in identities.DeletedIdentityAddresses)
         {
-            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification("IdentityDeletionConfiguration.DeletionStartsNotification.Message"), cancellationToken);
+            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(IdentityDeletionConfiguration.DeletionStartsNotification.Text!), cancellationToken);
 
             var relationships = await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken);
 

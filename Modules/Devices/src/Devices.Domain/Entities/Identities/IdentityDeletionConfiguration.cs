@@ -28,6 +28,11 @@ public class IdentityDeletionConfiguration
     {
         Time = 2
     };
+
+    public static DeletionStartsNotification DeletionStartsNotification { get; set; } = new()
+    {
+        Text = "Deletion Starting"
+    };
 }
 
 public class GracePeriodNotificationConfiguration
@@ -38,4 +43,9 @@ public class GracePeriodNotificationConfiguration
 public class ApprovalReminderNotificationConfiguration
 {
     public int Time { get; set; }
+}
+
+public class DeletionStartsNotification
+{
+    public string Text { get; set; } = "";
 }
