@@ -4,7 +4,7 @@ namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incomin
 public class IdentityDeletionProcessStatusChangedIntegrationEvent : IntegrationEvent
 {
     public IdentityDeletionProcessStatusChangedIntegrationEvent(string identityAddress, string deletionProcessId)
-        : base($"{identityAddress}/DeletionProcessStarted/{deletionProcessId}") // unsure about if this is needed and what for ?
+        : base($"{identityAddress}/DeletionProcessStatusChanged/{deletionProcessId}") // unsure about if this is needed and what for ?
     {
         Address = identityAddress;
         DeletionProcessId = deletionProcessId;
