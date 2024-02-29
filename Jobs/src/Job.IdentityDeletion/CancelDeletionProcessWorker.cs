@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -43,18 +41,11 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = (await _mediator.Send(new CancelStaleDeletionProcessesCommand(), cancellationToken)).StaleDeletionPrecessIdentities;
+        await _mediator.Send(new CancelStaleDeletionProcessesCommand(), cancellationToken);
 
-        foreach (var identity in identities)
-        {
-            var staleDeletionProcess = identity.DeletionProcesses.First(d => d.Status == DeletionProcessStatus.WaitingForApproval);
-
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
-
-            // this should be moved to handler or should not exist at all
-            //await _pushNotificationSender.SendNotification
-            //    (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
-        }
+        // this should be moved to handler or should not exist at all
+        //await _pushNotificationSender.SendNotification
+        //    (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
