@@ -15,18 +15,18 @@ public class HandlerTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
         var identities = new List<Identity>() { identity };
 
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns(identities);
 
-        var handler = new Handler(fakeIdentitiesRepository);
+        var handler = new Handler(mockIdentitiesRepository);
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => fakeIdentitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
 
         response.Should().NotBeNull();
         response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
