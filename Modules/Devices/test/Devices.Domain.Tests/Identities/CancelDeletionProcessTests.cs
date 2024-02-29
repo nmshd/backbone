@@ -25,6 +25,7 @@ public class CancelDeletionProcessTests
         identity.TierIdBeforeDeletion.Should().Be(null);
         identity.Status.Should().Be(IdentityStatus.Active);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
     [Fact]
@@ -55,6 +56,17 @@ public class CancelDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+    }
+
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
+    {
+        deletionProcess.AuditLog.Should().HaveCount(2);
+
+        var auditLogEntry = deletionProcess.AuditLog[1];
+        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
+        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
+        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.Approved);
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
     }
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()
