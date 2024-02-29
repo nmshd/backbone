@@ -43,7 +43,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = (await _mediator.Send(new CancelStaleDeletionProcessesCommand(), cancellationToken)).IdentityDeletionProcesses;
+        var identities = (await _mediator.Send(new CancelStaleDeletionProcessesCommand(), cancellationToken)).StaleDeletionPrecessIdentities;
 
         foreach (var identity in identities)
         {

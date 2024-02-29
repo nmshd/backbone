@@ -3,5 +3,5 @@
 namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 public class CancelStaleDeletionProcessesResponse
 {
-    public List<Identity> IdentityDeletionProcesses { get; set; } = [];
+    public List<Identity> StaleDeletionPrecessIdentities { get; set; } = [];
 }

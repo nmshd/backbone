@@ -27,8 +27,8 @@ public class HandlerTests
 
         // Assert
         response.Should().NotBeNull();
-        response.IdentityDeletionProcesses.Count.Should().Be(1);
-        response.IdentityDeletionProcesses[0].Address.Should().Be(identity.Address);
+        response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
+        response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identity.Address);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class HandlerTests
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.IdentityDeletionProcesses.Count.Should().Be(0);
+        response.StaleDeletionPrecessIdentities.Count.Should().Be(0);
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class HandlerTests
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.IdentityDeletionProcesses.Count.Should().Be(1);
-        response.IdentityDeletionProcesses[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
+        response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
+        response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
     }
 }

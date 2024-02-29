@@ -46,7 +46,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
 
             var identityDeletion = identity.StartDeletionProcessAsSupport();
             var identityDeleters = new CancelStaleDeletionProcessesResponse();
-            identityDeleters.IdentityDeletionProcesses.Add(identity);
+            identityDeleters.StaleDeletionPrecessIdentities.Add(identity);
 
             var cancelDeletionProcessWorker = new CancelDeletionProcessWorker(
                 A.Dummy<IHostApplicationLifetime>(),
@@ -75,7 +75,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
 
             var identityDeletion = identity.StartDeletionProcessAsSupport();
             var identityDeleters = new CancelStaleDeletionProcessesResponse();
-            identityDeleters.IdentityDeletionProcesses.Add(identity);
+            identityDeleters.StaleDeletionPrecessIdentities.Add(identity);
 
             var cancelDeletionProcessWorker = new CancelDeletionProcessWorker(
                 A.Dummy<IHostApplicationLifetime>(),

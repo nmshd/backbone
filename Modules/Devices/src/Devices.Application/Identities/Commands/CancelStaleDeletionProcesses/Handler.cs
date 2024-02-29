@@ -1,5 +1,7 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+//using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
@@ -7,6 +9,7 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDe
 public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, CancelStaleDeletionProcessesResponse>
 {
     private readonly IIdentitiesRepository _identityRepository;
+    //private readonly IEventBus _eventBus;
 
     public Handler(IIdentitiesRepository identityRepository)
     {
@@ -25,9 +28,11 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
 
             if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow) 
                 continue;
-
+            
             staleDeletionProcess.CancelAutomatically(identity.Address);
-            staleDeletionProcesses.IdentityDeletionProcesses.Add(identity);
+            staleDeletionProcesses.StaleDeletionPrecessIdentities.Add(identity);
+
+            //_eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
 
             await _identityRepository.Update(identity, cancellationToken);
         }
