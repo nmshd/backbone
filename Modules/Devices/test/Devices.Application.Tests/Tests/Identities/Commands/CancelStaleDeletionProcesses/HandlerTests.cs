@@ -1,6 +1,8 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -9,35 +11,10 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.C
 public class HandlerTests
 {
     [Fact]
-    public async Task Happy_Path()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var identities = new List<Identity>() { identity };
-
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(identities);
-
-        var handler = new Handler(mockIdentitiesRepository);
-
-        // Act
-        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockIdentitiesRepository.Update(identity, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
-
-        response.Should().NotBeNull();
-        response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
-        response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identity.Address);
-    }
-
-    [Fact]
     public async Task Empty_list_is_returned_if_no_deletion_process_approvals_are_past_due()
     {
         // Arrange
-        var handler = new Handler(A.Fake<IIdentitiesRepository>());
+        var handler = new Handler(A.Fake<IIdentitiesRepository>(), A.Fake<IEventBus>());
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
@@ -61,7 +38,7 @@ public class HandlerTests
         A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns(identities);
 
-        var handler = new Handler(fakeIdentitiesRepository);
+        var handler = new Handler(fakeIdentitiesRepository, A.Fake<IEventBus>());
 
         // Act
         var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
@@ -69,5 +46,30 @@ public class HandlerTests
         // Assert
         response.StaleDeletionPrecessIdentities.Count.Should().Be(1);
         response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
+    }
+
+    [Fact]
+    public async Task Publish_IntegrationEvent_for_canceled_deletion_process()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identities = new List<Identity>() { identity };
+
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockEventBus = A.Fake<IEventBus>();
+
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
+            .Returns(identities);
+
+        var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
+
+        // Act
+        await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i=>
+                i.Address == identity.Address &&
+                (string)i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
+            .MustHaveHappenedOnceExactly();
     }
 }
