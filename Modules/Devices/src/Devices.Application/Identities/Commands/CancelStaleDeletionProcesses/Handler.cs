@@ -25,9 +25,9 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
 
         foreach (var identity in identities)
         {
-            var staleDeletionProcess = identity.DeletionProcesses.First(dp=>dp.Status == DeletionProcessStatus.WaitingForApproval);
+            var staleDeletionProcess = identity.DeletionProcesses.First(dp => dp.Status == DeletionProcessStatus.WaitingForApproval);
 
-            if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow) 
+            if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow)
                 continue;
 
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);

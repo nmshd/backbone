@@ -67,7 +67,7 @@ public class HandlerTests
         await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i=>
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
                 i.Address == identity.Address &&
                 (string)i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
             .MustHaveHappenedOnceExactly();
