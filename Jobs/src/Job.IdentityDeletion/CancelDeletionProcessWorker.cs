@@ -54,6 +54,7 @@ public class CancelDeletionProcessWorker : IHostedService
 
             _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
 
+            // this should be moved to handler or should not exist at all
             //await _pushNotificationSender.SendNotification
             //    (identity.Address, new DeletionProcessCanceledPushNotification(), cancellationToken);
         }
