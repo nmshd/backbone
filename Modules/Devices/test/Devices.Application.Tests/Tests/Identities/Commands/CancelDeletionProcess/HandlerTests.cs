@@ -28,7 +28,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(fakeUserContext, fakeIdentitiesRepository);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
         var command = new CancelDeletionProcessCommand(deletionProcess.Id);
 
         // Act
@@ -50,11 +50,10 @@ public class HandlerTests
         // Arrange
         var address = CreateRandomIdentityAddress();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var fakeUserContext = A.Fake<IUserContext>();
 
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, CancellationToken.None, A<bool>._)).Returns<Identity?>(null);
 
-        var handler = CreateHandler(fakeUserContext);
+        var handler = CreateHandler(fakeIdentitiesRepository);
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionProcessCommand(address), CancellationToken.None);
@@ -63,10 +62,9 @@ public class HandlerTests
         acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private static Handler CreateHandler(IUserContext userContext, IIdentitiesRepository? identityRepository = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext? userContext = null)
     {
-        return identityRepository == null
-            ? new Handler(A.Fake<IIdentitiesRepository>(), userContext)
-            : new Handler(identityRepository, userContext);
+        userContext ??= A.Fake<IUserContext>();
+        return new Handler(identitiesRepository, userContext);
     }
 }
