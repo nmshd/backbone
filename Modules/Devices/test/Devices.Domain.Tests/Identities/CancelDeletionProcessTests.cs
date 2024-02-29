@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
@@ -42,5 +43,27 @@ public class CancelDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
+    }
+
+    [Fact]
+    public void Throws_when_deletion_process_is_in_wrong_status()
+    {
+        // Arrange
+        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
+        identity.Devices.Add(new Device(identity));
+
+        // Act
+        var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+    }
+
+    private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
+    {
+        var identity = TestDataGenerator.CreateIdentity();
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
+        identity.StartDeletionProcessAsSupport();
+        return identity;
     }
 }
