@@ -64,3 +64,9 @@ public class CancelDeletionProcessWorker : IHostedService
         return Task.CompletedTask;
     }
 }
+
+[NotificationText(Title = "Deletion process canceled", Body = "Your Identity deletion process is canceled due to no response within the approval period")]
+public record DeletionProcessCanceledPushNotification
+{
+    //public DeletionCanceledNotification(string message) => GetType().GetCustomAttribute<NotificationTextAttribute>().Body = message;
+}
