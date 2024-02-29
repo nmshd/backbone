@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
@@ -18,8 +18,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-      <ProjectReference Include="..\..\src\Devices.Jobs.IdentityDeletion\Devices.Jobs.IdentityDeletion.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+      <ProjectReference Include="..\..\src\Devices.Jobs.IdentityDeletion\Job.IdentityDeletion.csproj" />
     </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Jobs.IdentityDeletion;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Tooling;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Jobs.IdentityDeletion.Tests.Tests;
+namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 public class WorkerTests
 {
     [Fact]
