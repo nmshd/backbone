@@ -52,10 +52,9 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         var device = new Device(identity);
 
         identity.Devices.Add(device);
-        identity.StartDeletionProcessAsOwner(device.Id);
 
         // Act
-        var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
+        var acting = () => identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
