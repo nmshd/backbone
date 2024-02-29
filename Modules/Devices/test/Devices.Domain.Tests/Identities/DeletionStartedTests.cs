@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionProcessTests
+public class DeletionStartedTests
 {
     [Fact]
     public void DeletionStarted_sets_status_and_creates_valid_DeletionProcess()
