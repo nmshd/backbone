@@ -22,7 +22,7 @@ public static class Dependencies
             .Build();
 
         services.ConfigureAndValidate<HttpClientOptions>(options =>
-            config.GetSection("AdminUi:Http").Bind(options)
+            config.GetSection("AdminApi:Http").Bind(options)
         );
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
