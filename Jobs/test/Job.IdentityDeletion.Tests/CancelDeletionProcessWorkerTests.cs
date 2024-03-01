@@ -1,6 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -32,8 +30,6 @@ namespace Backbone.Job.IdentityDeletion.Tests
             return new CancelDeletionProcessWorker(
                 A.Dummy<IHostApplicationLifetime>(),
                 mediator,
-                A.Dummy<IPushNotificationSender>(),
-                A.Dummy<IEventBus>(),
                 A.Dummy<ILogger<CancelDeletionProcessWorker>>());
         }
     }
