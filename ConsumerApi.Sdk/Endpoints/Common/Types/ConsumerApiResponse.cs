@@ -24,8 +24,6 @@ public class ConsumerApiResponse<TResult>
 
 public class EmptyResponse { }
 
-public class EmptyConsumerApiResponse : ConsumerApiResponse<EmptyResponse> { }
-
 public class RawConsumerApiResponse
 {
     [MemberNotNullWhen(false, nameof(Error))]
