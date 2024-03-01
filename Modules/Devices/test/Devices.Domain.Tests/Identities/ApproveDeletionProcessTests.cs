@@ -76,6 +76,7 @@ public class ApproveDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("WaitingForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

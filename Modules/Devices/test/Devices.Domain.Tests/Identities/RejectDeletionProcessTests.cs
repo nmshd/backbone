@@ -31,7 +31,6 @@ public class RejectDeletionProcessTests
     public void Throws_when_device_not_owned_by_identity()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
@@ -39,6 +38,7 @@ public class RejectDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("Device");
     }
 
     [Fact]
@@ -54,6 +54,7 @@ public class RejectDeletionProcessTests
         var acting = () => identity.RejectDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
         acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
     }
 
@@ -71,6 +72,7 @@ public class RejectDeletionProcessTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("WaitingForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
