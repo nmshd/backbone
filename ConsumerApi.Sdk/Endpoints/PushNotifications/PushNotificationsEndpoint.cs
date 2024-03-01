@@ -9,9 +9,9 @@ public class PushNotificationsEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<ConsumerApiResponse<UpdateDeviceRegistrationResponse>> RegisterForPushNotifications(UpdateDeviceRegistrationRequest request)
         => await _client.Put<UpdateDeviceRegistrationResponse>("Devices/Self/PushNotifications", request);
 
-    public async Task<EmptyConsumerApiResponse> UnregisterFromPushNotifications()
-        => (EmptyConsumerApiResponse)await _client.Delete<EmptyResponse>("Devices/Self/PushNotifications");
+    public async Task<ConsumerApiResponse<EmptyResponse>> UnregisterFromPushNotifications()
+        => await _client.Delete<EmptyResponse>("Devices/Self/PushNotifications");
 
-    public async Task<EmptyConsumerApiResponse> SendTestNotification(object data)
-        => (EmptyConsumerApiResponse)await _client.Post<EmptyResponse>("Devices/Self/PushNotifications/SendTestNotification", data);
+    public async Task<ConsumerApiResponse<EmptyResponse>> SendTestNotification(object data)
+        => await _client.Post<EmptyResponse>("Devices/Self/PushNotifications/SendTestNotification", data);
 }
