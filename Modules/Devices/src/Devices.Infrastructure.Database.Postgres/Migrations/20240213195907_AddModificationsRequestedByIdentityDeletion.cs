@@ -68,7 +68,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
                         column: x => x.IdentityAddress,
                         principalTable: "Identities",
-                        principalColumn: "Address");
+                        principalColumn: "Address",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
