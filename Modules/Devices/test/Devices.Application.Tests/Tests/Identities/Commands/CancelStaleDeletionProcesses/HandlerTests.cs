@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
@@ -47,28 +48,28 @@ public class HandlerTests
         response.StaleDeletionPrecessIdentities[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
     }
 
-    //[Fact]
-    //public async Task Publish_IntegrationEvent_for_canceled_deletion_process()
-    //{
-    //    // Arrange
-    //    var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-    //    var identities = new List<Identity>() { identity };
+    [Fact]
+    public async Task Publish_IntegrationEvent_for_canceled_deletion_process()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identities = new List<Identity>() { identity };
 
-    //    var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-    //    var mockEventBus = A.Fake<IEventBus>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockEventBus = A.Fake<IEventBus>();
 
-    //    A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-    //        .Returns(identities);
+        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
+            .Returns(identities);
 
-    //    var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
+        var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
 
-    //    // Act
-    //    await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
+        // Act
+        await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
 
-    //    // Assert
-    //    A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
-    //            i.Address == identity.Address &&
-    //            (string)i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
-    //        .MustHaveHappenedOnceExactly();
-    //}
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
+                i.Address == identity.Address &&
+                (string)i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
+            .MustHaveHappenedOnceExactly();
+    }
 }
