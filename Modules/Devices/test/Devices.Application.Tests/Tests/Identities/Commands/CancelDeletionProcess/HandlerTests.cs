@@ -37,7 +37,8 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == activeIdentity.Address
                 && i.Status == IdentityStatus.Active
-                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
+                && i.DeletionProcesses[0].Status == DeletionProcessStatus.Cancelled   
+                && i.DeletionProcesses[0].Id == deletionProcess.Id), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
         response.Status.Should().Be(DeletionProcessStatus.Cancelled);
