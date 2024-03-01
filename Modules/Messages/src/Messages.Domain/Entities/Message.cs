@@ -2,7 +2,6 @@ using Backbone.Crypto.Implementations;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
-using Backbone.Tooling.JsonConverters;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
