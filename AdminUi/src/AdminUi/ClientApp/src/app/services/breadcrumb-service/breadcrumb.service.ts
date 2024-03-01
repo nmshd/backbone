@@ -58,11 +58,11 @@ export class BreadcrumbService {
     }
 
     private findExistingRouteIndex(newBreadcrumbHistory: Breadcrumb[]): number {
-        for (const i in this.breadcrumbHistory) {
-            const existingBreadcrumb = this.breadcrumbHistory[i];
+        for (const breadcrumb in this.breadcrumbHistory) {
+            const existingBreadcrumb = this.breadcrumbHistory[breadcrumb];
             const newBreadcrumb = newBreadcrumbHistory.find((breadcrumb) => breadcrumb.url === existingBreadcrumb.url);
             if (newBreadcrumb) {
-                return parseInt(i, 10);
+                return parseInt(breadcrumb, 10);
             }
         }
         return -1;
