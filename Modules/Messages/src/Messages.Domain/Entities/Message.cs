@@ -1,7 +1,4 @@
-using System.Text.Json;
-using Backbone.Crypto;
-using Backbone.Crypto.Implementations;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 using Backbone.Tooling.JsonConverters;
@@ -54,32 +51,5 @@ public class Message : IIdentifiable<MessageId>
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }
         Body = bytes;
-    }
-
-    public string Decrypt(string serializedSecret)
-    {
-        var secretKey = ExtractSymmetricKey(serializedSecret);
-
-        return new LibsodiumSymmetricEncrypter().Decrypt(
-                ConvertibleString.FromByteArray(Body),
-                ConvertibleString.FromByteArray(secretKey))
-            .Utf8Representation;
-    }
-
-    private static byte[] ExtractSymmetricKey(string serializedSecret)
-    {
-        var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
-            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
-
-        var key = Convert.FromBase64String(deserializedSecret!.Key + "=");
-        return key;
-    }
-
-    private class Secret
-    {
-        /**
-         * Algorithm (`alg`) field is omitted due to not being used in the code.
-         */
-        public required string Key { get; init; }
     }
 }
