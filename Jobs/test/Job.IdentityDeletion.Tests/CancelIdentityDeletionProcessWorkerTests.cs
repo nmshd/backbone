@@ -20,7 +20,7 @@ namespace Backbone.Job.IdentityDeletion.Tests
             await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
 
             // Assert
-            A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockMediator.Send(A<CancelStaleIdentityDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
 
         private static CancelIdentityDeletionProcessWorker CreateWorker(IMediator? mediator = null)

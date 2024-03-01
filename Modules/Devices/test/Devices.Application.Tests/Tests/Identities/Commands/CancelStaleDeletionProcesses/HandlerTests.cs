@@ -17,7 +17,7 @@ public class HandlerTests
         var handler = new Handler(A.Fake<IIdentitiesRepository>(), A.Fake<IEventBus>());
 
         // Act
-        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
@@ -41,7 +41,7 @@ public class HandlerTests
         var handler = new Handler(fakeIdentitiesRepository, A.Fake<IEventBus>());
 
         // Act
-        var response = await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.CanceledIdentityDeletionPrecessIds.Count.Should().Be(1);
@@ -64,7 +64,7 @@ public class HandlerTests
         var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
 
         // Act
-        await handler.Handle(new CancelStaleDeletionProcessesCommand(), CancellationToken.None);
+        await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>

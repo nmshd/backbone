@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
 
-public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, CancelStaleDeletionProcessesResponse>
+public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesCommand, CancelStaleIdentityDeletionProcessesResponse>
 {
     private readonly IIdentitiesRepository _identityRepository;
     private readonly IEventBus _eventBus;
@@ -17,11 +17,11 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
         _eventBus = eventBus;
     }
 
-    public async Task<CancelStaleDeletionProcessesResponse> Handle(CancelStaleDeletionProcessesCommand request, CancellationToken cancellationToken)
+    public async Task<CancelStaleIdentityDeletionProcessesResponse> Handle(CancelStaleIdentityDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
         var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true);
 
-        var staleDeletionProcesses = new CancelStaleDeletionProcessesResponse();
+        var staleDeletionProcesses = new CancelStaleIdentityDeletionProcessesResponse();
 
         foreach (var identity in identities)
         {
