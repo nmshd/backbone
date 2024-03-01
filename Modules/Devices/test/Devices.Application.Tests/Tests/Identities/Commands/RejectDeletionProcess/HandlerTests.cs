@@ -17,7 +17,9 @@ public class HandlerTests
     public async void Happy_path()
     {
         // Arrange
-        var utcNow = SystemTime.UtcNow;
+        var utcNow = DateTime.Parse("2000-01-01");
+        SystemTime.Set(utcNow);
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(utcNow);
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         var device = identity.Devices[0];
@@ -39,12 +41,12 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
                 && i.Status == IdentityStatus.Active
-                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._)) // todo: what if there are more than one rejected deletion process
+                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
         response.Status.Should().Be(DeletionProcessStatus.Rejected);
-        response.CreatedAt.Should().Be(utcNow);
+        response.RejectedAt.Should().Be(utcNow);
         response.RejectedByDevice.Should().Be(device.Id);
     }
 
