@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
                 continue;
 
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
-            staleDeletionProcesses.StaleDeletionPrecessIdentities.Add(identity);
+            staleDeletionProcesses.CanceledIdentityDeletionPrecessIds.Add(identity);
 
             _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
 
