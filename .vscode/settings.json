@@ -26,5 +26,10 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "dart.lineLength": 150,
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.rulers": [150]
+    }
 }
