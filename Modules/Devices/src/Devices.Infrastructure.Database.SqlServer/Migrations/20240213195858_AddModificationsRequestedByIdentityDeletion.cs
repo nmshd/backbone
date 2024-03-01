@@ -92,7 +92,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
                         column: x => x.IdentityDeletionProcessId,
                         principalTable: "IdentityDeletionProcesses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
