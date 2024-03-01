@@ -4,9 +4,9 @@ using Xunit;
 
 namespace Backbone.Crypto.Tests;
 
-public class KeyGeneratorTests : IDisposable
+public class KeyGeneratorTests
 {
-    private KeyGenerator _keyGeneratorUnderTest;
+    private readonly KeyGenerator _keyGeneratorUnderTest;
 
     #region GenerateSymmetricKey
 
@@ -33,11 +33,6 @@ public class KeyGeneratorTests : IDisposable
     public KeyGeneratorTests()
     {
         _keyGeneratorUnderTest = new KeyGenerator();
-    }
-
-    public void Dispose()
-    {
-        _keyGeneratorUnderTest = null;
     }
 
     #endregion

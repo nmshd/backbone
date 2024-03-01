@@ -27,7 +27,18 @@ public class TierTests
 
         // Assert
         error.Should().NotBeNull();
-        error.Should().BeEquivalentTo(DomainErrors.CannotDeleteBasicTier());
+        error!.Code.Should().Be("error.platform.validation.device.basicTierCannotBeDeleted");
+    }
+
+    [Fact]
+    public void Queued_for_deletion_tier_cannot_be_deleted()
+    {
+        // Act
+        var error = Tier.QUEUED_FOR_DELETION.CanBeDeleted(clientsCount: 0, identitiesCount: 0);
+
+        // Assert
+        error.Should().NotBeNull();
+        error!.Code.Should().Be("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted");
     }
 
     [Fact]
@@ -40,8 +51,8 @@ public class TierTests
         var error = tier.CanBeDeleted(clientsCount: 0, identitiesCount: 1);
 
         // Assert
-        error.Should().Be(DomainErrors.CannotDeleteUsedTier(""));
-        error!.Message.Should().Contain("Tier is assigned to one or more Identities");
+        error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
+        error.Message.Should().Contain("Tier is assigned to one or more Identities");
     }
 
     [Fact]
@@ -54,8 +65,8 @@ public class TierTests
         var error = tier.CanBeDeleted(clientsCount: 1, identitiesCount: 0);
 
         // Assert
-        error.Should().Be(DomainErrors.CannotDeleteUsedTier(""));
-        error!.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
+        error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
+        error.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
 
     }
 }

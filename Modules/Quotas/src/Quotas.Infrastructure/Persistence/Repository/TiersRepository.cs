@@ -30,11 +30,11 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tier = await (track ? _tiers : _readOnlyTiers)
             .IncludeAll(_dbContext)
-            .FirstWithId(id, cancellationToken);
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
 
         return tier;
     }
@@ -55,7 +55,19 @@ public class TiersRepository : ITiersRepository
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
+        RemoveOrphanedTierQuotaDefinitions();
         _tiers.Update(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private void RemoveOrphanedTierQuotaDefinitions()
+    {
+        var removedQuotas = _dbContext.ChangeTracker
+            .Entries<TierQuotaDefinition>()
+            .Where(e => e.State == EntityState.Modified)
+            .Where(e => _dbContext.Entry(e.Entity).Property("TierId").CurrentValue == null)
+            .Select(e => e.Entity);
+
+        _dbContext.RemoveRange(removedQuotas);
     }
 }

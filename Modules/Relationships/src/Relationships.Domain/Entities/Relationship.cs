@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
@@ -8,13 +9,20 @@ namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class Relationship
 {
-    private readonly RelationshipChangeLog _changes = new();
+    private readonly RelationshipChangeLog _changes = [];
 
-#pragma warning disable CS8618
-    private Relationship() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Relationship()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        RelationshipTemplateId = null!;
+        RelationshipTemplate = null!;
+        From = null!;
+        To = null!;
+    }
 
-    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[] requestContent)
+    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[]? requestContent)
     {
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -136,6 +144,13 @@ public class Relationship
         var existingChange = GetPendingChangeOrNull();
 
         if (existingChange != null)
-            throw new DomainException(DomainErrors.PendingChangeAlreadyExisits(existingChange.Id));
+            throw new DomainException(DomainErrors.PendingChangeAlreadyExists(existingChange.Id));
     }
+
+    #region Selectors
+    public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
+    {
+        return r => r.From == identity || r.To == identity;
+    }
+    #endregion
 }

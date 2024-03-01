@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,5 +10,7 @@ public class IdentityEntityTypeConfiguration : IEntityTypeConfiguration<Identity
     {
         builder.HasKey(x => x.Address);
         builder.Property(x => x.ClientId).HasMaxLength(200);
+        builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.PublicKey);
     }
 }

@@ -1,6 +1,6 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, forkJoin } from "rxjs";
@@ -49,6 +49,8 @@ export class IdentityDetailsComponent {
     public tiers: TierOverview[];
     public updatedTier?: TierOverview;
     public tier?: TierOverview;
+
+    private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -194,13 +196,10 @@ export class IdentityDetailsComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
-        });
-
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
-            if (result) {
-                this.createIdentityQuota(result);
+        this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                callback: this.createIdentityQuota.bind(this)
             }
         });
     }
@@ -222,15 +221,13 @@ export class IdentityDetailsComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
+                this.dialogRef?.close();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
+                this.dialogRef?.componentInstance.showErrorMessage(errorMessage);
             }
         });
     }

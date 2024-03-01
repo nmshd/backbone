@@ -9,9 +9,9 @@ public class DatawalletIdEntityFrameworkValueConverter : ValueConverter<Datawall
 
     public DatawalletIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => DatawalletId.Parse(value),
-            mappingHints?.With(new ConverterMappingHints(DatawalletId.MAX_LENGTH))
+            mappingHints.With(new ConverterMappingHints(DatawalletId.MAX_LENGTH))
         )
     { }
 }

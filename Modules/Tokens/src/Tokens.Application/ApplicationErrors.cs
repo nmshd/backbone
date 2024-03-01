@@ -1,3 +1,3 @@
 ﻿namespace Backbone.Modules.Tokens.Application;
 
-public static class ApplicationErrors { }
+public static class ApplicationErrors;

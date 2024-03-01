@@ -69,17 +69,18 @@ public class AbstractDbContextBase : DbContext, IDbContext
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> action, List<int>? errorNumbersToRetry,
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var response = default(T);
+        // the '!' is safe here because the default value is only returned after the action is executed, which is setting the response
+        var response = default(T)!;
 
-        await RunInTransaction(async () => response = await action(), errorNumbersToRetry, isolationLevel);
+        await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
         return response;
     }
 
-    public async Task<T?> RunInTransaction<T>(Func<Task<T?>> func, IsolationLevel isolationLevel)
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
     {
         return await RunInTransaction(func, null, isolationLevel);
     }
@@ -94,25 +95,5 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
-    }
-
-    protected void RollBack()
-    {
-        var changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged).ToList();
-
-        foreach (var entry in changedEntries)
-            switch (entry.State)
-            {
-                case EntityState.Modified:
-                    entry.CurrentValues.SetValues(entry.OriginalValues);
-                    entry.State = EntityState.Unchanged;
-                    break;
-                case EntityState.Added:
-                    entry.State = EntityState.Detached;
-                    break;
-                case EntityState.Deleted:
-                    entry.State = EntityState.Unchanged;
-                    break;
-            }
     }
 }

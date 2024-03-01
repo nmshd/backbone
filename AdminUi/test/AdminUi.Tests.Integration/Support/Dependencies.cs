@@ -1,5 +1,7 @@
 ﻿using Backbone.AdminUi.Tests.Integration.API;
 using Backbone.AdminUi.Tests.Integration.Configuration;
+using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
@@ -24,6 +26,8 @@ public static class Dependencies
         );
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
+        services.AddSingleton<ISignatureHelper>(SignatureHelper.CreateEd25519WithRawKeyFormat());
+
         services.AddTransient<IdentitiesApi>();
         services.AddTransient<TiersApi>();
         services.AddTransient<ClientsApi>();

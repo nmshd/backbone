@@ -19,7 +19,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
         _tierId = string.Empty;
     }
 
-    [Given(@"a Tier t")]
+    [Given("a Tier t")]
     public async Task GivenATier()
     {
         var createTierRequest = new CreateTierRequest
@@ -41,7 +41,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [When(@"a GET request is sent to the /Tiers/{t.id} endpoint")]
+    [When("a GET request is sent to the /Tiers/{t.id} endpoint")]
     public async Task WhenAGETRequestIsSentToTheTiersIdEndpoint()
     {
         _response = await _tiersApi.GetTierById(_requestConfiguration, _tierId);
@@ -49,7 +49,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
         _response.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains Tier t")]
+    [Then("the response contains Tier t")]
     public void ThenTheResponseContainsATier()
     {
         _response!.Content.Result.Should().NotBeNull();

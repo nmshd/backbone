@@ -67,7 +67,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 context.HttpContext.Response.StatusCode = (int)GetStatusCodeForDomainException(domainException);
 
                 break;
-            case BadHttpRequestException _:
+            case BadHttpRequestException:
                 _logger.RequestBodyTooLarge(ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
@@ -132,12 +132,12 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
     private dynamic? GetCustomData(ApplicationException applicationException)
     {
-        if (applicationException is QuotaExhaustedException quotaExhautedException)
+        if (applicationException is QuotaExhaustedException quotaExhaustedException)
         {
-            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
+            return quotaExhaustedException.ExhaustedMetricStatuses.Select(m => new
             {
 #pragma warning disable IDE0037
-                MetricKey = m.MetricKey,
+                MetricKey = m.MetricKey.Value,
                 IsExhaustedUntil = m.IsExhaustedUntil
 #pragma warning restore IDE0037
             });
@@ -146,7 +146,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return null;
     }
 
-    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException _)
     {
         return HttpStatusCode.BadRequest;
     }
@@ -155,9 +155,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         return exception switch
         {
-            NotFoundException _ => HttpStatusCode.NotFound,
-            ActionForbiddenException _ => HttpStatusCode.Forbidden,
-            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
+            NotFoundException => HttpStatusCode.NotFound,
+            ActionForbiddenException => HttpStatusCode.Forbidden,
+            QuotaExhaustedException => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
     }

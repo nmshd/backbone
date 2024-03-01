@@ -15,7 +15,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
         _logsApi = logsApi;
     }
 
-    [When(@"a POST request is sent to the /Logs endpoint")]
+    [When("a POST request is sent to the /Logs endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheLogsEndpoint()
     {
         var createTierRequest = new LogRequest
@@ -23,7 +23,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
             LogLevel = LogLevel.Trace,
             Category = "Test Category",
             MessageTemplate = "The log request {0} has the following description: {1}",
-            Arguments = new object[] { "Request Name", "Request Description" }
+            Arguments = ["Request Name", "Request Description"]
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -33,7 +33,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
         _postResponse = await _logsApi.CreateLog(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the /Logs endpoint with an invalid Log Level")]
+    [When("a POST request is sent to the /Logs endpoint with an invalid Log Level")]
     public async Task WhenAPOSTRequestIsSentToTheLogsEndpointWithAnInvalidLogLevel()
     {
         var createTierRequest = new LogRequest
@@ -41,7 +41,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
             LogLevel = (LogLevel)16,
             Category = "Test Category",
             MessageTemplate = "The log request {0} has the following description: {1}",
-            Arguments = new object[] { "Request Name", "Request Description" }
+            Arguments = ["Request Name", "Request Description"]
         };
 
         var requestConfiguration = _requestConfiguration.Clone();
@@ -64,7 +64,8 @@ internal class LogsStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _postResponse!.Content.Error.Should().NotBeNull();
-        _postResponse.Content.Error!.Code.Should().Be(errorCode);
+        _postResponse!.Content.Should().NotBeNull();
+        _postResponse!.Content!.Error.Should().NotBeNull();
+        _postResponse.Content.Error.Code.Should().Be(errorCode);
     }
 }

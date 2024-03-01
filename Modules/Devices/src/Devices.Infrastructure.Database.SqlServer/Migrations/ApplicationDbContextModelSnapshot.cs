@@ -17,7 +17,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -89,7 +89,26 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Tiers");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -149,26 +168,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Challenges", "Challenges", t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -209,7 +209,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
                         .HasMaxLength(36)
@@ -224,6 +224,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletionGracePeriodEndsAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<byte>("IdentityVersion")
                         .HasColumnType("tinyint");
 
@@ -231,7 +234,16 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("TierId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("TierIdBeforeDeletion")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -242,11 +254,113 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Identities");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("ApprovalReminder1SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ApprovalReminder2SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ApprovalReminder3SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodEndsAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodReminder1SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodReminder2SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GracePeriodReminder3SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityAddress")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("char(36)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityAddress");
+
+                    b.ToTable("IdentityDeletionProcesses", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("DeviceIdHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("IdentityAddressHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("IdentityDeletionProcessId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NewStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityDeletionProcessId");
+
+                    b.ToTable("IdentityDeletionProcessAuditLog", (string)null);
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ClientId")
                         .HasMaxLength(100)
@@ -254,6 +368,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ConcurrencyToken")
                         .IsConcurrencyToken()
@@ -280,6 +398,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DisplayNames")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("JsonWebKeySet")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("MaxIdentities")
                         .HasColumnType("int");
 
@@ -298,9 +419,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Requirements")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Settings")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -591,26 +711,40 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Device", "Device")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Device", "Device")
                         .WithOne("User")
-                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", "DeviceId")
+                        .HasForeignKey("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", "DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Device");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identity", "Identity")
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", "Identity")
                         .WithMany("Devices")
                         .HasForeignKey("IdentityAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
+                        .WithMany("DeletionProcesses")
+                        .HasForeignKey("IdentityAddress");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
+                        .WithMany("AuditLog")
+                        .HasForeignKey("IdentityDeletionProcessId");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
@@ -657,7 +791,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -666,7 +800,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -681,7 +815,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -690,22 +824,29 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Device", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
                     b.Navigation("User")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
+                    b.Navigation("DeletionProcesses");
+
                     b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Navigation("AuditLog");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

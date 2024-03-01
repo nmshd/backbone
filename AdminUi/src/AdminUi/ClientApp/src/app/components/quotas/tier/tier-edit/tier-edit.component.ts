@@ -1,15 +1,15 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Observable, forkJoin } from "rxjs";
+import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { QuotasService, TierQuota } from "src/app/services/quotas-service/quotas.service";
 import { Tier, TierService } from "src/app/services/tier-service/tier.service";
+import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
-import { SelectionModel } from "@angular/cdk/collections";
-import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { Observable, forkJoin } from "rxjs";
-import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrapper";
 
 @Component({
     selector: "app-tier-edit",
@@ -18,18 +18,17 @@ import { HttpErrorResponseWrapper } from "src/app/utils/http-error-response-wrap
 })
 export class TierEditComponent {
     public headerEdit: string;
-    public headerCreate: string;
     public headerDescriptionEdit: string;
-    public headerDescriptionCreate: string;
     public headerQuotas: string;
     public headerQuotasDescription: string;
     public selectionQuotas: SelectionModel<TierQuota>;
     public quotasTableDisplayedColumns: string[];
     public tierId?: string;
-    public disabled: boolean;
     public editMode: boolean;
     public tier: Tier;
     public loading: boolean;
+
+    private dialogRef?: MatDialogRef<AssignQuotasDialogComponent>;
 
     public constructor(
         private readonly route: ActivatedRoute,
@@ -40,8 +39,6 @@ export class TierEditComponent {
         private readonly quotasService: QuotasService
     ) {
         this.headerEdit = "Edit Tier";
-        this.headerCreate = "Create Tier";
-        this.headerDescriptionCreate = "Please fill the form below to create your Tier";
         this.headerDescriptionEdit = "Perform your desired changes and save to edit your Tier";
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this tier.";
@@ -49,12 +46,13 @@ export class TierEditComponent {
         this.quotasTableDisplayedColumns = ["select", "metricName", "max", "period"];
         this.editMode = false;
         this.loading = true;
-        this.disabled = false;
         this.tier = {
             id: "",
             name: "",
             quotas: [],
-            isDeletable: false
+            isDeletable: false,
+            isReadOnly: false,
+            numberOfIdentities: 0
         } as Tier;
     }
 
@@ -68,17 +66,7 @@ export class TierEditComponent {
 
         if (this.editMode) {
             this.getTier();
-        } else {
-            this.initTier();
         }
-    }
-
-    public initTier(): void {
-        this.tier = {
-            name: ""
-        } as Tier;
-
-        this.loading = false;
     }
 
     public getTier(): void {
@@ -87,39 +75,6 @@ export class TierEditComponent {
         this.tierService.getTierById(this.tierId!).subscribe({
             next: (data: HttpResponseEnvelope<Tier>) => {
                 this.tier = data.result;
-                this.tier.isDeletable = this.tier.name !== "Basic";
-            },
-            complete: () => (this.loading = false),
-            error: (err: any) => {
-                this.loading = false;
-                const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-            }
-        });
-    }
-
-    public createTier(): void {
-        this.loading = true;
-        this.tierService.createTier(this.tier).subscribe({
-            next: (data: HttpResponseEnvelope<Tier>) => {
-                this.tier = {
-                    id: data.result.id,
-                    name: data.result.name,
-                    quotas: [],
-                    numberOfIdentities: 0,
-                    isDeletable: true
-                } as Tier;
-
-                this.snackBar.open("Successfully added tier.", "Dismiss", {
-                    duration: 4000,
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
-                this.tierId = data.result.id;
-                this.editMode = true;
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
@@ -164,13 +119,10 @@ export class TierEditComponent {
     }
 
     public openAssignQuotaDialog(): void {
-        const dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
-            minWidth: "50%"
-        });
-
-        dialogRef.afterClosed().subscribe((result: AssignQuotaData | undefined) => {
-            if (result) {
-                this.createTierQuota(result);
+        this.dialogRef = this.dialog.open(AssignQuotasDialogComponent, {
+            minWidth: "50%",
+            data: {
+                callback: this.createTierQuota.bind(this)
             }
         });
     }
@@ -182,15 +134,13 @@ export class TierEditComponent {
                 this.snackBar.open("Successfully assigned quota.", "Dismiss");
                 this.tier.quotas.push(data.result);
                 this.tier.quotas = [...this.tier.quotas];
+                this.dialog.closeAll();
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
                 this.loading = false;
                 const errorMessage = err.error?.error?.message ?? err.message;
-                this.snackBar.open(errorMessage, "Dismiss", {
-                    verticalPosition: "top",
-                    horizontalPosition: "center"
-                });
+                this.dialogRef?.componentInstance.showErrorMessage(errorMessage);
             }
         });
     }
@@ -293,5 +243,17 @@ export class TierEditComponent {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+
+    public isNameInputDisabled(): boolean {
+        return this.editMode || this.tier.isReadOnly;
+    }
+
+    public isQuotaDeletionDisabled(): boolean {
+        return this.selectionQuotas.selected.length === 0 || this.tier.isReadOnly;
+    }
+
+    public isQuotaAssignmentDisabled(): boolean {
+        return this.tier.id === "" || this.tier.isReadOnly;
     }
 }

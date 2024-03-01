@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -22,41 +23,45 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly IQueryable<RelationshipChange> _readOnlyChanges;
     private readonly RelationshipsDbContext _dbContext;
-    private readonly ILogger<RelationshipsRepository> _logger;
 
-    public RelationshipsRepository(RelationshipsDbContext dbContext, ILogger<RelationshipsRepository> logger)
+    public RelationshipsRepository(RelationshipsDbContext dbContext)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
         _changes = dbContext.RelationshipChanges;
         _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
         _dbContext = dbContext;
-        _logger = logger;
     }
 
     public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids,
         RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
-        OptionalDateRange modifiedAt, OptionalDateRange createdAt, OptionalDateRange completedAt,
-        IdentityAddress createdBy, IdentityAddress completedBy, IdentityAddress identityAddress,
+        OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt,
+        IdentityAddress? createdBy, IdentityAddress? completedBy, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false)
     {
         var query = (track ? _changes : _readOnlyChanges)
             .AsQueryable()
             .IncludeAll(_dbContext)
-            .WithType(relationshipChangeType)
-            .WithStatus(relationshipChangeStatus)
-            .ModifiedAt(modifiedAt)
-            .CreatedAt(createdAt)
-            .CompletedAt(completedAt)
-            .CreatedBy(createdBy)
-            .CompletedBy(completedBy)
-            .WithRelationshipParticipant(identityAddress);
+            .WithRelationshipParticipant(activeIdentity);
 
+        if (relationshipChangeType.HasValue)
+            query = query.WithType(relationshipChangeType.Value);
+        if (relationshipChangeStatus.HasValue)
+            query = query.WithStatus(relationshipChangeStatus.Value);
+        if (modifiedAt != null)
+            query = query.ModifiedAt(modifiedAt);
+        if (createdAt != null)
+            query = query.CreatedAt(createdAt);
+        if (completedAt != null)
+            query = query.CompletedAt(completedAt);
+        if (createdBy != null)
+            query = query.CreatedBy(createdBy);
+        if (completedBy != null)
+            query = query.CompletedBy(completedBy);
         if (ids.Any())
             query = query.WithIdIn(ids);
-
         if (onlyPeerChanges)
-            query = query.OnlyPeerChanges(identityAddress);
+            query = query.OnlyPeerChanges(activeIdentity);
 
         var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
@@ -74,7 +79,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<RelationshipChange> FindRelationshipChange(RelationshipChangeId id,
+    public async Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id,
         IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var change = await (track ? _changes : _readOnlyChanges)
@@ -131,6 +136,11 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
                         r.Status != RelationshipStatus.Revoked)
             .AnyAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _relationships.Where(filter).ToListAsync(cancellationToken);
     }
 }
 

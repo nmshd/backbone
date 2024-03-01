@@ -14,7 +14,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         _dbContext = dbContext;
     }
 
-#nullable enable
     public Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
     {
         return _dbContext.Relationships
@@ -23,5 +22,4 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Select(r => r.Id)
             .FirstOrDefaultAsync();
     }
-#nullable disable
 }

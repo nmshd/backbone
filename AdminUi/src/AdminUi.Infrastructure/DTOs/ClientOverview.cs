@@ -1,10 +1,10 @@
 ﻿namespace Backbone.AdminUi.Infrastructure.DTOs;
 public class ClientOverview
 {
-    public string ClientId { get; set; }
-    public string DisplayName { get; set; }
-    public TierDTO DefaultTier { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required string ClientId { get; set; }
+    public required string DisplayName { get; set; }
+    public required TierDTO DefaultTier { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public int? MaxIdentities { get; set; }
-    public int NumberOfIdentities { get; set; }
+    public required int NumberOfIdentities { get; set; }
 }

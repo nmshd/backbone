@@ -8,13 +8,6 @@ using Xunit;
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.IntegrationEvents.TierDeleted;
 public class TierDeletedIntegrationEventHandlerTests
 {
-    private readonly ILogger<TierDeletedIntegrationEventHandler> _logger;
-
-    public TierDeletedIntegrationEventHandlerTests()
-    {
-        _logger = A.Fake<ILogger<TierDeletedIntegrationEventHandler>>();
-    }
-
     [Fact]
     public async Task Deletes_tier_after_consuming_integration_event()
     {
@@ -35,6 +28,6 @@ public class TierDeletedIntegrationEventHandlerTests
 
     private TierDeletedIntegrationEventHandler CreateHandler(ITiersRepository tiersRepository)
     {
-        return new(_logger, tiersRepository);
+        return new TierDeletedIntegrationEventHandler(A.Dummy<ILogger<TierDeletedIntegrationEventHandler>>(), tiersRepository);
     }
 }

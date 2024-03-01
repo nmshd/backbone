@@ -1,7 +1,9 @@
 ﻿using Backbone.AdminUi.Tests.Integration.API;
 using Backbone.AdminUi.Tests.Integration.Extensions;
 using Backbone.AdminUi.Tests.Integration.Models;
-using Backbone.AdminUi.Tests.Integration.TestData;
+using Backbone.Crypto;
+using Backbone.Crypto.Abstractions;
+using Newtonsoft.Json;
 
 namespace Backbone.AdminUi.Tests.Integration.StepDefinitions;
 
@@ -14,25 +16,27 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     private string _identityAddress;
     private string _quotaId;
     private HttpResponse<IndividualQuotaDTO>? _response;
+    private readonly ISignatureHelper _signatureHelper;
     private HttpResponse? _deleteResponse;
 
-    public IndividualQuotaStepDefinitions(IdentitiesApi identitiesApi)
+    public IndividualQuotaStepDefinitions(IdentitiesApi identitiesApi, ISignatureHelper signatureHelper)
     {
         _identitiesApi = identitiesApi;
+        _signatureHelper = signatureHelper;
         _identityAddress = string.Empty;
         _quotaId = string.Empty;
     }
 
-    [Given(@"an Identity i")]
-    public void GivenAnIdentity()
+    [Given("an Identity i")]
+    public async Task GivenAnIdentityI()
     {
-        _identityAddress = Identities.IDENTITY_A;
+        await CreateIdentity();
     }
 
-    [Given(@"an Identity i with an IndividualQuota q")]
+    [Given("an Identity i with an IndividualQuota q")]
     public async Task GivenAnIdentityIWithAnIndividualQuotaQ()
     {
-        _identityAddress = Identities.IDENTITY_A;
+        await CreateIdentity();
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
         {
             MetricKey = "NumberOfSentMessages",
@@ -49,21 +53,21 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _quotaId = response.Content.Result!.Id;
     }
 
-    [When(@"a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
+    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpoint()
     {
         _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, _quotaId, _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
-    [When(@"a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
+    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithAnInexistentQuotaId()
     {
         _deleteResponse = await _identitiesApi.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx", _requestConfiguration);
         _deleteResponse.Should().NotBeNull();
     }
 
-    [When(@"a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
+    [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpoint()
     {
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
@@ -80,7 +84,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _response = await _identitiesApi.CreateIndividualQuota(requestConfiguration, _identityAddress);
     }
 
-    [When(@"a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
+    [When("a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInexistentIdentityAddress()
     {
         var createIndividualQuotaRequest = new CreateIndividualQuotaRequest()
@@ -113,7 +117,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         }
     }
 
-    [Then(@"the response contains an IndividualQuota")]
+    [Then("the response contains an IndividualQuota")]
     public void ThenTheResponseContainsAnIndividualQuota()
     {
         _response!.AssertHasValue();
@@ -137,5 +141,41 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
             _deleteResponse.Content!.Error.Should().NotBeNull();
             _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
         }
+    }
+
+    private async Task CreateIdentity()
+    {
+        var keyPair = _signatureHelper.CreateKeyPair();
+
+        dynamic publicKey = new
+        {
+            pub = keyPair.PublicKey.Base64Representation,
+            alg = 3
+        };
+
+        var createIdentityRequest = new CreateIdentityRequest()
+        {
+            ClientId = "test",
+            ClientSecret = "test",
+            DevicePassword = "test",
+            IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.Base64Representation,
+            IdentityVersion = 1,
+            SignedChallenge = new CreateIdentityRequestSignedChallenge
+            {
+                Challenge = "string.Empty",
+                Signature = "some-dummy-signature"
+            }
+        };
+
+        var requestConfiguration = _requestConfiguration.Clone();
+        requestConfiguration.ContentType = "application/json";
+        requestConfiguration.SetContent(createIdentityRequest);
+
+        var createIdentityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
+        createIdentityResponse.IsSuccessStatusCode.Should().BeTrue();
+        _identityAddress = createIdentityResponse.Content.Result!.Address;
+
+        // allow the event queue to trigger the creation of this Identity on the Quotas module
+        Thread.Sleep(2000);
     }
 }

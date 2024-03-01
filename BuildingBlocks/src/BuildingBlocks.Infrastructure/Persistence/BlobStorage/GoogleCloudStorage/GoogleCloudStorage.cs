@@ -17,7 +17,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     public GoogleCloudStorage(StorageClient storageClient, ILogger<GoogleCloudStorage> logger)
     {
         _storageClient = storageClient;
-        _changedBlobs = new List<ChangedBlob>();
+        _changedBlobs = [];
         _removedBlobs = new List<RemovedBlob>();
         _logger = logger;
     }

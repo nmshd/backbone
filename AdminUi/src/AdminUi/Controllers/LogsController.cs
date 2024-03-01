@@ -1,11 +1,9 @@
 ﻿using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Devices.Application;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.AdminUi.Controllers;
@@ -14,13 +12,11 @@ namespace Backbone.AdminUi.Controllers;
 [Authorize("ApiKey")]
 public class LogsController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
     private readonly ILoggerFactory _loggerFactory;
 
     public LogsController(
-        IMediator mediator, IOptions<ApplicationOptions> options, ILoggerFactory logger) : base(mediator)
+        IMediator mediator, ILoggerFactory logger) : base(mediator)
     {
-        _options = options.Value;
         _loggerFactory = logger;
     }
 
@@ -54,7 +50,6 @@ public class LogsController : ApiControllerBase
                 break;
             default:
                 throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(request.LogLevel)));
-                break;
         }
 
         return NoContent();
@@ -63,10 +58,10 @@ public class LogsController : ApiControllerBase
 
 public class LogRequest
 {
-    public LogLevel LogLevel { get; set; }
-    public string Category { get; set; }
-    public string MessageTemplate { get; set; }
-    public object[] Arguments { get; set; }
+    public required LogLevel LogLevel { get; set; }
+    public required string Category { get; set; }
+    public required string MessageTemplate { get; set; }
+    public object[] Arguments { get; set; } = [];
 }
 
 public enum LogLevel

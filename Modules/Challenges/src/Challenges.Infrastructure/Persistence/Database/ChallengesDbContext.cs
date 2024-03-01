@@ -14,7 +14,7 @@ public class ChallengesDbContext : AbstractDbContextBase
 
     public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public virtual DbSet<Challenge> Challenges { get; set; }
+    public virtual DbSet<Challenge> Challenges { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

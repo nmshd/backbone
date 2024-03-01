@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 import { environment } from "src/environments/environment";
@@ -11,6 +11,8 @@ import { TierQuota } from "../quotas-service/quotas.service";
 })
 export class TierService {
     private readonly apiUrl: string;
+    private static readonly QUEUED_FOR_DELETION_TIER_ID = "TIR00000000000000001";
+    private static readonly BASIC_TIER_NAME = "Basic";
 
     public constructor(private readonly http: HttpClient) {
         this.apiUrl = `${environment.apiUrl}/Tiers`;
@@ -21,7 +23,13 @@ export class TierService {
     }
 
     public getTierById(id: string): Observable<HttpResponseEnvelope<Tier>> {
-        return this.http.get<HttpResponseEnvelope<Tier>>(`${this.apiUrl}/${id}`);
+        return this.http.get<HttpResponseEnvelope<Tier>>(`${this.apiUrl}/${id}`).pipe(
+            map((responseEnvelope: HttpResponseEnvelope<Tier>) => {
+                responseEnvelope.result.isDeletable = responseEnvelope.result.name !== TierService.BASIC_TIER_NAME && responseEnvelope.result.id !== TierService.QUEUED_FOR_DELETION_TIER_ID;
+                responseEnvelope.result.isReadOnly = responseEnvelope.result.id === TierService.QUEUED_FOR_DELETION_TIER_ID;
+                return responseEnvelope;
+            })
+        );
     }
 
     public createTier(tier: Tier): Observable<HttpResponseEnvelope<Tier>> {
@@ -42,6 +50,8 @@ export interface Tier {
     name: string;
     quotas: TierQuota[];
     isDeletable: boolean;
+    isReadOnly: boolean;
+    numberOfIdentities: number;
 }
 
 export interface TierOverview {

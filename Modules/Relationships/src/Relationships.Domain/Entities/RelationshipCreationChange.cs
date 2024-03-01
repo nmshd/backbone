@@ -6,7 +6,10 @@ namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipCreationChange : RelationshipChange
 {
-    private RelationshipCreationChange() { }
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipCreationChange()
+    {
+    }
 
     internal RelationshipCreationChange(Relationship relationship, IdentityAddress createdBy, DeviceId createdByDevice, byte[]? requestContent) : base(relationship, createdBy, createdByDevice, RelationshipChangeType.Creation, requestContent) { }
 

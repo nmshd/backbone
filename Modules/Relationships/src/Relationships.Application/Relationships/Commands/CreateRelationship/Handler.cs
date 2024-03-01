@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents;
+using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
@@ -17,9 +17,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
     private CancellationToken _cancellationToken;
-    private Relationship _relationship;
     private CreateRelationshipCommand _request;
     private RelationshipTemplate _template;
+    private Relationship _relationship;
 
     public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
@@ -28,6 +28,10 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _relationshipsRepository = relationshipsRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;
+
+        _request = null!;
+        _template = null!;
+        _relationship = null!;
     }
 
     public async Task<CreateRelationshipResponse> Handle(CreateRelationshipCommand request, CancellationToken cancellationToken)
@@ -77,12 +81,11 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _request.Content);
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
-
     }
 
     private void PublishIntegrationEvent()
     {
-        var change = _relationship.Changes.FirstOrDefault();
+        var change = _relationship.Changes.First(); // there is always one change, because the relationship was just created
         var evt = new RelationshipChangeCreatedIntegrationEvent(change);
         _eventBus.Publish(evt);
     }

@@ -15,6 +15,8 @@ public class SanityCheck
     {
         _dataSource = dataSource;
         _reporter = reporter;
+        _databaseIds = [];
+        _blobIds = [];
     }
 
     public async Task Run(CancellationToken cancellationToken)

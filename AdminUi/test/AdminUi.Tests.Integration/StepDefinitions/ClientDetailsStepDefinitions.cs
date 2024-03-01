@@ -22,7 +22,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _maxIdentities = 1;
     }
 
-    [Given(@"a Tier t")]
+    [Given("a Tier t")]
     public async Task GivenATierT()
     {
         var createTierRequest = new CreateTierRequest
@@ -44,7 +44,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [Given(@"a Client c with Tier t")]
+    [Given("a Client c with Tier t")]
     public async Task GivenAClientWithTierT()
     {
         var createClientRequest = new CreateClientRequest
@@ -67,7 +67,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _clientId = response.Content.Result!.ClientId;
     }
 
-    [When(@"a GET request is sent to the /Clients/{c.clientId} endpoint")]
+    [When("a GET request is sent to the /Clients/{c.clientId} endpoint")]
     public async Task WhenAGETRequestIsSentToTheClientsIdEndpoint()
     {
         _response = await _clientsApi.GetClient(_clientId, _requestConfiguration);
@@ -75,7 +75,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _response.Content.Should().NotBeNull();
     }
 
-    [Then(@"the response contains Client c")]
+    [Then("the response contains Client c")]
     public void ThenTheResponseContainsAClient()
     {
         _response!.Content.Result.Should().NotBeNull();

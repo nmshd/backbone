@@ -17,7 +17,7 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
         throw new NotImplementedException();
     }
 
-    public Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
@@ -28,6 +28,11 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
     }
 
     public Task RemoveById(TierId tierId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
         throw new NotImplementedException();
     }
