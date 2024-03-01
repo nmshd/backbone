@@ -112,7 +112,7 @@ public class Identity
     {
         EnsureIdentityOwnsDevice(deviceId);
 
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        var deletionProcess = GetDeletionProcess(deletionProcessId);
 
         deletionProcess.Approve(Address, deviceId);
 
@@ -123,11 +123,17 @@ public class Identity
         return deletionProcess;
     }
 
+    private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        return deletionProcess;
+    }
+
     public IdentityDeletionProcess RejectDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
         EnsureIdentityOwnsDevice(deviceId);
 
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        var deletionProcess = GetDeletionProcess(deletionProcessId);
         deletionProcess.Reject(Address, deviceId);
 
         return deletionProcess;
