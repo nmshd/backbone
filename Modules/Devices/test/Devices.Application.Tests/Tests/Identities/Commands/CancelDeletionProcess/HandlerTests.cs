@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
