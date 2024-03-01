@@ -70,7 +70,7 @@ public class RejectDeletionProcessTests
         var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
