@@ -1,5 +1,9 @@
-﻿namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-public class TriggerRipeDeletionProcessesResponse
+﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+
+namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+public class TriggerRipeDeletionProcessesResponse : CollectionResponseBase<string>
 {
-    public List<string> DeletedIdentityAddresses { get; set; } = new();
+    public TriggerRipeDeletionProcessesResponse(IEnumerable<string> deletedIdentityAddresses) : base(deletedIdentityAddresses)
+    {
+    }
 }

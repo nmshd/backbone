@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
 
     public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var response = new TriggerRipeDeletionProcessesResponse();
+        var response = new List<string>();
 
         var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
         foreach (var identity in identities)
@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
             {
                 identity.DeletionStarted();
                 await _identitiesRepository.Update(identity, cancellationToken);
-                response.DeletedIdentityAddresses.Add(identity.Address);
+                response.Add(identity.Address);
             }
             catch (DomainException ex)
             {
@@ -35,6 +35,6 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
             }
         }
 
-        return response;
+        return new TriggerRipeDeletionProcessesResponse(response);
     }
 }

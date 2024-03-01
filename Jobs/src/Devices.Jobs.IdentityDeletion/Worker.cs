@@ -41,9 +41,8 @@ public class Worker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var identities = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
-
-        foreach (var identityAddress in identities.DeletedIdentityAddresses)
+        var deletedIdentityAddresses = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        foreach (var identityAddress in deletedIdentityAddresses)
         {
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
 
