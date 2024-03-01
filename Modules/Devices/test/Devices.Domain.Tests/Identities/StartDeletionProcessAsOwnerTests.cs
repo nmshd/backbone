@@ -58,6 +58,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("Device");
     }
 
     [Fact]
