@@ -19,7 +19,6 @@ public static class RabbitMqServiceCollectionExtensions
         {
             var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
-
             var factory = new ConnectionFactory
             {
                 HostName = options.HostName
