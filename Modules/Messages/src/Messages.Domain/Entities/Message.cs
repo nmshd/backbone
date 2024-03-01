@@ -1,4 +1,6 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.Crypto;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 using Backbone.Tooling.JsonConverters;
@@ -51,5 +53,16 @@ public class Message : IIdentifiable<MessageId>
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }
         Body = bytes;
+    }
+
+    public string DecryptBody(string symmetricKey)
+    {
+        return BitConverter.ToString(Body);
+    }
+
+    public ConvertibleString DecryptBodyWithSymmetricKey(ConvertibleString encrypted, ConvertibleString symmetricKey)
+    {
+        var aesEncryptionHelper = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
+        return aesEncryptionHelper.Decrypt(encrypted, symmetricKey);
     }
 }
