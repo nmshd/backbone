@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion;
