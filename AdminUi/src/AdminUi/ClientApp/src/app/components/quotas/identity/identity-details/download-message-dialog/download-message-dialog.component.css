@@ -1,0 +1,26 @@
+.container {
+    overflow-y: auto;
+}
+
+.preview-container {
+    max-width: 800px;
+    max-height: 700px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.warning-container {
+    height: auto;
+    margin: auto;
+    border-radius: 5px;
+    background-color: #f35f5f;
+    opacity: 0.85;
+}
+
+.warning {
+    color: #ffffff;
+    font-weight: 500;
+    padding: 10px;
+}

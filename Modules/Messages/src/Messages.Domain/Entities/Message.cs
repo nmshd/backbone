@@ -1,7 +1,10 @@
+using System.Text.Json;
+using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
+using Backbone.Tooling.JsonConverters;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
@@ -53,20 +56,30 @@ public class Message : IIdentifiable<MessageId>
         Body = bytes;
     }
 
-<<<<<<< Updated upstream
-    public string DecryptBody(string symmetricKey)
+    public string Decrypt(string serializedSecret)
     {
-        return BitConverter.ToString(Body);
+        var secretKey = ExtractSymmetricKey(serializedSecret);
+
+        return new LibsodiumSymmetricEncrypter().Decrypt(
+                ConvertibleString.FromByteArray(Body),
+                ConvertibleString.FromByteArray(secretKey))
+            .Utf8Representation;
     }
 
-    public ConvertibleString DecryptBodyWithSymmetricKey(ConvertibleString encrypted, ConvertibleString symmetricKey)
+    private static byte[] ExtractSymmetricKey(string serializedSecret)
     {
-        var aesEncryptionHelper = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-        return aesEncryptionHelper.Decrypt(encrypted, symmetricKey);
-=======
-    public string DecryptBody(string secretKey)
+        var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
+            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
+
+        var key = Convert.FromBase64String(deserializedSecret!.Key + "=");
+        return key;
+    }
+
+    private class Secret
     {
-        return Encoding.UTF8.GetString(LibsodiumSymmetricEncrypter.DecryptXChaCha20Poly1305(Body, secretKey));
->>>>>>> Stashed changes
+        /**
+         * Algorithm (`alg`) field is omitted due to not being used in the code.
+         */
+        public required string Key { get; init; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Backbone.Crypto.Abstractions;
 using Backbone.Tooling.JsonConverters;
 using Sodium;
 
@@ -7,9 +8,9 @@ using Sodium;
 #pragma warning disable IDE1006
 
 namespace Backbone.Crypto.Implementations;
-public class LibsodiumSymmetricEncrypter
+public class LibsodiumSymmetricEncrypter : ISymmetricEncrypter
 {
-    public static byte[] DecryptXChaCha20Poly1305(byte[] body, string serializedSecret)
+    public static byte[] DecryptXChaCha20Poly1305(byte[] body, byte[] key)
     {
         var bodyString = Encoding.UTF8.GetString(body);
         var deserializedBody = JsonSerializer.Deserialize<CryptoCipher>(bodyString,
@@ -17,13 +18,9 @@ public class LibsodiumSymmetricEncrypter
             throw new InvalidOperationException("Decryption failed.");
 
         var cipherText = deserializedBody.cph.Replace('-', '+').Replace('_', '/') + "=";
+
         var payload = Convert.FromBase64String(cipherText);
-
         var nonce = Convert.FromBase64String(deserializedBody.nnc);
-
-        var deserializedSecret = JsonSerializer.Deserialize<Secret>(serializedSecret,
-            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
-        var key = Convert.FromBase64String(deserializedSecret!.key + "=");
 
         return DecryptXChaCha20Poly1305(payload, nonce, key);
     }
@@ -60,6 +57,30 @@ public class LibsodiumSymmetricEncrypter
         /**
          * Algorithm (`alg`) field is omitted due to not being used in the code.
          */
-        public required string key { get; init; }
+        public required string Key { get; init; }
+    }
+
+    public ConvertibleString Decrypt(ConvertibleString encryptedMessage, ConvertibleString key)
+    {
+        ArgumentNullException.ThrowIfNull(encryptedMessage);
+        ArgumentNullException.ThrowIfNull(key);
+
+        var body = encryptedMessage.BytesRepresentation;
+        var serializedSecret = key.BytesRepresentation;
+
+        try
+        {
+            var decryptedBytes = DecryptXChaCha20Poly1305(body, serializedSecret);
+            return ConvertibleString.FromByteArray(decryptedBytes);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Decryption failed.", ex);
+        }
+    }
+
+    public ConvertibleString Encrypt(ConvertibleString plaintext, ConvertibleString key)
+    {
+        throw new NotImplementedException();
     }
 }
