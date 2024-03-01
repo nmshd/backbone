@@ -45,7 +45,7 @@ public class HandlerTests
 
         // Assert
         response.CanceledIdentityDeletionPrecessIds.Count.Should().Be(1);
-        response.CanceledIdentityDeletionPrecessIds[0].Address.Should().Be(identityWithStaleDeletionProcess.Address);
+        response.CanceledIdentityDeletionPrecessIds[0].Should().Be(identityWithStaleDeletionProcess.DeletionProcesses[0].Id);
     }
 
     [Fact]
