@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.Json;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
