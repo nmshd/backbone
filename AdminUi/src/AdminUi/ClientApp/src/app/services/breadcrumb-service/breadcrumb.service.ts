@@ -44,7 +44,10 @@ export class BreadcrumbService {
         if (this.isMainLinkClicked(breadcrumbHistory)) {
             this.breadcrumbHistory = breadcrumbHistory;
         } else {
-            if (this.shouldPushBreadcrumbHistory(breadcrumbHistory)) {
+            const existingRouteIndex = this.findExistingRouteIndex(breadcrumbHistory);
+            if (existingRouteIndex !== -1) {
+                this.clearBreadcrumbHistoryAfterIndex(existingRouteIndex);
+            } else if (this.shouldPushBreadcrumbHistory(breadcrumbHistory)) {
                 this.breadcrumbHistory.push(...breadcrumbHistory);
             }
 
@@ -52,6 +55,17 @@ export class BreadcrumbService {
                 this.trimBreadcrumbHistory();
             }
         }
+    }
+
+    private findExistingRouteIndex(newBreadcrumbHistory: Breadcrumb[]): number {
+        for (const i in this.breadcrumbHistory) {
+            const existingBreadcrumb = this.breadcrumbHistory[i];
+            const newBreadcrumb = newBreadcrumbHistory.find((breadcrumb) => breadcrumb.url === existingBreadcrumb.url);
+            if (newBreadcrumb) {
+                return parseInt(i, 10);
+            }
+        }
+        return -1;
     }
 
     private isMainLinkClicked(breadcrumbHistory: Breadcrumb[]): boolean {
