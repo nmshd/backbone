@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
         {
             var staleDeletionProcess = identity.DeletionProcesses.First(dp => dp.Status == DeletionProcessStatus.WaitingForApproval);
 
-            if (staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow)
+            if (IsPastDueApproval(staleDeletionProcess))
                 continue;
 
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
@@ -39,5 +39,10 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
         }
 
         return staleDeletionProcesses;
+    }
+
+    private static bool IsPastDueApproval(IdentityDeletionProcess staleDeletionProcess)
+    {
+        return staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow;
     }
 }
