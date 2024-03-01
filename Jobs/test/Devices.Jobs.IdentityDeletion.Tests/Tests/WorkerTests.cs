@@ -80,11 +80,7 @@ public class WorkerTests
 
     private void SetupRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
     {
-        var commandResponse = new TriggerRipeDeletionProcessesResponse
-        {
-            DeletedIdentityAddresses = [.. identityAddresses]
-        };
-
+        var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses);
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 

@@ -25,7 +25,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().BeEmpty();
+        result.Should().BeEmpty();
     }
 
     [Fact]
@@ -44,8 +44,8 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().HaveCount(1);
-        result.DeletedIdentityAddresses.Single().Should().Be(anIdentity.Address);
+        result.Should().HaveCount(1);
+        result.Single().Should().Be(anIdentity.Address);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().HaveCount(1);
+        result.Should().HaveCount(1);
         identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 
