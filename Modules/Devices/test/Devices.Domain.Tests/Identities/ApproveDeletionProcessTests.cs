@@ -35,7 +35,6 @@ public class ApproveDeletionProcessTests
     public void Throws_when_device_not_owned_by_identity()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
