@@ -1,4 +1,3 @@
-using Backbone.Crypto.Implementations;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
