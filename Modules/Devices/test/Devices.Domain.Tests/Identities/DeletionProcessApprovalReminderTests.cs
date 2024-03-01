@@ -40,7 +40,7 @@ public class DeletionProcessApprovalReminderTests
         var acting = identity.DeletionProcessApprovalReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class DeletionProcessApprovalReminderTests
         var acting = identity.DeletionProcessApprovalReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class DeletionProcessApprovalReminderTests
         var acting = identity.DeletionProcessApprovalReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
     }
 
     [Fact]
