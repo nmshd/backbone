@@ -50,7 +50,7 @@ namespace Backbone.Job.IdentityDeletion
                 .ConfigureServices((hostContext, services) =>
                 {
                     var configuration = hostContext.Configuration;
-                    services.AddHostedService<CancelDeletionProcessWorker>();
+                    services.AddHostedService<CancelIdentityDeletionProcessWorker>();
 
                     services
                         .AddModule<DevicesModule>(configuration)

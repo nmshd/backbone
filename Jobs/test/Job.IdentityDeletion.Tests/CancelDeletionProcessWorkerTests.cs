@@ -23,14 +23,14 @@ namespace Backbone.Job.IdentityDeletion.Tests
             A.CallTo(() => mockMediator.Send(A<CancelStaleDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
 
-        private static CancelDeletionProcessWorker CreateWorker(IMediator? mediator = null)
+        private static CancelIdentityDeletionProcessWorker CreateWorker(IMediator? mediator = null)
         {
             mediator ??= A.Fake<IMediator>();
 
-            return new CancelDeletionProcessWorker(
+            return new CancelIdentityDeletionProcessWorker(
                 A.Dummy<IHostApplicationLifetime>(),
                 mediator,
-                A.Dummy<ILogger<CancelDeletionProcessWorker>>());
+                A.Dummy<ILogger<CancelIdentityDeletionProcessWorker>>());
         }
     }
 }

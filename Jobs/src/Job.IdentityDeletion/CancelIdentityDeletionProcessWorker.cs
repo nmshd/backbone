@@ -8,15 +8,15 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion;
-public class CancelDeletionProcessWorker : IHostedService
+public class CancelIdentityDeletionProcessWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
     private readonly IMediator _mediator;
-    private readonly ILogger<CancelDeletionProcessWorker> _logger;
+    private readonly ILogger<CancelIdentityDeletionProcessWorker> _logger;
 
-    public CancelDeletionProcessWorker(IHostApplicationLifetime host,
+    public CancelIdentityDeletionProcessWorker(IHostApplicationLifetime host,
         IMediator mediator,
-        ILogger<CancelDeletionProcessWorker> logger)
+        ILogger<CancelIdentityDeletionProcessWorker> logger)
     {
         _host = host;
         _mediator = mediator;
