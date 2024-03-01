@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleDeletionProcesses;
@@ -33,7 +32,7 @@ public class Handler : IRequestHandler<CancelStaleDeletionProcessesCommand, Canc
             identity.CancelStaleDeletionProcess(staleDeletionProcess.Id);
             staleDeletionProcesses.StaleDeletionPrecessIdentities.Add(identity);
 
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
+            //_eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, staleDeletionProcess.Id));
 
             await _identityRepository.Update(identity, cancellationToken);
         }
