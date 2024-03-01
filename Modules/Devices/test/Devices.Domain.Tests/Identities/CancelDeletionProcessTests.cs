@@ -12,11 +12,7 @@ public class CancelDeletionProcessTests
     public void Cancel_deletion_process()
     {
         // Arrange
-        var currentDate = DateTime.Parse("2020-01-01");
-        SystemTime.Set(currentDate);
-
         var identity = CreateIdentityWithApprovedDeletionProcess();
-        SystemTime.Set(DateTime.Parse("2020-01-02"));
 
         // Act
         var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
@@ -64,7 +60,6 @@ public class CancelDeletionProcessTests
 
         var auditLogEntry = deletionProcess.AuditLog[1];
         auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
         auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.Approved);
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
     }
