@@ -21,14 +21,6 @@ import {
 } from "@nmshd/transport";
 
 export class BackboneClient {
-    public async createNewClientForNewDevice() {
-        const signedChallenge = await this.getSignedChallenge();
-        const newDevice = await this.devices.createDevice({ devicePassword: "test", signedChallenge: signedChallenge.toJSON(false) });
-
-        const backboneClient2 = await BackboneClient.initFromExistingClient(this, newDevice.value.username, "test");
-
-        return backboneClient2;
-    }
     private static readonly DEFAULT_PASSWORD = "test";
     private static readonly CLIENT_ID = "test";
     private static readonly CLIENT_SECRET = "test";
@@ -131,8 +123,13 @@ export class BackboneClient {
         return signedChallenge;
     }
 
-    public async getSignedChallenge(): Promise<ChallengeSigned> {
-        return await BackboneClient.createSignedChallenge(this.signatureKeypair, this.config);
+    public async createNewClientForNewDevice() {
+        const signedChallenge = await BackboneClient.createSignedChallenge(this.signatureKeypair, this.config);
+        const newDevice = await this.devices.createDevice({ devicePassword: "test", signedChallenge: signedChallenge.toJSON(false) });
+
+        const backboneClient2 = await BackboneClient.initFromExistingClient(this, newDevice.value.username, "test");
+
+        return backboneClient2;
     }
 }
 
