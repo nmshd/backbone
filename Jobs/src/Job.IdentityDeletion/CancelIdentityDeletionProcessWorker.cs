@@ -30,7 +30,7 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
 
         var logCanceledDeletionProcessIds = string.Join(", ", identityDeletionProcessIds.CanceledIdentityDeletionPrecessIds);
 
-        _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]" , logCanceledDeletionProcessIds);
+        _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]", logCanceledDeletionProcessIds);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
