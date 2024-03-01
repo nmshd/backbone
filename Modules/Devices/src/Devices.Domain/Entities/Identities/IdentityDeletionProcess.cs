@@ -133,7 +133,7 @@ public class IdentityDeletionProcess
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
         Status = DeletionProcessStatus.Canceled;
-        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main
+        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main / or just make a migration yourself
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
     }
