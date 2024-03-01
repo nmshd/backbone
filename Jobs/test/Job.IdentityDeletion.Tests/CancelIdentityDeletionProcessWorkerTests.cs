@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Job.IdentityDeletion.Tests
 {
-    public class CancelDeletionProcessWorkerTests
+    public class CancelIdentityDeletionProcessWorkerTests
     {
         [Fact]
         public async void Happy_path()
