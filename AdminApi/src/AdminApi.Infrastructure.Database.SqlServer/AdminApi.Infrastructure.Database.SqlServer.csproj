@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

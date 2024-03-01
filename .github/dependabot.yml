@@ -44,7 +44,7 @@ updates:
 
   ##### Admin UI Angular App #####
   - package-ecosystem: "npm"
-    directory: "/AdminUi/src/AdminUi/ClientApp"
+    directory: "/AdminApi/src/AdminApi/ClientApp"
     schedule:
       interval: "weekly"
     groups:

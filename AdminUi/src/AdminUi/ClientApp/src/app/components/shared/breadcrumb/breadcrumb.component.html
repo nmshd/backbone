@@ -1,9 +1,0 @@
-<nav>
-    <ng-container *ngFor="let trail of breadcrumbHistory; let i = index; let last = last">
-        <ng-container *ngIf="!last || (last && breadcrumbHistory.length > 1)">
-            <a *ngIf="!last" [routerLink]="trail.url" (click)="onBreadcrumbClick(i)">{{ trail.label }}</a>
-            <span *ngIf="last">{{ trail.label }}</span>
-        </ng-container>
-        <ng-container *ngIf="!last"> &gt; </ng-container>
-    </ng-container>
-</nav>

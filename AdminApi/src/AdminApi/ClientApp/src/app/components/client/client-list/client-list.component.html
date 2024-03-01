@@ -1,0 +1,154 @@
+<div class="card-header">
+    <h2 class="header-title">{{ header }}</h2>
+    <p class="header-description">{{ headerDescription }}</p>
+</div>
+<mat-card [ngClass]="{ 'disabled-container': loading }">
+    <div class="action-buttons">
+        <button mat-mini-fab color="warn" (click)="openConfirmationDialog()" [disabled]="selection.selected.length === 0" style="margin-right: 10px">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="addClientDialog()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <mat-card-content style="min-height: 400px; overflow-x: auto">
+        <div *ngIf="loading" class="loading">
+            <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+        </div>
+        <table mat-table matSort (matSortChange)="onTableSort($event)" class="responsive" [dataSource]="clients" *ngIf="!loading">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                        (change)="$event ? toggleAllRows() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        color="primary"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index">
+                    <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        color="primary"
+                        [aria-label]="checkboxLabel(i, row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by client ID" style="text-align: center">
+                    <div class="header-container">
+                        <span>Client ID</span>
+                        <mat-form-field style="width: 100%; padding-top: 10px">
+                            <input matInput type="text" [(ngModel)]="filter.clientId" (input)="filterClients()" />
+                            <button *ngIf="filter.clientId" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('clientId')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let client" data-label="Client Id:" (click)="editClient(client.clientId)">
+                    {{ client.clientId }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="displayName">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef style="text-align: center">
+                    <div class="header-container">
+                        <span>Display Name</span>
+                        <mat-form-field style="width: 100%; padding-top: 10px">
+                            <input matInput type="text" [(ngModel)]="filter.displayName" (input)="filterClients()" />
+                            <button *ngIf="filter.displayName" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('displayName')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let client" data-label="Display Name:" (click)="editClient(client.clientId)">
+                    {{ client.displayName }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="defaultTier">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                    <div class="header-container">
+                        <span>Default Tier</span>
+                        <mat-form-field style="width: 100%; padding-top: 10px">
+                            <mat-label>Tiers</mat-label>
+                            <mat-select multiple [(ngModel)]="filter.tiers" (selectionChange)="filterClients()">
+                                <mat-option *ngFor="let tier of tiers" [value]="tier.id">{{ tier.name }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let client" data-label="Default Tier:" (click)="goToTier(client.defaultTier.id)" class="tier-navigation">
+                    {{ client.defaultTier.name }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="numberOfIdentities">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                    <div class="header-container">
+                        <span>Number of Identities</span>
+                        <div class="complex-filter-container">
+                            <mat-form-field style="width: 45%">
+                                <mat-select [(ngModel)]="filter.numberOfIdentities.operator" (selectionChange)="filterClients()">
+                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 45%">
+                                <input matInput type="number" [(ngModel)]="filter.numberOfIdentities.value" (input)="filterClients()" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let client" data-label="Number of Identities:" (click)="editClient(client.clientId)" style="text-align: center">
+                    <div *ngIf="client.maxIdentities == null; else maxIdentitiesWrapper">
+                        {{ client.numberOfIdentities }}
+                    </div>
+                    <ng-template #maxIdentitiesWrapper>
+                        <div>
+                            <span>{{ client.numberOfIdentities }}/{{ client.maxIdentities }}</span>
+                            <mat-progress-bar mode="determinate" [value]="(client.numberOfIdentities / client.maxIdentities) * 100"></mat-progress-bar>
+                        </div>
+                    </ng-template>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center">
+                    <div class="header-container">
+                        <span>Created At</span>
+                        <div class="complex-filter-container">
+                            <mat-form-field style="width: 25%">
+                                <mat-select [(ngModel)]="filter.createdAt.operator" (selectionChange)="filterClients()">
+                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 70%" class="inline-action-buttons">
+                                <mat-label>Choose a date</mat-label>
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="filter.createdAt.value" (dateChange)="filterClients()" />
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <button *ngIf="filter.createdAt.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter('createdAt')">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let client" data-label="Created At:" (click)="editClient(client.clientId)" style="text-align: center">
+                    {{ client.createdAt | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let client" data-label="">
+                    <button mat-raised-button class="actions-button" color="primary" (click)="openChangeSecretDialog(client.clientId)">Change Client Secret</button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">No clients found.</td>
+            </tr>
+        </table>
+    </mat-card-content>
+</mat-card>

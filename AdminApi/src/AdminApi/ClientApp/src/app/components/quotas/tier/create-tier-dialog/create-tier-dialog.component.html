@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="card-header">
+        <h2 class="header-title">{{ headerCreate }}</h2>
+        <p class="header-description">
+            {{ headerDescriptionCreate }}
+        </p>
+    </div>
+    <mat-card>
+        <mat-card-content class="form-card">
+            <div class="form-details">
+                <mat-form-field class="full-width">
+                    <mat-label>Name</mat-label>
+                    <input matInput required [(ngModel)]="tier.name" />
+                    <mat-error>You must enter a value</mat-error>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+        <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="createTier()" [disabled]="disabled || !validateTier()">Save</button>
+            <button mat-raised-button (click)="closeTierEditDialog()">Close</button>
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,7 @@
+{
+    "ignorePatterns": ["/*", "!/src"],
+    "extends": ["@js-soft/ts", "@js-soft/ts/mocha"],
+    "parserOptions": {
+        "project": ["tsconfig.json"]
+    }
+}

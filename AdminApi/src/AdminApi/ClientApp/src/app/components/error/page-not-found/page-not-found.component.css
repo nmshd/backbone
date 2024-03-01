@@ -1,0 +1,34 @@
+.error-container {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    align-items: baseline;
+}
+
+.error-code {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 6rem;
+    font-weight: 500;
+    color: rgb(66, 66, 66);
+}
+
+.error-title {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+}
+
+.error-description {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.dashboard-button {
+    width: 100%;
+    padding: 0.5rem;
+}

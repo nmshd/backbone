@@ -1,0 +1,34 @@
+.sidebar {
+    user-select: none !important;
+}
+
+.sidebar-extended {
+    width: 260px;
+}
+
+.sidebar-contracted {
+    width: 55px;
+}
+
+.active {
+    background-color: #17428d;
+    box-shadow:
+        0 4px 20px 0 rgba(0, 0, 0, 0.14),
+        0 7px 10px -5px rgba(156, 39, 176, 0.4);
+}
+
+.active span {
+    color: #fff;
+}
+
+.active mat-icon {
+    color: #fff;
+}
+
+.menu-entry {
+    margin: 10px 15px 0;
+    border-radius: 3px !important;
+    font-size: 13px;
+    padding: 10px 15px;
+    width: auto;
+}

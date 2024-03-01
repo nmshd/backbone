@@ -1,0 +1,146 @@
+.mat-column-address,
+.mat-column-address-filter,
+.mat-column-clientId,
+.mat-column-publicKey {
+    width: 25%;
+}
+
+.mat-column-createdAt,
+.mat-column-created-at-filter,
+.mat-column-last-login-filter,
+.mat-column-lastLoginAt {
+    max-width: 330px;
+}
+
+.mat-column-tierName,
+.mat-column-tier-filter {
+    max-width: 150px;
+}
+
+.mat-column-createdWithClient,
+.mat-column-client-filter {
+    max-width: 180px;
+}
+
+.mat-column-number-of-devices-filter,
+.mat-column-numberOfDevices,
+.mat-column-identity-version-filter,
+.mat-column-identityVersion,
+.mat-column-datawallet-version-filter,
+.mat-column-datawalletVersion {
+    max-width: 200px;
+}
+
+.disabled-container {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.inline-action-buttons ::ng-deep .mat-mdc-form-field-icon-suffix {
+    display: inherit;
+}
+
+.mat-column-address {
+    width: 26.5em;
+}
+
+.tier-navigation {
+    text-decoration: underline;
+    color: blue;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    position: absolute;
+    margin-top: -60px;
+    width: 100%;
+    height: 100%;
+}
+
+.no-data {
+    padding: 25px;
+}
+
+.mat-mdc-row:hover {
+    background-color: #ddd !important;
+    cursor: pointer;
+}
+
+.card-header {
+    border-radius: 3px;
+    padding: 15px;
+    background-color: #17428d;
+    position: relative;
+    z-index: 1;
+    margin: 15px 15px -50px 15px;
+}
+
+.filter-cell {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-description {
+    color: #fff;
+}
+
+.header-title {
+    color: #fff;
+}
+
+.action-buttons {
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media screen and (max-width: 960px) {
+    .card-header {
+        margin: 15px 15px -20px 15px;
+    }
+
+    .mat-mdc-table .mat-mdc-header-row {
+        display: none;
+    }
+
+    .mat-mdc-table .mat-mdc-row {
+        display: flex;
+        flex-wrap: wrap;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mat-mdc-table .mat-mdc-cell {
+        width: 100%;
+        border-bottom: 0px solid #ddd;
+        font-size: 1em;
+        min-height: 30px;
+        margin-bottom: 4%;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:before {
+        content: attr(data-label) ":";
+        float: left;
+        font-weight: 500;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:first-child {
+        margin-top: 25px;
+    }
+
+    .mat-mdc-table .mat-mdc-row:last-child {
+        border-bottom: 0px;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+        text-align: center;
+    }
+}
