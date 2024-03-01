@@ -1,0 +1,6 @@
+pubspec_overrides.yaml
+.dart_tool
+build
+.flutter-plugins
+.flutter-plugins-dependencies
+.DS_Store
