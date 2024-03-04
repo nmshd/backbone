@@ -43,6 +43,7 @@ import { CreateClientDialogComponent } from "./components/client/create-client-d
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { IdentityDetailsMessageRecipientsDialogComponent } from "./components/quotas/identity/identity-details/identity-details-message-recipients-dialog/identity-details-message-recipients-dialog.component";
 import { IdentityDetailsMessagesComponent } from "./components/quotas/identity/identity-details/identity-details-messages/identity-details-messages.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
@@ -75,6 +76,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         IdentityDetailsComponent,
         IdentityDetailsRelationshipsComponent,
         IdentityDetailsMessagesComponent,
+        IdentityDetailsMessageRecipientsDialogComponent,
         TierListComponent,
         TierEditComponent,
         CreateTierDialogComponent,
@@ -87,7 +89,6 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         LoginComponent,
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
-        IdentityDetailsRelationshipsComponent,
         BreadcrumbComponent
     ],
     imports: [
