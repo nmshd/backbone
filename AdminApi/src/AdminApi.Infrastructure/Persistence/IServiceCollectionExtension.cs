@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;

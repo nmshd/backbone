@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Backbone.AdminApi.Tests.Integration.Models;
 

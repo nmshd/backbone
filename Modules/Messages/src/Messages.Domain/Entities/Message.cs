@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 

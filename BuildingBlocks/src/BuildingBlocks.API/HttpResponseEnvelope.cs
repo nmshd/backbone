@@ -1,4 +1,4 @@
-﻿namespace Backbone.BuildingBlocks.API;
+namespace Backbone.BuildingBlocks.API;
 
 public class HttpResponseEnvelope
 {

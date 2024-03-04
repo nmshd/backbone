@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: POST TierQuota
 
 Administrator Creates a Tier Quota

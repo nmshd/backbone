@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.AdminApi.Tests.Integration;
 

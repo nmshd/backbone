@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 
 namespace Backbone.BuildingBlocks.Application.FluentValidation;

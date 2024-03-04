@@ -1,28 +1,28 @@
 {
-  "Infrastructure": {
-    "EventBus": {
-      "ConnectionInfo": "localhost"
-    },
-    "SqlDatabase": {
-      "Provider": "Postgres",
-      "ConnectionString": "User ID=adminUi;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
-      //"ConnectionString": "Server=localhost;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
-    }
-  },
-  "Modules": {
-    "Quotas": {
-      "Infrastructure": {
+    "Infrastructure": {
+        "EventBus": {
+            "ConnectionInfo": "localhost"
+        },
         "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
+            "Provider": "Postgres",
+            "ConnectionString": "User ID=adminUi;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
+            //"ConnectionString": "Server=localhost;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
         }
-      }
     },
-    "Devices": {
-      "Infrastructure": {
-        "SqlDatabase": {
-          "ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+    "Modules": {
+        "Quotas": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
+        },
+        "Devices": {
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+                }
+            }
         }
-      }
     }
-  }
 }

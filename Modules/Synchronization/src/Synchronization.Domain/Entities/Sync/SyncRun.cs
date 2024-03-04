@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;

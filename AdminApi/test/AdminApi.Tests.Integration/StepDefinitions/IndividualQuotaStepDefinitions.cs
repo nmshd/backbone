@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Tests.Integration.API;
+using Backbone.AdminApi.Tests.Integration.API;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.AdminApi.Tests.Integration.Models;
 using Backbone.Crypto;

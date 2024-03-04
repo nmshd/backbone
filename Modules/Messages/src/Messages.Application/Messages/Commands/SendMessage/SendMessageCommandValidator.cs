@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling.Extensions;

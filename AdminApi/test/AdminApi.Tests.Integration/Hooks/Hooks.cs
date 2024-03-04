@@ -1,4 +1,4 @@
-﻿using Backbone.SpecFlowCucumberResultsExporter.Extensions;
+using Backbone.SpecFlowCucumberResultsExporter.Extensions;
 
 namespace Backbone.AdminApi.Tests.Integration.Hooks;
 

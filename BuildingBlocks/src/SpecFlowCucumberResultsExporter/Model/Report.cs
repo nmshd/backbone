@@ -1,4 +1,4 @@
-﻿namespace Backbone.SpecFlowCucumberResultsExporter.Model;
+namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 public class Report : ReportItem
 {

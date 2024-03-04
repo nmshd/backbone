@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
 

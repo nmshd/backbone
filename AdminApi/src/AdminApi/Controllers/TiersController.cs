@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;

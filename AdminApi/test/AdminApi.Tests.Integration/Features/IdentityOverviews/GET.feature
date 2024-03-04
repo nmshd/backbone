@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: GET Identities
 
 User requests an Identity Overview List

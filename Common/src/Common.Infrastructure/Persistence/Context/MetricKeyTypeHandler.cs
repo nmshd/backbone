@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Backbone.BuildingBlocks.Domain;
 using Dapper;
 

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;

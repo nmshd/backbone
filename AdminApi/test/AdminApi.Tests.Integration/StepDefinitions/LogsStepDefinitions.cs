@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Tests.Integration.API;
+using Backbone.AdminApi.Tests.Integration.API;
 using Backbone.AdminApi.Tests.Integration.Models;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;

@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 

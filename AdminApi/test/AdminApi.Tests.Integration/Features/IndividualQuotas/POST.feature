@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: POST IndividualQuota
 
 Administrator Creates an Individual Quota

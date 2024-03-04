@@ -1,4 +1,4 @@
-﻿namespace Backbone.ConsumerApi.Mvc.Middleware;
+namespace Backbone.ConsumerApi.Mvc.Middleware;
 
 public class TraceIdMiddleware
 {

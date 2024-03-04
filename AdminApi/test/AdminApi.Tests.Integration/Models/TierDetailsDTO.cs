@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Tests.Integration.Models;
+namespace Backbone.AdminApi.Tests.Integration.Models;
 public class TierDetailsDTO
 {
     public required string Id { get; set; }

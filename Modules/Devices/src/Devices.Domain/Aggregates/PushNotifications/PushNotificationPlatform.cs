@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public enum PushNotificationPlatform
 {

@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Configuration;
+using Backbone.AdminApi.Configuration;
 using Backbone.Modules.Quotas.Application.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 

@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Tests.Integration.Models;
+namespace Backbone.AdminApi.Tests.Integration.Models;
 public class ChangeClientSecretResponse
 {
     public required string ClientId { get; set; }

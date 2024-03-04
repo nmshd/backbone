@@ -1,4 +1,4 @@
-﻿namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence;
 
 public interface IRepository<T, in TId> where T : class
 {

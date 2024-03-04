@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

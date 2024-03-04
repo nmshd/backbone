@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;

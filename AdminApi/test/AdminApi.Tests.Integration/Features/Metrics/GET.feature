@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: GET Metrics
 
 User requests an Metric List

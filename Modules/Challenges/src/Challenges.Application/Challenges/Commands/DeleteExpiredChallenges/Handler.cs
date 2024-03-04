@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

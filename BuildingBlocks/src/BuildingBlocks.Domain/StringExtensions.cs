@@ -1,4 +1,4 @@
-﻿namespace Backbone.BuildingBlocks.Domain;
+namespace Backbone.BuildingBlocks.Domain;
 
 public static class StringExtensions
 {

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.Infrastructure.EventBus;
 

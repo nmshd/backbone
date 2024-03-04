@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: DELETE TierQuota
 
 Administrator Deletes a Tier Quota

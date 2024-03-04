@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 

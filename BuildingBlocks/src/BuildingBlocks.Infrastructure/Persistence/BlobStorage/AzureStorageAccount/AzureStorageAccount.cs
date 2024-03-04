@@ -1,4 +1,4 @@
-﻿using Azure;
+using Azure;
 using Azure.Storage.Blobs;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;

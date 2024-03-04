@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.Infrastructure.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

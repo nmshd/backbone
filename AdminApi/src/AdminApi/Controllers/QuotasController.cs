@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;

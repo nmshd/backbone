@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Configuration;
+using Backbone.AdminApi.Configuration;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
 using Backbone.Modules.Devices.Application.Extensions;

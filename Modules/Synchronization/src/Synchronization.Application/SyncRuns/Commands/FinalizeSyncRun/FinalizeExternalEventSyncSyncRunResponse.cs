@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 

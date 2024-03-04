@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Tests.Integration.Models;
+namespace Backbone.AdminApi.Tests.Integration.Models;
 public class ClientOverviewDTO
 {
     public required string ClientId { get; set; }

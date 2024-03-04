@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Authentication;
+using Backbone.AdminApi.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

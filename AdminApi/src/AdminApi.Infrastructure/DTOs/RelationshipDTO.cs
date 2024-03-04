@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.AdminApi.Infrastructure.DTOs;
 public class RelationshipDTO

@@ -1,1 +1,1 @@
-﻿global using TechTalk.SpecFlow;
+global using TechTalk.SpecFlow;

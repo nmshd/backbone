@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 

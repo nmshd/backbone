@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Tests.Integration.Models;
+namespace Backbone.AdminApi.Tests.Integration.Models;
 public class LogRequest
 {
     public required LogLevel LogLevel { get; set; }

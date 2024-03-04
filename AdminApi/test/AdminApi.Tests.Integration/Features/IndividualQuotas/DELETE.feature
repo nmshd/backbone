@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: DELETE IndividualQuota
 
 Administrator Deletes an Individual Quota

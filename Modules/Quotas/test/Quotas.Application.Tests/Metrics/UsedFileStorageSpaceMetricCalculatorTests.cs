@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
 using FluentAssertions;
 using Xunit;
