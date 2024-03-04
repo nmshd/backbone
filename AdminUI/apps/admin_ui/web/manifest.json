@@ -1,6 +1,6 @@
 {
-    "name": "admin_ui",
-    "short_name": "admin_ui",
+    "name": "Admin UI",
+    "short_name": "AUI",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
