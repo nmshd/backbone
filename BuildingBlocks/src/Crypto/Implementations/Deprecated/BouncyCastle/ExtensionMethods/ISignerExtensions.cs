@@ -1,4 +1,4 @@
-﻿using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 
 namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;

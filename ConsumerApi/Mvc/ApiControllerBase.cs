@@ -1,4 +1,4 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;

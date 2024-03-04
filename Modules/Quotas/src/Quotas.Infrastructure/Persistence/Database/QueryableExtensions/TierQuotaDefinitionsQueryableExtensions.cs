@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore;
 

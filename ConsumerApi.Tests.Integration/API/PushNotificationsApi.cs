@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 
 namespace Backbone.ConsumerApi.Tests.Integration.API;

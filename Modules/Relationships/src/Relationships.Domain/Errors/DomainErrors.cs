@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 

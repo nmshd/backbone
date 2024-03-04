@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 
 namespace Backbone.BuildingBlocks.Application.Pagination;
 

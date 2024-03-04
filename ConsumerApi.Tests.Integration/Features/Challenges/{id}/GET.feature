@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: GET Challenge
 
 User requests a Challenge

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 

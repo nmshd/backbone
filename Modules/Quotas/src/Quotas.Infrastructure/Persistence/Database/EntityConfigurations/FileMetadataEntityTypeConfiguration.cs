@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
+using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

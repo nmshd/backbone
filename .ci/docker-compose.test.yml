@@ -28,7 +28,7 @@ services:
     hostname: admin-ui
     build:
       context: ..
-      dockerfile: AdminUi/src/AdminUi/Dockerfile
+      dockerfile: AdminApi/src/AdminApi/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -65,7 +65,7 @@ services:
 
   seed-client:
     container_name: seed-client-test
-    build: 
+    build:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
     depends_on:

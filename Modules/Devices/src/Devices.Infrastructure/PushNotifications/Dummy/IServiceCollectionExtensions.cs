@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Microsoft.Extensions.DependencyInjection;
 

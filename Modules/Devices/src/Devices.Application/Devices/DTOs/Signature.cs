@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Microsoft.IdentityModel.Tokens;

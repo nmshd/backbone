@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MediatR;
 
 namespace Backbone.BuildingBlocks.Application.CQRS.BaseClasses;

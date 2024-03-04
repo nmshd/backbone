@@ -1,4 +1,4 @@
-﻿// using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+// using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 //
 // namespace Synchronization.Application.IntegrationEvents.Incoming.MessageDelivered;
 //

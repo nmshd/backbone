@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application;

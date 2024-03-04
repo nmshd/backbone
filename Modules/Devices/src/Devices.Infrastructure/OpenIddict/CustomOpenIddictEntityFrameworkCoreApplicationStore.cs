@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;

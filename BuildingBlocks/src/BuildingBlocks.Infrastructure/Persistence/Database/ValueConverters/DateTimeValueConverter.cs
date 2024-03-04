@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 

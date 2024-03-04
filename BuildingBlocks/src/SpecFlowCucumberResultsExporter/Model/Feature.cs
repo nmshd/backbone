@@ -1,10 +1,10 @@
-﻿namespace Backbone.SpecFlowCucumberResultsExporter.Model;
+namespace Backbone.SpecFlowCucumberResultsExporter.Model;
 
 public class Feature : TaggedReportItem
 {
     private string _description;
 
-    private static readonly string DEFAULT_URI = "/uri/placeholder";
+    private const string DEFAULT_URI = "/uri/placeholder";
 
     public new string Description
     {

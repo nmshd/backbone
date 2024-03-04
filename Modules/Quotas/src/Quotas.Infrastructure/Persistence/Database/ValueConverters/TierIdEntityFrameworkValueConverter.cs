@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;

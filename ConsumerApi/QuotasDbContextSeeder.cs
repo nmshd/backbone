@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;

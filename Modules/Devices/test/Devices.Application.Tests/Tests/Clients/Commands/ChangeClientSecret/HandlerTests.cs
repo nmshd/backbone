@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
+using Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
