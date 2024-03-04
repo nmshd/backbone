@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -11,7 +12,7 @@ public class CancelStaleDeletionProcessTests
     public void Cancel_stale_deletion_process_still_waiting_for_approval()
     {
         // Arrange
-        var identity = new Identity("", IdentityAddress.Create([], "id1"), [], TierId.Generate(), 1);
+        var identity = TestDataGenerator.CreateIdentity();
         var deletionProcess = identity.StartDeletionProcessAsSupport();
 
         // Act
@@ -20,6 +21,21 @@ public class CancelStaleDeletionProcessTests
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
 
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.Canceled);
+        deletionProcess.CanceledAt.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Cancel_stale_deletion_process_creates_audit_log_when_executed()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var deletionProcess = identity.StartDeletionProcessAsSupport();
+
+        // Act
+        identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
+
+        // Assert
         var canceledDeletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Canceled)!;
 
         canceledDeletionProcess.AuditLog.Should().HaveCount(2); // count 2 because the first one was creation of a deletion process
