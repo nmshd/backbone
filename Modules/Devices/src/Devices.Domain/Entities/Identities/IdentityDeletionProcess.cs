@@ -62,6 +62,8 @@ public class IdentityDeletionProcess
     public DateTime? ApprovalReminder2SentAt { get; private set; }
     public DateTime? ApprovalReminder3SentAt { get; private set; }
 
+    public DateTime? CanceledAt { get; private set; }
+
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
 
@@ -133,7 +135,7 @@ public class IdentityDeletionProcess
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
         Status = DeletionProcessStatus.Canceled;
-        // CanceledAt = DateTime.UtcNow; // todo:Nikola2 prop will be there after related tasks are merged into main / or just make a migration yourself
+        CanceledAt = DateTime.UtcNow;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
     }
