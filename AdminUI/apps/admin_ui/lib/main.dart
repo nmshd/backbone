@@ -2,7 +2,13 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await setup();
+
   final client = await AdminApiClient.create(
     baseUrl: const String.fromEnvironment('BASE_URL'),
     apiKey: const String.fromEnvironment('API_KEY'),
