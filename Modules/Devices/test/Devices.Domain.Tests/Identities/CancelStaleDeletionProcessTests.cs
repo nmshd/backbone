@@ -13,7 +13,7 @@ public class CancelStaleDeletionProcessTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
         var deletionProcess = identity.StartDeletionProcessAsSupport();
-        
+
         SystemTime.Set(new DateTime(2024, 05, 06, 09, 50, 06));
 
         // Act
