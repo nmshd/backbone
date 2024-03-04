@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Backbone.SpecFlowCucumberResultsExporter.Model;
 
 namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;

@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.AspNetCore.Http;
 
 namespace Backbone.Modules.Files.ConsumerApi.DTOs;

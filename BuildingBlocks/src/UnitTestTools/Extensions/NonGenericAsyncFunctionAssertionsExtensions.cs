@@ -1,4 +1,4 @@
-﻿using FluentAssertions.Specialized;
+using FluentAssertions.Specialized;
 
 namespace Backbone.UnitTestTools.Extensions;
 

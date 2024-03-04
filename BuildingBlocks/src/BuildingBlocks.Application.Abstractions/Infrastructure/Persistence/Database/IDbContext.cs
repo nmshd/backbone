@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;

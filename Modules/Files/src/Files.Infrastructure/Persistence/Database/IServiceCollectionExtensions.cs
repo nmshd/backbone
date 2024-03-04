@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;

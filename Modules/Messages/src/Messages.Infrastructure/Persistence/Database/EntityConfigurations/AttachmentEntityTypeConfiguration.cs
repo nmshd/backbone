@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

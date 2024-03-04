@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Domain.Ids;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;

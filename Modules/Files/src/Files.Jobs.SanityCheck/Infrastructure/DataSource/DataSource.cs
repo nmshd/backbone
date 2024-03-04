@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Backbone.Modules.Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore;

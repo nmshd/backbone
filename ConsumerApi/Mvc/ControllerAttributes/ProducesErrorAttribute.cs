@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Mvc.ControllerAttributes;

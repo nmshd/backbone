@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Backbone.SpecFlowCucumberResultsExporter.Extensions;
 using Backbone.SpecFlowCucumberResultsExporter.Model;
