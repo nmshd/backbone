@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain;
 
