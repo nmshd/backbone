@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
 
         foreach (var identity in identities)
         {
-            var identityDeletionProcess = identity.DeletionProcesses.First(dp => dp.Status == DeletionProcessStatus.WaitingForApproval);
+            var identityDeletionProcess = ReturnWaitingForApprovalDeletionProcess(identity);
 
             if (IsInApprovalPeriod(identityDeletionProcess))
                 continue;
@@ -33,9 +33,9 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
             identity.CancelStaleDeletionProcess(identityDeletionProcess.Id);
             staleDeletionProcesses.CanceledIdentityDeletionPrecessIds.Add(identityDeletionProcess.Id);
 
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, identityDeletionProcess.Id));
-
             await _identityRepository.Update(identity, cancellationToken);
+
+            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, identityDeletionProcess.Id));
         }
 
         return staleDeletionProcesses;
@@ -44,5 +44,10 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
     private static bool IsInApprovalPeriod(IdentityDeletionProcess staleDeletionProcess)
     {
         return staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow;
+    }
+
+    private static IdentityDeletionProcess ReturnWaitingForApprovalDeletionProcess(Identity identity)
+    {
+        return identity.DeletionProcesses.First(dp => dp.Status == DeletionProcessStatus.WaitingForApproval);
     }
 }
