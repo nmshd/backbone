@@ -1,7 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentAssertions;
 using Xunit;
 
@@ -9,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class CancelStaleDeletionProcessTests
 {
     [Fact]
-    public void Cancel_stale_deletion_process_still_waiting_for_approval()
+    public void Cancel_deletion_process_that_is_past_due_approval()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
@@ -26,7 +23,7 @@ public class CancelStaleDeletionProcessTests
     }
 
     [Fact]
-    public void Cancel_stale_deletion_process_creates_audit_log_when_executed()
+    public void Canceling_stale_deletion_process_creates_audit_log_when_executed()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
