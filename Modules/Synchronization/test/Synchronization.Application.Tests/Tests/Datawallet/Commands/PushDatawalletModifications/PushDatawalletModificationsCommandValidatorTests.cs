@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation.TestHelper;
 using Xunit;

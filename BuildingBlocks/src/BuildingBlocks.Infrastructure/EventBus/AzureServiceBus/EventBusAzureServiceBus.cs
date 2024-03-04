@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Autofac;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;

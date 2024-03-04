@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;

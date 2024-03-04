@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Synchronization.Application;
 
 namespace Backbone.Modules.Synchronization.ConsumerApi;

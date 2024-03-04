@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Backbone.Tooling.Extensions;
 
 // ReSharper disable once CheckNamespace

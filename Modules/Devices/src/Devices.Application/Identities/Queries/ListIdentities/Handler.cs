@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.DTOs;
+using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 

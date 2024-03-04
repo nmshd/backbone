@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 public class MessageCreatedIntegrationEvent : IntegrationEvent

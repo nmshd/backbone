@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
+namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncError
 {

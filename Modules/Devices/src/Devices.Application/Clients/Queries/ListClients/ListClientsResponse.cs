@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;

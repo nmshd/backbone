@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: GET Tokens
 
 User requests multiple Tokens

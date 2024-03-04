@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 

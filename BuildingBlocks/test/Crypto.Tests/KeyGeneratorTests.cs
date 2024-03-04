@@ -1,4 +1,4 @@
-﻿using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 

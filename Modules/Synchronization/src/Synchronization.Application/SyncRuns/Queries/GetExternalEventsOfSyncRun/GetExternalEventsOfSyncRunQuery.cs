@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;

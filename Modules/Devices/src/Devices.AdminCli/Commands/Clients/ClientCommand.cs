@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
 
 namespace Backbone.Modules.Devices.AdminCli.Commands.Clients;
 

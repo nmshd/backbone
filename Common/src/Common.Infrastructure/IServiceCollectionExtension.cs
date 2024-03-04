@@ -1,4 +1,4 @@
-﻿using Backbone.Common.Infrastructure.Persistence.Context;
+using Backbone.Common.Infrastructure.Persistence.Context;
 using Backbone.Common.Infrastructure.Persistence.Repository;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;

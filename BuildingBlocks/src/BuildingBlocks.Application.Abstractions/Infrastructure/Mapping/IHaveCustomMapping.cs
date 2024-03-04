@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 
 namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
