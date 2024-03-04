@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;

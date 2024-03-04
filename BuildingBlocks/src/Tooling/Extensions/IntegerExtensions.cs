@@ -1,4 +1,4 @@
-﻿namespace Backbone.Tooling.Extensions;
+namespace Backbone.Tooling.Extensions;
 
 public static class IntegerExtensions
 {

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.ConsumerApi.Configuration;

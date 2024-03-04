@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;

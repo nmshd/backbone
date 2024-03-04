@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;

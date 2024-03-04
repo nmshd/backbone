@@ -1,4 +1,4 @@
-﻿using Google.Cloud.PubSub.V1;
+using Google.Cloud.PubSub.V1;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;

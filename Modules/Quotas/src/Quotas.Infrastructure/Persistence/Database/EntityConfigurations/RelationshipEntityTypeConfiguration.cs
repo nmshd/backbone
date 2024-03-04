@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

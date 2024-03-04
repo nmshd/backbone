@@ -237,11 +237,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.ConsumerApi", "Modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.ConsumerApi", "Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj", "{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Tests.Integration", "AdminUi\test\AdminUi.Tests.Integration\AdminUi.Tests.Integration.csproj", "{1A3E4581-6DF3-4FB3-891D-3E9CB704A3AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Tests.Integration", "AdminApi\test\AdminApi.Tests.Integration\AdminApi.Tests.Integration.csproj", "{1A3E4581-6DF3-4FB3-891D-3E9CB704A3AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminUi", "AdminUi", "{285E30DF-68B4-4A13-981E-E8BAB05489F5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminApi", "AdminApi", "{285E30DF-68B4-4A13-981E-E8BAB05489F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi", "AdminUi\src\AdminUi\AdminUi.csproj", "{17301932-8889-4564-9AB7-A8816A91B190}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi", "AdminApi\src\AdminApi\AdminApi.csproj", "{17301932-8889-4564-9AB7-A8816A91B190}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsumerApi", "ConsumerApi", "{E6BFD37D-335D-4975-B661-BC67FB82F5AA}"
 EndProject
@@ -259,11 +259,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{30CFBC0E-D72A-4890-9647-D488273B0F68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.SqlServer", "AdminUi\src\AdminUi.Infrastructure.Database.SqlServer\AdminUi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.Postgres", "AdminUi\src\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.Postgres", "AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure", "AdminUi\src\AdminUi.Infrastructure\AdminUi.Infrastructure.csproj", "{5028E85D-E115-4E02-AC94-2B441686E44E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure", "AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj", "{5028E85D-E115-4E02-AC94-2B441686E44E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "HealthCheck\HealthCheck.csproj", "{EE910828-296B-45CD-BA01-DCABE27BCC4C}"
 EndProject
@@ -798,10 +798,6 @@ Global
 		{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB} = {A8C20813-97C8-42A9-B45A-4A0D650DA647}
 		{5028E85D-E115-4E02-AC94-2B441686E44E} = {A8C20813-97C8-42A9-B45A-4A0D650DA647}
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993} = {4192A28C-45C0-4D20-B880-F417B8AB752F}
-		{230B4A6B-7596-4289-9F63-9621BBCE0A7F} = {8C822448-BB2E-4EC1-9618-922B3B296D3C}
-		{B842AF3B-517D-4AD3-97F9-81587FB2CFAA} = {8C822448-BB2E-4EC1-9618-922B3B296D3C}
-		{64D6BE17-537D-4F46-8598-F5C4F8D8084B} = {230B4A6B-7596-4289-9F63-9621BBCE0A7F}
-		{21DCBB96-4A26-4A59-A620-66792576FBBB} = {B842AF3B-517D-4AD3-97F9-81587FB2CFAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

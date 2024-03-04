@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;

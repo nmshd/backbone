@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using MediatR;
 using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;

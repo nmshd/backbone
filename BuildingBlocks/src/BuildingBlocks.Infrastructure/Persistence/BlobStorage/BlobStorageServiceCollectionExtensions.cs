@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;

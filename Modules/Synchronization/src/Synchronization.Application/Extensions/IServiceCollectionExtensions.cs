@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;

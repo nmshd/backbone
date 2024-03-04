@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Tooling;

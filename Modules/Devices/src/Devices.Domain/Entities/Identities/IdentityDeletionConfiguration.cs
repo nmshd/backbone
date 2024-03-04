@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Domain.Entities.Identities;
+namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionConfiguration
 {

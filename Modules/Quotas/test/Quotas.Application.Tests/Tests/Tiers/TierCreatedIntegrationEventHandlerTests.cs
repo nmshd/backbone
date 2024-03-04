@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;

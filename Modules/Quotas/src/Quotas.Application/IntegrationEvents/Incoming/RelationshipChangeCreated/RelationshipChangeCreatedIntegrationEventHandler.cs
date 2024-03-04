@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 

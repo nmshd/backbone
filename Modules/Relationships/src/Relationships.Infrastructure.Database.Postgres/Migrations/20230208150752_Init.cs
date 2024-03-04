@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
+using Backbone.Modules.Relationships.Infrastructure.Database.Postgres;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 

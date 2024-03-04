@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.ConsumerApi.Mvc;
 using Backbone.Modules.Devices.Application;

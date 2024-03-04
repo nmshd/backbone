@@ -13,7 +13,7 @@
         "DebugTarget": ""
       },
       {
-        "Name": "AdminUi\\src\\AdminUi\\AdminUi.csproj",
+        "Name": "AdminApi\\src\\AdminApi\\AdminApi.csproj",
         "Action": "Start",
         "DebugTarget": ""
       }

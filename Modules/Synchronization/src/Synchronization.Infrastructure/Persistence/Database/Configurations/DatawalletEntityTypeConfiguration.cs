@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
