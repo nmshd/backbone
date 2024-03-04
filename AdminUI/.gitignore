@@ -4,3 +4,6 @@ build
 .flutter-plugins
 .flutter-plugins-dependencies
 .DS_Store
+
+# config.json for connecting to the admin api
+config.json

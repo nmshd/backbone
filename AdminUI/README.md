@@ -18,3 +18,18 @@ Run `melos bootstrap` to [install and link dependencies](https://melos.invertase
 ### Melos scripts
 
 For an overview of all available melos scripts, run `melos run` or `melos run --help`.
+
+### Configuration
+
+Create a file `AdminUI/config.json` with the following content:
+
+```json
+{
+    "BASE_URL": "...",
+    "API_KEY": "..."
+}
+```
+
+This configuration is automatically used when using the VSCode tooling (run / debug buttons).
+
+For building and running the app from the command line, you can use the `--dart-define-from-file=<path-to-file>` flag.
