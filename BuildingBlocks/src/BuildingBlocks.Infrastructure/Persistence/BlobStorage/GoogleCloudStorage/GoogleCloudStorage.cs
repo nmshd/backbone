@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Google;

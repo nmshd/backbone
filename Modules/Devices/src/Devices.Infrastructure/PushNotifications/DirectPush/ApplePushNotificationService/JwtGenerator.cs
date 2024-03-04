@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using Backbone.Tooling;
 using JWT.Algorithms;
 using JWT.Builder;

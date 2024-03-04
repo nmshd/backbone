@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 

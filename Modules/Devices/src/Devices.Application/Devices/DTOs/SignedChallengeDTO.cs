@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Devices.Application.Devices.DTOs;
+namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class SignedChallengeDTO
 {

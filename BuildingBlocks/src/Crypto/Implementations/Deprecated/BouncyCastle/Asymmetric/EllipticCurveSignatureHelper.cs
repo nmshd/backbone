@@ -1,4 +1,4 @@
-﻿using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;

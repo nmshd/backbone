@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
 using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 

@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using RootCommand = Backbone.Modules.Devices.AdminCli.Commands.RootCommand;
 
 namespace Backbone.Modules.Devices.AdminCli;

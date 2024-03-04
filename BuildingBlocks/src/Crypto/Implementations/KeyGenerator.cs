@@ -1,4 +1,4 @@
-﻿using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Abstractions;
 
 namespace Backbone.Crypto.Implementations;
 

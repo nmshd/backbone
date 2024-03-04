@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: POST Identity
 
 User creates an Identity

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
