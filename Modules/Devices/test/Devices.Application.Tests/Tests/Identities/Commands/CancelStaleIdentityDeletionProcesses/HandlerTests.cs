@@ -31,12 +31,10 @@ public class HandlerTests
         var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
         var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
 
-        var identities = new List<Identity>() { identityWithStaleDeletionProcess, identityWithDeletionProcess };
-
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
         A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(identities);
+            .Returns(new List<Identity>() { identityWithStaleDeletionProcess, identityWithDeletionProcess });
 
         var handler = new Handler(fakeIdentitiesRepository, A.Fake<IEventBus>());
 
@@ -53,13 +51,12 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var identities = new List<Identity>() { identity };
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
         A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(identities);
+            .Returns(new List<Identity>() { identity });
 
         var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
 
