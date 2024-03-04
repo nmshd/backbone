@@ -1,4 +1,6 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
+using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -11,6 +13,8 @@ public class CancelStaleDeletionProcessTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
         var deletionProcess = identity.StartDeletionProcessAsSupport();
+        
+        SystemTime.Set(new DateTime(2024, 05, 06, 09, 50, 06));
 
         // Act
         identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
@@ -19,7 +23,7 @@ public class CancelStaleDeletionProcessTests
         identity.Status.Should().Be(IdentityStatus.Active);
 
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Canceled);
-        deletionProcess.CanceledAt.Should().NotBeNull();
+        deletionProcess.CanceledAt.Should().Be("2024-05-06T09:50:06");
     }
 
     [Fact]
