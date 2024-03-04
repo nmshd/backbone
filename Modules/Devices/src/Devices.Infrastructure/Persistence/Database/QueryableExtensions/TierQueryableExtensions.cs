@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;

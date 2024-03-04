@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
 public class Token : ICreatedAt
 {
     public required string CreatedBy { get; set; }

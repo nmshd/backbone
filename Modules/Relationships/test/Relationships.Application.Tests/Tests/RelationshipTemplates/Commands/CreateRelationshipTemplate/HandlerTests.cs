@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;

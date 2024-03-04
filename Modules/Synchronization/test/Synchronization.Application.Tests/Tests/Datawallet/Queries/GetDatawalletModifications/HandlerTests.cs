@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;

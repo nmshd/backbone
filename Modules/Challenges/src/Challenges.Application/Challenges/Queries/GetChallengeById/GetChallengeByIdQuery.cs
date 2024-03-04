@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Challenges.Application.Challenges.DTOs;
+using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Domain.Ids;
 using MediatR;
 

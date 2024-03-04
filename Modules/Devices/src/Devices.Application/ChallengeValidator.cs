@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Crypto;
 using Backbone.Crypto.Abstractions;

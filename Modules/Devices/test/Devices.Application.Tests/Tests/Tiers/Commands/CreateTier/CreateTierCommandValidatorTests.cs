@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
+using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;

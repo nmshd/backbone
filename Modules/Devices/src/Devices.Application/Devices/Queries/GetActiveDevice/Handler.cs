@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.DTOs;

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;

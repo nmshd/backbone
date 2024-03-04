@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;

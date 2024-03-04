@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
 using FluentAssertions;

@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.Modules.Devices.Application.AutoMapper;
 using Xunit;
 

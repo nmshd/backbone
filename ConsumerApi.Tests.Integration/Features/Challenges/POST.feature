@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: POST Challenge
 
 User creates a Challenge

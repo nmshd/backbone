@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.BuildingBlocks.Application.AutoMapper;

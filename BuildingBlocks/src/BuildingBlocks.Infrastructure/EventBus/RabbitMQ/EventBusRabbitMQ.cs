@@ -1,4 +1,4 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using System.Text;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;

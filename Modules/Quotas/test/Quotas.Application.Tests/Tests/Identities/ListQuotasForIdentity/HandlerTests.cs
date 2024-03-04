@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;

@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Extensions;

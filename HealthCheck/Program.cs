@@ -1,4 +1,4 @@
-﻿var httpClient = new HttpClient();
+var httpClient = new HttpClient();
 httpClient.DefaultRequestHeaders.ConnectionClose = true;
 
 var uriArgument = args[1];

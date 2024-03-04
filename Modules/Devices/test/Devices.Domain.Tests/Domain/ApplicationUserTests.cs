@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentAssertions;
 using Xunit;
 

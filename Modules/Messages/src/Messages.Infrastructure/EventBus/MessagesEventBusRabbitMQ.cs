@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Backbone.Modules.Messages.Application.Infrastructure.EventBus;

@@ -1,4 +1,4 @@
-﻿using Backbone.Crypto.Implementations;
+using Backbone.Crypto.Implementations;
 using FluentAssertions;
 using Xunit;
 

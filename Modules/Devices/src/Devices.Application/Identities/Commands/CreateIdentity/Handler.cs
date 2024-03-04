@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;

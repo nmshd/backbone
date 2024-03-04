@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Synchronization.Application.Tests.Tests;
+namespace Backbone.Modules.Synchronization.Application.Tests.Tests;
 
 public static class TestData
 {
