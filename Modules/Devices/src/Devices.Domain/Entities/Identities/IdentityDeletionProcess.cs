@@ -135,7 +135,7 @@ public class IdentityDeletionProcess
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
         Status = DeletionProcessStatus.Canceled;
-        CanceledAt = DateTime.UtcNow;
+        CanceledAt = SystemTime.UtcNow;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
     }
