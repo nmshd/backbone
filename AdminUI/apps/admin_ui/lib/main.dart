@@ -1,4 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -9,8 +10,10 @@ void main() async {
 
   await setup();
 
+  // baseUrl is empty for web to make sure the request is sent to the same origin
+  const baseUrl = kIsWeb ? '' : String.fromEnvironment('BASE_URL');
   final client = await AdminApiClient.create(
-    baseUrl: const String.fromEnvironment('BASE_URL'),
+    baseUrl: baseUrl,
     apiKey: const String.fromEnvironment('API_KEY'),
   );
   GetIt.I.registerSingleton(client);
