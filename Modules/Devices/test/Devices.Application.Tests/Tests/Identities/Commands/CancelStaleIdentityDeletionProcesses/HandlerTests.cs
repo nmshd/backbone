@@ -69,7 +69,7 @@ public class HandlerTests
         // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
                 i.Address == identity.Address &&
-                (string)i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
+                i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
             .MustHaveHappenedOnceExactly();
     }
 }

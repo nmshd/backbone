@@ -11,5 +11,5 @@ public class IdentityDeletionProcessStatusChangedIntegrationEvent : IntegrationE
     }
 
     public string Address { get; }
-    public object DeletionProcessId { get; }
+    public string DeletionProcessId { get; }
 }
