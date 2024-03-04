@@ -43,6 +43,6 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
 
     private static bool IsInApprovalPeriod(IdentityDeletionProcess staleDeletionProcess)
     {
-        return staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) >= DateTime.UtcNow;
+        return staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow;
     }
 }
