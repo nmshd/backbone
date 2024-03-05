@@ -29,10 +29,10 @@ public class LastLoginInformation
 
 public class Quota
 {
-    public string Id { get; set; }
-    public string Source { get; set; }
-    public Metric Metric { get; set; }
-    public int Max { get; set; }
-    public uint Usage { get; set; }
-    public string Period { get; set; }
+    public required string Id { get; set; }
+    public required string Source { get; set; }
+    public required Metric Metric { get; set; }
+    public required int Max { get; set; }
+    public required uint Usage { get; set; }
+    public required string Period { get; set; }
 }
