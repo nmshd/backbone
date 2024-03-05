@@ -13,5 +13,17 @@ public class Client
     {
         var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
         var endpointClient = new EndpointClient(httpClient, config.ApiKey, config.JsonSerializerOptions);
+        
+        ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
+        Clients = new ClientsEndpoint(endpointClient);
+        Identities = new IdentitiesEndpoint(endpointClient);
+        Logs = new LogsEndpoint(endpointClient);
+        Metrics = new MetricsEndpoint(endpointClient);
     }
+    
+    public ApiKeyValidationEndpoint ApiKeyValidation { get; }
+    public ClientsEndpoint Clients { get; }
+    public IdentitiesEndpoint Identities { get; }
+    public LogsEndpoint Logs { get; }
+    public MetricsEndpoint Metrics { get; }
 }
