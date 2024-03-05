@@ -657,6 +657,8 @@ Global
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
