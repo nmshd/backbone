@@ -44,10 +44,11 @@ public class IdentityDeletionProcess
     public DateTime? ApprovalReminder2SentAt { get; private set; }
     public DateTime? ApprovalReminder3SentAt { get; private set; }
 
-    public DateTime? CanceledAt { get; private set; }
-
     public DateTime? ApprovedAt { get; private set; }
     public DeviceId? ApprovedByDevice { get; private set; }
+
+    public DateTime? CancelledAt { get; private set; }
+    public DeviceId? CancelledByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
@@ -130,14 +131,26 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 
+    public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
+    {
+        if (Status != DeletionProcessStatus.Approved)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
+        CancelledByDevice = cancelledByDevice;
+
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelled(Id, address, cancelledByDevice));
+    }
+
     public void Cancel(IdentityAddress address)
     {
         if (Status != DeletionProcessStatus.WaitingForApproval)
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
-        Status = DeletionProcessStatus.Canceled;
-        CanceledAt = SystemTime.UtcNow;
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
     }
 }

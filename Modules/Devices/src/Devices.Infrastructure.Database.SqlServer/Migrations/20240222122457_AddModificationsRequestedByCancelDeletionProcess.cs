@@ -6,15 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class CancelIdentityDeletionProcess : Migration
+    public partial class AddModificationsRequestedByCancelDeletionProcess : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
-                name: "CanceledAt",
+                name: "CancelledAt",
                 table: "IdentityDeletionProcesses",
                 type: "datetime2",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "CancelledByDevice",
+                table: "IdentityDeletionProcesses",
+                type: "char(20)",
+                unicode: false,
+                fixedLength: true,
+                maxLength: 20,
                 nullable: true);
         }
 
@@ -22,7 +31,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CanceledAt",
+                name: "CancelledAt",
+                table: "IdentityDeletionProcesses");
+
+            migrationBuilder.DropColumn(
+                name: "CancelledByDevice",
                 table: "IdentityDeletionProcesses");
         }
     }
