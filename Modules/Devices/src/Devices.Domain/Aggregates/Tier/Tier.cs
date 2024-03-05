@@ -4,22 +4,28 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public class Tier
 {
-    public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Queued for Deletion").Value);
+    public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Queued for Deletion").Value, false, false);
 
     public Tier(TierName name)
     {
         Id = TierId.Generate();
         Name = name;
+        CanBeUsedAsDefaultTier = true;
+        CanBeManuallyAssigned = true;
     }
 
-    private Tier(TierId id, TierName name)
+    private Tier(TierId id, TierName name, bool canBeUsedAsDefaultTier, bool canBeManuallyAssigned)
     {
         Id = id;
         Name = name;
+        CanBeUsedAsDefaultTier = canBeUsedAsDefaultTier;
+        CanBeManuallyAssigned = canBeManuallyAssigned;
     }
 
     public TierId Id { get; }
     public TierName Name { get; }
+    public bool CanBeUsedAsDefaultTier { get; }
+    public bool CanBeManuallyAssigned { get; }
 
     public DomainError? CanBeDeleted(int clientsCount, int identitiesCount)
     {
