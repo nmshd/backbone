@@ -39,9 +39,13 @@ public static class TestDataGenerator
     {
         approvalDate ??= SystemTime.UtcNow;
 
+        var currentDateTime = SystemTime.UtcNow;
+
         var identity = CreateIdentityWithOneDevice();
         SystemTime.Set(approvalDate.Value);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
+
+        SystemTime.Set(currentDateTime);
 
         return identity;
     }
