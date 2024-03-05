@@ -244,4 +244,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: dotnet test Modules\Messages\test\Messages.Application.Tests --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - run: dotnet test ./Modules/Messages/test/Messages.Application.Tests --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
