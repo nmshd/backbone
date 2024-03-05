@@ -1,10 +1,10 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class CancelStaleDeletionProcessTests
 {
     [Fact]
@@ -14,7 +14,8 @@ public class CancelStaleDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentity();
         var deletionProcess = identity.StartDeletionProcessAsSupport();
 
-        SystemTime.Set(new DateTime(2024, 05, 06, 09, 50, 06));
+        var utcNow = DateTime.Parse("2020-01-01");
+        SystemTime.Set(utcNow);
 
         // Act
         identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
@@ -23,25 +24,22 @@ public class CancelStaleDeletionProcessTests
         identity.Status.Should().Be(IdentityStatus.Active);
 
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
-        deletionProcess.CancelledAt.Should().Be("2024-05-06T09:50:06");
+        deletionProcess.CancelledAt.Should().Be(utcNow);
     }
 
     [Fact]
-    public void Canceling_stale_deletion_process_creates_audit_log_when_executed()
+    public void Canceling_stale_deletion_process_creates_audit_log_entry_when_executed()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentity();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
+        var deletionProcess = identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
 
         // Assert
-        var canceledDeletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Cancelled)!;
-
-        canceledDeletionProcess.AuditLog.Should().HaveCount(2); // count 2 because the first one was creation of a deletion process
-        canceledDeletionProcess.AuditLog[1].ProcessId.Should().Be(deletionProcess.Id);
-        canceledDeletionProcess.AuditLog[1].OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        canceledDeletionProcess.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
+        deletionProcess.AuditLog.Should().HaveCount(2); // count 2 because the first one was creation of the deletion process
+        deletionProcess.AuditLog[1].ProcessId.Should().Be(deletionProcess.Id);
+        deletionProcess.AuditLog[1].OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        deletionProcess.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
     }
 }

@@ -26,11 +26,11 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Only_correct_deletion_processes_are_canceled()
+    public async Task Only_correct_deletion_processes_are_cancelled()
     {
         // Arrange
-        var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow);
-        var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.UtcNow);
+        var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.UtcNow.AddDays(-11));
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
@@ -48,7 +48,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publish_IntegrationEvent_for_canceled_deletion_process()
+    public async Task Publishes_IntegrationEvent_for_cancelled_deletion_process()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
