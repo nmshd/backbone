@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Application.Files.DTOs;
+using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 

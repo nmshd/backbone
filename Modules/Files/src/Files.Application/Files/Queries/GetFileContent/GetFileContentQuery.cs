@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;

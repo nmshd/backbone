@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.Text.Json;
 using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;

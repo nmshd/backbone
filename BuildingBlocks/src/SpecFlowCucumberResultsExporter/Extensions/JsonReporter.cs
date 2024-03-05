@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

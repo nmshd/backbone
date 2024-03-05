@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Tokens.Application.Infrastructure.Persistence;
+namespace Backbone.Modules.Tokens.Application.Infrastructure.Persistence;
 
 public class BlobOptions
 {

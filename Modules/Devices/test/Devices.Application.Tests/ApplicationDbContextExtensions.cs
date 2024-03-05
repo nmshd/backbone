@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 namespace Backbone.Modules.Devices.Application.Tests;
 

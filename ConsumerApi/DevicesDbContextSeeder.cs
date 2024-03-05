@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateQueuedForDeletionTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;

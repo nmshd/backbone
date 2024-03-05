@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
 using Assembly = System.Reflection.Assembly;

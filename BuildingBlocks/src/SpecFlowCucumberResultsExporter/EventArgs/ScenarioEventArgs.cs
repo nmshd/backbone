@@ -1,4 +1,4 @@
-﻿using Backbone.SpecFlowCucumberResultsExporter.Model;
+using Backbone.SpecFlowCucumberResultsExporter.Model;
 using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 namespace Backbone.SpecFlowCucumberResultsExporter.EventArgs;

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Tokens.Application.AutoMapper;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;

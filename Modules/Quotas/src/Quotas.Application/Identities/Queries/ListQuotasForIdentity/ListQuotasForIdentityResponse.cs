@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;

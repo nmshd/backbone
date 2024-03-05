@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;

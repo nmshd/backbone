@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 

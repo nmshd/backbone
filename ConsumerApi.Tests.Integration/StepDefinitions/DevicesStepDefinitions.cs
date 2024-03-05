@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.API;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Models;
 using Backbone.Crypto;

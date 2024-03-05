@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Synchronization.Domain;
 public static class DomainErrors

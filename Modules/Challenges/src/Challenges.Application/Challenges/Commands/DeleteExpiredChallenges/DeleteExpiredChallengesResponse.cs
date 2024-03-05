@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
+namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 
 public class DeleteExpiredChallengesResponse
 {
