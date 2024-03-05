@@ -3,6 +3,7 @@ using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests
 {
