@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
+using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -11,15 +12,20 @@ public class CancelDeletionProcessTests
     public void Cancel_deletion_process()
     {
         // Arrange
+        SystemTime.Set(DateTime.Parse("2024-01-01"));
         var identity = CreateIdentityWithApprovedDeletionProcess();
+        var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
         var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
+        identity.TierId.Should().Be(tierIdBeforeDeletion);
         identity.TierIdBeforeDeletion.Should().Be(null);
         identity.Status.Should().Be(IdentityStatus.Active);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        deletionProcess.CancelledAt.Should().Be(DateTime.Parse("2024-01-01"));
+        deletionProcess.CancelledByDevice.Should().Be(identity.Devices[0].Id);
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
