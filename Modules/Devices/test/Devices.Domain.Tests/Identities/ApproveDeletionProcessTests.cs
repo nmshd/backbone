@@ -49,7 +49,9 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        var deletionProcess = identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        var activeDevice = new Device(identity);
+        identity.Devices.Add(activeDevice);
+        var deletionProcess = identity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
