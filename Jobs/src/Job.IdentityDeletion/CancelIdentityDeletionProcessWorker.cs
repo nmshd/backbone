@@ -34,8 +34,8 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
     {
         var identityDeletionProcessIds = await _mediator.Send(new CancelStaleIdentityDeletionProcessesCommand(), cancellationToken);
 
-        var logCanceledDeletionProcessIds = string.Join(", ", identityDeletionProcessIds);
+        var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
 
-        _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]", logCanceledDeletionProcessIds);
+        _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]", concatenatedIds);
     }
 }
