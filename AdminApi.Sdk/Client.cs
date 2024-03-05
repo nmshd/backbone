@@ -4,6 +4,8 @@ using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
 using Backbone.AdminApi.Sdk.Endpoints.Logs;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
+using Backbone.AdminApi.Sdk.Endpoints.Relationships;
+using Backbone.AdminApi.Sdk.Endpoints.Tiers;
 
 namespace Backbone.AdminApi.Sdk;
 
@@ -19,6 +21,8 @@ public class Client
         Identities = new IdentitiesEndpoint(endpointClient);
         Logs = new LogsEndpoint(endpointClient);
         Metrics = new MetricsEndpoint(endpointClient);
+        Relationships = new RelationshipsEndpoint(endpointClient);
+        Tiers = new TiersEndpoint(endpointClient);
     }
     
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
@@ -26,4 +30,6 @@ public class Client
     public IdentitiesEndpoint Identities { get; }
     public LogsEndpoint Logs { get; }
     public MetricsEndpoint Metrics { get; }
+    public RelationshipsEndpoint Relationships { get; }
+    public TiersEndpoint Tiers { get; }
 }
