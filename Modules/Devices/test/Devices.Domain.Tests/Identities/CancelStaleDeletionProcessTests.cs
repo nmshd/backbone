@@ -22,8 +22,8 @@ public class CancelStaleDeletionProcessTests
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
 
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.Canceled);
-        deletionProcess.CanceledAt.Should().Be("2024-05-06T09:50:06");
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        deletionProcess.CancelledAt.Should().Be("2024-05-06T09:50:06");
     }
 
     [Fact]
@@ -37,11 +37,11 @@ public class CancelStaleDeletionProcessTests
         identity.CancelStaleDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id);
 
         // Assert
-        var canceledDeletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Canceled)!;
+        var canceledDeletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Cancelled)!;
 
         canceledDeletionProcess.AuditLog.Should().HaveCount(2); // count 2 because the first one was creation of a deletion process
         canceledDeletionProcess.AuditLog[1].ProcessId.Should().Be(deletionProcess.Id);
         canceledDeletionProcess.AuditLog[1].OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        canceledDeletionProcess.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Canceled);
+        canceledDeletionProcess.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
     }
 }

@@ -147,9 +147,9 @@ public class IdentityDeletionProcess
         if (Status != DeletionProcessStatus.WaitingForApproval)
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
-        Status = DeletionProcessStatus.Canceled;
-        CanceledAt = SystemTime.UtcNow;
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCanceledAutomatically(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
     }
 }
