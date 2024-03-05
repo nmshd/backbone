@@ -91,7 +91,7 @@ public class EndpointClient
         if (statusCode >= HttpStatusCode.BadRequest) //In case of an error, deserialize it
         {
             mem.Seek(0, SeekOrigin.Begin);
-            var deserialized = JsonSerializer.Deserialize<EmptyConsumerApiResponse>(mem, _jsonSerializerOptions)!;
+            var deserialized = JsonSerializer.Deserialize<ConsumerApiResponse<EmptyResponse>>(mem, _jsonSerializerOptions)!;
             error = deserialized.Error;
         }
 
