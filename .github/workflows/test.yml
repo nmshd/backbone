@@ -237,3 +237,11 @@ jobs:
         env:
           TAG: test
           PLATFORMS: linux/amd64
+
+  test-messages-application:
+    name: Test Messages.Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - run: dotnet test Modules\Messages\test\Messages.Application.Tests --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true
