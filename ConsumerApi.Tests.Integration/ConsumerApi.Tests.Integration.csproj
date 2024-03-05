@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\src\Crypto\Crypto.csproj" />
-    <ProjectReference Include="..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
     <ProjectReference Include="..\ConsumerApi\ConsumerApi.csproj" />
   </ItemGroup>
 
