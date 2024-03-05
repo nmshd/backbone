@@ -129,7 +129,7 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 
-    public void CancelAutomatically(IdentityAddress address)
+    public void Cancel(IdentityAddress address)
     {
         if (Status != DeletionProcessStatus.WaitingForApproval)
             throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
