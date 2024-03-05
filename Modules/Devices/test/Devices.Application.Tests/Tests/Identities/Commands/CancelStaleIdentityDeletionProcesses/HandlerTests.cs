@@ -22,7 +22,7 @@ public class HandlerTests
 
         // Assert
         response.Should().NotBeNull();
-        response.Should().HaveCount(1);
+        response.Should().BeEmpty();
     }
 
     [Fact]
