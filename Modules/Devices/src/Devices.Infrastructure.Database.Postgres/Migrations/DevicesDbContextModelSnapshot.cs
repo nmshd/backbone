@@ -63,7 +63,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations", (string)null);
+                    b.ToTable("PnsRegistrations");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
@@ -86,7 +86,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers", (string)null);
+                    b.ToTable("Tiers");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
@@ -205,7 +205,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices", (string)null);
+                    b.ToTable("Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
@@ -250,7 +250,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Address");
 
-                    b.ToTable("Identities", (string)null);
+                    b.ToTable("Identities");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
@@ -274,6 +274,15 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ApprovedByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CancelledByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")

@@ -35,15 +35,13 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime approvalDate)
+    public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
     {
-        var currentDateTime = SystemTime.UtcNow;
+        approvalDate ??= SystemTime.UtcNow;
 
         var identity = CreateIdentityWithOneDevice();
-        SystemTime.Set(approvalDate);
+        SystemTime.Set(approvalDate.Value);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
-
-        SystemTime.Set(currentDateTime);
 
         return identity;
     }

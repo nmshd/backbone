@@ -121,8 +121,11 @@ public class DeletionGracePeriodReminderTests : IDisposable
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-        identity.StartDeletionProcessAsOwner(new Device(identity).Id);
+        var device = new Device(identity);
+        identity.Devices.Add(device);
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
+        identity.StartDeletionProcessAsOwner(device.Id);
 
         return identity;
     }
