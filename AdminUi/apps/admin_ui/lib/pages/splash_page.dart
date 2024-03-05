@@ -38,19 +38,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> route() async {
     await GetIt.I.allReady();
-    final sharedPreferences = await SharedPreferences.getInstance();
+    final sp = await SharedPreferences.getInstance();
 
-    if (!sharedPreferences.containsKey('api_key')) {
+    if (!sp.containsKey('api_key')) {
       if (mounted) context.go('/login');
 
       return;
     }
 
-    final apiKey = sharedPreferences.getString('api_key')!;
+    final apiKey = sp.getString('api_key')!;
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('BASE_URL');
+
+    final isValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
+    if (!isValid) {
+      await sp.remove('api_key');
+      if (mounted) context.go('/login');
+
+      return;
+    }
+
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
     if (mounted) context.go('/dashboard');
-
-    // TODO(jkoenig134): Check if the API key is valid before routing to the dashboard
   }
 }
