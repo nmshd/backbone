@@ -30,7 +30,7 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Check formatting
-        run: ./.ci/checkFormatting.js
+        run: ./.ci/checkFormatting.sh
 
   test:
     runs-on: ubuntu-latest
@@ -38,14 +38,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
       - name: Run tests
-        run: ./.ci/test.js
+        run: ./.ci/test.sh
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
