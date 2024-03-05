@@ -280,6 +280,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CancelledByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
