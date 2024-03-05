@@ -15,7 +15,7 @@ public class Client
     {
         var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
         var endpointClient = new EndpointClient(httpClient, config.ApiKey, config.JsonSerializerOptions);
-        
+
         ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
@@ -24,7 +24,7 @@ public class Client
         Relationships = new RelationshipsEndpoint(endpointClient);
         Tiers = new TiersEndpoint(endpointClient);
     }
-    
+
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
     public ClientsEndpoint Clients { get; }
     public IdentitiesEndpoint Identities { get; }

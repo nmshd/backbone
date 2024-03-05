@@ -63,7 +63,7 @@ public class EndpointClient
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
         var statusCode = response.StatusCode;
-        
+
         if (responseContent.Length == 0) //If no content is sent, automatically decode an "empty" result
         {
             responseContent.Close();
@@ -88,7 +88,7 @@ public class EndpointClient
         private HttpContent? _content;
         private readonly NameValueCollection _extraHeaders = [];
         private readonly NameValueCollection _queryParameters = [];
-        
+
         public RequestBuilder(EndpointClient client, string apiKey, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
         {
             _client = client;
@@ -190,7 +190,7 @@ public class EndpointClient
             };
 
             if (_authenticated) AddExtraHeader("X-API-KEY", _apiKey);
-            
+
             foreach (var k in _extraHeaders.AllKeys)
             {
                 var values = _extraHeaders.GetValues(k);
@@ -199,7 +199,7 @@ public class EndpointClient
 
             return request;
         }
-        
+
         private string EncodeParametersInUrl()
         {
             if (_queryParameters.Count == 0) return _url;
