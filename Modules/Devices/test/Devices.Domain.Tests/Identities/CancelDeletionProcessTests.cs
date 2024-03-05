@@ -13,7 +13,7 @@ public class CancelDeletionProcessTests
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2024-01-01"));
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
         var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
@@ -49,8 +49,7 @@ public class CancelDeletionProcessTests
     public void Throws_when_deletion_process_is_in_wrong_status()
     {
         // Arrange
-        var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
-        identity.Devices.Add(new Device(identity));
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
         var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
@@ -67,22 +66,5 @@ public class CancelDeletionProcessTests
         auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
         auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.Approved);
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
-    }
-
-    private static Identity CreateIdentityWithApprovedDeletionProcess()
-    {
-        var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
-        identity.Devices.Add(device);
-        identity.StartDeletionProcessAsOwner(device.Id);
-        return identity;
-    }
-
-    private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
-    {
-        var identity = TestDataGenerator.CreateIdentity();
-        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-        identity.StartDeletionProcessAsSupport();
-        return identity;
     }
 }
