@@ -71,7 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (apiKey.isEmpty) return;
 
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('BASE_URL');
-    print(baseUrl);
     final apiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
 
     if (!mounted) return;
@@ -86,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    await (await SharedPreferences.getInstance()).setString('api_key', apiKey);
+    final sp = await SharedPreferences.getInstance();
+    await sp.setString('api_key', apiKey);
     await GetIt.I.reset();
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));

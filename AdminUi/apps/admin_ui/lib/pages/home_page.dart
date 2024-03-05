@@ -81,7 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _logout() async {
-    await (await SharedPreferences.getInstance()).remove('api_key');
+    final sp = await SharedPreferences.getInstance();
+    await sp.remove('api_key');
     await GetIt.I.reset();
     if (mounted) context.go('/login');
   }
