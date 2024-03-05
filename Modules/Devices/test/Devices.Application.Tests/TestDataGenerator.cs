@@ -37,10 +37,10 @@ public static class TestDataGenerator
 
     public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
     {
-        var dateTime = approvalDate ?? SystemTime.UtcNow;
+        approvalDate ??= SystemTime.UtcNow;
 
         var identity = CreateIdentityWithOneDevice();
-        SystemTime.Set(dateTime);
+        SystemTime.Set(approvalDate.Value);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
 
         return identity;
