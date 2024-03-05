@@ -15,6 +15,5 @@ public class AutoMapperProfileTests
 
         // Act & Assert
         configuration.AssertConfigurationIsValid();
-        true.Should().BeFalse();
     }
 }
