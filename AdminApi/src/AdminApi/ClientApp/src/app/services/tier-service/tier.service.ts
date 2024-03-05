@@ -64,7 +64,7 @@ export class TierService {
                 id: "TIR00000002",
                 name: "Some Other tier",
                 numberOfIdentities: 0,
-                canBeUsedAsDefaultTier: false,
+                canBeUsedAsDefaultTier: true,
                 isManualAssignmentAllowed: true
             }
         ];
