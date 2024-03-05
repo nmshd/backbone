@@ -368,4 +368,6 @@ dist
 **/SpecFlow/
 
 # flutter
+!AdminUi/packages/*
 !AdminUI/packages/*
+!aui/packages/*
