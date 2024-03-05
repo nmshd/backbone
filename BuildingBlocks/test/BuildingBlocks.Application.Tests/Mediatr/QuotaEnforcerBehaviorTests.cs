@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Attributes;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Application.QuotaCheck;

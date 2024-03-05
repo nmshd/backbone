@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.BuildingBlocks.Application.Attributes;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 

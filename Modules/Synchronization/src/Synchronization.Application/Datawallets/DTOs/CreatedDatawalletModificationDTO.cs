@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;

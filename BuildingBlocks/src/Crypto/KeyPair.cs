@@ -1,4 +1,4 @@
-﻿namespace Backbone.Crypto;
+namespace Backbone.Crypto;
 
 public class KeyPair
 {

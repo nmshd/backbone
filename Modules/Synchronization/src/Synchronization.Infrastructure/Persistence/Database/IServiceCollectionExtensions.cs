@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;

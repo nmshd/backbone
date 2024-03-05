@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.BuildingBlocks.Application.Attributes;
 using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 

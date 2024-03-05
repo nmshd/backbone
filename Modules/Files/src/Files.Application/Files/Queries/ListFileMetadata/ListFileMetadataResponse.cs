@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Application.Files.DTOs;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;

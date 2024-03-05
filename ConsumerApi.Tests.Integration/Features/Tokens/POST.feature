@@ -1,4 +1,4 @@
-﻿@Integration
+@Integration
 Feature: POST Token
 
 User creates a Token

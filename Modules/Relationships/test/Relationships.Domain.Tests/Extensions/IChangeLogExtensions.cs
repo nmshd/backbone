@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Extensions;
 

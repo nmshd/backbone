@@ -1,4 +1,4 @@
-﻿using System.Dynamic;
+using System.Dynamic;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain;
+using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Metrics;
 
 namespace Backbone.Modules.Quotas.Application.Tests;

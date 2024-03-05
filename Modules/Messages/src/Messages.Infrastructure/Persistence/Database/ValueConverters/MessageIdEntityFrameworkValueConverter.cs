@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;

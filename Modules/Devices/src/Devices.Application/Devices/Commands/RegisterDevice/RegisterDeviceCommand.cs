@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Devices.DTOs;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Devices.Application.AutoMapper;
