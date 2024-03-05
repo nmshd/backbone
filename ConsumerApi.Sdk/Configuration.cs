@@ -4,20 +4,15 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Configuration
 {
-    public Configuration()
-    {
-        JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-    }
-
-    public required string BaseUrl { get; set; }
-    public required AuthenticationConfiguration Authentication { get; set; }
-    public JsonSerializerOptions JsonSerializerOptions { get; set; }
+    public required string BaseUrl { get; init; }
+    public required AuthenticationConfiguration Authentication { get; init; }
+    public JsonSerializerOptions JsonSerializerOptions { get; init; } = new() { PropertyNameCaseInsensitive = true };
 
     public class AuthenticationConfiguration
     {
-        public required string ClientId { get; set; }
-        public required string ClientSecret { get; set; }
-        public required string Username { get; set; }
-        public required string Password { get; set; }
+        public required string ClientId { get; init; }
+        public required string ClientSecret { get; init; }
+        public required string Username { get; init; }
+        public required string Password { get; init; }
     }
 }
