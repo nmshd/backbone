@@ -8,8 +8,8 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleId
 
 public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesCommand, CancelStaleIdentityDeletionProcessesResponse>
 {
-    private readonly IIdentitiesRepository _identityRepository;
     private readonly IEventBus _eventBus;
+    private readonly IIdentitiesRepository _identityRepository;
 
     public Handler(IIdentitiesRepository identityRepository, IEventBus eventBus)
     {
@@ -19,35 +19,25 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
 
     public async Task<CancelStaleIdentityDeletionProcessesResponse> Handle(CancelStaleIdentityDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, true);
+        var identities = await _identityRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval, cancellationToken, track: true);
 
-        var staleDeletionProcesses = new CancelStaleIdentityDeletionProcessesResponse();
+        var idsOfCancelledDeletionProcesses = new List<IdentityDeletionProcessId>();
 
         foreach (var identity in identities)
         {
-            var identityDeletionProcess = ReturnWaitingForApprovalDeletionProcess(identity);
+            var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
 
-            if (IsInApprovalPeriod(identityDeletionProcess))
+            if (!deletionProcess.HasApprovalPeriodExpired)
                 continue;
 
-            identity.CancelStaleDeletionProcess(identityDeletionProcess.Id);
-            staleDeletionProcesses.CanceledIdentityDeletionPrecessIds.Add(identityDeletionProcess.Id);
+            identity.CancelStaleDeletionProcess(deletionProcess.Id);
+            idsOfCancelledDeletionProcesses.Add(deletionProcess.Id);
 
             await _identityRepository.Update(identity, cancellationToken);
 
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, identityDeletionProcess.Id));
+            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));
         }
 
-        return staleDeletionProcesses;
-    }
-
-    private static bool IsInApprovalPeriod(IdentityDeletionProcess staleDeletionProcess)
-    {
-        return staleDeletionProcess.CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime) > DateTime.UtcNow;
-    }
-
-    private static IdentityDeletionProcess ReturnWaitingForApprovalDeletionProcess(Identity identity)
-    {
-        return identity.DeletionProcesses.First(dp => dp.Status == DeletionProcessStatus.WaitingForApproval);
+        return new CancelStaleIdentityDeletionProcessesResponse(idsOfCancelledDeletionProcesses);
     }
 }

@@ -2,11 +2,12 @@
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion;
+
 public class CancelIdentityDeletionProcessWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
-    private readonly IMediator _mediator;
     private readonly ILogger<CancelIdentityDeletionProcessWorker> _logger;
+    private readonly IMediator _mediator;
 
     public CancelIdentityDeletionProcessWorker(IHostApplicationLifetime host,
         IMediator mediator,
@@ -24,17 +25,17 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
         _host.StopApplication();
     }
 
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
         var identityDeletionProcessIds = await _mediator.Send(new CancelStaleIdentityDeletionProcessesCommand(), cancellationToken);
 
-        var logCanceledDeletionProcessIds = string.Join(", ", identityDeletionProcessIds.CanceledIdentityDeletionPrecessIds);
+        var logCanceledDeletionProcessIds = string.Join(", ", identityDeletionProcessIds);
 
         _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]", logCanceledDeletionProcessIds);
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 }

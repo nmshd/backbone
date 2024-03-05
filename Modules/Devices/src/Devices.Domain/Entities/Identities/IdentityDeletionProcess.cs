@@ -16,16 +16,6 @@ public class IdentityDeletionProcess
         Id = null!;
     }
 
-    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
-    {
-        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
-    {
-        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
-    }
-
     private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
@@ -43,14 +33,6 @@ public class IdentityDeletionProcess
         Approve(createdByDevice);
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
-    }
-
-    private void Approve(DeviceId createdByDevice)
-    {
-        Status = DeletionProcessStatus.Approved;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
     }
 
     public IdentityDeletionProcessId Id { get; }
@@ -73,6 +55,25 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
+    public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow > GetEndOfApprovalPeriod();
+
+    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
+    {
+        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
+    }
+
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
 
     public bool IsActive()
     {

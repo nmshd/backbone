@@ -8,6 +8,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+
 public class HandlerTests
 {
     [Fact]
@@ -21,7 +22,7 @@ public class HandlerTests
 
         // Assert
         response.Should().NotBeNull();
-        response.CanceledIdentityDeletionPrecessIds.Count.Should().Be(0);
+        response.Should().HaveCount(1);
     }
 
     [Fact]
@@ -42,8 +43,8 @@ public class HandlerTests
         var response = await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.CanceledIdentityDeletionPrecessIds.Count.Should().Be(1);
-        response.CanceledIdentityDeletionPrecessIds[0].Should().Be(identityWithStaleDeletionProcess.DeletionProcesses[0].Id);
+        response.Should().HaveCount(1);
+        response.First().Should().Be(identityWithStaleDeletionProcess.DeletionProcesses[0].Id);
     }
 
     [Fact]
