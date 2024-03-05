@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.AdminCli.Commands.Clients;
+using Backbone.Modules.Devices.AdminCli.Commands.Clients;
 using Backbone.Modules.Devices.AdminCli.Commands.Tiers;
 
 namespace Backbone.Modules.Devices.AdminCli.Commands;

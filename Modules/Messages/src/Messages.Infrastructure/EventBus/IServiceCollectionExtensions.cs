@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Infrastructure.EventBus;
 public static class IServiceCollectionExtensions

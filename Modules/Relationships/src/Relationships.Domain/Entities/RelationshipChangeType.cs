@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public enum RelationshipChangeType
 {

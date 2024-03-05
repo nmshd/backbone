@@ -1,4 +1,4 @@
-﻿using Backbone.SpecFlowCucumberResultsExporter.Reporting;
+using Backbone.SpecFlowCucumberResultsExporter.Reporting;
 
 namespace Backbone.SpecFlowCucumberResultsExporter.Extensions;
 public class Exporter : ReportingStepDefinitions

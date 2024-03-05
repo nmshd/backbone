@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Common.Infrastructure.Persistence.Repository;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 

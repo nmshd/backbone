@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

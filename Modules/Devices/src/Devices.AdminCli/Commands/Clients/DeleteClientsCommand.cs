@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using MediatR;

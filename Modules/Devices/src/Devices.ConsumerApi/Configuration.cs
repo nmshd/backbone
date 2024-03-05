@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 

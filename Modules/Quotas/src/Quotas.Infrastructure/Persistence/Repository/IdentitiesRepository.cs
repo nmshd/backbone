@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;

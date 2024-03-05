@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 

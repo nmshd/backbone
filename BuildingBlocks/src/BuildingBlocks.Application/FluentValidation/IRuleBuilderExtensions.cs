@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 using FluentValidation;
 using FluentValidation.Results;
 

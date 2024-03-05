@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 
 namespace Backbone.BuildingBlocks.Application.QuotaCheck;
 public interface IQuotaChecker

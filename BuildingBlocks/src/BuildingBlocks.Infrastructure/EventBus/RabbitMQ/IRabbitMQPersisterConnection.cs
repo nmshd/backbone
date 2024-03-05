@@ -1,4 +1,4 @@
-﻿using RabbitMQ.Client;
+using RabbitMQ.Client;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
