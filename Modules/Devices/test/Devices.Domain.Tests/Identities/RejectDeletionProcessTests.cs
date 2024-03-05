@@ -37,8 +37,10 @@ public class RejectDeletionProcessTests
         var acting = () => identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("Device");
+        var exception = acting.Should().Throw<DomainException>().Which;
+
+        exception.Code.Should().Be("error.platform.recordNotFound");
+        exception.Message.Should().Contain("Device");
     }
 
     [Fact]
@@ -54,8 +56,10 @@ public class RejectDeletionProcessTests
         var acting = () => identity.RejectDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
+        var exception = acting.Should().Throw<DomainException>().Which;
+
+        exception.Code.Should().Be("error.platform.recordNotFound");
+        exception.Message.Should().Contain("IdentityDeletionProcess");
     }
 
     [Fact]
@@ -71,8 +75,10 @@ public class RejectDeletionProcessTests
         var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("WaitingForApproval");
+        var exception = acting.Should().Throw<DomainException>().Which;
+
+        exception.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
+        exception.Message.Should().Contain("WaitingForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
