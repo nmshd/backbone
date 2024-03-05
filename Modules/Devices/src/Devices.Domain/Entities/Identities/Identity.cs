@@ -71,6 +71,7 @@ public class Identity
     public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
     {
         EnsureNoActiveProcessExists();
+        EnsureIdentityOwnsDevice(asDevice);
 
         TierIdBeforeDeletion = TierId;
 
@@ -82,6 +83,12 @@ public class Identity
         Status = IdentityStatus.ToBeDeleted;
 
         return deletionProcess;
+    }
+
+    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
+    {
+        if (!Devices.Exists(device => device.Id == currentDeviceId))
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(Device)));
     }
 
     public void DeletionProcessApprovalReminder1Sent()
@@ -165,12 +172,28 @@ public class Identity
     {
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
+
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    {
+        EnsureIdentityOwnsDevice(canceledByDeviceId);
+
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
+                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Cancel(Address, canceledByDeviceId);
+        TierId = TierIdBeforeDeletion;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
 }
 
 public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
-    Approved = 1
+    Approved = 1,
+    Cancelled = 2
 }
 
 public enum IdentityStatus
