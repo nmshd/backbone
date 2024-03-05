@@ -57,8 +57,9 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         var acting = () => identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("Device");
+        var exception = acting.Should().Throw<DomainException>().Which;
+        exception.Code.Should().Be("error.platform.recordNotFound");
+        exception.Message.Should().Contain("Device");
     }
 
     [Fact]
