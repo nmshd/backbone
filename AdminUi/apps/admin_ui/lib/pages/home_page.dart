@@ -36,14 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await (await SharedPreferences.getInstance()).clear();
-              await GetIt.I.reset();
-              if (context.mounted) context.go('/login');
-            },
-          ),
+          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
           const SizedBox(width: 10),
         ],
       ),
@@ -85,5 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (widget.location.startsWith('/clients')) return 3;
 
     throw Exception();
+  }
+
+  Future<void> _logout() async {
+    await (await SharedPreferences.getInstance()).remove('api_key');
+    await GetIt.I.reset();
+    if (mounted) context.go('/login');
   }
 }
