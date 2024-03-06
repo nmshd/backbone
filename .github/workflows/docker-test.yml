@@ -1,0 +1,63 @@
+﻿name: Docker Test
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+    tags-ignore:
+      - "**"
+
+jobs:
+  docker-integration-test-postgres:
+    name: Run Cached Integration Tests (on Postgres)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          check-latest: true
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+      - name: Cache Docker
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      #- name: Cache npm dependencies
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: |
+      #      ./runtime/node_modules
+      #    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-npm-
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+
+      - name: Clear Docker Container
+        run: ./.ci/integrationTest.sh postgres down
+        
+      - name: Build Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-contexts: |
+            ./.ci/docker-compose.test.yml
+            ./.ci/docker-compose.test.postgres.yml
+          push: false
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache  
