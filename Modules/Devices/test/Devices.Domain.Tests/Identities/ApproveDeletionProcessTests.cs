@@ -39,10 +39,11 @@ public class ApproveDeletionProcessTests
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
+        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("Device");
+        exception.Code.Should().Be("error.platform.recordNotFound");
+        exception.Message.Should().Contain("Device");
     }
 
     [Fact]
@@ -56,10 +57,11 @@ public class ApproveDeletionProcessTests
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcessId, deviceId);
+        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.recordNotFound");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
+        exception.Code.Should().Be("error.platform.recordNotFound");
+        exception.Message.Should().Contain("IdentityDeletionProcess");
     }
 
     [Fact]
@@ -73,10 +75,11 @@ public class ApproveDeletionProcessTests
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, deviceId);
+        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessNotInRequiredStatus");
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("WaitingForApproval");
+        exception.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
+        exception.Message.Should().Contain("WaitingForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
