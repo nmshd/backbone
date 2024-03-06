@@ -8,8 +8,3 @@ public class ConsumerApiError
     public required string Docs { get; set; }
     public required DateTime Time { get; set; }
 }
-
-public class ConsumerApiError<TData> : ConsumerApiError
-{
-    public required TData Data { get; set; }
-}

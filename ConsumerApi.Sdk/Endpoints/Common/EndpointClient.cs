@@ -93,7 +93,7 @@ public class EndpointClient
         var data = mem.ToArray();
 
         ConsumerApiError? error = null;
-        if (statusCode >= HttpStatusCode.BadRequest) //In case of an error, deserialize it
+        if (statusCode >= HttpStatusCode.BadRequest) // In case of an error, deserialize it
         {
             mem.Seek(0, SeekOrigin.Begin);
             var deserialized = JsonSerializer.Deserialize<ConsumerApiResponse<EmptyResponse>>(mem, _jsonSerializerOptions)!;
@@ -103,20 +103,19 @@ public class EndpointClient
         return new RawConsumerApiResponse { Content = data, Error = error, Status = statusCode };
     }
 
-    private async Task<(Stream, HttpStatusCode)> ExecuteIntern(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection extraHeaders)
+    private async Task<(Stream, HttpStatusCode)> ExecuteIntern(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection headers)
     {
-        var httpRequest = new HttpRequestMessage(method, url)
-        {
-            Content = content
-        };
+        var httpRequest = new HttpRequestMessage(method, url) { Content = content };
 
         if (authenticate)
             await _authenticator.Authenticate(httpRequest);
 
-        foreach (var k in extraHeaders.AllKeys)
+        foreach (var headerName in headers.AllKeys)
         {
-            var values = extraHeaders.GetValues(k);
-            if (k != null && values != null) httpRequest.Headers.Add(k, values);
+            var values = headers.GetValues(headerName);
+
+            if (headerName != null && values != null)
+                httpRequest.Headers.Add(headerName, values);
         }
 
         var response = await _httpClient.SendAsync(httpRequest);
