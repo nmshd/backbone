@@ -21,18 +21,3 @@ public class ConsumerApiResponse<TResult>
     public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }
 }
-
-public class EmptyResponse { }
-
-public class RawConsumerApiResponse
-{
-    [MemberNotNullWhen(false, nameof(Error))]
-    public bool IsSuccess => Error == null;
-
-    [MemberNotNullWhen(true, nameof(Error))]
-    public bool IsError => !IsSuccess;
-
-    public required byte[] Content { get; set; }
-    public ConsumerApiError? Error { get; set; }
-    public required HttpStatusCode Status { get; set; }
-}
