@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: OutlineInputBorder(),
                 ),
                 onSubmitted: (_) => _login(),
+                obscureText: true,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
