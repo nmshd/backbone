@@ -67,6 +67,9 @@ public class IdentityDeletionProcess
 
     public DateTime? RejectedAt { get; private set; }
     public DeviceId? RejectedByDevice { get; private set; }
+    
+    public DateTime? CancelledAt { get; private set; }
+    public DeviceId? CancelledByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
@@ -147,5 +150,17 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.Rejected;
         RejectedAt = SystemTime.UtcNow;
         RejectedByDevice = rejectedByDevice;
+    }
+    
+    public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
+    {
+        if (Status != DeletionProcessStatus.Approved)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
+        CancelledByDevice = cancelledByDevice;
+
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelled(Id, address, cancelledByDevice));
     }
 }
