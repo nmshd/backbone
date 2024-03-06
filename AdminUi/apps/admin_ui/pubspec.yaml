@@ -10,6 +10,7 @@ dependencies:
   admin_api_sdk: ^1.0.0
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.10+1
   get_it: ^7.6.7
   go_router: ^13.2.0
   shared_preferences: ^2.2.2
@@ -27,7 +28,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icon.png
+    - assets/logo.svg
 
 # dart run flutter_launcher_icons
 flutter_launcher_icons:
