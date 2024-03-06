@@ -3,17 +3,20 @@ using System;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240223141956_AddProcessRejectionProperties")]
+    partial class AddProcessRejectionProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,15 +277,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ApprovedByDevice")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<DateTime?>("CancelledAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CancelledByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")

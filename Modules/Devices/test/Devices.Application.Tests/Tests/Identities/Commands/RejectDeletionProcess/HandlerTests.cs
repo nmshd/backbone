@@ -1,9 +1,7 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
@@ -12,8 +10,7 @@ using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.ApproveDeletionProcess;
-
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.RejectDeletionProcess;
 public class HandlerTests
 {
     [Fact]
@@ -23,7 +20,7 @@ public class HandlerTests
         var utcNow = DateTime.Parse("2000-01-01");
         SystemTime.Set(utcNow);
 
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.Parse("2000-01-10"));
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(utcNow);
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
         var device = identity.Devices[0];
 
@@ -38,23 +35,19 @@ public class HandlerTests
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         // Act
-        var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
+        var response = await handler.Handle(new RejectDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
-                && i.Status == IdentityStatus.ToBeDeleted
-                && i.TierId == Tier.QUEUED_FOR_DELETION.Id
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedAt == DateTime.Parse("2000-01-01")
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodEndsAt == DateTime.Parse("2000-01-31")
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == device.Id
-            ), A<CancellationToken>._))
+                && i.Status == IdentityStatus.Active
+                && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
-        response.ApprovedAt.Should().Be(utcNow);
-        response.ApprovedByDevice.Should().Be(device.Id);
-        response.Status.Should().Be(DeletionProcessStatus.Approved);
+        response.Status.Should().Be(DeletionProcessStatus.Rejected);
+        response.RejectedAt.Should().Be(utcNow);
+        response.RejectedByDevice.Should().Be(device.Id);
     }
 
     [Fact]
@@ -71,15 +64,14 @@ public class HandlerTests
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("some-deletion-process-id"), CancellationToken.None);
+        var acting = async () => await handler.Handle(new RejectDeletionProcessCommand("some-deletion-process-id"), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
+        acting.Should().AwaitThrowAsync<NotFoundException, RejectDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        return new Handler(identitiesRepository, userContext, eventBus);
+        return new Handler(identitiesRepository, userContext);
     }
 }
