@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain;
 
@@ -46,7 +45,7 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
 
-    public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
+    public static DomainError NoDeletionProcessWithRequiredStatusExists()
     {
         return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
     }

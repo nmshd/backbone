@@ -126,7 +126,8 @@ public class IdentityDeletionProcess
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)
     {
-        EnsureStatus(DeletionProcessStatus.WaitingForApproval);
+        if (Status != DeletionProcessStatus.WaitingForApproval)
+            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
 
         Approve(approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
