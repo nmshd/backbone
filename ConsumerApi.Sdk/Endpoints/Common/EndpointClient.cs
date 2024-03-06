@@ -88,19 +88,17 @@ public class EndpointClient
     {
         var (responseContent, statusCode) = await ExecuteIntern(method, url, content, authenticate, extraHeaders);
 
-        MemoryStream mem = new();
-        await responseContent.CopyToAsync(mem);
-        var data = mem.ToArray();
+        MemoryStream inputStream = new();
+        await responseContent.CopyToAsync(inputStream);
 
-        ConsumerApiError? error = null;
-        if (statusCode >= HttpStatusCode.BadRequest) // In case of an error, deserialize it
+        if (statusCode >= HttpStatusCode.BadRequest)
         {
-            mem.Seek(0, SeekOrigin.Begin);
-            var deserialized = JsonSerializer.Deserialize<ConsumerApiResponse<EmptyResponse>>(mem, _jsonSerializerOptions)!;
-            error = deserialized.Error;
+            inputStream.Seek(0, SeekOrigin.Begin);
+            var deserialized = JsonSerializer.Deserialize<ConsumerApiResponse<EmptyResponse>>(inputStream, _jsonSerializerOptions)!;
+            return new RawConsumerApiResponse { Error = deserialized.Error, Status = statusCode };
         }
 
-        return new RawConsumerApiResponse { Content = data, Error = error, Status = statusCode };
+        return new RawConsumerApiResponse { Content = inputStream.ToArray(), Status = statusCode };
     }
 
     private async Task<(Stream, HttpStatusCode)> ExecuteIntern(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection headers)
