@@ -41,7 +41,7 @@ jobs:
         run: npm install --prefix ./.ci
 
       - name: Clear Docker Container
-        run: ./.ci/integrationTest.sh postgres down
+        run: python .ci/integrationTest.py postgres down
         
       - name: Build Docker
         uses: docker/build-push-action@v5
@@ -53,6 +53,9 @@ jobs:
           push: false
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          
+      - name: Run Tests
+        run: python .ci/integrationTest.py build
 
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
