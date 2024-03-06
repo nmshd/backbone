@@ -155,9 +155,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
-#pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration =
-        services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
     services
         .AddCustomAspNetCore(parsedConfiguration, environment)
