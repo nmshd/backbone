@@ -24,8 +24,7 @@ RUN dotnet restore "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj
 COPY . .
 
 WORKDIR "/src/Modules/Devices/src/Devices.AdminCli"
-RUN dotnet build /property:UseAppHost=true /property:DebugType=None --no-restore -c Release -o /app/build --self-contained true "Devices.AdminCli.csproj" 
-RUN dotnet publish --no-restore --no-build -c Release -o /app/publish "Devices.AdminCli.csproj"
+RUN dotnet publish --no-restore -c Release -o /app/publish "Devices.AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app
