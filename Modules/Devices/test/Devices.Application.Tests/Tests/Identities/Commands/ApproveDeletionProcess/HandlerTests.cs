@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Domain;
@@ -129,7 +129,7 @@ public class HandlerTests
         var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand(identity.DeletionProcesses.FirstOrDefault()!.Id), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().AwaitThrowAsync<DomainException, ApproveDeletionProcessResponse>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessHasWrongStatus");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null)

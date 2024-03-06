@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -57,7 +57,7 @@ public class ApproveDeletionProcessTests
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, DeviceId.Parse("DVC"));
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessHasWrongStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

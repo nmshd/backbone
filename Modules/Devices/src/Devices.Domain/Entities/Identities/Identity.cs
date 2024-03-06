@@ -143,7 +143,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.Any(d => d.Status == status);
 
         if (!deletionProcess)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(status));
     }
 
     private void EnsureNoActiveProcessExists()

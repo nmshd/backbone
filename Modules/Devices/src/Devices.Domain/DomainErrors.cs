@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain;
 
@@ -30,7 +31,8 @@ public static class DomainErrors
 
     public static DomainError CannotChangeTierQueuedForDeletion()
     {
-        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned",
+            "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
     }
 
     public static DomainError CannotDeleteUsedTier(string reason = "")
@@ -45,8 +47,9 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
 
-    public static DomainError NoDeletionProcessWithRequiredStatusExists()
+    public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
     {
-        return new DomainError("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists", "The deletion process does not have the correct status to perform this action.");
+        return new DomainError("error.platform.validation.device.deletionProcessHasWrongStatus",
+            $"The deletion process has the wrong status. It must be in status '{deletionProcessStatus}' to perform this action..");
     }
 }
