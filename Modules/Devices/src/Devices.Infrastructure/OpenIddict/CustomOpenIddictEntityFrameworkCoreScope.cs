@@ -1,7 +1,5 @@
-﻿using OpenIddict.EntityFrameworkCore.Models;
+using OpenIddict.EntityFrameworkCore.Models;
 
 namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
-public class CustomOpenIddictEntityFrameworkCoreScope : OpenIddictEntityFrameworkCoreScope<string>
-{
-}
+public class CustomOpenIddictEntityFrameworkCoreScope : OpenIddictEntityFrameworkCoreScope<string>;
 

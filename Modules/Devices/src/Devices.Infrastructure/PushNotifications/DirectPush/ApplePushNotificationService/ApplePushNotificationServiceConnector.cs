@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Reflection.Metadata;
+using System.Reflection;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -60,7 +59,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
-        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId!);
+        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId);
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
@@ -77,7 +76,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             sendResults.AddSuccess(registration.DeviceId);
         else
         {
-            var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+            var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync())!;
             if (responseContent.reason == "Unregistered")
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
             else
@@ -125,8 +124,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
 public static class TypeExtensions
 {
-    public static T GetCustomAttribute<T>(this Type type) where T : Attribute
+    public static T? GetCustomAttribute<T>(this Type type) where T : Attribute
     {
-        return (T)type.GetCustomAttribute(typeof(T));
+        return (T?)type.GetCustomAttribute(typeof(T));
     }
 }

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentAssertions;
 using FluentValidation;
 using Xunit;
@@ -47,7 +47,7 @@ public class ValueInValidatorTests
 
     private class AClass
     {
-        public string AStringProperty { get; set; }
+        public required string AStringProperty { get; init; }
     }
 
     private class AClassValidator : AbstractValidator<AClass>

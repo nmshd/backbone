@@ -1,15 +1,20 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class ExternalEvent
 {
-    private readonly List<SyncError> _errors = new();
+    private readonly List<SyncError> _errors = [];
 
-#pragma warning disable CS8618
-    private ExternalEvent() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private ExternalEvent()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        Owner = null!;
+        Payload = null!;
+    }
 
     public ExternalEvent(ExternalEventType type, IdentityAddress owner, long index, object payload)
     {
@@ -51,8 +56,9 @@ public class ExternalEvent
 
 public enum ExternalEventType
 {
-    MessageReceived,
-    MessageDelivered,
-    RelationshipChangeCreated,
-    RelationshipChangeCompleted
+    MessageReceived = 0,
+    MessageDelivered = 1,
+    RelationshipChangeCreated = 2,
+    RelationshipChangeCompleted = 3,
+    IdentityDeletionProcessStarted = 4
 }

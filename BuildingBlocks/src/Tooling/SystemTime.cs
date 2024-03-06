@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Backbone.Tooling;
 
@@ -30,7 +30,7 @@ public static class SystemTime
         var stackTrace = new StackTrace();
         var callerType = stackTrace.GetFrame(1)!.GetMethod()!.DeclaringType;
 
-        if (callerType != null && callerType.Namespace != null && !callerType.Namespace.Contains("Test"))
+        if (callerType is { Namespace: not null } && !callerType.Namespace.Contains("Test"))
         {
             throw new NotSupportedException("You can't call this method from a Non-Test-class");
         }

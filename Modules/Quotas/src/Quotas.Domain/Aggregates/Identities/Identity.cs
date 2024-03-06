@@ -28,9 +28,9 @@ public class Identity
     {
         Address = address;
         TierId = tierId;
-        _tierQuotas = new List<TierQuota>();
-        _individualQuotas = new List<IndividualQuota>();
-        _metricStatuses = new List<MetricStatus>();
+        _tierQuotas = [];
+        _individualQuotas = [];
+        _metricStatuses = [];
     }
 
     public string Address { get; }
@@ -44,8 +44,8 @@ public class Identity
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (max <= 0)
-            throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
+        if (max < 0)
+            throw new DomainException(DomainErrors.MaxValueCannotBeLowerThanZero());
 
         if (IndividualQuotaAlreadyExists(metricKey, period))
             throw new DomainException(DomainErrors.DuplicateQuota());

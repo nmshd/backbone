@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;

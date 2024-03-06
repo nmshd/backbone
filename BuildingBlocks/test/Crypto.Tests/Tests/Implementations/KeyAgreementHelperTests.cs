@@ -1,12 +1,12 @@
-﻿using Backbone.Crypto.Implementations;
+using Backbone.Crypto.Implementations;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class KeyAgreementHelperTests : IDisposable
+public class KeyAgreementHelperTests
 {
-    private KeyAgreementHelper _keyAgreementHelper;
+    private readonly KeyAgreementHelper _keyAgreementHelper;
 
     [Fact]
     public void IsValidPublicKey_ShouldReturnTrue_WhenPublicKeyIsValid()
@@ -53,11 +53,6 @@ public class KeyAgreementHelperTests : IDisposable
     public KeyAgreementHelperTests()
     {
         _keyAgreementHelper = KeyAgreementHelper.CreateX25519WithRawKeyFormat();
-    }
-
-    public void Dispose()
-    {
-        _keyAgreementHelper = null;
     }
 
     #endregion

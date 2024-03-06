@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Files.Application;
 
 namespace Backbone.Modules.Files.ConsumerApi;

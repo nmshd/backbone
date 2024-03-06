@@ -1,9 +1,9 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 
 public class MessageCreatedIntegrationEvent : IntegrationEvent
 {
-    public string Id { get; private set; }
-    public IEnumerable<string> Recipients { get; private set; }
+    public required string Id { get; set; }
+    public required IEnumerable<string> Recipients { get; set; }
 }

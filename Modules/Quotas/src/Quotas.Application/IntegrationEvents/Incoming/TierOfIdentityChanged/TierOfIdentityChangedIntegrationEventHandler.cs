@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -22,7 +22,7 @@ public class TierOfIdentityChangedIntegrationEventHandler : IIntegrationEventHan
     public async Task Handle(TierOfIdentityChangedIntegrationEvent @event)
     {
         var identity = await _identitiesRepository.Find(@event.IdentityAddress, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Identity));
-        var newTier = await _tiersRepository.Find(@event.NewTier, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
+        var newTier = await _tiersRepository.Find(@event.NewTierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
 
         await identity.ChangeTier(newTier, _metricCalculatorFactory, CancellationToken.None);
 

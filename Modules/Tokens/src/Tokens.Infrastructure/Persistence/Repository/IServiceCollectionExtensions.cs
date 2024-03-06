@@ -1,4 +1,3 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;

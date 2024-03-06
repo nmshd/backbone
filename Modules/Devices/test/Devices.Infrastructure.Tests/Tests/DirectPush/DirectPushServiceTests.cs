@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
@@ -23,7 +23,7 @@ public class DirectPushServiceTests
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns((PnsRegistration)null).Once();
+           .Returns<PnsRegistration?>(null).Once();
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
@@ -98,7 +98,7 @@ public class DirectPushServiceTests
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns((PnsRegistration)null);
+           .Returns<PnsRegistration?>(null);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 

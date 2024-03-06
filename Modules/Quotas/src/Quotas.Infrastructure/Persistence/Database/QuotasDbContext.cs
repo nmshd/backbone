@@ -14,7 +14,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {
-    public QuotasDbContext() : base() { }
+    public QuotasDbContext() { }
 
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options) { }
 

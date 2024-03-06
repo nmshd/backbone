@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using CSharpFunctionalExtensions;

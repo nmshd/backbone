@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
@@ -144,7 +144,7 @@ public class EventBusFactory : IDisposable
 
     public const string CONNECTION_INFO = "";
 
-    private readonly List<Instance> _instances = new();
+    private readonly List<Instance> _instances = [];
 
     public EventBusFactory(ITestOutputHelper output)
     {

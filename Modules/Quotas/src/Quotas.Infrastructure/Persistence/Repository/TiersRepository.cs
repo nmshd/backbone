@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
@@ -55,7 +55,19 @@ public class TiersRepository : ITiersRepository
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
+        RemoveOrphanedTierQuotaDefinitions();
         _tiers.Update(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private void RemoveOrphanedTierQuotaDefinitions()
+    {
+        var removedQuotas = _dbContext.ChangeTracker
+            .Entries<TierQuotaDefinition>()
+            .Where(e => e.State == EntityState.Modified)
+            .Where(e => _dbContext.Entry(e.Entity).Property("TierId").CurrentValue == null)
+            .Select(e => e.Entity);
+
+        _dbContext.RemoveRange(removedQuotas);
     }
 }

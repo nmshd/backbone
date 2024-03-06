@@ -62,7 +62,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Starting_two_sync_runs_parallely_leads_to_error_for_one_call()
+    public async Task Starting_two_sync_runs_parallelly_leads_to_error_for_one_call()
     {
         // Arrange
         var externalEvent = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
@@ -253,7 +253,7 @@ public class HandlerTests
         return handler;
     }
 
-    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext dbContext = null)
+    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext? dbContext = null)
     {
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);

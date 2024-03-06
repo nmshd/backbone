@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;

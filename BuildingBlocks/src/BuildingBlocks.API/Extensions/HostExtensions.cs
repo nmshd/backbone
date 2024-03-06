@@ -1,9 +1,11 @@
-﻿using System.Data.SqlClient;
+using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using Polly;
+using Polly.Retry;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
 
@@ -20,13 +22,12 @@ public static class HostExtensions
         {
             logger.LogInformation("Migrating database associated with context '{context}'", typeof(TContext).Name);
 
-            var retry = Policy.Handle<SqlException>()
-                .WaitAndRetry(new[]
-                {
+            var retry = Policy.Handle<SqlException>().Or<PostgresException>()
+                .WaitAndRetry([
                     TimeSpan.FromSeconds(5),
                     TimeSpan.FromSeconds(10),
                     TimeSpan.FromSeconds(15)
-                });
+                ]);
 
             retry.Execute(context.Database.Migrate);
 

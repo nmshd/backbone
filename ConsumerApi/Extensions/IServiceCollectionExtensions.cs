@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.API;
@@ -34,7 +34,7 @@ public static class IServiceCollectionExtensions
                 options.InvalidModelStateResponseFactory = context =>
                 {
                     var firstPropertyWithError =
-                        context.ModelState.First(p => p.Value != null && p.Value.Errors.Count > 0);
+                        context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
                     var nameOfPropertyWithError = firstPropertyWithError.Key;
                     var firstError = firstPropertyWithError.Value!.Errors.First();
                     var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)

@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
@@ -139,7 +139,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
                 var handleMethod = handler.GetType().GetMethod("Handle");
 
-                await (Task)handleMethod!.Invoke(handler, new object[] { integrationEvent })!;
+                await (Task)handleMethod!.Invoke(handler, [integrationEvent])!;
 
                 return Task.CompletedTask;
             });

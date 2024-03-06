@@ -1,12 +1,12 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 
 namespace Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporter : IReporter
 {
-    public List<FileId> ReportedDatabaseIds { get; } = new();
-    public List<string> ReportedBlobIds { get; } = new();
+    public List<FileId> ReportedDatabaseIds { get; } = [];
+    public List<string> ReportedBlobIds { get; } = [];
 
     public void Complete()
     {

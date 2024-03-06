@@ -191,8 +191,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.Infrastructure.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.AdminCli", "Modules\Devices\src\Devices.AdminCli\Devices.AdminCli.csproj", "{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlowCucumberResultsExporter", "BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj", "{5CD9D570-BC18-47F3-8646-15EC5C7B70AB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Jobs.SanityCheck", "Modules\Files\src\Files.Jobs.SanityCheck\Files.Jobs.SanityCheck.csproj", "{1BB56A85-74F8-497F-983C-274D51B25CF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Jobs.SanityCheck.Tests", "Modules\Files\test\Files.Jobs.SanityCheck.Tests\Files.Jobs.SanityCheck.Tests.csproj", "{6289332A-DBF2-4B99-BEFB-AC01A4C9D262}"
@@ -237,11 +235,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quotas.ConsumerApi", "Modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devices.ConsumerApi", "Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj", "{8FAB83BF-EE83-4FC3-AA4F-3E954C7E7DD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Tests.Integration", "AdminUi\test\AdminUi.Tests.Integration\AdminUi.Tests.Integration.csproj", "{1A3E4581-6DF3-4FB3-891D-3E9CB704A3AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Tests.Integration", "AdminApi\test\AdminApi.Tests.Integration\AdminApi.Tests.Integration.csproj", "{1A3E4581-6DF3-4FB3-891D-3E9CB704A3AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminUi", "AdminUi", "{285E30DF-68B4-4A13-981E-E8BAB05489F5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminApi", "AdminApi", "{285E30DF-68B4-4A13-981E-E8BAB05489F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi", "AdminUi\src\AdminUi\AdminUi.csproj", "{17301932-8889-4564-9AB7-A8816A91B190}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi", "AdminApi\src\AdminApi\AdminApi.csproj", "{17301932-8889-4564-9AB7-A8816A91B190}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsumerApi", "ConsumerApi", "{E6BFD37D-335D-4975-B661-BC67FB82F5AA}"
 EndProject
@@ -259,13 +257,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "ConsumerApi\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{30CFBC0E-D72A-4890-9647-D488273B0F68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.SqlServer", "AdminUi\src\AdminUi.Infrastructure.Database.SqlServer\AdminUi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{FEBD339A-7343-47EF-84F1-770EDF7E5E94}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure.Database.Postgres", "AdminUi\src\AdminUi.Infrastructure.Database.Postgres\AdminUi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.Postgres", "AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj", "{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminUi.Infrastructure", "AdminUi\src\AdminUi.Infrastructure\AdminUi.Infrastructure.csproj", "{5028E85D-E115-4E02-AC94-2B441686E44E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure", "AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj", "{5028E85D-E115-4E02-AC94-2B441686E44E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCheck", "HealthCheck\HealthCheck.csproj", "{EE910828-296B-45CD-BA01-DCABE27BCC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "HealthCheck\HealthCheck.csproj", "{EE910828-296B-45CD-BA01-DCABE27BCC4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quotas.Infrastructure.Tests", "Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj", "{FB38C7C5-9F11-43BB-871F-E2E0360FD993}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -533,10 +533,6 @@ Global
 		{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CD9D570-BC18-47F3-8646-15EC5C7B70AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CD9D570-BC18-47F3-8646-15EC5C7B70AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CD9D570-BC18-47F3-8646-15EC5C7B70AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CD9D570-BC18-47F3-8646-15EC5C7B70AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BB56A85-74F8-497F-983C-274D51B25CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BB56A85-74F8-497F-983C-274D51B25CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BB56A85-74F8-497F-983C-274D51B25CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -649,6 +645,10 @@ Global
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE910828-296B-45CD-BA01-DCABE27BCC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -739,7 +739,6 @@ Global
 		{40F14114-44B0-4EE0-A653-6C8205F6F28C} = {F31B1655-A11B-4F30-9BC7-7418B8B915D7}
 		{19BE44FE-8852-40DD-AE70-EFA8B1E28730} = {F31B1655-A11B-4F30-9BC7-7418B8B915D7}
 		{E7B3FFFA-3B6B-45F9-BFD0-0D3344AF979F} = {AAE79377-8414-4C23-BF0C-678B68A24BC7}
-		{5CD9D570-BC18-47F3-8646-15EC5C7B70AB} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{1BB56A85-74F8-497F-983C-274D51B25CF4} = {3D324161-C287-4DC0-A9FD-FA3B1A6643FD}
 		{6289332A-DBF2-4B99-BEFB-AC01A4C9D262} = {2D0BC8E9-ED6B-49D9-937C-1616ED40FB3E}
 		{360430CE-6850-4A67-88ED-E9508B7D2658} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
@@ -773,6 +772,7 @@ Global
 		{FEBD339A-7343-47EF-84F1-770EDF7E5E94} = {A8C20813-97C8-42A9-B45A-4A0D650DA647}
 		{4D9FCC6B-0958-45A2-85EA-3992CE29B5CB} = {A8C20813-97C8-42A9-B45A-4A0D650DA647}
 		{5028E85D-E115-4E02-AC94-2B441686E44E} = {A8C20813-97C8-42A9-B45A-4A0D650DA647}
+		{FB38C7C5-9F11-43BB-871F-E2E0360FD993} = {4192A28C-45C0-4D20-B880-F417B8AB752F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
@@ -25,7 +26,7 @@ public class Handler : IRequestHandler<DeleteTierCommand>
         if (tierIdResult.IsFailure)
             throw new DomainException(tierIdResult.Error);
 
-        var tier = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken);
+        var tier = await _tiersRepository.FindById(tierIdResult.Value, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
 
         var clientsCount = await _tiersRepository.GetNumberOfClientsWithDefaultTier(tier, cancellationToken);
 

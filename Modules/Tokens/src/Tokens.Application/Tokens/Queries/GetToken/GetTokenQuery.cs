@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Application.Tokens.DTOs;
+using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 

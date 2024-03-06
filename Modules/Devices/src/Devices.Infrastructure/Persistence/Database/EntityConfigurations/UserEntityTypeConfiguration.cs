@@ -1,5 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

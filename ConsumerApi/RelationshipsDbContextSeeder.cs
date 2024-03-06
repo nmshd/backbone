@@ -1,8 +1,7 @@
-﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Relationships.Application.Infrastructure;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

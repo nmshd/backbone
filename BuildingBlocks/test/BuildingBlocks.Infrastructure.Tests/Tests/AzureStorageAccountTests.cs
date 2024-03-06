@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
@@ -38,7 +38,7 @@ public class AzureStorageAccountTests
 
     private static void CloseAzuriteContainer()
     {
-        var processInfo = new ProcessStartInfo("docker", $"stop azurite-test-container")
+        var processInfo = new ProcessStartInfo("docker", "stop azurite-test-container")
         {
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -71,7 +71,7 @@ public class AzureStorageAccountTests
         });
 
         var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetService<IBlobStorage>();
+        return serviceProvider.GetRequiredService<IBlobStorage>();
     }
 
     [Fact(Skip = "Fails because emulator container can't be started")]

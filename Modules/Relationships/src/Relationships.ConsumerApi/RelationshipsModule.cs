@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application;
@@ -47,5 +47,6 @@ public class RelationshipsModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
+        eventBus.AddRelationshipsIntegrationEventSubscriptions();
     }
 }

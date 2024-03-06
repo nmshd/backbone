@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -71,6 +71,6 @@ public class DatawalletController : ApiControllerBase
 
 public class PushDatawalletModificationsRequestBody
 {
-    public long? LocalIndex { get; set; }
-    public PushDatawalletModificationItem[] Modifications { get; set; }
+    public required long LocalIndex { get; set; }
+    public required PushDatawalletModificationItem[] Modifications { get; set; }
 }

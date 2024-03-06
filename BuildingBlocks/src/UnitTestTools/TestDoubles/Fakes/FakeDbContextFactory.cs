@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.UnitTestTools.TestDoubles.Fakes;
@@ -15,7 +15,7 @@ public static class FakeDbContextFactory
             .UseSqlite(connection)
             .Options;
 
-        object[] args = { options };
+        object[] args = [options];
 
         var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();

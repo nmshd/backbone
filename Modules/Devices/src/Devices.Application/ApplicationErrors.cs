@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application;
@@ -64,6 +64,13 @@ public static class ApplicationErrors
         public static ApplicationError ClientReachedIdentitiesLimit()
         {
             return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
+        }
+    }
+    public static class Identities
+    {
+        public static ApplicationError CanOnlyStartDeletionProcessForOwnIdentity()
+        {
+            return new ApplicationError("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity", "You can only start a deletion process for your own identity.");
         }
     }
 }

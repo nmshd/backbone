@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
 using FluentAssertions;
 using Polly;
@@ -8,7 +8,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSu
 
 public class TestEvent1IntegrationEventHandler1 : IIntegrationEventHandler<TestEvent1IntegrationEvent>
 {
-    public static List<TestEvent1IntegrationEventHandler1> Instances { get; } = new();
+    public static List<TestEvent1IntegrationEventHandler1> Instances { get; } = [];
 
     public TestEvent1IntegrationEventHandler1()
     {

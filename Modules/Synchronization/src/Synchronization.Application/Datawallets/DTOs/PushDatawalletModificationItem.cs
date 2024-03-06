@@ -1,16 +1,16 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class PushDatawalletModificationItem
 {
-    public string ObjectIdentifier { get; set; }
-    public string PayloadCategory { get; set; }
-    public string Collection { get; set; }
-    public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-    public byte[] EncryptedPayload { get; set; }
-    public ushort DatawalletVersion { get; set; }
+    public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
+    public required string ObjectIdentifier { get; set; }
+    public required string Collection { get; set; }
+    public string? PayloadCategory { get; set; }
+    public byte[]? EncryptedPayload { get; set; }
+    public required ushort DatawalletVersion { get; set; }
 }
 
 public class PushDatawalletModificationItemValidator : AbstractValidator<PushDatawalletModificationItem>

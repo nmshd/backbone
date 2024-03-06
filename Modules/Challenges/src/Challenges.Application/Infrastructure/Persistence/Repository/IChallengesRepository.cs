@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
 
 namespace Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;

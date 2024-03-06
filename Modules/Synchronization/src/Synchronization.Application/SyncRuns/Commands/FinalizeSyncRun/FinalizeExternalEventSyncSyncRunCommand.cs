@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -8,11 +8,11 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.Finaliz
 
 public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternalEventSyncSyncRunResponse>
 {
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId) : this(syncRunId, new List<ExternalEventResult>(), new List<PushDatawalletModificationItem>()) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId) : this(syncRunId, [], []) { }
 
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults) : this(syncRunId, externalEventResults, new List<PushDatawalletModificationItem>()) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults) : this(syncRunId, externalEventResults, []) { }
 
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<PushDatawalletModificationItem> datawalletModifications) : this(syncRunId, new List<ExternalEventResult>(), datawalletModifications) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<PushDatawalletModificationItem> datawalletModifications) : this(syncRunId, [], datawalletModifications) { }
 
     [JsonConstructor]
     public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults, List<PushDatawalletModificationItem> datawalletModifications)
@@ -31,13 +31,13 @@ public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternal
         public ExternalEventResult(ExternalEventId externalEventId) : this(externalEventId, null) { }
 
         [JsonConstructor]
-        public ExternalEventResult(ExternalEventId externalEventId, string errorCode)
+        public ExternalEventResult(ExternalEventId externalEventId, string? errorCode)
         {
             ExternalEventId = externalEventId;
             ErrorCode = errorCode;
         }
 
         public ExternalEventId ExternalEventId { get; set; }
-        public string ErrorCode { get; set; }
+        public string? ErrorCode { get; set; }
     }
 }

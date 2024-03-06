@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -153,7 +153,18 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var datawalletModifications = new List<PushDatawalletModificationItem> { new() { Type = DatawalletModificationDTO.DatawalletModificationType.Create, Collection = "someArbitraryCollection", EncryptedPayload = new byte[] { 0 }, ObjectIdentifier = "someArbitraryObjectIdentitfier", PayloadCategory = "someArbitraryObjectProperty" } };
+        var datawalletModifications = new List<PushDatawalletModificationItem>
+        {
+            new()
+            {
+                Type = DatawalletModificationDTO.DatawalletModificationType.Create,
+                Collection = "someArbitraryCollection",
+                EncryptedPayload = [0],
+                ObjectIdentifier = "someArbitraryObjectIdentifier",
+                PayloadCategory = "someArbitraryObjectProperty",
+                DatawalletVersion = 1
+            }
+        };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, datawalletModifications), CancellationToken.None);
 
@@ -162,7 +173,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     }
 
     [Fact]
-    public async Task Successful_item_results_dont_delete_sync_run_reference()
+    public async Task Successful_item_results_do_not_delete_sync_run_reference()
     {
         // Arrange
         var syncRun = SyncRunBuilder

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -24,10 +24,10 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private readonly IMapper _mapper;
 
     private CancellationToken _cancellationToken;
-    private Datawallet _datawallet;
-    private SyncRun _previousSyncRun;
-    private StartSyncRunCommand _request;
-    private DatawalletVersion _supportedDatawalletVersion;
+    private Datawallet? _datawallet;
+    private SyncRun? _previousSyncRun;
+    private StartSyncRunCommand _request = null!;
+    private DatawalletVersion? _supportedDatawalletVersion;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
@@ -87,7 +87,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private void EnsureSufficientSupportedDatawalletVersion()
     {
-        if (_datawallet != null && _supportedDatawalletVersion < _datawallet.Version)
+        if (_datawallet != null && _supportedDatawalletVersion! < _datawallet.Version)
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
     }
 
@@ -97,7 +97,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
         if (IsPreviousSyncRunStillActive())
         {
-            if (!_previousSyncRun.IsExpired)
+            if (!_previousSyncRun!.IsExpired)
                 throw new OperationFailedException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhenAnotherSyncRunIsRunning(_previousSyncRun.Id));
 
             await CancelPreviousSyncRun();
@@ -111,20 +111,21 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private async Task CancelPreviousSyncRun()
     {
-        _previousSyncRun.Cancel();
+        _previousSyncRun!.Cancel();
         _dbContext.Set<SyncRun>().Update(_previousSyncRun);
+
         await _dbContext.SaveChangesAsync(_cancellationToken);
     }
 
     private async Task<SyncRun> CreateNewSyncRun()
     {
-        return await CreateNewSyncRun(Array.Empty<ExternalEvent>());
+        return await CreateNewSyncRun([]);
     }
 
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events ?? Array.Empty<ExternalEvent>(), _mapper.Map<SyncRun.SyncRunType>(_request.Type));
+        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
@@ -144,13 +145,10 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private long DetermineNextSyncRunIndex()
     {
-        if (_previousSyncRun == null)
-            return 0;
-
-        return _previousSyncRun.Index + 1;
+        return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
     }
 
-    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun newSyncRun = null)
+    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
         var syncRunDTO = _mapper.Map<SyncRunDTO>(newSyncRun);
 

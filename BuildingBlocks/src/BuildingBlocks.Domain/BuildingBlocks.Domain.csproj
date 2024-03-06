@@ -1,14 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="OpenIddict.AspNetCore" Version="5.2.0" />
-    <PackageReference Include="OpenIddict.Core" Version="5.2.0" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.2.0" />
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Tooling\Tooling.csproj" />

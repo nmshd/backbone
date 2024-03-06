@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Tests.Extensions;
@@ -79,7 +78,7 @@ public class HandlerTests
         var command = new UpdateClientCommand(client.ClientId, newDefaultTier.Id, 1);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns((OAuthClient)null);
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns<OAuthClient?>(null);
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(newDefaultTier.Id, A<CancellationToken>._)).Returns(true);
@@ -129,7 +128,7 @@ public class HandlerTests
         var command = new UpdateClientCommand(client.ClientId, client.DefaultTier, 2);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns((OAuthClient)null);
+        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns<OAuthClient?>(null);
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);

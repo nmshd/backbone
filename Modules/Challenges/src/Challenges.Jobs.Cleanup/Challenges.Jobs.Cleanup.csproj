@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
 	<PropertyGroup>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

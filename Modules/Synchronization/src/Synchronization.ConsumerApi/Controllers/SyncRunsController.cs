@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -98,7 +98,7 @@ public class SyncRunsController : ApiControllerBase
         var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id,
             request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
 
-        return Ok(response!);
+        return Ok(response);
     }
 
     [HttpGet("{id}/ExternalEvents")]
@@ -149,27 +149,27 @@ public class StartSyncRunRequestBody
 public class FinalizeDatawalletVersionUpgradeRequest
 {
     public ushort NewDatawalletVersion { get; set; }
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }
 
 public class FinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
+    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }
 
 public class OldFinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = new();
+    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = [];
 
     public class FinalizeExternalEventSyncRequestDatawalletModification
     {
-        public string ObjectIdentifier { get; set; }
-        public string PayloadCategory { get; set; }
-        public string Collection { get; set; }
-        public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-        public byte[] EncryptedPayload { get; set; }
-        public ushort DatawalletVersion { get; set; }
+        public required string ObjectIdentifier { get; set; }
+        public string? PayloadCategory { get; set; }
+        public required string Collection { get; set; }
+        public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
+        public byte[]? EncryptedPayload { get; set; }
+        public required ushort DatawalletVersion { get; set; }
     }
 }

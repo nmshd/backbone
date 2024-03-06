@@ -1,17 +1,9 @@
-﻿using Backbone.Crypto.Abstractions;
-using NSec.Cryptography;
+using Backbone.Crypto.Abstractions;
 
 namespace Backbone.Crypto.Implementations;
 
 public class KeyGenerator : IKeyGenerator
 {
-    private readonly KeyBlobFormat _keyFormat;
-
-    public KeyGenerator(KeyBlobFormat keyFormat)
-    {
-        _keyFormat = keyFormat;
-    }
-
     public ConvertibleString DeriveSymmetricKeyWithEcdh(ConvertibleString privateKey, ConvertibleString publicKey,
         int keyLengthInBits)
     {

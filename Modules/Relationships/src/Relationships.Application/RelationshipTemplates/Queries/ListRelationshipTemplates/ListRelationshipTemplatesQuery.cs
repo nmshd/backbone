@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
@@ -9,7 +9,7 @@ public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplates
     public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipTemplateId>? ids)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? [] : new List<RelationshipTemplateId>(ids);
+        Ids = ids == null ? [] : ids.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }

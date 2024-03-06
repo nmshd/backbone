@@ -1,5 +1,6 @@
-﻿using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Application.Tiers.Commands.CreateQueuedForDeletionTier;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -28,13 +29,14 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         await context.Database.EnsureCreatedAsync();
 
         await SeedBasicTier(context);
+        await SeedQueuedForDeletionTier();
         await SeedApplicationUsers(context);
         await AddBasicTierToIdentities(context);
     }
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
     {
-        return await context.Tiers.GetBasicTier(CancellationToken.None) ?? null;
+        return await context.Tiers.GetBasicTier(CancellationToken.None);
     }
 
     private async Task SeedApplicationUsers(DevicesDbContext context)
@@ -53,14 +55,18 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         }
     }
 
+    private async Task SeedQueuedForDeletionTier()
+    {
+        await _mediator.Send(new CreateQueuedForDeletionTierCommand());
+    }
+
     private async Task AddBasicTierToIdentities(DevicesDbContext context)
     {
         var basicTier = await GetBasicTier(context);
         if (basicTier == null)
-        {
             return;
-        }
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }

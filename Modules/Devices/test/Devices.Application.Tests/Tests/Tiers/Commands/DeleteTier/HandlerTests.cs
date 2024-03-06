@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
@@ -9,6 +9,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.DeleteTier;
+
 public class HandlerTests
 {
     private readonly ITiersRepository _tiersRepository;
@@ -28,7 +29,7 @@ public class HandlerTests
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
+        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfClientsWithDefaultTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
@@ -46,7 +47,7 @@ public class HandlerTests
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult(tier));
+        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
 

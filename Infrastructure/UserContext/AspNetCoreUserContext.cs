@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Security.Claims;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -22,39 +22,39 @@ public class AspNetCoreUserContext : IUserContext
 
     public IdentityAddress GetAddress()
     {
-        var address = _context.HttpContext.User.FindFirstValue(ADDRESS_CLAIM) ?? throw new NotFoundException();
+        var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM) ?? throw new NotFoundException();
         return IdentityAddress.Parse(address);
     }
 
     public IdentityAddress? GetAddressOrNull()
     {
-        var address = _context.HttpContext.User.FindFirstValue(ADDRESS_CLAIM);
+        var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM);
 
         return address == null ? null : IdentityAddress.Parse(address);
     }
 
     public DeviceId GetDeviceId()
     {
-        var deviceId = _context.HttpContext.User.FindFirstValue(DEVICE_ID_CLAIM) ?? throw new NotFoundException();
+        var deviceId = GetHttpContext().User.FindFirstValue(DEVICE_ID_CLAIM) ?? throw new NotFoundException();
         return DeviceId.Parse(deviceId);
     }
 
     public DeviceId? GetDeviceIdOrNull()
     {
-        var deviceId = _context.HttpContext.User.FindFirstValue(DEVICE_ID_CLAIM);
+        var deviceId = GetHttpContext().User.FindFirstValue(DEVICE_ID_CLAIM);
 
         return deviceId == null ? null : DeviceId.Parse(deviceId);
     }
 
     public string GetUserId()
     {
-        var userId = _context.HttpContext.User.FindFirstValue(USER_ID_CLAIM) ?? throw new NotFoundException();
+        var userId = GetHttpContext().User.FindFirstValue(USER_ID_CLAIM) ?? throw new NotFoundException();
         return userId;
     }
 
-    public string GetUserIdOrNull()
+    public string? GetUserIdOrNull()
     {
-        var userId = _context.HttpContext.User.FindFirstValue(USER_ID_CLAIM);
+        var userId = GetHttpContext().User.FindFirstValue(USER_ID_CLAIM);
 
         return userId;
     }
@@ -64,15 +64,15 @@ public class AspNetCoreUserContext : IUserContext
         return GetUsernameOrNull() ?? throw new NotFoundException();
     }
 
-    public string GetUsernameOrNull()
+    public string? GetUsernameOrNull()
     {
-        var username = _context.HttpContext.User.Identities.FirstOrDefault()?.Name;
+        var username = GetHttpContext().User.Identities.FirstOrDefault()?.Name;
         return username;
     }
 
     public IEnumerable<string> GetRoles()
     {
-        var rolesClaim = _context.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+        var rolesClaim = GetHttpContext().User.FindFirstValue(ClaimTypes.Role);
 
         if (rolesClaim == null) return new List<string>();
 
@@ -81,7 +81,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public SubscriptionPlan GetSubscriptionPlan()
     {
-        var subscriptionPlanClaim = _context.HttpContext.User.FindFirstValue(SUBSCRIPTION_PLAN_CLAIM);
+        var subscriptionPlanClaim = GetHttpContext().User.FindFirstValue(SUBSCRIPTION_PLAN_CLAIM);
 
         if (string.IsNullOrEmpty(subscriptionPlanClaim)) return SubscriptionPlan.Undefined;
 
@@ -93,5 +93,10 @@ public class AspNetCoreUserContext : IUserContext
                 throw new InvalidEnumArgumentException(
                     $"The value '{subscriptionPlanClaim}' is not a supported subscription plan.");
         }
+    }
+
+    private HttpContext GetHttpContext()
+    {
+        return _context.HttpContext ?? throw new Exception("HttpContext is null");
     }
 }

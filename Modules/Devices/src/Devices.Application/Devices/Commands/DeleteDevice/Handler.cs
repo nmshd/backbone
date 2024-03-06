@@ -1,8 +1,8 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

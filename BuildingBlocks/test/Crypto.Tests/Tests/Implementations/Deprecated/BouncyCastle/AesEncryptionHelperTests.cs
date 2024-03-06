@@ -1,23 +1,18 @@
-﻿using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
-public class AesEncryptionHelperTests : IDisposable
+public class AesEncryptionHelperTests
 {
-    private ISymmetricEncrypter _symmetricEncrypterUnderTest;
+    private readonly ISymmetricEncrypter _symmetricEncrypterUnderTest;
 
     #region Setup/Teardown
 
     public AesEncryptionHelperTests()
     {
         _symmetricEncrypterUnderTest = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-    }
-
-    public void Dispose()
-    {
-        _symmetricEncrypterUnderTest = null;
     }
 
     #endregion

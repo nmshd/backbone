@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -13,7 +13,7 @@ public static class IRuleBuilderExtensions
         {
             var domainError = validator(v);
             if (domainError != null)
-                context.AddFailure(new ValidationFailure(context.PropertyName, domainError.Message, v) { ErrorCode = domainError.Code });
+                context.AddFailure(new ValidationFailure(context.PropertyPath, domainError.Message, v) { ErrorCode = domainError.Code });
         });
     }
 }

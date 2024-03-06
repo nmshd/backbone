@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;

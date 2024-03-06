@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Common.FluentValidation;
 using FluentValidation;

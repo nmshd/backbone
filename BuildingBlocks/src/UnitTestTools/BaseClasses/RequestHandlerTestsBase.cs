@@ -1,4 +1,4 @@
-﻿using Backbone.UnitTestTools.TestDoubles.Fakes;
+using Backbone.UnitTestTools.TestDoubles.Fakes;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.UnitTestTools.BaseClasses;

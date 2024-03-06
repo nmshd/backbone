@@ -1,7 +1,8 @@
-﻿namespace Backbone.ConsumerApi.Tests.Integration.Models;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 internal class PnsRegistrationRequest
 {
-    public string Platform { get; set; }
-    public string Handle { get; set; }
-    public string AppId { get; set; }
+    public required string Platform { get; set; }
+    public required string Handle { get; set; }
+    public required string AppId { get; set; }
+    public string? Environment { get; set; }
 }

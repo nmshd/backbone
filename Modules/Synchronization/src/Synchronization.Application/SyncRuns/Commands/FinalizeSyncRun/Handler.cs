@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -21,8 +21,8 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
-    private Datawallet _datawallet;
-    private SyncRun _syncRun;
+    private Datawallet? _datawallet;
+    private SyncRun _syncRun = null!;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
@@ -126,13 +126,13 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (_datawallet == null)
             throw new NotFoundException(nameof(Datawallet));
 
-        if (!modifications.Any())
-            return new List<DatawalletModification>();
+        if (modifications.Count == 0)
+            return [];
 
         var blobName = Guid.NewGuid().ToString("N");
 
         var newModifications = new List<DatawalletModification>();
-        var payloads = new Dictionary<long, byte[]>();
+
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
@@ -146,9 +146,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
                 blobName);
 
             newModifications.Add(newModification);
-
-            if (newModification.EncryptedPayload != null)
-                payloads.Add(newModification.Index, modificationDto.EncryptedPayload);
         }
 
         return newModifications;

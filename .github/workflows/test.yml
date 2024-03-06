@@ -50,7 +50,7 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
       - name: Check formatting
-        run: ./.ci/checkFormatting.js
+        run: ./.ci/checkFormatting.sh
 
   test:
     runs-on: ubuntu-latest
@@ -85,7 +85,9 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
       - name: Run tests
-        run: ./.ci/test.js
+        run: ./.ci/test.sh
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
@@ -120,6 +122,8 @@ jobs:
         with:
           name: integration-test-sqlserver-docker-logs
           path: docker-log.txt
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   integration-test-postgres:
     name: Run Integration Tests (on Postgres)
@@ -154,6 +158,8 @@ jobs:
         with:
           name: integration-test-postgres-docker-logs
           path: docker-log.txt
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)

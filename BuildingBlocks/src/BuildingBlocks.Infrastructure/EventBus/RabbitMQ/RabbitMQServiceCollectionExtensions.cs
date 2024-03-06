@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,7 +18,6 @@ public static class RabbitMqServiceCollectionExtensions
         services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
-
 
             var factory = new ConnectionFactory
             {
@@ -49,10 +48,8 @@ public static class RabbitMqServiceCollectionExtensions
 
 public class RabbitMqOptions : BasicBusOptions
 {
-#pragma warning disable CS8618
-    public string HostName { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public string HostName { get; set; } = null!;
+    public string Username { get; set; } = null!;
+    public string Password { get; set; } = null!;
     public int ConnectionRetryCount { get; set; } = 5;
-#pragma warning restore CS8618
 }

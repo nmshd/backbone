@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -33,7 +33,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return oAuthClients;
     }
 
-    public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken, bool track = false)
+    public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
@@ -138,7 +138,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         }
     }
 
-    private void Track(CustomOpenIddictEntityFrameworkCoreApplication application)
+    private void Track(CustomOpenIddictEntityFrameworkCoreApplication? application)
     {
         if (application != null)
         {

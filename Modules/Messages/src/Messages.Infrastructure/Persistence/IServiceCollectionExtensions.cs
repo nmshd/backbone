@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -12,7 +12,7 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
     {
         var options = new PersistenceOptions();
-        setupOptions?.Invoke(options);
+        setupOptions.Invoke(options);
 
         services.AddPersistence(options);
     }

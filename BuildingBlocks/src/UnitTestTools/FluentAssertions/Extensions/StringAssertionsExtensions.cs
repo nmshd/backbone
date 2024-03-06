@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
@@ -18,7 +18,7 @@ public static class StringAssertionsExtensions
             JsonDocument.Parse(it.Subject);
             Execute.Assertion.Given(() => it);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             Execute.Assertion.FailWith("Invalid Json");
         }

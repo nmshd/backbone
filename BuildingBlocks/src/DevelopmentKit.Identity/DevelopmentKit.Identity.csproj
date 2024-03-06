@@ -1,13 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="OpenIddict.AspNetCore" Version="5.2.0" />
-		<PackageReference Include="OpenIddict.Core" Version="5.2.0" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.2.0" />
 		<PackageReference Include="SimpleBase" Version="4.0.0" />
 	</ItemGroup>
 

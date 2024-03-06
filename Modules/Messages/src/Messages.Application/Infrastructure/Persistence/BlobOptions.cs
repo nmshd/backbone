@@ -1,6 +1,6 @@
-﻿namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence;
+namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence;
 
 public class BlobOptions
 {
-    public string RootFolder { get; set; }
+    public string? RootFolder { get; set; }
 }

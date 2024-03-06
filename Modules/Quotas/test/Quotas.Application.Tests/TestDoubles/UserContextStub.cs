@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
@@ -7,7 +7,7 @@ internal class UserContextStub : IUserContext
 {
     public IdentityAddress GetAddress()
     {
-        return IdentityAddress.Create(new byte[] { 0 }, "id1");
+        return IdentityAddress.Create([0], "id1");
     }
 
     public IdentityAddress GetAddressOrNull()

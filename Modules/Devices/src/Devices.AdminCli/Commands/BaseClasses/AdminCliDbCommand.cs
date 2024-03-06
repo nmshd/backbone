@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
@@ -28,6 +28,11 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
     }
 
     public Task RemoveById(TierId tierId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
         throw new NotImplementedException();
     }

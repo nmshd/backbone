@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Infrastructure.Database.SqlServer;
+using Backbone.Modules.Relationships.Infrastructure.Database.SqlServer;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

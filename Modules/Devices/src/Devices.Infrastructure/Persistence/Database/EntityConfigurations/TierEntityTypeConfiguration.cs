@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

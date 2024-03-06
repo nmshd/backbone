@@ -1,4 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application.Tests;
@@ -9,7 +9,7 @@ public class ExternalEventBuilder
     private byte _errorCount;
     private IdentityAddress _owner;
     private object _payload;
-    private SyncRun _syncRun;
+    private SyncRun? _syncRun;
     private ExternalEventType _type;
 
     private ExternalEventBuilder()
@@ -67,7 +67,7 @@ public class ExternalEventBuilder
 
     public ExternalEvent Create()
     {
-        var externalEvent = new ExternalEvent(_type, _owner, _currentIndex++, _payload ?? new { someAribtraryProperty = "someArbitraryValue" })
+        var externalEvent = new ExternalEvent(_type, _owner, _currentIndex++, _payload)
         {
             SyncErrorCount = _errorCount
         };

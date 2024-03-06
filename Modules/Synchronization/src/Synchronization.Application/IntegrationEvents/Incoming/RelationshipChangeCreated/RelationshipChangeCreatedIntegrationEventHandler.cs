@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -26,7 +26,9 @@ public class RelationshipChangeCreatedIntegrationEventHandler : IIntegrationEven
 
     private async Task CreateExternalEvent(RelationshipChangeCreatedIntegrationEvent integrationEvent)
     {
-        var payload = new { integrationEvent.RelationshipId, integrationEvent.ChangeId };
+#pragma warning disable IDE0037
+        var payload = new { RelationshipId = integrationEvent.RelationshipId, ChangeId = integrationEvent.ChangeId };
+#pragma warning restore IDE0037
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(integrationEvent.ChangeRecipient, ExternalEventType.RelationshipChangeCreated, payload);

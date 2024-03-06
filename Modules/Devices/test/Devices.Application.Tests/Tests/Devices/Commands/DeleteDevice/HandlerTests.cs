@@ -1,8 +1,8 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
@@ -17,8 +17,6 @@ public class HandlerTests
     public async Task Deletes_unOnboarded_device_owned_by_identity()
     {
         // Arrange
-        var startTime = SystemTime.UtcNow;
-
         var identity = TestDataGenerator.CreateIdentity();
         var unOnboardedDevice = CreateUnOnboardedDevice(identity);
         var onboardedDevice = CreateOnboardedDevice(identity);
@@ -33,17 +31,20 @@ public class HandlerTests
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
-        var deleteDeviceCommand = new DeleteDeviceCommand()
+        var deleteDeviceCommand = new DeleteDeviceCommand
         {
             DeviceId = unOnboardedDevice.Id
         };
+
+        var utcNow = DateTime.Parse("2000-01-01");
+        SystemTime.Set(utcNow);
 
         // Act
         await handler.Handle(deleteDeviceCommand, CancellationToken.None);
 
         // Assert
         unOnboardedDevice.DeletedAt.Should().NotBeNull();
-        unOnboardedDevice.DeletedAt.Should().BeAfter(startTime);
+        unOnboardedDevice.DeletedAt.Should().Be(utcNow);
         unOnboardedDevice.DeletedByDevice.Should().Be(onboardedDevice.Id);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
@@ -64,7 +65,7 @@ public class HandlerTests
 
         var handler = CreateHandler(mockIdentitiesRepository);
 
-        var deleteDeviceCommand = new DeleteDeviceCommand()
+        var deleteDeviceCommand = new DeleteDeviceCommand
         {
             DeviceId = nonExistentDeviceId
         };
@@ -88,7 +89,7 @@ public class HandlerTests
         return unOnboardedDevice;
     }
 
-    private static Device CreateOnboardedDevice(Identity identity = null)
+    private static Device CreateOnboardedDevice(Identity? identity = null)
     {
         identity ??= TestDataGenerator.CreateIdentity();
         var onboardedDevice = new Device(identity);

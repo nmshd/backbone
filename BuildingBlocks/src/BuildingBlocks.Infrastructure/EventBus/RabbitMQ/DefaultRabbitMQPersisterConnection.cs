@@ -1,4 +1,4 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
@@ -26,7 +26,7 @@ public class DefaultRabbitMqPersistentConnection
         _retryCount = retryCount;
     }
 
-    public bool IsConnected => _connection != null && _connection.IsOpen && !_disposed;
+    public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
 
     public IModel CreateModel()
     {

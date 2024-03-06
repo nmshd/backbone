@@ -1,4 +1,4 @@
-﻿namespace Backbone.BuildingBlocks.Infrastructure.Exceptions;
+namespace Backbone.BuildingBlocks.Infrastructure.Exceptions;
 
 public class InfrastructureError
 {

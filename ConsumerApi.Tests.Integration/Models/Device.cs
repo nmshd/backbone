@@ -1,5 +1,3 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-
 namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class Device

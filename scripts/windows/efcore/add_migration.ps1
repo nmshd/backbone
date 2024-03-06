@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminApi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("s", "p", "SqlServer", "Postgres", "")] $provider
 )
@@ -11,9 +11,9 @@ $provider = switch ($provider) {
 }
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
 $consumerApiProject = "$repoRoot\ConsumerApi"
-$startupProject = If ($moduleName -eq "AdminUi") { $adminUiProject } Else { $consumerApiProject }
+$startupProject = If ($moduleName -eq "AdminApi") { $adminApiProject } Else { $consumerApiProject }
 
 function AddMigration {    
     param (
@@ -21,10 +21,10 @@ function AddMigration {
     )
 
     switch ($moduleName) {
-        "AdminUi" {
+        "AdminApi" {
             New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-            $migrationProject = "$repoRoot\AdminUi\src\AdminUi.Infrastructure.Database.$provider"
+            $migrationProject = "$repoRoot\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
         }
         Default {
             New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
@@ -39,7 +39,7 @@ function AddMigration {
     Invoke-Expression $cmd
 }
 
-dotnet build /property:WarningLevel=0 $startupProject
+dotnet build $startupProject
 
 switch ($provider) {
     "SqlServer" { 

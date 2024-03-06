@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
@@ -8,9 +8,15 @@ namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipChange
 {
-#pragma warning disable CS8618
-    protected RelationshipChange() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    protected RelationshipChange()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        RelationshipId = null!;
+        Relationship = null!;
+        Request = null!;
+    }
 
     protected RelationshipChange(Relationship relationship, IdentityAddress createdBy, DeviceId createdByDevice, RelationshipChangeType type, byte[]? requestContent)
     {

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
@@ -29,7 +29,9 @@ public class MessageCreatedIntegrationEventHandler : IIntegrationEventHandler<Me
     {
         foreach (var recipient in integrationEvent.Recipients)
         {
-            var payload = new { integrationEvent.Id };
+#pragma warning disable IDE0037
+            var payload = new { Id = integrationEvent.Id };
+#pragma warning restore IDE0037
             try
             {
                 var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(recipient), ExternalEventType.MessageReceived, payload);

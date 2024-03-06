@@ -1,5 +1,5 @@
-﻿using MediatR;
+using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForIdentity;
 
-public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse> { }
+public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse>;

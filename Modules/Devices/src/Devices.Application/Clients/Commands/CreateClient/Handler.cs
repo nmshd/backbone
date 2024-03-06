@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -51,6 +51,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         if (tierNameResult.IsSuccess)
         {
             var tier = await _tiersRepository.FindByName(tierNameResult.Value, cancellationToken);
+
             if (tier != null)
                 return tier.Id;
         }

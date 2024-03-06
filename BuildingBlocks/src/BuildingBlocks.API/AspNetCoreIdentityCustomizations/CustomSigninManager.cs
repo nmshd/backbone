@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

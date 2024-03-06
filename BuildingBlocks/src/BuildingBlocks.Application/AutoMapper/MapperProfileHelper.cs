@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.BuildingBlocks.Application.AutoMapper;
@@ -11,12 +11,12 @@ internal static class MapperProfileHelper
 
         var mapsFrom = (
             from type in types
-            from interf in type.GetInterfaces()
+            from @interface in type.GetInterfaces()
             where
-                interf.IsGenericType && interf.GetGenericTypeDefinition() == typeof(IMapTo<>) &&
+                @interface.IsGenericType && @interface.GetGenericTypeDefinition() == typeof(IMapTo<>) &&
                 !type.IsAbstract &&
                 !type.IsInterface
-            select new Map(interf.GetGenericArguments().First(), type)).ToList();
+            select new Map(@interface.GetGenericArguments().First(), type)).ToList();
 
         return mapsFrom;
     }
@@ -27,9 +27,9 @@ internal static class MapperProfileHelper
 
         var mapsFrom = (
             from type in types
-            from interf in type.GetInterfaces()
+            from @interface in type.GetInterfaces()
             where
-                typeof(IHaveCustomMapping).IsAssignableFrom(interf) &&
+                typeof(IHaveCustomMapping).IsAssignableFrom(@interface) &&
                 !type.IsAbstract &&
                 !type.IsInterface
             select (IHaveCustomMapping)Activator.CreateInstance(type)!).ToList();
