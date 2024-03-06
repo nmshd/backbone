@@ -1,6 +1,5 @@
 using AutoMapper;
 using Backbone.Modules.Messages.Application.AutoMapper;
-using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.AutoMapper;
