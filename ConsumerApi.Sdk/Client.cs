@@ -16,9 +16,12 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration configuration)
+    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri(configuration.BaseUrl) }, configuration)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri(configuration.BaseUrl) };
+    }
+
+    public Client(HttpClient httpClient, Configuration configuration)
+    {
         var authenticator = new OAuthAuthenticator(configuration.Authentication, httpClient);
         var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
 
