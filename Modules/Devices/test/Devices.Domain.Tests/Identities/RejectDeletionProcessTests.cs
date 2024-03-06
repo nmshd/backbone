@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -8,26 +8,22 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
-
-public class ApproveDeletionProcessTests
+public class RejectDeletionProcessTests
 {
     [Fact]
-    public void Approve_deletion_process_waiting_for_approval()
+    public void Reject_deletion_process_waiting_for_approval()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
+        SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
         identity.Devices.Add(new Device(identity));
         var deviceId = identity.Devices[0].Id;
 
         // Act
-        identity.ApproveDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, deviceId);
+        identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, deviceId);
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
-        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
-        identity.TierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
-        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Rejected)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
@@ -38,10 +34,11 @@ public class ApproveDeletionProcessTests
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
-        var exception = acting.Should().Throw<DomainException>().Which;
+        var acting = () => identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
 
         // Assert
+        var exception = acting.Should().Throw<DomainException>().Which;
+
         exception.Code.Should().Be("error.platform.recordNotFound");
         exception.Message.Should().Contain("Device");
     }
@@ -56,10 +53,11 @@ public class ApproveDeletionProcessTests
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(deletionProcessId, deviceId);
-        var exception = acting.Should().Throw<DomainException>().Which;
+        var acting = () => identity.RejectDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
+        var exception = acting.Should().Throw<DomainException>().Which;
+
         exception.Code.Should().Be("error.platform.recordNotFound");
         exception.Message.Should().Contain("IdentityDeletionProcess");
     }
@@ -74,10 +72,11 @@ public class ApproveDeletionProcessTests
         var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 
         // Act
-        var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, deviceId);
-        var exception = acting.Should().Throw<DomainException>().Which;
+        var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
 
         // Assert
+        var exception = acting.Should().Throw<DomainException>().Which;
+
         exception.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
         exception.Message.Should().Contain("WaitingForApproval");
     }
@@ -91,7 +90,7 @@ public class ApproveDeletionProcessTests
         auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
         auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
+        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Rejected);
     }
 
     private static Identity CreateIdentity()
