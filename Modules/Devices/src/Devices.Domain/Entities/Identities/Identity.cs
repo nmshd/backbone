@@ -85,12 +85,6 @@ public class Identity
         return deletionProcess;
     }
 
-    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
-    {
-        if (!Devices.Exists(device => device.Id == currentDeviceId))
-            throw new DomainException(GenericDomainErrors.NotFound(nameof(Device)));
-    }
-
     public void DeletionProcessApprovalReminder1Sent()
     {
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
@@ -117,7 +111,9 @@ public class Identity
 
     public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
     {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        EnsureIdentityOwnsDevice(deviceId);
+
+        var deletionProcess = GetDeletionProcess(deletionProcessId);
 
         deletionProcess.Approve(Address, deviceId);
 
@@ -128,12 +124,28 @@ public class Identity
         return deletionProcess;
     }
 
+    private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    {
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        return deletionProcess;
+    }
+
+    public IdentityDeletionProcess RejectDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
+    {
+        EnsureIdentityOwnsDevice(deviceId);
+
+        var deletionProcess = GetDeletionProcess(deletionProcessId);
+        deletionProcess.Reject(Address, deviceId);
+
+        return deletionProcess;
+    }
+
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
     {
         var deletionProcess = DeletionProcesses.Any(d => d.Status == status);
 
         if (!deletionProcess)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(status));
     }
 
     private void EnsureNoActiveProcessExists()
@@ -142,6 +154,12 @@ public class Identity
 
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
+    }
+
+    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
+    {
+        if (!Devices.Exists(device => device.Id == currentDeviceId))
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(Device)));
     }
 
     public void DeletionGracePeriodReminder1Sent()
@@ -193,7 +211,8 @@ public enum DeletionProcessStatus
 {
     WaitingForApproval = 0,
     Approved = 1,
-    Cancelled = 2
+    Cancelled = 2,
+    Rejected = 3
 }
 
 public enum IdentityStatus
