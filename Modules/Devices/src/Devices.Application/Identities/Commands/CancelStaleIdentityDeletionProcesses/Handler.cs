@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
         {
             var deletionProcess = identity.CancelStaleDeletionProcess();
 
-            if(deletionProcess.IsFailure)
+            if (deletionProcess.IsFailure)
                 continue;
 
             idsOfCancelledDeletionProcesses.Add(deletionProcess.Value.Id);
