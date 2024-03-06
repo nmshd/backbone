@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -42,9 +42,15 @@ public class Authenticator
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/connect/token") { Content = new FormUrlEncodedContent(form) };
-        var httpResponse = await _httpClient.SendAsync(request);
 
+#pragma warning disable CS8774 // This warning ("Member must have a non-null value when exiting") must currently be disabled. (see https://github.com/dotnet/csharplang/discussions/ for details)
+        var httpResponse = await _httpClient.SendAsync(request).ConfigureAwait(false);
+#pragma warning restore CS8774
+
+#pragma warning disable CS8774 // This warning ("Member must have a non-null value when exiting") must currently be disabled. (see https://github.com/dotnet/csharplang/discussions/ for details)
         var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
+#pragma warning restore CS8774
+
         var accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(responseRawContent, SERIALIZER_OPTIONS)!;
 
         _expiresAt = accessTokenResponse.ExpiresAt;
