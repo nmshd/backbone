@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Tooling;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
@@ -115,14 +116,16 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    public IdentityDeletionProcess CancelStaleDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    public Result<IdentityDeletionProcess> CancelStaleDeletionProcess()
     {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(i => i.Id == deletionProcessId)
-                              ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+
+        if (!deletionProcess.HasApprovalPeriodExpired)
+            return Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions.");
 
         deletionProcess.Cancel(Address);
 
-        return deletionProcess;
+        return Result.Success(deletionProcess);
     }
 
     public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)

@@ -25,17 +25,16 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
 
         foreach (var identity in identities)
         {
-            var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+            var deletionProcess = identity.CancelStaleDeletionProcess();
 
-            if (!deletionProcess.HasApprovalPeriodExpired)
+            if(deletionProcess.IsFailure)
                 continue;
 
-            identity.CancelStaleDeletionProcess(deletionProcess.Id);
-            idsOfCancelledDeletionProcesses.Add(deletionProcess.Id);
+            idsOfCancelledDeletionProcesses.Add(deletionProcess.Value.Id);
 
             await _identityRepository.Update(identity, cancellationToken);
 
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));
+            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Value.Id));
         }
 
         return new CancelStaleIdentityDeletionProcessesResponse(idsOfCancelledDeletionProcesses);
