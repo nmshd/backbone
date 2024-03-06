@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\SpecFlowCucumberResultsExporter\SpecFlowCucumberResultsExporter.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\src\AdminApi\AdminApi.csproj" />
   </ItemGroup>
