@@ -1,6 +1,5 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -12,16 +11,17 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
 public class EndpointClient
 {
     private const string EMPTY_RESULT = """
-    {
-        "result": {}
-    }
-    """;
+                                        {
+                                            "result": {}
+                                        }
+                                        """;
 
-    protected readonly HttpClient _httpClient;
-    protected readonly JsonSerializerOptions _jsonSerializerOptions;
-    protected readonly Authenticator _authenticator;
+    private readonly IAuthenticator _authenticator;
 
-    public EndpointClient(HttpClient httpClient, Authenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
+    private readonly HttpClient _httpClient;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
+
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
@@ -32,6 +32,7 @@ public class EndpointClient
         .Authenticate()
         .WithJson(requestContent)
         .Execute();
+
     public async Task<ConsumerApiResponse<T>> PostUnauthenticated<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Post, url)
         .WithJson(requestContent)
         .Execute();
@@ -41,6 +42,7 @@ public class EndpointClient
         .WithPagination(pagination)
         .WithJson(requestContent)
         .Execute();
+
     public async Task<ConsumerApiResponse<T>> GetUnauthenticated<T>(string url, object? requestContent = null, PaginationFilter? pagination = null) => await Request<T>(HttpMethod.Get, url)
         .WithPagination(pagination)
         .WithJson(requestContent)
@@ -50,6 +52,7 @@ public class EndpointClient
         .Authenticate()
         .WithJson(requestContent)
         .Execute();
+
     public async Task<ConsumerApiResponse<T>> PutUnauthenticated<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Put, url)
         .WithJson(requestContent)
         .Execute();
@@ -58,6 +61,7 @@ public class EndpointClient
         .Authenticate()
         .WithJson(requestContent)
         .Execute();
+
     public async Task<ConsumerApiResponse<T>> DeleteUnauthenticated<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
         .WithJson(requestContent)
         .Execute();
@@ -72,6 +76,7 @@ public class EndpointClient
             responseContent.Close();
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
+
         var deserializedResponseContent = JsonSerializer.Deserialize<ConsumerApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
 
         deserializedResponseContent.Status = statusCode;
@@ -106,7 +111,7 @@ public class EndpointClient
         };
 
         if (authenticate)
-            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _authenticator.GetJwt());
+            await _authenticator.Authenticate(httpRequest);
 
         foreach (var k in extraHeaders.AllKeys)
         {
@@ -121,17 +126,14 @@ public class EndpointClient
     public class RequestBuilder<T>
     {
         private readonly EndpointClient _client;
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
-
-        private readonly string _url;
-        private readonly HttpMethod _method;
-        private bool _authenticated;
-        private HttpContent _content;
         private readonly NameValueCollection _extraHeaders = [];
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly HttpMethod _method;
         private readonly NameValueCollection _queryParameters = [];
 
-        public static RequestBuilder<T> Create(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
-            => new(client, jsonSerializerOptions, method, url);
+        private readonly string _url;
+        private bool _authenticated;
+        private HttpContent _content;
 
         private RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
         {
@@ -143,6 +145,9 @@ public class EndpointClient
             _authenticated = false;
             _content = JsonContent.Create((object?)null);
         }
+
+        public static RequestBuilder<T> Create(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
+            => new(client, jsonSerializerOptions, method, url);
 
         public RequestBuilder<T> Authenticate(bool authenticate = true)
         {

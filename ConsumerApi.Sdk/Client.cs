@@ -19,7 +19,7 @@ public class Client
     public Client(Configuration configuration)
     {
         var httpClient = new HttpClient { BaseAddress = new Uri(configuration.BaseUrl) };
-        var authenticator = new Authenticator(configuration.Authentication, httpClient);
+        var authenticator = new OAuthAuthenticator(configuration.Authentication, httpClient);
         var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
 
         Challenges = new ChallengesEndpoint(endpointClient);

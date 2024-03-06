@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
 
-public class Authenticator
+public class OAuthAuthenticator : IAuthenticator
 {
     private static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { PropertyNameCaseInsensitive = true };
 
@@ -13,7 +14,7 @@ public class Authenticator
     private readonly Dictionary<string, string> _jwtRequestData;
     private Jwt? _jwt;
 
-    public Authenticator(Configuration.AuthenticationConfiguration config, HttpClient httpClient)
+    public OAuthAuthenticator(Configuration.AuthenticationConfiguration config, HttpClient httpClient)
     {
         _httpClient = httpClient;
 
@@ -27,12 +28,15 @@ public class Authenticator
         };
     }
 
-    public async Task<string> GetJwt()
+    public async Task Authenticate(HttpRequestMessage request)
+    {
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetJwt());
+    }
+
+    private async Task<string> GetJwt()
     {
         if (_jwt == null || _jwt.IsExpired)
-        {
             await RefreshToken();
-        }
 
         return _jwt.AccessToken;
     }
@@ -57,9 +61,7 @@ public class Authenticator
     // ReSharper disable once ClassNeverInstantiated.Local
     private class AccessTokenResponse
     {
-        public AccessTokenResponse(
-            string accessToken,
-            int expiresIn)
+        public AccessTokenResponse(string accessToken, int expiresIn)
         {
             AccessToken = accessToken;
             ExpiresIn = expiresIn;
@@ -82,7 +84,7 @@ public class Authenticator
             _expiresAt = DateTime.Now + TimeSpan.FromSeconds(expiresIn);
         }
 
-        public string AccessToken { get; set; }
+        public string AccessToken { get; }
 
         // we consider JWTs expired 30 seconds before they actually are
         public bool IsExpired => DateTime.Now > _expiresAt - TimeSpan.FromSeconds(30);
