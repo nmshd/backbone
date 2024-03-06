@@ -2,7 +2,7 @@ name: Check Pull Request
 
 on:
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+    types: [opened, labeled, unlabeled]
   merge_group:
 
 jobs:

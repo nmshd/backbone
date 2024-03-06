@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdenti
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -29,8 +30,8 @@ public class HandlerTests
     public async Task Only_correct_deletion_processes_are_cancelled()
     {
         // Arrange
-        var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.UtcNow);
-        var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.UtcNow.AddDays(-11));
+        var identityWithDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: SystemTime.UtcNow);
+        var identityWithStaleDeletionProcess = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: SystemTime.UtcNow.AddDays(-11));
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
