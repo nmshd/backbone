@@ -67,7 +67,7 @@ public class IdentityDeletionProcess
 
     public DateTime? RejectedAt { get; private set; }
     public DeviceId? RejectedByDevice { get; private set; }
-    
+
     public DateTime? CancelledAt { get; private set; }
     public DeviceId? CancelledByDevice { get; private set; }
 
@@ -151,7 +151,7 @@ public class IdentityDeletionProcess
         RejectedAt = SystemTime.UtcNow;
         RejectedByDevice = rejectedByDevice;
     }
-    
+
     public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
     {
         if (Status != DeletionProcessStatus.Approved)

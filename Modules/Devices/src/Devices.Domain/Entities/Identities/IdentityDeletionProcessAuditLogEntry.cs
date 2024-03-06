@@ -24,7 +24,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was rejected.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Rejected);
     }
-    
+
     public static IdentityDeletionProcessAuditLogEntry ProcessCancelled(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
