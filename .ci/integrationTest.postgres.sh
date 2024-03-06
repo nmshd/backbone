@@ -11,7 +11,7 @@ debugRun() {
     echo
     echo "$@:"
     
-    $@
+    time $@
 }
 
 debugRun dockerCompose down
