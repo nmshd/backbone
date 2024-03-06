@@ -36,6 +36,16 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
 
         var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
 
-        _logger.LogInformation("Automatically canceled identity deletion processes: [{logCanceledDeletionProcessIds}]", concatenatedIds);
+        _logger.WorkerProcessCompleted(concatenatedIds);
     }
+}
+
+internal static partial class CancelIdentityDeletionProcessWorkerLogs
+{
+    [LoggerMessage(
+        EventId = 440986,
+        EventName = "Job.CancelIdentityDeletionProcessWorker.Completed",
+        Level = LogLevel.Information,
+        Message = "Automatically canceled identity deletion processes: {logCanceledDeletionProcessIds}")]
+    public static partial void WorkerProcessCompleted(this ILogger logger, string logCanceledDeletionProcessIds);
 }
