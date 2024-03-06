@@ -110,12 +110,17 @@ jobs:
         working-directory: ./runtime
         run: npm install
       - name: Run transport Tests
-        working-directory: ./runtime/packages/transport
+        uses: willcaul/jest-github-action@v4
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm run test:local:lokijs
+        with:
+          test-command: npm run test:local:lokijs -w packages/transport
+          coverage-comment: false
+          changes-only: true
+          working-directory: runtime
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
@@ -147,12 +152,17 @@ jobs:
         working-directory: ./runtime
         run: npm install
       - name: Run transport Tests
-        working-directory: ./runtime/packages/transport
+        uses: willcaul/jest-github-action@v4
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
-        run: npm run test:local:lokijs
+        with:
+          test-command: npm run test:local:lokijs -w packages/transport
+          coverage-comment: false
+          changes-only: true
+          working-directory: runtime
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
