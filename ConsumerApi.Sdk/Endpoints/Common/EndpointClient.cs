@@ -1,7 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
@@ -70,38 +69,39 @@ public class EndpointClient
 
     private async Task<ConsumerApiResponse<T>> Execute<T>(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection extraHeaders)
     {
-        var (responseContent, statusCode) = await ExecuteIntern(method, url, content, authenticate, extraHeaders);
-        if (responseContent.Length == 0) //If no content is sent, automatically decode an "empty" result
+        var response = await ExecuteIntern(method, url, content, authenticate, extraHeaders);
+
+        if (response.StatusCode == HttpStatusCode.NoContent)
         {
-            responseContent.Close();
-            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
+            return new ConsumerApiResponse<T>
+            {
+                Status = response.StatusCode,
+                Result = JsonSerializer.Deserialize<T>(EMPTY_RESULT, _jsonSerializerOptions)
+            };
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ConsumerApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
+        var consumerApiResponse = (await response.Content.ReadFromJsonAsync<ConsumerApiResponse<T>>(_jsonSerializerOptions))!;
 
-        deserializedResponseContent.Status = statusCode;
+        consumerApiResponse.Status = response.StatusCode;
 
-        return deserializedResponseContent;
+        return consumerApiResponse;
     }
 
     private async Task<RawConsumerApiResponse> ExecuteRaw(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection extraHeaders)
     {
-        var (responseContent, statusCode) = await ExecuteIntern(method, url, content, authenticate, extraHeaders);
+        var response = await ExecuteIntern(method, url, content, authenticate, extraHeaders);
 
-        MemoryStream inputStream = new();
-        await responseContent.CopyToAsync(inputStream);
-
-        if (statusCode >= HttpStatusCode.BadRequest)
+        if (response.StatusCode >= HttpStatusCode.BadRequest)
         {
-            inputStream.Seek(0, SeekOrigin.Begin);
-            var deserialized = JsonSerializer.Deserialize<ConsumerApiResponse<EmptyResponse>>(inputStream, _jsonSerializerOptions)!;
-            return new RawConsumerApiResponse { Error = deserialized.Error, Status = statusCode };
+            var deserialized = (await response.Content.ReadFromJsonAsync<ConsumerApiResponse<EmptyResponse>>(_jsonSerializerOptions))!;
+            return new RawConsumerApiResponse { Error = deserialized.Error, Status = response.StatusCode };
         }
 
-        return new RawConsumerApiResponse { Content = inputStream.ToArray(), Status = statusCode };
+        var responseBytes = await response.Content.ReadAsByteArrayAsync();
+        return new RawConsumerApiResponse { Content = responseBytes, Status = response.StatusCode };
     }
 
-    private async Task<(Stream, HttpStatusCode)> ExecuteIntern(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection headers)
+    private async Task<HttpResponseMessage> ExecuteIntern(HttpMethod method, string url, HttpContent content, bool authenticate, NameValueCollection headers)
     {
         var httpRequest = new HttpRequestMessage(method, url) { Content = content };
 
@@ -117,7 +117,7 @@ public class EndpointClient
         }
 
         var response = await _httpClient.SendAsync(httpRequest);
-        return (await response.Content.ReadAsStreamAsync(), response.StatusCode);
+        return response;
     }
 
     public class RequestBuilder<T>
