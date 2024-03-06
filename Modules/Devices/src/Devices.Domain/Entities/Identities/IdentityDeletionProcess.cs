@@ -155,7 +155,7 @@ public class IdentityDeletionProcess
     public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
     {
         if (Status != DeletionProcessStatus.Approved)
-            throw new DomainException(DomainErrors.NoDeletionProcessWithRequiredStatusExists());
+            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
         Status = DeletionProcessStatus.Cancelled;
         CancelledAt = SystemTime.UtcNow;

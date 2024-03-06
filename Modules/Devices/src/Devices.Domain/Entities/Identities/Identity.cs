@@ -85,12 +85,6 @@ public class Identity
         return deletionProcess;
     }
 
-    private void EnsureIdentityOwnsDevice(DeviceId currentDeviceId)
-    {
-        if (!Devices.Exists(device => device.Id == currentDeviceId))
-            throw new DomainException(GenericDomainErrors.NotFound(nameof(Device)));
-    }
-
     public void DeletionProcessApprovalReminder1Sent()
     {
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
