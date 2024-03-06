@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -21,7 +21,7 @@ public class Authenticator
 
     public async Task<string> GetJwt()
     {
-        if (_jwt == null || _expiresAt < DateTime.Now + TimeSpan.FromSeconds(30))
+        if (_jwt == null || DateTime.Now > _expiresAt - TimeSpan.FromSeconds(30)) // we consider JWTs expired 30 seconds before they actually are
         {
             await RefreshToken();
         }
