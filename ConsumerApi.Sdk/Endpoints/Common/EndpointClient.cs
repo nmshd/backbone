@@ -209,19 +209,19 @@ public class EndpointClient
             return this;
         }
 
-        public RequestBuilder<T> AddExtraHeader(string key, string value)
+        public RequestBuilder<T> AddHeader(string key, string value)
         {
             _extraHeaders.Add(key, value);
             return this;
         }
 
-        public RequestBuilder<T> AddExtraHeader(string key, List<string> value)
+        public RequestBuilder<T> AddHeader(string key, List<string> value)
         {
             foreach (var e in value) _extraHeaders.Add(key, e);
             return this;
         }
 
-        public RequestBuilder<T> AddExtraHeaders(NameValueCollection headers)
+        public RequestBuilder<T> AddHeader(NameValueCollection headers)
         {
             _extraHeaders.Add(headers);
             return this;

@@ -10,7 +10,7 @@ public class SyncRunsEndpoint(EndpointClient client) : Endpoint(client)
         .Request<StartSyncRunResponse>(HttpMethod.Post, "SyncRuns")
         .Authenticate()
         .WithJson(request)
-        .AddExtraHeader("X-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
+        .AddHeader("X-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
         .Execute();
 
     public async Task<ConsumerApiResponse<SyncRun>> GetSyncRun(string id) => await _client.Get<SyncRun>($"SyncRuns/{id}");

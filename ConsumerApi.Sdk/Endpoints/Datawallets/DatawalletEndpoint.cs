@@ -13,13 +13,13 @@ public class DatawalletEndpoint(EndpointClient client) : Endpoint(client)
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("localIndex", localIndex.ToString())
-            .AddExtraHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
+            .AddHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
             .Execute();
 
     public async Task<ConsumerApiResponse<PushDatawalletModificationsResponse>> PushDatawalletModifications(PushDatawalletModificationsRequest request, int supportedDatawalletVersion)
         => await _client.Request<PushDatawalletModificationsResponse>(HttpMethod.Post, "Datawallet/Modifications")
             .Authenticate()
             .WithJson(request)
-            .AddExtraHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
+            .AddHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
             .Execute();
 }
