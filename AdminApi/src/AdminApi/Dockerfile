@@ -89,7 +89,7 @@ RUN dotnet restore "AdminApi/src/AdminApi/AdminApi.csproj"
 
 COPY . .
 
-RUN dotnet publish /property:WarningLevel=0 /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
 ### Final ####
