@@ -5,5 +5,5 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 public class FinalizeDatawalletVersionUpgradeRequest
 {
     public required ushort NewDatawalletVersion { get; set; }
-    public List<PushDatawalletModificationsRequestItem> DatawalletModifications { get; set; } = [];
+    public required List<PushDatawalletModificationsRequestItem> DatawalletModifications { get; set; }
 }

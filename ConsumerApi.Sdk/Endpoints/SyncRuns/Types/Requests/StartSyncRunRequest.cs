@@ -2,7 +2,7 @@
 
 public class StartSyncRunRequest
 {
-    public SyncRunType? Type { get; set; }
+    public required SyncRunType Type { get; set; }
     public ushort? Duration { get; set; }
 }
 

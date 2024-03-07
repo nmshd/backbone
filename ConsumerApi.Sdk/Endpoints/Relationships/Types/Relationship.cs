@@ -21,7 +21,7 @@ public class RelationshipChange
     public required string RelationshipId { get; set; }
 
     public required RelationshipChangeRequest Request { get; set; }
-    public required RelationshipChangeResponse? Response { get; set; }
+    public RelationshipChangeResponse? Response { get; set; }
 
     public required string Type { get; set; }
 
@@ -33,7 +33,7 @@ public class RelationshipChangeRequest
     public required DateTime CreatedAt { get; set; }
     public required string CreatedBy { get; set; }
     public required string CreatedByDevice { get; set; }
-    public required byte[]? Content { get; set; }
+    public byte[]? Content { get; set; }
 }
 
 public class RelationshipChangeResponse
@@ -41,5 +41,5 @@ public class RelationshipChangeResponse
     public required DateTime CreatedAt { get; set; }
     public required string CreatedBy { get; set; }
     public required string CreatedByDevice { get; set; }
-    public required byte[]? Content { get; set; }
+    public byte[]? Content { get; set; }
 }

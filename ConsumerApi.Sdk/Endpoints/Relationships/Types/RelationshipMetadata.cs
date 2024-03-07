@@ -21,7 +21,7 @@ public class RelationshipChangeMetadata
     public required string RelationshipId { get; set; }
 
     public required RelationshipChangeRequestMetadata Request { get; set; }
-    public required RelationshipChangeResponseMetadata? Response { get; set; }
+    public RelationshipChangeResponseMetadata? Response { get; set; }
 
     public required string Type { get; set; }
 

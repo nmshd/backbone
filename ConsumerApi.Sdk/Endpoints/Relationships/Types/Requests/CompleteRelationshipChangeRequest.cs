@@ -2,5 +2,5 @@
 
 public class CompleteRelationshipChangeRequest
 {
-    public byte[] Content { get; set; } = [];
+    public byte[]? Content { get; set; }
 }
