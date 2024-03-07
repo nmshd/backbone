@@ -8,7 +8,8 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 
 public class TokensEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<CreateTokenResponse>> CreateToken(CreateTokenRequest request) => await _client.Post<CreateTokenResponse>("Tokens", request);
+    public async Task<ConsumerApiResponse<CreateTokenResponse>> CreateToken(CreateTokenRequest request)
+        => await _client.Post<CreateTokenResponse>("Tokens", request);
 
     public async Task<ConsumerApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)
         => await _client.Get<ListTokensResponse>("Tokens", null, pagination);

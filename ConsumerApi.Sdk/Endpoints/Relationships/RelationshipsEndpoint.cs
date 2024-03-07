@@ -20,7 +20,8 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
         .AddQueryParameter("ids", ids)
         .Execute();
 
-    public async Task<ConsumerApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request) => await _client.Post<RelationshipMetadata>("Relationships", request);
+    public async Task<ConsumerApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
+        => await _client.Post<RelationshipMetadata>("Relationships", request);
 
     public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(PaginationFilter? pagination = null) =>
         await _client.Get<List<RelationshipChange>>("Relationships/Changes", null, pagination);
