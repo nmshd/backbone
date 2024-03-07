@@ -23,25 +23,30 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<ConsumerApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
         => await _client.Post<RelationshipMetadata>("Relationships", request);
 
-    public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(PaginationFilter? pagination = null) =>
-        await _client.Get<List<RelationshipChange>>("Relationships/Changes", null, pagination);
-
-    public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(ListRelationshipChangesParameters parameters)
+    public async Task<ConsumerApiResponse<ListRelationshipChangesResponse>> ListChanges(
+        PaginationFilter? pagination = null, IEnumerable<string>? ids = null, OptionalDateRange? createdAt = null, OptionalDateRange? completedAt = null,
+        OptionalDateRange? modifiedAt = null, bool? onlyPeerChanges = null, string? createdBy = null, string? completedBy = null, string? status = null,
+        string? type = null
+        )
     {
         var builder = _client
-            .Request<List<RelationshipChange>>(HttpMethod.Get, "Relationships/Changes")
+            .Request<ListRelationshipChangesResponse>(HttpMethod.Get, "Relationships/Changes")
             .Authenticate()
-            .WithPagination(parameters.Pagination);
+            .WithPagination(pagination);
 
-        if (parameters.Ids != null && parameters.Ids.Count != 0) builder.AddQueryParameter("ids", parameters.Ids);
-        if (parameters.CreatedAt != null) builder.AddQueryParameter("createdAt", parameters.CreatedAt);
-        if (parameters.CompletedAt != null) builder.AddQueryParameter("completedAt", parameters.CompletedAt);
-        if (parameters.ModifiedAt != null) builder.AddQueryParameter("modifiedAt", parameters.ModifiedAt);
-        if (parameters.OnlyPeerChanges != null) builder.AddQueryParameter("onlyPeerChanges", parameters.OnlyPeerChanges);
-        if (parameters.CreatedBy != null) builder.AddQueryParameter("createdBy", parameters.CreatedBy);
-        if (parameters.CompletedBy != null) builder.AddQueryParameter("completedBy", parameters.CompletedBy);
-        if (parameters.Status != null) builder.AddQueryParameter("status", parameters.Status);
-        if (parameters.Type != null) builder.AddQueryParameter("type", parameters.Type);
+        if (ids != null)
+        {
+            var arr = ids.ToArray();
+            if (arr.Length != 0) builder.AddQueryParameter("ids", arr);
+        }
+        if (createdAt != null) builder.AddQueryParameter("createdAt", createdAt);
+        if (completedAt != null) builder.AddQueryParameter("completedAt", completedAt);
+        if (modifiedAt != null) builder.AddQueryParameter("modifiedAt", modifiedAt);
+        if (onlyPeerChanges != null) builder.AddQueryParameter("onlyPeerChanges", onlyPeerChanges);
+        if (createdBy != null) builder.AddQueryParameter("createdBy", createdBy);
+        if (completedBy != null) builder.AddQueryParameter("completedBy", completedBy);
+        if (status != null) builder.AddQueryParameter("status", status);
+        if (type != null) builder.AddQueryParameter("type", type);
 
         return await builder.Execute();
     }
