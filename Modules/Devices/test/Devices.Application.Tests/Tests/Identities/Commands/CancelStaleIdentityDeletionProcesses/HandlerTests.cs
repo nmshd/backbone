@@ -52,13 +52,14 @@ public class HandlerTests
     public async Task Publishes_IntegrationEvent_for_cancelled_deletion_process()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identity1 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identity2 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
         A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Identity>() { identity });
+            .Returns(new List<Identity>() { identity1, identity2 });
 
         var handler = new Handler(fakeIdentitiesRepository, mockEventBus);
 
@@ -67,8 +68,13 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
-                i.Address == identity.Address &&
-                i.DeletionProcessId == identity.DeletionProcesses[0].Id)))
+                i.Address == identity1.Address &&
+                i.DeletionProcessId == identity1.DeletionProcesses[0].Id)))
+            .MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
+                i.Address == identity2.Address &&
+                i.DeletionProcessId == identity2.DeletionProcesses[0].Id)))
             .MustHaveHappenedOnceExactly();
     }
 }
