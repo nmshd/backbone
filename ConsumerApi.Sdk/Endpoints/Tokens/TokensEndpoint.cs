@@ -1,6 +1,8 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 

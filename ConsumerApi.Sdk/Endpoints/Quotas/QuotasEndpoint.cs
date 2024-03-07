@@ -1,6 +1,6 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Quotas.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Quotas.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 
