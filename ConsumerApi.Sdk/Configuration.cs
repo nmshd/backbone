@@ -5,6 +5,7 @@ namespace Backbone.ConsumerApi.Sdk;
 public class Configuration
 {
     public required string BaseUrl { get; init; }
+    public string ApiVersion { get; init; } = "v1";
     public required AuthenticationConfiguration Authentication { get; init; }
     public JsonSerializerOptions JsonSerializerOptions { get; init; } = new() { PropertyNameCaseInsensitive = true };
 

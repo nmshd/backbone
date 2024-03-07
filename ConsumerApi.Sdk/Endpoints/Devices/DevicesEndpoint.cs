@@ -3,15 +3,16 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices;
+
 public class DevicesEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<List<Device>>> ListDevices(PaginationFilter? pagination = null) => await _client.Get<List<Device>>("Devices", null, pagination);
+    public async Task<ConsumerApiResponse<ListDevicesResponse>> ListDevices(PaginationFilter? pagination = null) => await _client.Get<ListDevicesResponse>("Devices", null, pagination);
 
-    public async Task<ConsumerApiResponse<List<Device>>> ListDevices(List<string> identities, PaginationFilter? pagination = null) => await _client
-        .Request<List<Device>>(HttpMethod.Get, "Devices")
+    public async Task<ConsumerApiResponse<ListDevicesResponse>> ListDevices(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
+        .Request<ListDevicesResponse>(HttpMethod.Get, "Devices")
         .Authenticate()
         .WithPagination(pagination)
-        .AddQueryParameter("ids", identities)
+        .AddQueryParameter("ids", ids)
         .Execute();
 
     public async Task<ConsumerApiResponse<RegisterDeviceResponse>> RegisterDevice(RegisterDeviceRequest request) => await _client.Post<RegisterDeviceResponse>("Devices", request);

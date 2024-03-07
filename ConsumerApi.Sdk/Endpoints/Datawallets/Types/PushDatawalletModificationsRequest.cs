@@ -3,10 +3,10 @@
 public class PushDatawalletModificationsRequest
 {
     public required int LocalIndex { get; set; }
-    public required List<PushDatawalletModificationItem> Modifications { get; set; }
+    public required List<PushDatawalletModificationsRequestItem> Modifications { get; set; }
 }
 
-public class PushDatawalletModificationItem
+public class PushDatawalletModificationsRequestItem
 {
     public required string Type { get; set; }
     public required string ObjectIdentifier { get; set; }

@@ -9,6 +9,7 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<ConsumerApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"Relationships/{id}");
 
     public async Task<ConsumerApiResponse<List<Relationship>>> ListRelationships(PaginationFilter? pagination = null) => await _client.Get<List<Relationship>>("Relationships", null, pagination);
+
     public async Task<ConsumerApiResponse<List<Relationship>>> ListRelationships(List<string> ids, PaginationFilter? pagination = null) => await _client
         .Request<List<Relationship>>(HttpMethod.Get, "Relationships")
         .Authenticate()
@@ -18,7 +19,8 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
 
     public async Task<ConsumerApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request) => await _client.Post<RelationshipMetadata>("Relationships", request);
 
-    public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(PaginationFilter? pagination = null) => await _client.Get<List<RelationshipChange>>("Relationships/Changes", null, pagination);
+    public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(PaginationFilter? pagination = null) =>
+        await _client.Get<List<RelationshipChange>>("Relationships/Changes", null, pagination);
 
     public async Task<ConsumerApiResponse<List<RelationshipChange>>> ListChanges(ListRelationshipChangesParameters parameters)
     {

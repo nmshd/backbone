@@ -188,9 +188,11 @@ public class EndpointClient
             return this;
         }
 
-        public RequestBuilder<T> AddQueryParameter(string key, IEnumerable<string> value)
+        public RequestBuilder<T> AddQueryParameter(string key, IEnumerable<string> values)
         {
-            foreach (var e in value) _queryParameters.Add(key, e);
+            foreach (var value in values)
+                _queryParameters.Add(key, value);
+
             return this;
         }
 

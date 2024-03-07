@@ -2,6 +2,12 @@
 
 public class StartSyncRunRequest
 {
-    public string? Type { get; set; }
+    public SyncRunType? Type { get; set; }
     public ushort? Duration { get; set; }
+}
+
+public enum SyncRunType
+{
+    ExternalEventSync = 0,
+    DatawalletVersionUpgrade = 1
 }
