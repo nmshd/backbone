@@ -78,6 +78,7 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow > GetEndOfApprovalPeriod();
+
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
