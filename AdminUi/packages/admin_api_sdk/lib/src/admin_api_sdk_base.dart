@@ -1,3 +1,5 @@
+import 'package:admin_api_sdk/src/endpoints/identity_endpoint.dart';
+import 'package:admin_api_sdk/src/endpoints/quotas_endpoint.dart';
 import 'package:dio/dio.dart';
 
 import 'endpoints/endpoints.dart';
@@ -7,6 +9,8 @@ class AdminApiClient {
 
   late final ClientsEndpoint clients;
   late final TiersEndpoint tiers;
+  late final QuotasEndpoint quotas;
+  late final IdentitiesEndpoint identities;
 
   AdminApiClient._(String baseUrl, String apiKey) {
     final dio = Dio(
@@ -20,6 +24,8 @@ class AdminApiClient {
 
     clients = ClientsEndpoint(dio);
     tiers = TiersEndpoint(dio);
+    quotas = QuotasEndpoint(dio);
+    identities = IdentitiesEndpoint(dio);
   }
 
   static Future<AdminApiClient> create({required String baseUrl, required String apiKey}) async {
