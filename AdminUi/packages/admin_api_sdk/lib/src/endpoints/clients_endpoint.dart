@@ -30,12 +30,19 @@ class ClientsEndpoint extends Endpoint {
         transformer: Client.fromJson,
       );
 
-  Future<ApiResponse<Client>> getClient(String clientId) => get(
+  Future<ApiResponse<Client>> getClient(
+    String clientId,
+  ) =>
+      get(
         '/api/v1/Clients/$clientId',
         transformer: Client.fromJson,
       );
 
-  Future<ApiResponse<Client>> changeClientSecret(String clientId, {required String? newSecret}) => patch(
+  Future<ApiResponse<Client>> changeClientSecret(
+    String clientId, {
+    required String? newSecret,
+  }) =>
+      patch(
         '/api/v1/Clients/$clientId/ChangeSecret',
         data: {
           'newSecret': newSecret,
@@ -57,7 +64,10 @@ class ClientsEndpoint extends Endpoint {
         transformer: Client.fromJson,
       );
 
-  Future<ApiResponse<void>> deleteClient(String clientId) => delete(
+  Future<ApiResponse<void>> deleteClient(
+    String clientId,
+  ) =>
+      delete(
         '/api/v1/Clients/$clientId',
         expectedStatus: 204,
         transformer: (e) {},
