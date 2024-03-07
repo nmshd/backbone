@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Xunit;
 
@@ -7,6 +8,24 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class CancelStaleDeletionProcessTests
 {
+    [Fact]
+    public void Returns_failure_if_process_is_still_within_approval_period()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var deletionProcess = identity.StartDeletionProcessAsSupport();
+
+        // Act
+        var result = identity.CancelStaleDeletionProcess();
+
+        // Assert
+        identity.Status.Should().Be(IdentityStatus.Active);
+
+        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+
+        result.Should().Be(Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions."));
+    }
+
     [Fact]
     public void Cancel_deletion_process_that_is_past_due_approval()
     {
@@ -19,13 +38,15 @@ public class CancelStaleDeletionProcessTests
         SystemTime.Set(utcNow);
 
         // Act
-        identity.CancelStaleDeletionProcess();
+        var result = identity.CancelStaleDeletionProcess();
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
 
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
         deletionProcess.CancelledAt.Should().Be(utcNow);
+
+        result.Should().Be(Result.Success(deletionProcess));
     }
 
     [Fact]
