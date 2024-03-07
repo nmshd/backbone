@@ -21,4 +21,19 @@ class TiersEndpoint extends Endpoint {
         },
         transformer: Tier.fromJson,
       );
+
+  Future<ApiResponse<TierOverview>> getTier(
+    String tierId,
+  ) =>
+      get(
+        '/api/v1/Tiers/$tierId',
+        transformer: TierOverview.fromJson,
+      );
+
+  Future<ApiResponse<void>> deleteTier(String tierId) => delete(
+        '/api/v1/Tiers/$tierId',
+        expectedStatus: 204,
+        transformer: (e) {},
+        allowEmptyResponse: true,
+      );
 }
