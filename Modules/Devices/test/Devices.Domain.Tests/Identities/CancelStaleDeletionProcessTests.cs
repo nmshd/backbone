@@ -47,12 +47,14 @@ public class CancelStaleDeletionProcessTests
     public void Cancel_deletion_process_that_is_past_due_approval()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2020-01-01"));
+        SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
         var identity = TestDataGenerator.CreateIdentity();
         var deletionProcess = identity.StartDeletionProcessAsSupport();
 
-        var utcNow = DateTime.Parse("2020-01-12");
+        var utcNow = DateTime.Parse("2020-01-11T00:00:00");
         SystemTime.Set(utcNow);
+
+        IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
         var result = identity.CancelStaleDeletionProcess();
@@ -70,9 +72,11 @@ public class CancelStaleDeletionProcessTests
     public void Canceling_stale_deletion_process_creates_audit_log_entry_when_executed()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2020-01-01"));
+        SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-        SystemTime.Set(DateTime.Parse("2020-01-12"));
+        SystemTime.Set(DateTime.Parse("2020-01-11T00:00:00"));
+
+        IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
         var deletionProcess = identity.CancelStaleDeletionProcess();
