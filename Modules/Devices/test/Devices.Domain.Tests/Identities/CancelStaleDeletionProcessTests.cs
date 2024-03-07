@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
@@ -8,6 +9,22 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class CancelStaleDeletionProcessTests
 {
+    [Fact]
+    public void Throws_if_no_process_is_waiting_for_approval()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        // Act
+        var acting = identity.CancelStaleDeletionProcess;
+
+        // Assert
+        var exception = acting.Should().Throw<DomainException>().Which;
+
+        exception.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
+        exception.Message.Should().Be("The deletion process must be in status 'WaitingForApproval'.");
+    }
+
     [Fact]
     public void Returns_failure_if_process_is_still_within_approval_period()
     {
