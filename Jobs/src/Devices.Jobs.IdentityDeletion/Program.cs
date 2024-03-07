@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Challenges.Application.Identities;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -72,7 +73,7 @@ public class Program
 
                 services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
 
-#pragma warning disable ASP0000 We retrieve the BackboneConfiguration via IOptions here so that it is validated
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
                 var parsedConfiguration =
                     services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
 #pragma warning restore ASP0000
@@ -91,7 +92,7 @@ public static class ServicesExtensions
 {
     public static IServiceCollection RegisterIdentityDeleters(this IServiceCollection services)
     {
-        services.AddTransient<IIdentityDeleter, Modules.Challenges.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Devices.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Files.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Messages.Application.Identities.IdentityDeleter>();
