@@ -5,4 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+  </ItemGroup>
+
 </Project>
