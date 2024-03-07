@@ -39,7 +39,7 @@ function AddMigration {
     Invoke-Expression $cmd
 }
 
-dotnet build /property:WarningLevel=0 $startupProject
+dotnet build $startupProject
 
 switch ($provider) {
     "SqlServer" { 

@@ -10,6 +10,10 @@
 		<PackageReference Include="FakeItEasy" Version="8.1.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
+		<PackageReference Include="GitHubActionsTestLogger" Version="2.3.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="xunit" Version="2.7.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
 			<PrivateAssets>all</PrivateAssets>
@@ -17,8 +21,8 @@
 		</PackageReference>
 	</ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
 		<ProjectReference Include="..\..\src\Devices.Application\Devices.Application.csproj" />
 		<ProjectReference Include="..\..\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
 	</ItemGroup>
