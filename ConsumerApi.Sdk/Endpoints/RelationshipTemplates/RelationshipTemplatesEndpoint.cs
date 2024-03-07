@@ -8,11 +8,12 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 
 public class RelationshipTemplatesEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<List<RelationshipTemplate>>> ListTemplates(PaginationFilter? pagination = null)
-        => await _client.Get<List<RelationshipTemplate>>("RelationshipTemplates", null, pagination);
+    public async Task<ConsumerApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(PaginationFilter? pagination = null)
+        => await _client.Get<ListRelationshipTemplatesResponse>("RelationshipTemplates", null, pagination);
 
-    public async Task<ConsumerApiResponse<List<RelationshipTemplate>>> ListTemplates(List<string> ids, PaginationFilter? pagination = null) => await _client
-        .Request<List<RelationshipTemplate>>(HttpMethod.Get, "RelationshipTemplates")
+    public async Task<ConsumerApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<string> ids, PaginationFilter? pagination = null)
+        => await _client
+        .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, "RelationshipTemplates")
         .Authenticate()
         .WithPagination(pagination)
         .AddQueryParameter("ids", ids)

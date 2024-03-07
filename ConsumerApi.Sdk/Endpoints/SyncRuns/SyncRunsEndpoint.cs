@@ -17,8 +17,8 @@ public class SyncRunsEndpoint(EndpointClient client) : Endpoint(client)
 
     public async Task<ConsumerApiResponse<SyncRun>> GetSyncRun(string id) => await _client.Get<SyncRun>($"SyncRuns/{id}");
 
-    public async Task<ConsumerApiResponse<List<ExternalEvent>>> GetExternalEventsOfSyncRun(string id, PaginationFilter? pagination = null)
-        => await _client.Get<List<ExternalEvent>>($"SyncRuns/{id}/ExternalEvents", null, pagination);
+    public async Task<ConsumerApiResponse<ListExternalEventsResponse>> ListExternalEventsOfSyncRun(string id, PaginationFilter? pagination = null)
+        => await _client.Get<ListExternalEventsResponse>($"SyncRuns/{id}/ExternalEvents", null, pagination);
 
     public async Task<ConsumerApiResponse<FinalizeExternalEventSyncResponse>> FinalizeExternalEventSync(string id, FinalizeExternalEventSyncRequest request)
         => await _client.Put<FinalizeExternalEventSyncResponse>($"SyncRuns/{id}/FinalizeExternalEventSync", request);

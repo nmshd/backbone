@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 
-public class ListDevicesResponse : CollectionResponseBase<Device>;
+public class ListDevicesResponse(IEnumerable<Device> items) : EnumerableResponseBase<Device>(items);

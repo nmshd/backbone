@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 
 public class QuotasEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<List<QuotaGroup>>> ListIndividualQuotas() => await _client.Get<List<QuotaGroup>>("Quotas");
+    public async Task<ConsumerApiResponse<ListIndividualQuotasResponse>> ListIndividualQuotas() => await _client.Get<ListIndividualQuotasResponse>("Quotas");
 }

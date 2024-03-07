@@ -8,10 +8,10 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Messages;
 
 public class MessagesEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<List<Message>>> ListMessages(PaginationFilter? pagination = null)
-        => await _client.Get<List<Message>>("Messages", null, pagination);
-    public async Task<ConsumerApiResponse<List<Message>>> ListMessages(List<string> ids, PaginationFilter? pagination = null)
-        => await _client.Request<List<Message>>(HttpMethod.Get, "Messages")
+    public async Task<ConsumerApiResponse<ListMessagesResponse>> ListMessages(PaginationFilter? pagination = null)
+        => await _client.Get<ListMessagesResponse>("Messages", null, pagination);
+    public async Task<ConsumerApiResponse<ListMessagesResponse>> ListMessages(IEnumerable<string> ids, PaginationFilter? pagination = null)
+        => await _client.Request<ListMessagesResponse>(HttpMethod.Get, "Messages")
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("ids", ids)

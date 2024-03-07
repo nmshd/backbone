@@ -10,8 +10,8 @@ public class DatawalletEndpoint(EndpointClient client) : Endpoint(client)
 {
     public async Task<ConsumerApiResponse<Datawallet>> GetDatawallet() => await _client.Get<Datawallet>("Datawallet");
 
-    public async Task<ConsumerApiResponse<List<DatawalletModification>>> GetDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
-        => await _client.Request<List<DatawalletModification>>(HttpMethod.Get, "Datawallet/Modifications")
+    public async Task<ConsumerApiResponse<GetDatawalletModificationsResponse>> GetDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
+        => await _client.Request<GetDatawalletModificationsResponse>(HttpMethod.Get, "Datawallet/Modifications")
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("localIndex", localIndex.ToString())

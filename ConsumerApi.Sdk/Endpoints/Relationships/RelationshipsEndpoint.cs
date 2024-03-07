@@ -10,10 +10,11 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
 {
     public async Task<ConsumerApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"Relationships/{id}");
 
-    public async Task<ConsumerApiResponse<List<Relationship>>> ListRelationships(PaginationFilter? pagination = null) => await _client.Get<List<Relationship>>("Relationships", null, pagination);
+    public async Task<ConsumerApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
+        => await _client.Get<ListRelationshipsResponse>("Relationships", null, pagination);
 
-    public async Task<ConsumerApiResponse<List<Relationship>>> ListRelationships(List<string> ids, PaginationFilter? pagination = null) => await _client
-        .Request<List<Relationship>>(HttpMethod.Get, "Relationships")
+    public async Task<ConsumerApiResponse<ListRelationshipsResponse>> ListRelationships(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
+        .Request<ListRelationshipsResponse>(HttpMethod.Get, "Relationships")
         .Authenticate()
         .WithPagination(pagination)
         .AddQueryParameter("ids", ids)
