@@ -112,10 +112,9 @@ public class Identity
 
     public Result<IdentityDeletionProcess> CancelStaleDeletionProcess()
     {
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval) 
-                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.WaitingForApproval));
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval);
 
-        if (!deletionProcess.HasApprovalPeriodExpired)
+        if (deletionProcess is not { HasApprovalPeriodExpired: true })
             return Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions.");
 
         deletionProcess.Cancel(Address);
