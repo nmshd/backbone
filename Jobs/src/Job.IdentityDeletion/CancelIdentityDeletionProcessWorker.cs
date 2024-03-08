@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using MediatR;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backbone.Job.IdentityDeletion;
 
@@ -34,12 +35,13 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
     {
         var identityDeletionProcessIds = await _mediator.Send(new CancelStaleIdentityDeletionProcessesCommand(), cancellationToken);
 
-        var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
-
-        if(concatenatedIds.Length == 0)
-            _logger.WorkerProcessCompletedEmpty();
+        if (!identityDeletionProcessIds.IsNullOrEmpty())
+        {
+            var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
+            _logger.WorkerProcessCompletedWithResults(concatenatedIds);
+        }
         else
-            _logger.WorkerProcessCompleted(concatenatedIds);
+            _logger.WorkerProcessCompletedWithoutResults();
     }
 }
 
@@ -47,15 +49,15 @@ internal static partial class CancelIdentityDeletionProcessWorkerLogs
 {
     [LoggerMessage(
         EventId = 440986,
-        EventName = "Job.CancelIdentityDeletionProcessWorker.Completed",
+        EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedWithResults",
         Level = LogLevel.Information,
         Message = "Automatically canceled identity deletion processes: {logCanceledDeletionProcessIds}")]
-    public static partial void WorkerProcessCompleted(this ILogger logger, string logCanceledDeletionProcessIds);
+    public static partial void WorkerProcessCompletedWithResults(this ILogger logger, string logCanceledDeletionProcessIds);
 
     [LoggerMessage(
         EventId = 361883,
-        EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedEmpty",
+        EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedWithoutResults",
         Level = LogLevel.Information,
-        Message = "Automatically canceled identity deletion processes: No processes are pass due approval")]
-    public static partial void WorkerProcessCompletedEmpty(this ILogger logger);
+        Message = "No identity deletion processes are pass due approval")]
+    public static partial void WorkerProcessCompletedWithoutResults(this ILogger logger);
 }
