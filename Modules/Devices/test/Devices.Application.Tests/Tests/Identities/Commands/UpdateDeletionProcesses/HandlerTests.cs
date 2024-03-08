@@ -35,7 +35,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(new Device(anIdentity).Id);
+        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
@@ -55,7 +55,7 @@ public class HandlerTests
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(DeviceId.New());
+        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
@@ -81,7 +81,7 @@ public class HandlerTests
         returnedIdentities = [];
 
         for (var i = 0; i < numberOfIdentities; i++)
-            returnedIdentities.Add(TestDataGenerator.CreateIdentity());
+            returnedIdentities.Add(TestDataGenerator.CreateIdentityWithOneDevice());
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
