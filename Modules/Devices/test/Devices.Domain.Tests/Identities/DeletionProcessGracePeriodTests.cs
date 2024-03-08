@@ -33,13 +33,13 @@ public class DeletionProcessGracePeriodTests : IDisposable
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
     }
 
     [Fact]
@@ -65,13 +65,13 @@ public class DeletionProcessGracePeriodTests : IDisposable
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
-        // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        // Asserterror
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
     }
 
     [Fact]
@@ -97,13 +97,13 @@ public class DeletionProcessGracePeriodTests : IDisposable
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
@@ -120,17 +120,11 @@ public class DeletionProcessGracePeriodTests : IDisposable
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
-        var identity = CreateIdentity();
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
-        identity.StartDeletionProcessAsOwner(new Device(identity).Id);
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
+        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 
         return identity;
-    }
-
-    private static Identity CreateIdentity()
-    {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
     }
 
     public void Dispose()

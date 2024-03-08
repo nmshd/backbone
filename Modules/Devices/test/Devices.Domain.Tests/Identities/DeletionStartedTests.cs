@@ -15,8 +15,8 @@ public class DeletionStartedTests
         // Arrange
         var currentDateTime = DateTime.Parse("2000-01-01 06:00:00");
         SystemTime.Set(currentDateTime);
-        var identity = CreateIdentity();
-        identity.StartDeletionProcessAsOwner(DeviceId.New());
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 
         // Act
         identity.DeletionStarted();
@@ -26,11 +26,5 @@ public class DeletionStartedTests
         identity.DeletionProcesses.Should().HaveCount(1);
         identity.DeletionProcesses.First().DeletionStartedAt.Should().Be(currentDateTime);
 
-    }
-
-    private static Identity CreateIdentity()
-    {
-        var address = IdentityAddress.Create([], "id1");
-        return new Identity("", address, [], TierId.Generate(), 1);
     }
 }
