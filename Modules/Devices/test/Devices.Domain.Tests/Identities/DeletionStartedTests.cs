@@ -1,6 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
