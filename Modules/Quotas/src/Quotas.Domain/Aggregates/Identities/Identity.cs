@@ -13,6 +13,8 @@ public class Identity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
+    private readonly object _latestExhaustionDateLock = new();
+
     // ReSharper disable once UnusedMember.Local
     private Identity()
     {
@@ -120,7 +122,7 @@ public class Identity
 
             var quotaExhaustion = quota.CalculateExhaustion(newUsage);
 
-            lock (latestExhaustionDate)
+            lock (_latestExhaustionDateLock)
             {
                 if (quotaExhaustion > latestExhaustionDate)
                     latestExhaustionDate = quotaExhaustion;
