@@ -10,19 +10,16 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class CancelStaleDeletionProcessTests
 {
     [Fact]
-    public void Throws_if_no_process_is_waiting_for_approval()
+    public void Returns_failure_if_no_process_is_waiting_for_approval()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
         // Act
-        var acting = identity.CancelStaleDeletionProcess;
+        var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-
-        exception.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
-        exception.Message.Should().Be("The deletion process must be in status 'WaitingForApproval'.");
+        result.Should().Be(Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions."));
     }
 
     [Fact]
