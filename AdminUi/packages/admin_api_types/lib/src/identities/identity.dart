@@ -75,13 +75,21 @@ class IdentityQuota {
 
 @JsonSerializable()
 class IdentityOverview {
+  @JsonKey(name: 'address')
   final String address;
+  @JsonKey(name: 'createdAt')
   final DateTime createdAt;
+  @JsonKey(name: 'lastLoginAt')
   final DateTime? lastLoginAt;
+  @JsonKey(name: 'createdWithClient')
   final String createdWithClient;
+  @JsonKey(name: 'datawalletVersion')
   final int? datawalletVersion;
+  @JsonKey(name: 'identityVersion')
   final int identityVersion;
+  @JsonKey(name: 'numberOfDevices')
   final int numberOfDevices;
+  @JsonKey(name: 'tier')
   final Tier tier;
 
   IdentityOverview({

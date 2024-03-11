@@ -72,6 +72,20 @@ class Dashboard extends StatelessWidget {
                 );
               },
             ),
+            FutureBuilder(
+              future: GetIt.I.get<AdminApiClient>().relationships.getRelationshipsByParticipantAddress(
+                    'id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm',
+                    0,
+                    10,
+                  ),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (snapshot.error != null) return Text('Error: ${snapshot.error}');
+                return Text(
+                  'Identity address: ${snapshot.data!.data.result.map((e) => e.createdByDevice)}',
+                );
+              },
+            ),
           ],
         ),
       ),
