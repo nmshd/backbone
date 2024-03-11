@@ -14,7 +14,7 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: Identity.fromJson,
       );
 
-  Future<ApiResponse<Identity>> updateClient(
+  Future<ApiResponse<void>> updateIdentity(
     String address, {
     required String tierId,
   }) =>
@@ -23,7 +23,7 @@ class IdentitiesEndpoint extends Endpoint {
         data: {
           'tierId': tierId,
         },
-        transformer: Identity.fromJson,
+        transformer: (e) {},
       );
 
   Future<ApiResponse<ODataResponse>> getIdentities() => get(
