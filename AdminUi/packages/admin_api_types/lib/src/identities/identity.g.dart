@@ -14,9 +14,10 @@ Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       createdAt: DateTime.parse(json['createdAt'] as String),
       identityVersion: json['identityVersion'] as int,
       numberOfDevices: json['numberOfDevices'] as int,
-      devices: (json['devices'] as List<dynamic>).map(Device.fromJson).toList(),
-      quotas: (json['quotas'] as List<dynamic>)
-          .map(IdentityQuota.fromJson)
+      devices:
+          (json['devices'] as List<dynamic>?)?.map(Device.fromJson).toList(),
+      quotas: (json['quotas'] as List<dynamic>?)
+          ?.map(IdentityQuota.fromJson)
           .toList(),
     );
 
@@ -37,7 +38,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
       username: json['username'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       createdByDevice: json['createdByDevice'] as String,
-      lastLogin: LastLoginInformation.fromJson(json['lastLogin']),
+      lastLogin: json['lastLogin'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
@@ -46,18 +47,6 @@ Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
       'createdAt': instance.createdAt.toIso8601String(),
       'createdByDevice': instance.createdByDevice,
       'lastLogin': instance.lastLogin,
-    };
-
-LastLoginInformation _$LastLoginInformationFromJson(
-        Map<String, dynamic> json) =>
-    LastLoginInformation(
-      time: DateTime.parse(json['time'] as String),
-    );
-
-Map<String, dynamic> _$LastLoginInformationToJson(
-        LastLoginInformation instance) =>
-    <String, dynamic>{
-      'time': instance.time.toIso8601String(),
     };
 
 IdentityQuota _$IdentityQuotaFromJson(Map<String, dynamic> json) =>
@@ -80,58 +69,44 @@ Map<String, dynamic> _$IdentityQuotaToJson(IdentityQuota instance) =>
       'period': instance.period,
     };
 
-IdentityOverviewFilter _$IdentityOverviewFilterFromJson(
-        Map<String, dynamic> json) =>
-    IdentityOverviewFilter(
-      numberOfDevices: NumberFilter.fromJson(
-          json['numberOfDevices'] as Map<String, dynamic>),
-      createdAt: DateFilter.fromJson(json['createdAt'] as Map<String, dynamic>),
-      lastLoginAt:
-          DateFilter.fromJson(json['lastLoginAt'] as Map<String, dynamic>),
-      datawalletVersion: NumberFilter.fromJson(
-          json['datawalletVersion'] as Map<String, dynamic>),
-      identityVersion: NumberFilter.fromJson(
-          json['identityVersion'] as Map<String, dynamic>),
-      address: json['address'] as String?,
-      tiers:
-          (json['tiers'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      clients:
-          (json['clients'] as List<dynamic>?)?.map((e) => e as String).toList(),
+IdentityOverview _$IdentityOverviewFromJson(Map<String, dynamic> json) =>
+    IdentityOverview(
+      address: json['address'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdWithClient: json['createdWithClient'] as String,
+      identityVersion: json['identityVersion'] as int,
+      numberOfDevices: json['numberOfDevices'] as int,
+      tier: Tier.fromJson(json['tier']),
+      lastLoginAt: json['lastLoginAt'] == null
+          ? null
+          : DateTime.parse(json['lastLoginAt'] as String),
+      datawalletVersion: json['datawalletVersion'] as int?,
     );
 
-Map<String, dynamic> _$IdentityOverviewFilterToJson(
-        IdentityOverviewFilter instance) =>
+Map<String, dynamic> _$IdentityOverviewToJson(IdentityOverview instance) =>
     <String, dynamic>{
       'address': instance.address,
-      'tiers': instance.tiers,
-      'clients': instance.clients,
-      'numberOfDevices': instance.numberOfDevices,
-      'createdAt': instance.createdAt,
-      'lastLoginAt': instance.lastLoginAt,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'lastLoginAt': instance.lastLoginAt?.toIso8601String(),
+      'createdWithClient': instance.createdWithClient,
       'datawalletVersion': instance.datawalletVersion,
       'identityVersion': instance.identityVersion,
+      'numberOfDevices': instance.numberOfDevices,
+      'tier': instance.tier,
     };
 
-NumberFilter _$NumberFilterFromJson(Map<String, dynamic> json) => NumberFilter(
-      operator: json['operator'] as String?,
-      value: json['value'] as int?,
+ODataResponse _$ODataResponseFromJson(Map<String, dynamic> json) =>
+    ODataResponse(
+      odataContext: json['@odata.context'] as String,
+      odataCount: json['@odata.count'] as int,
+      identities: (json['value'] as List<dynamic>)
+          .map(IdentityOverview.fromJson)
+          .toList(),
     );
 
-Map<String, dynamic> _$NumberFilterToJson(NumberFilter instance) =>
+Map<String, dynamic> _$ODataResponseToJson(ODataResponse instance) =>
     <String, dynamic>{
-      'operator': instance.operator,
-      'value': instance.value,
-    };
-
-DateFilter _$DateFilterFromJson(Map<String, dynamic> json) => DateFilter(
-      operator: json['operator'] as String?,
-      value: json['value'] == null
-          ? null
-          : DateTime.parse(json['value'] as String),
-    );
-
-Map<String, dynamic> _$DateFilterToJson(DateFilter instance) =>
-    <String, dynamic>{
-      'operator': instance.operator,
-      'value': instance.value?.toIso8601String(),
+      '@odata.context': instance.odataContext,
+      '@odata.count': instance.odataCount,
+      'value': instance.identities,
     };

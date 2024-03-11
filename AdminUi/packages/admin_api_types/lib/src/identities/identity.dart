@@ -1,4 +1,4 @@
-import 'package:admin_api_types/src/quotas/quota.dart';
+import 'package:admin_api_types/admin_api_types.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'identity.g.dart';
@@ -12,8 +12,8 @@ class Identity {
   final DateTime createdAt;
   final int identityVersion;
   final int numberOfDevices;
-  final List<Device> devices;
-  final List<IdentityQuota> quotas;
+  final List<Device>? devices;
+  final List<IdentityQuota>? quotas;
 
   Identity({
     required this.address,
@@ -23,8 +23,8 @@ class Identity {
     required this.createdAt,
     required this.identityVersion,
     required this.numberOfDevices,
-    required this.devices,
-    required this.quotas,
+    this.devices,
+    this.quotas,
   });
 
   factory Identity.fromJson(dynamic json) => _$IdentityFromJson(json as Map<String, dynamic>);
@@ -37,30 +37,18 @@ class Device {
   final String username;
   final DateTime createdAt;
   final String createdByDevice;
-  final LastLoginInformation lastLogin;
+  final Map<String, dynamic>? lastLogin;
 
   Device({
     required this.id,
     required this.username,
     required this.createdAt,
     required this.createdByDevice,
-    required this.lastLogin,
+    this.lastLogin,
   });
 
   factory Device.fromJson(dynamic json) => _$DeviceFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
-}
-
-@JsonSerializable()
-class LastLoginInformation {
-  final DateTime time;
-
-  LastLoginInformation({
-    required this.time,
-  });
-
-  factory LastLoginInformation.fromJson(dynamic json) => _$LastLoginInformationFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$LastLoginInformationToJson(this);
 }
 
 @JsonSerializable()
@@ -86,55 +74,49 @@ class IdentityQuota {
 }
 
 @JsonSerializable()
-class IdentityOverviewFilter {
-  final String? address;
-  final List<String>? tiers;
-  final List<String>? clients;
-  final NumberFilter numberOfDevices;
-  final DateFilter createdAt;
-  final DateFilter lastLoginAt;
-  final NumberFilter datawalletVersion;
-  final NumberFilter identityVersion;
+class IdentityOverview {
+  final String address;
+  final DateTime createdAt;
+  final DateTime? lastLoginAt;
+  final String createdWithClient;
+  final int? datawalletVersion;
+  final int identityVersion;
+  final int numberOfDevices;
+  final Tier tier;
 
-  IdentityOverviewFilter({
-    required this.numberOfDevices,
+  IdentityOverview({
+    required this.address,
     required this.createdAt,
-    required this.lastLoginAt,
-    required this.datawalletVersion,
+    required this.createdWithClient,
     required this.identityVersion,
-    this.address,
-    this.tiers,
-    this.clients,
+    required this.numberOfDevices,
+    required this.tier,
+    this.lastLoginAt,
+    this.datawalletVersion,
   });
 
-  factory IdentityOverviewFilter.fromJson(dynamic json) => _$IdentityOverviewFilterFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$IdentityOverviewFilterToJson(this);
+  factory IdentityOverview.fromJson(dynamic json) => _$IdentityOverviewFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$IdentityOverviewToJson(this);
 }
 
 @JsonSerializable()
-class NumberFilter {
-  final String? operator;
-  final int? value;
+class ODataResponse {
+  @JsonKey(name: '@odata.context')
+  final String odataContext;
 
-  NumberFilter({
-    this.operator,
-    this.value,
+  @JsonKey(name: '@odata.count')
+  final int odataCount;
+
+  @JsonKey(name: 'value')
+  final List<IdentityOverview> identities;
+
+  ODataResponse({
+    required this.odataContext,
+    required this.odataCount,
+    required this.identities,
   });
 
-  factory NumberFilter.fromJson(dynamic json) => _$NumberFilterFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$NumberFilterToJson(this);
-}
+  factory ODataResponse.fromJson(dynamic json) => _$ODataResponseFromJson(json as Map<String, dynamic>);
 
-@JsonSerializable()
-class DateFilter {
-  final String? operator;
-  final DateTime? value;
-
-  DateFilter({
-    this.operator,
-    this.value,
-  });
-
-  factory DateFilter.fromJson(dynamic json) => _$DateFilterFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$DateFilterToJson(this);
+  Map<String, dynamic> toJson() => _$ODataResponseToJson(this);
 }

@@ -29,7 +29,7 @@ class Dashboard extends StatelessWidget {
                 if (!snapshot.hasData) return const CircularProgressIndicator();
                 if (snapshot.error != null) return Text('Error: ${snapshot.error}');
                 return Text(
-                  'Tier ID: ${snapshot.data!.data.id} \n Tier name: ${snapshot.data!.data.name} \n Tier quotas: ${snapshot.data!.data.quotas.map((e) => e..metric.displayName).join(', ')}\n',
+                  'Tier ID: ${snapshot.data!.data.id} \n Tier name: ${snapshot.data!.data.name} \n Tier quotas: ${snapshot.data!.data.quotas.map((e) => e.metric.key)}\n',
                 );
               },
             ),
@@ -54,12 +54,21 @@ class Dashboard extends StatelessWidget {
               },
             ),
             FutureBuilder(
+              future: GetIt.I.get<AdminApiClient>().identities.getIdentities(),
+              builder: (context, snapshot) {
+                if (snapshot.error != null) return Text('Error: ${snapshot.error}');
+                return Text(
+                  'Identities: ${snapshot.data?.data.identities.map((e) => e.address).join(', ')}',
+                );
+              },
+            ),
+            FutureBuilder(
               future: GetIt.I.get<AdminApiClient>().identities.getIdentity('id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm'),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const CircularProgressIndicator();
                 if (snapshot.error != null) return Text('Error: ${snapshot.error}');
                 return Text(
-                  'Identity address: ${snapshot.data!.data.address}',
+                  'Identity address: ${snapshot.data!.data.createdAt}',
                 );
               },
             ),
