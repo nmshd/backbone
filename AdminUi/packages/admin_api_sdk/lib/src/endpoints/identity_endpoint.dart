@@ -14,6 +14,18 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: Identity.fromJson,
       );
 
+  Future<ApiResponse<Identity>> updateClient(
+    String address, {
+    required String tierId,
+  }) =>
+      put(
+        '/api/v1/Identities/$address',
+        data: {
+          'tierId': tierId,
+        },
+        transformer: Identity.fromJson,
+      );
+
   Future<ApiResponse<ODataResponse>> getIdentities() => get(
         '/odata/Identities',
         query: {
