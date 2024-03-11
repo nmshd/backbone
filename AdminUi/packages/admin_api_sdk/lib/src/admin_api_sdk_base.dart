@@ -1,5 +1,3 @@
-import 'package:admin_api_sdk/src/endpoints/identity_endpoint.dart';
-import 'package:admin_api_sdk/src/endpoints/quotas_endpoint.dart';
 import 'package:dio/dio.dart';
 
 import 'endpoints/endpoints.dart';
