@@ -205,6 +205,20 @@ public class Identity
 
         return deletionProcess;
     }
+
+    public IdentityDeletionProcess CancelDeletionProcessAsSupport()
+    {
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+
+        deletionProcess.CancelAsSupport(Address);
+        TierId = TierIdBeforeDeletion;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
 }
 
 public enum DeletionProcessStatus
