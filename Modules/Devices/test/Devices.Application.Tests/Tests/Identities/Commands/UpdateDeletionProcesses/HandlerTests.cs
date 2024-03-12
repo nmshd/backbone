@@ -1,11 +1,9 @@
 ﻿using System.Linq.Expressions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateDeletionProcesses;
@@ -45,7 +43,7 @@ public class HandlerTests
 
         // Assert
         result.DeletedIdentityAddresses.Should().HaveCount(1);
-        result.DeletedIdentityAddresses.Single().Should().Be(anIdentity.Address);
+        result.DeletedIdentityAddresses.Single().Key.Should().Be(anIdentity.Address);
     }
 
     [Fact]
