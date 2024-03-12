@@ -91,4 +91,35 @@ abstract class Endpoint {
     }
     return ApiResponse.success(transformer(payload['result']));
   }
+
+  @protected
+  Future<ApiResponse<T>> getOData<T>(String path, {required T Function(dynamic) transformer, Map<String, dynamic>? query}) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      path,
+      queryParameters: query,
+      options: Options(headers: {'Accept': 'application/json'}),
+    );
+    return _makeODataResult(response, transformer);
+  }
+
+  ApiResponse<T> _makeODataResult<T>(
+    Response<Map<String, dynamic>> httpResponse,
+    T Function(dynamic) transformer, {
+    int? expectedStatus,
+    bool allowEmptyResponse = false,
+  }) {
+    expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) { 'POST' => 201, _ => 200 };
+
+    final payload = httpResponse.data;
+
+    if (payload == null) {
+      if (allowEmptyResponse) {
+        return ApiResponse.success(transformer(null));
+      }
+
+      throw Exception('Invalid response type');
+    }
+
+    return ApiResponse.success(transformer(payload['value']));
+  }
 }
