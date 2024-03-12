@@ -98,12 +98,4 @@ public class WorkerTests
         var logger = A.Dummy<ILogger<Worker>>();
         return new Worker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
     }
-
-    private static Relationship CreateRelationship(IdentityAddress identityAddress)
-    {
-        var templateCreator = IdentityAddress.Create(new byte[2], "id0");
-        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, SystemTime.UtcNow, new byte[2]);
-
-        return new Relationship(template, identityAddress, template.CreatedByDevice, TestDataGenerator.CreateRandomBytes());
-    }
 }
