@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
@@ -111,6 +112,16 @@ public class IdentitiesController : ApiControllerBase
     {
         var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
         return Created("", response);
+    }
+
+    [HttpDelete("{address}/DeletionProcesses")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new CancelDeletionAsSupportCommand(address), cancellationToken);
+        return NoContent();
     }
 }
 
