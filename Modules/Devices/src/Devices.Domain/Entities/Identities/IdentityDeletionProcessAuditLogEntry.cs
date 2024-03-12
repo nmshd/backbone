@@ -20,6 +20,16 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Approved);
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was rejected.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Rejected);
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelled(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
+    }
+
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(processId, "The first approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);

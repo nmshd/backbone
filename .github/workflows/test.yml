@@ -41,7 +41,7 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Check formatting
-        run: ./.ci/checkFormatting.js
+        run: ./.ci/checkFormatting.sh
 
   test:
     runs-on: ubuntu-latest
@@ -49,14 +49,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
       - name: Run tests
-        run: ./.ci/test.js
+        run: ./.ci/test.sh
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
@@ -77,6 +77,8 @@ jobs:
         with:
           name: integration-test-sqlserver-docker-logs
           path: docker-log.txt
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   integration-test-postgres:
     name: Run Integration Tests (on Postgres)
@@ -97,6 +99,8 @@ jobs:
         with:
           name: integration-test-postgres-docker-logs
           path: docker-log.txt
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
 
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)

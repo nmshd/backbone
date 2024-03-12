@@ -26,7 +26,7 @@ WORKDIR "/src/Modules/Files/src/Files.Jobs.SanityCheck"
 RUN dotnet build "Files.Jobs.SanityCheck.csproj" --configuration Release --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish /property:UseAppHost=false /property:WarningLevel=0 --configuration Release --output /app/publish --no-restore "Files.Jobs.SanityCheck.csproj" 
+RUN dotnet publish /property:UseAppHost=false --configuration Release --output /app/publish --no-restore "Files.Jobs.SanityCheck.csproj" 
 
 FROM base AS final
 WORKDIR /app
