@@ -25,7 +25,7 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().BeEmpty();
+        result.DeletedIdentityAddresses.Should().BeEmpty();
     }
 
     [Fact]
@@ -44,8 +44,8 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(1);
-        result.Single().Should().Be(anIdentity.Address);
+        result.DeletedIdentityAddresses.Should().HaveCount(1);
+        result.DeletedIdentityAddresses.Single().Should().Be(anIdentity.Address);
     }
 
     [Fact]
@@ -64,16 +64,13 @@ public class HandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(1);
+        result.DeletedIdentityAddresses.Should().HaveCount(1);
         identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
-        return new Handler(
-            identitiesRepository,
-            A.Dummy<ILogger<Handler>>()
-        );
+        return new Handler(identitiesRepository);
     }
 
     private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities, out List<Identity> returnedIdentities)

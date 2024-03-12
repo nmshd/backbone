@@ -1,24 +1,24 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using CSharpFunctionalExtensions;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, TriggerRipeDeletionProcessesResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly ILogger<Handler> _logger;
 
-    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository)
     {
         _identitiesRepository = identitiesRepository;
-        _logger = logger;
     }
 
     public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
-        var response = new List<string>();
+        var deletedIdentityAddresses = new Dictionary<IdentityAddress, UnitResult<DomainError>>();
 
         var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
         foreach (var identity in identities)
@@ -27,14 +27,14 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
             {
                 identity.DeletionStarted();
                 await _identitiesRepository.Update(identity, cancellationToken);
-                response.Add(identity.Address);
+                deletedIdentityAddresses.Add(identity.Address, UnitResult.Success<DomainError>());
             }
             catch (DomainException ex)
             {
-                _logger.LogError(ex, "There was an error while triggering a deletion process.");
+                deletedIdentityAddresses.Add(identity.Address, UnitResult.Failure(ex.Error));
             }
         }
 
-        return new TriggerRipeDeletionProcessesResponse(response);
+        return new TriggerRipeDeletionProcessesResponse(deletedIdentityAddresses);
     }
 }

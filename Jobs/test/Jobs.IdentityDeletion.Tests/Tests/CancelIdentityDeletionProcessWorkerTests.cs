@@ -1,11 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.UnitTestTools.Data;
+using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -75,14 +77,15 @@ public class CancelIdentityDeletionProcessWorkerTests
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 }) {
+        foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
+        {
             A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
     }
 
-    private void SetupRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
+    private void SetupRipeDeletionProcessesCommand(IMediator mediator, params IdentityAddress[] identityAddresses)
     {
-        var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses);
+        var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses.ToDictionary(x => x, _ => UnitResult.Success<DomainError>()));
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 

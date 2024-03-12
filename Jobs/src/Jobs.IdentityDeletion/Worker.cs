@@ -1,10 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Job.IdentityDeletion;
@@ -42,7 +44,11 @@ public class Worker : IHostedService
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
         var toBeDeletedIdentityAddresses = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
-        foreach (var identityAddress in toBeDeletedIdentityAddresses)
+
+        var successfulDeletions = toBeDeletedIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsSuccess);
+        var erroringDeletions = toBeDeletedIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsFailure);
+
+        foreach (var identityAddress in successfulDeletions.Select(x => x.Key))
         {
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
 
@@ -57,6 +63,13 @@ public class Worker : IHostedService
             {
                 await identityDeleter.Delete(identityAddress);
             }
+        }
+
+        foreach (var erroringDeletion in erroringDeletions)
+        {
+            _logger.LogError(
+                new DomainException(erroringDeletion.Value.Error),
+                "There was an error while triggering a deletion process.");
         }
     }
 

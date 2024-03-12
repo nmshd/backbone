@@ -1,9 +1,14 @@
-﻿using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-public class TriggerRipeDeletionProcessesResponse : CollectionResponseBase<string>
+public class TriggerRipeDeletionProcessesResponse
 {
-    public TriggerRipeDeletionProcessesResponse(IEnumerable<string> deletedIdentityAddresses) : base(deletedIdentityAddresses)
+    public Dictionary<IdentityAddress, UnitResult<DomainError>> DeletedIdentityAddresses { get; }
+
+    public TriggerRipeDeletionProcessesResponse(Dictionary<IdentityAddress, UnitResult<DomainError>> deletedIdentityAddresses)
     {
+        DeletedIdentityAddresses = deletedIdentityAddresses;
     }
 }
