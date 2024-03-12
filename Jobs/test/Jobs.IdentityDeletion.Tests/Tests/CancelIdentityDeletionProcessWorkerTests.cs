@@ -84,11 +84,6 @@ public class WorkerTests
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
-    private static Worker CreateWorker(IMediator mediator, IEventBus? eventBus)
-    {
-        return CreateWorker(mediator, null, eventBus);
-    }
-
     private static Worker CreateWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
