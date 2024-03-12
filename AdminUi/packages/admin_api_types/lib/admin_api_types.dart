@@ -5,4 +5,4 @@ library;
 
 export 'src/admin_api_types_base.dart';
 
-// TODO: Export any libraries intended for clients of this package.
+// TODO(stamenione): Export any libraries intended for clients of this package .
