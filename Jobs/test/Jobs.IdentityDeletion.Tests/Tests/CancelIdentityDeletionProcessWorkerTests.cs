@@ -1,11 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using MediatR;
@@ -14,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
-public class WorkerTests
+public class CancelIdentityDeletionProcessWorkerTests
 {
     [Fact]
     public async Task Proxies_deletion_to_command_handler()
