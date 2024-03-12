@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
@@ -15,7 +16,7 @@ namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 public class CancelIdentityDeletionProcessWorkerTests
 {
     [Fact]
-    public async Task Proxies_deletion_to_command_handler()
+    public async Task Proxies_triggering_the_deletion_processes_to_command_handler()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
@@ -23,7 +24,7 @@ public class CancelIdentityDeletionProcessWorkerTests
         SetupRipeDeletionProcessesCommand(mockMediator);
 
         var identityDeleters = new List<IIdentityDeleter>();
-        var worker = CreateWorker(mockMediator, identityDeleters, null);
+        var worker = CreateWorker(mockMediator, identityDeleters);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -40,10 +41,10 @@ public class CancelIdentityDeletionProcessWorkerTests
         var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2);
-        var mockIdentityDeleter = A.Dummy<IIdentityDeleter>();
+        var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var identityDeleters = new List<IIdentityDeleter>([mockIdentityDeleter]);
 
-        var worker = CreateWorker(mediator, identityDeleters, null);
+        var worker = CreateWorker(mediator, identityDeleters);
 
         A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
@@ -57,7 +58,7 @@ public class CancelIdentityDeletionProcessWorkerTests
     }
 
     [Fact]
-    public async Task Calls_FindRelationshipsByIdentityCommand_For_Each_Identity()
+    public async Task Sends_PushNotification_For_Each_Relationship_In_Each_Identity()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
@@ -67,13 +68,16 @@ public class CancelIdentityDeletionProcessWorkerTests
         SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
-        var worker = CreateWorker(mockMediator, null, null);
+        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var worker = CreateWorker(mockMediator, pushNotificationSender: pushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly);
+        foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 }) {
+            A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        }
     }
 
     private void SetupRipeDeletionProcessesCommand(IMediator mediator, params string[] identityAddresses)
@@ -82,12 +86,15 @@ public class CancelIdentityDeletionProcessWorkerTests
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
-    private static Worker CreateWorker(IMediator mediator, List<IIdentityDeleter>? identityDeleters, IEventBus? eventBus)
+    private static Worker CreateWorker(IMediator mediator,
+                                       List<IIdentityDeleter>? identityDeleters = null,
+                                       IEventBus? eventBus = null,
+                                       IPushNotificationSender? pushNotificationSender = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         eventBus ??= A.Dummy<IEventBus>();
-        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<Worker>>();
         return new Worker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
     }
