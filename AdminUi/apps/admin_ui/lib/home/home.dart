@@ -2,8 +2,23 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
+
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  int _pageNumber = 0;
+  int _pageSize = 1;
+
+  void _fetchData(int pageNumber, int pageSize) {
+    setState(() {
+      _pageSize = pageSize;
+      _pageNumber = pageNumber;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +78,41 @@ class Dashboard extends StatelessWidget {
               },
             ),
             FutureBuilder(
-              future: GetIt.I.get<AdminApiClient>().identities.getIdentities(),
+              future: GetIt.I.get<AdminApiClient>().identities.getIdentities(pageNumber: _pageNumber, pageSize: _pageSize),
               builder: (context, snapshot) {
-                if (snapshot.error != null) return Text('Error: ${snapshot.error}');
-                return Text(
-                  'Identities: ${snapshot.data?.data.map((e) => e.address)} \n ',
-                );
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.data.isEmpty) {
+                  return const Text('No data available.');
+                } else {
+                  List<String> addresses = snapshot.data!.data.map((e) => e.address).toList();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Identities:'),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: addresses.map((address) => Text(address)).toList(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _pageNumber > 0 ? () => _fetchData(_pageNumber - 1, _pageSize) : null,
+                            child: const Text('Previous'),
+                          ),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: addresses.length == _pageSize ? () => _fetchData(_pageNumber + 1, _pageSize) : null,
+                            child: const Text('Next'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
               },
             ),
             FutureBuilder(
