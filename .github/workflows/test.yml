@@ -19,7 +19,7 @@ jobs:
 
   run-adminUi-flutter-checks:
     runs-on: ubuntu-latest
-    name: Run Admin UI Checks
+    name: Run Admin UI Flutter Checks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
