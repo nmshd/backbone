@@ -26,12 +26,12 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: (e) {},
       );
 
-  Future<ApiResponse<ODataResponse>> getIdentities() => get(
+  Future<ApiResponse<List<IdentityOverview>>> getIdentities() => getOData(
         '/odata/Identities',
         query: {
           r'$count': 'true',
           r'$expand': 'Tier',
         },
-        transformer: ODataResponse.fromJson,
+        transformer: (e) => (e as List).map(IdentityOverview.fromJson).toList(),
       );
 }

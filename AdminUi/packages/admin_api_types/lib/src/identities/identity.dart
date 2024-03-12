@@ -75,22 +75,14 @@ class IdentityQuota {
 
 @JsonSerializable()
 class IdentityOverview {
-  @JsonKey(name: 'address')
   final String address;
-  @JsonKey(name: 'createdAt')
   final DateTime createdAt;
-  @JsonKey(name: 'lastLoginAt')
-  final DateTime? lastLoginAt;
-  @JsonKey(name: 'createdWithClient')
   final String createdWithClient;
-  @JsonKey(name: 'datawalletVersion')
-  final int? datawalletVersion;
-  @JsonKey(name: 'identityVersion')
   final int identityVersion;
-  @JsonKey(name: 'numberOfDevices')
   final int numberOfDevices;
-  @JsonKey(name: 'tier')
   final Tier tier;
+  final DateTime? lastLoginAt;
+  final int? datawalletVersion;
 
   IdentityOverview({
     required this.address,
@@ -105,26 +97,4 @@ class IdentityOverview {
 
   factory IdentityOverview.fromJson(dynamic json) => _$IdentityOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityOverviewToJson(this);
-}
-
-@JsonSerializable()
-class ODataResponse {
-  @JsonKey(name: '@odata.context')
-  final String odataContext;
-
-  @JsonKey(name: '@odata.count')
-  final int odataCount;
-
-  @JsonKey(name: 'value')
-  final List<IdentityOverview> identities;
-
-  ODataResponse({
-    required this.odataContext,
-    required this.odataCount,
-    required this.identities,
-  });
-
-  factory ODataResponse.fromJson(dynamic json) => _$ODataResponseFromJson(json as Map<String, dynamic>);
-
-  Map<String, dynamic> toJson() => _$ODataResponseToJson(this);
 }
