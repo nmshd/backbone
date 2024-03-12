@@ -116,10 +116,10 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{address}/DeletionProcesses")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDeletionProcesses([FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string address, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(address), cancellationToken);
         return Ok(response);

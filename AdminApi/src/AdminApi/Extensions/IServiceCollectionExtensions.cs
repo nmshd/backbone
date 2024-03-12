@@ -40,7 +40,7 @@ public static class IServiceCollectionExtensions
             .AddControllersWithViews(options =>
             {
                 options.Filters.Add(typeof(CustomExceptionFilter));
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
             })
             .ConfigureApiBehaviorOptions(options =>
