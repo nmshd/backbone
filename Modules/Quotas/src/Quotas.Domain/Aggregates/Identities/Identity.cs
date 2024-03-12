@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using CSharpFunctionalExtensions;
@@ -167,7 +168,7 @@ public class Identity
     }
 
     #region Selectors
-    public static Expression<Func<Identity, bool>> HasAddress(string identityAddress)
+    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress identityAddress)
     {
         return i => i.Address == identityAddress;
     }

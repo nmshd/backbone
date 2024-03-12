@@ -52,7 +52,7 @@ public class PnsRegistration
             DevicePushIdentifier = DevicePushIdentifier.New();
     }
 
-    public static Expression<Func<PnsRegistration, bool>> HasAddress(string identityAddress)
+    public static Expression<Func<PnsRegistration, bool>> HasAddress(IdentityAddress identityAddress)
     {
         return i => i.IdentityAddress == identityAddress;
     }
