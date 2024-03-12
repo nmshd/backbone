@@ -9,12 +9,10 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionPro
 public class Handler : IRequestHandler<GetDeletionProcessesAsSupportQuery, GetDeletionProcessesAsSupportResponse>
 {
     private readonly IIdentitiesRepository _identityRepository;
-    private readonly IUserContext _userContext;
 
     public Handler(IIdentitiesRepository identityRepository, IUserContext userContext)
     {
         _identityRepository = identityRepository;
-        _userContext = userContext;
     }
 
     public async Task<GetDeletionProcessesAsSupportResponse> Handle(GetDeletionProcessesAsSupportQuery request, CancellationToken cancellationToken)
