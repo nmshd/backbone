@@ -30,6 +30,11 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled by support.", Hasher.HashUtf8(identityAddress.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
+    }
+
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(processId, "The first approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
@@ -78,6 +83,17 @@ public class IdentityDeletionProcessAuditLogEntry
         Message = message;
         IdentityAddressHash = identityAddressHash;
         DeviceIdHash = deviceIdHash;
+        OldStatus = oldStatus;
+        NewStatus = newStatus;
+    }
+
+    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
+    {
+        Id = IdentityDeletionProcessAuditLogEntryId.Generate();
+        ProcessId = processId;
+        CreatedAt = SystemTime.UtcNow;
+        Message = message;
+        IdentityAddressHash = identityAddressHash;
         OldStatus = oldStatus;
         NewStatus = newStatus;
     }
