@@ -192,7 +192,7 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public static Expression<Func<Identity, bool>> IsWithAddress(IdentityAddress address)
+    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
     {
         return i => i.Address == address;
     }
