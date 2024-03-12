@@ -5,6 +5,8 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
@@ -111,6 +113,16 @@ public class IdentitiesController : ApiControllerBase
     {
         var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
         return Created("", response);
+    }
+
+    [HttpGet("{address}/DeletionProcesses")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDeletionProcesses([FromRoute] string address, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(address), cancellationToken);
+        return Ok(response);
     }
 }
 
