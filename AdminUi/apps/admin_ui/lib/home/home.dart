@@ -54,35 +54,29 @@ class Dashboard extends StatelessWidget {
               },
             ),
             FutureBuilder(
+              future: GetIt.I.get<AdminApiClient>().identities.getIdentity('id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm'),
+              builder: (context, snapshot) {
+                if (snapshot.error != null) return Text('Error: ${snapshot.error}');
+                return Text(
+                  'Identity created at: ${snapshot.data?.data.createdAt} \n',
+                );
+              },
+            ),
+            FutureBuilder(
               future: GetIt.I.get<AdminApiClient>().identities.getIdentities(),
               builder: (context, snapshot) {
                 if (snapshot.error != null) return Text('Error: ${snapshot.error}');
                 return Text(
-                  'Identities: ${snapshot.data?.data.identities.map((e) => e.address).join(', ')}',
+                  'Identities: ${snapshot.data?.data.map((e) => e.address)} \n ',
                 );
               },
             ),
             FutureBuilder(
-              future: GetIt.I.get<AdminApiClient>().identities.getIdentity('id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm'),
+              future: GetIt.I.get<AdminApiClient>().relationships.getRelationshipsByParticipantAddress('id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm', 0, 10),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
                 if (snapshot.error != null) return Text('Error: ${snapshot.error}');
                 return Text(
-                  'Identity address: ${snapshot.data!.data.createdAt}',
-                );
-              },
-            ),
-            FutureBuilder(
-              future: GetIt.I.get<AdminApiClient>().relationships.getRelationshipsByParticipantAddress(
-                    'id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm',
-                    0,
-                    10,
-                  ),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
-                if (snapshot.error != null) return Text('Error: ${snapshot.error}');
-                return Text(
-                  'Identity address: ${snapshot.data!.data.result.map((e) => e.createdByDevice)}',
+                  'Relationships count: ${snapshot.data?.data.length} \n ',
                 );
               },
             ),
