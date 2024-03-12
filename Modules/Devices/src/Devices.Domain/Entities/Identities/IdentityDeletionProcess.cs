@@ -163,4 +163,15 @@ public class IdentityDeletionProcess
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelled(Id, address, cancelledByDevice));
     }
+
+    public void CancelAsSupport(IdentityAddress address)
+    {
+        if (Status != DeletionProcessStatus.Approved)
+            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
+
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
+    }
 }
