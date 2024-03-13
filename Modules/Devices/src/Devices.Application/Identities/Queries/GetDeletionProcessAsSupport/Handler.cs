@@ -16,8 +16,8 @@ public class Handler : IRequestHandler<GetDeletionProcessAsSupportQuery, Identit
 
     public async Task<IdentityDeletionProcessDTO> Handle(GetDeletionProcessAsSupportQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(p => p.Id == request.Id) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
+        var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(p => p.Id == request.DeletionProcessId) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
         var response = new IdentityDeletionProcessDTO(deletionProcess);
 
         return response;
