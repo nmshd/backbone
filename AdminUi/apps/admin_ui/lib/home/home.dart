@@ -78,7 +78,22 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             FutureBuilder(
-              future: GetIt.I.get<AdminApiClient>().identities.getIdentities(pageNumber: _pageNumber, pageSize: _pageSize),
+              future: GetIt.I.get<AdminApiClient>().identities.getIdentities(
+                    filter: IdentityOverviewFilter(
+                      // address: 'id12Pbi7CgBHaFxge6uy1h6qUkedjQr8XHfm',
+                      // tiers: ['TIRJs0LlenSqLFy4pCcr'],
+                      createdAt: FilterOperatorValue(
+                        FilterOperator.lessThan,
+                        '2024-02-21T09:25:06.88502+01:00',
+                      ),
+                      lastLoginAt: FilterOperatorValue(
+                        FilterOperator.lessThan,
+                        '2024-03-11T09:25:06.88502+01:00',
+                      ),
+                    ),
+                    pageNumber: _pageNumber,
+                    pageSize: _pageSize,
+                  ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
