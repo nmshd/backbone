@@ -8,7 +8,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessAsSupport;
-public class HandlerTest
+public class HandlerTests
 {
     [Fact]
     public async Task Happy_path()
@@ -68,10 +68,10 @@ public class HandlerTest
         var handler = CreateHandler(mockIdentitiesRepository);
         var query = new GetDeletionProcessAsSupportQuery(identity.Address, "some-inexistent-deletion-process-id");
 
-        // Assert
+        // Act
         Func<Task> acting = async () => await handler.Handle(query, CancellationToken.None);
 
-        // Act
+        // Assert
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
