@@ -6,12 +6,12 @@ class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
-  _DashboardState createState() => _DashboardState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  int _pageNumber = 0;
-  int _pageSize = 1;
+  var _pageNumber = 0;
+  var _pageSize = 1;
 
   void _fetchData(int pageNumber, int pageSize) {
     setState(() {
@@ -102,14 +102,14 @@ class _DashboardState extends State<Dashboard> {
                 } else if (!snapshot.hasData || snapshot.data!.data.isEmpty) {
                   return const Text('No data available.');
                 } else {
-                  List<String> addresses = snapshot.data!.data.map((e) => e.address).toList();
+                  final addresses = snapshot.data!.data.map((e) => e.address).toList();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Identities:'),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: addresses.map((address) => Text(address)).toList(),
+                        children: addresses.map(Text.new).toList(),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
