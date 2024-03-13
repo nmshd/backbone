@@ -10,10 +10,6 @@ ide:
     enabled: false
 
 scripts:
-  analyze:
-    run: melos exec -- "flutter analyze"
-    description: Run `flutter analyze` in all packages
-
   format:
     run: melos exec -- "dart format . --set-exit-if-changed -l 150"
     description: Run `dart format .` in all packages
