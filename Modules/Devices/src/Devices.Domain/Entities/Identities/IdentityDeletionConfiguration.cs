@@ -31,7 +31,7 @@ public class IdentityDeletionConfiguration
 
     public static DeletionStartsNotification DeletionStartsNotification { get; set; } = new()
     {
-        Text = "Deletion Starting"
+        Text = "After the grace period has passed, your identity's deletion has been processed."
     };
 }
 
