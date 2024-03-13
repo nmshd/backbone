@@ -125,6 +125,37 @@ public class Identity
         return deletionProcess;
     }
 
+    public void DeletionStarted()
+    {
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
+                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+
+        if (deletionProcess.IsReadyToStartDeletion())
+        {
+            Status = IdentityStatus.Deleting;
+            deletionProcess.DeletionStarted();
+        }
+        else
+        {
+            throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
+        }
+    }
+
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    {
+        EnsureIdentityOwnsDevice(canceledByDeviceId);
+
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
+                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Cancel(Address, canceledByDeviceId);
+        TierId = TierIdBeforeDeletion;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
     private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
     {
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
@@ -200,33 +231,6 @@ public class Identity
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()
     {
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
-    }
-
-    public void DeletionStarted()
-    {
-        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
-                              ?? throw new DomainException(DomainErrors.NoActiveDeletionProcessFound());
-
-        if (deletionProcess.IsReadyToStartDeletion())
-        {
-            Status = IdentityStatus.Deleting;
-            deletionProcess.DeletionStarted();
-        }
-    }
-
-    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
-    {
-        EnsureIdentityOwnsDevice(canceledByDeviceId);
-
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
-                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
-
-        deletionProcess.Cancel(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion;
-        TierIdBeforeDeletion = null;
-        Status = IdentityStatus.Active;
-
-        return deletionProcess;
     }
 }
 

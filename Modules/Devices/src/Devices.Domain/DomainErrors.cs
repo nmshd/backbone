@@ -51,8 +51,8 @@ public static class DomainErrors
         return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
     }
 
-    public static DomainError NoActiveDeletionProcessFound()
+    public static DomainError IdentityCannotBeDeleted()
     {
-        return new DomainError("error.platform.validation.device.noActiveDeletionProcessFound", "No active deletion process was found.");
+        return new DomainError($"error.platform.validation.device.identityCannotBeDeleted", $"The identity cannot be deleted because it have not been approved or the grace period is not past yet.");
     }
 }

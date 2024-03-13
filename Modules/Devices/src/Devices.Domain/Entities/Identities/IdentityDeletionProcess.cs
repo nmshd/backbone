@@ -132,7 +132,7 @@ public class IdentityDeletionProcess
 
     internal bool IsReadyToStartDeletion()
     {
-        return Status == DeletionProcessStatus.Approved;
+        return Status == DeletionProcessStatus.Approved && GracePeriodEndsAt < SystemTime.UtcNow;
     }
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)
