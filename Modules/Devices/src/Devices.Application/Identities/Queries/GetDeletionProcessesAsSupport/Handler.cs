@@ -10,7 +10,7 @@ public class Handler : IRequestHandler<GetDeletionProcessesAsSupportQuery, GetDe
 {
     private readonly IIdentitiesRepository _identityRepository;
 
-    public Handler(IIdentitiesRepository identityRepository, IUserContext userContext)
+    public Handler(IIdentitiesRepository identityRepository)
     {
         _identityRepository = identityRepository;
     }
