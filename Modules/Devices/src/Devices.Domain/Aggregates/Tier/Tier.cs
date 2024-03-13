@@ -10,17 +10,17 @@ public class Tier
     {
     }
 
-    private Tier(TierId id, TierName name, bool canBeUsedAsDefaultTier, bool canBeManuallyAssigned)
+    private Tier(TierId id, TierName name, bool canBeUsedAsDefaultForUser, bool canBeManuallyAssigned)
     {
         Id = id;
         Name = name;
-        CanBeUsedAsDefaultTier = canBeUsedAsDefaultTier;
+        CanBeUsedAsDefaultForUser = canBeUsedAsDefaultForUser;
         CanBeManuallyAssigned = canBeManuallyAssigned;
     }
 
     public TierId Id { get; }
     public TierName Name { get; }
-    public bool CanBeUsedAsDefaultTier { get; }
+    public bool CanBeUsedAsDefaultForUser { get; }
     public bool CanBeManuallyAssigned { get; }
 
     public DomainError? CanBeDeleted(int clientsCount, int identitiesCount)

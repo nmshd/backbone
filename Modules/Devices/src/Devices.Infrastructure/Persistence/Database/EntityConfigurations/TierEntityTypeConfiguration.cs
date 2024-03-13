@@ -11,6 +11,6 @@ public class TierEntityTypeConfiguration : IEntityTypeConfiguration<Tier>
         builder.HasKey(x => x.Id);
         builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.CanBeManuallyAssigned).HasDefaultValue(true);
-        builder.Property(x => x.CanBeUsedAsDefaultTier).HasDefaultValue(true);
+        builder.Property(x => x.CanBeUsedAsDefaultForUser).HasDefaultValue(true);
     }
 }
