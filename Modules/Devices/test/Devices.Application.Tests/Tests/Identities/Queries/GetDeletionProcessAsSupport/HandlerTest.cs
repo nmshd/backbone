@@ -40,7 +40,7 @@ public class HandlerTest
     }
 
     [Fact]
-    public async Task Throws_when_no_identity_not_found()
+    public async Task Throws_when_no_identity_found()
     {
         // Arrange
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
