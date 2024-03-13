@@ -43,12 +43,12 @@ public class Worker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var toBeDeletedIdentityAddresses = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        var triggeredForDeletionIdentityAddresses = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
-        var successfulDeletions = toBeDeletedIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsSuccess);
-        var erroringDeletions = toBeDeletedIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsFailure);
+        var successfulDeletionTriggers = triggeredForDeletionIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsSuccess);
+        var erroringDeletionTriggers = triggeredForDeletionIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsFailure);
 
-        foreach (var identityAddress in successfulDeletions.Select(x => x.Key))
+        foreach (var identityAddress in successfulDeletionTriggers.Select(x => x.Key))
         {
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
 
@@ -65,7 +65,7 @@ public class Worker : IHostedService
             }
         }
 
-        foreach (var erroringDeletion in erroringDeletions)
+        foreach (var erroringDeletion in erroringDeletionTriggers)
         {
             _logger.LogError(
                 new DomainException(erroringDeletion.Value.Error),
