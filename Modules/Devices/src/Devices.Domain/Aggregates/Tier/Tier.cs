@@ -6,12 +6,8 @@ public class Tier
 {
     public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Queued for Deletion").Value, false, false);
 
-    public Tier(TierName name)
+    public Tier(TierName name) : this(TierId.Generate(), name, true, true)
     {
-        Id = TierId.Generate();
-        Name = name;
-        CanBeUsedAsDefaultTier = true;
-        CanBeManuallyAssigned = true;
     }
 
     private Tier(TierId id, TierName name, bool canBeUsedAsDefaultTier, bool canBeManuallyAssigned)
