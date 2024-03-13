@@ -28,15 +28,15 @@ public class HandlerTest
 
         // Assert
         response.Status.Should().Be(DeletionProcessStatus.Approved);
-        response.ApprovalReminder1SentAt.Should().Be(null);
-        response.ApprovalReminder2SentAt.Should().Be(null);
-        response.ApprovalReminder3SentAt.Should().Be(null);
+        response.ApprovalReminder1SentAt.Should().Be(deletionProcess.ApprovalReminder1SentAt);
+        response.ApprovalReminder2SentAt.Should().Be(deletionProcess.ApprovalReminder2SentAt);
+        response.ApprovalReminder3SentAt.Should().Be(deletionProcess.ApprovalReminder3SentAt);
         response.ApprovedAt.Should().Be(deletionProcess.ApprovedAt);
         response.ApprovedByDevice.Should().Be(identity.Devices[0].Id);
         response.GracePeriodEndsAt.Should().Be(identity.DeletionGracePeriodEndsAt);
-        response.GracePeriodReminder1SentAt.Should().Be(null);
-        response.GracePeriodReminder2SentAt.Should().Be(null);
-        response.GracePeriodReminder3SentAt.Should().Be(null);
+        response.GracePeriodReminder1SentAt.Should().Be(deletionProcess.GracePeriodReminder1SentAt);
+        response.GracePeriodReminder2SentAt.Should().Be(deletionProcess.GracePeriodReminder2SentAt);
+        response.GracePeriodReminder3SentAt.Should().Be(deletionProcess.GracePeriodReminder3SentAt);
     }
 
     [Fact]
