@@ -27,7 +27,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
+    public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identitiesDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }

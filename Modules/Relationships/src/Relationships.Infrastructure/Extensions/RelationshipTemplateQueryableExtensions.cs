@@ -33,9 +33,4 @@ public static class RelationshipTemplateQueryableExtensions
     {
         return query.Where(t => !t.DeletedAt.HasValue);
     }
-
-    public static IQueryable<RelationshipTemplate> CreatedBy(this IQueryable<RelationshipTemplate> query, IdentityAddress identityId)
-    {
-        return query.Where(r => r.CreatedBy == identityId);
-    }
 }

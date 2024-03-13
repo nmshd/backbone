@@ -33,7 +33,7 @@ public class ChallengesRepository : IChallengesRepository
         return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task DeleteChallenges(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
+    public async Task Delete(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
     {
         await _challenges.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }

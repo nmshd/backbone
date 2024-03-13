@@ -15,6 +15,6 @@ public class Handler : IRequestHandler<DeleteChallengesOfIdentityCommand>
 
     public async Task Handle(DeleteChallengesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _challengesRepository.DeleteChallenges(Challenge.WasCreatedBy(request.IdentityAddress), cancellationToken);
+        await _challengesRepository.Delete(Challenge.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }
 }

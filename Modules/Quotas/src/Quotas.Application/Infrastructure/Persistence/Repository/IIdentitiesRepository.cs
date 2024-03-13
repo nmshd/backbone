@@ -11,5 +11,5 @@ public interface IIdentitiesRepository
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false);
     Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false);
-    Task DeleteIdentities(Expression<Func<Identity, bool>> expression, CancellationToken cancellationToken);
+    Task Delete(Expression<Func<Identity, bool>> expression, CancellationToken cancellationToken);
 }

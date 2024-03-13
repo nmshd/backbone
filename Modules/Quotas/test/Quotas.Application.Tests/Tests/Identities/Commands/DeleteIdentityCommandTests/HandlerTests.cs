@@ -19,7 +19,7 @@ public class HandlerTests
 
         await handler.Handle(new DeleteIdentityCommand(identity.Address), CancellationToken.None);
 
-        A.CallTo(() => mockIdentitiesRepository.DeleteIdentities(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentitiesRepository.Delete(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)

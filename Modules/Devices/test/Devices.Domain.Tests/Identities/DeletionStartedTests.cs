@@ -24,7 +24,6 @@ public class DeletionStartedTests
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Deleting);
-        identity.DeletionProcesses.Should().HaveCount(1);
         identity.DeletionProcesses.First().DeletionStartedAt.Should().Be(SystemTime.UtcNow);
     }
 

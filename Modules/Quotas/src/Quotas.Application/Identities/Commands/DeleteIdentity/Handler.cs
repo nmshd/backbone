@@ -14,6 +14,6 @@ public class Handler : IRequestHandler<DeleteIdentityCommand>
 
     public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _identitiesRepository.DeleteIdentities(Identity.HasAddress(request.IdentityAddress), cancellationToken);
+        await _identitiesRepository.Delete(Identity.HasAddress(request.IdentityAddress), cancellationToken);
     }
 }
