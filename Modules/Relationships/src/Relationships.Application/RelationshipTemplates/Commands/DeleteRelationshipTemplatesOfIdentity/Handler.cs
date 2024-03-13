@@ -15,6 +15,6 @@ public class Handler : IRequestHandler<DeleteRelationshipTemplatesOfIdentityComm
 
     public async Task Handle(DeleteRelationshipTemplatesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _relationshipTemplatesRepository.DeleteTemplates(RelationshipTemplate.WasCreatedBy(request.IdentityAddress), cancellationToken);
+        await _relationshipTemplatesRepository.Delete(RelationshipTemplate.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }
 }

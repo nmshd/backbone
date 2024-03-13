@@ -19,5 +19,5 @@ public interface IRelationshipsRepository
     Task Update(Relationship relationship);
     Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
-    Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
+    Task Delete(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
 }

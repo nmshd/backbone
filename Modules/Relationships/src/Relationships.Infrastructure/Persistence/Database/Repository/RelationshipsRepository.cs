@@ -139,7 +139,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
-    public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    public async Task Delete(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }

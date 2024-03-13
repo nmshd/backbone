@@ -29,7 +29,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
         await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
