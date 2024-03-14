@@ -271,6 +271,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E7576FD6-3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi.Tests.Integration", "AdminApi\test\AdminApi.Tests.Integration\AdminApi.Tests.Integration.csproj", "{7B42684C-9846-4769-814B-5F96C8A7CE82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk\ConsumerApi.Sdk.csproj", "{76956954-B37E-4055-B5F5-CF2FFD473598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -649,6 +651,8 @@ Global
 		{7B42684C-9846-4769-814B-5F96C8A7CE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B42684C-9846-4769-814B-5F96C8A7CE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B42684C-9846-4769-814B-5F96C8A7CE82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
