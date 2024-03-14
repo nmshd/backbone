@@ -52,8 +52,8 @@ public class HandlerTests
     public async Task Publishes_IntegrationEvent_for_cancelled_deletion_process()
     {
         // Arrange
-        var identity1 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
-        var identity2 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(DateTime.UtcNow.AddDays(-11));
+        var identity1 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(SystemTime.UtcNow.AddDays(-11));
+        var identity2 = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(SystemTime.UtcNow.AddDays(-11));
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockEventBus = A.Fake<IEventBus>();
