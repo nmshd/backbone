@@ -25,7 +25,8 @@ public static class SystemTime
 
     public static void Set(string dateTimeString)
     {
-        Set(DateTime.Parse(dateTimeString));
+        EnsureIsCalledFromTest();
+        SetInternal(DateTime.Parse(dateTimeString));
     }
 
     /// <summary>
@@ -33,14 +34,23 @@ public static class SystemTime
     /// </summary>
     public static void Set(DateTime dateTime)
     {
+        EnsureIsCalledFromTest();
+        SetInternal(dateTime);
+    }
+
+    private static void EnsureIsCalledFromTest()
+    {
         var stackTrace = new StackTrace();
-        var callerType = stackTrace.GetFrame(1)!.GetMethod()!.DeclaringType;
+        var callerType = stackTrace.GetFrame(2)!.GetMethod()!.DeclaringType;
 
         if (callerType is { Namespace: not null } && !callerType.Namespace.Contains("Test"))
         {
             throw new NotSupportedException("You can't call this method from a Non-Test-class");
         }
+    }
 
+    private static void SetInternal(DateTime dateTime)
+    {
         if (dateTime.Kind != DateTimeKind.Local)
             dateTime = dateTime.ToLocalTime();
 
