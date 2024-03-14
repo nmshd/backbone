@@ -38,10 +38,10 @@ public class CancelIdentityDeletionProcessWorker : IHostedService
         if (!identityDeletionProcessIds.IsNullOrEmpty())
         {
             var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
-            _logger.WorkerProcessCompletedWithResults(concatenatedIds);
+            _logger.WorkerCompletedWithResults(concatenatedIds);
         }
         else
-            _logger.WorkerProcessCompletedWithoutResults();
+            _logger.WorkerCompletedWithoutResults();
     }
 }
 
@@ -51,13 +51,13 @@ internal static partial class CancelIdentityDeletionProcessWorkerLogs
         EventId = 440986,
         EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedWithResults",
         Level = LogLevel.Information,
-        Message = "Automatically canceled identity deletion processes: {logCanceledDeletionProcessIds}")]
-    public static partial void WorkerProcessCompletedWithResults(this ILogger logger, string logCanceledDeletionProcessIds);
+        Message = "Automatically canceled identity deletion processes: {concatenatedProcessIds}")]
+    public static partial void WorkerCompletedWithResults(this ILogger logger, string concatenatedProcessIds);
 
     [LoggerMessage(
         EventId = 361883,
         EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedWithoutResults",
         Level = LogLevel.Information,
         Message = "No identity deletion processes are pass due approval")]
-    public static partial void WorkerProcessCompletedWithoutResults(this ILogger logger);
+    public static partial void WorkerCompletedWithoutResults(this ILogger logger);
 }
