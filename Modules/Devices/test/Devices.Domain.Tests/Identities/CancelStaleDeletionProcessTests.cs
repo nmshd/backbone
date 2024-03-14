@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using CSharpFunctionalExtensions;
@@ -19,7 +20,8 @@ public class CancelStaleDeletionProcessTests
         var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        result.Should().Be(Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions."));
+        result.Error.Message.Should().Be($"The deletion process must be in status 'WaitingForApproval'.");
+        result.Error.Code.Should().Be($"error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
     }
 
     [Fact]
@@ -37,7 +39,8 @@ public class CancelStaleDeletionProcessTests
 
         deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
 
-        result.Should().Be(Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions."));
+        result.Error.Message.Should().Be("No deletion process is past due approval.");
+        result.Error.Code.Should().Be("error.platform.validation.device.noDeletionProcessIsPastDueApproval");
     }
 
     [Fact]
@@ -62,7 +65,7 @@ public class CancelStaleDeletionProcessTests
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
         deletionProcess.CancelledAt.Should().Be(utcNow);
 
-        result.Should().Be(Result.Success(deletionProcess));
+        result.Should().Be(Result.Success<IdentityDeletionProcess, DomainError>(deletionProcess));
     }
 
     [Fact]
