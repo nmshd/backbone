@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -54,6 +55,8 @@ public class HandlerTests
 
         var anIdentity = identities.First();
         anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
 
         var handler = CreateHandler(identitiesRepository);
         var command = new TriggerRipeDeletionProcessesCommand();
