@@ -267,6 +267,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "HealthCheck\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quotas.Infrastructure.Tests", "Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj", "{FB38C7C5-9F11-43BB-871F-E2E0360FD993}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk\ConsumerApi.Sdk.csproj", "{76956954-B37E-4055-B5F5-CF2FFD473598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -649,6 +651,8 @@ Global
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
