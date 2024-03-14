@@ -49,7 +49,7 @@ public class HandlerTests
         Func<Task> acting = async () => await handler.Handle(query, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>();
+        await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*Identity*");
     }
 
     private static void AssertReturningValuesForSpecificDeletionProcess(GetDeletionProcessesAsSupportResponse response, Identity identity, int index)
