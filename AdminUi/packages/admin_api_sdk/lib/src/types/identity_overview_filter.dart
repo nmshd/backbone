@@ -1,3 +1,12 @@
+enum FilterOperator {
+  equal,
+  notEqual,
+  greaterThan,
+  greaterThanOrEqual,
+  lessThan,
+  lessThanOrEqual,
+}
+
 class IdentityOverviewFilter {
   final String? address;
   final List<String>? tiers;
@@ -18,15 +27,6 @@ class IdentityOverviewFilter {
     this.datawalletVersion,
     this.identityVersion,
   });
-}
-
-enum FilterOperator {
-  equal,
-  notEqual,
-  greaterThan,
-  greaterThanOrEqual,
-  lessThan,
-  lessThanOrEqual,
 }
 
 class FilterOperatorValue {
