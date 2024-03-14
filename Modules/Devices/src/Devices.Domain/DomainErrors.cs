@@ -50,4 +50,9 @@ public static class DomainErrors
     {
         return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
     }
+
+    public static DomainError DeletionProcessMustBePastDueApproval()
+    {
+        return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
+    }
 }
