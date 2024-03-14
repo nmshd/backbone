@@ -35,24 +35,6 @@ public class IdentityDeletionProcess
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
 
-    private void Approve(DeviceId createdByDevice)
-    {
-        Status = DeletionProcessStatus.Approved;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
-    }
-
-    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
-    {
-        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
-    {
-        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
-    }
-
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
@@ -78,6 +60,24 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= GetEndOfApprovalPeriod();
+
+    private void Approve(DeviceId createdByDevice)
+    {
+        Status = DeletionProcessStatus.Approved;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+    }
+
+    public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
+    {
+        return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
+    }
+
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    {
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
+    }
 
     public bool IsActive()
     {
@@ -163,7 +163,7 @@ public class IdentityDeletionProcess
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelled(Id, address, cancelledByDevice));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }
 
     public void Cancel(IdentityAddress address)
