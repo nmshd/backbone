@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;

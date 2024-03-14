@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Errors;
+﻿using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using CSharpFunctionalExtensions;
