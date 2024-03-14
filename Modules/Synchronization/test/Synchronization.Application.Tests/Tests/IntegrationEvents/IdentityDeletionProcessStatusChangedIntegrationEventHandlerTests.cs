@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.IntegrationEvents;
+
 public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
 {
     [Fact]
@@ -24,7 +25,7 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
             new { identityDeletionProcessStatusChangedIntegrationEvent.DeletionProcessId });
 
         A.CallTo(() => mockDbContext.CreateExternalEvent(
-            A<IdentityAddress>.That.Matches(i => i.StringValue == identityAddress),
+            identityAddress,
             ExternalEventType.IdentityDeletionProcessStatusChanged,
             A<object>._)
         ).Returns(externalEvent);
@@ -55,7 +56,7 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
             new { identityDeletionProcessStatusChangedIntegrationEvent.DeletionProcessId });
 
         A.CallTo(() => fakeDbContext.CreateExternalEvent(
-            A<IdentityAddress>.That.Matches(i => i.StringValue == identityAddress),
+            identityAddress,
             ExternalEventType.IdentityDeletionProcessStatusChanged,
             A<object>._)
         ).Returns(externalEvent);

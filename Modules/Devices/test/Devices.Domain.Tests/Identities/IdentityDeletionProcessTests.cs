@@ -4,25 +4,27 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class IdentityDeletionProcessTests
 {
     [Theory]
     [InlineData("2020-01-01T00:00:00")]
     [InlineData("2020-01-01T00:00:01")]
     [InlineData("2020-01-09T23:59:59")]
-    public void HasApprovalPeriodExpired_is_false_for_stale_deletion_process(string time)
+    public void HasApprovalPeriodExpired_is_false_for_stale_deletion_process(string utcNow)
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
+        SystemTime.Set("2020-01-01T00:00:00");
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-        SystemTime.Set(DateTime.Parse(time));
+        SystemTime.Set(utcNow);
 
         IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
+        var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
 
         // Assert
-        identity.DeletionProcesses[0].HasApprovalPeriodExpired.Should().BeFalse();
+        result.Should().BeFalse();
     }
 
     [Theory]
@@ -39,8 +41,9 @@ public class IdentityDeletionProcessTests
         IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
+        var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
 
         // Assert
-        identity.DeletionProcesses[0].HasApprovalPeriodExpired.Should().BeTrue();
+        result.Should().BeTrue();
     }
 }
