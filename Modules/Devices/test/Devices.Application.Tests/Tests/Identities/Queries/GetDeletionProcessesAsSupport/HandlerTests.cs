@@ -31,8 +31,8 @@ public class HandlerTests
 
         // Assert
         response.Count().Should().Be(2);
-        AssertReturningValuesForSpecificDeletionProcess(response, identity, 0);
-        AssertReturningValuesForSpecificDeletionProcess(response, identity, 1);
+        AssertDeletionProcessValues(response, identity, 0);
+        AssertDeletionProcessValues(response, identity, 1);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class HandlerTests
         await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*Identity*");
     }
 
-    private static void AssertReturningValuesForSpecificDeletionProcess(GetDeletionProcessesAsSupportResponse response, Identity identity, int index)
+    private static void AssertDeletionProcessValues(GetDeletionProcessesAsSupportResponse response, Identity identity, int index)
     {
         response.ElementAt(index).Status.Should().Be(identity.DeletionProcesses[index].Status);
         response.ElementAt(index).ApprovalReminder1SentAt.Should().Be(identity.DeletionProcesses[index].ApprovalReminder1SentAt);
