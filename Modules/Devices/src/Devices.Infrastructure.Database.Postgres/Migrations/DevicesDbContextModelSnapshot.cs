@@ -279,7 +279,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<DateTime>("DeletionStartedAt");
                     b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("timestamp with time zone");
 
