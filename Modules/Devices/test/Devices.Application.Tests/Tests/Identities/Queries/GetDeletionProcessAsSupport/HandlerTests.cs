@@ -53,7 +53,7 @@ public class HandlerTests
         Func<Task> acting = async () => await handler.Handle(query, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>();
+        await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*Identity*");
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class HandlerTests
         Func<Task> acting = async () => await handler.Handle(query, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>();
+        await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*IdentityDeletionProcess*");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
