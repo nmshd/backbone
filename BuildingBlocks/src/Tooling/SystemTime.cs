@@ -10,7 +10,8 @@ namespace Backbone.Tooling;
 /// </remarks>
 public static class SystemTime
 {
-    private static readonly ThreadLocal<Func<DateTime>> GET_TIME = new(() => () => DateTime.Now);
+    private static readonly ThreadLocal<Stack<Func<DateTime>>> HISTORY = new(() => new Stack<Func<DateTime>>());
+    private static readonly ThreadLocal<Func<DateTime>> GET_TIME = new(() => () => DateTime.UtcNow);
 
     /// <inheritdoc cref="DateTime.Today"/>
     public static DateTime UtcToday => GET_TIME.Value == null
@@ -38,7 +39,17 @@ public static class SystemTime
         if (time.Kind != DateTimeKind.Local)
             time = time.ToLocalTime();
 
+        HISTORY.Value!.Push(GET_TIME.Value!);
+
         GET_TIME.Value = () => time;
+    }
+
+    public static void UndoSet()
+    {
+        if (HISTORY.Value!.Count == 0)
+            GET_TIME.Value = () => DateTime.UtcNow;
+
+        GET_TIME.Value = HISTORY.Value!.Pop();
     }
 
     /// <summary>

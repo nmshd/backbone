@@ -39,26 +39,22 @@ public static class TestDataGenerator
     {
         approvalDate ??= SystemTime.UtcNow;
 
-        var currentDateTime = SystemTime.UtcNow;
-
         var identity = CreateIdentityWithOneDevice();
+
         SystemTime.Set(approvalDate.Value);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
-
-        SystemTime.Set(currentDateTime);
+        SystemTime.UndoSet();
 
         return identity;
     }
 
     public static Identity CreateIdentityWithDeletionProcessWaitingForApproval(DateTime deletionProcessStartedAt)
     {
-        var currentDateTime = SystemTime.UtcNow;
-
         var identity = CreateIdentityWithOneDevice();
+
         SystemTime.Set(deletionProcessStartedAt);
         identity.StartDeletionProcessAsSupport();
-
-        SystemTime.Set(currentDateTime);
+        SystemTime.UndoSet();
 
         return identity;
     }
