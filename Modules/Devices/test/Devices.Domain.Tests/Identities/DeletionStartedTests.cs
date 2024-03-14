@@ -17,7 +17,7 @@ public class DeletionStartedTests
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1)); // past deletion grace period
-        
+
 
         // Act
         identity.DeletionStarted();
