@@ -26,7 +26,7 @@ public static class SystemTime
     /// <summary>
     /// Sets a fixed (deterministic) time for the current thread to return by <see cref="SystemTime"/>.
     /// </summary>
-    public static void Set(DateTime time)
+    public static void Set(DateTime dateTime)
     {
         var stackTrace = new StackTrace();
         var callerType = stackTrace.GetFrame(1)!.GetMethod()!.DeclaringType;
@@ -36,12 +36,12 @@ public static class SystemTime
             throw new NotSupportedException("You can't call this method from a Non-Test-class");
         }
 
-        if (time.Kind != DateTimeKind.Local)
-            time = time.ToLocalTime();
+        if (dateTime.Kind != DateTimeKind.Local)
+            dateTime = dateTime.ToLocalTime();
 
         HISTORY.Value!.Push(GET_TIME.Value!);
 
-        GET_TIME.Value = () => time;
+        GET_TIME.Value = () => dateTime;
     }
 
     public static void UndoSet()
