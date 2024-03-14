@@ -15,8 +15,8 @@ class RelationshipsEndpoint extends Endpoint {
         '/api/v1/Relationships',
         query: {
           'participant': participant,
-          'pageNumber': pageNumber + 1,
-          'pageSize': pageSize,
+          'PageNumber': pageNumber + 1,
+          'PageSize': pageSize,
         },
         transformer: (e) => (e as List).map(Relationship.fromJson).toList(),
       );
