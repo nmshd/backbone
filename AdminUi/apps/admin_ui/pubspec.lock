@@ -9,7 +9,7 @@ packages:
     source: path
     version: "1.0.0"
   admin_api_types:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../../packages/admin_api_types"
       relative: true

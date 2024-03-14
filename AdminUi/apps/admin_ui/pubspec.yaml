@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   admin_api_sdk: ^1.0.0
+  admin_api_types: ^1.0.0
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.10+1
