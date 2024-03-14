@@ -1,4 +1,4 @@
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,6 +15,8 @@ public class IdentityDeletionProcessEntityTypeConfiguration : IEntityTypeConfigu
         builder.Property(x => x.ApprovalReminder1SentAt);
         builder.Property(x => x.ApprovalReminder2SentAt);
         builder.Property(x => x.ApprovalReminder3SentAt);
+
+        builder.Ignore(x => x.HasApprovalPeriodExpired);
     }
 }
 
