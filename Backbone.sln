@@ -269,6 +269,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quotas.Infrastructure.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi.Sdk", "AdminApi.Sdk\AdminApi.Sdk.csproj", "{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk\ConsumerApi.Sdk.csproj", "{76956954-B37E-4055-B5F5-CF2FFD473598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -651,8 +653,6 @@ Global
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB38C7C5-9F11-43BB-871F-E2E0360FD993}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
