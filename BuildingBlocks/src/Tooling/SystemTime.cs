@@ -23,6 +23,11 @@ public static class SystemTime
         ? throw new Exception("Time function is null")
         : GET_TIME.Value().ToUniversalTime();
 
+    public static void Set(string dateTimeString)
+    {
+        Set(DateTime.Parse(dateTimeString));
+    }
+
     /// <summary>
     /// Sets a fixed (deterministic) time for the current thread to return by <see cref="SystemTime"/>.
     /// </summary>
