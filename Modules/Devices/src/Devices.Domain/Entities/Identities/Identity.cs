@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -110,16 +111,18 @@ public class Identity
         deletionProcess.ApprovalReminder3Sent(Address);
     }
 
-    public Result<IdentityDeletionProcess> CancelStaleDeletionProcess()
+    public Result<IdentityDeletionProcess, DomainError> CancelStaleDeletionProcess()
     {
         var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval);
 
-        if (deletionProcess is not { HasApprovalPeriodExpired: true })
-            return Result.Failure<IdentityDeletionProcess>("No deletion process that matches the conditions.");
+        if (deletionProcess == null)
+            return Result.Failure<IdentityDeletionProcess, DomainError>(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.WaitingForApproval));
+        if (!deletionProcess.HasApprovalPeriodExpired)
+            return Result.Failure<IdentityDeletionProcess, DomainError>(DomainErrors.DeletionProcessMustBePastDueApproval());
 
         deletionProcess.Cancel(Address);
 
-        return Result.Success(deletionProcess);
+        return Result.Success<IdentityDeletionProcess, DomainError>(deletionProcess);
     }
 
     public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
