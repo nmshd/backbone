@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -23,9 +18,7 @@ public class HandlerTests
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
         identity.CancelDeletionProcess(deletionProcess.Id, identity.Devices[0].Id);
-
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
-
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, CancellationToken.None, A<bool>._)).Returns(identity);
@@ -38,7 +31,6 @@ public class HandlerTests
 
         // Assert
         response.Count().Should().Be(2);
-
         AssertReturningValuesForSpecificDeletionProcess(response, identity, 0);
         AssertReturningValuesForSpecificDeletionProcess(response, identity, 1);
     }
