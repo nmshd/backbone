@@ -15,7 +15,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run Checks
-        run: ./.ci/runAdminUiChecks.sh
+        run: ./.ci/aui/runChecks.sh
+
+  run-adminUi-flutter-checks:
+    runs-on: ubuntu-latest
+    name: Run Admin UI Flutter Checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.8.0
+      - name: Run checks
+        run: ./.ci/aui/runFlutterChecks.sh
 
   check-formatting:
     runs-on: ubuntu-latest
