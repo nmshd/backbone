@@ -112,7 +112,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was cancelled by the support employee.",
+            "The deletion process was cancelled by a support employee.",
             Hasher.HashUtf8(identityAddress.StringValue),
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Cancelled

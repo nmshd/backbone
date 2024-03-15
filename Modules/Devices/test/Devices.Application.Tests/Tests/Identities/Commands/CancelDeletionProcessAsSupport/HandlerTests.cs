@@ -23,6 +23,7 @@ public class HandlerTests
         SystemTime.Set(utcNow);
 
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(utcNow);
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
@@ -36,6 +37,7 @@ public class HandlerTests
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
 
+        result.Id.Should().Be(deletionProcess!.Id);
         result.Status.Should().Be(DeletionProcessStatus.Cancelled);
         result.CancelledAt.Should().Be(utcNow);
     }
@@ -70,22 +72,18 @@ public class HandlerTests
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
-
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
-                address,
-                A<CancellationToken>._,
-                A<bool>._))
-            .Returns<Identity?>(null);
-
-        var handler = CreateHandler(fakeIdentitiesRepository);
+        var handler = CreateHandler();
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
+    }
+
+    private static Handler CreateHandler()
+    {
+        return CreateHandler(A.Fake<IIdentitiesRepository>(), A.Fake<IEventBus>());
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
