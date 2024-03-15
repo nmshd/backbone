@@ -16,6 +16,11 @@ using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
+using Serilog.Settings.Configuration;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.Job.IdentityDeletion;
@@ -52,7 +57,9 @@ public class Program
             .ConfigureServices((hostContext, services) =>
             {
                 var configuration = hostContext.Configuration;
-                services.AddHostedService<Worker>();
+
+                services.AddHostedService<ActualIdentityDeletionWorker>();
+                services.AddHostedService<CancelIdentityDeletionProcessWorker>();
 
                 services
                     .AddModule<DevicesModule>(configuration)
@@ -84,7 +91,16 @@ public class Program
                 configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
                 services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
             })
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .UseSerilog((context, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+            .Enrich.WithDemystifiedStackTraces()
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("service", "jobs.identitydeletion")
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+        );
     }
 }
 

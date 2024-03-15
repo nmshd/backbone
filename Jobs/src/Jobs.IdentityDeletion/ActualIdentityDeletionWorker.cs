@@ -10,21 +10,21 @@ using Microsoft.Extensions.Logging;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Job.IdentityDeletion;
-public class Worker : IHostedService
+public class ActualIdentityDeletionWorker : IHostedService
 {
     private readonly IEventBus _eventBus;
     private readonly IHostApplicationLifetime _host;
     private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<ActualIdentityDeletionWorker> _logger;
 
-    public Worker(IHostApplicationLifetime host,
+    public ActualIdentityDeletionWorker(IHostApplicationLifetime host,
                     IEnumerable<IIdentityDeleter> identityDeleters,
                     IMediator mediator,
                     IPushNotificationSender pushNotificationSender,
                     IEventBus eventBus,
-                    ILogger<Worker> logger)
+                    ILogger<ActualIdentityDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters;
