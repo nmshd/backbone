@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     partial class AdminUiDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

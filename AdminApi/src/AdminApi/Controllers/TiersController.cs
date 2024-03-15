@@ -21,9 +21,9 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class TiersController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminUiDbContext;
 
-    public TiersController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public TiersController(IMediator mediator, AdminApiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
     }

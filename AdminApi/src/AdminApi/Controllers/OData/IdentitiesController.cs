@@ -7,9 +7,9 @@ namespace Backbone.AdminApi.Controllers.OData;
 
 public class IdentitiesController : ODataController
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminUiDbContext;
 
-    public IdentitiesController(AdminUiDbContext adminUiDbContext)
+    public IdentitiesController(AdminApiDbContext adminUiDbContext)
     {
         _adminUiDbContext = adminUiDbContext;
     }

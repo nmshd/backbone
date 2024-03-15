@@ -20,9 +20,9 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class ClientsController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminUiDbContext;
 
-    public ClientsController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public ClientsController(IMediator mediator, AdminApiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
     }

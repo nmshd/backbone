@@ -18,11 +18,11 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class RelationshipsController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminUiDbContext;
     private readonly ApplicationOptions _options;
 
 
-    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options, AdminApiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
         _options = options.Value;
