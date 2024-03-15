@@ -1,0 +1,12 @@
+name: enmeshed
+publish_to: none
+
+repository: https://github.com/nmshd/backbone
+homepage: https://enmeshed.eu
+
+environment:
+  sdk: ^3.2.0
+
+dev_dependencies:
+  melos: ^5.0.0
+  very_good_analysis: ^5.1.0
