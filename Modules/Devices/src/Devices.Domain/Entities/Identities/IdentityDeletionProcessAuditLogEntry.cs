@@ -1,70 +1,10 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionProcessAuditLogEntry
 {
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by the owner. It was automatically approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), null, DeletionProcessStatus.Approved);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was started by support. It is now waiting for approval.", Hasher.HashUtf8(identityAddress.StringValue), null, null, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was approved.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Approved);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was rejected.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.Rejected);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelled(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled.", Hasher.HashUtf8(identityAddress.StringValue), Hasher.HashUtf8(deviceId.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The deletion process was cancelled by support.", Hasher.HashUtf8(identityAddress.StringValue), DeletionProcessStatus.Approved, DeletionProcessStatus.Cancelled);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The first approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The second approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The third approval reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.WaitingForApproval, DeletionProcessStatus.WaitingForApproval);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The first grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The second grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(processId, "The third grace period reminder notification has been sent.", Hasher.HashUtf8(identityAddress.StringValue), null, DeletionProcessStatus.Approved, DeletionProcessStatus.Approved);
-    }
-
     // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcessAuditLogEntry()
     {
@@ -75,7 +15,8 @@ public class IdentityDeletionProcessAuditLogEntry
         IdentityAddressHash = null!;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
+    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
+        DeletionProcessStatus newStatus)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
@@ -106,4 +47,147 @@ public class IdentityDeletionProcessAuditLogEntry
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
     public DeletionProcessStatus NewStatus { get; }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was started by the owner. It was automatically approved.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            Hasher.HashUtf8(deviceId.StringValue),
+            null,
+            DeletionProcessStatus.Approved
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was started by support. It is now waiting for approval.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            null,
+            DeletionProcessStatus.WaitingForApproval
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was approved.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            Hasher.HashUtf8(deviceId.StringValue),
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.Approved
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was rejected.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            Hasher.HashUtf8(deviceId.StringValue),
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.Rejected
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was cancelled by the owner of the identity.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            Hasher.HashUtf8(deviceId.StringValue),
+            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Cancelled
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledAutomatically(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.Cancelled
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The first approval reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.WaitingForApproval
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(processId,
+            "The second approval reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.WaitingForApproval
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The third approval reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.WaitingForApproval,
+            DeletionProcessStatus.WaitingForApproval
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The first grace period reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Approved
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The second grace period reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Approved
+        );
+    }
+
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The third grace period reminder notification has been sent.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Approved
+        );
+    }
 }
