@@ -69,7 +69,7 @@ export class DeletionProcessDetailsComponent {
     }
 
     public styleStatus(status: string) {
-        if (status == "WaitingForApproval") return "Waiting for Approval";
+        if (status === "WaitingForApproval") return "Waiting for Approval";
         return status;
     }
 }
