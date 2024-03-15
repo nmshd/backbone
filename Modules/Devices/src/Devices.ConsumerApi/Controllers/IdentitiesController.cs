@@ -9,8 +9,8 @@ using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionPro
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -97,15 +97,15 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessQuery { Id = id }, cancellationToken);
+        var response = await _mediator.Send(new GetDeletionProcessAsOwnerQuery { Id = id }, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet("Self/DeletionProcesses")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsOwnerResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDeletionProcesses(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessesQuery(), cancellationToken);
+        var response = await _mediator.Send(new GetDeletionProcessesAsOwnerQuery(), cancellationToken);
         return Ok(response);
     }
 

@@ -5,9 +5,9 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess;
+namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 
-public class Handler : IRequestHandler<GetDeletionProcessQuery, IdentityDeletionProcessDetailsDTO>
+public class Handler : IRequestHandler<GetDeletionProcessAsOwnerQuery, IdentityDeletionProcessDetailsDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetDeletionProcessQuery, IdentityDeletion
         _userContext = userContext;
     }
 
-    public async Task<IdentityDeletionProcessDetailsDTO> Handle(GetDeletionProcessQuery request, CancellationToken cancellationToken)
+    public async Task<IdentityDeletionProcessDetailsDTO> Handle(GetDeletionProcessAsOwnerQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(p => p.Id == request.Id) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
