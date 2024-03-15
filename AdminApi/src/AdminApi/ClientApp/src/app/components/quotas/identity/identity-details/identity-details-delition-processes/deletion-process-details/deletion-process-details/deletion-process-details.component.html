@@ -1,0 +1,109 @@
+<div class="card-header">
+    <h2 class="header-title">{{ header }}</h2>
+</div>
+<div [ngClass]="{ 'disabled-container': loading }" *ngIf="mockDataDeletionProcess">
+    <mat-card>
+        <mat-card-content class="form-card">
+            <div *ngIf="loading" class="loading">
+                <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+            </div>
+            <div class="form-details">
+                <mat-list>
+                    <div class="container">
+                        <div class="column">
+                            <mat-list-item>
+                                <span matListItemTitle>Address</span>
+                                <span matListItemLine>{{ mockDataDeletionProcess.id }}</span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                <span matListItemTitle>Identity Address</span>
+                                <span matListItemLine>{{ mockDataDeletionProcess.identityAddress }}</span>
+                            </mat-list-item>
+                        </div>
+                        <div class="column">
+                            <mat-list-item>
+                                <span matListItemTitle>Created At</span>
+                                <span matListItemLine>{{ mockDataDeletionProcess.createdAt | date }}</span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                <span matListItemTitle>Approved by Device</span>
+                                <span matListItemLine>{{ mockDataDeletionProcess.approvedByDevice }}</span>
+                            </mat-list-item>
+                        </div>
+                    </div>
+                </mat-list>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="details-expansion-panel" [expanded]="true" style="overflow-x: auto">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerDeletionProcessAuditLog }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerDeletionProcessAuditLogDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent *ngIf="mockDataDeletionProcessAuditLog">
+                <table mat-table class="responsive" [dataSource]="mockDataDeletionProcessAuditLog">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="ID:">
+                            {{ AuditLog.id }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell *matHeaderCellDef>Created At</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Created At:">
+                            {{ AuditLog.createdAt | date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="message">
+                        <th mat-header-cell *matHeaderCellDef>Message</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Message:">
+                            {{ AuditLog.message }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="identityAddressHash">
+                        <th mat-header-cell *matHeaderCellDef>Identity Address Hash</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Identity Address Hash:">
+                            {{ AuditLog.identityAddressHash }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="deviceIdHash">
+                        <th mat-header-cell *matHeaderCellDef>Device ID Hash</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Device ID Hash:">
+                            {{ AuditLog.deviceIdHash }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="oldStatus">
+                        <th mat-header-cell *matHeaderCellDef>Old Status</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Old Status:">
+                            {{ showStatusDescription(AuditLog.oldStatus) }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="newStatus">
+                        <th mat-header-cell *matHeaderCellDef>New Status</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="New Status:">
+                            {{ showStatusDescription(AuditLog.newStatus) }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="identityDeletionProcessId">
+                        <th mat-header-cell *matHeaderCellDef>Identity Deletion Process Id</th>
+                        <td mat-cell *matCellDef="let AuditLog" data-label="Identity Deletion Process Id:">
+                            {{ AuditLog.identityDeletionProcessId }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="deletionProcessesAuditLogTableDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: deletionProcessesAuditLogTableDisplayedColumns"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell no-data" [attr.colspan]="deletionProcessesAuditLogTableDisplayedColumns.length">No devices found.</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
