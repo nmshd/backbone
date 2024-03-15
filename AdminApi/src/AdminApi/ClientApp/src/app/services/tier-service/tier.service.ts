@@ -50,22 +50,22 @@ export class TierService {
                 id: "TIRFMDP9YJW0wk7E7PKn",
                 name: "Basic",
                 numberOfIdentities: 2,
-                canBeUsedAsDefaultTier: true,
-                isManualAssignmentAllowed: true
+                canBeUsedAsDefaultForUser: true,
+                canBeManuallyAssigned: true
             },
             {
                 id: "TIR00000000000000001",
                 name: "Queued for Deletion",
                 numberOfIdentities: 0,
-                canBeUsedAsDefaultTier: false,
-                isManualAssignmentAllowed: false
+                canBeUsedAsDefaultForUser: false,
+                canBeManuallyAssigned: false
             },
             {
                 id: "TIR00000002",
                 name: "Some Other tier",
                 numberOfIdentities: 0,
-                canBeUsedAsDefaultTier: true,
-                isManualAssignmentAllowed: true
+                canBeUsedAsDefaultForUser: true,
+                canBeManuallyAssigned: true
             }
         ];
     }
@@ -84,8 +84,8 @@ export interface TierOverview {
     id: string;
     name: string;
     numberOfIdentities: number;
-    canBeUsedAsDefaultTier: boolean;
-    isManualAssignmentAllowed: boolean; // Other possible names: canAssignManually, hasManualAssignmentOption, supportsManualAssignment
+    canBeUsedAsDefaultForUser: boolean;
+    canBeManuallyAssigned: boolean;
 }
 
 export interface TierDTO {

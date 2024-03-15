@@ -100,7 +100,7 @@ export class IdentityDetailsComponent {
     }
 
     public enablesManualAssignment(tier: TierOverview): boolean {
-        return tier.isManualAssignmentAllowed;
+        return tier.canBeManuallyAssigned;
     }
 
     public disabledTiers(tier: TierOverview): boolean {
