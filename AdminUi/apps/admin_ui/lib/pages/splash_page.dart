@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     final apiKey = sp.getString('api_key')!;
-    const baseUrl = kIsWeb ? '' : String.fromEnvironment('BASE_URL');
+    const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
 
     final isValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
     if (!isValid) {
