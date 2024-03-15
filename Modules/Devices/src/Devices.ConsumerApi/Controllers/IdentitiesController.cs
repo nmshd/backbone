@@ -113,7 +113,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CancelDeletionProcessCommand(id), cancellationToken);
+        var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand(id), cancellationToken);
         return Ok(response);
     }
 }

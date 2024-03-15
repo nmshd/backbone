@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
@@ -8,7 +8,7 @@ using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcess;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsOwner;
 public class HandlerTests
 {
     [Fact]
@@ -28,7 +28,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
-        var command = new CancelDeletionProcessCommand(deletionProcess.Id);
+        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -49,22 +49,20 @@ public class HandlerTests
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, CancellationToken.None, A<bool>._)).Returns<Identity?>(null);
-
-        var handler = CreateHandler(fakeIdentitiesRepository);
+        var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext? userContext = null)
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null)
     {
         userContext ??= A.Fake<IUserContext>();
+        identitiesRepository ??= A.Fake<IIdentitiesRepository>();
+
         return new Handler(identitiesRepository, userContext);
     }
 }

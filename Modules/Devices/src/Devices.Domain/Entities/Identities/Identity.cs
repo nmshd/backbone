@@ -206,14 +206,14 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
     {
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
-        deletionProcess.Cancel(Address, canceledByDeviceId);
+        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;

@@ -154,7 +154,7 @@ public class IdentityDeletionProcess
         RejectedByDevice = rejectedByDevice;
     }
 
-    public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
+    public void CancelAsOwner(IdentityAddress address, DeviceId cancelledByDevice)
     {
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
@@ -166,16 +166,6 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }
 
-    public void Cancel(IdentityAddress address)
-    {
-        EnsureStatus(DeletionProcessStatus.WaitingForApproval);
-
-        Status = DeletionProcessStatus.Cancelled;
-        CancelledAt = SystemTime.UtcNow;
-
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
-    }
-
     public void CancelAsSupport(IdentityAddress address)
     {
         if (Status != DeletionProcessStatus.Approved)
@@ -185,5 +175,15 @@ public class IdentityDeletionProcess
         CancelledAt = SystemTime.UtcNow;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
+    }
+
+    public void Cancel(IdentityAddress address)
+    {
+        EnsureStatus(DeletionProcessStatus.WaitingForApproval);
+
+        Status = DeletionProcessStatus.Cancelled;
+        CancelledAt = SystemTime.UtcNow;
+
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
     }
 }
