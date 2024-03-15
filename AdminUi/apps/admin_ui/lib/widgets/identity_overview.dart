@@ -31,14 +31,14 @@ class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
     final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities();
 
     identities = response.data;
-    dataSource.setData(identities, 0, true);
+    dataSource.setData(identities, 0, columnAscending: true);
   }
 
   void _sort(int columnIndex, bool ascending) {
     setState(() {
       _columnIndex = columnIndex;
       _columnAscending = ascending;
-      dataSource.setData(identities, _columnIndex, _columnAscending);
+      dataSource.setData(identities, _columnIndex, columnAscending: _columnAscending);
     });
   }
 

@@ -6,7 +6,11 @@ class IdentityDataTableSource extends DataTableSource {
   int sortColumnIndex = 0;
   bool sortAscending = true;
 
-  void setData(List<IdentityOverview> identities, int columnIndex, bool columnAscending) {
+  void setData(
+    List<IdentityOverview> identities,
+    int columnIndex, {
+    required bool columnAscending,
+  }) {
     data = identities;
     sortColumnIndex = columnIndex;
     sortAscending = columnAscending;
@@ -77,11 +81,13 @@ class IdentityDataTableSource extends DataTableSource {
             ),
           ),
         ),
-        DataCell(Center(
-          child: Text(
-            identity.numberOfDevices.toString(),
+        DataCell(
+          Center(
+            child: Text(
+              identity.numberOfDevices.toString(),
+            ),
           ),
-        )),
+        ),
         DataCell(
           Center(
             child: Text(
