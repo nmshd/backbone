@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { IdentityDetailsDeletionProcessesComponent } from "./identity-details-deletion-processes.component";
 
-describe("IdentityDetailsDeletionProcessesComponent", () => {
+describe("IdentityDetailsDeletionProcessesComponent", function () {
     let component: IdentityDetailsDeletionProcessesComponent;
     let fixture: ComponentFixture<IdentityDetailsDeletionProcessesComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
         await TestBed.configureTestingModule({
             imports: [IdentityDetailsDeletionProcessesComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("IdentityDetailsDeletionProcessesComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function () {
+        await expect(component).toBeTruthy();
     });
 });
