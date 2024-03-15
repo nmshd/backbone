@@ -59,8 +59,8 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e => 
-                    e.Address == identity.Address && 
+            A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e =>
+                    e.Address == identity.Address &&
                     e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
     }
