@@ -278,9 +278,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.Postgres", "AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj", "{D3DCCA97-80ED-4362-A344-EC0305F356A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{5EB516C8-510A-437E-8E68-88431717AFC1}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi.Sdk", "AdminApi.Sdk\AdminApi.Sdk.csproj", "{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk\ConsumerApi.Sdk.csproj", "{76956954-B37E-4055-B5F5-CF2FFD473598}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi.Sdk", "AdminApi.Sdk\AdminApi.Sdk.csproj", "{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -662,8 +661,6 @@ Global
 		{7B42684C-9846-4769-814B-5F96C8A7CE82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76956954-B37E-4055-B5F5-CF2FFD473598}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76956954-B37E-4055-B5F5-CF2FFD473598}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -676,6 +673,8 @@ Global
 		{5EB516C8-510A-437E-8E68-88431717AFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EB516C8-510A-437E-8E68-88431717AFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EB516C8-510A-437E-8E68-88431717AFC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
