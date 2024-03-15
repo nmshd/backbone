@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
@@ -63,7 +64,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPost("Self/DeletionProcesses")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartDeletionProcessAsOwnerResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
     {
@@ -72,7 +73,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPut("Self/DeletionProcesses/{id}/Approve")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ApproveDeletionProcessResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ApproveDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
@@ -82,7 +83,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPut("Self/DeletionProcesses/{id}/Reject")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectDeletionProcessResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RejectDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
@@ -92,7 +93,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("Self/DeletionProcesses/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IdentityDeletionProcessOverviewDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
@@ -101,7 +102,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("Self/DeletionProcesses")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDeletionProcesses(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDeletionProcessesQuery(), cancellationToken);
@@ -109,7 +110,8 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPut("Self/DeletionProcesses/{id}/Cancel")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionProcessResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
