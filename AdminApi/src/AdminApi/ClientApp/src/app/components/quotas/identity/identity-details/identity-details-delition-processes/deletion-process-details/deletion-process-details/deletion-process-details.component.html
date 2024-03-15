@@ -68,7 +68,7 @@
                     <ng-container matColumnDef="oldStatus">
                         <th mat-header-cell *matHeaderCellDef>Old Status</th>
                         <td mat-cell *matCellDef="let AuditLog" data-label="Old Status:">
-                            {{ styleStatus(AuditLog.newStatus) }}
+                            {{ styleStatus(AuditLog.oldStatus) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="newStatus">
