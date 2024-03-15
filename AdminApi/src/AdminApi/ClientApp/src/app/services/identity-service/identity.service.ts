@@ -193,10 +193,6 @@ export class IdentityService {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
 
-    public getStatuses(): string[] {
-        return ["Waiting for Approval", "Approved", "Deleting", "Rejected", "Cancelled"];
-    }
-
     public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
         return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/${deletionProcessId}`);
     }
@@ -261,7 +257,7 @@ export interface DeletionProcessAuditLog {
 
 export interface DeletionProcess {
     id: string;
-    status: number;
+    status: string;
     createdAt: string;
     auditLog: DeletionProcessAuditLog[];
     approvalReminder1SentAt: Date;

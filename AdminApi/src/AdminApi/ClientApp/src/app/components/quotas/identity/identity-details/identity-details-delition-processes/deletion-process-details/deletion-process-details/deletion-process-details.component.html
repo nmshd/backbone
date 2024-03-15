@@ -12,12 +12,12 @@
                     <div class="container">
                         <div class="column">
                             <mat-list-item>
-                                <span matListItemTitle>Address</span>
+                                <span matListItemTitle>Deletion Process ID</span>
                                 <span matListItemLine>{{ identityDeletionProcess.id }}</span>
                             </mat-list-item>
                             <mat-list-item>
                                 <span matListItemTitle>Identity Address</span>
-                                <span matListItemLine>{{ identityDeletionProcess.identityAddress }}</span>
+                                <span matListItemLine>{{ identityAddress }}</span>
                             </mat-list-item>
                         </div>
                         <div class="column">
@@ -26,8 +26,8 @@
                                 <span matListItemLine>{{ identityDeletionProcess.createdAt | date }}</span>
                             </mat-list-item>
                             <mat-list-item>
-                                <span matListItemTitle>Approved by Device</span>
-                                <span matListItemLine>{{ identityDeletionProcess.approvedByDevice }}</span>
+                                <span matListItemTitle>Status</span>
+                                <span matListItemLine>{{ styleStatus(identityDeletionProcess.status) }}</span>
                             </mat-list-item>
                         </div>
                     </div>
@@ -68,13 +68,13 @@
                     <ng-container matColumnDef="oldStatus">
                         <th mat-header-cell *matHeaderCellDef>Old Status</th>
                         <td mat-cell *matCellDef="let AuditLog" data-label="Old Status:">
-                            {{ showStatusDescription(AuditLog.oldStatus) }}
+                            {{ styleStatus(AuditLog.newStatus) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="newStatus">
                         <th mat-header-cell *matHeaderCellDef>New Status</th>
                         <td mat-cell *matCellDef="let AuditLog" data-label="New Status:">
-                            {{ showStatusDescription(AuditLog.newStatus) }}
+                            {{ styleStatus(AuditLog.newStatus) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="identityDeletionProcessId">

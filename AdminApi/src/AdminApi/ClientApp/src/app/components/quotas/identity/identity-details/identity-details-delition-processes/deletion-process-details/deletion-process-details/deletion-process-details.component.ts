@@ -20,9 +20,6 @@ export class DeletionProcessDetailsComponent {
     public loading: boolean;
     public deletionProcessesAuditLogTableDisplayedColumns: string[];
 
-    public statuses: string[];
-    public status: string;
-
     public identityDeletionProcess?: DeletionProcess;
     public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[];
 
@@ -39,8 +36,6 @@ export class DeletionProcessDetailsComponent {
 
         this.identityDeletionProcessID = "";
         this.identityAddress = "";
-        this.statuses = identityService.getStatuses();
-        this.status = "";
         this.identityDeletionProcessAuditLogs = [];
     }
 
@@ -73,12 +68,8 @@ export class DeletionProcessDetailsComponent {
         });
     }
 
-    public showStatusDescription(status: number): string {
-        for (let i = 0; i < this.statuses.length; i++) {
-            if (i === status) {
-                return this.statuses[i];
-            }
-        }
-        return "";
+    public styleStatus(status: string) {
+        if (status == "WaitingForApproval") return "Waiting for Approval";
+        return status;
     }
 }
