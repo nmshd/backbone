@@ -29,6 +29,9 @@ export class IdentityDetailsComponent {
     public headerRelationships: string;
     public headerRelationshipsDescription: string;
 
+    public headerDeletionProcesses: string;
+    public headerDeletionProcessesDescription: string;
+
     public selectionQuotas: SelectionModel<IdentityQuota>;
     public quotasTableDisplayedColumns: string[];
     public quotasTableData: (Quota | MetricGroup)[];
@@ -62,6 +65,8 @@ export class IdentityDetailsComponent {
         this.headerDevicesDescription = "View devices for this Identity.";
         this.headerRelationships = "Relationships";
         this.headerRelationshipsDescription = "View relationships of this Identity.";
+        this.headerDeletionProcesses = "Deletion Processes";
+        this.headerDeletionProcessesDescription = "View deletion processes of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
         this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
