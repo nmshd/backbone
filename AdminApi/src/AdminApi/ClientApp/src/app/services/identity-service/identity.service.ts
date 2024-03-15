@@ -192,6 +192,14 @@ export class IdentityService {
     public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
+
+    public getStatuses(): string[] {
+        return ["Waiting for Approval", "Approved", "Deleting", "Rejected", "Cancelled"];
+    }
+
+    public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/${deletionProcessId}`);
+    }
 }
 
 export interface Identity {
@@ -241,4 +249,29 @@ export interface IdentityOverviewFilter {
 
 export interface UpdateTierRequest {
     tierId: string;
+}
+
+export interface DeletionProcessAuditLog {
+    id: string;
+    createdAt: string;
+    message: string;
+    oldStatus: number;
+    newStatus: number;
+}
+
+export interface DeletionProcess {
+    id: string;
+    status: number;
+    createdAt: string;
+    auditLog: DeletionProcessAuditLog[];
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
+    identityAddress: string;
 }

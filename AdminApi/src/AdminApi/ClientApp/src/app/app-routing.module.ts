@@ -10,6 +10,7 @@ import { IdentityDetailsComponent } from "./components/quotas/identity/identity-
 import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
 import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
 import { LoginComponent } from "./components/shared/login/login.component";
+import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/identity-details-delition-processes/deletion-process-details/deletion-process-details/deletion-process-details.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
@@ -23,6 +24,7 @@ const routes: Routes = [
     { path: "clients", component: ClientListComponent, data: { breadcrumb: "Clients" }, canActivate: [AuthGuard] },
     { path: "clients/create", component: ClientEditComponent, data: { breadcrumb: "Create Client" }, canActivate: [AuthGuard] },
     { path: "clients/:id", component: ClientEditComponent, canActivate: [AuthGuard] },
+    { path: "deletion-process-details/:address/:id", component: DeletionProcessDetailsComponent, canActivate: [AuthGuard] },
     { path: "**", component: PageNotFoundComponent }
 ];
 

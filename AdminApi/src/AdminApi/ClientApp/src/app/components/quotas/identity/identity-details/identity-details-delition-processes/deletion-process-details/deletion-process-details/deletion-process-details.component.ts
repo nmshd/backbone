@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { DeletionProcess, DeletionProcessAuditLog, DeletionProcessService } from "src/app/services/deletion-process-service/deletion-process.service";
+import { DeletionProcess, DeletionProcessAuditLog, IdentityService } from "src/app/services/identity-service/identity.service";
+import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
     selector: "app-deletion-process-details",
@@ -8,7 +10,8 @@ import { DeletionProcess, DeletionProcessAuditLog, DeletionProcessService } from
     styleUrl: "./deletion-process-details.component.css"
 })
 export class DeletionProcessDetailsComponent {
-    public id: string;
+    public identityDeletionProcessID: string;
+    public identityAddress: string;
 
     public header: string;
     public headerDeletionProcessAuditLog: string;
@@ -17,47 +20,57 @@ export class DeletionProcessDetailsComponent {
     public loading: boolean;
     public deletionProcessesAuditLogTableDisplayedColumns: string[];
 
-    public readonly mockDataDeletionProcesses: DeletionProcess[];
-    public readonly mockDataDeletionProcessAuditLogs: DeletionProcessAuditLog[];
-
-    public mockDataDeletionProcess?: DeletionProcess;
-    public mockDataDeletionProcessAuditLog?: DeletionProcessAuditLog[];
-
     public statuses: string[];
     public status: string;
 
+    public identityDeletionProcess?: DeletionProcess;
+    public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[];
+
     public constructor(
-        private readonly deletionProcess: DeletionProcessService,
+        private readonly identityService: IdentityService,
+        private readonly snackBar: MatSnackBar,
         private readonly activatedRoute: ActivatedRoute
     ) {
         this.header = "Deletion Process Details";
         this.headerDeletionProcessAuditLog = "Deletion Process Audit Logs";
         this.headerDeletionProcessAuditLogDescription = "View deletion process audit logs for Identity.";
         this.loading = false;
-        this.deletionProcessesAuditLogTableDisplayedColumns = ["id", "createdAt", "message", "identityAddressHash", "deviceIdHash", "oldStatus", "newStatus"];
+        this.deletionProcessesAuditLogTableDisplayedColumns = ["id", "createdAt", "message", "oldStatus", "newStatus"];
 
-        this.id = "";
-
-        this.mockDataDeletionProcesses = deletionProcess.getDeletionProcessMockData();
-        this.mockDataDeletionProcessAuditLogs = deletionProcess.getDeletionProcessAuditLogMockData();
-        this.statuses = deletionProcess.getStatuses();
+        this.identityDeletionProcessID = "";
+        this.identityAddress = "";
+        this.statuses = identityService.getStatuses();
         this.status = "";
+        this.identityDeletionProcessAuditLogs = [];
     }
 
     public ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
-            this.id = params["id"];
+            this.identityAddress = params["address"];
+            this.identityDeletionProcessID = params["id"];
         });
-        this.loadDeletionProcess(this.id);
-        this.loadDeletionProcessAuditLogs(this.id);
+        this.loadDeletionProcess();
     }
 
-    private loadDeletionProcess(id: string): void {
-        this.mockDataDeletionProcess = this.mockDataDeletionProcesses.find((data: DeletionProcess) => data.id === id);
-    }
-
-    private loadDeletionProcessAuditLogs(id: string): void {
-        this.mockDataDeletionProcessAuditLog = this.mockDataDeletionProcessAuditLogs.filter((data: DeletionProcessAuditLog) => data.identityDeletionProcessId === id);
+    private loadDeletionProcess(): void {
+        this.loading = true;
+        this.identityService.getDeletionProcessOfIdentityById(this.identityAddress, this.identityDeletionProcessID).subscribe({
+            next: (data: HttpResponseEnvelope<DeletionProcess>) => {
+                this.identityDeletionProcess = data.result;
+                this.identityDeletionProcessAuditLogs = this.identityDeletionProcess.auditLog;
+            },
+            complete: () => {
+                this.loading = false;
+            },
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
     }
 
     public showStatusDescription(status: number): string {

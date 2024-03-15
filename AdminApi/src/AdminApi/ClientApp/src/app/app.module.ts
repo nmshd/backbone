@@ -46,6 +46,7 @@ import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-d
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
+import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/identity-details-delition-processes/deletion-process-details/deletion-process-details/deletion-process-details.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
 import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
@@ -82,7 +83,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
         IdentityDetailsRelationshipsComponent,
-        BreadcrumbComponent
+        BreadcrumbComponent,
+        DeletionProcessDetailsComponent
     ],
     imports: [
         FormsModule,
