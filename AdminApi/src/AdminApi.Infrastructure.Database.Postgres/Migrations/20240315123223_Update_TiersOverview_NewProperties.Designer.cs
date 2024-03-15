@@ -3,42 +3,45 @@ using System;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AdminApiDbContext))]
-    partial class AdminUiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240315123223_Update_TiersOverview_NewProperties")]
+    partial class Update_TiersOverview_NewProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
                 {
                     b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("MaxIdentities")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("NumberOfIdentities")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("ClientId");
 
@@ -50,25 +53,25 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedWithClient")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("DatawalletVersion")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<byte>("IdentityVersion")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("smallint");
 
                     b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("NumberOfDevices")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Address");
 
@@ -80,32 +83,32 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.RelationshipOverview", b =>
                 {
                     b.Property<DateTime?>("AnsweredAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AnsweredByDevice")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RelationshipTemplateId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.ToTable((string)null);
 
@@ -115,20 +118,20 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.TierOverview", b =>
                 {
                     b.Property<bool>("CanBeManuallyAssigned")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("CanBeUsedAsDefaultForUser")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("NumberOfIdentities")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.ToTable((string)null);
 
@@ -140,16 +143,16 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
                         {
                             b1.Property<string>("ClientOverviewClientId")
-                                .HasColumnType("nvarchar(450)");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Id")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("text")
                                 .HasColumnName("DefaultTierId");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("text")
                                 .HasColumnName("DefaultTierName");
 
                             b1.HasKey("ClientOverviewClientId");
@@ -171,16 +174,16 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
                         {
                             b1.Property<string>("IdentityOverviewAddress")
-                                .HasColumnType("nvarchar(450)");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Id")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("text")
                                 .HasColumnName("TierId");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("text")
                                 .HasColumnName("TierName");
 
                             b1.HasKey("IdentityOverviewAddress");
