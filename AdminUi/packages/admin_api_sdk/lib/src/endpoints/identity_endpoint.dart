@@ -35,7 +35,7 @@ class IdentitiesEndpoint extends Endpoint {
     final queryParameters = <String, String>{r'$expand': 'Tier'};
 
     if (filter != null) {
-      queryParameters[r'$filter'] = ODataFilterBuilder().buildOdataFilter(filter);
+      queryParameters[r'$filter'] = IdentityOverviewFilterBuilder(filter).build();
     }
 
     return getOData(
