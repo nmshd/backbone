@@ -7,17 +7,20 @@ class RelationshipsEndpoint extends Endpoint {
   RelationshipsEndpoint(super._dio);
 
   Future<ApiResponse<List<Relationship>>> getRelationshipsByParticipantAddress(
-    String participant,
-    int pageNumber,
-    int pageSize,
-  ) =>
-      get(
-        '/api/v1/Relationships',
-        query: {
-          'participant': participant,
-          'PageNumber': pageNumber + 1,
-          'PageSize': pageSize,
-        },
-        transformer: (e) => (e as List).map(Relationship.fromJson).toList(),
-      );
+    String participant, {
+    int? pageNumber,
+    int? pageSize,
+  }) {
+    assert(pageNumber == null || pageNumber > 0, 'pageNumber must be greater than 0 when defined');
+
+    return get(
+      '/api/v1/Relationships',
+      query: {
+        'participant': participant,
+        'PageNumber': pageNumber,
+        'PageSize': pageSize,
+      },
+      transformer: (e) => (e as List).map(Relationship.fromJson).toList(),
+    );
+  }
 }
