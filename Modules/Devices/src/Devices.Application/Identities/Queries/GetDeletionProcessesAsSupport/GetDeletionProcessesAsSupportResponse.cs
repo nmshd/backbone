@@ -4,10 +4,10 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 
-public class GetDeletionProcessesAsSupportResponse : CollectionResponseBase<IdentityDeletionProcessDTO>
+public class GetDeletionProcessesAsSupportResponse : CollectionResponseBase<IdentityDeletionProcessOverviewDTO>
 {
     public GetDeletionProcessesAsSupportResponse(IEnumerable<IdentityDeletionProcess> processes)
-        : base(processes.Select(p => new IdentityDeletionProcessDTO(p)))
+        : base(processes.Select(p => new IdentityDeletionProcessOverviewDTO(p)))
     {
     }
 }

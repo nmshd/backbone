@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess;
 
-public class GetDeletionProcessQuery : IRequest<IdentityDeletionProcessDTO>
+public class GetDeletionProcessQuery : IRequest<IdentityDeletionProcessDetailsDTO>
 {
     public required string Id { get; set; }
 }
