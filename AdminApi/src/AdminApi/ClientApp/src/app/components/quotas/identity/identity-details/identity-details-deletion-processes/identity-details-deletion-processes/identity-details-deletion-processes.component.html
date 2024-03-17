@@ -1,0 +1,115 @@
+<div [ngClass]="{ 'disabled-container': loading }" class="container">
+    <div *ngIf="loading" class="loading">
+        <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+    </div>
+    <div style="overflow-x: auto">
+        <table mat-table class="responsive" [dataSource]="identityDeletionProcesses!" *ngIf="!loading">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="ID:">
+                    {{ DeletionProcess.id }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Status:">
+                    {{ styleDeletionProcessStatus(DeletionProcess.status) }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Created At</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Created At:">
+                    {{ DeletionProcess.createdAt | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="approvalReminders">
+                <th mat-header-cell *matHeaderCellDef>Approval Reminders</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Approval Reminders:">
+                    <div *ngIf="DeletionProcess.approvalReminder1SentAt || DeletionProcess.approvalReminder2SentAt || DeletionProcess.approvalReminder3SentAt">
+                        <div *ngIf="DeletionProcess.approvalReminder1SentAt">
+                            <span>Reminder 1: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.approvalReminder1SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.approvalReminder1SentAt | date
+                            }}</span
+                            ><br />
+                        </div>
+                        <div *ngIf="DeletionProcess.approvalReminder2SentAt">
+                            <span>Reminder 2: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.approvalReminder2SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.approvalReminder2SentAt | date
+                            }}</span
+                            ><br />
+                        </div>
+                        <div *ngIf="DeletionProcess.approvalReminder3SentAt">
+                            <span>Reminder 3: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.approvalReminder3SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.approvalReminder3SentAt | date
+                            }}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="!DeletionProcess.approvalReminder1SentAt && !DeletionProcess.approvalReminder2SentAt && !DeletionProcess.approvalReminder3SentAt">No data</div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="approvedAt">
+                <th mat-header-cell *matHeaderCellDef>Approved At</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Approved At:">
+                    {{ DeletionProcess.approvedAt | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="approvedByDevice">
+                <th mat-header-cell *matHeaderCellDef>Approved by Device</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Approved by Device:">
+                    {{ DeletionProcess.approvedByDevice }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="gracePeriodEndsAt">
+                <th mat-header-cell *matHeaderCellDef>Grace Period Ends At</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Grace Period Ends At:">
+                    {{ DeletionProcess.gracePeriodEndsAt | date }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="gracePeriodReminders">
+                <th mat-header-cell *matHeaderCellDef>Grace Period Reminders</th>
+                <td mat-cell *matCellDef="let DeletionProcess" data-label="Grace Period Reminders:">
+                    <div *ngIf="DeletionProcess.gracePeriodReminder1SentAt || DeletionProcess.gracePeriodReminder2SentAt || DeletionProcess.gracePeriodReminder3SentAt">
+                        <div *ngIf="DeletionProcess.gracePeriodReminder1SentAt">
+                            <span>Reminder 1: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.gracePeriodReminder1SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.gracePeriodReminder1SentAt | date
+                            }}</span
+                            ><br />
+                        </div>
+                        <div *ngIf="DeletionProcess.gracePeriodReminder2SentAt">
+                            <span>Reminder 2: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.gracePeriodReminder2SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.gracePeriodReminder2SentAt | date
+                            }}</span
+                            ><br />
+                        </div>
+                        <div *ngIf="DeletionProcess.gracePeriodReminder3SentAt">
+                            <span>Reminder 3: </span>
+                            <span [style.color]="isDatePassed(DeletionProcess.gracePeriodReminder3SentAt) && !isRowDisabled(DeletionProcess) ? 'green' : 'black'">{{
+                                DeletionProcess.gracePeriodReminder3SentAt | date
+                            }}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="!DeletionProcess.gracePeriodReminder1SentAt && !DeletionProcess.gracePeriodReminder2SentAt && !DeletionProcess.gracePeriodReminder3SentAt">No data</div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="deletionProcessesTableDisplayedColumns"></tr>
+            <tr
+                mat-row
+                *matRowDef="let row; columns: deletionProcessesTableDisplayedColumns"
+                (click)="goToDeletionProcessDetails(row.id)"
+                style="cursor: pointer; transition: background-color 0.3s"
+                onmouseover="this.style.backgroundColor='#f0f0f0';"
+                onmouseout="this.style.backgroundColor='transparent';"
+                [ngClass]="{ 'disabled-container': isRowDisabled(row) }"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell no-data" [attr.colspan]="deletionProcessesTableDisplayedColumns.length">No relationships found.</td>
+            </tr>
+        </table>
+    </div>
+</div>
