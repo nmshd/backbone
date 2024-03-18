@@ -21,7 +21,7 @@ export class DeletionProcessDetailsComponent {
     public deletionProcessesAuditLogTableDisplayedColumns: string[];
 
     public identityDeletionProcess?: DeletionProcess;
-    public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[];
+    public identityDeletionProcessAuditLogs?: DeletionProcessAuditLog[];
 
     public constructor(
         private readonly identityService: IdentityService,
@@ -36,7 +36,6 @@ export class DeletionProcessDetailsComponent {
 
         this.identityDeletionProcessID = "";
         this.identityAddress = "";
-        this.identityDeletionProcessAuditLogs = [];
     }
 
     public ngOnInit(): void {
@@ -53,6 +52,7 @@ export class DeletionProcessDetailsComponent {
             next: (data: HttpResponseEnvelope<DeletionProcess>) => {
                 this.identityDeletionProcess = data.result;
                 this.identityDeletionProcessAuditLogs = this.identityDeletionProcess.auditLog;
+                console.log(this.identityDeletionProcessAuditLogs);
             },
             complete: () => {
                 this.loading = false;

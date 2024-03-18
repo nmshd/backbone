@@ -4,7 +4,7 @@ import { ClientEditComponent } from "./components/client/client-edit/client-edit
 import { ClientListComponent } from "./components/client/client-list/client-list.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
-import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/identity-details-delition-processes/deletion-process-details/deletion-process-details/deletion-process-details.component";
+import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-process-details/deletion-process-details.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
