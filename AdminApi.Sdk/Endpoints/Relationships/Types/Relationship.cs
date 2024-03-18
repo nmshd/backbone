@@ -6,7 +6,7 @@ public class Relationship
     public required string RequestedBy { get; set; }
     public required string TemplateId { get; set; }
     public required string Status { get; set; }
-    public DateTime CreationDate { get; set; }
+    public required DateTime CreationDate { get; set; }
     public DateTime? AnsweredAt { get; set; }
     public required string CreatedByDevice { get; set; }
     public string? AnsweredByDevice { get; set; }
