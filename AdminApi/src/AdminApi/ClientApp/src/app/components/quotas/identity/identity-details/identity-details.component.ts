@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, forkJoin } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
@@ -28,6 +28,9 @@ export class IdentityDetailsComponent {
 
     public headerRelationships: string;
     public headerRelationshipsDescription: string;
+
+    public headerDeletionProcesses: string;
+    public headerDeletionProcessesDescription: string;
 
     public selectionQuotas: SelectionModel<IdentityQuota>;
     public quotasTableDisplayedColumns: string[];
@@ -59,9 +62,11 @@ export class IdentityDetailsComponent {
         this.headerQuotas = "Quotas";
         this.headerQuotasDescription = "View and assign quotas for this Identity.";
         this.headerDevices = "Devices";
-        this.headerDevicesDescription = "View devices for this Identity.";
+        this.headerDevicesDescription = "View devices of this Identity.";
         this.headerRelationships = "Relationships";
         this.headerRelationshipsDescription = "View relationships of this Identity.";
+        this.headerDeletionProcesses = "Deletion Processes";
+        this.headerDeletionProcessesDescription = "View deletion processes of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
         this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
