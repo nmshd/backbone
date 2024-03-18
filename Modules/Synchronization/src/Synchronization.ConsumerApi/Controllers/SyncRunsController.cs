@@ -50,31 +50,6 @@ public class SyncRunsController : ApiControllerBase
         return Ok(response);
     }
 
-    [HttpPut("{id}/Finalize")]
-    [Obsolete("Use '/{id}/FinalizeExternalEventSync' instead.")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
-        StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Finalize([FromRoute] SyncRunId id,
-        [FromBody] OldFinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
-    {
-        var modificationsWithVersion = request.DatawalletModifications.Select(m => new PushDatawalletModificationItem
-        {
-            DatawalletVersion = 0,
-            Type = m.Type,
-            Collection = m.Collection,
-            EncryptedPayload = m.EncryptedPayload,
-            ObjectIdentifier = m.ObjectIdentifier,
-            PayloadCategory = m.PayloadCategory
-        }).ToList();
-
-        var response =
-            await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id, request.ExternalEventResults,
-                modificationsWithVersion), cancellationToken);
-
-        return Ok(response);
-    }
-
     [HttpPut("{id}/FinalizeExternalEventSync")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
         StatusCodes.Status200OK)]
@@ -156,20 +131,4 @@ public class FinalizeExternalEventSyncRequest
 {
     public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
     public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
-}
-
-public class OldFinalizeExternalEventSyncRequest
-{
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
-    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = [];
-
-    public class FinalizeExternalEventSyncRequestDatawalletModification
-    {
-        public required string ObjectIdentifier { get; set; }
-        public string? PayloadCategory { get; set; }
-        public required string Collection { get; set; }
-        public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-        public byte[]? EncryptedPayload { get; set; }
-        public required ushort DatawalletVersion { get; set; }
-    }
 }
