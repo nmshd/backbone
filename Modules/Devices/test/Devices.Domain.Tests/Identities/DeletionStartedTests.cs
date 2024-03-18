@@ -42,4 +42,17 @@ public class DeletionStartedTests
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.IdentityCannotBeDeleted().Code);
     }
+
+    [Fact]
+    public void Fails_to_start_if_no_deletion_process_exists()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+
+        // Act
+        var acting = identity.DeletionStarted;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
+    }
 }
