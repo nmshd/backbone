@@ -2,15 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Consumer API (Docker)",
-            "type": "docker",
-            "request": "attach",
-            "platform": "netCore",
-            "sourceFileMap": {
-                "/app": "${workspaceFolder}"
-            },
-            "containerName": "consumerApi",
-            "processName": "ConsumerApi"
+            "name": "Launch current dart file",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": ["--dart-define-from-file=${workspaceFolder}/AdminUi/config.local.json"],
+            "templateFor": ""
         }
     ]
 }
