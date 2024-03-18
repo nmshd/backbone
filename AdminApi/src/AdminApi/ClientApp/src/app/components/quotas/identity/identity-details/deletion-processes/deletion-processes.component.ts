@@ -5,11 +5,11 @@ import { DeletionProcessOverview, IdentityService } from "src/app/services/ident
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
-    selector: "app-identity-details-deletion-processes",
-    templateUrl: "./identity-details-deletion-processes.component.html",
-    styleUrl: "./identity-details-deletion-processes.component.css"
+    selector: "app-deletion-processes",
+    templateUrl: "./deletion-processes.component.html",
+    styleUrl: "./deletion-processes.component.css"
 })
-export class IdentityDetailsDeletionProcessesComponent {
+export class DeletionProcessesComponent {
     @Input() public identityAddress?: string;
 
     public loading: boolean;
@@ -49,7 +49,7 @@ export class IdentityDetailsDeletionProcessesComponent {
     }
 
     public async goToDeletionProcessDetails(id: string): Promise<void> {
-        await this.router.navigate(["/deletion-process-details", id]);
+        await this.router.navigate(["/deletion-process-details", this.identityAddress, id]);
     }
 
     public isDatePassed(date: Date): boolean {

@@ -43,7 +43,7 @@ import { CreateClientDialogComponent } from "./components/client/create-client-d
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
-import { IdentityDetailsDeletionProcessesComponent } from "./components/quotas/identity/identity-details/identity-details-deletion-processes/identity-details-deletion-processes/identity-details-deletion-processes.component";
+import { DeletionProcessesComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-processes.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
@@ -84,7 +84,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         IdentitiesOverviewComponent,
         IdentityDetailsRelationshipsComponent,
         BreadcrumbComponent,
-        IdentityDetailsDeletionProcessesComponent
+        DeletionProcessesComponent
     ],
     imports: [
         FormsModule,
