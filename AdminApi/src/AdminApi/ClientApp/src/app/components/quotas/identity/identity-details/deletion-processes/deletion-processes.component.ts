@@ -35,7 +35,6 @@ export class DeletionProcessesComponent {
         this.identityService.getDeletionProcessesForIdentity(this.identityAddress!).subscribe({
             next: (data: HttpResponseEnvelope<DeletionProcessOverview[]>) => {
                 this.identityDeletionProcesses = data.result;
-                console.log(data.result);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
