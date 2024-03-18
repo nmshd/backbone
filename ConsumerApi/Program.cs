@@ -11,7 +11,6 @@ using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
-using Backbone.Infrastructure.Logging;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -33,12 +32,14 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
+using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -111,11 +112,7 @@ static WebApplication CreateApp(string[] args)
 
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
-        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>()
-        .SeedDbContext<RelationshipsDbContext, RelationshipsDbContextSeeder>()
-        .SeedDbContext<TokensDbContext, TokensDbContextSeeder>()
-        .SeedDbContext<MessagesDbContext, MessagesDbContextSeeder>()
-        .SeedDbContext<SynchronizationDbContext, SynchronizationDbContextSeeder>();
+        .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
     foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
     {
@@ -131,10 +128,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddTransient<DevicesDbContextSeeder>();
     services.AddTransient<QuotasDbContextSeeder>();
-    services.AddTransient<RelationshipsDbContextSeeder>();
-    services.AddTransient<TokensDbContextSeeder>();
-    services.AddTransient<MessagesDbContextSeeder>();
-    services.AddTransient<SynchronizationDbContextSeeder>();
 
     services
         .AddModule<ChallengesModule>(configuration)
@@ -210,7 +203,7 @@ static void Configure(WebApplication app)
         app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
-        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 
