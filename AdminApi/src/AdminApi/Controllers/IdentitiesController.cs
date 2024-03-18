@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
@@ -72,7 +73,7 @@ public class IdentitiesController : ApiControllerBase
     [HttpPut("{identityAddress}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
         await _mediator.Send(command, cancellationToken);
@@ -112,6 +113,15 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
         return Created("", response);
     }
+
+    [HttpGet("{identityAddress}/DeletionProcesses")]
+    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
+        return Ok(response);
+    }
 }
 
 public class CreateQuotaForIdentityRequest
@@ -121,7 +131,7 @@ public class CreateQuotaForIdentityRequest
     public required QuotaPeriod Period { get; set; }
 }
 
-public class UpdateIdentityTierRequest
+public class UpdateIdentityRequest
 {
     public required string TierId { get; set; }
 }
