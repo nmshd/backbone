@@ -43,16 +43,17 @@ import { CreateClientDialogComponent } from "./components/client/create-client-d
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { DeletionProcessesComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-processes.component";
+import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/identity-details-delition-processes/deletion-process-details/deletion-process-details/deletion-process-details.component";
+import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
-import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
-import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/identity-details-delition-processes/deletion-process-details/deletion-process-details/deletion-process-details.component";
+import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
-import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
+import { BreadcrumbComponent } from "./components/shared/breadcrumb/breadcrumb.component";
 import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
 import { IdentitiesOverviewComponent } from "./components/shared/identities-overview/identities-overview.component";
-import { BreadcrumbComponent } from "./components/shared/breadcrumb/breadcrumb.component";
 import { LoginComponent } from "./components/shared/login/login.component";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { TopbarComponent } from "./components/topbar/topbar.component";
@@ -83,6 +84,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
         IdentityDetailsRelationshipsComponent,
+        BreadcrumbComponent,
+        DeletionProcessesComponent
         BreadcrumbComponent,
         DeletionProcessDetailsComponent
     ],

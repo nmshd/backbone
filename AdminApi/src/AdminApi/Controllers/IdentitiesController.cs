@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
@@ -74,7 +75,7 @@ public class IdentitiesController : ApiControllerBase
     [HttpPut("{identityAddress}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityTierRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
         await _mediator.Send(command, cancellationToken);
@@ -115,6 +116,15 @@ public class IdentitiesController : ApiControllerBase
         return Created("", response);
     }
 
+    [HttpGet("{identityAddress}/DeletionProcesses")]
+    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
+        return Ok(response);
+    }
+
     [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]
     [ProducesResponseType(typeof(IdentityDeletionProcessDTO), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
@@ -132,7 +142,7 @@ public class CreateQuotaForIdentityRequest
     public required QuotaPeriod Period { get; set; }
 }
 
-public class UpdateIdentityTierRequest
+public class UpdateIdentityRequest
 {
     public required string TierId { get; set; }
 }

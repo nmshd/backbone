@@ -193,6 +193,10 @@ export class IdentityService {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
 
+    public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcessOverview[]>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcessOverview[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
+    }
+
     public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
         return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/${deletionProcessId}`);
     }
@@ -245,6 +249,22 @@ export interface IdentityOverviewFilter {
 
 export interface UpdateTierRequest {
     tierId: string;
+}
+
+export interface DeletionProcessOverview {
+    id: string;
+    status: number;
+    createdAt: string;
+    approvalReminder1SentAt?: string;
+    approvalReminder2SentAt?: string;
+    approvalReminder3SentAt?: string;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt?: string;
+    gracePeriodReminder2SentAt?: string;
+    gracePeriodReminder3SentAt?: string;
+    identityAddress: string;
 }
 
 export interface DeletionProcessAuditLog {

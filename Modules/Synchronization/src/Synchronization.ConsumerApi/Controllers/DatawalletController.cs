@@ -23,7 +23,6 @@ public class DatawalletController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
 
-
     public DatawalletController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
     {
         _options = options.Value;
@@ -42,7 +41,9 @@ public class DatawalletController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetModificationsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetModifications([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] int? localIndex,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")]
+        ushort supportedDatawalletVersion,
+        CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
@@ -61,7 +62,8 @@ public class DatawalletController : ApiControllerBase
         StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PushModifications(PushDatawalletModificationsRequestBody request,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")]
+        ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new PushDatawalletModificationsCommand(request.Modifications,
             request.LocalIndex, supportedDatawalletVersion), cancellationToken);
