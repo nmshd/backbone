@@ -148,7 +148,6 @@ public class MessagesRepositoryTests
         var message = new Message(
             identityAddress,
             DeviceId.New(),
-            null,
             Array.Empty<byte>(),
             [],
             []
