@@ -13,7 +13,6 @@ public class MessageDTO : IMapTo<Message>
     public required IdentityAddress CreatedBy { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
 
-    public DateTime? DoNotSendBefore { get; set; }
     public required byte[] Body { get; set; }
 
     public required List<AttachmentDTO> Attachments { get; set; }
