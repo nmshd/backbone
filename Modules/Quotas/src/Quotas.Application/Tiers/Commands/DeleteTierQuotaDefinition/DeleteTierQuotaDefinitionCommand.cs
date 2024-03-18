@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 public class DeleteTierQuotaDefinitionCommand : IRequest

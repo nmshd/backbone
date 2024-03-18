@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Files.Application.AutoMapper;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using FluentValidation;

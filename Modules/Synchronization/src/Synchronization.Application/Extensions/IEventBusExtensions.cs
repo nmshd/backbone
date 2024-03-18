@@ -1,5 +1,6 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
@@ -20,6 +21,7 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
         eventBus.Subscribe<IdentityDeletionProcessStartedIntegrationEvent, IdentityDeletionProcessStartedIntegrationEventHandler>();
+        eventBus.Subscribe<IdentityDeletionProcessStatusChangedIntegrationEvent, IdentityDeletionProcessStatusChangedIntegrationEventHandler>();
         // eventBus.Subscribe<MessageDeliveredIntegrationEvent, MessageDeliveredIntegrationEventHandler>(); // this is temporarily disabled to avoid an external event flood when the same message is sent to many recipients
     }
 

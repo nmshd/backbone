@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
 using Xunit.Sdk;

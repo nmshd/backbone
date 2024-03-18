@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using FluentValidation.Validators;

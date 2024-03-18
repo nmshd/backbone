@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 
 namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migrations;

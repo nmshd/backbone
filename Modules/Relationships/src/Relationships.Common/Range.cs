@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Relationships.Common;
+namespace Backbone.Modules.Relationships.Common;
 
 public class Range<T>
 {

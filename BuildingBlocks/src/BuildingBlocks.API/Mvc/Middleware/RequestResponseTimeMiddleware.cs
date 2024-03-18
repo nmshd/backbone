@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Http;
 
 namespace Backbone.BuildingBlocks.API.Mvc.Middleware;

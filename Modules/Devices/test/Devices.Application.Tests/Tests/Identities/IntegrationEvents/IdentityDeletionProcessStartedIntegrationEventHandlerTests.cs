@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;

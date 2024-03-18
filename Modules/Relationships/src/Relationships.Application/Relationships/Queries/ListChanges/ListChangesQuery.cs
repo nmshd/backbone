@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
 namespace Backbone.BuildingBlocks.API.Mvc.Middleware;

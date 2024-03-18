@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -39,7 +39,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
@@ -121,8 +121,11 @@ public class DeletionGracePeriodReminderTests : IDisposable
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-        identity.StartDeletionProcessAsOwner(new Device(identity).Id);
+        var device = new Device(identity);
+        identity.Devices.Add(device);
+        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+
+        identity.StartDeletionProcessAsOwner(device.Id);
 
         return identity;
     }
