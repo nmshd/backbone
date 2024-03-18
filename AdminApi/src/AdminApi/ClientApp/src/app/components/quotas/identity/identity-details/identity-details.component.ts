@@ -88,7 +88,7 @@ export class IdentityDetailsComponent {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
                 this.tiers = tiers.result;
-                if (this.identity.tierId !== this.getQfDTierId()) {
+                if (this.identity.tierId !== "TIR00000000000000001") {
                     this.tiers = this.tiers.filter((tier) => tier.id !== this.getQfDTierId());
                 }
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
@@ -107,7 +107,7 @@ export class IdentityDetailsComponent {
     }
 
     public getQfDTierId(): string {
-        const qfdTier = this.tiers.find((tier) => tier.name === "Queued for Deletion");
+        const qfdTier = this.tiers.find((tier) => tier.id === "TIR00000000000000001");
         return qfdTier ? qfdTier.id : "";
     }
 
