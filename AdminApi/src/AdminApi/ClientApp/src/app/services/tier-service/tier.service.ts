@@ -43,32 +43,6 @@ export class TierService {
     public deleteTierById(id: string): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
-
-    public createMockData(): TierOverview[] {
-        return [
-            {
-                id: "TIRFMDP9YJW0wk7E7PKn",
-                name: "Basic",
-                numberOfIdentities: 2,
-                canBeUsedAsDefaultForUser: true,
-                canBeManuallyAssigned: true
-            },
-            {
-                id: "TIR00000000000000001",
-                name: "Queued for Deletion",
-                numberOfIdentities: 0,
-                canBeUsedAsDefaultForUser: false,
-                canBeManuallyAssigned: false
-            },
-            {
-                id: "TIR00000002",
-                name: "Some Other tier",
-                numberOfIdentities: 0,
-                canBeUsedAsDefaultForUser: true,
-                canBeManuallyAssigned: true
-            }
-        ];
-    }
 }
 
 export interface Tier {

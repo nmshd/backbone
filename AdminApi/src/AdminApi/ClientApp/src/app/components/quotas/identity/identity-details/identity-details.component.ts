@@ -86,12 +86,10 @@ export class IdentityDetailsComponent {
 
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
-            next: () => {
-                // tiers
-                // this.tiers = tiers.result;
-                this.tiers = this.tierService.createMockData();
+            next: (tiers) => {
+                this.tiers = tiers.result;
                 if (this.identity.tierId !== this.getQfDTierId()) {
-                    this.tiers = this.tierService.createMockData().filter((tier) => tier.id !== this.getQfDTierId());
+                    this.tiers = this.tiers.filter((tier) => tier.id !== this.getQfDTierId());
                 }
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;

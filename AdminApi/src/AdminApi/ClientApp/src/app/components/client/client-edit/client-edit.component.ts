@@ -4,7 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Client, ClientService, UpdateClientRequest } from "src/app/services/client-service/client-service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-// import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
+ import { PagedHttpResponseEnvelope } from "src/app/utils/paged-http-response-envelope";
 
 @Component({
     selector: "app-client-edit",
@@ -104,10 +104,8 @@ export class ClientEditComponent {
         this.loading = true;
         this.tierList = [];
         this.tierService.getTiers().subscribe({
-            next: () => {
-                // data: PagedHttpResponseEnvelope<TierOverview>
-                // this.tierList = data.result;
-                this.tierList = this.tierService.createMockData().filter((tier) => tier.canBeUsedAsDefaultForUser);
+            next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
+                this.tierList = data.result.filter((tier) => tier.canBeUsedAsDefaultForUser);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {
