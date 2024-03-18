@@ -126,7 +126,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]
-    [ProducesResponseType(typeof(IdentityDeletionProcessOverviewDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IdentityDeletionProcessDetailsDTO), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcessAsSupport([FromRoute] string identityAddress, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {
