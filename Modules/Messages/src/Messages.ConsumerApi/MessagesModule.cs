@@ -26,18 +26,6 @@ public class MessagesModule : AbstractModule
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-
-            if (parsedConfiguration.Infrastructure.BlobStorage != null)
-            {
-                options.BlobStorageOptions = new()
-                {
-                    CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
-                    ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
-                    Container = parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                        ? "messages"
-                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
-                };
-            }
         });
 
         services.AddApplication();
