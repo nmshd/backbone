@@ -22,6 +22,6 @@ public class IdentitiesEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<AdminApiResponse<CreateIdentityResponse>> CreateIdentity(CreateIdentityRequest request)
         => await _client.Post<CreateIdentityResponse>("Identities", request);
 
-    public async Task<AdminApiResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcessAsSupport(string address)
-        => await _client.Post<StartDeletionProcessAsSupportResponse>($"Identities/{address}/DeletionProcess");
+    public async Task<AdminApiResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string address)
+        => await _client.Post<StartDeletionProcessAsSupportResponse>($"Identities/{address}/DeletionProcesses");
 }

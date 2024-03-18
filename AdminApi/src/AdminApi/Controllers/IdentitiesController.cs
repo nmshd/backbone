@@ -107,7 +107,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> StartDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> StartDeletionProcess([FromRoute] string address, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
         return Created("", response);
