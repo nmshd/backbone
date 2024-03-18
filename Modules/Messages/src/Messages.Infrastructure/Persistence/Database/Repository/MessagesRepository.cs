@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -7,7 +8,6 @@ using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
 public class MessagesRepository : IMessagesRepository
@@ -75,10 +75,10 @@ public class MessagesRepository : IMessagesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Message>> FindMessagesWithParticipant(IdentityAddress requiredParticipant, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Message>> FindMessagesWithParticipant(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
         return await _messages.IncludeAll(_dbContext)
-            .WithSenderOrRecipient(requiredParticipant)
+            .Where(expression)
             .ToListAsync(cancellationToken);
     }
 }

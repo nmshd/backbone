@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
@@ -62,5 +63,10 @@ public class Message : IIdentifiable<MessageId>
         var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
 
         recipient?.UpdateAddress(newIdentityAddress);
+    }
+
+    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return i => i.CreatedBy == identityAddress;
     }
 }
