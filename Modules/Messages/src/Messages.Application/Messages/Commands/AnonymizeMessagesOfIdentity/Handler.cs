@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -20,7 +21,7 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var messages = await _messagesRepository.FindMessagesWithParticipant(request.IdentityAddress, cancellationToken);
+        var messages = await _messagesRepository.FindMessagesWithParticipant(Message.WasCreatedBy(request.IdentityAddress), cancellationToken);
 
         var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.AddressPrefix);
 

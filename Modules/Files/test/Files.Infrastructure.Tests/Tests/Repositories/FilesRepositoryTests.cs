@@ -42,7 +42,7 @@ public class FilesRepositoryTests
     private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)
     {
         var fakeDbContext = A.Fake<FilesDbContext>();
-        var blobStorageOptions = Options.Create(new BlobOptions());
+        var blobStorageOptions = Options.Create(new BlobOptions() { RootFolder = "" });
 
         fakeDbContext.FileMetadata = files.AsQueryable().BuildMockDbSet();
 

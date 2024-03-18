@@ -72,7 +72,6 @@ public class ReplaceIdentityAddressTests
         return new Message(
             parameters.createdBy,
             TestDataGenerator.CreateRandomDeviceId(),
-            null,
             [],
             [],
             recipientInformation
