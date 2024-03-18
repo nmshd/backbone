@@ -147,7 +147,6 @@ public class Identity
 
         deletionProcess.DeletionStarted();
         Status = IdentityStatus.Deleting;
-        throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
     }
 
     public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
