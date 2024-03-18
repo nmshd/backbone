@@ -50,6 +50,20 @@ public class DeletionStartedTests
         acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
     }
 
+    [Fact]
+    public void Fails_to_start_if_no_approved_deletion_process_exists()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        identity.StartDeletionProcessAsSupport();
+
+        // Act
+        var acting = identity.DeletionStarted;
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.IdentityCannotBeDeleted().Code);
+    }
+
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
