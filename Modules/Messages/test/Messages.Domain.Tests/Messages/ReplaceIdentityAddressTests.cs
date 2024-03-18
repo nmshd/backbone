@@ -49,13 +49,13 @@ public class ReplaceIdentityAddressTests
         var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
         var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
         var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var erroneousIdentityIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var testIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
         var message = CreateMessage((createdByAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
-        message.ReplaceIdentityAddress(erroneousIdentityIdentityAddress, newAddress);
+        message.ReplaceIdentityAddress(testIdentityAddress, newIdentityAddress);
 
         // Assert
         message.Recipients.First().Address.Should().Be(recipient1Address);
