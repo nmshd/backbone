@@ -1,4 +1,6 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation.Types;
+using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation.Types.Requests;
+using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation.Types.Responses;
 using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
 

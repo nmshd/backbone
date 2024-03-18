@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation.Types.Requests;
 
 public class ValidateApiKeyRequest
 {

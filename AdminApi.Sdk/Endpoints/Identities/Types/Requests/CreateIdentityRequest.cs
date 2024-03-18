@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 
 public class CreateIdentityRequest
 {
@@ -7,11 +7,4 @@ public class CreateIdentityRequest
     public required byte[] IdentityPublicKey { get; set; }
     public required string DevicePassword { get; set; }
     public required byte IdentityVersion { get; set; }
-    public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
-}
-
-public class CreateIdentityRequestSignedChallenge
-{
-    public required string Challenge { get; set; }
-    public required byte[] Signature { get; set; }
 }

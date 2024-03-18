@@ -1,4 +1,6 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Clients.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
+using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Responses;
 using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
 

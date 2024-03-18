@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 
 public class UpdateIdentityTierRequest
 {

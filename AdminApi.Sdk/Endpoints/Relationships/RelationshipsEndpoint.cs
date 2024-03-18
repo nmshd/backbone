@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
-using Backbone.AdminApi.Sdk.Endpoints.Relationships.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Relationships.Types.Responses;
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Relationships;
 

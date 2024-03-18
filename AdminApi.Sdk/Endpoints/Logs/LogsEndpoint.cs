@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
-using Backbone.AdminApi.Sdk.Endpoints.Logs.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Logs.Types.Requests;
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Logs;
 

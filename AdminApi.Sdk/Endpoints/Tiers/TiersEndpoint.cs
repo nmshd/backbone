@@ -1,6 +1,8 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
+using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Responses;
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Tiers;
 

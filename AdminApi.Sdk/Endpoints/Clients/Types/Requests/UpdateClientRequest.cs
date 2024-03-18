@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Clients.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
 
 public class UpdateClientRequest
 {

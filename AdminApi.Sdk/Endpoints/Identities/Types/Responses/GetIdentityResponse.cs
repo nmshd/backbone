@@ -1,9 +1,9 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
 
 public class GetIdentityResponse
 {
     public required string Address { get; set; }
-    public required string? ClientId { get; set; }
+    public string? ClientId { get; set; }
     public required byte[] PublicKey { get; set; }
     public required string TierId { get; set; }
     public required DateTime CreatedAt { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Logs.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Logs.Types.Requests;
 
 public class LogRequest
 {

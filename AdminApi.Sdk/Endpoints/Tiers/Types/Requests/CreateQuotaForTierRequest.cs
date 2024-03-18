@@ -1,6 +1,6 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 
-public class CreateQuotaForIdentityRequest
+public class CreateQuotaForTierRequest
 {
     public required string MetricKey { get; set; }
     public required int Max { get; set; }

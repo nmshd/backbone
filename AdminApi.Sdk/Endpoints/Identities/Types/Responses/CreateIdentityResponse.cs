@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
 
 public class CreateIdentityResponse
 {
