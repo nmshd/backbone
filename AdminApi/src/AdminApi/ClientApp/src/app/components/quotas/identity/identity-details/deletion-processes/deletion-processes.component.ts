@@ -57,7 +57,7 @@ export class DeletionProcessesComponent {
     }
 
     public isRowDisabled(deletionProcess: any): boolean {
-        return deletionProcess.status === "Approved";
+        return deletionProcess.status === "Rejected" || deletionProcess.status === "Cancelled";
     }
 
     public styleDeletionProcessStatus(status: string): string {
