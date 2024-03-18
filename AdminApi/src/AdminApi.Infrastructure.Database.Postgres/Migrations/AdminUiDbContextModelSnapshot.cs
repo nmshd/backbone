@@ -17,7 +17,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -75,6 +75,49 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("IdentityOverviews", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageOverview", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("NumberOfAttachments")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SenderAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SenderDevice")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("MessageId");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("MessageOverviews", (string)null);
+                });
+
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageRecipient", b =>
+                {
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MessageId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Address", "MessageId");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("MessageRecipients", (string)null);
                 });
 
             modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.RelationshipOverview", b =>
@@ -189,6 +232,20 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.Navigation("Tier")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageRecipient", b =>
+                {
+                    b.HasOne("Backbone.AdminUi.Infrastructure.DTOs.MessageOverview", null)
+                        .WithMany("Recipients")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageOverview", b =>
+                {
+                    b.Navigation("Recipients");
                 });
 #pragma warning restore 612, 618
         }

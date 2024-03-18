@@ -70,3 +70,13 @@
         aria-label="Select page of relationships">
     </mat-paginator>
 </div>
+<mat-paginator
+    *ngIf="!loading"
+    (page)="relationshipsPageChangeEvent($event)"
+    [length]="relationshipsTotalRecords"
+    [pageSize]="relationshipsPageSize"
+    [pageIndex]="relationshipsPageIndex"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    showFirstLastButtons
+    aria-label="Select page of relationships">
+</mat-paginator>

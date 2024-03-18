@@ -1,14 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageId>Enmeshed.Crypto</PackageId>
-		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
-		<PackageTags>Enmeshed</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702</NoWarn>
 	</PropertyGroup>

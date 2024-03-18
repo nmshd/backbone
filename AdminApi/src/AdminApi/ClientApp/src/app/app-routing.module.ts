@@ -1,15 +1,16 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
+import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
+import { ClientListComponent } from "./components/client/client-list/client-list.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
-import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
-import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
-import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
-import { ClientListComponent } from "./components/client/client-list/client-list.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
-import { ClientEditComponent } from "./components/client/client-edit/client-edit.component";
-import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
+import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
+import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
+import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
 import { LoginComponent } from "./components/shared/login/login.component";
+import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
+import { CustomRouteReuseStrategy } from "./utils/custom-route-reuse-strategy";
 
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
@@ -27,7 +28,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: "reload" })],
+    exports: [RouterModule],
+    providers: [{ provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }]
 })
 export class AppRoutingModule {}
