@@ -145,15 +145,9 @@ public class Identity
         var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
                               ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        if (deletionProcess.IsReadyToStartDeletion())
-        {
-            Status = IdentityStatus.Deleting;
-            deletionProcess.DeletionStarted();
-        }
-        else
-        {
-            throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
-        }
+        deletionProcess.DeletionStarted();
+        Status = IdentityStatus.Deleting;
+        throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
     }
 
     public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)

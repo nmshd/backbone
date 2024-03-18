@@ -128,6 +128,10 @@ public class IdentityDeletionProcess
 
     internal void DeletionStarted()
     {
+        if (!IsReadyToStartDeletion())
+        {
+            throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
+        }
         Status = DeletionProcessStatus.Deleting;
         DeletionStartedAt = SystemTime.UtcNow;
     }
