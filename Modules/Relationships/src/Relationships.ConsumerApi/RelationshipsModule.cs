@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -28,18 +27,6 @@ public class RelationshipsModule : AbstractModule
         {
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-
-            if (parsedConfiguration.Infrastructure.BlobStorage != null)
-            {
-                options.BlobStorageOptions = new()
-                {
-                    CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider,
-                    ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo,
-                    Container = parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                        ? "relationships"
-                        : parsedConfiguration.Infrastructure.BlobStorage.ContainerName
-                };
-            }
         });
 
         services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
