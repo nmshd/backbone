@@ -11,11 +11,11 @@ namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.Update
 
 public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDeviceRegistrationResponse>
 {
-    private readonly IdentityAddress _activeIdentity;
-    private readonly IPushNotificationRegistrationService _pushRegistrationService;
-    private readonly DeviceId _activeDevice;
     private const string PRODUCTION_ENVIRONMENT = "Production";
     private const string DEVELOPMENT_ENVIRONMENT = "Development";
+    private readonly DeviceId _activeDevice;
+    private readonly IdentityAddress _activeIdentity;
+    private readonly IPushNotificationRegistrationService _pushRegistrationService;
 
     public Handler(IPushNotificationRegistrationService pushRegistrationService, IUserContext userContext)
     {
