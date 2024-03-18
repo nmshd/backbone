@@ -3,12 +3,13 @@ using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
-/// <summary>
-///     See corresponding Unit Tests for an example of a built notification.
-/// </summary>
 public class FcmMessageBuilder
 {
-    protected JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase /*, Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement)*/};
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     private readonly Message _message;
 
     private readonly Dictionary<string, string> _data;
