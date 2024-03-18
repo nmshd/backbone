@@ -279,6 +279,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion", "Job
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion.Tests", "Jobs\test\Jobs.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj", "{9AB91A36-1E62-490A-9CF3-2137CA15658F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Tests", "Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj", "{EE7F27E9-9DD9-41FC-923D-05D595829A03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -673,6 +675,10 @@ Global
 		{9AB91A36-1E62-490A-9CF3-2137CA15658F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AB91A36-1E62-490A-9CF3-2137CA15658F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AB91A36-1E62-490A-9CF3-2137CA15658F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7F27E9-9DD9-41FC-923D-05D595829A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE7F27E9-9DD9-41FC-923D-05D595829A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE7F27E9-9DD9-41FC-923D-05D595829A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE7F27E9-9DD9-41FC-923D-05D595829A03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -801,6 +807,7 @@ Global
 		{5EB516C8-510A-437E-8E68-88431717AFC1} = {4E66D5C4-1EF2-4605-BBA3-F99BF90E973F}
 		{732B2474-C4D2-4DF0-89CC-0679C9B47624} = {9599F729-2B1F-4E96-83F4-C20D0CA1C61B}
 		{9AB91A36-1E62-490A-9CF3-2137CA15658F} = {4F812E23-62EB-4B79-8ECA-5CA72CF5D3BC}
+		{EE7F27E9-9DD9-41FC-923D-05D595829A03} = {2D0BC8E9-ED6B-49D9-937C-1616ED40FB3E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
