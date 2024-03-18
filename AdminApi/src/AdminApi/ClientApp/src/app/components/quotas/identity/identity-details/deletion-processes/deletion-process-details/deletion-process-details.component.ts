@@ -52,7 +52,6 @@ export class DeletionProcessDetailsComponent {
             next: (data: HttpResponseEnvelope<DeletionProcess>) => {
                 this.identityDeletionProcess = data.result;
                 this.identityDeletionProcessAuditLogs = this.identityDeletionProcess.auditLog;
-                console.log(this.identityDeletionProcessAuditLogs);
             },
             complete: () => {
                 this.loading = false;
