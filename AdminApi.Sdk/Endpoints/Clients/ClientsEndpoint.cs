@@ -8,7 +8,7 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Clients;
 
 public class ClientsEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<AdminApiResponse<List<ClientOverwiew>>> GetAllClients() => await _client.Get<List<ClientOverwiew>>("Clients");
+    public async Task<AdminApiResponse<ListClientsResponse>> GetAllClients() => await _client.Get<ListClientsResponse>("Clients");
 
     public async Task<AdminApiResponse<ClientInfo>> GetClient(string id) => await _client.Get<ClientInfo>($"Clients/{id}");
 

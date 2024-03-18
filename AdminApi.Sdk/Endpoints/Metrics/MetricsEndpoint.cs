@@ -6,5 +6,5 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Metrics;
 
 public class MetricsEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<AdminApiResponse<List<Metric>>> GetAllMetrics() => await _client.Get<List<Metric>>("Metrics");
+    public async Task<AdminApiResponse<ListMetricsResponse>> GetAllMetrics() => await _client.Get<ListMetricsResponse>("Metrics");
 }

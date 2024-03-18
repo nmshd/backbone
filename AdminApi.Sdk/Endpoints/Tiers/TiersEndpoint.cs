@@ -8,7 +8,7 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Tiers;
 
 public class TiersEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<AdminApiResponse<List<TierOverview>>> ListTiers() => await _client.Get<List<TierOverview>>("Tiers");
+    public async Task<AdminApiResponse<ListTiersResponse>> ListTiers() => await _client.Get<ListTiersResponse>("Tiers");
 
     public async Task<AdminApiResponse<TierDetails>> GetTier(string id) => await _client.Get<TierDetails>($"Tiers/{id}");
 
