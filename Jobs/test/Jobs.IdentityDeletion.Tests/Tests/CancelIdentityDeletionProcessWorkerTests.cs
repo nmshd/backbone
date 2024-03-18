@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Job.IdentityDeletion.Tests
+namespace Backbone.Job.IdentityDeletion.Tests.Tests
 {
     public class CancelIdentityDeletionProcessWorkerTests
     {

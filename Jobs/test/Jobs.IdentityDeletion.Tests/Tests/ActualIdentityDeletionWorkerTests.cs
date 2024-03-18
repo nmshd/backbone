@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
-public class CancelIdentityDeletionProcessWorkerTests
+public class ActualIdentityDeletionWorkerTests
 {
     [Fact]
     public async Task Proxies_triggering_the_deletion_processes_to_command_handler()
