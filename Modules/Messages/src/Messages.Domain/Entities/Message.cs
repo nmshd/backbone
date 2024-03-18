@@ -19,7 +19,7 @@ public class Message : IIdentifiable<MessageId>
         Recipients = null!;
     }
 
-    public Message(IdentityAddress createdBy, DeviceId createdByDevice, DateTime? doNotSendBefore, byte[] body, IEnumerable<Attachment> attachments, IEnumerable<RecipientInformation> recipients)
+    public Message(IdentityAddress createdBy, DeviceId createdByDevice, byte[] body, IEnumerable<Attachment> attachments, IEnumerable<RecipientInformation> recipients)
     {
         Id = MessageId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -27,7 +27,6 @@ public class Message : IIdentifiable<MessageId>
 
         CreatedBy = createdBy;
         CreatedByDevice = createdByDevice;
-        DoNotSendBefore = doNotSendBefore;
         Body = body;
         Attachments = attachments.ToList();
     }
@@ -38,7 +37,6 @@ public class Message : IIdentifiable<MessageId>
     public IdentityAddress CreatedBy { get; private set; }
     public DeviceId CreatedByDevice { get; }
 
-    public DateTime? DoNotSendBefore { get; }
     public byte[] Body { get; private set; }
 
     public IReadOnlyCollection<Attachment> Attachments { get; }
@@ -50,6 +48,7 @@ public class Message : IIdentifiable<MessageId>
         {
             throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
         }
+
         Body = bytes;
     }
 

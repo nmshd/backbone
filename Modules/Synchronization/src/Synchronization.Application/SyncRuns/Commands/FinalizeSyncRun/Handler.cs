@@ -84,10 +84,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         CheckPreconditions();
 
-        _datawallet = await _dbContext.GetDatawalletForInsertion(_activeIdentity, cancellationToken);
-
-        if (_datawallet == null)
-            throw new NotFoundException(nameof(Datawallet));
+        _datawallet = await _dbContext.GetDatawalletForInsertion(_activeIdentity, cancellationToken) ?? throw new NotFoundException(nameof(Datawallet));
 
         var eventResults = _mapper.Map<ExternalEventResult[]>(request.ExternalEventResults);
         _syncRun.FinalizeExternalEventSync(eventResults);
