@@ -21,7 +21,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                     FROM Devices.Tiers TIERS
                     LEFT JOIN Devices.Identities IDENTITIES
                     ON IDENTITIES.TierId = TIERS.Id
-                    GROUP BY TIERS.Id, TIERS.Name
+                    GROUP BY TIERS.Id, TIERS.Name, TIERS.CanBeUsedAsDefaultForUser, TIERS.CanBeManuallyAssigned
              """);
         }
 
