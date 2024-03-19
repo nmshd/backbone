@@ -20,11 +20,11 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class ClientsController : ApiControllerBase
 {
-    private readonly AdminApiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminApiDbContext;
 
-    public ClientsController(IMediator mediator, AdminApiDbContext adminUiDbContext) : base(mediator)
+    public ClientsController(IMediator mediator, AdminApiDbContext adminApiDbContext) : base(mediator)
     {
-        _adminUiDbContext = adminUiDbContext;
+        _adminApiDbContext = adminApiDbContext;
     }
 
     [HttpGet]
@@ -32,7 +32,7 @@ public class ClientsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
     {
-        var clientOverviews = await _adminUiDbContext.ClientOverviews.ToListAsync(cancellationToken);
+        var clientOverviews = await _adminApiDbContext.ClientOverviews.ToListAsync(cancellationToken);
         return Ok(clientOverviews);
     }
 

@@ -7,16 +7,16 @@ namespace Backbone.AdminApi.Controllers.OData;
 
 public class IdentitiesController : ODataController
 {
-    private readonly AdminApiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminApiDbContext;
 
-    public IdentitiesController(AdminApiDbContext adminUiDbContext)
+    public IdentitiesController(AdminApiDbContext adminApiDbContext)
     {
-        _adminUiDbContext = adminUiDbContext;
+        _adminApiDbContext = adminApiDbContext;
     }
 
     [EnableQuery]
     public IQueryable<IdentityOverview> Get()
     {
-        return _adminUiDbContext.IdentityOverviews;
+        return _adminApiDbContext.IdentityOverviews;
     }
 }
