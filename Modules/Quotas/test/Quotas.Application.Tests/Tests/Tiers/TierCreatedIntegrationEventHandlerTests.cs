@@ -14,7 +14,7 @@ public class TierCreatedIntegrationEventHandlerTests
     {
         // Arrange
         var id = new TierId("TIRFxoL0U24aUqZDSAWc");
-        var name = "Basic";
+        const string name = "Basic";
         var mockTierRepository = new AddMockTiersRepository();
         var handler = CreateHandler(mockTierRepository);
 
