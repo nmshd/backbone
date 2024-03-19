@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { CancelDeletionProcessDialogComponent } from "./cancel-deletion-process-dialog.component";
 
-describe("CancelDeletionProcessDialogComponent", () => {
+describe("CancelDeletionProcessDialogComponent", function() {
     let component: CancelDeletionProcessDialogComponent;
     let fixture: ComponentFixture<CancelDeletionProcessDialogComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await TestBed.configureTestingModule({
             imports: [CancelDeletionProcessDialogComponent]
         }).compileComponents();
@@ -16,7 +16,7 @@ describe("CancelDeletionProcessDialogComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
+    it("should create", async function() {
+        await expect(component).toBeTruthy();
     });
 });
