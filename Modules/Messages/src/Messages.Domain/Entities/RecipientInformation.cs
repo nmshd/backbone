@@ -24,6 +24,7 @@ public class RecipientInformation
         MessageId = null!; // we just assign null to satisfy the compiler; it will be set by EF Core
     }
 
+    public int Id { get; }
     public IdentityAddress Address { get; private set; }
     public byte[] EncryptedKey { get; }
     public DateTime? ReceivedAt { get; private set; }
