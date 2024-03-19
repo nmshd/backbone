@@ -41,7 +41,7 @@ public class XsrfAndApiKeyAuthenticator
     {
         HttpRequestMessage request = new(HttpMethod.Get, "xsrf");
         request.Headers.Add("X-API-KEY", _apiKey);
-        
+
 #pragma warning disable CS8774 // This warning ("Member must have a non-null value when exiting") must currently be disabled. (see https://github.com/dotnet/csharplang/discussions/ for details)
         var response = await _client.SendAsync(request);
 
