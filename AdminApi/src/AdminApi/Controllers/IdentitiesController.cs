@@ -127,9 +127,9 @@ public class IdentitiesController : ApiControllerBase
     [HttpPut("{address}/DeletionProcesses")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CancelDeletionAsSupportCommand(address), cancellationToken);
+        await _mediator.Send(new CancelDeletionAsSupportCommand(deletionProcessId), cancellationToken);
         return NoContent();
     }
 }

@@ -9,7 +9,6 @@ using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsSupport;
 
@@ -23,16 +22,17 @@ public class HandlerTests
         SystemTime.Set(utcNow);
 
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(utcNow);
-        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved);
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => fakeIdentitiesRepository
+                .FindWithDeletionProcess(deletionProcess.Id, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var handler = CreateHandler(mockIdentitiesRepository);
+        var handler = CreateHandler(fakeIdentitiesRepository);
 
         // Acting
-        var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address), CancellationToken.None);
+        var result = await handler.Handle(new CancelDeletionAsSupportCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
@@ -47,9 +47,11 @@ public class HandlerTests
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository
+                .FindWithDeletionProcess(deletionProcess.Id, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
         var mockEventBus = A.Fake<IEventBus>();
@@ -57,7 +59,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeIdentitiesRepository, mockEventBus);
 
         // Act
-        var response = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address), CancellationToken.None);
+        var response = await handler.Handle(new CancelDeletionAsSupportCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
@@ -71,11 +73,11 @@ public class HandlerTests
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
-        var address = CreateRandomIdentityAddress();
+        var deletionProcessId = IdentityDeletionProcessId.Generate();
         var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(deletionProcessId), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");

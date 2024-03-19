@@ -69,4 +69,9 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     {
         return Task.FromResult((Identity?)_identity);
     }
+
+    public Task<Identity?> FindWithDeletionProcess(IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
 }

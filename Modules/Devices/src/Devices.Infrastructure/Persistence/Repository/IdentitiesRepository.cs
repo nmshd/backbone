@@ -47,6 +47,13 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
+    public async Task<Identity?> FindWithDeletionProcess(IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .FirstOrDefaultAsync(i => i.DeletionProcesses.Any(dp => dp.Id == deletionProcessId), cancellationToken);
+    }
+
     public async Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
     {
         return await _readonlyIdentities
