@@ -78,7 +78,6 @@ export class DeletionProcessDetailsComponent {
 
     public openCancelDeletionProcessDialog(): void {
         const dialogRef = this.dialog.open(CancelDeletionProcessDialogComponent, {
-            minWidth: "50%",
             maxWidth: "100%"
         });
 
