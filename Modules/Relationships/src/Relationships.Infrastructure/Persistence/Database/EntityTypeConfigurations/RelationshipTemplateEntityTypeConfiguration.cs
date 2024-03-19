@@ -23,6 +23,6 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
             .HasMany(x => x.Allocations)
             .WithOne()
             .HasForeignKey(x => x.RelationshipTemplateId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

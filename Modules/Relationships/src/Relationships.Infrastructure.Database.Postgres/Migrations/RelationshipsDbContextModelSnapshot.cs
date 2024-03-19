@@ -348,7 +348,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", null)
                         .WithMany("Allocations")
                         .HasForeignKey("RelationshipTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
