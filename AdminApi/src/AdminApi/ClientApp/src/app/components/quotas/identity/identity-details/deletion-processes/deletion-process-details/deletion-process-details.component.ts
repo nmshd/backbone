@@ -82,7 +82,7 @@ export class DeletionProcessDetailsComponent {
             maxWidth: "100%"
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 this.cancelDeletionProcess();
             }
@@ -99,7 +99,7 @@ export class DeletionProcessDetailsComponent {
                 });
             },
             complete: async () => {
-                await this.router.navigate(["/identities",this.identityAddress]);
+                await this.router.navigate(["/identities", this.identityAddress]);
             },
             error: (err: any) => {
                 this.loading = false;

@@ -7,11 +7,7 @@ import { MatDialogRef } from "@angular/material/dialog";
     styleUrl: "./cancel-deletion-process-dialog.component.css"
 })
 export class CancelDeletionProcessDialogComponent {
-
-    public constructor(
-        public dialogRef: MatDialogRef<CancelDeletionProcessDialogComponent>,
-    ) {
-    }
+    public constructor(public dialogRef: MatDialogRef<CancelDeletionProcessDialogComponent>) {}
 
     public cancelDeletionProcess(): void {
         this.dialogRef.close(true);

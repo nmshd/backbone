@@ -86,7 +86,7 @@
     color: rgba(255, 255, 255, 0.54) !important;
 }
 
-:host ::ng-deep .details-expansion-panel-header>.mat-expansion-indicator::after {
+:host ::ng-deep .details-expansion-panel-header > .mat-expansion-indicator::after {
     color: white !important;
 }
 
