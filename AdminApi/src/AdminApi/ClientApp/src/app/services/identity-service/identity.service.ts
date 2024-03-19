@@ -196,6 +196,10 @@ export class IdentityService {
     public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcessOverview[]>> {
         return this.http.get<HttpResponseEnvelope<DeletionProcessOverview[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
     }
+
+    public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/${deletionProcessId}`);
+    }
 }
 
 export interface Identity {
@@ -247,18 +251,43 @@ export interface UpdateTierRequest {
     tierId: string;
 }
 
-export interface DeletionProcessOverview {
+export interface DeletionProcessAuditLog {
     id: string;
-    status: number;
     createdAt: string;
-    approvalReminder1SentAt?: string;
-    approvalReminder2SentAt?: string;
-    approvalReminder3SentAt?: string;
+    message: string;
+    oldStatus: number;
+    newStatus: number;
+}
+
+export interface DeletionProcess {
+    id: string;
+    status: string;
+    createdAt: string;
+    auditLog: DeletionProcessAuditLog[];
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
     approvedAt: string;
     approvedByDevice: string;
     gracePeriodEndsAt: string;
-    gracePeriodReminder1SentAt?: string;
-    gracePeriodReminder2SentAt?: string;
-    gracePeriodReminder3SentAt?: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
+    identityAddress: string;
+}
+
+export interface DeletionProcessOverview {
+    id: string;
+    status: string;
+    createdAt: string;
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
     identityAddress: string;
 }
