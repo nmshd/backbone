@@ -2,4 +2,4 @@
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Responses;
 
-public class ListTiersResponse(IEnumerable<TierOverview> items) : EnumerableResponseBase<TierOverview>(items);
+public class ListTiersResponse : EnumerableResponseBase<TierOverview>;

@@ -3,4 +3,4 @@ using Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Metrics.Types.Responses;
 
-public class ListMetricsResponse(IEnumerable<Metric> items) : EnumerableResponseBase<Metric>(items);
+public class ListMetricsResponse : EnumerableResponseBase<Metric>;
