@@ -12,12 +12,12 @@ public class OAuthClientTests
     {
         // Arrange
         var oldTierId = TierId.Generate();
-        var oldMaxIdentities = 1;
+        const int oldMaxIdentities = 1;
 
         var client = new OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
 
         var newTierId = TierId.Generate();
-        var newMaxIdentities = 2;
+        const int newMaxIdentities = 2;
 
         // Act
         client.Update(newTierId, newMaxIdentities);
@@ -32,12 +32,12 @@ public class OAuthClientTests
     {
         // Arrange
         var oldTierId = TierId.Generate();
-        var oldMaxIdentities = 1;
+        const int oldMaxIdentities = 1;
 
         var client = new OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
 
         var newTierId = TierId.Generate();
-        var newMaxIdentities = 2;
+        const int newMaxIdentities = 2;
 
         // Act
         var hasChanges = client.Update(newTierId, newMaxIdentities);
@@ -51,7 +51,7 @@ public class OAuthClientTests
     {
         // Arrange
         var tierId = TierId.Generate();
-        var maxIdentities = 1;
+        const int maxIdentities = 1;
         var client = new OAuthClient(string.Empty, string.Empty, tierId, SystemTime.UtcNow, maxIdentities);
 
         // Act

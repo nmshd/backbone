@@ -15,12 +15,12 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tierName = "some-tier-name";
+        const string tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
         var metricKey = MetricKey.NumberOfSentMessages;
-        var max = 5;
-        var period = QuotaPeriod.Month;
+        const int max = 5;
+        const QuotaPeriod period = QuotaPeriod.Month;
         tier.CreateQuota(metricKey, max, period);
 
         var stubTiersRepository = new FindTiersStubRepository(tier);
@@ -45,7 +45,7 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
-        var tierName = "some-tier-name";
+        const string tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
         var metricWithTwoQuotas = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");

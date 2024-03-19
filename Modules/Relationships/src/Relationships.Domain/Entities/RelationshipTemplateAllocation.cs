@@ -14,6 +14,7 @@ public class RelationshipTemplateAllocation
         AllocatedByDevice = allocatedByDevice;
     }
 
+    public int Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; set; }
     public IdentityAddress AllocatedBy { get; set; }
     public DateTime AllocatedAt { get; set; }

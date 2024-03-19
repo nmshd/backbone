@@ -79,7 +79,7 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var addBlobName = "AzureSaveAsyncAndFindAsync";
+        const string addBlobName = "AzureSaveAsyncAndFindAsync";
         var addBlobContent = "AzureSaveAsyncAndFindAsync"u8.ToArray();
 
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);

@@ -17,7 +17,7 @@ public class IdentityCreatedIntegrationEventHandlerTests
     public async void Creates_a_copy_of_the_identity_from_the_event()
     {
         // Arrange
-        var address = "some-dummy-address";
+        const string address = "some-dummy-address";
         var tierId = new TierId("TIRsomeTierId1111111");
         var tier = new Tier(tierId, "some-tier-name");
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -35,10 +35,10 @@ public class IdentityCreatedIntegrationEventHandlerTests
     public async void Assigns_tier_quotas_to_new_identity()
     {
         // Arrange
-        var address = "some-dummy-address";
+        const string address = "some-dummy-address";
         var tierId = new TierId("TIRsomeTierId1111111");
 
-        var max = 5;
+        const int max = 5;
         var tier = new Tier(tierId, "some-tier-name");
         tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month));
         tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Week));

@@ -49,7 +49,7 @@ export class DeletionProcessesComponent {
     }
 
     public async goToDeletionProcessDetails(id: string): Promise<void> {
-        await this.router.navigate(["/deletion-process-details", this.identityAddress, id]);
+        await this.router.navigate(["/deletion-process-details/", this.identityAddress, id]);
     }
 
     public isDatePassed(date: Date): boolean {
