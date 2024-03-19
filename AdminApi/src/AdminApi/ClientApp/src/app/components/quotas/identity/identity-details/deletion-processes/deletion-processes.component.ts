@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { DeletionProcess, IdentityService } from "src/app/services/identity-service/identity.service";
+import { DeletionProcessOverview, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
@@ -15,7 +15,7 @@ export class DeletionProcessesComponent {
     public loading: boolean;
     public deletionProcessesTableDisplayedColumns: string[];
 
-    public identityDeletionProcesses?: DeletionProcess[];
+    public identityDeletionProcesses?: DeletionProcessOverview[];
 
     public constructor(
         private readonly router: Router,
@@ -33,7 +33,7 @@ export class DeletionProcessesComponent {
     public getIdentitiesDeletionProcesses(): void {
         this.loading = true;
         this.identityService.getDeletionProcessesForIdentity(this.identityAddress!).subscribe({
-            next: (data: HttpResponseEnvelope<DeletionProcess[]>) => {
+            next: (data: HttpResponseEnvelope<DeletionProcessOverview[]>) => {
                 this.identityDeletionProcesses = data.result;
             },
             complete: () => (this.loading = false),

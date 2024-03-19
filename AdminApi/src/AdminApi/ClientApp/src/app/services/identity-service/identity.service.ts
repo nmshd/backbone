@@ -193,8 +193,8 @@ export class IdentityService {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
 
-    public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcess[]>> {
-        return this.http.get<HttpResponseEnvelope<DeletionProcess[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
+    public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcessOverview[]>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcessOverview[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
     }
 
     public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
@@ -263,7 +263,23 @@ export interface DeletionProcess {
     id: string;
     status: string;
     createdAt: string;
-    auditLog?: DeletionProcessAuditLog[];
+    auditLog: DeletionProcessAuditLog[];
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
+    identityAddress: string;
+}
+
+export interface DeletionProcessOverview {
+    id: string;
+    status: string;
+    createdAt: string;
     approvalReminder1SentAt: Date;
     approvalReminder2SentAt: Date;
     approvalReminder3SentAt: Date;
