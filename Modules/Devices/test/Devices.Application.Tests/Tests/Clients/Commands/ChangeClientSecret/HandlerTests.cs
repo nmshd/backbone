@@ -15,7 +15,7 @@ public class HandlerTests
         // Arrange
         var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
 
-        var newClientSecret = "New-client-secret";
+        const string newClientSecret = "New-client-secret";
         var command = new ChangeClientSecretCommand(client.ClientId, newClientSecret);
 
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
