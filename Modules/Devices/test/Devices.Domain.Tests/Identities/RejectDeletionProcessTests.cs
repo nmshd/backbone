@@ -77,7 +77,7 @@ public class RejectDeletionProcessTests
         // Assert
         var exception = acting.Should().Throw<DomainException>().Which;
 
-        exception.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
+        exception.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.WaitingForApproval).Code);
         exception.Message.Should().Contain("WaitingForApproval");
     }
 

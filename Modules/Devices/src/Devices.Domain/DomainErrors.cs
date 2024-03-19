@@ -48,7 +48,7 @@ public static class DomainErrors
 
     public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
     {
-        return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
+        return new DomainError($"error.platform.validation.device.deletionProcessIsNotInRequiredStatus", $"The deletion process must be in status '{deletionProcessStatus}' for the operation to continue, but it was in another status.");
     }
 
     public static DomainError IdentityCannotBeDeleted()

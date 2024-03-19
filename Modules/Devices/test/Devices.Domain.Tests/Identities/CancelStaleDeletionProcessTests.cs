@@ -18,8 +18,7 @@ public class CancelStaleDeletionProcessTests
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Message.Should().Be($"The deletion process must be in status 'WaitingForApproval'.");
-        result.Error.Code.Should().Be($"error.platform.validation.device.deletionProcessMustBeInStatusWaitingForApproval");
+        result.Error.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
     }
 
     [Fact]
