@@ -7,9 +7,6 @@
             <div *ngIf="loading" class="loading">
                 <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
             </div>
-            <div class="action-buttons">
-                <button mat-mini-fab color="warn" (click)="openCancelDeletionProcessDialog()" *ngIf="!loading"><mat-icon>cancel</mat-icon></button>
-            </div>
             <div class="form-details" *ngIf="!loading">
                 <mat-list>
                     <div class="container">
@@ -97,4 +94,7 @@
             </ng-template>
         </mat-expansion-panel>
     </mat-accordion>
+    <div class="action-buttons">
+        <button mat-raised-button (click)="openCancelDeletionProcessDialog()" *ngIf="!loading">Cancel Deletion Process</button>
+    </div>
 </div>
