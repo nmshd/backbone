@@ -23,7 +23,7 @@ public class AesEncryptionHelperTests
     public void Decrypt_GivesCorrectResult_IfEncryptedTextWasGeneratedByEncrypt()
     {
         // Arrange
-        var expected = "Test";
+        const string expected = "Test";
         var key = ConvertibleString.FromBase64("ZcR3a8iOzdQnC0nWHWIH6zJIwBAu2rz4EWNVtr98C/c=");
         var cipherText = _symmetricEncrypterUnderTest.Encrypt(ConvertibleString.FromUtf8(expected), key);
 
@@ -87,7 +87,7 @@ public class AesEncryptionHelperTests
     public void Encrypt_ShouldReturnDifferentResults_EvenThoughParametersAreTheSame()
     {
         // Arrange
-        var plaintext = "Test";
+        const string plaintext = "Test";
         var key = ConvertibleString.FromBase64("ZcR3a8iOzdQnC0nWHWIH6zJIwBAu2rz4EWNVtr98C/c=");
 
         // Act
