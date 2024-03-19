@@ -2,8 +2,8 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
@@ -126,7 +126,7 @@ public class IdentitiesController : ApiControllerBase
         return Ok(response);
     }
 
-    [HttpPut("{address}/DeletionProcesses")]
+    [HttpPut("{deletionProcessId}/DeletionProcesses")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string deletionProcessId, CancellationToken cancellationToken)
