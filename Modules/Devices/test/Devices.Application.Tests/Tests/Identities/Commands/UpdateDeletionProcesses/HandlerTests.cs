@@ -21,10 +21,10 @@ public class HandlerTests
         var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var result = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().BeEmpty();
+        response.Results.Should().BeEmpty();
     }
 
     [Fact]
@@ -40,11 +40,11 @@ public class HandlerTests
         var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var result = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().HaveCount(1);
-        result.DeletedIdentityAddresses.Single().Key.Should().Be(anIdentity.Address);
+        response.Results.Should().HaveCount(1);
+        response.Results.Single().Key.Should().Be(anIdentity.Address);
     }
 
     [Fact]
@@ -62,10 +62,10 @@ public class HandlerTests
         var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var result = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        result.DeletedIdentityAddresses.Should().HaveCount(1);
+        response.Results.Should().HaveCount(1);
         identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 

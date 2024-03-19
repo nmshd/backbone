@@ -5,10 +5,10 @@ using CSharpFunctionalExtensions;
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 public class TriggerRipeDeletionProcessesResponse
 {
-    public Dictionary<IdentityAddress, UnitResult<DomainError>> DeletedIdentityAddresses { get; }
-
-    public TriggerRipeDeletionProcessesResponse(Dictionary<IdentityAddress, UnitResult<DomainError>> deletedIdentityAddresses)
+    public TriggerRipeDeletionProcessesResponse(Dictionary<IdentityAddress, UnitResult<DomainError>> results)
     {
-        DeletedIdentityAddresses = deletedIdentityAddresses;
+        Results = results;
     }
+
+    public Dictionary<IdentityAddress, UnitResult<DomainError>> Results { get; }
 }

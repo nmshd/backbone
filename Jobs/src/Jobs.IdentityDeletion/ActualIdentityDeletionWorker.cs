@@ -2,9 +2,12 @@
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
@@ -43,33 +46,58 @@ public class ActualIdentityDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var triggeredForDeletionIdentityAddresses = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
-        var successfulDeletionTriggers = triggeredForDeletionIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsSuccess);
-        var erroringDeletionTriggers = triggeredForDeletionIdentityAddresses.DeletedIdentityAddresses.Where(x => x.Value.IsFailure);
+        var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key);
+        var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
 
-        foreach (var identityAddress in successfulDeletionTriggers.Select(x => x.Key))
+        await ExecuteDeletion(addressesWithTriggeredDeletionProcesses, cancellationToken);
+        LogErroringDeletionTriggers(erroringDeletionTriggers);
+    }
+
+    private async Task ExecuteDeletion(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken)
+    {
+        foreach (var identityAddress in addresses)
         {
-            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
-
-            var relationships = await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken);
-
-            foreach (var relationship in relationships)
-            {
-                _eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
-            }
-
-            foreach (var identityDeleter in _identityDeleters)
-            {
-                await identityDeleter.Delete(identityAddress);
-            }
+            await ExecuteDeletion(cancellationToken, identityAddress);
         }
+    }
 
+    private async Task ExecuteDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    {
+        await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
+        await NotifyRelationshipsAboutStartingDeletion(identityAddress, cancellationToken);
+        await Delete(identityAddress);
+    }
+
+    private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    {
+        await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
+    }
+
+    private async Task NotifyRelationshipsAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        var relationships = await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken);
+
+        foreach (var relationship in relationships)
+        {
+            _eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
+        }
+    }
+
+    private async Task Delete(IdentityAddress identityAddress)
+    {
+        foreach (var identityDeleter in _identityDeleters)
+        {
+            await identityDeleter.Delete(identityAddress);
+        }
+    }
+
+    private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
+    {
         foreach (var erroringDeletion in erroringDeletionTriggers)
         {
-            _logger.LogError(
-                new DomainException(erroringDeletion.Value.Error),
-                "There was an error while triggering a deletion process.");
+            _logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Key, erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
         }
     }
 
@@ -77,4 +105,14 @@ public class ActualIdentityDeletionWorker : IHostedService
     {
         return Task.CompletedTask;
     }
+}
+
+internal static partial class ActualIdentityDeletionWorkerLogs
+{
+    [LoggerMessage(
+        EventId = 390931,
+        EventName = "EventBusRabbitMQ.ErrorWhenTriggeringDeletionProcessForIdentity",
+        Level = LogLevel.Error,
+        Message = "There was an error when trying to trigger the deletion process for the identity with the address {identityAddress}. Error code: '{errorCode}. Error message: {errorMessage}...")]
+    public static partial void ErrorWhenTriggeringDeletionProcessForIdentity(this ILogger logger, IdentityAddress identityAddress, string errorCode, string errorMessage);
 }
