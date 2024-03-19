@@ -3,9 +3,11 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
+using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
@@ -131,6 +133,15 @@ public class IdentitiesController : ApiControllerBase
     {
         await _mediator.Send(new CancelDeletionAsSupportCommand(deletionProcessId), cancellationToken);
         return NoContent();
+    }
+
+    [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]
+    [ProducesResponseType(typeof(IdentityDeletionProcessDetailsDTO), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDeletionProcessAsSupport([FromRoute] string identityAddress, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessAsSupportQuery(identityAddress, deletionProcessId), cancellationToken);
+        return Ok(response);
     }
 }
 
