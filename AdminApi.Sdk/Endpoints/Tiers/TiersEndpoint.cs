@@ -12,7 +12,7 @@ public class TiersEndpoint(EndpointClient client) : Endpoint(client)
 
     public async Task<AdminApiResponse<TierDetails>> GetTier(string id) => await _client.Get<TierDetails>($"Tiers/{id}");
 
-    public async Task<AdminApiResponse<Tier>> CreateTier(CreateTierRequest request) => await _client.Post<Tier>("Tiers");
+    public async Task<AdminApiResponse<Tier>> CreateTier(CreateTierRequest request) => await _client.Post<Tier>("Tiers", request);
 
     public async Task<AdminApiResponse<EmptyResponse>> DeleteTier(string id) => await _client.Delete<EmptyResponse>($"Tiers/{id}");
 
